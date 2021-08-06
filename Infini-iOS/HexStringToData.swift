@@ -1,12 +1,10 @@
 //
-//  File.swift
+//  HexStringToData.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/4/21.
+//  Cloned by xan-m on 8/4/21 (with many thanks) from https://gist.github.com/gamako/94c8cb8873cabb97291b5a839ead50ca
 //
-//  cloned from https://gist.github.com/gamako/94c8cb8873cabb97291b5a839ead50ca
-//
-//  extends String to add .hex and .hexData conversions
+//  extends String to add .hex and .hexData conversions to make my life a million times easier when writing to PineTime
 //
 
 import Foundation

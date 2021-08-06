@@ -46,8 +46,6 @@ struct ContentView: View {
 					HStack {
 						Button(action: {
 							self.bleManager.deviceToConnect = peripheral.id
-							print(peripheral.id)
-							//print(self.bleManager.peripheralDictionary[peripheral.id]?.name)
 							self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.id]!)
 						}) {
 							Text(peripheral.name)

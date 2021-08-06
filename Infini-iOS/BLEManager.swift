@@ -26,15 +26,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	var myCentral: CBCentralManager!
 	var notifyCharacteristic: CBCharacteristic!
 	
-	@Published var isSwitchedOn = false
-	@Published var peripherals = [Peripheral]()
-	@Published var peripheralDictionary: [Int: CBPeripheral] = [:]
-	@Published var isConnectedToPinetime = false
-	@Published var infiniTime: CBPeripheral!
-	@Published var heartBPM: String!
-	@Published var batteryLevel: String!
-	@Published var isScanning = false
-	@Published var deviceToConnect: Int!
+	// UI flag variables
+	@Published var isSwitchedOn = false									// for now this is used to display if bluetooth is on in the main app screen. maybe an alert in the future?
+	@Published var isScanning = false									// another UI flag. Probably not necessary for anything but debugging. I dunno maybe a little swirly animation or something could be triggered by this
+	@Published var isConnectedToPinetime = false						// another flag published to update UI stuff. Can probably be implemented better in the future
+	@Published var heartBPM: String!									// published var to communicate the HRM data to the UI. I don't know enough about Swift to know if this is a bad idea.
+	@Published var batteryLevel: String!								// Same as heartBPM but for battery data
+
+	// Selecting and connecting variables
+	@Published var peripherals = [Peripheral]() 						// used to print human-readable device names to UI in selection process
+	@Published var deviceToConnect: Int!								// When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
+	@Published var peripheralDictionary: [Int: CBPeripheral] = [:] 		// this is the dictionary that relates human-readable peripheral names to the CBPeripheral class that CoreBluetooth actually interacts with
+	@Published var infiniTime: CBPeripheral!							// variable to save the CBPeripheral that you're connecting to
 	
 	override init() {
 		super.init()
@@ -66,7 +69,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 	
 	func connect(peripheral: CBPeripheral) {
-		// working on adding user choice, but still blocking anything but InfiniTime until I can set up a proper way to test it, because it might crash everything?
+		// Still blocking connections to anything not named "InfiniTime" until I can set up a proper way to test other devices
 		
 		if peripheral.name == "InfiniTime" {
 			self.myCentral.stopScan()
@@ -81,8 +84,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 		
 	func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-		// scan BLE devices, looking for any named InfiniTime, and then automatically connect to InfiniTime
-		// I know this sucks for anyone who has more than one watch, a dev/sealed pair, waspOS, etc. I'll open this up when I've got the core functionality for InfiniTime locked in
 		
 		var peripheralName: String! // ** not necessary without below scan list thing
 		
@@ -97,55 +98,21 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		print(newPeripheral)
 		
 		// ************************* remove if statement from code! but holy fuck this TV is the noisiest BLE advertiser in the world what the actual fuck *****************************
+		/*
+		P.S. I'd love to figure out how to filter by a unique ID other than the name, but all I can seem to find online is that MAC address and other hardware flag things I think would be helpful to filter by are not advertised over BLE, so I don't know what to do about it.
+		A unique identifier would be super helpful for flagging your pinetime in the app so you can have the app automatically connect and skip the process of scanning and selecting a pinetime.
+		For now I'm going to selfishly block my TV, and anyone else who touches this can either modify the if statement below to suit their TV or remove it.
+		*/
 		
 		if newPeripheral.name != "[TV] Samsung 8 Series (50)" {
 			peripherals.append(newPeripheral)
 			peripheralDictionary[newPeripheral.id] = peripheral
 		}
-		
-		/*
-		
-		this can probably be a function
-
-		if let pname = peripheral.name {
-			if pname == "InfiniTime" {
-				self.myCentral.stopScan()
-				isScanning = false
-				
-				self.infiniTime = peripheral
-				infiniTime.delegate = self
-				self.myCentral.connect(peripheral, options: nil)
-				
-				isConnectedToPinetime = true
-			}
-		}
-		
-		*/
-
-		/*
-		
-		********
-		scan for all nearby BLE devices -- this was part of one of the tuts I was following. For now I'm just going to keep the app tightly coupled to PineTimes running Infinitime to reduce complexity for initial development. This code will be useful if it turns out this app is functional with other similar watches/waspOS/etc.
-		********
-		
-		var peripheralName: String! ** not necessary without below scan list thing
-		
-		if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
-			peripheralName = name
-		}
-		else {
-			peripheralName = "Unknown"
-		}
-		   
-		let newPeripheral = Peripheral(id: peripherals.count, name: peripheralName, rssi: RSSI.intValue)
-		print(newPeripheral)
-		peripherals.append(newPeripheral)
-		
-		*/
 	}
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
 		self.infiniTime.discoverServices(nil)
+		sendNotification(notification: "iOS Connected!")
 	}
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -182,12 +149,11 @@ extension BLEManager: CBPeripheralDelegate {
 			// subscribe to values that can be subscribed to
 			if characteristic.properties.contains(.notify) {
 				peripheral.setNotifyValue(true, for: characteristic)
-				// print(characteristic.uuid, "can notify") // debug
 			}
 			
 			if characteristic.properties.contains(.write) {
-				//print(characteristic.uuid, "is writable") // debug
 				if characteristic.uuid == notifyCBUUID {
+					// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this ad-hoc method works okay and allows it to be published as well.
 					notifyCharacteristic = characteristic
 				}
 			}
@@ -199,7 +165,7 @@ extension BLEManager: CBPeripheralDelegate {
 			// listen for the music controller notifications
 			let musicControl = [UInt8](characteristic.value!)
 			let musicNumber = String(musicControl[0])
-			// for now just print to console, but I am getting the numbers as a string here, and hopefully I can use that to control music apps soon
+			// for now just print to console, but I am getting the numbers as a string here, so hopefully I can use that to control music apps soon
 			print(musicNumber) // debug
 		
 		case hrmCBUUID:
@@ -222,14 +188,17 @@ extension BLEManager: CBPeripheralDelegate {
 	}
 
 	func sendNotification(notification: String) {
-		let paddedNotification = "   " + notification // I'm pretty sure this is due to a lack of understanding on my part of the notification protocol, but sending ascii text as a notification eats the first 3 characters, so add 3 spaces here to absorb that
+		// I'm pretty sure this is due to a lack of understanding on my part of the notification protocol, but sending ascii text as a notification eats the first 3 characters seemingly no matter what they are, so add 3 spaces here to absorb that, then encode the string to ASCII Data
+		let paddedNotification = "   " + notification
 		let notificationData = paddedNotification.data(using: .ascii)!
+		
+		// this line prevents crashes when sending a notification before the app has finished establishing the notification write characteristic
 		if notifyCharacteristic != nil {
 			infiniTime.writeValue(notificationData, for: notifyCharacteristic, type: .withResponse)
 		}
 	}
 	
-	// function to translate heart rate to decimal
+	// function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
 	private func heartRate(from characteristic: CBCharacteristic) -> Int {
 		guard let characteristicData = characteristic.value else { return -1 }
 		let byteArray = [UInt8](characteristicData)
@@ -244,7 +213,7 @@ extension BLEManager: CBPeripheralDelegate {
 		}
 	}
 	
-	// this function pulls date from phone, shuffles it around, and then hex-encodes it to a format that InfiniTime can understand
+	// this function pulls date from phone, shuffles it into the correct order, and then hex-encodes it to a format that InfiniTime can understand
 	private func currentTime() -> String {
 		let now = Date() // current time
 		
