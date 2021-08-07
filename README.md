@@ -21,12 +21,11 @@ This is a proof-of-concept, barely-functional iOS application to interact with y
 - Figure out how to control music from watch
 - Optional auto-connect: save some device-specific characteristic (MAC address? Serial number?) to the app, and allow users to automatically connect to their device. I know I probably won't want to connect to anything other than my own pinetime with very few exceptions, so it'd save me a few taps if it just snagged my watch automatically when I open the app.
 - Learn anything whatsoever about making an app design in SwiftUI that isn't a horrific clusterwhoops 
-- Send notifications to the phone, probably. Might be nice to get a buzz on your phone if the watch disconnects for some reason?
-- Options menu: I think it'd be nice to have user-configurable options. I was thinking things like:
-  - "send notification to watch when watch battery falls below [x]"
-  - "send notification to watch when phone battery falls below [x]"
-  - "turn on/off watch notifications"
-  - etc. I guess my ideas are all based on adding/subtracting notifications...
+- Send notifications to the phone, probably. Might be nice to get a buzz on your phone if the watch disconnects for some reason
+- User-configurable settings:
+  - select device for autoconnect
+  - enable/disable notifications
+  - taking suggestions
 - Clean everything up. Still tons of commented lines and code blocks from debugging and trial and error stuff that I should really remove. Probably should add a few more explanatory comments here and there too, mostly for my own benefit...
 - I mean, there's the navigation thing? I guess poke at that. I'm not super sure that's a priority for me at all, but if that's something that people want I can definitely look into it sooner.
 

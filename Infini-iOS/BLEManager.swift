@@ -12,6 +12,7 @@ struct Peripheral: Identifiable {
 	let id: Int
 	let name: String
 	let rssi: Int
+	let peripheralHash: Int
 }
 
 // declare some CBUUIDs for easier reference
@@ -94,19 +95,20 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			peripheralName = "Unknown"
 		}
 		
-		let newPeripheral = Peripheral(id: peripherals.count, name: peripheralName, rssi: RSSI.intValue)
-		print(newPeripheral)
-		
-		// ************************* remove if statement from code! but holy fuck this TV is the noisiest BLE advertiser in the world what the actual fuck *****************************
-		/*
-		P.S. I'd love to figure out how to filter by a unique ID other than the name, but all I can seem to find online is that MAC address and other hardware flag things I think would be helpful to filter by are not advertised over BLE, so I don't know what to do about it.
-		A unique identifier would be super helpful for flagging your pinetime in the app so you can have the app automatically connect and skip the process of scanning and selecting a pinetime.
-		For now I'm going to selfishly block my TV, and anyone else who touches this can either modify the if statement below to suit their TV or remove it.
-		*/
-		
-		if newPeripheral.name != "[TV] Samsung 8 Series (50)" {
+		let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash)
+
+		// compare peripheral hashes to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
+		if !peripherals.contains(where: {$0.peripheralHash == newPeripheral.peripheralHash}) {
+			// I think there's probably a way to get rid of this array someday, but for now it's useful for displaying the device names. You cant have a Peripheral struct as a key in the peripheralDictionary, so there has to be some way to pass the names to the UI, and the peripherals array seems like it.
 			peripherals.append(newPeripheral)
-			peripheralDictionary[newPeripheral.id] = peripheral
+			peripheralDictionary[newPeripheral.peripheralHash] = peripheral
+			
+			print(newPeripheral, "added to list")
+			/*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+			TODO: hey alpha testers! Please send me a message/comment/email/toot/whatever with the peripheralHash of your PineTime! While the hash is valuable for weeding out repeat broadcasters, I'm not sure what exactly is hashed, and if that would be unique between two of the same device. If it's just a hash of "InfiniTime" + $INFINITIMEUUID, then there will be unintended collisions and this won't solve anything for people that have more than one InfiniTime watch to sync.
+			
+			I'm getting the same value each time I run the app (138271609), let's hope yours is different!
+			*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
 		}
 	}
 	
