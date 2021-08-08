@@ -1,0 +1,648 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */; };
+		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
+		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
+		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
+		264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4A26BC51CF0050A223 /* Persistence.swift */; };
+		264BFE5926BC51CF0050A223 /* Infini_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE5826BC51CF0050A223 /* Infini_iOSTests.swift */; };
+		264BFE6426BC51CF0050A223 /* Infini_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE6326BC51CF0050A223 /* Infini_iOSUITests.swift */; };
+		264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7326BC526C0050A223 /* BLEManager.swift */; };
+		264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7526BC52720050A223 /* HexStringToData.swift */; };
+		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
+		264BFE7B26BCB9510050A223 /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */; };
+		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
+		26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315126BF45E0005AE404 /* BLEMusic.swift */; };
+		26A6315526C0297A005AE404 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* Notifications.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		264BFE5526BC51CF0050A223 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 264BFE3626BC51CE0050A223 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 264BFE3D26BC51CE0050A223;
+			remoteInfo = "Infini-iOS";
+		};
+		264BFE6026BC51CF0050A223 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 264BFE3626BC51CE0050A223 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 264BFE3D26BC51CE0050A223;
+			remoteInfo = "Infini-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		264BFE3E26BC51CE0050A223 /* Infini-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Infini-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSApp.swift; sourceTree = "<group>"; };
+		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		264BFE4526BC51CF0050A223 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		264BFE4A26BC51CF0050A223 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		264BFE5426BC51CF0050A223 /* Infini-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Infini-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		264BFE5826BC51CF0050A223 /* Infini_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSTests.swift; sourceTree = "<group>"; };
+		264BFE5A26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		264BFE5F26BC51CF0050A223 /* Infini-iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Infini-iOSUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		264BFE6326BC51CF0050A223 /* Infini_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSUITests.swift; sourceTree = "<group>"; };
+		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		264BFE7326BC526C0050A223 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		264BFE7526BC52720050A223 /* HexStringToData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexStringToData.swift; sourceTree = "<group>"; };
+		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
+		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
+		26A6315126BF45E0005AE404 /* BLEMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEMusic.swift; sourceTree = "<group>"; };
+		26A6315426C0297A005AE404 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		264BFE3B26BC51CE0050A223 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5126BC51CF0050A223 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5C26BC51CF0050A223 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		264BFE3526BC51CE0050A223 = {
+			isa = PBXGroup;
+			children = (
+				264BFE7726BCAAC00050A223 /* README.md */,
+				264BFE4026BC51CE0050A223 /* Infini-iOS */,
+				264BFE5726BC51CF0050A223 /* Infini-iOSTests */,
+				264BFE6226BC51CF0050A223 /* Infini-iOSUITests */,
+				264BFE3F26BC51CE0050A223 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		264BFE3F26BC51CE0050A223 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE3E26BC51CE0050A223 /* Infini-iOS.app */,
+				264BFE5426BC51CF0050A223 /* Infini-iOSTests.xctest */,
+				264BFE5F26BC51CF0050A223 /* Infini-iOSUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		264BFE4026BC51CE0050A223 /* Infini-iOS */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */,
+				264BFE4326BC51CE0050A223 /* ContentView.swift */,
+				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
+				264BFE7326BC526C0050A223 /* BLEManager.swift */,
+				26A6315326BF5FD6005AE404 /* Notifications */,
+				26A6314E26BF0FA2005AE404 /* Music */,
+				264BFE7526BC52720050A223 /* HexStringToData.swift */,
+				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
+				264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */,
+				264BFE4F26BC51CF0050A223 /* Info.plist */,
+				264BFE4726BC51CF0050A223 /* Preview Content */,
+			);
+			path = "Infini-iOS";
+			sourceTree = "<group>";
+		};
+		264BFE4726BC51CF0050A223 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		264BFE5726BC51CF0050A223 /* Infini-iOSTests */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE5826BC51CF0050A223 /* Infini_iOSTests.swift */,
+				264BFE5A26BC51CF0050A223 /* Info.plist */,
+			);
+			path = "Infini-iOSTests";
+			sourceTree = "<group>";
+		};
+		264BFE6226BC51CF0050A223 /* Infini-iOSUITests */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE6326BC51CF0050A223 /* Infini_iOSUITests.swift */,
+				264BFE6526BC51CF0050A223 /* Info.plist */,
+			);
+			path = "Infini-iOSUITests";
+			sourceTree = "<group>";
+		};
+		26A6314E26BF0FA2005AE404 /* Music */ = {
+			isa = PBXGroup;
+			children = (
+				26A6314C26BEFD2C005AE404 /* MusicController.swift */,
+				26A6315126BF45E0005AE404 /* BLEMusic.swift */,
+			);
+			path = Music;
+			sourceTree = "<group>";
+		};
+		26A6315326BF5FD6005AE404 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				26A6315426C0297A005AE404 /* Notifications.swift */,
+			);
+			path = Notifications;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		264BFE3D26BC51CE0050A223 /* Infini-iOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 264BFE6826BC51CF0050A223 /* Build configuration list for PBXNativeTarget "Infini-iOS" */;
+			buildPhases = (
+				264BFE3A26BC51CE0050A223 /* Sources */,
+				264BFE3B26BC51CE0050A223 /* Frameworks */,
+				264BFE3C26BC51CE0050A223 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Infini-iOS";
+			productName = "Infini-iOS";
+			productReference = 264BFE3E26BC51CE0050A223 /* Infini-iOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+		264BFE5326BC51CF0050A223 /* Infini-iOSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 264BFE6B26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "Infini-iOSTests" */;
+			buildPhases = (
+				264BFE5026BC51CF0050A223 /* Sources */,
+				264BFE5126BC51CF0050A223 /* Frameworks */,
+				264BFE5226BC51CF0050A223 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				264BFE5626BC51CF0050A223 /* PBXTargetDependency */,
+			);
+			name = "Infini-iOSTests";
+			productName = "Infini-iOSTests";
+			productReference = 264BFE5426BC51CF0050A223 /* Infini-iOSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		264BFE5E26BC51CF0050A223 /* Infini-iOSUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 264BFE6E26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "Infini-iOSUITests" */;
+			buildPhases = (
+				264BFE5B26BC51CF0050A223 /* Sources */,
+				264BFE5C26BC51CF0050A223 /* Frameworks */,
+				264BFE5D26BC51CF0050A223 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				264BFE6126BC51CF0050A223 /* PBXTargetDependency */,
+			);
+			name = "Infini-iOSUITests";
+			productName = "Infini-iOSUITests";
+			productReference = 264BFE5F26BC51CF0050A223 /* Infini-iOSUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		264BFE3626BC51CE0050A223 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					264BFE3D26BC51CE0050A223 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					264BFE5326BC51CF0050A223 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 264BFE3D26BC51CE0050A223;
+					};
+					264BFE5E26BC51CF0050A223 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 264BFE3D26BC51CE0050A223;
+					};
+				};
+			};
+			buildConfigurationList = 264BFE3926BC51CE0050A223 /* Build configuration list for PBXProject "Infini-iOS" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 264BFE3526BC51CE0050A223;
+			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				264BFE3D26BC51CE0050A223 /* Infini-iOS */,
+				264BFE5326BC51CF0050A223 /* Infini-iOSTests */,
+				264BFE5E26BC51CF0050A223 /* Infini-iOSUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		264BFE3C26BC51CE0050A223 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE7826BCAAC00050A223 /* README.md in Resources */,
+				264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */,
+				264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5226BC51CF0050A223 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5D26BC51CF0050A223 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		264BFE3A26BC51CE0050A223 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE7B26BCB9510050A223 /* Infini_iOS.xcdatamodeld in Sources */,
+				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
+				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				26A6315526C0297A005AE404 /* Notifications.swift in Sources */,
+				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
+				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
+				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
+				264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */,
+				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5026BC51CF0050A223 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE5926BC51CF0050A223 /* Infini_iOSTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5B26BC51CF0050A223 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE6426BC51CF0050A223 /* Infini_iOSUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		264BFE5626BC51CF0050A223 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 264BFE3D26BC51CE0050A223 /* Infini-iOS */;
+			targetProxy = 264BFE5526BC51CF0050A223 /* PBXContainerItemProxy */;
+		};
+		264BFE6126BC51CF0050A223 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 264BFE3D26BC51CE0050A223 /* Infini-iOS */;
+			targetProxy = 264BFE6026BC51CF0050A223 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		264BFE6626BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		264BFE6726BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		264BFE6926BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Infini-iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = T2VD6LADUL;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Infini-iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		264BFE6A26BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"Infini-iOS/Preview Content\"";
+				DEVELOPMENT_TEAM = T2VD6LADUL;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "Infini-iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 0.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		264BFE6C26BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 99BHY6DC82;
+				INFOPLIST_FILE = "Infini-iOSTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Infini-iOS.app/Infini-iOS";
+			};
+			name = Debug;
+		};
+		264BFE6D26BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 99BHY6DC82;
+				INFOPLIST_FILE = "Infini-iOSTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOSTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Infini-iOS.app/Infini-iOS";
+			};
+			name = Release;
+		};
+		264BFE6F26BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 99BHY6DC82;
+				INFOPLIST_FILE = "Infini-iOSUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Infini-iOS";
+			};
+			name = Debug;
+		};
+		264BFE7026BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 99BHY6DC82;
+				INFOPLIST_FILE = "Infini-iOSUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOSUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Infini-iOS";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		264BFE3926BC51CE0050A223 /* Build configuration list for PBXProject "Infini-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6626BC51CF0050A223 /* Debug */,
+				264BFE6726BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		264BFE6826BC51CF0050A223 /* Build configuration list for PBXNativeTarget "Infini-iOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6926BC51CF0050A223 /* Debug */,
+				264BFE6A26BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		264BFE6B26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "Infini-iOSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6C26BC51CF0050A223 /* Debug */,
+				264BFE6D26BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		264BFE6E26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "Infini-iOSUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6F26BC51CF0050A223 /* Debug */,
+				264BFE7026BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */,
+			);
+			currentVersion = 264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */;
+			path = Infini_iOS.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = 264BFE3626BC51CE0050A223 /* Project object */;
+}
