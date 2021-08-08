@@ -21,11 +21,21 @@ let batCBUUID = CBUUID(string: "2A19")
 let timeCBUUID = CBUUID(string: "2A2B")
 let notifyCBUUID = CBUUID(string: "2A46")
 let musicControlCBUUID = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+let musicTrackCBUUID = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
+let musicArtistCBUUID = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
 
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	var myCentral: CBCentralManager!
 	var notifyCharacteristic: CBCharacteristic!
+	
+	struct musicCharacteristics {
+		var control: CBCharacteristic!
+		var track: CBCharacteristic!
+		var artist: CBCharacteristic!
+	}
+	
+	@Published var musicChars = musicCharacteristics()
 	
 	// UI flag variables
 	@Published var isSwitchedOn = false									// for now this is used to display if bluetooth is on in the main app screen. maybe an alert in the future?
@@ -86,7 +96,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		
 	func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
 		
-		var peripheralName: String! // ** not necessary without below scan list thing
+		var peripheralName: String!
 		
 		if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
 			peripheralName = name
@@ -98,23 +108,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash)
 
 		// compare peripheral hashes to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
+		// this hash value is functional only for separating devices during this search, and is not at all guaranteed to be a persistent value. Probably not to be trusted for long-term autoconnect persistence. So far, I have gotten the same value for my PineTime every time I run the app, but based on the Apple docs this is not a guarantee.
 		if !peripherals.contains(where: {$0.peripheralHash == newPeripheral.peripheralHash}) {
 			// I think there's probably a way to get rid of this array someday, but for now it's useful for displaying the device names. You cant have a Peripheral struct as a key in the peripheralDictionary, so there has to be some way to pass the names to the UI, and the peripherals array seems like it.
 			peripherals.append(newPeripheral)
 			peripheralDictionary[newPeripheral.peripheralHash] = peripheral
 			
 			print(newPeripheral, "added to list")
-			/*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-			TODO: hey alpha testers! Please send me a message/comment/email/toot/whatever with the peripheralHash of your PineTime! While the hash is valuable for weeding out repeat broadcasters, I'm not sure what exactly is hashed, and if that would be unique between two of the same device. If it's just a hash of "InfiniTime" + $INFINITIMEUUID, then there will be unintended collisions and this won't solve anything for people that have more than one InfiniTime watch to sync.
-			
-			I'm getting the same value each time I run the app (138271609), let's hope yours is different!
-			*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
 		}
 	}
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
 		self.infiniTime.discoverServices(nil)
-		sendNotification(notification: "iOS Connected!")
 	}
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -148,15 +153,30 @@ extension BLEManager: CBPeripheralDelegate {
 				peripheral.readValue(for: characteristic)
 			}
 			
-			// subscribe to values that can be subscribed to
+			// subscribe to all values that can be subscribed to.
+			// TODO: separate this out and subscribe individually for each service in a separate .swift document so this isn't so monolithic
 			if characteristic.properties.contains(.notify) {
+				switch characteristic.uuid {
+				case musicControlCBUUID:
+					peripheral.setNotifyValue(true, for: characteristic)
+					print("subscribed to", characteristic.uuid)
+				case hrmCBUUID:
+					peripheral.setNotifyValue(true, for: characteristic)
+					print("subscribed to", characteristic.uuid)
+				case batCBUUID:
+					peripheral.setNotifyValue(true, for: characteristic)
+					print("subscribed to", characteristic.uuid)
+				default:
+					break
+				}
 				peripheral.setNotifyValue(true, for: characteristic)
 			}
 			
 			if characteristic.properties.contains(.write) {
 				if characteristic.uuid == notifyCBUUID {
-					// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this ad-hoc method works okay and allows it to be published as well.
+					// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
 					notifyCharacteristic = characteristic
+					sendNotification(notification: "iOS Connected!")
 				}
 			}
 		}
@@ -165,11 +185,18 @@ extension BLEManager: CBPeripheralDelegate {
 		switch characteristic.uuid {
 		case musicControlCBUUID:
 			// listen for the music controller notifications
+			musicChars.control = characteristic
 			let musicControl = [UInt8](characteristic.value!)
-			let musicNumber = String(musicControl[0])
-			// for now just print to console, but I am getting the numbers as a string here, so hopefully I can use that to control music apps soon
-			print(musicNumber) // debug
-		
+			controlMusic(controlNumber: Int(musicControl[0]))
+			
+		case musicTrackCBUUID:
+			// select track characteristic for writing to music app
+			musicChars.track = characteristic
+			
+		case musicArtistCBUUID:
+			// select artist characteristic for writing to music app
+			musicChars.artist = characteristic
+			
 		case hrmCBUUID:
 			// read heart rate hex, convert to decimal
 			let bpm = heartRate(from: characteristic)
@@ -188,17 +215,13 @@ extension BLEManager: CBPeripheralDelegate {
 			break
 		}
 	}
-
-	func sendNotification(notification: String) {
-		// I'm pretty sure this is due to a lack of understanding on my part of the notification protocol, but sending ascii text as a notification eats the first 3 characters seemingly no matter what they are, so add 3 spaces here to absorb that, then encode the string to ASCII Data
-		let paddedNotification = "   " + notification
-		let notificationData = paddedNotification.data(using: .ascii)!
-		
-		// this line prevents crashes when sending a notification before the app has finished establishing the notification write characteristic
-		if notifyCharacteristic != nil {
-			infiniTime.writeValue(notificationData, for: notifyCharacteristic, type: .withResponse)
-		}
+	
+	// this function converts string to ascii and writes to the selected characteristic. Used for notifications and music app
+	func writeASCIIToPineTime(message: String, characteristic: CBCharacteristic) {
+		let writeData = message.data(using: .ascii)!
+		infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
 	}
+	
 	
 	// function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
 	private func heartRate(from characteristic: CBCharacteristic) -> Int {

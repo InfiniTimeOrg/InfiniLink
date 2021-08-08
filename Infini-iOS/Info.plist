@@ -22,6 +22,10 @@
 	<true/>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>This app needs permission to allow your PineTime to control your music.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>This app needs permission to allow your PineTime to control your music.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
