@@ -2,7 +2,7 @@
 //  MusicController.swift
 //  Infini-iOS
 //
-//  Created by Alex Emry on 8/7/21.
+//  Created by xan-m on 8/7/21.
 //
 
 import Foundation
