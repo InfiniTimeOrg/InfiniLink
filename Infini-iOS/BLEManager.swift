@@ -8,21 +8,6 @@
 import Foundation
 import CoreBluetooth
 
-struct Peripheral: Identifiable {
-	let id: Int
-	let name: String
-	let rssi: Int
-	let peripheralHash: Int
-}
-
-// declare some CBUUIDs for easier reference
-let hrmCBUUID = CBUUID(string: "2A37")
-let batCBUUID = CBUUID(string: "2A19")
-let timeCBUUID = CBUUID(string: "2A2B")
-let notifyCBUUID = CBUUID(string: "2A46")
-let musicControlCBUUID = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
-let musicTrackCBUUID = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
-let musicArtistCBUUID = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
 
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
@@ -49,6 +34,22 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var deviceToConnect: Int!								// When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
 	@Published var peripheralDictionary: [Int: CBPeripheral] = [:] 		// this is the dictionary that relates human-readable peripheral names to the CBPeripheral class that CoreBluetooth actually interacts with
 	@Published var infiniTime: CBPeripheral!							// variable to save the CBPeripheral that you're connecting to
+	
+	// declare some CBUUIDs for easier reference
+	let hrmCBUUID = CBUUID(string: "2A37")
+	let batCBUUID = CBUUID(string: "2A19")
+	let timeCBUUID = CBUUID(string: "2A2B")
+	let notifyCBUUID = CBUUID(string: "2A46")
+	let musicControlCBUUID = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+	let musicTrackCBUUID = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
+	let musicArtistCBUUID = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
+	
+	struct Peripheral: Identifiable {
+		let id: Int
+		let name: String
+		let rssi: Int
+		let peripheralHash: Int
+	}
 	
 	override init() {
 		super.init()
