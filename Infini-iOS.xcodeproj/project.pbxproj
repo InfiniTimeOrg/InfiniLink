@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -18,9 +18,17 @@
 		264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7526BC52720050A223 /* HexStringToData.swift */; };
 		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
 		264BFE7B26BCB9510050A223 /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */; };
+		264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80A26C62ED600E812C3 /* SideMenu.swift */; };
+		264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80C26C633CF00E812C3 /* PageSwitcher.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315126BF45E0005AE404 /* BLEMusic.swift */; };
 		26A6315526C0297A005AE404 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* Notifications.swift */; };
+		26A6315B26C49841005AE404 /* DFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315A26C49841005AE404 /* DFU.swift */; };
+		26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */ = {isa = PBXBuildFile; productRef = 26A6315D26C498B7005AE404 /* NordicDFU */; };
+		26A6316026C4BC25005AE404 /* DFUView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315F26C4BC25005AE404 /* DFUView.swift */; };
+		26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6316226C4C6D6005AE404 /* BLEConnectView.swift */; };
+		26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* BLEStatusView.swift */; };
+		26F426F226C8468300D0866B /* SwiftUTI in Frameworks */ = {isa = PBXBuildFile; productRef = 26F426F126C8468300D0866B /* SwiftUTI */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,9 +66,15 @@
 		264BFE7526BC52720050A223 /* HexStringToData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexStringToData.swift; sourceTree = "<group>"; };
 		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
+		264DB80A26C62ED600E812C3 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
+		264DB80C26C633CF00E812C3 /* PageSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwitcher.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315126BF45E0005AE404 /* BLEMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEMusic.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
+		26A6315A26C49841005AE404 /* DFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFU.swift; sourceTree = "<group>"; };
+		26A6315F26C4BC25005AE404 /* DFUView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUView.swift; sourceTree = "<group>"; };
+		26A6316226C4C6D6005AE404 /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
+		26F426EE26C72D7D00D0866B /* BLEStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEStatusView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +82,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */,
+				26F426F226C8468300D0866B /* SwiftUTI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,8 +130,10 @@
 			children = (
 				264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
+				264DB80926C62EAC00E812C3 /* View Components */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
-				264BFE7326BC526C0050A223 /* BLEManager.swift */,
+				26A6316126C4C6BB005AE404 /* BLE */,
+				26A6315926C49839005AE404 /* DFU */,
 				26A6315326BF5FD6005AE404 /* Notifications */,
 				26A6314E26BF0FA2005AE404 /* Music */,
 				264BFE7526BC52720050A223 /* HexStringToData.swift */,
@@ -153,6 +171,15 @@
 			path = "Infini-iOSUITests";
 			sourceTree = "<group>";
 		};
+		264DB80926C62EAC00E812C3 /* View Components */ = {
+			isa = PBXGroup;
+			children = (
+				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
+				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
+			);
+			path = "View Components";
+			sourceTree = "<group>";
+		};
 		26A6314E26BF0FA2005AE404 /* Music */ = {
 			isa = PBXGroup;
 			children = (
@@ -168,6 +195,25 @@
 				26A6315426C0297A005AE404 /* Notifications.swift */,
 			);
 			path = Notifications;
+			sourceTree = "<group>";
+		};
+		26A6315926C49839005AE404 /* DFU */ = {
+			isa = PBXGroup;
+			children = (
+				26A6315F26C4BC25005AE404 /* DFUView.swift */,
+				26A6315A26C49841005AE404 /* DFU.swift */,
+			);
+			path = DFU;
+			sourceTree = "<group>";
+		};
+		26A6316126C4C6BB005AE404 /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
+				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
+				264BFE7326BC526C0050A223 /* BLEManager.swift */,
+			);
+			path = BLE;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -186,6 +232,10 @@
 			dependencies = (
 			);
 			name = "Infini-iOS";
+			packageProductDependencies = (
+				26A6315D26C498B7005AE404 /* NordicDFU */,
+				26F426F126C8468300D0866B /* SwiftUTI */,
+			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* Infini-iOS.app */;
 			productType = "com.apple.product-type.application";
@@ -257,6 +307,10 @@
 				Base,
 			);
 			mainGroup = 264BFE3526BC51CE0050A223;
+			packageReferences = (
+				26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
+				26F426F026C8468300D0866B /* XCRemoteSwiftPackageReference "SwiftUTI" */,
+			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -304,11 +358,17 @@
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				26A6315526C0297A005AE404 /* Notifications.swift in Sources */,
+				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
+				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
+				264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */,
+				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
+				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
+				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -630,6 +690,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		26F426F026C8468300D0866B /* XCRemoteSwiftPackageReference "SwiftUTI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "git@github.com:mkeiser/SwiftUTI.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		26A6315D26C498B7005AE404 /* NordicDFU */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
+			productName = NordicDFU;
+		};
+		26F426F126C8468300D0866B /* SwiftUTI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 26F426F026C8468300D0866B /* XCRemoteSwiftPackageReference "SwiftUTI" */;
+			productName = SwiftUTI;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */ = {

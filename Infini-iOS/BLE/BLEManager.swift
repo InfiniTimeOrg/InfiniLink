@@ -26,8 +26,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var isSwitchedOn = false									// for now this is used to display if bluetooth is on in the main app screen. maybe an alert in the future?
 	@Published var isScanning = false									// another UI flag. Probably not necessary for anything but debugging. I dunno maybe a little swirly animation or something could be triggered by this
 	@Published var isConnectedToPinetime = false						// another flag published to update UI stuff. Can probably be implemented better in the future
-	@Published var heartBPM: String!									// published var to communicate the HRM data to the UI. I don't know enough about Swift to know if this is a bad idea.
-	@Published var batteryLevel: String!								// Same as heartBPM but for battery data
+	@Published var heartBPM: String = "Disconnected"					// published var to communicate the HRM data to the UI.
+	@Published var batteryLevel: String = "Disconnected"				// Same as heartBPM but for battery data
+	@Published var firmwareVersion: String = "Disconnected"
 
 	// Selecting and connecting variables
 	@Published var peripherals = [Peripheral]() 						// used to print human-readable device names to UI in selection process
@@ -40,6 +41,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	let batCBUUID = CBUUID(string: "2A19")
 	let timeCBUUID = CBUUID(string: "2A2B")
 	let notifyCBUUID = CBUUID(string: "2A46")
+	let firmwareCBUUID = CBUUID(string: "2A26")
 	let musicControlCBUUID = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
 	let musicTrackCBUUID = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
 	let musicArtistCBUUID = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
@@ -58,6 +60,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		myCentral.delegate = self
 		heartBPM = "Reading"
 		batteryLevel = "Reading"
+		firmwareVersion = "Reading"
+		
 	}
 	
 	func startScanning() {
@@ -211,7 +215,9 @@ extension BLEManager: CBPeripheralDelegate {
 		case timeCBUUID:
 			// convert string with hex value of time to actual hex data, then write to PineTime
 			peripheral.writeValue(currentTime().hexData, for: characteristic, type: .withResponse)
-	
+			
+		case firmwareCBUUID:
+			firmwareVersion = String(decoding: characteristic.value!, as: UTF8.self)
 		default:
 			break
 		}
