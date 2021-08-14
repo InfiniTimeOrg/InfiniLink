@@ -2,7 +2,7 @@
 //  BLEStatusView.swift
 //  Infini-iOS
 //
-//  Created by Alex Emry on 8/13/21.
+//  Created by xan-m on 8/13/21.
 //
 
 import Foundation

@@ -2,7 +2,7 @@
 //  PageSwitcher.swift
 //  Infini-iOS
 //
-//  Created by Alex Emry on 8/12/21.
+//  Created by xan-m on 8/12/21.
 //
 
 import Foundation
