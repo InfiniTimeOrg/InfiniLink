@@ -10,107 +10,65 @@ import CoreData
 
 struct ContentView: View {
 
-	@ObservedObject var bleManager = BLEManager()
+	@State var showMenu = false
 	
 	var body: some View {
-		VStack (spacing: 10){
-			
-			
-			if bleManager.isConnectedToPinetime {
-				Text("InfiniTime Services")
-					.font(.largeTitle)
-					.frame(maxWidth: .infinity, alignment: .center)
-					.padding(30)
-
-				HStack (spacing: 10){
-					Text("Heart Rate: ")
-						.font(.title)
-					Text(bleManager.heartBPM)
-						.font(.title)
-						.foregroundColor(.red)
+		
+		let drag = DragGesture()
+			.onEnded {
+				if $0.translation.width < -100 {
+					withAnimation {
+						self.showMenu = false
+					}
+				} 
+			}
+		
+		return NavigationView {
+			GeometryReader { geometry in
+				ZStack(alignment: .leading) {
+					MainView(showMenu: self.$showMenu)
+						.frame(width: geometry.size.width, height: geometry.size.height)
+						.offset(x: self.showMenu ? geometry.size.width/2 : 0)
+						.disabled(self.showMenu ? true : false)
+					if self.showMenu {
+						MenuView(isOpen: self.$showMenu)
+							.frame(width: geometry.size.width/2)
+							.transition(.move(edge: .leading))
+					}
 				}
-				
-				HStack (spacing: 10){
-					Text("Battery Level: ")
-						.font(.title)
-					Text(bleManager.batteryLevel)
-						.font(.title)
-						.foregroundColor(.red)
-				}
-			} else {
-				Text("Available Devices")
-					.font(.largeTitle)
-					.frame(maxWidth: .infinity, alignment: .center)
-					.padding(30)
-				List(bleManager.peripherals) { peripheral in
-					HStack {
-						Button(action: {
-							self.bleManager.deviceToConnect = peripheral.peripheralHash
-							self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
-						}) {
-							Text(peripheral.name)
+					.gesture(drag)
+			}
+				//.navigationBarTitle("Infini-iOS", displayMode: .inline)
+				.navigationBarItems(leading: (
+					Button(action: {
+						withAnimation {
+							self.showMenu.toggle()
 						}
-					}
-				}
-			}
-			
-			Spacer()
-			
-			HStack {
-				VStack (spacing:10) {
-					Button(action: {
-						self.bleManager.startScanning()
 					}) {
-						Text("Scan and Connect")
+						Image(systemName: "line.horizontal.3")
+							.imageScale(.large)
+							.foregroundColor(Color.white)
 					}
-					Button(action: {
-						self.bleManager.stopScanning()
-					}) {
-						Text("Stop Scanning")
-					}
-					Button(action: {
-						self.bleManager.disconnect()
-					}) {
-						Text("Disconnect")
-					}
-					Button(action: {
-						self.bleManager.sendNotification(notification: "Testing Notifications")
-					}) {
-						Text("Test Notifications")
-					}
-				}.padding()
-				
-				Spacer()
-				
-				VStack (spacing:10) {
-					Text("STATUS")
-						.font(.headline)
+				))
+		}
+	}
+}
 
-					
-					if bleManager.isSwitchedOn {
-						Text("Bluetooth is switched on")
-							.foregroundColor(.green)
-					}
-					else {
-						Text("Bluetooth is NOT switched on")
-							.foregroundColor(.red)
-					}
-					
-					if bleManager.isConnectedToPinetime {
-						Text("PineTime is connected")
-							.foregroundColor(.green)
-					}
-					else {
-						Text("PineTime is not connected")
-							.foregroundColor(.red)
-					}
-					
-					if bleManager.isScanning {
-						Text("Scanning")
-							.foregroundColor(.green)
-					}
-				}
-			}
+struct MainView: View {
+	
+	@Binding var showMenu: Bool
+	@State var currentPage: Page = .connect
+	@EnvironmentObject var pageSwitcher: PageSwitcher
+	@EnvironmentObject var bleManager: BLEManager
+	
+	var body: some View {
+		switch pageSwitcher.currentPage {
+		case .connect:
+			Connect()
+		case .dfu:
+			DFU_Page(dfuUpdater: DFU_Updater(ble: bleManager))
+		case .status:
+			DeviceView()
 		}
 	}
 }
@@ -118,5 +76,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
 		ContentView()
+			.environmentObject(PageSwitcher())
 	}
 }

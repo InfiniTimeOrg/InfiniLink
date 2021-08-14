@@ -15,6 +15,8 @@ struct Infini_iOSApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+				.environmentObject(PageSwitcher())
+				.environmentObject(BLEManager())
         }
     }
 }
