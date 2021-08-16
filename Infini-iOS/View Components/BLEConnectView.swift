@@ -10,7 +10,6 @@ import SwiftUI
 
 struct Connect: View {
 	
-	//@ObservedObject var bleManager = BLEManager()
 	@EnvironmentObject var bleManager: BLEManager
 
 	var body: some View {
@@ -28,6 +27,7 @@ struct Connect: View {
 					}) {
 						Text(peripheral.name)
 					}
+					Text(String(peripheral.rssi))
 				}
 			}
 		

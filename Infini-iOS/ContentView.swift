@@ -9,8 +9,9 @@ import SwiftUI
 import CoreData
 
 struct ContentView: View {
-
+	
 	@State var showMenu = false
+	@EnvironmentObject var pageSwitcher: PageSwitcher
 	
 	var body: some View {
 		
@@ -20,9 +21,12 @@ struct ContentView: View {
 					withAnimation {
 						self.showMenu = false
 					}
-				} 
+				} else if $0.translation.width > 100 {
+					withAnimation {
+						self.showMenu = true
+					}
+				}
 			}
-		
 		return NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
@@ -31,26 +35,25 @@ struct ContentView: View {
 						.offset(x: self.showMenu ? geometry.size.width/2 : 0)
 						.disabled(self.showMenu ? true : false)
 					if self.showMenu {
-						MenuView(isOpen: self.$showMenu)
+						SideMenu(isOpen: self.$showMenu)
 							.frame(width: geometry.size.width/2)
 							.transition(.move(edge: .leading))
 					}
 				}
-					.gesture(drag)
 			}
-				//.navigationBarTitle("Infini-iOS", displayMode: .inline)
-				.navigationBarItems(leading: (
-					Button(action: {
-						withAnimation {
-							self.showMenu.toggle()
-						}
-					}) {
-						Image(systemName: "line.horizontal.3")
-							.imageScale(.large)
-							.foregroundColor(Color.white)
+			.navigationBarItems(leading: (
+				Button(action: {
+					withAnimation {
+						self.showMenu.toggle()
 					}
-				))
+				}) {
+					Image(systemName: "line.horizontal.3")
+						.imageScale(.large)
+						.foregroundColor(Color.gray)
+				}
+			))
 		}
+		.gesture(drag)
 	}
 }
 
@@ -69,6 +72,8 @@ struct MainView: View {
 			DFU_Page(dfuUpdater: DFU_Updater(ble: bleManager))
 		case .status:
 			DeviceView()
+		case .settings:
+			Settings_Page()
 		}
 	}
 }
@@ -77,5 +82,6 @@ struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
 		ContentView()
 			.environmentObject(PageSwitcher())
+			.environmentObject(BLEManager())
 	}
 }
