@@ -20,12 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app uses bluetooth to communicate with your PineTime.</string>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>This app needs permission to allow your PineTime to control your music.</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This app needs permission to allow your PineTime to control your music.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -42,8 +40,6 @@
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
@@ -52,5 +48,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>kTCCServiceMediaLibrary</key>
+	<string>This app needs permission to allow your PineTime to control your music.</string>
 </dict>
 </plist>

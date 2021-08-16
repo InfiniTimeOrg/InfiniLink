@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MenuView: View {
+struct SideMenu: View {
 	
 	@State var currentPage: Page = .connect
 	@Binding var isOpen: Bool
@@ -33,7 +33,7 @@ struct MenuView: View {
 						.padding(5)
 				}
 			}
-			.padding(.top, 100)
+				.padding(.top, 30)
 			HStack {
 				Button(action: {changePage(newPage: .status)}) {
 					Image(systemName: "heart")
@@ -44,7 +44,7 @@ struct MenuView: View {
 						.padding(5)
 				}
 			}
-				.padding(.top, 30)
+				.padding(.top, 20)
 			HStack {
 				Button(action: {changePage(newPage: .dfu)}) {
 					Image(systemName: "arrow.up.doc")
@@ -55,7 +55,18 @@ struct MenuView: View {
 						.padding(5)
 				}
 			}
-			.padding(.top, 30)
+				.padding(.top, 20)
+			HStack {
+				Button(action: {changePage(newPage: .settings)}) {
+					Image(systemName: "gear")
+						.foregroundColor(.gray)
+						.imageScale(.large)
+					Text("Settings")
+						.foregroundColor(.gray)
+						.padding(5)
+				}
+			}
+				.padding(.top, 20)
 			
 			Spacer()
 			
@@ -87,12 +98,5 @@ struct MenuView: View {
 		}
 			.padding()
 			.frame(maxWidth: .infinity, alignment: .leading)
-			//.edgesIgnoringSafeArea(.all)
 	}
 }
-
-//struct MenuView_Previews: PreviewProvider {
-//	static var previews: some View {
-//		MenuView()
-//	}
-//}

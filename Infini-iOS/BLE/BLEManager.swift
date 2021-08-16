@@ -58,14 +58,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 
 		myCentral = CBCentralManager(delegate: self, queue: nil)
 		myCentral.delegate = self
-		heartBPM = "Reading"
-		batteryLevel = "Reading"
-		firmwareVersion = "Reading"
 		
 	}
 	
 	func startScanning() {
-		print("startScanning")
 		myCentral.scanForPeripherals(withServices: nil, options: nil)
 		isScanning = true
 		peripherals = [Peripheral]()
@@ -73,7 +69,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 	
 	func stopScanning() {
-		print("stopScanning")
 		myCentral.stopScan()
 		isScanning = false
 	}
@@ -141,148 +136,3 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 }
 
-extension BLEManager: CBPeripheralDelegate {
-	func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
-		guard let services = peripheral.services else { return }
-
-		for service in services {
-			peripheral.discoverCharacteristics(nil, for:service)
-		}
-	}
-	
-	func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
-		guard let characteristics = service.characteristics else { return }
-		
-		for characteristic in characteristics {
-			if characteristic.properties.contains(.read) {
-				peripheral.readValue(for: characteristic)
-			}
-			
-			// subscribe to all values that can be subscribed to.
-			// TODO: separate this out and subscribe individually for each service in a separate .swift document so this isn't so monolithic
-			if characteristic.properties.contains(.notify) {
-				switch characteristic.uuid {
-				case musicControlCBUUID:
-					peripheral.setNotifyValue(true, for: characteristic)
-					print("subscribed to", characteristic.uuid)
-				case hrmCBUUID:
-					peripheral.setNotifyValue(true, for: characteristic)
-					print("subscribed to", characteristic.uuid)
-				case batCBUUID:
-					peripheral.setNotifyValue(true, for: characteristic)
-					print("subscribed to", characteristic.uuid)
-				default:
-					break
-				}
-				peripheral.setNotifyValue(true, for: characteristic)
-			}
-			
-			if characteristic.properties.contains(.write) {
-				if characteristic.uuid == notifyCBUUID {
-					// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
-					notifyCharacteristic = characteristic
-					sendNotification(notification: "iOS Connected!")
-				}
-			}
-		}
-	}
-	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-		switch characteristic.uuid {
-		case musicControlCBUUID:
-			// listen for the music controller notifications
-			musicChars.control = characteristic
-			let musicControl = [UInt8](characteristic.value!)
-			controlMusic(controlNumber: Int(musicControl[0]))
-			
-		case musicTrackCBUUID:
-			// select track characteristic for writing to music app
-			musicChars.track = characteristic
-			
-		case musicArtistCBUUID:
-			// select artist characteristic for writing to music app
-			musicChars.artist = characteristic
-			
-		case hrmCBUUID:
-			// read heart rate hex, convert to decimal
-			let bpm = heartRate(from: characteristic)
-			heartBPM = String(bpm)
-			
-		case batCBUUID:
-			// read battery hex data, convert it to decimal
-			let batData = [UInt8](characteristic.value!)
-			batteryLevel = String(batData[0])
-			
-		case timeCBUUID:
-			// convert string with hex value of time to actual hex data, then write to PineTime
-			peripheral.writeValue(currentTime().hexData, for: characteristic, type: .withResponse)
-			
-		case firmwareCBUUID:
-			firmwareVersion = String(decoding: characteristic.value!, as: UTF8.self)
-		default:
-			break
-		}
-	}
-	
-	// this function converts string to ascii and writes to the selected characteristic. Used for notifications and music app
-	func writeASCIIToPineTime(message: String, characteristic: CBCharacteristic) {
-		let writeData = message.data(using: .ascii)!
-		infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
-	}
-	
-	
-	// function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
-	private func heartRate(from characteristic: CBCharacteristic) -> Int {
-		guard let characteristicData = characteristic.value else { return -1 }
-		let byteArray = [UInt8](characteristicData)
-
-		let firstBitValue = byteArray[0] & 0x01
-		if firstBitValue == 0 {
-			// Heart Rate Value Format is in the 2nd byte
-			return Int(byteArray[1])
-		} else {
-			// Heart Rate Value Format is in the 2nd and 3rd bytes
-			return (Int(byteArray[1]) << 8) + Int(byteArray[2])
-		}
-	}
-	
-	// this function pulls date from phone, shuffles it into the correct order, and then hex-encodes it to a format that InfiniTime can understand
-	private func currentTime() -> String {
-		let now = Date() // current time
-		
-		// formatting setup for the date, not including the year because we have to reformat the year hex to match what the PT expects
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "MM dd H m s e SSSS"
-		
-		// prepare formatting for year
-		let yearFormatter = DateFormatter()
-		yearFormatter.dateFormat = "y"
-		let yearString = yearFormatter.string(from: now)
-		let intYear = Int(yearString)
-		
-		// convert year string to hex-encoded string. conditionally prepend 0 in case by some miracle this application and your watch is still functional in the year 4096
-		var hexYear = String (format: "%02X", intYear!)
-		if hexYear.count == 3 {
-			hexYear.insert("0", at: hexYear.startIndex)
-		}
-		
-		// infinitime (and BLE in general? I dunno...) requires the MSB first, so we have to switch the year from XXYY to YYXX
-		var revYearChars = hexYear.suffix(2)
-		revYearChars += hexYear.prefix(2)
-		
-		var fullDateString = String(revYearChars)
-		
-		let dateString = dateFormatter.string(from: now)
-		let dateParts = dateString.components(separatedBy: " ")
-		
-		// convert the rest of the date parts to hex, and append them to the date string
-		
-		for part in dateParts {
-			let intPart = Int(part)
-			let hex = String(format: "%02X", intPart!)
-			fullDateString.append(hex)
-		}
-		
-		// print(fullDateString) // debug
-		return fullDateString
-	}
-}

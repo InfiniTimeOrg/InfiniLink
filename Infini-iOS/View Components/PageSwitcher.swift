@@ -11,6 +11,7 @@ enum Page {
 	case connect
 	case dfu
 	case status
+	case settings
 }
 
 class PageSwitcher: ObservableObject {
