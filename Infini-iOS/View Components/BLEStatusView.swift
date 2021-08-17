@@ -17,7 +17,7 @@ struct DeviceView: View {
 			Text("InfiniTime Status")
 				.font(.largeTitle)
 				.frame(maxWidth: .infinity, alignment: .center)
-				.padding(30)
+				.padding(.bottom, 30)
 
 			HStack (spacing: 10){
 				Text("Heart Rate: ")
@@ -36,6 +36,33 @@ struct DeviceView: View {
 			}
 			
 			Spacer()
-		}
+			if bleManager.isConnectedToPinetime {
+				Button(action: {
+					self.bleManager.disconnect()
+				}) {
+					Text("Disconnect from PineTime")
+						.padding()
+						.padding(.vertical, 7)
+						.frame(maxWidth: .infinity, alignment: .center)
+						.background(Color.gray)
+						.foregroundColor(Color.white)
+						.cornerRadius(10)
+						.padding(.horizontal, 20)
+				}
+			} else {
+				Button(action: {
+					self.bleManager.disconnect()
+				}) {
+					Text("Disconnect from PineTime")
+						.padding()
+						.padding(.vertical, 7)
+						.frame(maxWidth: .infinity, alignment: .center)
+						.background(Color.darkGray)
+						.foregroundColor(Color.gray)
+						.cornerRadius(10)
+						.padding(.horizontal, 20)
+				}.disabled(true)
+			}
+		}//.padding()
 	}
 }

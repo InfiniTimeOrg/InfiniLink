@@ -22,12 +22,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	@Published var musicChars = musicCharacteristics()
 	
+	let settings = UserDefaults.standard
+	
 	// UI flag variables
 	@Published var isSwitchedOn = false									// for now this is used to display if bluetooth is on in the main app screen. maybe an alert in the future?
 	@Published var isScanning = false									// another UI flag. Probably not necessary for anything but debugging. I dunno maybe a little swirly animation or something could be triggered by this
 	@Published var isConnectedToPinetime = false						// another flag published to update UI stuff. Can probably be implemented better in the future
 	@Published var heartBPM: String = "Disconnected"					// published var to communicate the HRM data to the UI.
-	@Published var batteryLevel: String = "Disconnected"				// Same as heartBPM but for battery data
+	@Published var batteryLevel: String = "20"//"Disconnected"				// Same as heartBPM but for battery data
 	@Published var firmwareVersion: String = "Disconnected"
 
 	// Selecting and connecting variables
@@ -82,7 +84,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	func connect(peripheral: CBPeripheral) {
 		// Still blocking connections to anything not named "InfiniTime" until I can set up a proper way to test other devices
 		
-		if peripheral.name == "InfiniTime" {
+		if peripheral.name == "InfiniTime" || peripheral.name == "Pinetime-JF" {
 			self.myCentral.stopScan()
 			isScanning = false
 			
@@ -98,23 +100,35 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		
 		var peripheralName: String!
 		
+		//for item in advertisementData { // DEBUG
+		//	print(item)
+		//}
+		
+		// TODO: Recreate the process below.
+		/*
+			- the hash I'm using is only unique between PineTimes because the peripheral struct includes an incrementing ID number that's part of the hash.
+				- this works for getting more than one PT in the menu, but is obviously a drag because it's not at all guaranteed to be persistent
+			- there's some stuff happening here that doesn't need to happen - ex. there's an array and a dictionary doing basically the same thing?
+		*/
+		
 		if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
 			peripheralName = name
-		}
-		else {
-			peripheralName = "Unknown"
-		}
-		
-		let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash)
-
-		// compare peripheral hashes to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
-		// this hash value is functional only for separating devices during this search, and is not at all guaranteed to be a persistent value. Probably not to be trusted for long-term autoconnect persistence. So far, I have gotten the same value for my PineTime every time I run the app, but based on the Apple docs this is not a guarantee.
-		if !peripherals.contains(where: {$0.peripheralHash == newPeripheral.peripheralHash}) {
-			// I think there's probably a way to get rid of this array someday, but for now it's useful for displaying the device names. You cant have a Peripheral struct as a key in the peripheralDictionary, so there has to be some way to pass the names to the UI, and the peripherals array seems like it.
-			peripherals.append(newPeripheral)
-			peripheralDictionary[newPeripheral.peripheralHash] = peripheral
+			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash)
 			
-			print(newPeripheral, "added to list")
+			let autoconnect = UserDefaults.standard.object(forKey: "autoconnect") as? Bool ?? true
+			
+			if autoconnect {
+				connect(peripheral: peripheral)
+			}
+			else {
+				// compare peripheral hashes to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
+				if !peripherals.contains(where: {$0.peripheralHash == newPeripheral.peripheralHash}) {
+					peripherals.append(newPeripheral)
+					peripheralDictionary[newPeripheral.peripheralHash] = peripheral
+					
+					print(newPeripheral, "added to list")
+				}
+			}
 		}
 	}
 	

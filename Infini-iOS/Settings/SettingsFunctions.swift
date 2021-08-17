@@ -8,3 +8,12 @@
     
 
 import Foundation
+
+class SettingsFunctions {
+	func batteryNotification(bat: Int, bleManager: BLEManager) {
+		if bat == 20 {
+			print("test")
+			bleManager.sendNotification(notification: "Battery at 20%")
+		}
+	}
+}
