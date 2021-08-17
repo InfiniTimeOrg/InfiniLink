@@ -27,29 +27,13 @@ extension BLEManager: CBPeripheralDelegate {
 			if characteristic.properties.contains(.read) {
 				peripheral.readValue(for: characteristic)
 			}
-			// MARK: - Subscribe to services
-			// subscribe to HRM, battery, and music control characteristics
-			if characteristic.properties.contains(.notify) {
-				/*switch characteristic.uuid {
-				case musicControlCBUUID:
-					//peripheral.setNotifyValue(true, for: characteristic)
-				case hrmCBUUID:
-					//peripheral.setNotifyValue(true, for: characteristic)
-				case batCBUUID:
-					//peripheral.setNotifyValue(true, for: characteristic)
-					break
-				default:
-					break
-				}
-				peripheral.setNotifyValue(true, for: characteristic)*/
-				print(characteristic.uuid, " can notify")
-			}
 			
-			if characteristic.properties.contains(.write) {
-				if characteristic.uuid == notifyCBUUID {
-					// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
-					notifyCharacteristic = characteristic
+			if characteristic.uuid == notifyCBUUID {
+				// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
+				notifyCharacteristic = characteristic
+				if firstConnect {
 					sendNotification(notification: "iOS Connected!")
+					firstConnect = false
 				}
 			}
 		}

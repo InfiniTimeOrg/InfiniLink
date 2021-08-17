@@ -24,8 +24,8 @@ struct DFU_Page: View {
 		VStack (spacing: 10){
 			Text("Firmware Update")
 				.font(.largeTitle)
-				.frame(maxWidth: .infinity, alignment: .center)
-				.padding(.bottom, 30)
+				.padding()
+				.frame(maxWidth: .infinity, alignment: .leading)
 
 			HStack (spacing: 10){
 				Text("Current Firmware: ")

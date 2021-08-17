@@ -24,6 +24,8 @@
 	<string>This app needs permission to allow your PineTime to control your music.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
@@ -31,6 +33,10 @@
 	</dict>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UIRequiredDeviceCapabilities</key>

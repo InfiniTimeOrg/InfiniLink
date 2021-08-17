@@ -16,9 +16,9 @@ struct DeviceView: View {
 		VStack (spacing: 10){
 			Text("InfiniTime Status")
 				.font(.largeTitle)
-				.frame(maxWidth: .infinity, alignment: .center)
-				.padding(.bottom, 30)
-
+				.padding()
+				.frame(maxWidth: .infinity, alignment: .leading)
+			
 			HStack (spacing: 10){
 				Text("Heart Rate: ")
 					.font(.title)

@@ -12,6 +12,8 @@ struct Connect: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
 	@State var scanOrStopScan: Bool = true
+	@AppStorage("autoconnect") var autoconnect: Bool = false
+	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 
 	var body: some View {
 		
@@ -36,12 +38,16 @@ struct Connect: View {
 		
 			Spacer()
 	
-			let autoconnect = UserDefaults.standard.object(forKey: "autoconnect") as? Bool ?? true
+			//let autoconnect = UserDefaults.standard.object(forKey: "autoconnect") as? Bool ?? true
 			if autoconnect {
-				Button(action: {
-					self.bleManager.startScanning()
-				}) {
-					Text("Autoconnect")
+				//Button(action: {
+				//	self.bleManager.startScanning()
+				//}) {
+				if bleManager.isSwitchedOn {
+					Text("Scanning")
+						.onAppear {
+							self.bleManager.startScanning()
+						}
 						.padding()
 						.padding(.vertical, 7)
 						.frame(maxWidth: .infinity, alignment: .center)
@@ -50,7 +56,6 @@ struct Connect: View {
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
 				}
-
 			} else {
 				if scanOrStopScan {
 					Button(action: {

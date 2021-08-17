@@ -17,6 +17,7 @@ struct Settings_Page: View {
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
+	@AppStorage("autoconnectUUID") var autoconnectUUID: String = "empty"
 
 	
 	var body: some View {
@@ -28,8 +29,15 @@ struct Settings_Page: View {
 				Section(header: Text("Connection")) {
 					Toggle("Autoconnect to Nearest PineTime", isOn: $autoconnect)
 					if autoconnect {
-					Text("Warning! Autoconnect is insecure! Only use in safe environments.").foregroundColor(Color.red)
+					Text("Autoconnect is currently experimental! Connection is made based on device UUID, which I am only sort of sure is static.").foregroundColor(Color.red)
 					}
+					Button {
+						autoconnectUUID = bleManager.setAutoconnectUUID
+						print(autoconnectUUID)
+					} label: {
+						Text("Select Current Device for Autoconnect")
+					}
+
 				}
 				Section(header: Text("Notifications")) {
 					Toggle("Enable Watch Notifications", isOn: $watchNotifications)
