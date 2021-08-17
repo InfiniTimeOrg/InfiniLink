@@ -17,5 +17,6 @@ enum Page {
 class PageSwitcher: ObservableObject {
 	
 	@Published var currentPage: Page = .connect
+	@Published var currentPageTitle: String = "Connect to Your Device"
 
 }

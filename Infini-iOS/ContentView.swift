@@ -12,9 +12,18 @@ struct ContentView: View {
 	
 	@State var showMenu = false
 	@EnvironmentObject var pageSwitcher: PageSwitcher
+	@EnvironmentObject var bleManager: BLEManager
+	
+	init() {
+		 UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
+		 UINavigationBar.appearance().shadowImage = UIImage()
+		 UINavigationBar.appearance().isTranslucent = true
+		 UINavigationBar.appearance().tintColor = .clear
+		 UINavigationBar.appearance().backgroundColor = .clear
+	}
+
 	
 	var body: some View {
-		
 		let drag = DragGesture()
 			.onEnded {
 				if $0.translation.width < -100 {
@@ -27,6 +36,14 @@ struct ContentView: View {
 					}
 				}
 			}
+		if bleManager.batteryLevel == "20" {
+			let batNotification = UserDefaults.standard.object(forKey: "batteryNotification") as? Bool ?? false
+			if batNotification {
+				bleManager.sendNotification(notification: "Battery at 20%")
+				print("20")
+			}
+		}
+		
 		return NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
@@ -38,6 +55,7 @@ struct ContentView: View {
 						SideMenu(isOpen: self.$showMenu)
 							.frame(width: geometry.size.width/2)
 							.transition(.move(edge: .leading))
+							.ignoresSafeArea()
 					}
 				}
 			}
@@ -52,6 +70,8 @@ struct ContentView: View {
 						.foregroundColor(Color.gray)
 				}
 			))
+			.background(Color.black)
+			.navigationBarTitleDisplayMode(.inline)
 		}
 		.gesture(drag)
 	}
@@ -85,3 +105,4 @@ struct ContentView_Previews: PreviewProvider {
 			.environmentObject(BLEManager())
 	}
 }
+

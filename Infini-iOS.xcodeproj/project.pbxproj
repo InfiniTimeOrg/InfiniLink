@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */; };
 		264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */; };
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
@@ -17,7 +18,6 @@
 		264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7326BC526C0050A223 /* BLEManager.swift */; };
 		264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7526BC52720050A223 /* HexStringToData.swift */; };
 		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
-		264BFE7B26BCB9510050A223 /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */; };
 		264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80A26C62ED600E812C3 /* SideMenu.swift */; };
 		264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80C26C633CF00E812C3 /* PageSwitcher.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
@@ -29,8 +29,11 @@
 		26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6316226C4C6D6005AE404 /* BLEConnectView.swift */; };
 		26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816426C9EB3800BBF555 /* BLEDelegates.swift */; };
 		26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */; };
-		26D7816A26C9F04400BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816926C9F04400BBF555 /* SettingsView.swift */; };
-		26D7816C26C9F9EC00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816B26C9F9EC00BBF555 /* SettingsFunctions.swift */; };
+		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
+		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
+		26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817226CAB27800BBF555 /* WatchNotificationsView.swift */; };
+		26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817426CAB79200BBF555 /* PhoneNotificationsView.swift */; };
+		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* BLEStatusView.swift */; };
 /* End PBXBuildFile section */
 
@@ -52,6 +55,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* Infini-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Infini-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSApp.swift; sourceTree = "<group>"; };
 		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -68,7 +72,6 @@
 		264BFE7326BC526C0050A223 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		264BFE7526BC52720050A223 /* HexStringToData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexStringToData.swift; sourceTree = "<group>"; };
 		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
 		264DB80A26C62ED600E812C3 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		264DB80C26C633CF00E812C3 /* PageSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwitcher.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
@@ -79,8 +82,11 @@
 		26A6316226C4C6D6005AE404 /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
 		26D7816426C9EB3800BBF555 /* BLEDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDelegates.swift; sourceTree = "<group>"; };
 		26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManagerExtensions.swift; sourceTree = "<group>"; };
-		26D7816926C9F04400BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
-		26D7816B26C9F9EC00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
+		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
+		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		26D7817226CAB27800BBF555 /* WatchNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchNotificationsView.swift; sourceTree = "<group>"; };
+		26D7817426CAB79200BBF555 /* PhoneNotificationsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneNotificationsView.swift; sourceTree = "<group>"; };
+		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		26F426EE26C72D7D00D0866B /* BLEStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEStatusView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -134,19 +140,19 @@
 		264BFE4026BC51CE0050A223 /* Infini-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				26D7816826C9F02A00BBF555 /* Settings */,
 				264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				264DB80926C62EAC00E812C3 /* View Components */,
-				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
+				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
 				26A6315926C49839005AE404 /* DFU */,
 				26A6315326BF5FD6005AE404 /* Notifications */,
 				26A6314E26BF0FA2005AE404 /* Music */,
-				264BFE7526BC52720050A223 /* HexStringToData.swift */,
+				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
-				264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */,
+				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
+				26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */,
 				264BFE4726BC51CF0050A223 /* Preview Content */,
 			);
 			path = "Infini-iOS";
@@ -228,10 +234,29 @@
 		26D7816826C9F02A00BBF555 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				26D7816926C9F04400BBF555 /* SettingsView.swift */,
-				26D7816B26C9F9EC00BBF555 /* SettingsFunctions.swift */,
+				26D7817126CAB25600BBF555 /* Notification Settings */,
+				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
+				26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */,
 			);
 			path = Settings;
+			sourceTree = "<group>";
+		};
+		26D7817126CAB25600BBF555 /* Notification Settings */ = {
+			isa = PBXGroup;
+			children = (
+				26D7817226CAB27800BBF555 /* WatchNotificationsView.swift */,
+				26D7817426CAB79200BBF555 /* PhoneNotificationsView.swift */,
+			);
+			path = "Notification Settings";
+			sourceTree = "<group>";
+		};
+		26D7817826CAD18B00BBF555 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE7526BC52720050A223 /* HexStringToData.swift */,
+				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -371,11 +396,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				26D7816C26C9F9EC00BBF555 /* SettingsFunctions.swift in Sources */,
-				264BFE7B26BCB9510050A223 /* Infini_iOS.xcdatamodeld in Sources */,
+				26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */,
 				26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */,
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
-				26D7816A26C9F04400BBF555 /* SettingsView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				26A6315526C0297A005AE404 /* Notifications.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
@@ -386,10 +409,15 @@
 				264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */,
 				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */,
+				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
+				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
+				26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */,
+				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
+				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -740,12 +768,12 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		264BFE7926BCB9510050A223 /* Infini_iOS.xcdatamodeld */ = {
+		26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */,
+				26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */,
 			);
-			currentVersion = 264BFE7A26BCB9510050A223 /* Infini_iOS.xcdatamodel */;
+			currentVersion = 26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */;
 			path = Infini_iOS.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

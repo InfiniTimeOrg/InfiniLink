@@ -27,20 +27,22 @@ extension BLEManager: CBPeripheralDelegate {
 			if characteristic.properties.contains(.read) {
 				peripheral.readValue(for: characteristic)
 			}
-			
+			// MARK: - Subscribe to services
 			// subscribe to HRM, battery, and music control characteristics
 			if characteristic.properties.contains(.notify) {
-				switch characteristic.uuid {
+				/*switch characteristic.uuid {
 				case musicControlCBUUID:
-					peripheral.setNotifyValue(true, for: characteristic)
+					//peripheral.setNotifyValue(true, for: characteristic)
 				case hrmCBUUID:
-					peripheral.setNotifyValue(true, for: characteristic)
+					//peripheral.setNotifyValue(true, for: characteristic)
 				case batCBUUID:
-					peripheral.setNotifyValue(true, for: characteristic)
+					//peripheral.setNotifyValue(true, for: characteristic)
+					break
 				default:
 					break
 				}
-				peripheral.setNotifyValue(true, for: characteristic)
+				peripheral.setNotifyValue(true, for: characteristic)*/
+				print(characteristic.uuid, " can notify")
 			}
 			
 			if characteristic.properties.contains(.write) {
@@ -58,6 +60,7 @@ extension BLEManager: CBPeripheralDelegate {
 		case musicControlCBUUID:
 			// listen for the music controller notifications
 			musicChars.control = characteristic
+			peripheral.setNotifyValue(true, for: characteristic)
 			let musicControl = [UInt8](characteristic.value!)
 			controlMusic(controlNumber: Int(musicControl[0]))
 			
@@ -70,14 +73,16 @@ extension BLEManager: CBPeripheralDelegate {
 			musicChars.artist = characteristic
 			
 		case hrmCBUUID:
-			// read heart rate hex, convert to decimal
+			// subscribe to HRM, read heart rate hex, convert to decimal
 			heartBPM = "Reading"
+			peripheral.setNotifyValue(true, for: characteristic)
 			let bpm = heartRate(from: characteristic)
 			heartBPM = String(bpm)
 			
 		case batCBUUID:
-			// read battery hex data, convert it to decimal
+			// subscribe to battery updates, read battery hex data, convert it to decimal
 			batteryLevel = "Reading"
+			peripheral.setNotifyValue(true, for: characteristic)
 			let batData = [UInt8](characteristic.value!)
 			batteryLevel = String(batData[0])
 			

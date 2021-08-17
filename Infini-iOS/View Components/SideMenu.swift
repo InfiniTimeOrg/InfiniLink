@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SideMenu: View {
 	
-	@State var currentPage: Page = .connect
+	//@State var currentPage: Page = .connect
 	@Binding var isOpen: Bool
 	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@EnvironmentObject var bleManager: BLEManager
@@ -33,7 +33,7 @@ struct SideMenu: View {
 						.padding(5)
 				}
 			}
-				.padding(.top, 30)
+				.padding(.top, 100)
 			HStack {
 				Button(action: {changePage(newPage: .status)}) {
 					Image(systemName: "heart")
@@ -94,9 +94,11 @@ struct SideMenu: View {
 				}
 			}
 			.padding()
+			.frame(maxWidth: .infinity, alignment: .center)
 			
 		}
-			.padding()
+			.padding(20)
 			.frame(maxWidth: .infinity, alignment: .leading)
+			.background(Color.darkGray)
 	}
 }
