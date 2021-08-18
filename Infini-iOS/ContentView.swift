@@ -25,7 +25,6 @@ struct ContentView: View {
 	}
 	
 	
-	
 	var body: some View {
 		let drag = DragGesture()
 			.onEnded {
@@ -41,6 +40,7 @@ struct ContentView: View {
 				//	pageSwitcher.connectViewLoad = true
 				}
 			}
+		
 		return NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
@@ -52,9 +52,12 @@ struct ContentView: View {
 						.offset(x: self.pageSwitcher.showMenu ? geometry.size.width/2 : 0)
 						.disabled(self.pageSwitcher.showMenu ? true : false)
 						.onAppear(){
-							if autoconnect && bleManager.isSwitchedOn {
-								self.bleManager.startScanning()
-							}
+							// if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
+							DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+								if autoconnect && bleManager.isSwitchedOn {
+									self.bleManager.startScanning()
+								}
+							})
 							if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) {
 								DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
 									withAnimation {

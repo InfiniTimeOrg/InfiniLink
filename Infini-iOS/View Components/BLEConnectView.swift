@@ -35,7 +35,9 @@ struct Connect: View {
 				HStack {
 					Button(action: {
 						self.bleManager.deviceToConnect = peripheral.peripheralHash
-						self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
+						if !self.bleManager.isConnectedToPinetime {
+							self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
+						}
 						presentation.wrappedValue.dismiss()
 					}) {
 						Text(peripheral.name)

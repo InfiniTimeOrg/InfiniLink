@@ -27,16 +27,25 @@ struct Settings_Page: View {
 				.padding()
 			Form {
 				Section(header: Text("Connection")) {
-					Toggle("Autoconnect to Nearest PineTime", isOn: $autoconnect)
+					Toggle("Autoconnect to PineTime", isOn: $autoconnect)
 					if autoconnect {
-					Text("Autoconnect is currently experimental! Connection is made based on device UUID, which I am only sort of sure is static.").foregroundColor(Color.red)
+						Text("Autoconnect is currently experimental! Connection is made based on device UUID, which I am only sort of sure is static.").foregroundColor(Color.red)
+						Button {
+							autoconnectUUID = bleManager.setAutoconnectUUID
+							print(autoconnectUUID)
+						} label: {
+							Text("Use Current Device for Autoconnect")
+								.foregroundColor(Color.white)
+						}
+						Button {
+							autoconnectUUID = ""
+							print(autoconnectUUID)
+						} label: {
+							Text("Clear Autoconnect Device")
+								.foregroundColor(Color.white)
+						}
 					}
-					Button {
-						autoconnectUUID = bleManager.setAutoconnectUUID
-						print(autoconnectUUID)
-					} label: {
-						Text("Select Current Device for Autoconnect")
-					}
+
 
 				}
 				Section(header: Text("Notifications")) {

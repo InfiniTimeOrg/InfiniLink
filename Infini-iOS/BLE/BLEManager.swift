@@ -86,6 +86,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		if infiniTime != nil {
 			myCentral.cancelPeripheralConnection(infiniTime)
 			firstConnect = true
+			isConnectedToPinetime = false
 		}
 	}
 	

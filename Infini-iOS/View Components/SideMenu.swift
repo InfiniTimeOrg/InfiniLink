@@ -59,16 +59,18 @@ struct SideMenu: View {
 			
 			Spacer()
 			HStack {
-				Button(action: {
-					pageSwitcher.connectViewLoad = true
-					pageSwitcher.showMenu = false
-				}) {
-					Image(systemName: "radiowaves.right")
-						.foregroundColor(.gray)
-						.imageScale(.large)
-					Text("Connect to PineTime")
-						.foregroundColor(.gray)
-						.padding(5)
+				if !self.bleManager.isConnectedToPinetime {
+					Button(action: {
+						pageSwitcher.connectViewLoad = true
+						pageSwitcher.showMenu = false
+					}) {
+						Image(systemName: "radiowaves.right")
+							.foregroundColor(.gray)
+							.imageScale(.large)
+						Text("Connect to PineTime")
+							.foregroundColor(.gray)
+							.padding(5)
+					}
 				}
 			}
 				.padding(.top, 100)

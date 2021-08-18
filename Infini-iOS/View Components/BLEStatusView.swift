@@ -50,18 +50,14 @@ struct DeviceView: View {
 						.padding(.horizontal, 20)
 				}
 			} else {
-				Button(action: {
-					self.bleManager.disconnect()
-				}) {
-					Text("Disconnect from PineTime")
-						.padding()
-						.padding(.vertical, 7)
-						.frame(maxWidth: .infinity, alignment: .center)
-						.background(Color.darkGray)
-						.foregroundColor(Color.gray)
-						.cornerRadius(10)
-						.padding(.horizontal, 20)
-				}.disabled(true)
+				Text("Disconnected")
+					.padding()
+					.padding(.vertical, 7)
+					.frame(maxWidth: .infinity, alignment: .center)
+					.background(Color.darkGray)
+					.foregroundColor(Color.gray)
+					.cornerRadius(10)
+					.padding(.horizontal, 20)
 			}
 		}//.padding()
 	}
