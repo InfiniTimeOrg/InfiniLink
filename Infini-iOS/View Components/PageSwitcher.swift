@@ -8,7 +8,7 @@
 import Foundation
 
 enum Page {
-	case connect
+	//case connect
 	case dfu
 	case status
 	case settings
@@ -16,7 +16,20 @@ enum Page {
 
 class PageSwitcher: ObservableObject {
 	
-	@Published var currentPage: Page = .connect
+	@Published var currentPage: Page = .status
 	@Published var currentPageTitle: String = "Connect to Your Device"
+	@Published var connectViewLoad: Bool = false
+	@Published var showMenu: Bool = false
+	
+	/*init() {
+		if UserDefaults.standard.object(forKey: "autoconnect") as! Bool {
+			currentPage = .status
+		} else {
+			currentPage = .connect
+		}
+	}*/
+}
 
+class connectViewLoader: ObservableObject {
+	@Published var load: Bool = false
 }

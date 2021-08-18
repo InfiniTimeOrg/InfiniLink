@@ -104,18 +104,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			isConnectedToPinetime = true
 		}
 	}
-	func autoconnect() {
-		if autoconnectPeripheral != nil {
-			self.myCentral.stopScan()
-			isScanning = false
-			
-			self.infiniTime = autoconnectPeripheral
-			infiniTime.delegate = self
-			self.myCentral.connect(autoconnectPeripheral, options: nil)
-			
-			isConnectedToPinetime = true
-		}
-	}
 		
 	func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
 		
@@ -140,12 +128,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			let devUUID: CBUUID = CBUUID(string: devUUIDString)
 			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID)
 			
-			print(peripheralName + ": " + String(peripheral.identifier.uuidString))
+			//print(peripheralName + ": " + String(peripheral.identifier.uuidString))
 			
 			// handle autoconnect defaults
 			let settings = UserDefaults.standard
 			let autoconnect = settings.object(forKey: "autoconnect") as? Bool ?? true
-			let autoconnectUUID = settings.object(forKey: "autoconnectUUID") as! String
+			let autoconnectUUID = settings.object(forKey: "autoconnectUUID") as? String ?? ""
 			
 			if autoconnect && devUUIDString == autoconnectUUID {
 				connect(peripheral: peripheral)

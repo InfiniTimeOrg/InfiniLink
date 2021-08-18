@@ -24,17 +24,6 @@ struct SideMenu: View {
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack {
-				Button(action: {changePage(newPage: .connect)}) {
-					Image(systemName: "radiowaves.right")
-						.foregroundColor(.gray)
-						.imageScale(.large)
-					Text("Connect to PineTime")
-						.foregroundColor(.gray)
-						.padding(5)
-				}
-			}
-				.padding(.top, 100)
-			HStack {
 				Button(action: {changePage(newPage: .status)}) {
 					Image(systemName: "heart")
 						.foregroundColor(.gray)
@@ -44,7 +33,7 @@ struct SideMenu: View {
 						.padding(5)
 				}
 			}
-				.padding(.top, 20)
+				.padding(.top, 100)
 			HStack {
 				Button(action: {changePage(newPage: .dfu)}) {
 					Image(systemName: "arrow.up.doc")
@@ -69,6 +58,20 @@ struct SideMenu: View {
 				.padding(.top, 20)
 			
 			Spacer()
+			HStack {
+				Button(action: {
+					pageSwitcher.connectViewLoad = true
+					pageSwitcher.showMenu = false
+				}) {
+					Image(systemName: "radiowaves.right")
+						.foregroundColor(.gray)
+						.imageScale(.large)
+					Text("Connect to PineTime")
+						.foregroundColor(.gray)
+						.padding(5)
+				}
+			}
+				.padding(.top, 100)
 			
 			VStack (alignment: .center, spacing:10) {
 				Text("STATUS")
