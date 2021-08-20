@@ -9,6 +9,7 @@
 
 import Foundation
 import CoreBluetooth
+import SwiftUICharts
 
 extension BLEManager {
 	
@@ -32,6 +33,12 @@ extension BLEManager {
 			// Heart Rate Value Format is in the 2nd and 3rd bytes
 			return (Int(byteArray[1]) << 8) + Int(byteArray[2])
 		}
+	}
+	
+	func updateChartInfo(data: Double, heart: Bool) -> LineChartDataPoint {
+		let dateFormat = DateFormatter()
+		dateFormat.dateFormat = "H:mm:ss"
+		return LineChartDataPoint(value: data, xAxisLabel: "Time", description: dateFormat.string(from: Date()), date: Date())
 	}
 	
 	// this function pulls date from phone, shuffles it into the correct order, and then hex-encodes it to a format that InfiniTime can understand

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SideMenu: View {
 	
-	//@State var currentPage: Page = .connect
 	@Binding var isOpen: Bool
 	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@EnvironmentObject var bleManager: BLEManager

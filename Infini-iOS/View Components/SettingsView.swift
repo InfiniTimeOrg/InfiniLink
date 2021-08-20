@@ -29,7 +29,6 @@ struct Settings_Page: View {
 				Section(header: Text("Connection")) {
 					Toggle("Autoconnect to PineTime", isOn: $autoconnect)
 					if autoconnect {
-						Text("Autoconnect is currently experimental! Connection is made based on device UUID, which I am only sort of sure is static.").foregroundColor(Color.red)
 						Button {
 							autoconnectUUID = bleManager.setAutoconnectUUID
 							print(autoconnectUUID)

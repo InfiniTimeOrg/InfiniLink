@@ -8,6 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */; };
+		263B20B526CD673900676BF0 /* StatusViewTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B426CD673900676BF0 /* StatusViewTabs.swift */; };
+		263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B926CDF13400676BF0 /* HeartChart.swift */; };
+		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
+		263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 263B20C426CEB46800676BF0 /* SwiftUICharts */; };
+		263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */; };
 		264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */; };
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
@@ -27,6 +32,7 @@
 		26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */ = {isa = PBXBuildFile; productRef = 26A6315D26C498B7005AE404 /* NordicDFU */; };
 		26A6316026C4BC25005AE404 /* DFUView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315F26C4BC25005AE404 /* DFUView.swift */; };
 		26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6316226C4C6D6005AE404 /* BLEConnectView.swift */; };
+		26C82A5326CF4EFC0085EBE9 /* Shortcuts.intentdefinition in Sources */ = {isa = PBXBuildFile; fileRef = 26C82A5226CF4EFC0085EBE9 /* Shortcuts.intentdefinition */; };
 		26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816426C9EB3800BBF555 /* BLEDelegates.swift */; };
 		26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */; };
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
@@ -56,6 +62,10 @@
 
 /* Begin PBXFileReference section */
 		26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
+		263B20B426CD673900676BF0 /* StatusViewTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewTabs.swift; sourceTree = "<group>"; };
+		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
+		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
+		263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUProgressBar.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* Infini-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Infini-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSApp.swift; sourceTree = "<group>"; };
 		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -80,6 +90,7 @@
 		26A6315A26C49841005AE404 /* DFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFU.swift; sourceTree = "<group>"; };
 		26A6315F26C4BC25005AE404 /* DFUView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUView.swift; sourceTree = "<group>"; };
 		26A6316226C4C6D6005AE404 /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
+		26C82A5226CF4EFC0085EBE9 /* Shortcuts.intentdefinition */ = {isa = PBXFileReference; lastKnownFileType = file.intentdefinition; path = Shortcuts.intentdefinition; sourceTree = "<group>"; };
 		26D7816426C9EB3800BBF555 /* BLEDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDelegates.swift; sourceTree = "<group>"; };
 		26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManagerExtensions.swift; sourceTree = "<group>"; };
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
@@ -95,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */,
 				26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -116,6 +128,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		263B20B626CD673D00676BF0 /* Status View Components */ = {
+			isa = PBXGroup;
+			children = (
+				263B20B426CD673900676BF0 /* StatusViewTabs.swift */,
+				263B20B926CDF13400676BF0 /* HeartChart.swift */,
+				263B20BB26CDF20400676BF0 /* BatteryChart.swift */,
+			);
+			path = "Status View Components";
+			sourceTree = "<group>";
+		};
+		263B20C826CF07BE00676BF0 /* DFU */ = {
+			isa = PBXGroup;
+			children = (
+				26A6315F26C4BC25005AE404 /* DFUView.swift */,
+				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
+			);
+			path = DFU;
+			sourceTree = "<group>";
+		};
 		264BFE3526BC51CE0050A223 = {
 			isa = PBXGroup;
 			children = (
@@ -190,8 +221,10 @@
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
 				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
-				26A6315F26C4BC25005AE404 /* DFUView.swift */,
+				263B20C826CF07BE00676BF0 /* DFU */,
+				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
 				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
+				263B20B626CD673D00676BF0 /* Status View Components */,
 			);
 			path = "View Components";
 			sourceTree = "<group>";
@@ -235,7 +268,6 @@
 			isa = PBXGroup;
 			children = (
 				26D7817126CAB25600BBF555 /* Notification Settings */,
-				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
 				26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */,
 			);
 			path = Settings;
@@ -254,6 +286,7 @@
 			isa = PBXGroup;
 			children = (
 				264BFE7526BC52720050A223 /* HexStringToData.swift */,
+				26C82A5226CF4EFC0085EBE9 /* Shortcuts.intentdefinition */,
 				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
 			);
 			path = Utilities;
@@ -277,6 +310,7 @@
 			name = "Infini-iOS";
 			packageProductDependencies = (
 				26A6315D26C498B7005AE404 /* NordicDFU */,
+				263B20C426CEB46800676BF0 /* SwiftUICharts */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* Infini-iOS.app */;
@@ -351,7 +385,7 @@
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
 				26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
-				26F426F026C8468300D0866B /* XCRemoteSwiftPackageReference "SwiftUTI" */,
+				263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -396,6 +430,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */,
 				26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */,
 				26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */,
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
@@ -405,6 +440,7 @@
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
+				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
 				264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */,
 				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
@@ -413,7 +449,10 @@
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
 				26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */,
+				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
+				263B20B526CD673900676BF0 /* StatusViewTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
+				26C82A5326CF4EFC0085EBE9 /* Shortcuts.intentdefinition in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
@@ -741,6 +780,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/willdale/SwiftUICharts.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library.git";
@@ -749,17 +796,14 @@
 				kind = branch;
 			};
 		};
-		26F426F026C8468300D0866B /* XCRemoteSwiftPackageReference "SwiftUTI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "git@github.com:mkeiser/SwiftUTI.git";
-			requirement = {
-				branch = master;
-				kind = branch;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		263B20C426CEB46800676BF0 /* SwiftUICharts */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */;
+			productName = SwiftUICharts;
+		};
 		26A6315D26C498B7005AE404 /* NordicDFU */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;

@@ -27,14 +27,26 @@ extension BLEManager: CBPeripheralDelegate {
 			if characteristic.properties.contains(.read) {
 				peripheral.readValue(for: characteristic)
 			}
-			
-			if characteristic.uuid == notifyCBUUID {
-				// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
-				notifyCharacteristic = characteristic
-				if firstConnect {
-					sendNotification(notification: "iOS Connected!")
-					firstConnect = false
-				}
+			// Need to grab some characteristics now, namely those that don't respond to didUpdateValueFor.
+			// TODO: if AMS and ANCS are implemented, this whole switch can probably be deleted...
+			switch characteristic.uuid {
+				case musicControlCBUUID:
+					peripheral.setNotifyValue(true, for: characteristic)
+					musicChars.control = characteristic
+				case musicTrackCBUUID:
+					musicChars.track = characteristic
+				case musicArtistCBUUID:
+					// select artist characteristic for writing to music app
+					musicChars.artist = characteristic
+				case notifyCBUUID :
+						// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
+						notifyCharacteristic = characteristic
+						if firstConnect {
+							sendNotification(notification: "iOS Connected!")
+							firstConnect = false
+						}
+				default:
+					break
 			}
 		}
 	}
@@ -43,10 +55,9 @@ extension BLEManager: CBPeripheralDelegate {
 		switch characteristic.uuid {
 		case musicControlCBUUID:
 			// listen for the music controller notifications
-			musicChars.control = characteristic
-			peripheral.setNotifyValue(true, for: characteristic)
 			let musicControl = [UInt8](characteristic.value!)
 			controlMusic(controlNumber: Int(musicControl[0]))
+			print(musicControl)
 			
 		case musicTrackCBUUID:
 			// select track characteristic for writing to music app
@@ -58,24 +69,26 @@ extension BLEManager: CBPeripheralDelegate {
 			
 		case hrmCBUUID:
 			// subscribe to HRM, read heart rate hex, convert to decimal
-			heartBPM = "Reading"
 			peripheral.setNotifyValue(true, for: characteristic)
 			let bpm = heartRate(from: characteristic)
-			heartBPM = String(bpm)
+			heartBPM = Double(bpm)
+			if bpm != 0 {
+				hrmChartDataPoints.append(updateChartInfo(data: Double(bpm), heart: true))
+			}
 			
 		case batCBUUID:
 			// subscribe to battery updates, read battery hex data, convert it to decimal
-			batteryLevel = "Reading"
 			peripheral.setNotifyValue(true, for: characteristic)
 			let batData = [UInt8](characteristic.value!)
-			batteryLevel = String(batData[0])
+			batChartDataPoints.append(updateChartInfo(data: Double(batData[0]), heart: false))
+			batteryLevel = Double(batData[0])
+			
 			
 		case timeCBUUID:
 			// convert string with hex value of time to actual hex data, then write to PineTime
 			peripheral.writeValue(currentTime().hexData, for: characteristic, type: .withResponse)
 			
 		case firmwareCBUUID:
-			firmwareVersion = "Reading"
 			firmwareVersion = String(decoding: characteristic.value!, as: UTF8.self)
 		default:
 			break

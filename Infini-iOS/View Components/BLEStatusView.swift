@@ -19,22 +19,9 @@ struct DeviceView: View {
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
 			
-			HStack (spacing: 10){
-				Text("Heart Rate: ")
-					.font(.title)
-				Text(bleManager.heartBPM)
-					.font(.title)
-					.foregroundColor(.red)
-			}
 			
-			HStack (spacing: 10){
-				Text("Battery Level: ")
-					.font(.title)
-				Text(bleManager.batteryLevel)
-					.font(.title)
-					.foregroundColor(.red)
-			}
-			
+
+			StatusTabs().environmentObject(bleManager)
 			Spacer()
 			if bleManager.isConnectedToPinetime {
 				Button(action: {

@@ -1,6 +1,6 @@
 # Infini-iOS - an InfiniTime Companion App for iOS
 
-This is a proof-of-concept, barely-functional iOS application to interact with your PineTime running (at least) InfiniTime 1.3.0 (and maybe more, I haven't tested it against other watches or OSes).
+This is an alpha-verging-on-beta iOS application that allows you to interact with your PineTime running (at least) InfiniTime 1.3.0 (and perhaps other watches/OSes, pending testing).
 
 ### What works:
 - Scan nearby devices and allow the user to select an InfiniTime device to connect to
@@ -10,18 +10,13 @@ This is a proof-of-concept, barely-functional iOS application to interact with y
 - Read battery level, and subscribe to battery level's notifier for updated values
 - Display heart rate, battery level, and connection/bluetooth/scanning status to app main page
 - Music controls on InfiniTime can control Apple Music. I can't access system-level music controls or system volume from within an app, so the controls literally only work on Apple Music.
-- DFU - updating firmware is now possible!
+- DFU - updates to InfiniTime, bootloader, and recovery firmware have all been successful in testing
+- Limited user-configurable settings. I'm counting on testers to let me know what other things should be optional preferences!
 
-### What sort of works but mostly just sucks:
-- The UI. I'm working on it, but it's still a little rough
-- Notifications: I can send a test notification to the PineTime, but can't send phone notifications to the watch yet. Apple requires the ANCS protocol and secure bonding to be implemented on the peripheral device, so there's some big hills to climb before notifications are functional.
-
-### What's next:
-- Learn anything whatsoever about making an app design in SwiftUI that isn't an awful mess 
-- Send notifications to the phone, probably. Might be nice to get a buzz on your phone if the watch disconnects for some reason or if the watch battery is running low
-- User-configurable settings, like enabling or disabling Apple Music controls, notifications, etc
-- Clean everything up. Being my first major foray into larger-scale coding projects, I have not done a great job of compartmentalizing my code, so e.g. the BLEManager.swift file is pretty monolithic. 
-- Watch navigation app. This is a lower priority to me personally, but I'll definitely give it a shot eventually. Based on how the music control and notifications have gone, I'm guessing there's another proprietary Apple service that will need to be implemented to make this work.
+### What doesn't work:
+- Navigation app.
+- Music controls for anything other than Apple Music -- This requires Apple Music Service (AMS) to be implemented in InfiniTime. Once I feel like Infini-iOS has reached a semi-stable state, I'll try to help implement this service!
+- Phone notifications pushing to watch -- This requires a proprietary Apple service that behaves in more or less the exact same way as the notification service already implemented in InfiniTime, but this one has Apple in the name... as with AMS, I'll work on getting this implemented in Infini-iOS once I feel like the app is stable enough to leave alone for a while
 
 ### How to try it out:
 - Snag this repo and open it in XCode on a Mac

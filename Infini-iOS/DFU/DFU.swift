@@ -8,19 +8,17 @@
 import Foundation
 import NordicDFU
 
-class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
+class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate  {
 	
 	private var url: URL = URL(fileURLWithPath: "")
-	var bleManager: BLEManager
+	var bleManager: BLEManager!
 	var deviceToUpgrade: BLEManager.Peripheral!
+	var dfuController: DFUServiceController!
 	
-	@Published var dfuState: DFUState = DFUState.starting
-	@Published var dfuStatus: String = ""
-	@Published var percentComplete: Int = 0
-	
-	init(ble: BLEManager){
-		bleManager = ble
-	}
+	//@Published var dfuState: DFUState = DFUState.starting
+	@Published var transferFailed = false
+	@Published var percentComplete: Double!
+
 	
 	func prepare(location: URL, device: BLEManager) {
 		url = location
@@ -31,6 +29,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 		guard url.startAccessingSecurityScopedResource() else { return }
 		guard let selectedFirmware = DFUFirmware(urlToZipFile:url) else { return }
 		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
+		
 		// Optional:
 		// initiator.forceDfu = true/false // default false
 		// initiator.packetReceiptNotificationParameter = N // default is 12
@@ -39,23 +38,30 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 		initiator.progressDelegate = self // - to show progress bar
 		// initiator.peripheralSelector = ... // the default selector is used
 
-		_ = initiator.start(target: bleManager.infiniTime)
+		dfuController = initiator.start(target: bleManager.infiniTime)
 		url.stopAccessingSecurityScopedResource()
 	}
 	
+	func stopTransfer() {
+		if dfuController != nil {
+			_ = dfuController.abort()
+		}
+	}
 	
 	// stubs added automatically.
 	func dfuStateDidChange(to state: DFUState) {
-		dfuState = state
-		print(state)
+		print(state.description())
+
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-		print("DFU Error:", error)
+		print("DFU Error:", message)
+		dfuController = nil
+		transferFailed = true
 	}
 	
 	func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
-		percentComplete = progress
+		percentComplete = Double(progress)
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {

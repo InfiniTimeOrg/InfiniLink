@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreBluetooth
+import SwiftUICharts
 
 
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
@@ -36,8 +37,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var isSwitchedOn = false									// for now this is used to display if bluetooth is on in the main app screen. maybe an alert in the future?
 	@Published var isScanning = false									// another UI flag. Probably not necessary for anything but debugging. I dunno maybe a little swirly animation or something could be triggered by this
 	@Published var isConnectedToPinetime = false						// another flag published to update UI stuff. Can probably be implemented better in the future
-	@Published var heartBPM: String = "Disconnected"					// published var to communicate the HRM data to the UI.
-	@Published var batteryLevel: String = "Disconnected"				// Same as heartBPM but for battery data
+	@Published var heartBPM: Double = 0									// published var to communicate the HRM data to the UI.
+	@Published var batteryLevel: Double = 0								// Same as heartBPM but for battery data
+	@Published var hrmChartDataPoints: [LineChartDataPoint] = []
+	@Published var batChartDataPoints: [LineChartDataPoint] = []
 	@Published var firmwareVersion: String = "Disconnected"
 
 	// Selecting and connecting variables
