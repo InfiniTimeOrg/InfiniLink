@@ -13,6 +13,7 @@ import SwiftUI
 struct Settings_Page: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
+	@Environment(\.colorScheme) var colorScheme
 	
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
 	@AppStorage("autoconnect") var autoconnect: Bool = false
@@ -34,14 +35,14 @@ struct Settings_Page: View {
 							print(autoconnectUUID)
 						} label: {
 							Text("Use Current Device for Autoconnect")
-								.foregroundColor(Color.white)
+								.foregroundColor(colorScheme == .dark ? Color.white : Color.black)
 						}
 						Button {
 							autoconnectUUID = ""
 							print(autoconnectUUID)
 						} label: {
 							Text("Clear Autoconnect Device")
-								.foregroundColor(Color.white)
+								.foregroundColor(colorScheme == .dark ? Color.white : Color.black)
 						}
 					}
 

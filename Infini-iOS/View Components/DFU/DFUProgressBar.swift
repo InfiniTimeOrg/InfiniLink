@@ -31,3 +31,11 @@ struct DFUProgressBar: View {
 		}
 	}
 }
+
+struct DFUProgressBar_Previews: PreviewProvider {
+	static var previews: some View {
+		DFUProgressBar()
+			.environmentObject(PageSwitcher())
+			.environmentObject(DFU_Updater())
+	}
+}

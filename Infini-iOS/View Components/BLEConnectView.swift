@@ -47,37 +47,7 @@ struct Connect: View {
 				}
 			}
 		
-			Spacer()/*
-			if scanOrStopScan {
-				Button(action: {
-					self.bleManager.startScanning()
-					self.scanOrStopScan.toggle()
-				}) {
-					Text("Scan")
-						.padding()
-						.padding(.vertical, 7)
-						.frame(maxWidth: .infinity, alignment: .center)
-						.background(Color.gray)
-						.foregroundColor(Color.white)
-						.cornerRadius(10)
-						.padding(.horizontal, 20)
-				}
-			} else {
-			
-				Button(action: {
-					self.bleManager.stopScanning()
-					self.scanOrStopScan.toggle()
-				}) {
-					Text("Stop Scanning")
-						.padding()
-						.padding(.vertical, 7)
-						.frame(maxWidth: .infinity, alignment: .center)
-						.background(Color.gray)
-						.foregroundColor(Color.white)
-						.cornerRadius(10)
-						.padding(.horizontal, 20)
-				}
-			}*/
+			Spacer()
 		}
 	}
 }

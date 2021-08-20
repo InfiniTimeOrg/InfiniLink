@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct DeviceView: View {
+struct StatusView: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
 	
@@ -19,11 +19,10 @@ struct DeviceView: View {
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
 			
-			
-
-			StatusTabs().environmentObject(bleManager)
 			Spacer()
 			if bleManager.isConnectedToPinetime {
+				StatusTabs().environmentObject(bleManager)
+
 				Button(action: {
 					self.bleManager.disconnect()
 				}) {
@@ -35,6 +34,7 @@ struct DeviceView: View {
 						.foregroundColor(Color.white)
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
+						.padding(.bottom)
 				}
 			} else {
 				Text("Disconnected")
@@ -45,7 +45,16 @@ struct DeviceView: View {
 					.foregroundColor(Color.gray)
 					.cornerRadius(10)
 					.padding(.horizontal, 20)
+					.padding(.bottom)
 			}
 		}//.padding()
+	}
+}
+
+struct StatusView_Previews: PreviewProvider {
+	static var previews: some View {
+		StatusView()
+			.environmentObject(PageSwitcher())
+			.environmentObject(BLEManager())
 	}
 }

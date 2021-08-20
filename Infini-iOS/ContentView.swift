@@ -105,7 +105,7 @@ struct ContentView: View {
 							.foregroundColor(Color.gray)
 					}
 				))
-				.background(Color.black)
+				//.background(Color.black)
 				.navigationBarTitleDisplayMode(.inline)
 			}
 			.gesture(drag)
@@ -122,9 +122,9 @@ struct MainView: View {
 	var body: some View {
 		switch pageSwitcher.currentPage {
 		case .dfu:
-			DFU_Page()
+			DFUView()
 		case .status:
-			DeviceView()
+			StatusView()
 		case .settings:
 			Settings_Page()
 		}

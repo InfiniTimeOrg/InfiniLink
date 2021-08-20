@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct DFU_Page: View {
+struct DFUView: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
 	@ObservedObject var dfuUpdater = DFU_Updater()
@@ -96,6 +96,7 @@ struct DFU_Page: View {
 						.foregroundColor(firmwareSelected ? Color.white : Color.gray)
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
+						.padding(.bottom)
 				}.disabled(!firmwareSelected)
 			} else {
 				Button(action:{
@@ -111,8 +112,17 @@ struct DFU_Page: View {
 						.foregroundColor(firmwareSelected ? Color.white : Color.gray)
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
+						.padding(.bottom)
 				}.disabled(!firmwareSelected)
 			}
 		}
+	}
+}
+
+struct DFUView_Previews: PreviewProvider {
+	static var previews: some View {
+		DFUView()
+			.environmentObject(BLEManager())
+			.environmentObject(DFU_Updater())
 	}
 }
