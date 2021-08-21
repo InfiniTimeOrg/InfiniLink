@@ -14,53 +14,46 @@ struct StatusTabs: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
 	@State var trueIfHeart = true
-	
+	@State var trueIfBat = false
+	@Environment(\.colorScheme) var colorScheme
+
 	var body: some View{
 		VStack {
-			if !bleManager.isConnectedToPinetime {
-				Text("Disconnected")
-					.foregroundColor(Color.white)
-					.frame(maxWidth: .infinity, alignment: .center)
+			HStack {
+				Button (action: {
+					self.trueIfHeart = true
+					self.trueIfBat = false
+				}) {
+				(Text(Image(systemName: "heart"))
+					.foregroundColor(Color.pink) +
+				Text(": " + String(format: "%.0f", bleManager.heartBPM))
+					.foregroundColor(Color.white))
+					.frame(maxWidth:.infinity, alignment: .center)
 					.padding()
-					.background(Color.darkGray)
+					.background(colorScheme == .dark ? (trueIfHeart ? Color.darkGray : Color.darkestGray) : (trueIfHeart ? Color.gray : Color.lightGray))
 					.cornerRadius(5)
 					.font(.title)
-					.padding(.horizontal, 10)
+				}.padding(.leading, 10)
+				Button (action: {
+					self.trueIfHeart = false
+					self.trueIfBat = true
+				}) {
+				(Text(Image(systemName: "battery.100"))
+					.foregroundColor(Color.green) +
+					Text(": " + String(format: "%.0f", bleManager.batteryLevel))
+					.foregroundColor(Color.white))
+					.frame(maxWidth: .infinity, alignment: .center)
+					.padding()
+					.background(colorScheme == .dark ? (trueIfBat ? Color.darkGray : Color.darkestGray) : (trueIfBat ? Color.gray : Color.lightGray))
+					.cornerRadius(5)
+					.font(.title)
+				}
+				.padding(.trailing, 10)
+			}
+			if trueIfHeart {
+				HeartChart()
 			} else {
-				HStack {
-					Button (action: {
-						self.trueIfHeart = true
-					}) {
-					(Text(Image(systemName: "heart"))
-						.foregroundColor(Color.pink) +
-					Text(": " + String(format: "%.0f", bleManager.heartBPM))
-						.foregroundColor(Color.white))
-						.frame(maxWidth:.infinity, alignment: .center)
-						.padding()
-						.background(trueIfHeart ? Color.darkGray : Color.darkestGray)
-						.cornerRadius(5)
-						.font(.title)
-					}.padding(.leading, 10)
-					Button (action: {
-						self.trueIfHeart = false
-					}) {
-					(Text(Image(systemName: "battery.100"))
-						.foregroundColor(Color.green) +
-						Text(": " + String(format: "%.0f", bleManager.batteryLevel))
-						.foregroundColor(Color.white))
-						.frame(maxWidth: .infinity, alignment: .center)
-						.padding()
-						.background(trueIfHeart ? Color.darkestGray : Color.darkGray)
-						.cornerRadius(5)
-						.font(.title)
-					}
-					.padding(.trailing, 10)
-				}
-				if trueIfHeart {
-					HeartChart()
-				} else {
-					BatteryChart()
-				}
+				BatteryChart()
 			}
 		}
 	}

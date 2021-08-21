@@ -11,6 +11,7 @@ import SwiftUI
 struct StatusView: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
+	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
 		VStack (spacing: 10){
@@ -30,7 +31,7 @@ struct StatusView: View {
 						.padding()
 						.padding(.vertical, 7)
 						.frame(maxWidth: .infinity, alignment: .center)
-						.background(Color.gray)
+						.background(colorScheme == .dark ? Color.darkGray : Color.gray)
 						.foregroundColor(Color.white)
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
@@ -41,8 +42,8 @@ struct StatusView: View {
 					.padding()
 					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)
-					.background(Color.darkGray)
-					.foregroundColor(Color.gray)
+					.background(colorScheme == .dark ? Color.gray : Color.lightGray)
+					.foregroundColor(colorScheme == .dark ? Color.gray : Color.white)
 					.cornerRadius(10)
 					.padding(.horizontal, 20)
 					.padding(.bottom)

@@ -77,6 +77,7 @@ struct SideMenu: View {
 			VStack (alignment: .center, spacing:10) {
 				Text("STATUS")
 					.font(.headline)
+					.foregroundColor(Color.gray)
 
 				
 				if bleManager.isSwitchedOn {
