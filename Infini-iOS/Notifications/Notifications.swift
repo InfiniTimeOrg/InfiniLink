@@ -2,7 +2,7 @@
 //  Notifications.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/8/21.
+//  Created by Alex Emry on 8/8/21.
 //
 
 import Foundation

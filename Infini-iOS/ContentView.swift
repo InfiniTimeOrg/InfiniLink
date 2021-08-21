@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/5/21.
+//  Created by Alex Emry on 8/5/21.
 //
 
 import SwiftUI
@@ -13,9 +13,12 @@ struct ContentView: View {
 	
 	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var batteryNotifications = BatteryNotifications()
 
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+	@AppStorage("batteryNotification") var batteryNotification: Bool = false
+	
 	
 	init() {
 		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -39,8 +42,7 @@ struct ContentView: View {
 					}
 				}
 			}
-		// let timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
-		
+
 		return NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
@@ -49,6 +51,9 @@ struct ContentView: View {
 							// pop-up menu to connect to a device
 							Connect().environmentObject(self.bleManager)
 						})
+						.onChange(of: bleManager.batteryLevel) { bat in
+							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
+						}
 						.frame(width: geometry.size.width, height: geometry.size.height)
 						.offset(x: self.pageSwitcher.showMenu ? geometry.size.width/2 : 0)
 						.disabled(self.pageSwitcher.showMenu ? true : false)
@@ -64,12 +69,7 @@ struct ContentView: View {
 									}
 							}
 						})
-						// TODO: decide if this matters? I want the graph to show up because I spent a lot of time on it, but is it important enough to pollute it with a ton of data at the expense of the phone's processing power?
-						// P.S. don't forget timer above the navigation view
-						//
-						//.onReceive(timer) { _ in
-						//	bleManager.batChartDataPoints.append(bleManager.updateChartInfo(data: bleManager.batteryLevel, heart: false))
-						//}
+				
 						.onAppear(){
 							// if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
 							DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
@@ -139,4 +139,3 @@ struct ContentView_Previews: PreviewProvider {
 			.environmentObject(BLEManager())
 	}
 }
-

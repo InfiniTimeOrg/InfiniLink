@@ -2,7 +2,7 @@
 //  WatchNotificationsView.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/16/21.
+//  Created by Alex Emry on 8/16/21.
 //  
 //
     

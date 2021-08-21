@@ -2,7 +2,7 @@
 //  BLEStatusView.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/13/21.
+//  Created by Alex Emry on 8/13/21.
 //
 
 import Foundation
@@ -43,7 +43,7 @@ struct StatusView: View {
 					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)
 					.background(colorScheme == .dark ? Color.gray : Color.lightGray)
-					.foregroundColor(colorScheme == .dark ? Color.gray : Color.white)
+					.foregroundColor(Color.white)
 					.cornerRadius(10)
 					.padding(.horizontal, 20)
 					.padding(.bottom)

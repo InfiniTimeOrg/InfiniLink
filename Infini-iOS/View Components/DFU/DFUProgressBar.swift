@@ -2,7 +2,7 @@
 //  DFUProgressBar.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/19/21.
+//  Created by Alex Emry on 8/19/21.
 //  
 //
     
@@ -16,6 +16,9 @@ struct DFUProgressBar: View {
 	@EnvironmentObject var dfuUpdater: DFU_Updater
 	
 	var body: some View {
+		VStack {
+			Text("DFU Status: " + dfuUpdater.dfuState)
+			Text("Progress:")
 			ZStack {
 				GeometryReader { geometry in
 					Capsule()
@@ -23,11 +26,12 @@ struct DFUProgressBar: View {
 						.foregroundColor(colorScheme == .dark ? Color.darkGray : Color.gray)
 						.padding(.horizontal)
 					Capsule()
-						.frame(width: (geometry.size.width * CGFloat((dfuUpdater.percentComplete ?? 0.0)/100)) * 0.9, height: 10)
+						.frame(width: (geometry.size.width * CGFloat((dfuUpdater.percentComplete)/100)) * 0.9, height: 10)
 						.foregroundColor(colorScheme == .dark ? Color.white : Color.black)
 						.padding(.horizontal)
 						.animation(.easeIn)
 				}
+			}
 		}
 	}
 }

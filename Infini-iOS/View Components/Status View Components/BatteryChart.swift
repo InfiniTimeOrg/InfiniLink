@@ -2,7 +2,7 @@
 //  File.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/18/21.
+//  Created by Alex Emry on 8/18/21.
 //
 //
 	

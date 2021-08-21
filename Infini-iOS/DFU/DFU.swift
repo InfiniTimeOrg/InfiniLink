@@ -2,7 +2,7 @@
 //  DFU.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/11/21.
+//  Created by Alex Emry on 8/11/21.
 //
 
 import Foundation
@@ -15,9 +15,9 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	var deviceToUpgrade: BLEManager.Peripheral!
 	var dfuController: DFUServiceController!
 	
-	//@Published var dfuState: DFUState = DFUState.starting
+	@Published var dfuState: String = ""
 	@Published var transferFailed = false
-	@Published var percentComplete: Double!
+	@Published var percentComplete: Double = 0
 
 	
 	func prepare(location: URL, device: BLEManager) {
@@ -50,8 +50,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	
 	// stubs added automatically.
 	func dfuStateDidChange(to state: DFUState) {
-		print(state.description())
-
+		dfuState = state.description()
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {

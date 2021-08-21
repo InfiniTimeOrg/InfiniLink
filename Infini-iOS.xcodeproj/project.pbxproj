@@ -83,6 +83,7 @@
 		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		264DB80A26C62ED600E812C3 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		264DB80C26C633CF00E812C3 /* PageSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwitcher.swift; sourceTree = "<group>"; };
+		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315126BF45E0005AE404 /* BLEMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEMusic.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
@@ -149,6 +150,7 @@
 			isa = PBXGroup;
 			children = (
 				264BFE7726BCAAC00050A223 /* README.md */,
+				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
 				264BFE4026BC51CE0050A223 /* Infini-iOS */,
 				264BFE5726BC51CF0050A223 /* Infini-iOSTests */,
 				264BFE6226BC51CF0050A223 /* Infini-iOSUITests */,
@@ -611,7 +613,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Infini-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = T2VD6LADUL;
+				DEVELOPMENT_TEAM = 99BHY6DC82;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Infini-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -619,8 +621,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOS";
+				MARKETING_VERSION = 0.8;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -634,7 +636,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"Infini-iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = T2VD6LADUL;
+				DEVELOPMENT_TEAM = 99BHY6DC82;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = "Infini-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -642,8 +644,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.1;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.xan-m.Infini-iOS";
+				MARKETING_VERSION = 0.8;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

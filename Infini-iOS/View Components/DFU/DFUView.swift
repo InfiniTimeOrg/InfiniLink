@@ -2,7 +2,7 @@
 //  DFUView.swift
 //  Infini-iOS
 //
-//  Created by xan-m on 8/11/21.
+//  Created by Alex Emry on 8/11/21.
 //
 
 import Foundation
@@ -45,11 +45,8 @@ struct DFUView: View {
 			Spacer()
 			
 			if updateStarted {
-				Text("Progress:")
-					.frame(maxWidth: .infinity, alignment: .center)
-					.padding(.horizontal)
 				DFUProgressBar().environmentObject(dfuUpdater)
-					.frame(height: 20 ,alignment: .center)
+					.frame(height: 40 ,alignment: .center)
 					.padding()
 			}
 			
@@ -60,7 +57,7 @@ struct DFUView: View {
 					.padding()
 					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)
-					.background(Color.gray)
+					.background(colorScheme == .dark ? Color.darkGray : Color.gray)
 					.foregroundColor(Color.white)
 					.cornerRadius(10)
 					.padding(.horizontal, 20)
