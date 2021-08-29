@@ -14,8 +14,14 @@ import SwiftUICharts
 extension BLEManager {
 	
 	// this function converts string to ascii and writes to the selected characteristic. Used for notifications and music app
-	func writeASCIIToPineTime(message: String, characteristic: CBCharacteristic) {
-		let writeData = message.data(using: .ascii)!
+	func writeASCIIToPineTime(message: String, characteristic: CBCharacteristic) -> Void {
+		guard let writeData = message.data(using: .ascii) else {
+			if characteristic == musicChars.artist || characteristic == musicChars.track {
+				// TODO: for music app, this sends an empty string to not display anything if this is non-ascii. This string can be changed to a "cannot display song title" or whatever but that seems a lot more annoying than just displaying nothing.
+				infiniTime.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
+			}
+			return
+		}
 		infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
 	}
 	
@@ -39,46 +45,5 @@ extension BLEManager {
 		let dateFormat = DateFormatter()
 		dateFormat.dateFormat = "H:mm:ss"
 		return LineChartDataPoint(value: data, xAxisLabel: "Time", description: dateFormat.string(from: Date()), date: Date())
-	}
-	
-	// this function pulls date from phone, shuffles it into the correct order, and then hex-encodes it to a format that InfiniTime can understand
-	func currentTime() -> String {
-		let now = Date() // current time
-		
-		// formatting setup for the date, not including the year because we have to reformat the year hex to match what the PT expects
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = "MM dd H m s e SSSS"
-		
-		// prepare formatting for year
-		let yearFormatter = DateFormatter()
-		yearFormatter.dateFormat = "y"
-		let yearString = yearFormatter.string(from: now)
-		let intYear = Int(yearString)
-		
-		// convert year string to hex-encoded string. conditionally prepend 0 in case by some miracle this application and your watch is still functional in the year 4096
-		var hexYear = String (format: "%02X", intYear!)
-		if hexYear.count == 3 {
-			hexYear.insert("0", at: hexYear.startIndex)
-		}
-		
-		// infinitime (and BLE in general? I dunno...) requires the MSB first, so we have to switch the year from XXYY to YYXX
-		var revYearChars = hexYear.suffix(2)
-		revYearChars += hexYear.prefix(2)
-		
-		var fullDateString = String(revYearChars)
-		
-		let dateString = dateFormatter.string(from: now)
-		let dateParts = dateString.components(separatedBy: " ")
-		
-		// convert the rest of the date parts to hex, and append them to the date string
-		
-		for part in dateParts {
-			let intPart = Int(part)
-			let hex = String(format: "%02X", intPart!)
-			fullDateString.append(hex)
-		}
-		
-		// print(fullDateString) // debug
-		return fullDateString
 	}
 }

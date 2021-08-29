@@ -13,6 +13,7 @@
 		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
 		263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 263B20C426CEB46800676BF0 /* SwiftUICharts */; };
 		263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */; };
+		2644261226DC093D009BD54A /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644261126DC093D009BD54A /* SetTime.swift */; };
 		264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */; };
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
@@ -65,6 +66,7 @@
 		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
 		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUProgressBar.swift; sourceTree = "<group>"; };
+		2644261126DC093D009BD54A /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* Infini-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Infini-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSApp.swift; sourceTree = "<group>"; };
 		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 				264BFE7326BC526C0050A223 /* BLEManager.swift */,
 				26D7816426C9EB3800BBF555 /* BLEDelegates.swift */,
 				26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */,
+				2644261126DC093D009BD54A /* SetTime.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
 				26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
+				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				263B20B526CD673900676BF0 /* StatusViewTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
