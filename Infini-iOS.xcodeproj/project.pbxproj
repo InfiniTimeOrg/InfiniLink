@@ -14,6 +14,7 @@
 		263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 263B20C426CEB46800676BF0 /* SwiftUICharts */; };
 		263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */; };
 		2644261226DC093D009BD54A /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644261126DC093D009BD54A /* SetTime.swift */; };
+		2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644261526DC1D8E009BD54A /* Onboarding.swift */; };
 		264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */; };
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
@@ -26,6 +27,8 @@
 		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
 		264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80A26C62ED600E812C3 /* SideMenu.swift */; };
 		264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80C26C633CF00E812C3 /* PageSwitcher.swift */; };
+		2675CA5726DC447500967E4D /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5626DC447500967E4D /* SheetManager.swift */; };
+		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315126BF45E0005AE404 /* BLEMusic.swift */; };
 		26A6315526C0297A005AE404 /* Notifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* Notifications.swift */; };
@@ -67,6 +70,7 @@
 		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUProgressBar.swift; sourceTree = "<group>"; };
 		2644261126DC093D009BD54A /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
+		2644261526DC1D8E009BD54A /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* Infini-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Infini-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Infini_iOSApp.swift; sourceTree = "<group>"; };
 		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -86,6 +90,8 @@
 		264DB80A26C62ED600E812C3 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		264DB80C26C633CF00E812C3 /* PageSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwitcher.swift; sourceTree = "<group>"; };
 		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
+		2675CA5626DC447500967E4D /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
+		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315126BF45E0005AE404 /* BLEMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEMusic.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* Notifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notifications.swift; sourceTree = "<group>"; };
@@ -139,13 +145,14 @@
 			path = "Status View Components";
 			sourceTree = "<group>";
 		};
-		263B20C826CF07BE00676BF0 /* DFU */ = {
+		263B20C826CF07BE00676BF0 /* DFU View */ = {
 			isa = PBXGroup;
 			children = (
 				26A6315F26C4BC25005AE404 /* DFUView.swift */,
+				2675CA5926DC81AA00967E4D /* DFUComplete.swift */,
 				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
 			);
-			path = DFU;
+			path = "DFU View";
 			sourceTree = "<group>";
 		};
 		264BFE3526BC51CE0050A223 = {
@@ -221,14 +228,24 @@
 			isa = PBXGroup;
 			children = (
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
+				2644261526DC1D8E009BD54A /* Onboarding.swift */,
 				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
-				263B20C826CF07BE00676BF0 /* DFU */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
-				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
+				263B20C826CF07BE00676BF0 /* DFU View */,
+				2675CA5826DC5C9400967E4D /* View Utilities */,
 				263B20B626CD673D00676BF0 /* Status View Components */,
 			);
 			path = "View Components";
+			sourceTree = "<group>";
+		};
+		2675CA5826DC5C9400967E4D /* View Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				2675CA5626DC447500967E4D /* SheetManager.swift */,
+				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
+			);
+			path = "View Utilities";
 			sourceTree = "<group>";
 		};
 		26A6314E26BF0FA2005AE404 /* Music */ = {
@@ -442,14 +459,17 @@
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
+				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
 				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
 				264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */,
 				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */,
+				2675CA5726DC447500967E4D /* SheetManager.swift in Sources */,
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
+				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,

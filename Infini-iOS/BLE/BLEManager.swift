@@ -42,6 +42,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var hrmChartDataPoints: [LineChartDataPoint] = []
 	@Published var batChartDataPoints: [LineChartDataPoint] = []
 	@Published var firmwareVersion: String = "Disconnected"
+	@Published var setTimeError = false
+	@Published var blePermissions: Bool!
 
 	// Selecting and connecting variables
 	@Published var peripherals = [Peripheral]() 						// used to print human-readable device names to UI in selection process
@@ -70,7 +72,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 
 		myCentral = CBCentralManager(delegate: self, queue: nil)
 		myCentral.delegate = self
-		
+		if myCentral.state == .unauthorized {
+			blePermissions = false
+		} else {
+			blePermissions = true
+		}
 	}
 	
 	func startScanning() {
@@ -109,14 +115,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		}
 	}
 		
+	
+
 	func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
 		
 		var peripheralName: String!
-		
-		//for item in advertisementData { // DEBUG
-		//	print(item)
-		//}
-		
 		// TODO: Recreate the process below.
 		/*
 			- the hash I'm using is only unique between PineTimes because the peripheral struct includes an incrementing ID number that's part of the hash.
@@ -128,11 +131,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
 			peripheralName = name
 			let devUUIDString: String = peripheral.identifier.uuidString
-			//setAutoconnectUUID = devUUIDString
 			let devUUID: CBUUID = CBUUID(string: devUUIDString)
 			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID)
-			
-			//print(peripheralName + ": " + String(peripheral.identifier.uuidString))
+
 			
 			// handle autoconnect defaults
 			let settings = UserDefaults.standard
@@ -147,8 +148,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 				if !peripherals.contains(where: {$0.deviceUUID == newPeripheral.deviceUUID}) {
 					peripherals.append(newPeripheral)
 					peripheralDictionary[newPeripheral.peripheralHash] = peripheral
-					
-					//print(newPeripheral, "added to list")
 				}
 			}
 		}

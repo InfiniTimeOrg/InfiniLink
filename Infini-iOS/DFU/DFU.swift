@@ -17,6 +17,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	
 	@Published var dfuState: String = ""
 	@Published var transferFailed = false
+	@Published var transferCompleted = false
 	@Published var percentComplete: Double = 0
 
 	
@@ -51,6 +52,12 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	// stubs added automatically.
 	func dfuStateDidChange(to state: DFUState) {
 		dfuState = state.description()
+		print(dfuState)
+		if state.rawValue == 6 {
+			print("hooray")
+			transferCompleted = true
+			print(transferCompleted)
+		}
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {

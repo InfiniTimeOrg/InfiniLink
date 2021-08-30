@@ -16,6 +16,7 @@ struct StatusTabs: View {
 	@State var trueIfHeart = true
 	@State var trueIfBat = false
 	@Environment(\.colorScheme) var colorScheme
+	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = true
 
 	var body: some View{
 		VStack {
@@ -23,6 +24,7 @@ struct StatusTabs: View {
 				Button (action: {
 					self.trueIfHeart = true
 					self.trueIfBat = false
+					lastStatusViewWasHeart = true
 				}) {
 				(Text(Image(systemName: "heart"))
 					.foregroundColor(Color.pink) +
@@ -37,6 +39,7 @@ struct StatusTabs: View {
 				Button (action: {
 					self.trueIfHeart = false
 					self.trueIfBat = true
+					lastStatusViewWasHeart = false
 				}) {
 				(Text(Image(systemName: "battery.100"))
 					.foregroundColor(Color.green) +
@@ -50,11 +53,20 @@ struct StatusTabs: View {
 				}
 				.padding(.trailing, 10)
 			}
-			if trueIfHeart {
+			if lastStatusViewWasHeart {
 				HeartChart()
+					.onAppear() {
+						self.trueIfHeart = true
+						self.trueIfBat = false
+					}
 			} else {
 				BatteryChart()
+					.onAppear() {
+						self.trueIfHeart = false
+						self.trueIfBat = true
+					}
 			}
 		}
+
 	}
 }

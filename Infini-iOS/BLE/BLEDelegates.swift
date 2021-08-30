@@ -86,7 +86,13 @@ extension BLEManager: CBPeripheralDelegate {
 			
 		case timeCBUUID:
 			// convert string with hex value of time to actual hex data, then write to PineTime
-			peripheral.writeValue(SetTime().currentTime().hexData /*currentTime().hexData*/, for: characteristic, type: .withResponse)
+			do {
+				try peripheral.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
+			} catch SetTime.SetTimeError.nilValue {
+				setTimeError = true
+			} catch {
+				print("Unexpected error: \(error).")
+			}
 			
 		case firmwareCBUUID:
 			firmwareVersion = String(decoding: characteristic.value!, as: UTF8.self)

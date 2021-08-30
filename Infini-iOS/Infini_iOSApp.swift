@@ -17,6 +17,7 @@ struct Infini_iOSApp: App {
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
 				.environmentObject(PageSwitcher())
 				.environmentObject(BLEManager())
+				.environmentObject(DFU_Updater())
         }
     }
 }

@@ -14,10 +14,12 @@ struct ContentView: View {
 	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@EnvironmentObject var bleManager: BLEManager
 	@ObservedObject var batteryNotifications = BatteryNotifications()
+	@ObservedObject var sheetManager = SheetManager()
 
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
+	@AppStorage("onboarding") var onboarding: Bool = true
 	
 	
 	init() {
@@ -47,9 +49,14 @@ struct ContentView: View {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
 					MainView()
-						.sheet(isPresented: $pageSwitcher.connectViewLoad, content: {
-							// pop-up menu to connect to a device
-							Connect().environmentObject(self.bleManager)
+						.sheet(isPresented: $sheetManager.showSheet, content: {
+							sheetManager.setView(isOnboarding: onboarding, bleManager: bleManager)
+								.onDisappear {
+									if onboarding {
+										onboarding = false
+										sheetManager.showSheet = true
+									}
+								}
 						})
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
@@ -69,24 +76,27 @@ struct ContentView: View {
 									}
 							}
 						})
-				
+						// alert to handle errors thrown by SetTime
+						.alert(isPresented: $bleManager.setTimeError, content: {
+							Alert(title: Text("Failed to Set Time"), message: Text("There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect."), dismissButton: .default(Text("Dismiss")))
+						})
+
 						.onAppear(){
 							// if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
 							DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
 								if autoconnect && bleManager.isSwitchedOn {
 									self.bleManager.startScanning()
 								}
+								
+								if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) {
+									sheetManager.sheetSelection = .connect
+									sheetManager.showSheet = true
+								}
 							})
-							if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) {
-								DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-									withAnimation {
-										pageSwitcher.connectViewLoad = true
-									}
-								})
-							}
 						}
 					if self.pageSwitcher.showMenu {
 						SideMenu(isOpen: self.$pageSwitcher.showMenu)
+							.environmentObject(sheetManager)
 							.frame(width: geometry.size.width/2)
 							.transition(.move(edge: .leading))
 							.ignoresSafeArea()
@@ -137,5 +147,6 @@ struct ContentView_Previews: PreviewProvider {
 		ContentView()
 			.environmentObject(PageSwitcher())
 			.environmentObject(BLEManager())
+			.environmentObject(DFU_Updater())
 	}
 }

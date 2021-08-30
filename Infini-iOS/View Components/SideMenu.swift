@@ -12,6 +12,7 @@ struct SideMenu: View {
 	@Binding var isOpen: Bool
 	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@EnvironmentObject var bleManager: BLEManager
+	@EnvironmentObject var sheetManager: SheetManager
 	
 	func changePage(newPage: Page){
 		withAnimation{
@@ -60,7 +61,7 @@ struct SideMenu: View {
 			HStack {
 				if !self.bleManager.isConnectedToPinetime {
 					Button(action: {
-						pageSwitcher.connectViewLoad = true
+						sheetManager.showSheet = true
 						pageSwitcher.showMenu = false
 					}) {
 						Image(systemName: "radiowaves.right")

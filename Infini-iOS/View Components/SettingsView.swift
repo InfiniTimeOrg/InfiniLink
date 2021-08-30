@@ -19,7 +19,8 @@ struct Settings_Page: View {
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = "empty"
-
+	@AppStorage("heartChartFill") var heartChartFill: Bool = true
+	@AppStorage("batChartFill") var batChartFill: Bool = true
 	
 	var body: some View {
 		VStack (alignment: .leading){
@@ -51,6 +52,18 @@ struct Settings_Page: View {
 				Section(header: Text("Notifications")) {
 					Toggle("Enable Watch Notifications", isOn: $watchNotifications)
 					Toggle("Notify about Low Battery", isOn: $batteryNotification)
+				}
+				Section(header: Text("Graph Styles")) {
+					Toggle("Filled HRM Graph", isOn: $heartChartFill)
+					Toggle("Filled Battery Graph", isOn: $batChartFill)
+				}
+				Section(header: Text("Links")) {
+					Link("Infini-iOS GitHub", destination: URL(string: "https://github.com/xan-m/Infini-iOS")!)
+					Link("Matrix", destination: URL(string: "https://matrix.to/#/@xanm:matrix.org")!)
+					Link("Mastodon", destination: URL(string: "https://fosstodon.org/@xanm")!)
+				}
+				Section(header: Text("Donations")) {
+					Link("PayPal Donation", destination: URL(string: "https://paypal.me/alexemry")!)
 				}
 			}
 		}
