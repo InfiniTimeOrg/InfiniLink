@@ -25,7 +25,8 @@ Join the TestFlight beta now! Click this link from your iOS device: https://test
 I'm not interested in profiting from this app, but the Apple Developer License was not cheap! If you've enjoyed the app and have some disposable income, consider donating. If not, no problem!
 
 [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/alexemry)
-Monero: 45k5KTyKgEBbKxUFqzHMAgZPHZeHDGQ7zCBuJqumHaTZHFFdj98KAen4MK4JsAUwEWW1xS13J7VY4SmNguyeBEvb296nske
+
+XMR: 45k5KTyKgEBbKxUFqzHMAgZPHZeHDGQ7zCBuJqumHaTZHFFdj98KAen4MK4JsAUwEWW1xS13J7VY4SmNguyeBEvb296nske
 
 ### Disclaimer
 **This is the first time I've worked with Swift, SwiftUI, XCode, BLE, or anything else in this application. I take no responsibility for what happens if you interact with this repository in any way. If it breaks your phone, your watch, or your brain,** ***that's on you buddy!***
