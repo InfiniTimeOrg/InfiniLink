@@ -53,6 +53,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var autoconnectPeripheral: CBPeripheral!
 	@Published var setAutoconnectUUID: String = ""							// placeholder for now while I figure out how to save the whole device in UserDefaults to save "favorite" devices
 	
+	@Published var bleLogger = BLELogs() // MARK: logging
+	
 	var firstConnect: Bool = true										// makes iOS connected message only show up on first connect, not if device drops connection and reconnects
 	
 	// declare some CBUUIDs for easier reference
@@ -96,6 +98,21 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			myCentral.cancelPeripheralConnection(infiniTime)
 			firstConnect = true
 			isConnectedToPinetime = false
+		}
+	}
+	
+	// MARK: logging
+	func debug(error: Error?) {
+		let settings = UserDefaults.standard
+		let debugMode = settings.object(forKey: "debugMode") as? Bool ?? false
+		if debugMode {
+			print(error.debugDescription)
+			let date = Date()
+			let dateFormatter = DateFormatter()
+			dateFormatter.dateFormat = "MMM d, HH:mm"
+			
+			let logEntry = LogEntry(date: dateFormatter.string(from: date), message: error?.localizedDescription ?? "", log: DebugLog.ble)
+			bleLogger.addLogEntry(entry: logEntry)
 		}
 	}
 	
@@ -154,7 +171,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 	
 	func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-		print(error ?? "no error")
+		debug(error: error) // MARK: logging
 	}
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -165,6 +182,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		if error != nil {
 			connect(peripheral: peripheral)
 		}
+		debug(error: error) // MARK: logging
 	}
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {

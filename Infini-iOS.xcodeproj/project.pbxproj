@@ -13,6 +13,7 @@
 		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
 		263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 263B20C426CEB46800676BF0 /* SwiftUICharts */; };
 		263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */; };
+		263F56E026F13E760001BA4F /* DebugUtilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263F56DF26F13E760001BA4F /* DebugUtilities.swift */; };
 		2644261226DC093D009BD54A /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644261126DC093D009BD54A /* SetTime.swift */; };
 		2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2644261526DC1D8E009BD54A /* Onboarding.swift */; };
 		264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* Infini_iOSApp.swift */; };
@@ -36,6 +37,7 @@
 		26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */ = {isa = PBXBuildFile; productRef = 26A6315D26C498B7005AE404 /* NordicDFU */; };
 		26A6316026C4BC25005AE404 /* DFUView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315F26C4BC25005AE404 /* DFUView.swift */; };
 		26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6316226C4C6D6005AE404 /* BLEConnectView.swift */; };
+		26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26B2BAF626F139D600FBC9CE /* DebugView.swift */; };
 		26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816426C9EB3800BBF555 /* BLEDelegates.swift */; };
 		26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */; };
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
@@ -69,6 +71,7 @@
 		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
 		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUProgressBar.swift; sourceTree = "<group>"; };
+		263F56DF26F13E760001BA4F /* DebugUtilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugUtilities.swift; sourceTree = "<group>"; };
 		2644261126DC093D009BD54A /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		2644261526DC1D8E009BD54A /* Onboarding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Onboarding.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* Infini-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Infini-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +101,7 @@
 		26A6315A26C49841005AE404 /* DFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFU.swift; sourceTree = "<group>"; };
 		26A6315F26C4BC25005AE404 /* DFUView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUView.swift; sourceTree = "<group>"; };
 		26A6316226C4C6D6005AE404 /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
+		26B2BAF626F139D600FBC9CE /* DebugView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugView.swift; sourceTree = "<group>"; };
 		26D7816426C9EB3800BBF555 /* BLEDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDelegates.swift; sourceTree = "<group>"; };
 		26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManagerExtensions.swift; sourceTree = "<group>"; };
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
@@ -232,6 +236,7 @@
 				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
+				26B2BAF626F139D600FBC9CE /* DebugView.swift */,
 				263B20C826CF07BE00676BF0 /* DFU View */,
 				2675CA5826DC5C9400967E4D /* View Utilities */,
 				263B20B626CD673D00676BF0 /* Status View Components */,
@@ -243,6 +248,7 @@
 			isa = PBXGroup;
 			children = (
 				2675CA5626DC447500967E4D /* SheetManager.swift */,
+				263F56DF26F13E760001BA4F /* DebugUtilities.swift */,
 				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
 			);
 			path = "View Utilities";
@@ -457,6 +463,7 @@
 				26A6315526C0297A005AE404 /* Notifications.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
+				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
@@ -466,6 +473,7 @@
 				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */,
 				2675CA5726DC447500967E4D /* SheetManager.swift in Sources */,
+				263F56E026F13E760001BA4F /* DebugUtilities.swift in Sources */,
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,

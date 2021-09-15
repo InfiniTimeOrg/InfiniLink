@@ -137,6 +137,8 @@ struct MainView: View {
 			StatusView()
 		case .settings:
 			Settings_Page()
+		case .debug:
+			DebugView() // MARK: logging
 		}
 	}
 }

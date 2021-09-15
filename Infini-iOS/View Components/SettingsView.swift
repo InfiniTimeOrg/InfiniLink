@@ -13,6 +13,7 @@ import SwiftUI
 struct Settings_Page: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
+	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@Environment(\.colorScheme) var colorScheme
 	
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
@@ -21,6 +22,7 @@ struct Settings_Page: View {
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = "empty"
 	@AppStorage("heartChartFill") var heartChartFill: Bool = true
 	@AppStorage("batChartFill") var batChartFill: Bool = true
+	@AppStorage("debugMode") var debugMode: Bool = false
 	
 	var body: some View {
 		VStack (alignment: .leading){
@@ -56,6 +58,17 @@ struct Settings_Page: View {
 				Section(header: Text("Graph Styles")) {
 					Toggle("Filled HRM Graph", isOn: $heartChartFill)
 					Toggle("Filled Battery Graph", isOn: $batChartFill)
+				}
+				// MARK: logging
+				Section(header: Text("Debug Mode")) {
+					Toggle("Enable Debug Mode", isOn: $debugMode)
+					if debugMode {
+						Button {
+							pageSwitcher.currentPage = Page.debug
+						} label: {
+							Text("Debug Logs")
+						}
+					}
 				}
 				Section(header: Text("Links")) {
 					Link("Infini-iOS GitHub", destination: URL(string: "https://github.com/xan-m/Infini-iOS")!)

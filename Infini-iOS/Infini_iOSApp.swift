@@ -18,6 +18,7 @@ struct Infini_iOSApp: App {
 				.environmentObject(PageSwitcher())
 				.environmentObject(BLEManager())
 				.environmentObject(DFU_Updater())
+				.environmentObject(BLELogs()) // MARK: logging
         }
     }
 }
