@@ -12,7 +12,6 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	
 	private var url: URL = URL(fileURLWithPath: "")
 	var bleManager: BLEManager!
-	var deviceToUpgrade: BLEManager.Peripheral!
 	var dfuController: DFUServiceController!
 	
 	@Published var dfuState: String = ""
@@ -38,8 +37,9 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 		initiator.delegate = self // - to be informed about current state and errors
 		initiator.progressDelegate = self // - to show progress bar
 		// initiator.peripheralSelector = ... // the default selector is used
-
-		dfuController = initiator.start(target: bleManager.infiniTime)
+		if bleManager.infiniTime != nil {
+			dfuController = initiator.start(target: bleManager.infiniTime)
+		}
 		url.stopAccessingSecurityScopedResource()
 	}
 	

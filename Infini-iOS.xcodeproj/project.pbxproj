@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */; };
+		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
+		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
+		2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */; };
+		2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388926F2591900D72B43 /* DFUStartTransferButton.swift */; };
+		2632388C26F265B100D72B43 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388B26F265B100D72B43 /* MainView.swift */; };
+		2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388D26F297CB00D72B43 /* OnboardingBody.swift */; };
+		2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */; };
 		263B20B526CD673900676BF0 /* StatusViewTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B426CD673900676BF0 /* StatusViewTabs.swift */; };
 		263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B926CDF13400676BF0 /* HeartChart.swift */; };
 		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
@@ -65,6 +72,13 @@
 
 /* Begin PBXFileReference section */
 		26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
+		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
+		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
+		2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUFileSelectButton.swift; sourceTree = "<group>"; };
+		2632388926F2591900D72B43 /* DFUStartTransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUStartTransferButton.swift; sourceTree = "<group>"; };
+		2632388B26F265B100D72B43 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		2632388D26F297CB00D72B43 /* OnboardingBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBody.swift; sourceTree = "<group>"; };
+		2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDismissButton.swift; sourceTree = "<group>"; };
 		263B20B426CD673900676BF0 /* StatusViewTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewTabs.swift; sourceTree = "<group>"; };
 		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
 		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
@@ -135,6 +149,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2632389326F29A4100D72B43 /* Onboarding */ = {
+			isa = PBXGroup;
+			children = (
+				2644261526DC1D8E009BD54A /* Onboarding.swift */,
+				2632388D26F297CB00D72B43 /* OnboardingBody.swift */,
+				2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */,
+			);
+			path = Onboarding;
+			sourceTree = "<group>";
+		};
 		263B20B626CD673D00676BF0 /* Status View Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -149,6 +173,10 @@
 			isa = PBXGroup;
 			children = (
 				26A6315F26C4BC25005AE404 /* DFUView.swift */,
+				2632388326F2531C00D72B43 /* DFUWithBLE.swift */,
+				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
+				2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */,
+				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
 				2675CA5926DC81AA00967E4D /* DFUComplete.swift */,
 				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
 			);
@@ -227,11 +255,12 @@
 		264DB80926C62EAC00E812C3 /* View Components */ = {
 			isa = PBXGroup;
 			children = (
+				2632388B26F265B100D72B43 /* MainView.swift */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
-				2644261526DC1D8E009BD54A /* Onboarding.swift */,
 				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
+				2632389326F29A4100D72B43 /* Onboarding */,
 				263B20C826CF07BE00676BF0 /* DFU View */,
 				2675CA5826DC5C9400967E4D /* View Utilities */,
 				263B20B626CD673D00676BF0 /* Status View Components */,
@@ -456,10 +485,15 @@
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				26A6315526C0297A005AE404 /* Notifications.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
+				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
+				2632388C26F265B100D72B43 /* MainView.swift in Sources */,
+				2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
+				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
+				2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */,
 				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
 				264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */,
@@ -468,7 +502,9 @@
 				2675CA5726DC447500967E4D /* SheetManager.swift in Sources */,
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
+				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
+				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,

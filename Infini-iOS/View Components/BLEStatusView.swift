@@ -11,11 +11,12 @@ import SwiftUI
 struct StatusView: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
+	@EnvironmentObject var sheetManager: SheetManager
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
 		VStack (spacing: 10){
-			Text("InfiniTime Status")
+			Text("Current Stats")
 				.font(.largeTitle)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
@@ -38,15 +39,19 @@ struct StatusView: View {
 						.padding(.bottom)
 				}
 			} else {
-				Text("Disconnected")
-					.padding()
-					.padding(.vertical, 7)
-					.frame(maxWidth: .infinity, alignment: .center)
-					.background(colorScheme == .dark ? Color.darkGray : Color.gray)
-					.foregroundColor(Color.white)
-					.cornerRadius(10)
-					.padding(.horizontal, 20)
-					.padding(.bottom)
+				Button(action: {
+					sheetManager.showSheet = true
+				}) {
+					Text("Connect to PineTime")
+						.padding()
+						.padding(.vertical, 7)
+						.frame(maxWidth: .infinity, alignment: .center)
+						.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
+						.foregroundColor(Color.white)
+						.cornerRadius(10)
+						.padding(.horizontal, 20)
+						.padding(.bottom)
+				}
 			}
 		}//.padding()
 	}

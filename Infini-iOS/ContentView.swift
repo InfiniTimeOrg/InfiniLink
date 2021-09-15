@@ -49,6 +49,7 @@ struct ContentView: View {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
 					MainView()
+						.environmentObject(sheetManager)
 						.sheet(isPresented: $sheetManager.showSheet, content: {
 							sheetManager.setView(isOnboarding: onboarding, bleManager: bleManager)
 								.onDisappear {
@@ -57,7 +58,7 @@ struct ContentView: View {
 										sheetManager.showSheet = true
 									}
 								}
-						})
+						}).environmentObject(sheetManager)
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
@@ -88,7 +89,7 @@ struct ContentView: View {
 									self.bleManager.startScanning()
 								}
 								
-								if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) {
+								if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) || onboarding {
 									sheetManager.sheetSelection = .connect
 									sheetManager.showSheet = true
 								}
@@ -115,31 +116,13 @@ struct ContentView: View {
 							.foregroundColor(Color.gray)
 					}
 				))
-				//.background(Color.black)
 				.navigationBarTitleDisplayMode(.inline)
 			}
 			.gesture(drag)
 		}
 	}
 }
-	
-struct MainView: View {
 
-	@EnvironmentObject var pageSwitcher: PageSwitcher
-	@EnvironmentObject var bleManager: BLEManager
-	
-	
-	var body: some View {
-		switch pageSwitcher.currentPage {
-		case .dfu:
-			DFUView()
-		case .status:
-			StatusView()
-		case .settings:
-			Settings_Page()
-		}
-	}
-}
 
 	
 struct ContentView_Previews: PreviewProvider {

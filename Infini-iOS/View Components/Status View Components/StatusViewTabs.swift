@@ -16,7 +16,7 @@ struct StatusTabs: View {
 	@State var trueIfHeart = true
 	@State var trueIfBat = false
 	@Environment(\.colorScheme) var colorScheme
-	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = true
+	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false
 
 	var body: some View{
 		VStack {
