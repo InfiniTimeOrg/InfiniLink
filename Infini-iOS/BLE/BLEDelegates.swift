@@ -72,15 +72,21 @@ extension BLEManager: CBPeripheralDelegate {
 			peripheral.setNotifyValue(true, for: characteristic)
 			let bpm = heartRate(from: characteristic)
 			heartBPM = Double(bpm)
-			if bpm != 0 {
-				hrmChartDataPoints.append(updateChartInfo(data: Double(bpm), heart: true))
+			if !chartReconnect {
+				if bpm != 0{
+					ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
+				}
+			} else {
+				// this skips the first HRM data point. With persistent data, every time there's an OOR condition, it copies the current HRM value, even if you've stopped the HRM. In testing I turned off the HRM, but stayed connected to the watch, and got probably 20 data points from the value the HRM was stopped at.
+				
+				chartReconnect = false
 			}
-			
 		case batCBUUID:
 			// subscribe to battery updates, read battery hex data, convert it to decimal
 			peripheral.setNotifyValue(true, for: characteristic)
 			let batData = [UInt8](characteristic.value!)
 			batChartDataPoints.append(updateChartInfo(data: Double(batData[0]), heart: false))
+			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
 			batteryLevel = Double(batData[0])
 			
 			

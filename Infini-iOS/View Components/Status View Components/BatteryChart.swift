@@ -14,6 +14,9 @@ import SwiftUICharts
 struct BatteryChart: View {
 	@EnvironmentObject var bleManager: BLEManager
 	@AppStorage("batChartFill") var batChartFill: Bool = true
+	@Environment(\.managedObjectContext) var viewContext
+	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
+	private var chartPoints: FetchedResults<ChartDataPoint>
 	
 	func setLineStyle() -> LineStyle {
 		if batChartFill {
@@ -25,33 +28,34 @@ struct BatteryChart: View {
 	
 	
 	var body: some View {
-		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 0), topLine: .maximum(of: 100))
+		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 50), topLine: .maximum(of: 160))
 		let data = LineChartData(dataSets: LineDataSet(
-										dataPoints: bleManager.batChartDataPoints,
-										style: setLineStyle()),
-									chartStyle: chartStyle
-								 )
+			dataPoints: ChartManager.shared.convert(results: chartPoints, chart: ChartsAsInts.battery.rawValue),
+			style: setLineStyle()),
+			chartStyle: chartStyle
+		)
 		
-		if bleManager.batChartDataPoints.count > 1 {
+		if chartPoints.count > 1 {
 			if batChartFill {
 				FilledLineChart(chartData: data)
 					.animation(.easeIn)
 					.floatingInfoBox(chartData: data)
 					.touchOverlay(chartData: data, unit: .suffix(of: "%"))
 					.yAxisLabels(chartData: data)
+					.padding()
 			} else {
 				LineChart(chartData: data)
 					.animation(.easeIn)
 					.floatingInfoBox(chartData: data)
 					.touchOverlay(chartData: data, unit: .suffix(of: "%"))
 					.yAxisLabels(chartData: data)
-
+					.padding()
 			}
 		} else {
 			VStack (alignment: .center) {
 				Spacer()
 				HStack (alignment: .center) {
-					Text("Waiting for Data")
+					Text("Insufficient Battery Data")
 						.font(.title)
 				}
 				Spacer()

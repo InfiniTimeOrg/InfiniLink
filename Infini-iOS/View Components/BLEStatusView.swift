@@ -32,7 +32,7 @@ struct StatusView: View {
 						.padding()
 						.padding(.vertical, 7)
 						.frame(maxWidth: .infinity, alignment: .center)
-						.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
+						.background(colorScheme == .dark ? Color.darkGray : Color.gray)
 						.foregroundColor(Color.white)
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
@@ -46,14 +46,14 @@ struct StatusView: View {
 						.padding()
 						.padding(.vertical, 7)
 						.frame(maxWidth: .infinity, alignment: .center)
-						.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
+						.background(colorScheme == .dark ? Color.darkGray : Color.gray)
 						.foregroundColor(Color.white)
 						.cornerRadius(10)
 						.padding(.horizontal, 20)
 						.padding(.bottom)
 				}
 			}
-		}//.padding()
+		}
 	}
 }
 

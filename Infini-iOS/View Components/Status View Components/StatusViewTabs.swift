@@ -29,7 +29,10 @@ struct StatusTabs: View {
 				(Text(Image(systemName: "heart"))
 					.foregroundColor(Color.pink) +
 				Text(": " + String(format: "%.0f", bleManager.heartBPM))
-					.foregroundColor(Color.white))
+					.foregroundColor(Color.white) +
+				Text(" BPM")
+					.foregroundColor(Color.white)
+					.font(.body))
 					.frame(maxWidth:.infinity, alignment: .center)
 					.padding()
 					.background(colorScheme == .dark ? (trueIfHeart ? Color.darkGray : Color.darkestGray) : (trueIfHeart ? Color.gray : Color.lightGray))
@@ -43,7 +46,7 @@ struct StatusTabs: View {
 				}) {
 				(Text(Image(systemName: "battery.100"))
 					.foregroundColor(Color.green) +
-					Text(": " + String(format: "%.0f", bleManager.batteryLevel))
+					Text(": " + String(format: "%.0f", bleManager.batteryLevel) + "%")
 					.foregroundColor(Color.white))
 					.frame(maxWidth: .infinity, alignment: .center)
 					.padding()
