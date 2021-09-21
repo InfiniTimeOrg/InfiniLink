@@ -6,15 +6,14 @@
 //
 
 import SwiftUI
-import SwiftUICharts
-import CoreData
 
 struct ContentView: View {
 	
-	@EnvironmentObject var pageSwitcher: PageSwitcher
 	@EnvironmentObject var bleManager: BLEManager
+	
+	@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@ObservedObject var batteryNotifications = BatteryNotifications()
-	@ObservedObject var sheetManager = SheetManager()
+	@ObservedObject var sheetManager = SheetManager.shared
 
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
@@ -36,11 +35,11 @@ struct ContentView: View {
 			.onEnded {
 				if $0.translation.width < -100 {
 					withAnimation {
-						self.pageSwitcher.showMenu = false
+						pageSwitcher.showMenu = false
 					}
 				} else if $0.translation.width > 100 {
 					withAnimation {
-						self.pageSwitcher.showMenu = true
+						pageSwitcher.showMenu = true
 					}
 				}
 			}
@@ -49,22 +48,22 @@ struct ContentView: View {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
 					MainView()
-						.environmentObject(sheetManager)
+						//.environmentObject(sheetManager)
 						.sheet(isPresented: $sheetManager.showSheet, content: {
-							sheetManager.setView(isOnboarding: onboarding, bleManager: bleManager)
+							SheetManager.shared.setView(isOnboarding: onboarding, bleManager: bleManager)
 								.onDisappear {
 									if onboarding {
 										onboarding = false
-										sheetManager.showSheet = true
+										SheetManager.shared.showSheet = true
 									}
 								}
-						}).environmentObject(sheetManager)
+						})//.environmentObject(sheetManager)
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
 						.frame(width: geometry.size.width, height: geometry.size.height)
-						.offset(x: self.pageSwitcher.showMenu ? geometry.size.width/2 : 0)
-						.disabled(self.pageSwitcher.showMenu ? true : false)
+						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
+						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
 							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0
 							if pageSwitcher.showMenu {
@@ -90,14 +89,14 @@ struct ContentView: View {
 								}
 								
 								if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) || onboarding {
-									sheetManager.sheetSelection = .connect
-									sheetManager.showSheet = true
+									SheetManager.shared.sheetSelection = .connect
+									SheetManager.shared.showSheet = true
 								}
 							})
 						}
 					if self.pageSwitcher.showMenu {
 						SideMenu(isOpen: self.$pageSwitcher.showMenu)
-							.environmentObject(sheetManager)
+							//.environmentObject(sheetManager)
 							.frame(width: geometry.size.width/2)
 							.transition(.move(edge: .leading))
 							.ignoresSafeArea()
@@ -118,8 +117,8 @@ struct ContentView: View {
 				))
 				.navigationBarTitleDisplayMode(.inline)
 			}
-			.gesture(drag)
-		}
+			
+		}.gesture(drag)
 	}
 }
 
@@ -128,7 +127,6 @@ struct ContentView: View {
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
 		ContentView()
-			.environmentObject(PageSwitcher())
 			.environmentObject(BLEManager())
 			.environmentObject(DFU_Updater())
 	}

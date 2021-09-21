@@ -6,7 +6,9 @@
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
+    <entity name="DeviceNames" representedClassName="DeviceNames" syncable="YES" codeGenerationType="class"/>
     <elements>
         <element name="ChartDataPoint" positionX="-63" positionY="-18" width="128" height="89"/>
+        <element name="DeviceNames" positionX="-54" positionY="18" width="128" height="29"/>
     </elements>
 </model>

@@ -16,6 +16,7 @@ enum SheetSelection {
 }
 
 class SheetManager: ObservableObject {
+	static let shared = SheetManager()
 		
 	@Published var showSheet: Bool = false
 	var sheetSelection: SheetSelection!

@@ -15,7 +15,7 @@ struct BatteryChart: View {
 	@EnvironmentObject var bleManager: BLEManager
 	@AppStorage("batChartFill") var batChartFill: Bool = true
 	@Environment(\.managedObjectContext) var viewContext
-	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
+	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 1"))
 	private var chartPoints: FetchedResults<ChartDataPoint>
 	
 	func setLineStyle() -> LineStyle {
@@ -30,10 +30,28 @@ struct BatteryChart: View {
 	var body: some View {
 		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 50), topLine: .maximum(of: 160))
 		let data = LineChartData(dataSets: LineDataSet(
-			dataPoints: ChartManager.shared.convert(results: chartPoints, chart: ChartsAsInts.battery.rawValue),
+			dataPoints: ChartManager.shared.convert(results: chartPoints),
 			style: setLineStyle()),
 			chartStyle: chartStyle
 		)
+		
+		Button (action: {
+			ChartManager.shared.deleteAll(dataSet: chartPoints)
+		}) {
+			(Text("Delete All Entries"))
+		}
+		Button (action: {
+			var newDelete: [ChartDataPoint] = []
+			for i in chartPoints{
+				if i.timestamp!.timeIntervalSinceNow <= -3600 {
+					newDelete.append(i)
+				}
+			}
+			print(String(newDelete.count))
+			ChartManager.shared.deleteItems(dataSet: newDelete)
+		}) {
+			(Text("Delete Entries Over 1 Hour Old"))
+		}
 		
 		if chartPoints.count > 1 {
 			if batChartFill {

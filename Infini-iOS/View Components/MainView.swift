@@ -12,7 +12,7 @@ import SwiftUI
 
 struct MainView: View {
 
-	@EnvironmentObject var pageSwitcher: PageSwitcher
+	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@EnvironmentObject var bleManager: BLEManager
 	
 	
@@ -24,6 +24,8 @@ struct MainView: View {
 			StatusView()
 		case .settings:
 			Settings_Page()
+		case .home:
+			HomeScreen()
 		}
 	}
 }

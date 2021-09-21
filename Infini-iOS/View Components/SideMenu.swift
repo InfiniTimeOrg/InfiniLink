@@ -10,9 +10,8 @@ import SwiftUI
 struct SideMenu: View {
 	
 	@Binding var isOpen: Bool
-	@EnvironmentObject var pageSwitcher: PageSwitcher
+	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@EnvironmentObject var bleManager: BLEManager
-	@EnvironmentObject var sheetManager: SheetManager
 	
 	func changePage(newPage: Page){
 		withAnimation{
@@ -24,16 +23,27 @@ struct SideMenu: View {
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack {
-				Button(action: {changePage(newPage: .status)}) {
-					Image(systemName: "heart")
+				Button(action: {changePage(newPage: .home)}) {
+					Image(systemName: "house.fill")
 						.foregroundColor(.gray)
 						.imageScale(.large)
-					Text("Current Stats")
+					Text("Home")
 						.foregroundColor(.gray)
 						.padding(5)
 				}
 			}
 				.padding(.top, 100)
+			HStack {
+				Button(action: {changePage(newPage: .status)}) {
+					Image(systemName: "heart")
+						.foregroundColor(.gray)
+						.imageScale(.large)
+					Text("Graphs")
+						.foregroundColor(.gray)
+						.padding(5)
+				}
+			}
+				.padding(.top, 20)
 			HStack {
 				Button(action: {changePage(newPage: .dfu)}) {
 					Image(systemName: "arrow.up.doc")
@@ -61,7 +71,7 @@ struct SideMenu: View {
 			HStack {
 				if !self.bleManager.isConnectedToPinetime {
 					Button(action: {
-						sheetManager.showSheet = true
+						SheetManager.shared.showSheet = true
 						pageSwitcher.showMenu = false
 					}) {
 						Image(systemName: "radiowaves.right")

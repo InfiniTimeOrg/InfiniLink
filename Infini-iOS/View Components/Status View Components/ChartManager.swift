@@ -38,25 +38,39 @@ class ChartManager {
 		newItem.chart = dataPoint.chart
 		do {
 			try viewContext.save()
-			if newItem.chart == ChartsAsInts.heart.rawValue {
-				print("hrm save successful")
-			} else {
-				print("batt save successful")
-			}
 		} catch {
-			//fatalError(error.localizedDescription)
-			print(error)
+			print(error.localizedDescription)
 		}
 	}
 	
-	func convert(results: FetchedResults<ChartDataPoint>, chart: Int16) -> [LineChartDataPoint] {
+	func deleteAll(dataSet: FetchedResults<ChartDataPoint>) {
+		for i in dataSet {
+			viewContext.delete(i)
+		}
+		do {
+			try viewContext.save()
+		} catch {
+			print(error.localizedDescription)
+		}
+	}
+	
+	func deleteItems(dataSet: [ChartDataPoint]) {
+		for i in dataSet {
+			viewContext.delete(i)
+		}
+		do {
+			try viewContext.save()
+		} catch {
+			print(error.localizedDescription)
+		}
+	}
+	
+	func convert(results: FetchedResults<ChartDataPoint>) -> [LineChartDataPoint] {
 		var dataPoints: [LineChartDataPoint] = []
 		let dateFormat = DateFormatter()
 		dateFormat.dateFormat = "H:mm:ss"
 		for data in results {
-			if data.chart == chart {
-				dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
-			}
+			dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
 		}
 		return dataPoints
 	}

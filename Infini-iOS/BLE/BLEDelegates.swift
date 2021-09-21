@@ -24,21 +24,23 @@ extension BLEManager: CBPeripheralDelegate {
 		guard let characteristics = service.characteristics else { return }
 		
 		for characteristic in characteristics {
+
+			
 			if characteristic.properties.contains(.read) {
 				peripheral.readValue(for: characteristic)
 			}
 			// Need to grab some characteristics now, namely those that don't respond to didUpdateValueFor.
 			// TODO: if AMS and ANCS are implemented, this whole switch can probably be deleted...
 			switch characteristic.uuid {
-				case musicControlCBUUID:
+			case cbuuidList.shared.musicControl:
 					peripheral.setNotifyValue(true, for: characteristic)
 					musicChars.control = characteristic
-				case musicTrackCBUUID:
+			case cbuuidList.shared.musicTrack:
 					musicChars.track = characteristic
-				case musicArtistCBUUID:
+			case cbuuidList.shared.musicArtist:
 					// select artist characteristic for writing to music app
 					musicChars.artist = characteristic
-				case notifyCBUUID :
+			case cbuuidList.shared.notify:
 						// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
 						notifyCharacteristic = characteristic
 						if firstConnect {
@@ -52,22 +54,25 @@ extension BLEManager: CBPeripheralDelegate {
 	}
 	
 	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+		let getDeviceInfo = GetDeviceInfo()
+		getDeviceInfo.updateInfo(characteristic: characteristic)
+		
 		switch characteristic.uuid {
-		case musicControlCBUUID:
+		case cbuuidList.shared.musicControl:
 			// listen for the music controller notifications
 			let musicControl = [UInt8](characteristic.value!)
 			controlMusic(controlNumber: Int(musicControl[0]))
 			print(musicControl)
 			
-		case musicTrackCBUUID:
+		case cbuuidList.shared.musicTrack:
 			// select track characteristic for writing to music app
 			musicChars.track = characteristic
 			
-		case musicArtistCBUUID:
+		case cbuuidList.shared.musicArtist:
 			// select artist characteristic for writing to music app
 			musicChars.artist = characteristic
 			
-		case hrmCBUUID:
+		case cbuuidList.shared.hrm:
 			// subscribe to HRM, read heart rate hex, convert to decimal
 			peripheral.setNotifyValue(true, for: characteristic)
 			let bpm = heartRate(from: characteristic)
@@ -81,7 +86,7 @@ extension BLEManager: CBPeripheralDelegate {
 				
 				chartReconnect = false
 			}
-		case batCBUUID:
+		case cbuuidList.shared.bat:
 			// subscribe to battery updates, read battery hex data, convert it to decimal
 			peripheral.setNotifyValue(true, for: characteristic)
 			let batData = [UInt8](characteristic.value!)
@@ -90,7 +95,7 @@ extension BLEManager: CBPeripheralDelegate {
 			batteryLevel = Double(batData[0])
 			
 			
-		case timeCBUUID:
+		case cbuuidList.shared.time:
 			// convert string with hex value of time to actual hex data, then write to PineTime
 			do {
 				try peripheral.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
@@ -100,7 +105,7 @@ extension BLEManager: CBPeripheralDelegate {
 				print("Unexpected error: \(error).")
 			}
 			
-		case firmwareCBUUID:
+		case cbuuidList.shared.firmware:
 			firmwareVersion = String(decoding: characteristic.value!, as: UTF8.self)
 		default:
 			break
