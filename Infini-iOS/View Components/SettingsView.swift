@@ -21,6 +21,8 @@ struct Settings_Page: View {
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = "empty"
 	@AppStorage("heartChartFill") var heartChartFill: Bool = true
 	@AppStorage("batChartFill") var batChartFill: Bool = true
+	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
+	private var chartPoints: FetchedResults<ChartDataPoint>
 	
 	var body: some View {
 		VStack (alignment: .leading){
@@ -36,19 +38,18 @@ struct Settings_Page: View {
 							print(autoconnectUUID)
 						} label: {
 							Text("Use Current Device for Autoconnect")
-								.foregroundColor(colorScheme == .dark ? Color.white : Color.black)
 						}
 						Button {
 							autoconnectUUID = ""
 							print(autoconnectUUID)
 						} label: {
 							Text("Clear Autoconnect Device")
-								.foregroundColor(colorScheme == .dark ? Color.white : Color.black)
 						}
 					}
 
 
 				}
+
 				Section(header: Text("Notifications")) {
 					Toggle("Enable Watch Notifications", isOn: $watchNotifications)
 					Toggle("Notify about Low Battery", isOn: $batteryNotification)
@@ -56,6 +57,18 @@ struct Settings_Page: View {
 				Section(header: Text("Graph Styles")) {
 					Toggle("Filled HRM Graph", isOn: $heartChartFill)
 					Toggle("Filled Battery Graph", isOn: $batChartFill)
+				}
+				Section(header: Text("Graph Data")) {
+					Button (action: {
+						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+					}) {
+						(Text("Clear All HRM Chart Data"))
+					}
+					Button (action: {
+						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+					}) {
+						(Text("Clear All Battery Chart Data"))
+					}
 				}
 				Section(header: Text("Links")) {
 					Link("Infini-iOS GitHub", destination: URL(string: "https://github.com/xan-m/Infini-iOS")!)

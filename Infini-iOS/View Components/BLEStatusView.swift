@@ -15,12 +15,11 @@ struct StatusView: View {
 	
 	var body: some View {
 		VStack {
-			Text("Graphs")
+			Text("Charts")
 				.font(.largeTitle)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			
-			Spacer()
+			TimeRangeTabs()
 			StatusTabs().environmentObject(bleManager)
 		}
 	}

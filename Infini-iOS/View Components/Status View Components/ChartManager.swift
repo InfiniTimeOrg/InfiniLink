@@ -22,12 +22,29 @@ struct DataPoint {
 	let chart: Int16
 }
 
-class ChartManager {
+class ChartManager: ObservableObject {
 	
 	static let shared = ChartManager()
 	private init() {}
 	
-	//@Environment(\.managedObjectContext) var viewContext
+	@Published var trueIfHeart = true
+	@Published var trueIfBat = false
+	
+	enum DateRange {
+		case hour
+		case day
+		case week
+		case all
+	}
+	
+	enum DateValue: Double {
+		case hour = -3600
+		case day = -86400
+		case week = -604800
+	}
+	
+	@Published var dateRange: DateRange = .all
+	
 	let viewContext = PersistenceController.shared.container.viewContext
 	
 	func addItem(dataPoint: DataPoint) {
@@ -43,9 +60,11 @@ class ChartManager {
 		}
 	}
 	
-	func deleteAll(dataSet: FetchedResults<ChartDataPoint>) {
+	func deleteAll(dataSet: FetchedResults<ChartDataPoint>, chart: Int16) {
 		for i in dataSet {
-			viewContext.delete(i)
+			if i.chart == chart {
+				viewContext.delete(i)
+			}
 		}
 		do {
 			try viewContext.save()
@@ -65,14 +84,38 @@ class ChartManager {
 		}
 	}
 	
+	func setTimeRange() -> Double {
+		var dateValue: Double = 0
+		switch dateRange {
+		case .hour:
+			dateValue = -3600
+		case .day:
+			dateValue = -86400
+		case .week:
+			dateValue = -604800
+		case .all:
+			dateValue = 0
+		}
+		return dateValue
+	}
+	
 	func convert(results: FetchedResults<ChartDataPoint>) -> [LineChartDataPoint] {
 		var dataPoints: [LineChartDataPoint] = []
 		let dateFormat = DateFormatter()
+		let timeRange = setTimeRange()
 		dateFormat.dateFormat = "H:mm:ss"
 		for data in results {
-			dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+			if timeRange == 0 {
+				dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+			} else if data.timestamp!.timeIntervalSinceNow >= setTimeRange() {
+				dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+			}
 		}
 		return dataPoints
+	}
+	
+	func filterDates(results: FetchedResults<ChartDataPoint>) {
+		
 	}
 	
 }

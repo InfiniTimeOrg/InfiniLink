@@ -38,7 +38,7 @@ struct SideMenu: View {
 					Image(systemName: "heart")
 						.foregroundColor(.gray)
 						.imageScale(.large)
-					Text("Graphs")
+					Text("Charts")
 						.foregroundColor(.gray)
 						.padding(5)
 				}
