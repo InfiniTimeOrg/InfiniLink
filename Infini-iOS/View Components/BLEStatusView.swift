@@ -11,49 +11,17 @@ import SwiftUI
 struct StatusView: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
-	@EnvironmentObject var sheetManager: SheetManager
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {
-		VStack (spacing: 10){
-			Text("Current Stats")
+		VStack {
+			Text("Charts")
 				.font(.largeTitle)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			
-			Spacer()
-			if bleManager.isConnectedToPinetime {
-				StatusTabs().environmentObject(bleManager)
-
-				Button(action: {
-					self.bleManager.disconnect()
-				}) {
-					Text("Disconnect from PineTime")
-						.padding()
-						.padding(.vertical, 7)
-						.frame(maxWidth: .infinity, alignment: .center)
-						.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
-						.foregroundColor(Color.white)
-						.cornerRadius(10)
-						.padding(.horizontal, 20)
-						.padding(.bottom)
-				}
-			} else {
-				Button(action: {
-					sheetManager.showSheet = true
-				}) {
-					Text("Connect to PineTime")
-						.padding()
-						.padding(.vertical, 7)
-						.frame(maxWidth: .infinity, alignment: .center)
-						.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
-						.foregroundColor(Color.white)
-						.cornerRadius(10)
-						.padding(.horizontal, 20)
-						.padding(.bottom)
-				}
-			}
-		}//.padding()
+			TimeRangeTabs()
+			StatusTabs().environmentObject(bleManager)
+		}
 	}
 }
 

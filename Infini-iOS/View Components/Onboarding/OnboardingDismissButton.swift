@@ -10,12 +10,12 @@
 import SwiftUI
 
 struct OnboardingDismissButton: View {
-	@EnvironmentObject var sheetManager: SheetManager
+	//@EnvironmentObject var sheetManager: SheetManager
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View{
 		Button(action: {
-			sheetManager.showSheet = false
+			SheetManager.shared.showSheet = false
 		}) {
 			Text("Dismiss")
 				.padding()

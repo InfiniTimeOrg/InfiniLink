@@ -15,7 +15,7 @@
 		2632388C26F265B100D72B43 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388B26F265B100D72B43 /* MainView.swift */; };
 		2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388D26F297CB00D72B43 /* OnboardingBody.swift */; };
 		2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */; };
-		263B20B526CD673900676BF0 /* StatusViewTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B426CD673900676BF0 /* StatusViewTabs.swift */; };
+		263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B426CD673900676BF0 /* ChartTabs.swift */; };
 		263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B926CDF13400676BF0 /* HeartChart.swift */; };
 		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
 		263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 263B20C426CEB46800676BF0 /* SwiftUICharts */; };
@@ -34,6 +34,10 @@
 		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
 		264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80A26C62ED600E812C3 /* SideMenu.swift */; };
 		264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80C26C633CF00E812C3 /* PageSwitcher.swift */; };
+		266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E326F7FCA6007481A6 /* ChartManager.swift */; };
+		266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E526FA7676007481A6 /* HomeScreen.swift */; };
+		266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E926FA91F3007481A6 /* DeviceInfo.swift */; };
+		266F53EC26FAABE7007481A6 /* TimeRangeTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */; };
 		2675CA5726DC447500967E4D /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5626DC447500967E4D /* SheetManager.swift */; };
 		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
@@ -79,7 +83,7 @@
 		2632388B26F265B100D72B43 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		2632388D26F297CB00D72B43 /* OnboardingBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBody.swift; sourceTree = "<group>"; };
 		2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDismissButton.swift; sourceTree = "<group>"; };
-		263B20B426CD673900676BF0 /* StatusViewTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusViewTabs.swift; sourceTree = "<group>"; };
+		263B20B426CD673900676BF0 /* ChartTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTabs.swift; sourceTree = "<group>"; };
 		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
 		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUProgressBar.swift; sourceTree = "<group>"; };
@@ -104,6 +108,10 @@
 		264DB80A26C62ED600E812C3 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
 		264DB80C26C633CF00E812C3 /* PageSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwitcher.swift; sourceTree = "<group>"; };
 		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
+		266F53E326F7FCA6007481A6 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
+		266F53E526FA7676007481A6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
+		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
+		266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRangeTabs.swift; sourceTree = "<group>"; };
 		2675CA5626DC447500967E4D /* SheetManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
@@ -162,9 +170,11 @@
 		263B20B626CD673D00676BF0 /* Status View Components */ = {
 			isa = PBXGroup;
 			children = (
-				263B20B426CD673900676BF0 /* StatusViewTabs.swift */,
+				266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */,
+				263B20B426CD673900676BF0 /* ChartTabs.swift */,
 				263B20B926CDF13400676BF0 /* HeartChart.swift */,
 				263B20BB26CDF20400676BF0 /* BatteryChart.swift */,
+				266F53E326F7FCA6007481A6 /* ChartManager.swift */,
 			);
 			path = "Status View Components";
 			sourceTree = "<group>";
@@ -256,6 +266,7 @@
 			isa = PBXGroup;
 			children = (
 				2632388B26F265B100D72B43 /* MainView.swift */,
+				266F53E526FA7676007481A6 /* HomeScreen.swift */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
 				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
@@ -309,6 +320,7 @@
 				26D7816426C9EB3800BBF555 /* BLEDelegates.swift */,
 				26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */,
 				2644261126DC093D009BD54A /* SetTime.swift */,
+				266F53E926FA91F3007481A6 /* DeviceInfo.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -490,6 +502,7 @@
 				2632388C26F265B100D72B43 /* MainView.swift in Sources */,
 				2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
+				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
@@ -501,6 +514,7 @@
 				264BFE4226BC51CE0050A223 /* Infini_iOSApp.swift in Sources */,
 				2675CA5726DC447500967E4D /* SheetManager.swift in Sources */,
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
+				266F53EC26FAABE7007481A6 /* TimeRangeTabs.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
@@ -509,12 +523,14 @@
 				26D7817526CAB79200BBF555 /* PhoneNotificationsView.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
-				263B20B526CD673900676BF0 /* StatusViewTabs.swift in Sources */,
+				266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */,
+				263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
+				266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

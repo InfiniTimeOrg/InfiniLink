@@ -10,7 +10,7 @@ import SwiftUI
 
 struct Connect: View {
 	
-	@EnvironmentObject var pageSwitcher: PageSwitcher
+	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@EnvironmentObject var bleManager: BLEManager
 	@Environment(\.presentationMode) var presentation
 	@State var scanOrStopScan: Bool = true
@@ -55,7 +55,6 @@ struct Connect: View {
 struct ConnectView_Previews: PreviewProvider {
 	static var previews: some View {
 		Connect()
-			.environmentObject(PageSwitcher())
 			.environmentObject(BLEManager())
 	}
 }

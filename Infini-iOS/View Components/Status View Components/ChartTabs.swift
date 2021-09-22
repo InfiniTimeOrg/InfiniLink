@@ -13,41 +13,43 @@ import SwiftUI
 struct StatusTabs: View {
 	
 	@EnvironmentObject var bleManager: BLEManager
-	@State var trueIfHeart = true
-	@State var trueIfBat = false
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false
+	@ObservedObject var chartManager = ChartManager.shared
 
 	var body: some View{
 		VStack {
 			HStack {
 				Button (action: {
-					self.trueIfHeart = true
-					self.trueIfBat = false
+					chartManager.trueIfHeart = true
+					chartManager.trueIfBat = false
 					lastStatusViewWasHeart = true
 				}) {
 				(Text(Image(systemName: "heart"))
 					.foregroundColor(Color.pink) +
 				Text(": " + String(format: "%.0f", bleManager.heartBPM))
-					.foregroundColor(Color.white))
+					.foregroundColor(Color.white) +
+				Text(" BPM")
+					.foregroundColor(Color.white)
+					.font(.body))
 					.frame(maxWidth:.infinity, alignment: .center)
 					.padding()
-					.background(colorScheme == .dark ? (trueIfHeart ? Color.darkGray : Color.darkestGray) : (trueIfHeart ? Color.gray : Color.lightGray))
+					.background(colorScheme == .dark ? (chartManager.trueIfHeart ? Color.darkGray : Color.darkestGray) : (chartManager.trueIfHeart ? Color.gray : Color.lightGray))
 					.cornerRadius(5)
 					.font(.title)
 				}.padding(.leading, 10)
 				Button (action: {
-					self.trueIfHeart = false
-					self.trueIfBat = true
+					chartManager.trueIfHeart = false
+					chartManager.trueIfBat = true
 					lastStatusViewWasHeart = false
 				}) {
 				(Text(Image(systemName: "battery.100"))
 					.foregroundColor(Color.green) +
-					Text(": " + String(format: "%.0f", bleManager.batteryLevel))
+					Text(": " + String(format: "%.0f", bleManager.batteryLevel) + "%")
 					.foregroundColor(Color.white))
 					.frame(maxWidth: .infinity, alignment: .center)
 					.padding()
-					.background(colorScheme == .dark ? (trueIfBat ? Color.darkGray : Color.darkestGray) : (trueIfBat ? Color.gray : Color.lightGray))
+					.background(colorScheme == .dark ? (chartManager.trueIfBat ? Color.darkGray : Color.darkestGray) : (chartManager.trueIfBat ? Color.gray : Color.lightGray))
 					.cornerRadius(5)
 					.font(.title)
 				}
@@ -56,14 +58,14 @@ struct StatusTabs: View {
 			if lastStatusViewWasHeart {
 				HeartChart()
 					.onAppear() {
-						self.trueIfHeart = true
-						self.trueIfBat = false
+						chartManager.trueIfHeart = true
+						chartManager.trueIfBat = false
 					}
 			} else {
 				BatteryChart()
 					.onAppear() {
-						self.trueIfHeart = false
-						self.trueIfBat = true
+						chartManager.trueIfHeart = false
+						chartManager.trueIfBat = true
 					}
 			}
 		}

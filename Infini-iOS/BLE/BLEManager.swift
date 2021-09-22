@@ -29,6 +29,23 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let deviceUUID: CBUUID
 	}
 	
+	struct cbuuidList {
+		static let shared = cbuuidList()
+		let hrm = CBUUID(string: "2A37")
+		let bat = CBUUID(string: "2A19")
+		let time = CBUUID(string: "2A2B")
+		let notify = CBUUID(string: "2A46")
+		let modelNumber = CBUUID(string: "2A24")
+		let serial = CBUUID(string: "2A25")
+		let firmware = CBUUID(string: "2A26")
+		let hardwareRevision = CBUUID(string: "2A27")
+		let softwareRevision = CBUUID(string: "2A28")
+		let manufacturer = CBUUID(string: "2A29")
+		let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+		let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
+		let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
+	}
+	
 	@Published var musicChars = musicCharacteristics()
 	
 	let settings = UserDefaults.standard
@@ -39,7 +56,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var isConnectedToPinetime = false						// another flag published to update UI stuff. Can probably be implemented better in the future
 	@Published var heartBPM: Double = 0									// published var to communicate the HRM data to the UI.
 	@Published var batteryLevel: Double = 0								// Same as heartBPM but for battery data
-	@Published var hrmChartDataPoints: [LineChartDataPoint] = []
+	//@Published var hrmChartDataPoints: [LineChartDataPoint] = []
 	@Published var batChartDataPoints: [LineChartDataPoint] = []
 	@Published var firmwareVersion: String = "Disconnected"
 	@Published var setTimeError = false
@@ -54,16 +71,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var setAutoconnectUUID: String = ""							// placeholder for now while I figure out how to save the whole device in UserDefaults to save "favorite" devices
 	
 	var firstConnect: Bool = true										// makes iOS connected message only show up on first connect, not if device drops connection and reconnects
+	var chartReconnect: Bool = true										// skip first HRM transmission on every fresh connection to prevent saving of BS data
 	
 	// declare some CBUUIDs for easier reference
-	let hrmCBUUID = CBUUID(string: "2A37")
-	let batCBUUID = CBUUID(string: "2A19")
-	let timeCBUUID = CBUUID(string: "2A2B")
-	let notifyCBUUID = CBUUID(string: "2A46")
-	let firmwareCBUUID = CBUUID(string: "2A26")
-	let musicControlCBUUID = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
-	let musicTrackCBUUID = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
-	let musicArtistCBUUID = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
+
 	
 
 	
@@ -96,6 +107,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			myCentral.cancelPeripheralConnection(infiniTime)
 			firstConnect = true
 			isConnectedToPinetime = false
+			chartReconnect = false
 		}
 	}
 	
@@ -163,6 +175,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
 		if error != nil {
+			chartReconnect = true
 			connect(peripheral: peripheral)
 		}
 	}
