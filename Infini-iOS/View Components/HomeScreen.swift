@@ -14,7 +14,6 @@ struct HomeScreen: View {
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
 	
-	
 	var body: some View {
 		return VStack{
 			Text("Infini-iOS")

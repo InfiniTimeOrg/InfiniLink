@@ -54,7 +54,7 @@ extension BLEManager: CBPeripheralDelegate {
 	}
 	
 	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-		let getDeviceInfo = GetDeviceInfo()
+		let getDeviceInfo = DeviceInfoManager()
 		getDeviceInfo.updateInfo(characteristic: characteristic)
 		
 		switch characteristic.uuid {
@@ -90,7 +90,6 @@ extension BLEManager: CBPeripheralDelegate {
 			// subscribe to battery updates, read battery hex data, convert it to decimal
 			peripheral.setNotifyValue(true, for: characteristic)
 			let batData = [UInt8](characteristic.value!)
-			batChartDataPoints.append(updateChartInfo(data: Double(batData[0]), heart: false))
 			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
 			batteryLevel = Double(batData[0])
 			

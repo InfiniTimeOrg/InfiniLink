@@ -59,8 +59,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var isConnectedToPinetime = false						// another flag published to update UI stuff. Can probably be implemented better in the future
 	@Published var heartBPM: Double = 0									// published var to communicate the HRM data to the UI.
 	@Published var batteryLevel: Double = 0								// Same as heartBPM but for battery data
-	//@Published var hrmChartDataPoints: [LineChartDataPoint] = []
-	@Published var batChartDataPoints: [LineChartDataPoint] = []
 	@Published var firmwareVersion: String = "Disconnected"
 	@Published var setTimeError = false
 	@Published var blePermissions: Bool!
@@ -174,15 +172,16 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
 		self.infiniTime.discoverServices(nil)
-		GetDeviceInfo.init().setDeviceName(uuid: peripheral.identifier.uuidString)
+		DeviceInfoManager().setDeviceName(uuid: peripheral.identifier.uuidString)
 	}
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
 		if error != nil {
 			chartReconnect = true
 			connect(peripheral: peripheral)
+		} else {
+			DeviceInfoManager.init().clearDeviceInfo()
 		}
-		GetDeviceInfo.init().clearDeviceInfo()
 	}
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {

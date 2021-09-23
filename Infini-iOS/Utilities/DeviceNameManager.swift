@@ -72,7 +72,7 @@ struct DeviceNameManager {
 				//}
 			}
 		}
-		GetDeviceInfo.init().setDeviceName(uuid: deviceUUID)
+		DeviceInfoManager().setDeviceName(uuid: deviceUUID)
 		return message
 	}
 	

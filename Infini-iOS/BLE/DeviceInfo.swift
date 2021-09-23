@@ -19,7 +19,7 @@ class BLEDeviceInfo: ObservableObject {
 	var manufacturer = ""
 }
 
-struct GetDeviceInfo {
+struct DeviceInfoManager {
 	
 	struct cbuuid {
 		let modelNumber = CBUUID(string: "2A24")
@@ -65,11 +65,11 @@ struct GetDeviceInfo {
 	
 	func clearDeviceInfo(){
 		BLEDeviceInfo.shared.deviceName = ""
-		BLEDeviceInfo.shared.deviceName = ""
-		BLEDeviceInfo.shared.deviceName = ""
-		BLEDeviceInfo.shared.deviceName = ""
-		BLEDeviceInfo.shared.deviceName = ""
-		BLEDeviceInfo.shared.deviceName = ""
-		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.modelNumber = ""
+		BLEDeviceInfo.shared.serial = ""
+		BLEDeviceInfo.shared.firmware = ""
+		BLEDeviceInfo.shared.hardwareRevision = ""
+		BLEDeviceInfo.shared.softwareRevision = ""
+		BLEDeviceInfo.shared.manufacturer = ""
 	}
 }
