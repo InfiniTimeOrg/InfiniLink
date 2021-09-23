@@ -27,6 +27,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let rssi: Int
 		let peripheralHash: Int
 		let deviceUUID: CBUUID
+		let stringUUID: String
 	}
 	
 	struct cbuuidList {
@@ -144,7 +145,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			peripheralName = name
 			let devUUIDString: String = peripheral.identifier.uuidString
 			let devUUID: CBUUID = CBUUID(string: devUUIDString)
-			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID)
+			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID, stringUUID: peripheral.identifier.uuidString)
 
 			
 			// handle autoconnect defaults
@@ -171,6 +172,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
 		self.infiniTime.discoverServices(nil)
+		GetDeviceInfo.init().setDeviceName(uuid: peripheral.identifier.uuidString)
 	}
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
@@ -178,6 +180,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			chartReconnect = true
 			connect(peripheral: peripheral)
 		}
+		GetDeviceInfo.init().clearDeviceInfo()
 	}
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {

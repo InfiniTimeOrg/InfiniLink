@@ -24,30 +24,43 @@ struct Settings_Page: View {
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
 	private var chartPoints: FetchedResults<ChartDataPoint>
 	
+	@State private var changedName: String = ""
+	private var isEditing = false
+	@State private var noCommittedChanges = true
+	private var nameManager = DeviceNameManager()
+	@State private var resultMessage = ""
+	
 	var body: some View {
-		VStack (alignment: .leading){
+		VStack {//(alignment: .leading){
 			Text("Settings")
 				.font(.largeTitle)
 				.padding()
 			Form {
-				Section(header: Text("Connection")) {
+				Section(header: Text("Connect Options")) {
 					Toggle("Autoconnect to PineTime", isOn: $autoconnect)
-					if autoconnect {
-						Button {
-							autoconnectUUID = bleManager.setAutoconnectUUID
-							print(autoconnectUUID)
-						} label: {
-							Text("Use Current Device for Autoconnect")
-						}
-						Button {
-							autoconnectUUID = ""
-							print(autoconnectUUID)
-						} label: {
-							Text("Clear Autoconnect Device")
-						}
+					Button {
+						autoconnectUUID = bleManager.setAutoconnectUUID
+						print(autoconnectUUID)
+					} label: {
+						Text("Use Current Device for Autoconnect")
+					}.disabled(!autoconnect)
+					Button {
+						autoconnectUUID = ""
+						print(autoconnectUUID)
+					} label: {
+						Text("Clear Autoconnect Device")
+					}.disabled(!autoconnect)
+				}
+				Section(header: Text("Device Name")) {
+				TextField("Enter New Name", text: $changedName, onCommit:  {
+						print("piss")
+					})
+					Button {
+						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+						resultMessage = nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+					} label: {
+						Text("Rename Device")
 					}
-
-
 				}
 
 				Section(header: Text("Notifications")) {
@@ -80,6 +93,5 @@ struct Settings_Page: View {
 				}
 			}
 		}
-
 	}
 }

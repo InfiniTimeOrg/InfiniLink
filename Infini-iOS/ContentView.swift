@@ -44,7 +44,7 @@ struct ContentView: View {
 				}
 			}
 
-		return NavigationView {
+		NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
 					MainView()
@@ -57,7 +57,7 @@ struct ContentView: View {
 										SheetManager.shared.showSheet = true
 									}
 								}
-						})//.environmentObject(sheetManager)
+						})
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
@@ -65,10 +65,10 @@ struct ContentView: View {
 						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
 						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
-							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0
+							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0 for tap interactions
 							if pageSwitcher.showMenu {
-								Color.white
-									.opacity(pageSwitcher.showMenu ? 0.01 : 0)
+								Color.black
+									.opacity(pageSwitcher.showMenu ? 0.3 : 0)
 									.onTapGesture {
 										withAnimation {
 											pageSwitcher.showMenu = false
@@ -94,9 +94,8 @@ struct ContentView: View {
 								}
 							})
 						}
-					if self.pageSwitcher.showMenu {
-						SideMenu(isOpen: self.$pageSwitcher.showMenu)
-							//.environmentObject(sheetManager)
+					if pageSwitcher.showMenu {
+						SideMenu(isOpen: $pageSwitcher.showMenu)
 							.frame(width: geometry.size.width/2)
 							.transition(.move(edge: .leading))
 							.ignoresSafeArea()
@@ -105,7 +104,7 @@ struct ContentView: View {
 				.navigationBarItems(leading: (
 					Button(action: {
 						withAnimation {
-							self.pageSwitcher.showMenu.toggle()
+							pageSwitcher.showMenu.toggle()
 						}
 					}) {
 						Image(systemName: "line.horizontal.3")

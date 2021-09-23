@@ -12,24 +12,29 @@ struct HomeScreen: View {
 	@EnvironmentObject var bleManager: BLEManager
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("autoconnect") var autoconnect: Bool = false
+	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
 	
-	var body: some View{
-		VStack{
+	
+	var body: some View {
+		return VStack{
 			Text("Infini-iOS")
 				.font(.largeTitle)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			
-			Text("Firmware Version: " + BLEDeviceInfo.shared.firmware)
-				.font(.title)
-			Text("Model Number: " + BLEDeviceInfo.shared.modelNumber)
-				.font(.title)
-			Text("Software Revision: " + BLEDeviceInfo.shared.softwareRevision)
-				.font(.title)
-			Text("Hardware revision: " + BLEDeviceInfo.shared.hardwareRevision)
-				.font(.title)
-			Text("Manufacturer: " + BLEDeviceInfo.shared.manufacturer)
-				.font(.title)
+			Form{
+				Section(header: Text("Device Name")) {
+					Text(deviceInfo.deviceName)
+				}
+				Section(header: Text("Device Information")) {
+					if !bleManager.isConnectedToPinetime {
+						Text("Firmware Version: ")
+						Text("Model: ")
+					} else {
+						Text("Firmware Version: " + deviceInfo.firmware)
+						Text("Model: " + deviceInfo.modelNumber)
+					}
+				}
+			}
 			Spacer()
 
 			
@@ -69,3 +74,5 @@ struct HomeScreen: View {
 		}
 	}
 }
+
+

@@ -13,13 +13,8 @@ struct Connect: View {
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@EnvironmentObject var bleManager: BLEManager
 	@Environment(\.presentationMode) var presentation
-	@State var scanOrStopScan: Bool = true
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-	
-	init(){
-		UITableView.appearance().backgroundColor = .clear
-	}
 
 	var body: some View {
 		
@@ -32,6 +27,7 @@ struct Connect: View {
 					bleManager.startScanning()
 				}
 			List(bleManager.peripherals) { peripheral in
+				let deviceName = DeviceNameManager.init().getName(deviceUUID: peripheral.stringUUID)
 				HStack {
 					Button(action: {
 						self.bleManager.deviceToConnect = peripheral.peripheralHash
@@ -40,7 +36,11 @@ struct Connect: View {
 						}
 						presentation.wrappedValue.dismiss()
 					}) {
-						Text(peripheral.name)
+						if deviceName == "" {
+							Text(peripheral.name)
+						} else {
+							Text(deviceName)
+						}
 					}
 					Spacer()
 					Text("RSSI: " + String(peripheral.rssi))
@@ -48,6 +48,10 @@ struct Connect: View {
 			}
 		
 			Spacer()
+		}.onDisappear {
+			if bleManager.isScanning {
+				bleManager.stopScanning()
+			}
 		}
 	}
 }

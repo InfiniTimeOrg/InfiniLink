@@ -8,8 +8,9 @@
 import Foundation
 import CoreBluetooth
 
-struct BLEDeviceInfo {
+class BLEDeviceInfo: ObservableObject {
 	static var shared = BLEDeviceInfo()
+	var deviceName = ""
 	var modelNumber = ""
 	var serial = ""
 	var firmware = ""
@@ -49,5 +50,26 @@ struct GetDeviceInfo {
 		default:
 			break
 		}
+	}
+	
+	func setDeviceName(uuid: String) {
+		let deviceNamer = DeviceNameManager()
+		let deviceName = deviceNamer.getName(deviceUUID: uuid)
+		
+		if deviceName == "" {
+			BLEDeviceInfo.shared.deviceName = "InfiniTime"
+		} else {
+			BLEDeviceInfo.shared.deviceName = deviceName
+		}
+	}
+	
+	func clearDeviceInfo(){
+		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.deviceName = ""
+		BLEDeviceInfo.shared.deviceName = ""
 	}
 }

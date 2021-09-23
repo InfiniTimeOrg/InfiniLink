@@ -19,6 +19,9 @@ struct PersistenceController {
 			newitem.value = 10.0
 			newitem.id = UUID()
 			newitem.chart = ChartsAsInts.heart.rawValue
+			let newName = DeviceNames(context: viewContext)
+			newName.name = "Name"
+			newName.uuid = "0"
         }
         do {
             try viewContext.save()
