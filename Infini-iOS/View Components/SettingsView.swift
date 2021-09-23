@@ -35,6 +35,7 @@ struct Settings_Page: View {
 			Text("Settings")
 				.font(.largeTitle)
 				.padding()
+				.frame(maxWidth: .infinity, alignment: .leading)
 			Form {
 				Section(header: Text("Connect Options")) {
 					Toggle("Autoconnect to PineTime", isOn: $autoconnect)
@@ -58,6 +59,7 @@ struct Settings_Page: View {
 					Button {
 						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 						resultMessage = nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+						changedName = ""
 					} label: {
 						Text("Rename Device")
 					}
@@ -66,6 +68,12 @@ struct Settings_Page: View {
 				Section(header: Text("Notifications")) {
 					Toggle("Enable Watch Notifications", isOn: $watchNotifications)
 					Toggle("Notify about Low Battery", isOn: $batteryNotification)
+					Button {
+						SheetManager.shared.sheetSelection = .notification
+						SheetManager.shared.showSheet = true
+					} label: {
+						Text("Send Notification to PineTime")
+					}.disabled(!watchNotifications || !bleManager.isConnectedToPinetime)
 				}
 				Section(header: Text("Graph Styles")) {
 					Toggle("Filled HRM Graph", isOn: $heartChartFill)

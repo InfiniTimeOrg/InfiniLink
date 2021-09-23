@@ -15,9 +15,9 @@ struct SideMenu: View {
 	
 	func changePage(newPage: Page) {
 		pageSwitcher.currentPage = newPage
-		withAnimation() {
+	//	withAnimation() {
 			self.isOpen = false
-		}
+	//	}
 	}
 	
 	var body: some View {

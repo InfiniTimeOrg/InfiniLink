@@ -50,7 +50,7 @@ struct ContentView: View {
 					MainView()
 						//.environmentObject(sheetManager)
 						.sheet(isPresented: $sheetManager.showSheet, content: {
-							SheetManager.shared.setView(isOnboarding: onboarding, bleManager: bleManager)
+							SheetManager.CurrentSheet().environmentObject(bleManager)
 								.onDisappear {
 									if onboarding {
 										onboarding = false
@@ -61,7 +61,6 @@ struct ContentView: View {
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
-						.frame(width: geometry.size.width, height: geometry.size.height)
 						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
 						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {

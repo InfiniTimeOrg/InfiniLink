@@ -24,7 +24,7 @@ struct DFUWithBLE: View {
 	var body: some View {
 		ZStack {
 			VStack (alignment: .leading){
-				Text("Firmware Update")
+				Text("Update Firmware")
 					.font(.largeTitle)
 					.padding()
 				

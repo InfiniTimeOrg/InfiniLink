@@ -48,6 +48,7 @@
 		26A6316026C4BC25005AE404 /* DFUView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315F26C4BC25005AE404 /* DFUView.swift */; };
 		26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6316226C4C6D6005AE404 /* BLEConnectView.swift */; };
 		26C5FAD526FBB76100921207 /* DeviceNameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5FAD426FBB76100921207 /* DeviceNameManager.swift */; };
+		26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */; };
 		26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816426C9EB3800BBF555 /* BLEDelegates.swift */; };
 		26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */; };
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
@@ -122,6 +123,7 @@
 		26A6315F26C4BC25005AE404 /* DFUView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUView.swift; sourceTree = "<group>"; };
 		26A6316226C4C6D6005AE404 /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
 		26C5FAD426FBB76100921207 /* DeviceNameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceNameManager.swift; sourceTree = "<group>"; };
+		26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		26D7816426C9EB3800BBF555 /* BLEDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDelegates.swift; sourceTree = "<group>"; };
 		26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManagerExtensions.swift; sourceTree = "<group>"; };
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
@@ -270,10 +272,9 @@
 				2632388B26F265B100D72B43 /* MainView.swift */,
 				266F53E526FA7676007481A6 /* HomeScreen.swift */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
-				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
-				2632389326F29A4100D72B43 /* Onboarding */,
+				26C5FAD626FC126F00921207 /* Sheets */,
 				263B20C826CF07BE00676BF0 /* DFU View */,
 				2675CA5826DC5C9400967E4D /* View Utilities */,
 				263B20B626CD673D00676BF0 /* Status View Components */,
@@ -284,7 +285,6 @@
 		2675CA5826DC5C9400967E4D /* View Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				2675CA5626DC447500967E4D /* SheetManager.swift */,
 				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
 			);
 			path = "View Utilities";
@@ -325,6 +325,17 @@
 				266F53E926FA91F3007481A6 /* DeviceInfo.swift */,
 			);
 			path = BLE;
+			sourceTree = "<group>";
+		};
+		26C5FAD626FC126F00921207 /* Sheets */ = {
+			isa = PBXGroup;
+			children = (
+				2675CA5626DC447500967E4D /* SheetManager.swift */,
+				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
+				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
+				2632389326F29A4100D72B43 /* Onboarding */,
+			);
+			path = Sheets;
 			sourceTree = "<group>";
 		};
 		26D7816826C9F02A00BBF555 /* Settings */ = {
@@ -518,6 +529,7 @@
 				2675CA5726DC447500967E4D /* SheetManager.swift in Sources */,
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
 				266F53EC26FAABE7007481A6 /* TimeRangeTabs.swift in Sources */,
+				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26D7817326CAB27800BBF555 /* WatchNotificationsView.swift in Sources */,
