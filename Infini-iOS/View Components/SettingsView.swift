@@ -95,6 +95,7 @@ struct Settings_Page: View {
 					Link("Infini-iOS GitHub", destination: URL(string: "https://github.com/xan-m/Infini-iOS")!)
 					Link("Matrix", destination: URL(string: "https://matrix.to/#/@xanm:matrix.org")!)
 					Link("Mastodon", destination: URL(string: "https://fosstodon.org/@xanm")!)
+					Link("InfiniTime Firmware Releases", destination: URL(string: "https://github.com/JF002/InfiniTime/releases")!)
 				}
 				Section(header: Text("Donations")) {
 					Link("PayPal Donation", destination: URL(string: "https://paypal.me/alexemry")!)
