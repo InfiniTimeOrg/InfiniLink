@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 struct HomeScreen: View {
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared

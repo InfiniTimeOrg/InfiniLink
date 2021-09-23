@@ -13,7 +13,7 @@ import SwiftUI
 struct DFUFileSelectButton: View {
 	@Environment(\.colorScheme) var colorScheme
 	@Binding var openFile: Bool
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	
 	var body: some View{
 		Button(action:{

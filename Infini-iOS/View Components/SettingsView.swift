@@ -12,7 +12,7 @@ import SwiftUI
 
 struct Settings_Page: View {
 	
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
@@ -53,9 +53,7 @@ struct Settings_Page: View {
 					}.disabled(!autoconnect)
 				}
 				Section(header: Text("Device Name")) {
-				TextField("Enter New Name", text: $changedName, onCommit:  {
-						print("piss")
-					})
+					TextField("Enter New Name", text: $changedName)
 					Button {
 						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 						resultMessage = nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)

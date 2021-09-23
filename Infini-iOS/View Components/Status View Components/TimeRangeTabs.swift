@@ -22,7 +22,7 @@ import SwiftUI
 
 struct TimeRangeTabs: View {
 	
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var chartManager = ChartManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false

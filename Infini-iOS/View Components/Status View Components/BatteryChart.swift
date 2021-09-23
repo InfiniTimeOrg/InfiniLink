@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUICharts
 
 struct BatteryChart: View {
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@AppStorage("batChartFill") var batChartFill: Bool = true
 	@Environment(\.managedObjectContext) var viewContext
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 1"))

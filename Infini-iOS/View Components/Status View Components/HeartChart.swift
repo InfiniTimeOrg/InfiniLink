@@ -13,7 +13,7 @@ import SwiftUICharts
 import CoreData
 
 struct HeartChart: View {
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var chartManager = ChartManager.shared
 	@AppStorage("heartChartFill") var heartChartFill: Bool = true
 	@Environment(\.managedObjectContext) var viewContext

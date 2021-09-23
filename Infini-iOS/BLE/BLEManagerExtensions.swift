@@ -11,20 +11,7 @@ import Foundation
 import CoreBluetooth
 import SwiftUICharts
 
-extension BLEManager {
-	
-	// this function converts string to ascii and writes to the selected characteristic. Used for notifications and music app
-	func writeASCIIToPineTime(message: String, characteristic: CBCharacteristic) -> Void {
-		guard let writeData = message.data(using: .ascii) else {
-			if characteristic == musicChars.artist || characteristic == musicChars.track {
-				// TODO: for music app, this sends an empty string to not display anything if this is non-ascii. This string can be changed to a "cannot display song title" or whatever but that seems a lot more annoying than just displaying nothing.
-				infiniTime.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
-			}
-			return
-		}
-		infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
-	}
-	
+extension BLEManager {	
 	
 	// function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
 	func heartRate(from characteristic: CBCharacteristic) -> Int {

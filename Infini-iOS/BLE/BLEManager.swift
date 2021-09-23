@@ -12,6 +12,8 @@ import SwiftUICharts
 
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
+	static let shared = BLEManager()
+	
 	var myCentral: CBCentralManager!
 	var notifyCharacteristic: CBCharacteristic!
 	

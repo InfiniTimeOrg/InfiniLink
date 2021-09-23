@@ -12,7 +12,7 @@ import SwiftUI
 
 struct StatusTabs: View {
 	
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false
 	@ObservedObject var chartManager = ChartManager.shared

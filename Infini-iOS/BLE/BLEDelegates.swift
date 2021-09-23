@@ -44,7 +44,7 @@ extension BLEManager: CBPeripheralDelegate {
 						// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
 						notifyCharacteristic = characteristic
 						if firstConnect {
-							sendNotification(notification: "iOS Connected!")
+							BLEWriteManager.init().sendNotification(title: "", body: "iOS Connected!")
 							firstConnect = false
 						}
 				default:

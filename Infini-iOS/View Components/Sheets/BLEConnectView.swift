@@ -11,7 +11,7 @@ import SwiftUI
 struct Connect: View {
 	
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.presentationMode) var presentation
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""

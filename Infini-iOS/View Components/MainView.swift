@@ -13,7 +13,7 @@ import SwiftUI
 struct MainView: View {
 
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	
 	
 	var body: some View {

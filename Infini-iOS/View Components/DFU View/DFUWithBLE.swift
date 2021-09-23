@@ -12,7 +12,7 @@ import SwiftUI
 
 struct DFUWithBLE: View {
 	@Environment(\.colorScheme) var colorScheme
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@EnvironmentObject var dfuUpdater: DFU_Updater
 	
 	@State var openFile = false

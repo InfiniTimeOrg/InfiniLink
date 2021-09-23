@@ -11,13 +11,13 @@ struct SideMenu: View {
 	
 	@Binding var isOpen: Bool
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	
 	func changePage(newPage: Page) {
 		pageSwitcher.currentPage = newPage
-	//	withAnimation() {
+		withAnimation() {
 			self.isOpen = false
-	//	}
+		}
 	}
 	
 	var body: some View {

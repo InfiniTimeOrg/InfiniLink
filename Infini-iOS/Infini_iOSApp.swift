@@ -15,7 +15,7 @@ struct Infini_iOSApp: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-				.environmentObject(BLEManager())
+//				.environmentObject(BLEManager())
 				.environmentObject(DFU_Updater())
         }
     }

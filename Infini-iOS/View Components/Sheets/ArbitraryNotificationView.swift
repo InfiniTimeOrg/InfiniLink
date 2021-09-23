@@ -11,26 +11,33 @@ import Foundation
 import SwiftUI
 
 struct ArbitraryNotificationSheet: View {
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
-	@State var arbitraryNotification: String = ""
+	@State var notificationTitle: String = ""
+	@State var notificationBody: String = ""
 	var placeholderString = "enter text here"
-	@Namespace var arbitraryNotificationSheet
-	
-//	init() {
-//		UITextView.appearance().backgroundColor = .clear
-//	}
 	
 	var body: some View {
 		VStack{
-			Text("Enter notification below")
+			Text("Send Notification")
 				.font(.title)
 				.padding()
 			Divider()
-			TextEditor(text: $arbitraryNotification)
+				.padding(.horizontal)
+			HStack {
+				Text("Title: ")
+					.padding(.leading)
+				TextField("", text: $notificationTitle)
+			}
+			Divider()
+				.padding(.horizontal)
+			TextEditor(text: $notificationBody)
 				.padding(.horizontal)
 			Button(action: {
-				bleManager.sendNotification(notification: arbitraryNotification)
+				UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+				if !notificationBody.isEmpty || !notificationTitle.isEmpty {
+					BLEWriteManager.init().sendNotification(title: notificationTitle, body: notificationBody)
+				}
 				SheetManager.shared.showSheet = false
 				SheetManager.shared.sheetSelection = .connect
 			}) {
@@ -44,6 +51,6 @@ struct ArbitraryNotificationSheet: View {
 					.padding(.horizontal, 20)
 					.padding(.bottom)
 			}
-		}.navigationTitle(Text("Send Notification"))
+		}
 	}
 }

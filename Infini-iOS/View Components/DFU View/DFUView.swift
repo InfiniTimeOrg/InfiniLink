@@ -10,7 +10,7 @@ import SwiftUI
 
 struct DFUView: View {
 	
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 
 	
 	var body: some View {

@@ -23,7 +23,7 @@ class SheetManager: ObservableObject {
 	@Published var sheetSelection: SheetSelection = .connect
 	
 	struct CurrentSheet: View {
-		@EnvironmentObject var bleManager: BLEManager
+		@ObservedObject var bleManager = BLEManager.shared
 		var body: some View {
 			switch SheetManager.shared.sheetSelection {
 			case .onboarding:

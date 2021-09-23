@@ -10,7 +10,7 @@ import SwiftUI
 
 struct StatusView: View {
 	
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	
 	var body: some View {

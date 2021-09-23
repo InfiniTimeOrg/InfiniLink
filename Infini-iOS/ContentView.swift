@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ContentView: View {
 	
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
 	
 	@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@ObservedObject var batteryNotifications = BatteryNotifications()
