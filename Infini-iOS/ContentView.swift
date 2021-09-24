@@ -49,6 +49,13 @@ struct ContentView: View {
 		NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
+					if pageSwitcher.showMenu {
+						SideMenu(isOpen: $pageSwitcher.showMenu)
+							.frame(width: geometry.size.width/2)
+							.transition(.move(edge: .leading))
+							.ignoresSafeArea()
+							.zIndex(10)
+					}
 					MainView()
 						.sheet(isPresented: $sheetManager.showSheet, content: {
 							SheetManager.CurrentSheet()
@@ -103,12 +110,6 @@ struct ContentView: View {
 								}
 							})
 						}
-					if pageSwitcher.showMenu {
-						SideMenu(isOpen: $pageSwitcher.showMenu)
-							.frame(width: geometry.size.width/2)
-							.transition(.move(edge: .leading))
-							.ignoresSafeArea()
-					}
 				}
 				.navigationBarItems(leading: (
 					Button(action: {
@@ -122,15 +123,13 @@ struct ContentView: View {
 							.padding(.horizontal, 7)
 							.imageScale(.large)
 							.foregroundColor(Color.gray)
-					}
-				))
+					}))
 				.navigationBarTitleDisplayMode(.inline)
 			}
 			
 		}.gesture(drag)
 	}
 }
-
 
 	
 struct ContentView_Previews: PreviewProvider {

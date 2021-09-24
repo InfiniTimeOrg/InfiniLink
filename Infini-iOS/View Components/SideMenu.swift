@@ -12,6 +12,7 @@ struct SideMenu: View {
 	@Binding var isOpen: Bool
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@ObservedObject var bleManager = BLEManager.shared
+	@Environment(\.colorScheme) var colorScheme
 	
 	func changePage(newPage: Page) {
 		withAnimation() {
@@ -25,10 +26,10 @@ struct SideMenu: View {
 			HStack {
 				Button(action: {changePage(newPage: .home)}) {
 					Image(systemName: "house.fill")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Home")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
@@ -36,10 +37,10 @@ struct SideMenu: View {
 			HStack {
 				Button(action: {changePage(newPage: .status)}) {
 					Image(systemName: "heart")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Charts")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
@@ -47,10 +48,10 @@ struct SideMenu: View {
 			HStack {
 				Button(action: {changePage(newPage: .dfu)}) {
 					Image(systemName: "arrow.up.doc")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Update Firmware")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
@@ -58,10 +59,10 @@ struct SideMenu: View {
 			HStack {
 				Button(action: {changePage(newPage: .settings)}) {
 					Image(systemName: "gear")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Settings")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
@@ -75,10 +76,10 @@ struct SideMenu: View {
 						pageSwitcher.showMenu = false
 					}) {
 						Image(systemName: "radiowaves.right")
-							.foregroundColor(.gray)
+							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.imageScale(.large)
 						Text("Connect to PineTime")
-							.foregroundColor(.gray)
+							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.padding(5)
 					}
 				}
@@ -88,7 +89,7 @@ struct SideMenu: View {
 			VStack (alignment: .center, spacing:10) {
 				Text("STATUS")
 					.font(.headline)
-					.foregroundColor(Color.gray)
+					.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 
 				
 				if bleManager.isSwitchedOn {
@@ -115,6 +116,6 @@ struct SideMenu: View {
 		}
 			.padding(20)
 			.frame(maxWidth: .infinity, alignment: .leading)
-			.background(Color.darkGray)
+			.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
 	}
 }

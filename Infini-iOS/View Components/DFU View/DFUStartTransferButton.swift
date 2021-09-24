@@ -21,37 +21,24 @@ struct DFUStartTransferButton: View {
 	@ObservedObject var bleManager = BLEManager.shared
 	
 	var body: some View {
-		if updateStarted {
-			Button(action:{
+		Button {
+			if updateStarted {
 				dfuUpdater.stopTransfer()
 				updateStarted = false
-			}) {
-				Text("Stop Transfer")
-					.padding()
-					.padding(.vertical, 7)
-					.frame(maxWidth: .infinity, alignment: .center)
-					.background(colorScheme == .dark ? (firmwareSelected ? Color.darkGray : Color.darkestGray) : (firmwareSelected ? Color.gray : Color.blue))
-					.foregroundColor(firmwareSelected ? Color.white : Color.gray)
-					.cornerRadius(10)
-					.padding(.horizontal, 20)
-					.padding(.bottom)
-			}.disabled(!firmwareSelected)
-		} else {
-			Button(action:{
+			} else {
 				dfuUpdater.prepare(location: firmwareURL, device: bleManager)
 				dfuUpdater.transfer()
 				updateStarted = true
-			}) {
-				Text("Begin Transfer")
-					.padding()
-					.padding(.vertical, 7)
-					.frame(maxWidth: .infinity, alignment: .center)
-					.background(colorScheme == .dark ? (firmwareSelected ? Color.darkGray : Color.darkestGray) : (firmwareSelected ? Color.gray : Color.blue))
-					.foregroundColor(firmwareSelected ? Color.white : Color.gray)
-					.cornerRadius(10)
-					.padding(.horizontal, 20)
-					.padding(.bottom)
-			}.disabled(!firmwareSelected)
-		}
+			}} label: {
+			Text(updateStarted ? "Stop Transfer" : "Start Transfer")
+				.padding()
+				.padding(.vertical, 7)
+				.frame(maxWidth: .infinity, alignment: .center)
+				.background(colorScheme == .dark ? (firmwareSelected ? Color.darkGray : Color.darkestGray) : (firmwareSelected ? Color.blue : Color.lightGray))
+				.foregroundColor(firmwareSelected ? Color.white : Color.gray)
+				.cornerRadius(10)
+				.padding(.horizontal, 20)
+				.padding(.bottom)
+		}.disabled(!firmwareSelected)
 	}
 }

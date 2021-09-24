@@ -13,6 +13,7 @@ import SwiftUI
 struct DFUWithBLE: View {
 	@Environment(\.colorScheme) var colorScheme
 	@ObservedObject var bleManager = BLEManager.shared
+	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
 	@EnvironmentObject var dfuUpdater: DFU_Updater
 	
 	@State var openFile = false
@@ -31,7 +32,7 @@ struct DFUWithBLE: View {
 				HStack {
 					Text("Current Firmware: ")
 						.font(.title)
-					Text(bleManager.firmwareVersion)
+					Text(deviceInfo.firmware)
 						.font(.title)
 				}.padding()
 				
@@ -70,26 +71,25 @@ struct DFUWithBLE: View {
 							print (error.localizedDescription)
 						}
 					}
-				
 				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $firmwareSelected, firmwareURL: $firmwareURL)
 					.environmentObject(dfuUpdater)
-				
-				VStack{
-					if dfuUpdater.transferCompleted {
-						DFUComplete()
-							.cornerRadius(10)
-							.onAppear() {
-								DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-									dfuUpdater.transferCompleted = false
-								})
-								updateStarted = false
-								firmwareURL = URL(fileURLWithPath: "")
-								firmwareSelected = false
-								firmwareFilename = ""
-							}
-					}
-				}.transition(.opacity).animation(.easeInOut(duration: 1.0))
 			}
+			VStack{
+				if dfuUpdater.transferCompleted {
+					DFUComplete()
+						.cornerRadius(10)
+						.onAppear() {
+							DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+								dfuUpdater.transferCompleted = false
+							})
+							updateStarted = false
+							firmwareURL = URL(fileURLWithPath: "")
+							firmwareSelected = false
+							firmwareFilename = ""
+							bleManager.disconnect()
+						}
+				}
+			}.transition(.opacity).animation(.easeInOut(duration: 1.0))
 		}
 	}
 }

@@ -17,7 +17,7 @@ struct Connect: View {
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 
 	var body: some View {
-		
+		SheetCloseButton()
 		VStack (){
 			Text("Available Devices")
 				.font(.largeTitle)
@@ -31,9 +31,7 @@ struct Connect: View {
 				HStack {
 					Button(action: {
 						self.bleManager.deviceToConnect = peripheral.peripheralHash
-						if !self.bleManager.isConnectedToPinetime {
-							self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
-						}
+						self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
 						presentation.wrappedValue.dismiss()
 					}) {
 						if deviceName == "" {

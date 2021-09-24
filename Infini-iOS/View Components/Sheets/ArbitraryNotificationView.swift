@@ -18,6 +18,7 @@ struct ArbitraryNotificationSheet: View {
 	var placeholderString = "enter text here"
 	
 	var body: some View {
+		SheetCloseButton()
 		VStack{
 			Text("Send Notification")
 				.font(.title)
