@@ -34,10 +34,12 @@ struct ContentView: View {
 			// this drag gesture allows swiping right to open the side menu and left to close the side menu
 			.onEnded {
 				if $0.translation.width < -100 {
+					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 					withAnimation {
 						pageSwitcher.showMenu = false
 					}
 				} else if $0.translation.width > 100 {
+					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 					withAnimation {
 						pageSwitcher.showMenu = true
 					}
@@ -48,12 +50,15 @@ struct ContentView: View {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
 					MainView()
-						//.environmentObject(sheetManager)
 						.sheet(isPresented: $sheetManager.showSheet, content: {
-							SheetManager.CurrentSheet().environmentObject(bleManager)
+							SheetManager.CurrentSheet()
+								.onAppear {
+									print(sheetManager.sheetSelection)
+								}
 								.onDisappear {
 									if onboarding {
 										onboarding = false
+										sheetManager.sheetSelection = .connect
 										SheetManager.shared.showSheet = true
 									}
 								}
@@ -66,8 +71,8 @@ struct ContentView: View {
 						.overlay(Group {
 							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0 for tap interactions
 							if pageSwitcher.showMenu {
-								Color.black
-									.opacity(pageSwitcher.showMenu ? 0.3 : 0)
+								Color.white
+									.opacity(pageSwitcher.showMenu ? 0.01 : 0)
 									.onTapGesture {
 										withAnimation {
 											pageSwitcher.showMenu = false
@@ -87,7 +92,12 @@ struct ContentView: View {
 									self.bleManager.startScanning()
 								}
 								
-								if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) || onboarding {
+								if onboarding {
+									SheetManager.shared.sheetSelection = .onboarding
+									SheetManager.shared.showSheet = true
+								}
+								
+								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
 									SheetManager.shared.sheetSelection = .connect
 									SheetManager.shared.showSheet = true
 								}
@@ -102,6 +112,7 @@ struct ContentView: View {
 				}
 				.navigationBarItems(leading: (
 					Button(action: {
+						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 						withAnimation {
 							pageSwitcher.showMenu.toggle()
 						}

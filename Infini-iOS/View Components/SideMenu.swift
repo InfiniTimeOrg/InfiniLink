@@ -14,8 +14,8 @@ struct SideMenu: View {
 	@ObservedObject var bleManager = BLEManager.shared
 	
 	func changePage(newPage: Page) {
-		pageSwitcher.currentPage = newPage
 		withAnimation() {
+			pageSwitcher.currentPage = newPage
 			self.isOpen = false
 		}
 	}

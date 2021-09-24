@@ -18,20 +18,18 @@ struct Settings_Page: View {
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
-	@AppStorage("autoconnectUUID") var autoconnectUUID: String = "empty"
+	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("heartChartFill") var heartChartFill: Bool = true
 	@AppStorage("batChartFill") var batChartFill: Bool = true
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
 	private var chartPoints: FetchedResults<ChartDataPoint>
 	
 	@State private var changedName: String = ""
-	private var isEditing = false
-	@State private var noCommittedChanges = true
 	private var nameManager = DeviceNameManager()
 	@State private var resultMessage = ""
 	
 	var body: some View {
-		VStack {//(alignment: .leading){
+		VStack {
 			Text("Settings")
 				.font(.largeTitle)
 				.padding()
@@ -44,13 +42,13 @@ struct Settings_Page: View {
 						print(autoconnectUUID)
 					} label: {
 						Text("Use Current Device for Autoconnect")
-					}.disabled(!autoconnect)
+					}.disabled(!autoconnect || (autoconnectUUID == bleManager.infiniTime.identifier.uuidString))
 					Button {
 						autoconnectUUID = ""
 						print(autoconnectUUID)
 					} label: {
 						Text("Clear Autoconnect Device")
-					}.disabled(!autoconnect)
+					}.disabled(!autoconnect || autoconnectUUID.isEmpty)
 				}
 				Section(header: Text("Device Name")) {
 					TextField("Enter New Name", text: $changedName)

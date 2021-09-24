@@ -5,7 +5,7 @@
 //  Created by Alex Emry on 9/15/21.
 //  
 //
-    
+
 
 import Foundation
 import SwiftUI
@@ -73,7 +73,6 @@ struct DFUWithBLE: View {
 				
 				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $firmwareSelected, firmwareURL: $firmwareURL)
 					.environmentObject(dfuUpdater)
-					.environmentObject(bleManager)
 				
 				VStack{
 					if dfuUpdater.transferCompleted {

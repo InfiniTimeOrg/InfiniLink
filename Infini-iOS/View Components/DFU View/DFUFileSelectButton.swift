@@ -17,13 +17,13 @@ struct DFUFileSelectButton: View {
 	
 	var body: some View{
 		Button(action:{
-			openFile = true
+			openFile.toggle()
 		}) {
 			Text("Select Firmware File")
 				.padding()
 				.padding(.vertical, 7)
 				.frame(maxWidth: .infinity, alignment: .center)
-				.background(colorScheme == .dark ? (bleManager.isConnectedToPinetime ? Color.darkGray : Color.darkestGray) : (bleManager.isConnectedToPinetime ? Color.gray : Color.lightGray))
+				.background(colorScheme == .dark ? (bleManager.isConnectedToPinetime ? Color.darkGray : Color.darkestGray) : (bleManager.isConnectedToPinetime ? Color.blue : Color.lightGray))
 				.foregroundColor(bleManager.isConnectedToPinetime ? Color.white : Color.gray)
 				.cornerRadius(10)
 				.padding(.horizontal, 20)

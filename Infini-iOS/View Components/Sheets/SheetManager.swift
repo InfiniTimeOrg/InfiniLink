@@ -18,32 +18,28 @@ enum SheetSelection {
 
 class SheetManager: ObservableObject {
 	static let shared = SheetManager()
-		
+	
 	@Published var showSheet: Bool = false
 	@Published var sheetSelection: SheetSelection = .connect
 	
+//	init() {
+//		let onboarding = UserDefaults.standard.object(forKey: "onboarding") as? Bool ?? true
+//		if onboarding {
+//			sheetSelection = .onboarding
+//			print(sheetSelection)
+//		}
+//	}
+	
 	struct CurrentSheet: View {
-		@ObservedObject var bleManager = BLEManager.shared
 		var body: some View {
 			switch SheetManager.shared.sheetSelection {
 			case .onboarding:
 				Onboarding()
 			case .connect:
-				Connect().environmentObject(bleManager)
+				Connect()
 			case .notification:
 				ArbitraryNotificationSheet()
 			}
-		}
-	}
-	
-	func setView(sheet: SheetSelection, bleManager: BLEManager) -> AnyView {
-		switch sheet {
-		case .onboarding:
-			return AnyView(Onboarding())
-		case .connect:
-			return AnyView(Connect().environmentObject(bleManager))
-		case .notification:
-			return AnyView(Color.black)
 		}
 	}
 }
