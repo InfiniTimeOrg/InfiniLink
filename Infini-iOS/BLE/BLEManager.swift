@@ -149,19 +149,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 
 			
 			// handle autoconnect defaults
-			let settings = UserDefaults.standard
-			let autoconnect = settings.object(forKey: "autoconnect") as? Bool ?? true
-			let autoconnectUUID = settings.object(forKey: "autoconnectUUID") as? String ?? ""
+			//let settings = UserDefaults.standard
+			//let autoconnect = settings.object(forKey: "autoconnect") as? Bool ?? true
+			//let autoconnectUUID = settings.object(forKey: "autoconnectUUID") as? String ?? ""
 			
-			if autoconnect && devUUIDString == autoconnectUUID {
-				connect(peripheral: peripheral)
-			}
-			else {
-				// compare peripheral hashes to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
+			
+			guard BLEAutoconnectManager.shared.connect(peripheral: peripheral) else {
+				// compare peripheral UUIDs to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
 				if !peripherals.contains(where: {$0.deviceUUID == newPeripheral.deviceUUID}) {
 					peripherals.append(newPeripheral)
 					peripheralDictionary[newPeripheral.peripheralHash] = peripheral
 				}
+				return
 			}
 		}
 	}

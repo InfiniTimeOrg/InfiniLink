@@ -86,7 +86,10 @@ struct DFUWithBLE: View {
 							firmwareURL = URL(fileURLWithPath: "")
 							firmwareSelected = false
 							firmwareFilename = ""
+							BLEAutoconnectManager.shared.uuid = bleManager.infiniTime.identifier.uuidString
+							BLEAutoconnectManager.shared.dfu = true
 							bleManager.disconnect()
+							bleManager.startScanning()
 						}
 				}
 			}.transition(.opacity).animation(.easeInOut(duration: 1.0))
