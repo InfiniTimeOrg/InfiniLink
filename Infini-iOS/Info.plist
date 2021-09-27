@@ -26,6 +26,8 @@
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
+	<key>NSDownloadsFolderUsageDescription</key>
+	<string></string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

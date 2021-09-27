@@ -14,13 +14,11 @@ struct DFUWithBLE: View {
 	@Environment(\.colorScheme) var colorScheme
 	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
-	@EnvironmentObject var dfuUpdater: DFU_Updater
+	@ObservedObject var dfuUpdater = DFU_Updater.shared
 	
 	@State var openFile = false
-	@State private var firmwareFilename = ""
-	@State private var firmwareSelected: Bool = false
-	@State private var firmwareURL: URL = URL(fileURLWithPath: "")
 	@State private var updateStarted: Bool = false
+	
 	
 	var body: some View {
 		ZStack {
@@ -29,21 +27,16 @@ struct DFUWithBLE: View {
 					.font(.largeTitle)
 					.padding()
 				
-				HStack {
-					Text("Current Firmware: ")
-						.font(.title)
-					Text(deviceInfo.firmware)
-						.font(.title)
-				}.padding()
-				
-				
-				if firmwareSelected {
-					Text("Selected Firmware File: ")
-						.font(.title)
-						.padding(.horizontal)
-					Text(firmwareFilename)
-						.padding(.horizontal)
+				List {
+					Section(header: Text("Current Firmware")) {
+						Text(deviceInfo.firmware)
+					}
+					Section(header: Text("Selected Firmware")) {
+						Text(dfuUpdater.firmwareFilename)
+					}
 				}
+					.listStyle(.inset)
+				
 				Spacer()
 				
 				if updateStarted {
@@ -61,9 +54,9 @@ struct DFUWithBLE: View {
 							
 							guard fileUrl.startAccessingSecurityScopedResource() else { return }
 							
-							self.firmwareSelected = true
-							self.firmwareFilename = fileUrl.lastPathComponent
-							self.firmwareURL = fileUrl.absoluteURL
+							dfuUpdater.firmwareSelected = true
+							dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
+							dfuUpdater.firmwareURL = fileUrl.absoluteURL
 							
 							fileUrl.stopAccessingSecurityScopedResource()
 						} catch{
@@ -71,7 +64,7 @@ struct DFUWithBLE: View {
 							print (error.localizedDescription)
 						}
 					}
-				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $firmwareSelected, firmwareURL: $firmwareURL)
+				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
 					.environmentObject(dfuUpdater)
 			}
 			VStack{
@@ -83,9 +76,9 @@ struct DFUWithBLE: View {
 								dfuUpdater.transferCompleted = false
 							})
 							updateStarted = false
-							firmwareURL = URL(fileURLWithPath: "")
-							firmwareSelected = false
-							firmwareFilename = ""
+							dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
+							dfuUpdater.firmwareSelected = false
+							dfuUpdater.firmwareFilename = ""
 							BLEAutoconnectManager.shared.uuid = bleManager.infiniTime.identifier.uuidString
 							BLEAutoconnectManager.shared.dfu = true
 							bleManager.disconnect()

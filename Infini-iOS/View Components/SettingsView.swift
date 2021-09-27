@@ -21,6 +21,7 @@ struct Settings_Page: View {
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("heartChartFill") var heartChartFill: Bool = true
 	@AppStorage("batChartFill") var batChartFill: Bool = true
+	@AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
 	private var chartPoints: FetchedResults<ChartDataPoint>
 	
@@ -60,6 +61,11 @@ struct Settings_Page: View {
 						Text("Rename Device")
 					}
 				}
+				
+				Section(header: Text("Updates")) {
+					Toggle("Show Upgrades Only", isOn: $showNewDownloadsOnly)
+				}
+				
 
 				Section(header: Text("Notifications")) {
 					Toggle("Enable Watch Notifications", isOn: $watchNotifications)

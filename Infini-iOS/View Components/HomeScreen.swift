@@ -9,11 +9,20 @@ import Foundation
 import SwiftUI
 
 struct HomeScreen: View {
-	@ObservedObject var bleManager = BLEManager.shared
+	
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
+	@ObservedObject var dfuUpdater = DFU_Updater.shared
+	@ObservedObject var bleManager = BLEManager.shared
+	@ObservedObject var downloadManager = DownloadManager.shared
+	@ObservedObject var uptimeManager = UptimeManager.shared
+	let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+	
+	@State var currentUptime: TimeInterval!
+	
+	private var dateFormatter = DateComponentsFormatter()
 	
 	var body: some View {
 		return VStack{
@@ -34,7 +43,43 @@ struct HomeScreen: View {
 						Text("Model: " + deviceInfo.modelNumber)
 					}
 				}
+				Section(header: Text("Uptime Stats")) {
+					if UptimeManager.shared.lastDisconnect == nil {
+						Text("Last disconnect: ")
+					} else {
+						Text("Last disconnect: " + uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
+					}
+					if currentUptime == nil {
+						Text("Uptime: ")
+					} else {
+						Text("Uptime: " + (dateFormatter.string(from: currentUptime) ?? ""))
+					}
+				}.onReceive(timer, perform: { _ in
+					if uptimeManager.connectTime != nil {
+						currentUptime = -uptimeManager.connectTime.timeIntervalSinceNow
+					}
+				})
+				Section(header: Text("Firmware Updates")) {
+					if downloadManager.updateAvailable && bleManager.isConnectedToPinetime {
+						Button{
+							let asset = downloadManager.chooseAsset(response: downloadManager.autoUpgrade)
+							dfuUpdater.firmwareFilename = asset.name
+							dfuUpdater.firmwareSelected = true
+							dfuUpdater.local = false
+							DownloadManager.shared.startDownload(url: asset.browser_download_url)
+							PageSwitcher.shared.currentPage = .dfu
+						} label: {
+							Text("Firmware Update is Available!")
+						}.disabled(!bleManager.isConnectedToPinetime)
+					} else {
+						Text("No Updates Available")
+					}
+				}
 			}
+			.onAppear() {
+				downloadManager.getDownloadUrls()
+			}
+			
 			Spacer()
 			Button(action: {
 				// if pinetime is connected, button says disconnect, and disconnects on press

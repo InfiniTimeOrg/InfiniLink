@@ -59,9 +59,6 @@ struct ContentView: View {
 					MainView()
 						.sheet(isPresented: $sheetManager.showSheet, content: {
 							SheetManager.CurrentSheet()
-								.onAppear {
-									print(sheetManager.sheetSelection)
-								}
 								.onDisappear {
 									if onboarding {
 										onboarding = false

@@ -14,6 +14,7 @@ enum SheetSelection {
 	case onboarding
 	case connect
 	case notification
+	case downloadUpdate
 }
 
 class SheetManager: ObservableObject {
@@ -21,14 +22,6 @@ class SheetManager: ObservableObject {
 	
 	@Published var showSheet: Bool = false
 	@Published var sheetSelection: SheetSelection = .connect
-	
-//	init() {
-//		let onboarding = UserDefaults.standard.object(forKey: "onboarding") as? Bool ?? true
-//		if onboarding {
-//			sheetSelection = .onboarding
-//			print(sheetSelection)
-//		}
-//	}
 	
 	struct CurrentSheet: View {
 		var body: some View {
@@ -39,6 +32,8 @@ class SheetManager: ObservableObject {
 				Connect()
 			case .notification:
 				ArbitraryNotificationSheet()
+			case .downloadUpdate:
+				DownloadView()
 			}
 		}
 	}

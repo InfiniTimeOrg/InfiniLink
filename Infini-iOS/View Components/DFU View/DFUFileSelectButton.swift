@@ -14,10 +14,11 @@ struct DFUFileSelectButton: View {
 	@Environment(\.colorScheme) var colorScheme
 	@Binding var openFile: Bool
 	@ObservedObject var bleManager = BLEManager.shared
+	@State var actionSheet = false
 	
 	var body: some View{
 		Button(action:{
-			openFile.toggle()
+			actionSheet.toggle()
 		}) {
 			Text("Select Firmware File")
 				.padding()
@@ -28,5 +29,21 @@ struct DFUFileSelectButton: View {
 				.cornerRadius(10)
 				.padding(.horizontal, 20)
 		}.disabled(!bleManager.isConnectedToPinetime)
+			.actionSheet(isPresented: $actionSheet) {
+				ActionSheet(title: Text("Select a File Source"), buttons: [
+					.default(Text("Use Local File"), action: {
+						openFile.toggle()
+						DFU_Updater.shared.local = true
+					}),
+					.default(Text("Download Firmware File"), action: {
+						DownloadManager.shared.results = []
+						SheetManager.shared.sheetSelection = .downloadUpdate
+						SheetManager.shared.showSheet = true
+						DFU_Updater.shared.local = false
+					}),
+					.cancel()
+						
+				])
+			}
 	}
 }

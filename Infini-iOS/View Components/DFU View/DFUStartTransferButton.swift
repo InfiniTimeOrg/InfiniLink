@@ -15,22 +15,31 @@ struct DFUStartTransferButton: View {
 	@Environment(\.colorScheme) var colorScheme
 	@Binding var updateStarted: Bool
 	@Binding var firmwareSelected: Bool
-	@Binding var firmwareURL: URL
 	
-	@EnvironmentObject var dfuUpdater: DFU_Updater
+	@ObservedObject var dfuUpdater = DFU_Updater.shared
 	@ObservedObject var bleManager = BLEManager.shared
+	@ObservedObject var downloadManager = DownloadManager.shared
 	
 	var body: some View {
 		Button {
 			if updateStarted {
 				dfuUpdater.stopTransfer()
 				updateStarted = false
+				dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
+				dfuUpdater.firmwareSelected = false
+				dfuUpdater.firmwareFilename = ""
 			} else {
-				dfuUpdater.prepare(location: firmwareURL, device: bleManager)
-				dfuUpdater.transfer()
-				updateStarted = true
+				if dfuUpdater.local {
+					dfuUpdater.transfer()
+					updateStarted = true
+				} else {
+					dfuUpdater.downloadTransfer()
+					updateStarted = true
+				}
 			}} label: {
-			Text(updateStarted ? "Stop Transfer" : "Start Transfer")
+				Text(updateStarted ? "Stop Transfer" :
+						(dfuUpdater.local ? "Start Transfer" :
+						(downloadManager.downloading ? "Downloading" : "Start Transfer")))
 				.padding()
 				.padding(.vertical, 7)
 				.frame(maxWidth: .infinity, alignment: .center)
@@ -39,6 +48,6 @@ struct DFUStartTransferButton: View {
 				.cornerRadius(10)
 				.padding(.horizontal, 20)
 				.padding(.bottom)
-		}.disabled(!firmwareSelected)
+			}.disabled((dfuUpdater.local ? !firmwareSelected : (!firmwareSelected || downloadManager.downloading)))
 	}
 }
