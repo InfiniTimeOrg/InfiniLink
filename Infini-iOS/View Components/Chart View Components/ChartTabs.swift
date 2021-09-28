@@ -21,9 +21,7 @@ struct StatusTabs: View {
 		VStack {
 			HStack {
 				Button (action: {
-					chartManager.trueIfHeart = true
-					chartManager.trueIfBat = false
-					lastStatusViewWasHeart = true
+					chartManager.currentChart = .heart
 				}) {
 				(Text(Image(systemName: "heart"))
 					.foregroundColor(Color.pink) +
@@ -34,14 +32,12 @@ struct StatusTabs: View {
 					.font(.body))
 					.frame(maxWidth:.infinity, alignment: .center)
 					.padding()
-					.background(colorScheme == .dark ? (chartManager.trueIfHeart ? Color.darkGray : Color.darkestGray) : (chartManager.trueIfHeart ? Color.gray : Color.lightGray))
+					.background(colorScheme == .dark ? (chartManager.currentChart == .heart ? Color.darkGray : Color.darkestGray) : (chartManager.currentChart == .heart ? Color.gray : Color.lightGray))
 					.cornerRadius(5)
 					.font(.title)
 				}.padding(.leading, 10)
 				Button (action: {
-					chartManager.trueIfHeart = false
-					chartManager.trueIfBat = true
-					lastStatusViewWasHeart = false
+					chartManager.currentChart = .battery
 				}) {
 				(Text(Image(systemName: "battery.100"))
 					.foregroundColor(Color.green) +
@@ -49,26 +45,12 @@ struct StatusTabs: View {
 					.foregroundColor(Color.white))
 					.frame(maxWidth: .infinity, alignment: .center)
 					.padding()
-					.background(colorScheme == .dark ? (chartManager.trueIfBat ? Color.darkGray : Color.darkestGray) : (chartManager.trueIfBat ? Color.gray : Color.lightGray))
+					.background(colorScheme == .dark ? (chartManager.currentChart == .battery ? Color.darkGray : Color.darkestGray) : (chartManager.currentChart == .battery ? Color.gray : Color.lightGray))
 					.cornerRadius(5)
 					.font(.title)
 				}
 				.padding(.trailing, 10)
 			}
-			if lastStatusViewWasHeart {
-				HeartChart()
-					.onAppear() {
-						chartManager.trueIfHeart = true
-						chartManager.trueIfBat = false
-					}
-			} else {
-				BatteryChart()
-					.onAppear() {
-						chartManager.trueIfHeart = false
-						chartManager.trueIfBat = true
-					}
-			}
 		}
-
 	}
 }

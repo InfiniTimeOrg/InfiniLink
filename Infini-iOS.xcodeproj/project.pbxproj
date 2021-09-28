@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */; };
 		26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */; };
 		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
 		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
@@ -59,7 +60,7 @@
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
-		26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* BLEStatusView.swift */; };
+		26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* ChartView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +81,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewSelector.swift; sourceTree = "<group>"; };
 		26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
 		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
 		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
@@ -137,7 +139,7 @@
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
-		26F426EE26C72D7D00D0866B /* BLEStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEStatusView.swift; sourceTree = "<group>"; };
+		26F426EE26C72D7D00D0866B /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,7 +179,7 @@
 			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		263B20B626CD673D00676BF0 /* Status View Components */ = {
+		263B20B626CD673D00676BF0 /* Chart View Components */ = {
 			isa = PBXGroup;
 			children = (
 				266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */,
@@ -185,8 +187,9 @@
 				263B20B926CDF13400676BF0 /* HeartChart.swift */,
 				263B20BB26CDF20400676BF0 /* BatteryChart.swift */,
 				266F53E326F7FCA6007481A6 /* ChartManager.swift */,
+				2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */,
 			);
-			path = "Status View Components";
+			path = "Chart View Components";
 			sourceTree = "<group>";
 		};
 		263B20C826CF07BE00676BF0 /* DFU View */ = {
@@ -277,12 +280,12 @@
 				2632388B26F265B100D72B43 /* MainView.swift */,
 				266F53E526FA7676007481A6 /* HomeScreen.swift */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
-				26F426EE26C72D7D00D0866B /* BLEStatusView.swift */,
+				26F426EE26C72D7D00D0866B /* ChartView.swift */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
 				26C5FAD626FC126F00921207 /* Sheets */,
 				263B20C826CF07BE00676BF0 /* DFU View */,
 				2675CA5826DC5C9400967E4D /* View Utilities */,
-				263B20B626CD673D00676BF0 /* Status View Components */,
+				263B20B626CD673D00676BF0 /* Chart View Components */,
 			);
 			path = "View Components";
 			sourceTree = "<group>";
@@ -510,7 +513,7 @@
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
 				2632388C26F265B100D72B43 /* MainView.swift in Sources */,
 				2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */,
-				26F426EF26C72D7D00D0866B /* BLEStatusView.swift in Sources */,
+				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,
 				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
@@ -538,6 +541,7 @@
 				263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
+				2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				26C5FAD526FBB76100921207 /* DeviceNameManager.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
@@ -709,7 +713,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.5;
+				MARKETING_VERSION = 0.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -732,7 +736,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.8.5;
+				MARKETING_VERSION = 0.9.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

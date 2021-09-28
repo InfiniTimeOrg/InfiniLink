@@ -62,7 +62,7 @@ struct Settings_Page: View {
 					}
 				}
 				
-				Section(header: Text("Firmware Updates")) {
+				Section(header: Text("Firmware Update Downloads")) {
 					Toggle("Show Newer Versions Only", isOn: $showNewDownloadsOnly)
 				}
 				

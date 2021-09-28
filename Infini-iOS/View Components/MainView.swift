@@ -21,7 +21,7 @@ struct MainView: View {
 		case .dfu:
 			DFUView()
 		case .status:
-			StatusView()
+			ChartView()
 		case .settings:
 			Settings_Page()
 		case .home:

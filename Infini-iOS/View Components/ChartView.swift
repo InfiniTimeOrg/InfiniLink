@@ -8,7 +8,7 @@
 import Foundation
 import SwiftUI
 
-struct StatusView: View {
+struct ChartView: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
@@ -20,14 +20,15 @@ struct StatusView: View {
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
 			TimeRangeTabs()
-			StatusTabs().environmentObject(bleManager)
+			StatusTabs()
+			CurrentChart()
 		}
 	}
 }
 
-struct StatusView_Previews: PreviewProvider {
+struct ChartView_Previews: PreviewProvider {
 	static var previews: some View {
-		StatusView()
+		ChartView()
 			.environmentObject(PageSwitcher())
 			.environmentObject(BLEManager())
 	}

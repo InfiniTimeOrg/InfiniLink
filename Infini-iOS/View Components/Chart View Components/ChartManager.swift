@@ -34,7 +34,12 @@ class ChartManager: ObservableObject {
 		case hour
 		case day
 		case week
-		case all
+		//case all
+	}
+	
+	enum chartSelection {
+		case heart
+		case battery
 	}
 	
 	enum DateValue: Double {
@@ -43,7 +48,8 @@ class ChartManager: ObservableObject {
 		case week = -604800
 	}
 	
-	@Published var dateRange: DateRange = .all
+	@Published var dateRange: DateRange = .day//.all
+	@Published var currentChart: chartSelection = .battery
 	
 	let viewContext = PersistenceController.shared.container.viewContext
 	
@@ -93,8 +99,8 @@ class ChartManager: ObservableObject {
 			dateValue = -86400
 		case .week:
 			dateValue = -604800
-		case .all:
-			dateValue = 0
+//		case .all:
+//			dateValue = 0
 		}
 		return dateValue
 	}

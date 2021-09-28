@@ -25,7 +25,6 @@ struct TimeRangeTabs: View {
 	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var chartManager = ChartManager.shared
 	@Environment(\.colorScheme) var colorScheme
-	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false
 
 	var body: some View{
 		HStack {
@@ -55,7 +54,7 @@ struct TimeRangeTabs: View {
 				.cornerRadius(5)
 				.font(.title)
 			}
-			.padding(.horizontal, 3)
+			//.padding(.horizontal, 1)
 			
 			// set date range to last week
 			Button (action: {
