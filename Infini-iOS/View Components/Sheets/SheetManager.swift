@@ -28,33 +28,27 @@ class SheetManager: ObservableObject {
 	private var whatsNew: Bool = true
 	
 	let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-	var lastVersion = UserDefaults.standard.value(forKey: "lastVersion") as? String ?? ""
+	var defaults = UserDefaults.standard
 	
 	func showWhatsNew () -> Bool {
 		if !whatsNew {
 			return false
 		} else {
 			var showSheet = false
-			
-			print("before: ", lastVersion, " <last | current> ", currentVersion)
-			if lastVersion == "" {
-				lastVersion = "0.0.0"
-			}
-			
+			let lastVersion = defaults.value(forKey: "lastVersion") as? String ?? "0.0.0"
 			let comparison = currentVersion.compare(lastVersion, options: .numeric)
 			if comparison == .orderedDescending {
 				showSheet = true
 			}
-			lastVersion = currentVersion
+			defaults.set(currentVersion, forKey: "lastVersion")
 			whatsNew = false
 			
-			print(showSheet)
 			return showSheet
 		}
 	}
 	
 	func setNextSheet() {
-		let onboarding = UserDefaults.standard.value(forKey: "onboarding")// as? Bool ?? true
+		let onboarding = defaults.value(forKey: "onboarding")
 		if onboarding == nil {
 			SheetManager.shared.sheetSelection = .onboarding
 			SheetManager.shared.showSheet = true

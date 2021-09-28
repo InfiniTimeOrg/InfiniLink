@@ -13,6 +13,7 @@ import SwiftUI
 struct Settings_Page: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
+	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
 	@Environment(\.colorScheme) var colorScheme
 	
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
@@ -28,6 +29,7 @@ struct Settings_Page: View {
 	@State private var changedName: String = ""
 	private var nameManager = DeviceNameManager()
 	@State private var resultMessage = ""
+	@State private var deviceName = ""
 	
 	var body: some View {
 		VStack {
@@ -52,6 +54,7 @@ struct Settings_Page: View {
 					}.disabled(!autoconnect || autoconnectUUID.isEmpty)
 				}
 				Section(header: Text("Device Name")) {
+					Text("Current Device Name: " + deviceInfo.deviceName)
 					TextField("Enter New Name", text: $changedName)
 					Button {
 						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
