@@ -165,10 +165,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		if error != nil {
 			chartReconnect = true
 			connect(peripheral: peripheral)
-			UptimeManager.shared.lastDisconnect = Date()
 		} else {
 			DeviceInfoManager.init().clearDeviceInfo()
 		}
+		UptimeManager.shared.lastDisconnect = Date()
+		UptimeManager.shared.connectTime = nil
 	}
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {

@@ -56,13 +56,13 @@ extension BLEManager: CBPeripheralDelegate {
 	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
 		let getDeviceInfo = DeviceInfoManager()
 		getDeviceInfo.updateInfo(characteristic: characteristic)
+		DownloadManager.shared.getDownloadUrls()
 		
 		switch characteristic.uuid {
 		case cbuuidList.shared.musicControl:
 			// listen for the music controller notifications
 			let musicControl = [UInt8](characteristic.value!)
 			controlMusic(controlNumber: Int(musicControl[0]))
-			print(musicControl)
 			
 		case cbuuidList.shared.musicTrack:
 			// select track characteristic for writing to music app

@@ -43,7 +43,7 @@ class DownloadManager: NSObject, ObservableObject {
 			if i.tag_name.first != "v" {
 				let comparison = BLEDeviceInfo.shared.firmware.compare(i.tag_name, options: .numeric)
 				if comparison == .orderedAscending {
-					print(i.tag_name)
+					updateAvailable = true
 					autoUpgrade = i
 					return true
 				}

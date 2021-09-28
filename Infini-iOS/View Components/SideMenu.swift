@@ -72,6 +72,7 @@ struct SideMenu: View {
 			HStack {
 				if !self.bleManager.isConnectedToPinetime {
 					Button(action: {
+						SheetManager.shared.sheetSelection = .connect
 						SheetManager.shared.showSheet = true
 						pageSwitcher.showMenu = false
 					}) {

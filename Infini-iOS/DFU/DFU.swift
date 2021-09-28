@@ -74,6 +74,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	func stopTransfer() {
 		if dfuController != nil {
 			_ = dfuController.abort()
+			dfuController = nil
 		}
 	}
 	
@@ -84,6 +85,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 		if state.rawValue == 6 {
 			transferCompleted = true
 			print(transferCompleted)
+			dfuController = nil
 		}
 	}
 	
@@ -99,7 +101,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
-		//print("DFU \(level.name()): \(message)")
+		print("DFU \(level.name()): \(message)")
 	}
 
 	

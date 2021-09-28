@@ -48,6 +48,7 @@ struct HomeScreen: View {
 						Text("Last disconnect: ")
 					} else {
 						Text("Last disconnect: " + uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
+
 					}
 					if currentUptime == nil {
 						Text("Uptime: ")
@@ -76,9 +77,7 @@ struct HomeScreen: View {
 					}
 				}
 			}
-			.onAppear() {
-				downloadManager.getDownloadUrls()
-			}
+
 			
 			Spacer()
 			Button(action: {

@@ -62,8 +62,8 @@ struct Settings_Page: View {
 					}
 				}
 				
-				Section(header: Text("Updates")) {
-					Toggle("Show Upgrades Only", isOn: $showNewDownloadsOnly)
+				Section(header: Text("Firmware Updates")) {
+					Toggle("Show Newer Versions Only", isOn: $showNewDownloadsOnly)
 				}
 				
 
