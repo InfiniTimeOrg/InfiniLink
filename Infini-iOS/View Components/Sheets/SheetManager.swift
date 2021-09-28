@@ -15,6 +15,7 @@ enum SheetSelection {
 	case connect
 	case notification
 	case downloadUpdate
+	case whatsNew
 }
 
 class SheetManager: ObservableObject {
@@ -22,6 +23,50 @@ class SheetManager: ObservableObject {
 	
 	@Published var showSheet: Bool = false
 	@Published var sheetSelection: SheetSelection = .connect
+	@Published var upToDate: Bool = false
+	
+	private var whatsNew: Bool = true
+	
+	let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+	var lastVersion = UserDefaults.standard.value(forKey: "lastVersion") as? String ?? ""
+	
+	func showWhatsNew () -> Bool {
+		if !whatsNew {
+			return false
+		} else {
+			var showSheet = false
+			
+			print("before: ", lastVersion, " <last | current> ", currentVersion)
+			if lastVersion == "" {
+				lastVersion = "0.0.0"
+			}
+			
+			let comparison = currentVersion.compare(lastVersion, options: .numeric)
+			if comparison == .orderedDescending {
+				showSheet = true
+			}
+			lastVersion = currentVersion
+			whatsNew = false
+			
+			print(showSheet)
+			return showSheet
+		}
+	}
+	
+	func setNextSheet() {
+		let onboarding = UserDefaults.standard.value(forKey: "onboarding")// as? Bool ?? true
+		if onboarding == nil {
+			SheetManager.shared.sheetSelection = .onboarding
+			SheetManager.shared.showSheet = true
+		} else if SheetManager.shared.showWhatsNew() {
+			SheetManager.shared.sheetSelection = .whatsNew
+			SheetManager.shared.showSheet = true
+		} else {
+			SheetManager.shared.sheetSelection = .connect
+			SheetManager.shared.showSheet = true
+			SheetManager.shared.upToDate = true
+		}
+	}
 	
 	struct CurrentSheet: View {
 		var body: some View {
@@ -34,6 +79,8 @@ class SheetManager: ObservableObject {
 				ArbitraryNotificationSheet()
 			case .downloadUpdate:
 				DownloadView()
+			case .whatsNew:
+				WhatsNew()
 			}
 		}
 	}

@@ -19,13 +19,24 @@ struct Connect: View {
 	var body: some View {
 		SheetCloseButton()
 		VStack (){
-			Text("Available Devices")
-				.font(.largeTitle)
-				.padding()
-				.frame(maxWidth: .infinity, alignment: .leading)
-				.onAppear {
-					bleManager.startScanning()
-				}
+			if bleManager.isSwitchedOn {
+				Text("Available Devices")
+					.font(.largeTitle)
+					.padding()
+					.frame(maxWidth: .infinity, alignment: .leading)
+					.onAppear {
+						bleManager.startScanning()
+					}
+			} else {
+				Text("Available Devices")
+					.font(.largeTitle)
+					.padding()
+					.frame(maxWidth: .infinity, alignment: .leading)
+				Text("Waiting for Bluetooth")
+					.font(.title)
+					.padding()
+					.frame(maxWidth: .infinity, alignment: .leading)
+			}
 			List(bleManager.peripherals) { peripheral in
 				let deviceName = DeviceNameManager.init().getName(deviceUUID: peripheral.stringUUID)
 				HStack {

@@ -36,7 +36,8 @@ struct TimeRangeTabs: View {
 				.foregroundColor(Color.white))
 				.frame(maxWidth: .infinity, alignment: .center)
 				.padding()
-				.background(colorScheme == .dark ? (chartManager.dateRange == .hour ? Color.darkGray : Color.darkestGray) : (chartManager.dateRange == .hour ? Color.gray : Color.lightGray))
+				.background(colorScheme == .dark ? (chartManager.dateRange == .hour ? Color.darkGray : Color.darkestGray) : (Color.blue))
+				.opacity(colorScheme == .dark ? 1.0 : (chartManager.dateRange == .hour ? 1.0 : 0.3))
 				.cornerRadius(5)
 				.font(.title)
 			}
@@ -50,7 +51,8 @@ struct TimeRangeTabs: View {
 				.foregroundColor(Color.white))
 				.frame(maxWidth: .infinity, alignment: .center)
 				.padding()
-				.background(colorScheme == .dark ? (chartManager.dateRange == .day ? Color.darkGray : Color.darkestGray) : (chartManager.dateRange == .day ? Color.gray : Color.lightGray))
+				.background(colorScheme == .dark ? (chartManager.dateRange == .day ? Color.darkGray : Color.darkestGray) : (Color.blue))
+				.opacity(colorScheme == .dark ? 1.0 : (chartManager.dateRange == .day ? 1.0 : 0.3))
 				.cornerRadius(5)
 				.font(.title)
 			}
@@ -64,7 +66,8 @@ struct TimeRangeTabs: View {
 				.foregroundColor(Color.white))
 				.frame(maxWidth: .infinity, alignment: .center)
 				.padding()
-				.background(colorScheme == .dark ? (chartManager.dateRange == .week ? Color.darkGray : Color.darkestGray) : (chartManager.dateRange == .week ? Color.gray : Color.lightGray))
+				.background(colorScheme == .dark ? (chartManager.dateRange == .week ? Color.darkGray : Color.darkestGray) : (Color.blue))
+				.opacity(colorScheme == .dark ? 1.0 : (chartManager.dateRange == .week ? 1.0 : 0.3))
 				.cornerRadius(5)
 				.font(.title)
 			}

@@ -6,8 +6,10 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Scan nearby devices and connect to PineTimes
 - Set time and date immediately after connection
 - Read and chart battery level data and heart rate data from watch
+- Chart persistence, with filters for last hour, last day, and last week
 - Music controls on InfiniTime can control Apple Music.
-- DFU - send [firmware updates](https://github.com/JF002/InfiniTime/releases) to the PineTime
+- Check for updates to InfiniTime using the GitHub API, download them directly with the app, and send them to the PineTime. 
+    - Manual updates can be completed with DFU zip files downloaded from [InfiniTime's GitHub Releases Page](https://github.com/JF002/InfiniTime/releases)
 
 ### What doesn't work:
 - InfiniTime's navigation app. As far as I can tell, there is no API in Swift to access current directions, so this will likely never work unless it's added into a mapping application.

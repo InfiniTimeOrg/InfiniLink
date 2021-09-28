@@ -24,8 +24,21 @@ struct DataPoint {
 
 class ChartManager: ObservableObject {
 	
+	@Published var dateRange: DateRange = .day
+	@Published var currentChart: chartSelection = .battery
+	var lastChartWasHeart = UserDefaults.standard.value(forKey: "lastStatusViewWasHeart") as? Bool ?? false
+	
+	let viewContext = PersistenceController.shared.container.viewContext
+	
 	static let shared = ChartManager()
-	private init() {}
+	
+	private init() {
+		if lastChartWasHeart {
+			currentChart = .heart
+		} else {
+			currentChart = .battery
+		}
+	}
 	
 	@Published var trueIfHeart = true
 	@Published var trueIfBat = false
@@ -48,10 +61,7 @@ class ChartManager: ObservableObject {
 		case week = -604800
 	}
 	
-	@Published var dateRange: DateRange = .day//.all
-	@Published var currentChart: chartSelection = .battery
-	
-	let viewContext = PersistenceController.shared.container.viewContext
+
 	
 	func addItem(dataPoint: DataPoint) {
 		let newItem = ChartDataPoint(context: viewContext)
@@ -99,8 +109,6 @@ class ChartManager: ObservableObject {
 			dateValue = -86400
 		case .week:
 			dateValue = -604800
-//		case .all:
-//			dateValue = 0
 		}
 		return dateValue
 	}
@@ -119,9 +127,4 @@ class ChartManager: ObservableObject {
 		}
 		return dataPoints
 	}
-	
-	func filterDates(results: FetchedResults<ChartDataPoint>) {
-		
-	}
-	
 }

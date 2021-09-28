@@ -18,7 +18,9 @@ struct ContentView: View {
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
-	@AppStorage("onboarding") var onboarding: Bool = true
+	@AppStorage("onboarding") var onboarding: Bool!// = false
+	@AppStorage("lastVersion") var lastVersion: String = ""
+	let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 	
 	
 	init() {
@@ -60,10 +62,11 @@ struct ContentView: View {
 						.sheet(isPresented: $sheetManager.showSheet, content: {
 							SheetManager.CurrentSheet()
 								.onDisappear {
-									if onboarding {
-										onboarding = false
-										sheetManager.sheetSelection = .connect
-										SheetManager.shared.showSheet = true
+									if !sheetManager.upToDate {
+										if onboarding == nil {
+											onboarding = false
+										}
+										sheetManager.setNextSheet()
 									}
 								}
 						})
@@ -96,15 +99,18 @@ struct ContentView: View {
 									self.bleManager.startScanning()
 								}
 								
-								if onboarding {
-									SheetManager.shared.sheetSelection = .onboarding
-									SheetManager.shared.showSheet = true
-								}
-								
-								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
-									SheetManager.shared.sheetSelection = .connect
-									SheetManager.shared.showSheet = true
-								}
+								sheetManager.setNextSheet()
+								sheetManager.showSheet = true
+//
+//								if onboarding {
+//									SheetManager.shared.sheetSelection = .onboarding
+//									SheetManager.shared.showSheet = true
+//								}
+//								
+//								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
+//									SheetManager.shared.sheetSelection = .connect
+//									SheetManager.shared.showSheet = true
+//								}
 							})
 						}
 				}

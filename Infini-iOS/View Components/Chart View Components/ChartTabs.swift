@@ -22,6 +22,7 @@ struct StatusTabs: View {
 			HStack {
 				Button (action: {
 					chartManager.currentChart = .heart
+					lastStatusViewWasHeart = true
 				}) {
 				(Text(Image(systemName: "heart"))
 					.foregroundColor(Color.pink) +
@@ -32,12 +33,14 @@ struct StatusTabs: View {
 					.font(.body))
 					.frame(maxWidth:.infinity, alignment: .center)
 					.padding()
-					.background(colorScheme == .dark ? (chartManager.currentChart == .heart ? Color.darkGray : Color.darkestGray) : (chartManager.currentChart == .heart ? Color.gray : Color.lightGray))
+					.background(colorScheme == .dark ? (chartManager.currentChart == .heart ? Color.darkGray : Color.darkestGray) : Color.blue)
+					.opacity(colorScheme == .dark ? 1.0 : (chartManager.currentChart == .heart ? 1.0 : 0.3))
 					.cornerRadius(5)
 					.font(.title)
 				}.padding(.leading, 10)
 				Button (action: {
 					chartManager.currentChart = .battery
+					lastStatusViewWasHeart = false
 				}) {
 				(Text(Image(systemName: "battery.100"))
 					.foregroundColor(Color.green) +
@@ -45,7 +48,8 @@ struct StatusTabs: View {
 					.foregroundColor(Color.white))
 					.frame(maxWidth: .infinity, alignment: .center)
 					.padding()
-					.background(colorScheme == .dark ? (chartManager.currentChart == .battery ? Color.darkGray : Color.darkestGray) : (chartManager.currentChart == .battery ? Color.gray : Color.lightGray))
+					.background(colorScheme == .dark ? (chartManager.currentChart == .battery ? Color.darkGray : Color.darkestGray) : Color.blue)
+						.opacity(colorScheme == .dark ? 1.0 : (chartManager.currentChart == .battery ? 1.0 : 0.3))
 					.cornerRadius(5)
 					.font(.title)
 				}

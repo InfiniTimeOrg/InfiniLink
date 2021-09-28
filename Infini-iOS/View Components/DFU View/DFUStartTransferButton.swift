@@ -29,6 +29,7 @@ struct DFUStartTransferButton: View {
 				dfuUpdater.firmwareSelected = false
 				dfuUpdater.firmwareFilename = ""
 			} else {
+				dfuUpdater.percentComplete = 0
 				if dfuUpdater.local {
 					dfuUpdater.transfer()
 					updateStarted = true

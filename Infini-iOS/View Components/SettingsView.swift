@@ -93,6 +93,23 @@ struct Settings_Page: View {
 						(Text("Clear All Battery Chart Data"))
 					}
 				}
+				
+				Section(header: Text("Onboarding Information")) {
+					
+					Button {
+						SheetManager.shared.sheetSelection = .onboarding
+						SheetManager.shared.showSheet = true
+					} label: {
+						Text("Open Onboarding Page")
+					}
+					Button {
+						SheetManager.shared.sheetSelection = .whatsNew
+						SheetManager.shared.showSheet = true
+					} label: {
+						Text("Open 'What's New' Page for This Version")
+					}
+				}
+
 				Section(header: Text("Links")) {
 					Link("Infini-iOS GitHub", destination: URL(string: "https://github.com/xan-m/Infini-iOS")!)
 					Link("Matrix", destination: URL(string: "https://matrix.to/#/@xanm:matrix.org")!)

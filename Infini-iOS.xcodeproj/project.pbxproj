@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */; };
+		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
+		2617EF3D27036DC600FE6F48 /* WhatsNewBody090.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3C27036DC600FE6F48 /* WhatsNewBody090.swift */; };
 		26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26318B1426CB27E70036051E /* Infini_iOS.xcdatamodeld */; };
 		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
 		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
@@ -82,6 +84,8 @@
 
 /* Begin PBXFileReference section */
 		2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewSelector.swift; sourceTree = "<group>"; };
+		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
+		2617EF3C27036DC600FE6F48 /* WhatsNewBody090.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewBody090.swift; sourceTree = "<group>"; };
 		26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
 		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
 		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
@@ -169,6 +173,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2617EF3A27036D9100FE6F48 /* What's New */ = {
+			isa = PBXGroup;
+			children = (
+				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
+				2617EF3C27036DC600FE6F48 /* WhatsNewBody090.swift */,
+			);
+			path = "What's New";
+			sourceTree = "<group>";
+		};
 		2632389326F29A4100D72B43 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
@@ -338,6 +351,7 @@
 				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
 				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
 				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
+				2617EF3A27036D9100FE6F48 /* What's New */,
 				2632389326F29A4100D72B43 /* Onboarding */,
 			);
 			path = Sheets;
@@ -508,6 +522,7 @@
 				26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */,
 				26C5FAE126FE98F500921207 /* BLEAutoconnectManager.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
+				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
 				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
 				264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */,
 				26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */,
@@ -529,6 +544,7 @@
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
 				266F53EC26FAABE7007481A6 /* TimeRangeTabs.swift in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
+				2617EF3D27036DC600FE6F48 /* WhatsNewBody090.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,

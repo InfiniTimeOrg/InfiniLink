@@ -7,8 +7,6 @@
 //
     
 
-import Foundation
-
 import SwiftUI
 
 struct OnboardingBody: View {
