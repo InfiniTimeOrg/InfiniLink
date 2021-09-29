@@ -43,7 +43,7 @@ class SetTime {
 		
 		var fullDateString = String(revYearChars)
 		
-		let dateString = dateFormatter.string(from: now) + "x"
+		let dateString = dateFormatter.string(from: now)
 		
 		var debugString = "Date components array: "
 		
