@@ -6,20 +6,21 @@
 //
 
 import SwiftUI
-import SwiftUICharts
-import CoreData
 
 struct ContentView: View {
 	
-	@EnvironmentObject var pageSwitcher: PageSwitcher
-	@EnvironmentObject var bleManager: BLEManager
+	@ObservedObject var bleManager = BLEManager.shared
+	
+	@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@ObservedObject var batteryNotifications = BatteryNotifications()
-	@ObservedObject var sheetManager = SheetManager()
+	@ObservedObject var sheetManager = SheetManager.shared
 
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
-	@AppStorage("onboarding") var onboarding: Bool = true
+	@AppStorage("onboarding") var onboarding: Bool!// = false
+	@AppStorage("lastVersion") var lastVersion: String = ""
+	let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 	
 	
 	init() {
@@ -35,37 +36,47 @@ struct ContentView: View {
 			// this drag gesture allows swiping right to open the side menu and left to close the side menu
 			.onEnded {
 				if $0.translation.width < -100 {
+					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 					withAnimation {
-						self.pageSwitcher.showMenu = false
+						pageSwitcher.showMenu = false
 					}
 				} else if $0.translation.width > 100 {
+					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 					withAnimation {
-						self.pageSwitcher.showMenu = true
+						pageSwitcher.showMenu = true
 					}
 				}
 			}
 
-		return NavigationView {
+		NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
+					if pageSwitcher.showMenu {
+						SideMenu(isOpen: $pageSwitcher.showMenu)
+							.frame(width: geometry.size.width/2)
+							.transition(.move(edge: .leading))
+							.ignoresSafeArea()
+							.zIndex(10)
+					}
 					MainView()
 						.sheet(isPresented: $sheetManager.showSheet, content: {
-							sheetManager.setView(isOnboarding: onboarding, bleManager: bleManager)
+							SheetManager.CurrentSheet()
 								.onDisappear {
-									if onboarding {
-										onboarding = false
-										sheetManager.showSheet = true
+									if !sheetManager.upToDate {
+										if onboarding == nil {
+											onboarding = false
+										}
+										sheetManager.setNextSheet()
 									}
 								}
 						})
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
-						.frame(width: geometry.size.width, height: geometry.size.height)
-						.offset(x: self.pageSwitcher.showMenu ? geometry.size.width/2 : 0)
-						.disabled(self.pageSwitcher.showMenu ? true : false)
+						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
+						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
-							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0
+							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0 for tap interactions
 							if pageSwitcher.showMenu {
 								Color.white
 									.opacity(pageSwitcher.showMenu ? 0.01 : 0)
@@ -88,24 +99,26 @@ struct ContentView: View {
 									self.bleManager.startScanning()
 								}
 								
-								if (autoconnect && autoconnectUUID == "") || (!autoconnect && !bleManager.isConnectedToPinetime) {
-									sheetManager.sheetSelection = .connect
-									sheetManager.showSheet = true
-								}
+								sheetManager.setNextSheet()
+								sheetManager.showSheet = true
+//
+//								if onboarding {
+//									SheetManager.shared.sheetSelection = .onboarding
+//									SheetManager.shared.showSheet = true
+//								}
+//								
+//								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
+//									SheetManager.shared.sheetSelection = .connect
+//									SheetManager.shared.showSheet = true
+//								}
 							})
 						}
-					if self.pageSwitcher.showMenu {
-						SideMenu(isOpen: self.$pageSwitcher.showMenu)
-							.environmentObject(sheetManager)
-							.frame(width: geometry.size.width/2)
-							.transition(.move(edge: .leading))
-							.ignoresSafeArea()
-					}
 				}
 				.navigationBarItems(leading: (
 					Button(action: {
+						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 						withAnimation {
-							self.pageSwitcher.showMenu.toggle()
+							pageSwitcher.showMenu.toggle()
 						}
 					}) {
 						Image(systemName: "line.horizontal.3")
@@ -113,33 +126,11 @@ struct ContentView: View {
 							.padding(.horizontal, 7)
 							.imageScale(.large)
 							.foregroundColor(Color.gray)
-					}
-				))
-				//.background(Color.black)
+					}))
 				.navigationBarTitleDisplayMode(.inline)
 			}
-			.gesture(drag)
-		}
-	}
-}
-	
-struct MainView: View {
-
-	@EnvironmentObject var pageSwitcher: PageSwitcher
-	@EnvironmentObject var bleManager: BLEManager
-	
-	
-	var body: some View {
-		switch pageSwitcher.currentPage {
-		case .dfu:
-			DFUView()
-		case .status:
-			StatusView()
-		case .settings:
-			Settings_Page()
-		case .debug:
-			DebugView() // MARK: logging
-		}
+			
+		}.gesture(drag)
 	}
 }
 
@@ -147,7 +138,6 @@ struct MainView: View {
 struct ContentView_Previews: PreviewProvider {
 	static var previews: some View {
 		ContentView()
-			.environmentObject(PageSwitcher())
 			.environmentObject(BLEManager())
 			.environmentObject(DFU_Updater())
 	}

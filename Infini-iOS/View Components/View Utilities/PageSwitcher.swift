@@ -11,13 +11,17 @@ enum Page {
 	case dfu
 	case status
 	case settings
+	case home
 	case debug // MARK: logging
 }
 
 class PageSwitcher: ObservableObject {
+	static let shared = PageSwitcher()
 	
-	@Published var currentPage: Page = .status
-	@Published var connectViewLoad: Bool = false
+	@Published var currentPage: Page = .home
+//	@Published var connectViewLoad: Bool = false
 	@Published var showMenu: Bool = false
 	
 }
+
+

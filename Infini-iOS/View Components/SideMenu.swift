@@ -10,13 +10,12 @@ import SwiftUI
 struct SideMenu: View {
 	
 	@Binding var isOpen: Bool
-	@EnvironmentObject var pageSwitcher: PageSwitcher
-	@EnvironmentObject var bleManager: BLEManager
-	@EnvironmentObject var sheetManager: SheetManager
-	//@AppStorage("debugMode") var debugMode: Bool = false
+	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
+	@ObservedObject var bleManager = BLEManager.shared
+	@Environment(\.colorScheme) var colorScheme
 	
-	func changePage(newPage: Page){
-		withAnimation{
+	func changePage(newPage: Page) {
+		withAnimation() {
 			pageSwitcher.currentPage = newPage
 			self.isOpen = false
 		}
@@ -25,23 +24,34 @@ struct SideMenu: View {
 	var body: some View {
 		VStack(alignment: .leading) {
 			HStack {
-				Button(action: {changePage(newPage: .status)}) {
-					Image(systemName: "heart")
-						.foregroundColor(.gray)
+				Button(action: {changePage(newPage: .home)}) {
+					Image(systemName: "house.fill")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
-					Text("Current Stats")
-						.foregroundColor(.gray)
+					Text("Home")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
 				.padding(.top, 100)
 			HStack {
+				Button(action: {changePage(newPage: .status)}) {
+					Image(systemName: "heart")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+						.imageScale(.large)
+					Text("Charts")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+						.padding(5)
+				}
+			}
+				.padding(.top, 20)
+			HStack {
 				Button(action: {changePage(newPage: .dfu)}) {
 					Image(systemName: "arrow.up.doc")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Update Firmware")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
@@ -49,10 +59,10 @@ struct SideMenu: View {
 			HStack {
 				Button(action: {changePage(newPage: .settings)}) {
 					Image(systemName: "gear")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Settings")
-						.foregroundColor(.gray)
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
 			}
@@ -78,14 +88,15 @@ struct SideMenu: View {
 			HStack {
 				if !self.bleManager.isConnectedToPinetime {
 					Button(action: {
-						sheetManager.showSheet = true
+						SheetManager.shared.sheetSelection = .connect
+						SheetManager.shared.showSheet = true
 						pageSwitcher.showMenu = false
 					}) {
 						Image(systemName: "radiowaves.right")
-							.foregroundColor(.gray)
+							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.imageScale(.large)
 						Text("Connect to PineTime")
-							.foregroundColor(.gray)
+							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.padding(5)
 					}
 				}
@@ -95,7 +106,7 @@ struct SideMenu: View {
 			VStack (alignment: .center, spacing:10) {
 				Text("STATUS")
 					.font(.headline)
-					.foregroundColor(Color.gray)
+					.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 
 				
 				if bleManager.isSwitchedOn {
@@ -122,6 +133,6 @@ struct SideMenu: View {
 		}
 			.padding(20)
 			.frame(maxWidth: .infinity, alignment: .leading)
-			.background(Color.darkGray)
+			.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
 	}
 }

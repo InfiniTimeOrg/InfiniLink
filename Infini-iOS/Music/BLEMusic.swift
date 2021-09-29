@@ -37,7 +37,7 @@ extension BLEManager{
 		let musicController = MusicController()
 		let songInfo = musicController.getCurrentSongInfo()
 		
-		writeASCIIToPineTime(message: songInfo.trackName, characteristic: musicChars.track)
-		writeASCIIToPineTime(message: songInfo.artistName, characteristic: musicChars.artist)
+		BLEWriteManager.init().writeToMusicApp(message: songInfo.trackName)
+		//writeASCIIToPineTime(message: songInfo.artistName, characteristic: musicChars.artist)
 	}
 }

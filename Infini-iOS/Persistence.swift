@@ -14,8 +14,14 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+			let newitem = ChartDataPoint(context: viewContext)
+			newitem.timestamp = Date()
+			newitem.value = 10.0
+			newitem.id = UUID()
+			newitem.chart = ChartsAsInts.heart.rawValue
+			let newName = DeviceNames(context: viewContext)
+			newName.name = "Name"
+			newName.uuid = "0"
         }
         do {
             try viewContext.save()

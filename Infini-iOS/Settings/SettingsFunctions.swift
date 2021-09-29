@@ -15,15 +15,16 @@ class BatteryNotifications: ObservableObject {
 	@Published var ten: Bool = false
 	
 	func notify(bat: Int, bleManager: BLEManager) {
+		let bleWriteManger = BLEWriteManager()
 		if UserDefaults.standard.object(forKey: "batteryNotifications") as! Bool? == true{
 			if bat > 20 {
 				twenty = false
 				ten = false
 			} else if (bat <= 20 && bat > 10) && twenty == false {
-				bleManager.sendNotification(notification: "Battery Low")
+				bleWriteManger.sendNotification(title: "", body: "Battery Low")
 				twenty = true
 			} else if (bat <= 10 && bat > 5) && ten == false {
-				bleManager.sendNotification(notification: "Battery Low")
+				bleWriteManger.sendNotification(title: "", body: "Battery Low")
 				ten = true
 			}
 		}
