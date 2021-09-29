@@ -26,6 +26,8 @@ struct MainView: View {
 			Settings_Page()
 		case .home:
 			HomeScreen()
+		case .debug:
+			DebugView()
 		}
 	}
 }

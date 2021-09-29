@@ -14,6 +14,7 @@ struct Settings_Page: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
+	@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@Environment(\.colorScheme) var colorScheme
 	
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true

@@ -67,23 +67,6 @@ struct SideMenu: View {
 				}
 			}
 				.padding(.top, 20)
-			/*
-			---- MARK: original idea was to have this be in the side menu, but I think just having a link under the debug mode toggle in settings is probably a better move. ----
-			
-			if debugMode {
-				HStack {
-					Button(action: {changePage(newPage: .debug)}) {
-						Image(systemName: "ant")
-							.foregroundColor(.gray)
-							.imageScale(.large)
-						Text("Debug Information")
-							.foregroundColor(.gray)
-							.padding(5)
-					}
-				}
-					.padding(.top, 20)
-			}
-			*/
 			Spacer()
 			HStack {
 				if !self.bleManager.isConnectedToPinetime {

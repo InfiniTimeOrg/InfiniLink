@@ -71,7 +71,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var autoconnectPeripheral: CBPeripheral!
 	@Published var setAutoconnectUUID: String = ""							// placeholder for now while I figure out how to save the whole device in UserDefaults to save "favorite" devices
 	
-	@Published var bleLogger = BLELogs() // MARK: logging
+	@Published var bleLogger = DebugLogManager.shared // MARK: logging
 	
 	var firstConnect: Bool = true										// makes iOS connected message only show up on first connect, not if device drops connection and reconnects
 	var chartReconnect: Bool = true										// skip first HRM transmission on every fresh connection to prevent saving of BS data
@@ -111,21 +111,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			firstConnect = true
 			isConnectedToPinetime = false
 			chartReconnect = false
-		}
-	}
-	
-	// MARK: logging
-	func debug(error: Error?) {
-		let settings = UserDefaults.standard
-		let debugMode = settings.object(forKey: "debugMode") as? Bool ?? false
-		if debugMode {
-			print(error.debugDescription)
-			let date = Date()
-			let dateFormatter = DateFormatter()
-			dateFormatter.dateFormat = "MMM d, HH:mm"
-			
-			let logEntry = LogEntry(date: dateFormatter.string(from: date), message: error?.localizedDescription ?? "", log: DebugLog.ble)
-			bleLogger.addLogEntry(entry: logEntry)
 		}
 	}
 	
@@ -169,7 +154,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 	
 	func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-		debug(error: error) // MARK: logging
+		bleLogger.debug(error: error, log: .ble, date: Date()) // MARK: logging
 	}
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -187,7 +172,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		}
 		UptimeManager.shared.lastDisconnect = Date()
 		UptimeManager.shared.connectTime = nil
-		debug(error: error) // MARK: logging
+		bleLogger.debug(error: error, log: .ble, date: Date()) // MARK: logging
 	}
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {
