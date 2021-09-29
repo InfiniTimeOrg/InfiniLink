@@ -35,7 +35,7 @@ struct WhatsNewBody: View {
 				Text("Firmware Updates")
 					.font(.title2)
 					.padding()
-				Text("- Updated DFU process: DFU downloads are now available! Now, when you tap the 'Select Firmware File' button, you're given the option to select a local file or download a firmware file. Tapping the download button uses the GitHub API to bring up a list of firmware files available on GitHub. Selecting a file from that list will download it and prepare it for flashing. After flashing, the file is deleted. Also, when a watch is connected, Infini-iOS will compare the firmware version number on the watch to this list, and notify you of any updates on the Home screen.")
+				Text("Updated DFU process: DFU downloads are now available! Now, when you tap the 'Select Firmware File' button, you're given the option to select a local file or download a firmware file. Tapping the download button uses the GitHub API to bring up a list of firmware files available on GitHub. Selecting a file from that list will download it and prepare it for flashing. After flashing, the file is deleted. Also, when a watch is connected, Infini-iOS will compare the firmware version number on the watch to this list, and notify you of any updates on the Home screen.")
 					.padding()
 		}
 	}
