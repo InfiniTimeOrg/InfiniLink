@@ -48,6 +48,7 @@
 		26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E882704E97C007966F6 /* DebugViewBLE.swift */; };
 		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
 		26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8C2704EB32007966F6 /* DebugViewApp.swift */; };
+		26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315226BF45E0005AE404 /* BLEMusic.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315126BF45E0005AE404 /* BLEMusic.swift */; };
 		26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* BLEWriteManager.swift */; };
@@ -135,6 +136,7 @@
 		26A40E882704E97C007966F6 /* DebugViewBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewBLE.swift; sourceTree = "<group>"; };
 		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
 		26A40E8C2704EB32007966F6 /* DebugViewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewApp.swift; sourceTree = "<group>"; };
+		26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewShareButton.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315126BF45E0005AE404 /* BLEMusic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEMusic.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
@@ -334,6 +336,7 @@
 			isa = PBXGroup;
 			children = (
 				26B2BAF626F139D600FBC9CE /* DebugView.swift */,
+				26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */,
 				26A40E882704E97C007966F6 /* DebugViewBLE.swift */,
 				26A40E8C2704EB32007966F6 /* DebugViewApp.swift */,
 				26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */,
@@ -554,6 +557,7 @@
 				26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */,
 				26C5FAE126FE98F500921207 /* BLEAutoconnectManager.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
+				26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */,
 				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
 				26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */,
 				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
