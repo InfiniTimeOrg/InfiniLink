@@ -30,7 +30,7 @@ struct HomeScreen: View {
 				.font(.largeTitle)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			Form{
+			List{
 				Section(header: Text("Device Name")) {
 					Text(deviceInfo.deviceName)
 				}
@@ -77,7 +77,7 @@ struct HomeScreen: View {
 					}
 				}
 			}
-
+			.listStyle(.insetGrouped)
 			
 			Spacer()
 			Button(action: {

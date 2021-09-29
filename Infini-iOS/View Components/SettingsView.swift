@@ -37,7 +37,7 @@ struct Settings_Page: View {
 				.font(.largeTitle)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			Form {
+			List {
 				Section(header: Text("Connect Options")) {
 					Toggle("Autoconnect to PineTime", isOn: $autoconnect)
 					Button {
@@ -45,7 +45,7 @@ struct Settings_Page: View {
 						print(autoconnectUUID)
 					} label: {
 						Text("Use Current Device for Autoconnect")
-					}.disabled(!autoconnect || (autoconnectUUID == bleManager.infiniTime.identifier.uuidString))
+					}.disabled(!bleManager.isConnectedToPinetime || (!autoconnect || (autoconnectUUID == bleManager.infiniTime.identifier.uuidString)))
 					Button {
 						autoconnectUUID = ""
 						print(autoconnectUUID)
@@ -123,6 +123,7 @@ struct Settings_Page: View {
 					Link("PayPal Donation", destination: URL(string: "https://paypal.me/alexemry")!)
 				}
 			}
+			.listStyle(.insetGrouped)
 		}
 	}
 }
