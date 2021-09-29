@@ -15,8 +15,6 @@ struct DebugViewDFU: View {
 	
 	var body: some View {
 		VStack {
-			Text("DFU Logs")
-				.font(.title)
 			List {
 				ForEach(0..<logManager.logFiles.dfuLogEntries.count, id: \.self) { entry in
 					Text(logManager.logFiles.dfuLogEntries[entry].date + " - " + logManager.logFiles.dfuLogEntries[entry].message)

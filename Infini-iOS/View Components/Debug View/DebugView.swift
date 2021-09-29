@@ -49,7 +49,34 @@ struct DebugView: View {
 		return true
 	}
 	
+	func setPageTitle() -> String {
+		switch self.activeTab{
+		case 1:
+			return "BLE Logs"
+		case 2:
+			return "DFU Logs"
+		case 3:
+			return "App Logs"
+		default:
+			return ""
+		}
+	}
+	
 	var body: some View {
+		HStack {
+			Text(setPageTitle())
+				.font(.title)
+				.padding()
+			Spacer()
+			Button {
+				share()
+			} label: {
+				Image(systemName: "square.and.arrow.up")
+					.padding()
+					.imageScale(.large)
+			}
+		}
+
 		TabView (selection: $activeTab) {
 			DebugViewBLE()
 				.tabItem {
@@ -70,17 +97,5 @@ struct DebugView: View {
 				}
 				.tag(3)
 		}
-		.navigationBarItems(trailing: (
-				Button {
-					share()
-				} label: {
-					Image(systemName: "square.and.arrow.up")
-						.padding(.vertical, 10)
-						.padding(.horizontal, 7)
-						.imageScale(.large)
-						.foregroundColor(Color.gray)
-				}
-			)
-		)
 	}
 }

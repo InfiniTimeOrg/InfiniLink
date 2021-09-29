@@ -15,8 +15,6 @@ struct DebugViewApp: View {
 	
 	var body: some View {
 		VStack {
-			Text("App Logs")
-				.font(.title)
 			List {
 				ForEach(0..<logManager.logFiles.appLogEntries.count, id: \.self) { entry in
 					Text(logManager.logFiles.appLogEntries[entry].date + " - " + logManager.logFiles.appLogEntries[entry].additionalInfo)

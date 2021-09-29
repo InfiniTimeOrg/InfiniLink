@@ -16,8 +16,6 @@ struct DebugViewBLE: View {
 	
 	var body: some View {
 		VStack {
-			Text("BLE Logs")
-				.font(.title)
 			List {
 				ForEach(0..<logManager.logFiles.bleLogEntries.count, id: \.self) { entry in
 					Text(logManager.logFiles.bleLogEntries[entry].date + " - " + logManager.logFiles.bleLogEntries[entry].message)
