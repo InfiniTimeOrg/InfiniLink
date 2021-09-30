@@ -367,8 +367,8 @@
 			children = (
 				264BFE7326BC526C0050A223 /* BLEManager.swift */,
 				26D7816426C9EB3800BBF555 /* BLEDelegates.swift */,
-				26C5FAE026FE98F500921207 /* BLEAutoconnectManager.swift */,
 				26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */,
+				26C5FAE026FE98F500921207 /* BLEAutoconnectManager.swift */,
 				26A6315426C0297A005AE404 /* BLEWriteManager.swift */,
 				2644261126DC093D009BD54A /* SetTime.swift */,
 				266F53E926FA91F3007481A6 /* DeviceInfo.swift */,
