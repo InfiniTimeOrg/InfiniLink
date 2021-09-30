@@ -27,7 +27,7 @@ enum Coordinator {
 
 extension DebugView {
 	func shareApp(text: String) {
-	let textToShare = "something..."
+	let textToShare = text
 	let activityViewController = UIActivityViewController(activityItems: [textToShare], applicationActivities: nil)
 	
 	let viewController = Coordinator.topViewController()

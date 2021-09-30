@@ -24,10 +24,15 @@ class SetTime {
 		// formatting setup for the date, not including the year because we have to reformat the year hex to match what the PT expects
 		let dateFormatter = DateFormatter()
 		dateFormatter.dateFormat = "MM dd H m s e SSSS"
+		dateFormatter.isLenient = false
+		dateFormatter.locale = Locale(identifier: "en_US_POSIX")
 		
 		// prepare formatting for year
 		let yearFormatter = DateFormatter()
-		yearFormatter.dateFormat = "y"
+		yearFormatter.dateFormat = "yyyy"
+		yearFormatter.isLenient = false
+		yearFormatter.locale = Locale(identifier: "en_US_POSIX")
+		
 		let yearString = yearFormatter.string(from: now)
 		let intYear = Int(yearString)
 		
@@ -43,8 +48,7 @@ class SetTime {
 		
 		var fullDateString = String(revYearChars)
 		
-		let dateString = dateFormatter.string(from: now)
-		
+		let dateString = dateFormatter.string(from: now) + "x"
 		var debugString = "Date components array: "
 		
 		// convert the rest of the date parts to hex, and append them to the date string
