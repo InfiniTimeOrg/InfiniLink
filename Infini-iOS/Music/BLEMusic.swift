@@ -8,9 +8,12 @@
 import Foundation
 
 extension BLEManager{
+	
+	
 	func controlMusic(controlNumber: Int) {
 
 		let musicController = MusicController()
+		
 		
 		// when CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are relatively up to date
 		switch controlNumber {
@@ -33,11 +36,13 @@ extension BLEManager{
 		}
 		updateMusicInformation(songInfo: musicController.getCurrentSongInfo())
 	}
+	
 	func updateMusicInformation(songInfo: MusicController.songInfo) {
+		let bleWriteManager = BLEWriteManager()
 		let musicController = MusicController()
 		let songInfo = musicController.getCurrentSongInfo()
 		
-		BLEWriteManager.init().writeToMusicApp(message: songInfo.trackName)
-		//writeASCIIToPineTime(message: songInfo.artistName, characteristic: musicChars.artist)
+		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: musicChars.track)
+		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: musicChars.artist)
 	}
 }

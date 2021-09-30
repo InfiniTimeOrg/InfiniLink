@@ -47,7 +47,6 @@ class SetTime {
 		var fullDateString = String(revYearChars)
 		
 		let dateString = dateFormatter.string(from: now)
-		//let dateParts = dateString.components(separatedBy: " ")
 		
 		// convert the rest of the date parts to hex, and append them to the date string
 		

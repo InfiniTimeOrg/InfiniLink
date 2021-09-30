@@ -6,17 +6,18 @@
 //
 
 import Foundation
+import CoreBluetooth
 
 struct BLEWriteManager {
 	let bleManager = BLEManager.shared
 	
-	func writeToMusicApp(message: String) -> Void {
+	func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
 		guard let writeData = message.data(using: .ascii) else {
 			// TODO: for music app, this sends an empty string to not display anything if this is non-ascii. This string can be changed to a "cannot display song title" or whatever but that seems a lot more annoying than just displaying nothing.
-			bleManager.infiniTime.writeValue("".data(using: .ascii)!, for: bleManager.notifyCharacteristic, type: .withResponse)
+			bleManager.infiniTime.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
 			return
 		}
-		bleManager.infiniTime.writeValue(writeData, for: bleManager.notifyCharacteristic, type: .withResponse)
+		bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
 	}
 	
 	func sendNotification(title: String, body: String) {
