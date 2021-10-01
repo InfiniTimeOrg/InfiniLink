@@ -14,6 +14,9 @@ struct SideMenu: View {
 	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	
+	@AppStorage("autoconnect") var autoconnect: Bool = false
+	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+	
 	func changePage(newPage: Page) {
 		withAnimation() {
 			pageSwitcher.currentPage = newPage
@@ -36,7 +39,7 @@ struct SideMenu: View {
 				.padding(.top, 100)
 			HStack {
 				Button(action: {changePage(newPage: .status)}) {
-					Image(systemName: "heart")
+					Image(systemName: "waveform.path.ecg")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
 					Text("Charts")
@@ -50,7 +53,7 @@ struct SideMenu: View {
 					Image(systemName: "arrow.up.doc")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.imageScale(.large)
-					Text("Update Firmware")
+					Text("Update")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
@@ -69,20 +72,53 @@ struct SideMenu: View {
 				.padding(.top, 20)
 			Spacer()
 			HStack {
-				if !self.bleManager.isConnectedToPinetime {
-					Button(action: {
-						SheetManager.shared.sheetSelection = .connect
-						SheetManager.shared.showSheet = true
-						pageSwitcher.showMenu = false
-					}) {
-						Image(systemName: "radiowaves.right")
-							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
-							.imageScale(.large)
-						Text("Connect to PineTime")
-							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
-							.padding(5)
+				Button(action: {
+					// if pinetime is connected, button says disconnect, and disconnects on press
+					if bleManager.isConnectedToPinetime {
+						self.bleManager.disconnect()
+					} else {
+						// show connect sheet if pinetime is not connected and autoconnect is disabled,
+						// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
+						if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
+							SheetManager.shared.showSheet = true
+						} else {
+							// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises
+							bleManager.startScanning()
+						}
 					}
-				}
+				}) {
+					Image(systemName: "radiowaves.right")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+						.imageScale(.large)
+					Text(bleManager.isConnectedToPinetime ? "Disconnect" : (bleManager.isScanning ? "Scanning" : "Connect"))
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+						.padding(5)
+				}.disabled(bleManager.isScanning && autoconnect)
+//				if !self.bleManager.isConnectedToPinetime {
+//					Button(action: {
+//						SheetManager.shared.sheetSelection = .connect
+//						SheetManager.shared.showSheet = true
+//						pageSwitcher.showMenu = false
+//					}) {
+//						Image(systemName: "radiowaves.right")
+//							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+//							.imageScale(.large)
+//						Text("Connect")
+//							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+//							.padding(5)
+//					}
+//				} else {
+//					Button(action: {
+//						bleManager.disconnect()
+//					}) {
+//						Image(systemName: "radiowaves.right")
+//							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+//							.imageScale(.large)
+//						Text("Disconnect")
+//							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+//							.padding(5)
+//					}
+//				}
 			}
 				.padding(.top, 100)
 			
