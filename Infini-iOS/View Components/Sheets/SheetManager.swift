@@ -47,7 +47,7 @@ class SheetManager: ObservableObject {
 		}
 	}
 	
-	func setNextSheet() {
+	func setNextSheet(autoconnect: Bool, autoconnectUUID: String) {
 		let onboarding = defaults.value(forKey: "onboarding")
 		if onboarding == nil {
 			SheetManager.shared.sheetSelection = .onboarding
@@ -56,9 +56,12 @@ class SheetManager: ObservableObject {
 			SheetManager.shared.sheetSelection = .whatsNew
 			SheetManager.shared.showSheet = true
 		} else {
-			SheetManager.shared.sheetSelection = .connect
-			SheetManager.shared.showSheet = true
-			SheetManager.shared.upToDate = true
+			print("autoconnect \(autoconnect), autoconnectUUID \(autoconnectUUID)")
+			if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
+				SheetManager.shared.sheetSelection = .connect
+				SheetManager.shared.showSheet = true
+				SheetManager.shared.upToDate = true
+			}
 		}
 	}
 	

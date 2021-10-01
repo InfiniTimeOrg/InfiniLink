@@ -79,32 +79,32 @@ struct HomeScreen: View {
 			}
 			.listStyle(.insetGrouped)
 			
-			Spacer()
-			Button(action: {
-				// if pinetime is connected, button says disconnect, and disconnects on press
-				if bleManager.isConnectedToPinetime {
-					self.bleManager.disconnect()
-				} else {
-					// show connect sheet if pinetime is not connected and autoconnect is disabled,
-					// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
-					if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
-						SheetManager.shared.showSheet = true
-					} else {
-						// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises
-						bleManager.startScanning()
-					}
-				}
-			}) {
-				Text(bleManager.isConnectedToPinetime ? "Disconnect from PineTime" : (bleManager.isScanning ? "Scanning" : "Connect to PineTime"))
-					.padding()
-					.padding(.vertical, 7)
-					.frame(maxWidth: .infinity, alignment: .center)
-					.background(colorScheme == .dark ? Color.darkGray : Color.blue)
-					.foregroundColor(Color.white)
-					.cornerRadius(10)
-					.padding(.horizontal, 20)
-					.padding(.bottom)
-			}.disabled(bleManager.isScanning && autoconnect) // this button should be disabled and read "Scanning" if autoconnect is enabled and a scan is started. Any other condition when not connected should show the sheet and cover the button
+//			Spacer()
+//			Button(action: {
+//				// if pinetime is connected, button says disconnect, and disconnects on press
+//				if bleManager.isConnectedToPinetime {
+//					self.bleManager.disconnect()
+//				} else {
+//					// show connect sheet if pinetime is not connected and autoconnect is disabled,
+//					// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
+//					if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
+//						SheetManager.shared.showSheet = true
+//					} else {
+//						// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises
+//						bleManager.startScanning()
+//					}
+//				}
+//			}) {
+//				Text(bleManager.isConnectedToPinetime ? "Disconnect from PineTime" : (bleManager.isScanning ? "Scanning" : "Connect to PineTime"))
+//					.padding()
+//					.padding(.vertical, 7)
+//					.frame(maxWidth: .infinity, alignment: .center)
+//					.background(colorScheme == .dark ? Color.darkGray : Color.blue)
+//					.foregroundColor(Color.white)
+//					.cornerRadius(10)
+//					.padding(.horizontal, 20)
+//					.padding(.bottom)
+//			}.disabled(bleManager.isScanning && autoconnect) // this button should be disabled and read "Scanning" if autoconnect is enabled and a scan is started. Any other condition when not connected should show the sheet and cover the button
 		}
 	}
 }

@@ -66,13 +66,13 @@ struct ContentView: View {
 										if onboarding == nil {
 											onboarding = false
 										}
-										sheetManager.setNextSheet()
+										sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
 									}
 								}
 						})
-//						.onChange(of: bleManager.batteryLevel) { bat in
-//							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
-//						}
+						.onChange(of: bleManager.batteryLevel) { bat in
+							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
+						}
 						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
 						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
@@ -99,9 +99,8 @@ struct ContentView: View {
 									self.bleManager.startScanning()
 								}
 								
-								sheetManager.setNextSheet()
-								sheetManager.showSheet = true
-
+								sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
+//								sheetManager.showSheet = true
 //								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
 //									SheetManager.shared.sheetSelection = .connect
 //									SheetManager.shared.showSheet = true
