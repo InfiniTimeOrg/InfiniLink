@@ -74,7 +74,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var bleLogger = DebugLogManager.shared // MARK: logging
 	
 	var firstConnect: Bool = true										// makes iOS connected message only show up on first connect, not if device drops connection and reconnects
-	var chartReconnect: Bool = true										// skip first HRM transmission on every fresh connection to prevent saving of BS data
+	var heartChartReconnect: Bool = true								// skip first HRM transmission on every fresh connection to prevent saving of BS data
+	var batChartReconnect: Bool = true								// skip first HRM transmission on every fresh connection to prevent saving of BS data
 	
 	// declare some CBUUIDs for easier reference
 
@@ -110,7 +111,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			myCentral.cancelPeripheralConnection(infiniTime)
 			firstConnect = true
 			isConnectedToPinetime = false
-			chartReconnect = false
+			heartChartReconnect = false
 		}
 	}
 	
@@ -165,14 +166,16 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
 		if error != nil {
-			chartReconnect = true
-			connect(peripheral: peripheral)
+			heartChartReconnect = true
+			//connect(peripheral: peripheral)
+			central.connect(peripheral)
+			bleLogger.debug(error: error, log: .ble, date: Date()) // MARK: logging
 		} else {
 			DeviceInfoManager.init().clearDeviceInfo()
+			bleLogger.debug(error: nil, log: .ble, additionalInfo: "User initiated disconnect", date: Date()) // MARK: logging
 		}
 		UptimeManager.shared.lastDisconnect = Date()
 		UptimeManager.shared.connectTime = nil
-		bleLogger.debug(error: error, log: .ble, date: Date()) // MARK: logging
 	}
 	
 	func centralManagerDidUpdateState(_ central: CBCentralManager) {

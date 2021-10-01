@@ -18,7 +18,7 @@ struct DebugViewBLE: View {
 		VStack {
 			List {
 				ForEach(0..<logManager.logFiles.bleLogEntries.count, id: \.self) { entry in
-					Text(logManager.logFiles.bleLogEntries[entry].date + " - " + logManager.logFiles.bleLogEntries[entry].message)
+					Text(logManager.logFiles.bleLogEntries[entry].date + " - " + (logManager.logFiles.bleLogEntries[entry].message.isEmpty ? logManager.logFiles.bleLogEntries[entry].additionalInfo : logManager.logFiles.bleLogEntries[entry].message))
 				}
 			}
 		}

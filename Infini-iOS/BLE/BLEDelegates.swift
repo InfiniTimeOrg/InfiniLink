@@ -5,7 +5,7 @@
 //  Created by Alex Emry on 8/15/21.
 //  
 //
-    
+
 
 import Foundation
 import CoreBluetooth
@@ -14,7 +14,7 @@ import CoreBluetooth
 extension BLEManager: CBPeripheralDelegate {
 	func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
 		guard let services = peripheral.services else { return }
-
+		
 		for service in services {
 			peripheral.discoverCharacteristics(nil, for:service)
 		}
@@ -24,7 +24,7 @@ extension BLEManager: CBPeripheralDelegate {
 		guard let characteristics = service.characteristics else { return }
 		
 		for characteristic in characteristics {
-
+			
 			
 			if characteristic.properties.contains(.read) {
 				peripheral.readValue(for: characteristic)
@@ -33,23 +33,36 @@ extension BLEManager: CBPeripheralDelegate {
 			// TODO: if AMS and ANCS are implemented, this whole switch can probably be deleted...
 			switch characteristic.uuid {
 			case cbuuidList.shared.musicControl:
-					peripheral.setNotifyValue(true, for: characteristic)
-					musicChars.control = characteristic
+				peripheral.setNotifyValue(true, for: characteristic)
+				musicChars.control = characteristic
 			case cbuuidList.shared.musicTrack:
-					musicChars.track = characteristic
+				musicChars.track = characteristic
 			case cbuuidList.shared.musicArtist:
-					// select artist characteristic for writing to music app
-					musicChars.artist = characteristic
+				// select artist characteristic for writing to music app
+				musicChars.artist = characteristic
+			case cbuuidList.shared.hrm:
+				// subscribe to HRM, read heart rate hex, convert to decimal
+				peripheral.setNotifyValue(true, for: characteristic)
+			case cbuuidList.shared.bat:
+				peripheral.setNotifyValue(true, for: characteristic)
 			case cbuuidList.shared.notify:
-						// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
-						notifyCharacteristic = characteristic
-						if firstConnect {
-							BLEWriteManager.init().sendNotification(title: "", body: "iOS Connected!")
-							firstConnect = false
-						}
-				default:
-					break
+				// I'm sure there's a less clunky way to grab the full characteristic for the sendNotification() function, but this works fine for now
+				notifyCharacteristic = characteristic
+				if firstConnect {
+					BLEWriteManager.init().sendNotification(title: "", body: "iOS Connected!")
+					firstConnect = false
+				}
+			default:
+				break
 			}
+		}
+	}
+	
+	func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
+		if (error == nil) {
+			print("notification state updated for \(characteristic.uuid)")
+		} else {
+			print(error!.localizedDescription)
 		}
 	}
 	
@@ -62,7 +75,7 @@ extension BLEManager: CBPeripheralDelegate {
 		case cbuuidList.shared.musicControl:
 			// listen for the music controller notifications
 			let musicControl = [UInt8](characteristic.value!)
-			controlMusic(controlNumber: Int(musicControl[0]))
+			MusicController().controlMusic(controlNumber: Int(musicControl[0]))
 			
 		case cbuuidList.shared.musicTrack:
 			// select track characteristic for writing to music app
@@ -74,25 +87,25 @@ extension BLEManager: CBPeripheralDelegate {
 			
 		case cbuuidList.shared.hrm:
 			// subscribe to HRM, read heart rate hex, convert to decimal
-			peripheral.setNotifyValue(true, for: characteristic)
+			//			peripheral.setNotifyValue(true, for: characteristic)
 			let bpm = heartRate(from: characteristic)
 			heartBPM = Double(bpm)
-			if !chartReconnect {
+			if !heartChartReconnect {
 				if bpm != 0{
 					ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
 				}
 			} else {
 				// this skips the first HRM data point. With persistent data, every time there's an OOR condition, it copies the current HRM value, even if you've stopped the HRM. In testing I turned off the HRM, but stayed connected to the watch, and got probably 20 data points from the value the HRM was stopped at.
 				
-				chartReconnect = false
+				heartChartReconnect = false
 			}
 		case cbuuidList.shared.bat:
 			// subscribe to battery updates, read battery hex data, convert it to decimal
-			peripheral.setNotifyValue(true, for: characteristic)
+			//			peripheral.setNotifyValue(true, for: characteristic)
 			let batData = [UInt8](characteristic.value!)
+			DebugLogManager.shared.debug(error: nil, log: .ble, additionalInfo: "battery level report: \(String(batData[0]))", date: Date())
 			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
 			batteryLevel = Double(batData[0])
-			
 			
 		case cbuuidList.shared.time:
 			// convert string with hex value of time to actual hex data, then write to PineTime

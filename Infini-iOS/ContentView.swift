@@ -70,9 +70,9 @@ struct ContentView: View {
 									}
 								}
 						})
-						.onChange(of: bleManager.batteryLevel) { bat in
-							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
-						}
+//						.onChange(of: bleManager.batteryLevel) { bat in
+//							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
+//						}
 						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
 						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
@@ -101,12 +101,7 @@ struct ContentView: View {
 								
 								sheetManager.setNextSheet()
 								sheetManager.showSheet = true
-//
-//								if onboarding {
-//									SheetManager.shared.sheetSelection = .onboarding
-//									SheetManager.shared.showSheet = true
-//								}
-//								
+
 //								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
 //									SheetManager.shared.sheetSelection = .connect
 //									SheetManager.shared.showSheet = true

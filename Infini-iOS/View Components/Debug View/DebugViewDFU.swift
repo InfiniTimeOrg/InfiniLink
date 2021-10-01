@@ -17,7 +17,7 @@ struct DebugViewDFU: View {
 		VStack {
 			List {
 				ForEach(0..<logManager.logFiles.dfuLogEntries.count, id: \.self) { entry in
-					Text(logManager.logFiles.dfuLogEntries[entry].date + " - " + logManager.logFiles.dfuLogEntries[entry].message)
+					Text(logManager.logFiles.dfuLogEntries[entry].date + " - " + (logManager.logFiles.dfuLogEntries[entry].message.isEmpty ? logManager.logFiles.dfuLogEntries[entry].additionalInfo : logManager.logFiles.dfuLogEntries[entry].message))
 				}
 			}
 		}

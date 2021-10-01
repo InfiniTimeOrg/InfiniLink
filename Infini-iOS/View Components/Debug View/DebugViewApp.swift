@@ -17,7 +17,7 @@ struct DebugViewApp: View {
 		VStack {
 			List {
 				ForEach(0..<logManager.logFiles.appLogEntries.count, id: \.self) { entry in
-					Text(logManager.logFiles.appLogEntries[entry].date + " - " + logManager.logFiles.appLogEntries[entry].additionalInfo)
+					Text(logManager.logFiles.appLogEntries[entry].date + " - " + (logManager.logFiles.appLogEntries[entry].message.isEmpty ? logManager.logFiles.appLogEntries[entry].additionalInfo : logManager.logFiles.appLogEntries[entry].message))
 				}
 			}
 		}
