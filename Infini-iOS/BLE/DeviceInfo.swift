@@ -52,6 +52,15 @@ struct DeviceInfoManager {
 		}
 	}
 	
+	func readInfoCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
+		switch characteristic.uuid {
+		case cbuuids.modelNumber, cbuuids.serial, cbuuids.firmware, cbuuids.hardwareRevision, cbuuids.softwareRevision, cbuuids.manufacturer:
+			peripheral.readValue(for: characteristic)
+		default:
+			break
+		}
+	}
+	
 	func setDeviceName(uuid: String) {
 		let deviceNamer = DeviceNameManager()
 		let deviceName = deviceNamer.getName(deviceUUID: uuid)

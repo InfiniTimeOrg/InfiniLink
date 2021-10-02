@@ -49,6 +49,8 @@
 		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
 		26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8C2704EB32007966F6 /* DebugViewApp.swift */; };
 		26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */; };
+		26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */; };
+		26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E922707D119007966F6 /* BLEUpdateHandler.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* BLEWriteManager.swift */; };
 		26A6315B26C49841005AE404 /* DFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315A26C49841005AE404 /* DFU.swift */; };
@@ -63,7 +65,6 @@
 		26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */; };
 		26C5FAE8270100FF00921207 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5FAE7270100FF00921207 /* DownloadManager.swift */; };
 		26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816426C9EB3800BBF555 /* BLEDelegates.swift */; };
-		26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */; };
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
@@ -136,6 +137,8 @@
 		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
 		26A40E8C2704EB32007966F6 /* DebugViewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewApp.swift; sourceTree = "<group>"; };
 		26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewShareButton.swift; sourceTree = "<group>"; };
+		26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
+		26A40E922707D119007966F6 /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
 		26A6315A26C49841005AE404 /* DFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFU.swift; sourceTree = "<group>"; };
@@ -149,7 +152,6 @@
 		26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUDownloadView.swift; sourceTree = "<group>"; };
 		26C5FAE7270100FF00921207 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		26D7816426C9EB3800BBF555 /* BLEDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDelegates.swift; sourceTree = "<group>"; };
-		26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManagerExtensions.swift; sourceTree = "<group>"; };
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
@@ -364,7 +366,8 @@
 			children = (
 				264BFE7326BC526C0050A223 /* BLEManager.swift */,
 				26D7816426C9EB3800BBF555 /* BLEDelegates.swift */,
-				26D7816626C9EC3100BBF555 /* BLEManagerExtensions.swift */,
+				26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */,
+				26A40E922707D119007966F6 /* BLEUpdateHandler.swift */,
 				26C5FAE026FE98F500921207 /* BLEAutoconnectManager.swift */,
 				26A6315426C0297A005AE404 /* BLEWriteManager.swift */,
 				2644261126DC093D009BD54A /* SetTime.swift */,
@@ -548,8 +551,8 @@
 				263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */,
 				26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */,
 				26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */,
-				26D7816726C9EC3100BBF555 /* BLEManagerExtensions.swift in Sources */,
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
+				26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */,
 				26C5FAE126FE98F500921207 /* BLEAutoconnectManager.swift in Sources */,
@@ -564,6 +567,7 @@
 				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,
 				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
 				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
+				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,

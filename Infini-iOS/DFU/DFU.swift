@@ -17,7 +17,6 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	var dfuController: DFUServiceController!
 	
 	@Published var dfuState: String = ""
-	@Published var transferFailed = false
 	@Published var transferCompleted = false
 	@Published var percentComplete: Double = 0
 	
@@ -76,6 +75,9 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 			_ = dfuController.abort()
 			dfuController = nil
 		}
+		dfuState = ""
+		transferCompleted = false
+		percentComplete = 0
 	}
 	
 	// stubs added automatically.
@@ -86,14 +88,18 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 			transferCompleted = true
 			print(transferCompleted)
 			dfuController = nil
+			percentComplete = 0
 		}
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-		print("DFU Error:", message)
+//		print("DFU Error:", message)
+		
+		DebugLogManager.shared.debug(error: nil, log: .dfu, additionalInfo: "DFU Error: \(message)", date: Date())
 		
 		dfuController = nil
-		transferFailed = true
+		transferCompleted = false
+		percentComplete = 0
 	}
 	
 	func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
@@ -101,7 +107,9 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
-		print("DFU \(level.name()): \(message)")
+		let logManager = DebugLogManager.shared
+		logManager.debug(error: nil, log: .dfu, additionalInfo: "DFU \(level.name()): \(message)", date: nil)
+//		print("DFU \(level.name()): \(message)")
 	}
 
 	

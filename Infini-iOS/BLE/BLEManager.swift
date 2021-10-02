@@ -33,7 +33,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 	
 	struct cbuuidList {
-		static let shared = cbuuidList()
 		let hrm = CBUUID(string: "2A37")
 		let bat = CBUUID(string: "2A19")
 		let time = CBUUID(string: "2A2B")
@@ -49,7 +48,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
 	}
 	
-	@Published var musicChars = musicCharacteristics()
+	let cbuuidList = cbuuidList()
+	var musicChars = musicCharacteristics()
 	
 	let settings = UserDefaults.standard
 	

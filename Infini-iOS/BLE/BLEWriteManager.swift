@@ -21,14 +21,19 @@ struct BLEWriteManager {
 	}
 	
 	func sendNotification(title: String, body: String) {
-		guard let titleData = ("   " + title + "\0").data(using: .ascii) else { return }
-		guard let bodyData = (body + "\0").data(using: .ascii) else { return }
+		guard let titleData = ("   " + title + "\0").data(using: .ascii) else {
+			DebugLogManager.shared.debug(error: nil, log: .app, additionalInfo: "Failed to convert notification title to ASCII", date: Date())
+			return }
+		guard let bodyData = (body + "\0").data(using: .ascii) else {
+			DebugLogManager.shared.debug(error: nil, log: .app, additionalInfo: "Failed to convert notification body to ASCII", date: Date())
+			return }
 		var notification = titleData
-		notification.append(Data(String("0x0a").hexData))
 		notification.append(bodyData)
-		let doSend: Bool = UserDefaults.standard.object(forKey: "watchNotifications") as? Bool ?? true
-		if doSend && bleManager.isConnectedToPinetime {
-			bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
+		let doSend = UserDefaults.standard.object(forKey: "watchNotifications")
+		if !notification.isEmpty {
+			if (doSend == nil || doSend as! Bool) && bleManager.infiniTime != nil {
+				bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
+			}
 		}
 	}
 }
