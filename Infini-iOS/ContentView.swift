@@ -22,6 +22,8 @@ struct ContentView: View {
 	@AppStorage("lastVersion") var lastVersion: String = ""
 	let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 	
+
+	
 	
 	init() {
 		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
@@ -51,13 +53,6 @@ struct ContentView: View {
 		NavigationView {
 			GeometryReader { geometry in
 				ZStack(alignment: .leading) {
-					if pageSwitcher.showMenu {
-						SideMenu(isOpen: $pageSwitcher.showMenu)
-							.frame(width: geometry.size.width/2)
-							.transition(.move(edge: .leading))
-							.ignoresSafeArea()
-							.zIndex(10)
-					}
 					MainView()
 						.sheet(isPresented: $sheetManager.showSheet, content: {
 							SheetManager.CurrentSheet()
@@ -98,15 +93,16 @@ struct ContentView: View {
 								if autoconnect && bleManager.isSwitchedOn {
 									self.bleManager.startScanning()
 								}
-								
 								sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
-//								sheetManager.showSheet = true
-//								if (autoconnect && autoconnectUUID.isEmpty) || (!autoconnect && !bleManager.isConnectedToPinetime) && !onboarding {
-//									SheetManager.shared.sheetSelection = .connect
-//									SheetManager.shared.showSheet = true
-//								}
 							})
 						}
+					if pageSwitcher.showMenu {
+						SideMenu(isOpen: $pageSwitcher.showMenu)
+							.frame(width: geometry.size.width/2)
+							.transition(.move(edge: .leading))
+							.ignoresSafeArea()
+							.zIndex(10)
+					}
 				}
 				.navigationBarItems(leading: (
 					Button(action: {

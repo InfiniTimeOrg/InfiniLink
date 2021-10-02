@@ -56,8 +56,7 @@ class SheetManager: ObservableObject {
 			SheetManager.shared.sheetSelection = .whatsNew
 			SheetManager.shared.showSheet = true
 		} else {
-			print("autoconnect \(autoconnect), autoconnectUUID \(autoconnectUUID)")
-			if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
+			if BLEAutoconnectManager.shared.shouldDisplayConnectSheet() {
 				SheetManager.shared.sheetSelection = .connect
 				SheetManager.shared.showSheet = true
 				SheetManager.shared.upToDate = true

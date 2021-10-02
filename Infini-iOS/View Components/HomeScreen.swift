@@ -79,6 +79,8 @@ struct HomeScreen: View {
 			}
 			.listStyle(.insetGrouped)
 			
+			// leaving this section here in case of negative feedback on removing the button.
+			
 //			Spacer()
 //			Button(action: {
 //				// if pinetime is connected, button says disconnect, and disconnects on press

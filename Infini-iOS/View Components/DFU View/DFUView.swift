@@ -15,7 +15,7 @@ struct DFUView: View {
 	
 	var body: some View {
 		if bleManager.isSwitchedOn {
-			DFUWithBLE().environmentObject(bleManager)
+			DFUWithBLE()
 		} else {
 			DFUWithoutBLE()
 		}
@@ -25,7 +25,5 @@ struct DFUView: View {
 struct DFUView_Previews: PreviewProvider {
 	static var previews: some View {
 		DFUView()
-			.environmentObject(BLEManager())
-			.environmentObject(DFU_Updater())
 	}
 }

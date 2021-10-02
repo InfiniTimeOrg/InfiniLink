@@ -16,11 +16,22 @@ struct BLEAutoconnectManager {
 	var dfu: Bool = false
 	var uuid: String = String()
 	
+	func shouldDisplayConnectSheet() -> Bool {
+		let bleManager = BLEManager.shared
+		let autoconnect = UserDefaults.standard.object(forKey: "autoconnect") as? Bool ?? true
+		let autoconnectUUID = UserDefaults.standard.object(forKey: "autoconnectUUID") as? String ?? ""
+		
+		if autoconnect && autoconnectUUID.isEmpty {
+			return true
+		} else if !autoconnect && !bleManager.isConnectedToPinetime {
+			return true
+		}
+		return false
+	}
+	
 	func connect (peripheral: CBPeripheral) -> Bool {
-		// handle autoconnect defaults
-		let settings = UserDefaults.standard
-		let autoconnect = settings.object(forKey: "autoconnect") as? Bool ?? true
-		let autoconnectUUID = settings.object(forKey: "autoconnectUUID") as? String ?? ""
+		let autoconnect = UserDefaults.standard.object(forKey: "autoconnect") as? Bool ?? true
+		let autoconnectUUID = UserDefaults.standard.object(forKey: "autoconnectUUID") as? String ?? ""
 		
 		if dfu {
 			if uuid == peripheral.identifier.uuidString {
