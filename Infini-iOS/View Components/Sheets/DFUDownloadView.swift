@@ -17,10 +17,19 @@ struct DownloadView: View {
 	
 	var body: some View {
 		VStack {
-			Text("Available Downloads")
-				.font(.largeTitle)
-				.padding()
-				.frame(maxWidth: .infinity, alignment: .leading)
+			HStack {
+				Text("Available Downloads")
+					.font(.largeTitle)
+					.padding()
+					.frame(maxWidth: .infinity, alignment: .leading)
+				Button {
+					DownloadManager.shared.getDownloadUrls()
+				} label: {
+					Image(systemName: "arrow.counterclockwise")
+						.padding()
+						.imageScale(.large)
+				}
+			}
 			List{
 				Section(header: Text("Firmware Download Links")) {
 					ForEach(downloadManager.results, id: \.tag_name) { i in
@@ -40,8 +49,9 @@ struct DownloadView: View {
 
 			}
 			Spacer()
-		}.onAppear(){
-			DownloadManager.shared.getDownloadUrls()
 		}
+//		.onAppear(){
+//			DownloadManager.shared.getDownloadUrls()
+//		}
 	}
 }

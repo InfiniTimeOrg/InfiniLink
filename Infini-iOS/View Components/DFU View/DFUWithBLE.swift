@@ -26,27 +26,6 @@ struct DFUWithBLE: View {
 				Text("Update Firmware")
 					.font(.largeTitle)
 					.padding()
-				
-				List {
-					Section(header: Text("Current Firmware")) {
-						Text(deviceInfo.firmware)
-					}
-					Section(header: Text("Selected Firmware")) {
-						Text(dfuUpdater.firmwareFilename)
-					}
-				}
-					.listStyle(.inset)
-				
-				Spacer()
-				
-				if updateStarted {
-					DFUProgressBar().environmentObject(dfuUpdater)
-						.frame(height: 40 ,alignment: .center)
-						.padding()
-				}
-				
-				DFUFileSelectButton(openFile: $openFile)
-					.environmentObject(bleManager)
 					.fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
 						// this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
 						do{
@@ -64,6 +43,30 @@ struct DFUWithBLE: View {
 							print (error.localizedDescription)
 						}
 					}
+				List {
+					Section(header: Text("Current Firmware")) {
+						Text(deviceInfo.firmware)
+					}
+					Section(header: ClearHeader()) {
+						if dfuUpdater.firmwareSelected {
+							Text(dfuUpdater.firmwareFilename)
+						} else {
+							DFUFileSelectButton(openFile: $openFile)
+						}
+					}
+				}
+					.listStyle(.inset)
+				
+				Spacer()
+				
+				if updateStarted {
+					DFUProgressBar().environmentObject(dfuUpdater)
+						.frame(height: 40 ,alignment: .center)
+						.padding()
+				}
+				
+//				DFUFileSelectButton(openFile: $openFile)
+					
 				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
 					.environmentObject(dfuUpdater)
 			}
@@ -86,6 +89,25 @@ struct DFUWithBLE: View {
 						}
 				}
 			}.transition(.opacity).animation(.easeInOut(duration: 1.0))
+		}
+	}
+}
+
+struct ClearHeader: View {
+	@ObservedObject var dfuUpdater = DFU_Updater.shared
+	var body: some View {
+		HStack{
+			Text("Firmware File")
+			Spacer()
+			if dfuUpdater.firmwareSelected {
+				Button{
+					dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
+					dfuUpdater.firmwareSelected = false
+					dfuUpdater.firmwareFilename = ""
+				} label: {
+					Text("Clear")
+				}
+			}
 		}
 	}
 }

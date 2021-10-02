@@ -39,7 +39,6 @@ extension BLEManager: CBPeripheralDelegate {
 	
 	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
 		DeviceInfoManager().updateInfo(characteristic: characteristic)
-		DownloadManager.shared.getDownloadUrls()
 		BLEUpdatedCharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
 	}
 }

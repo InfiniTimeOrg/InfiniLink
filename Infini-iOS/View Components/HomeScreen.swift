@@ -21,6 +21,7 @@ struct HomeScreen: View {
 	let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
 	
 	@State var currentUptime: TimeInterval!
+	@State var updateAvailable: Bool = false
 	
 	private var dateFormatter = DateComponentsFormatter()
 	
@@ -41,6 +42,12 @@ struct HomeScreen: View {
 					} else {
 						Text("Firmware Version: " + deviceInfo.firmware)
 						Text("Model: " + deviceInfo.modelNumber)
+							.onAppear() {
+								// check if an update has been made in the last 24 hours
+								if downloadManager.lastCheck == nil || downloadManager.lastCheck.timeIntervalSince(Date()) <  -86400 {
+									DownloadManager.shared.getDownloadUrls()
+								}
+							}
 					}
 				}
 				Section(header: Text("Uptime Stats")) {
@@ -61,19 +68,30 @@ struct HomeScreen: View {
 					}
 				})
 				Section(header: Text("Firmware Updates")) {
-					if downloadManager.updateAvailable && bleManager.isConnectedToPinetime {
-						Button{
-							let asset = downloadManager.chooseAsset(response: downloadManager.autoUpgrade)
-							dfuUpdater.firmwareFilename = asset.name
-							dfuUpdater.firmwareSelected = true
-							dfuUpdater.local = false
-							DownloadManager.shared.startDownload(url: asset.browser_download_url)
-							PageSwitcher.shared.currentPage = .dfu
-						} label: {
-							Text("Firmware Update is Available!")
-						}.disabled(!bleManager.isConnectedToPinetime)
+					if bleManager.isConnectedToPinetime {
+						if self.updateAvailable {
+							Button{
+								let asset = downloadManager.chooseAsset(response: downloadManager.autoUpgrade)
+								dfuUpdater.firmwareFilename = asset.name
+								dfuUpdater.firmwareSelected = true
+								dfuUpdater.local = false
+								DownloadManager.shared.startDownload(url: asset.browser_download_url)
+								PageSwitcher.shared.currentPage = .dfu
+							} label: {
+								Text("Firmware Update is Available!")
+							}.disabled(!bleManager.isConnectedToPinetime)
+						} else {
+							Text("No Updates Available")
+						}
 					} else {
-						Text("No Updates Available")
+						Text("")
+					}
+				}
+				.onChange(of: downloadManager.downloading) { _ in
+					if !downloadManager.downloading {
+						if downloadManager.updateAvailable {
+							self.updateAvailable = true
+						}
 					}
 				}
 			}

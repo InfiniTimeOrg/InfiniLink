@@ -18,6 +18,7 @@ class DownloadManager: NSObject, ObservableObject {
 	@Published var downloading = false
 	@Published var updateAvailable = false
 	@Published var autoUpgrade: Result!
+	@Published var lastCheck: Date!
 	
 	private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 	private var downloadTask: URLSessionDownloadTask!
@@ -54,7 +55,8 @@ class DownloadManager: NSObject, ObservableObject {
 	
 	func getDownloadUrls() {
 		results = []
-		guard let url = URL(string: "https://api.github.com/repos/jf002/infinitime/releases") else {
+		print("start of json fetch. results array count: \(results.count)")
+		guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases") else {
 			return
 		}
 		URLSession.shared.dataTask(with: url) { data, response, error in
@@ -63,6 +65,7 @@ class DownloadManager: NSObject, ObservableObject {
 					let res = try JSONDecoder().decode([Result].self, from: data)
 					DispatchQueue.main.async {
 						for i in res {
+							print(i.tag_name)
 							if i.tag_name.first != "v" {
 								if UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true {
 									let comparison = BLEDeviceInfo.shared.firmware.compare(i.tag_name, options: .numeric)
@@ -83,6 +86,7 @@ class DownloadManager: NSObject, ObservableObject {
 				}
 			}
 		}.resume()
+		print("end of json fetch")
 	}
 	
 	func chooseAsset(response: Result) -> Asset {
