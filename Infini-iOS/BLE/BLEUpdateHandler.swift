@@ -44,14 +44,6 @@ struct BLEUpdatedCharacteristicHandler {
 			DebugLogManager.shared.debug(error: nil, log: .ble, additionalInfo: "battery level report: \(String(batData[0]))", date: Date())
 			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
 			bleManager.batteryLevel = Double(batData[0])
-			
-		case bleManager.cbuuidList.time:
-			do {
-				try peripheral.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
-			} catch {
-				bleManager.setTimeError = true
-				print("Error setting time: \(error)")
-			}
 		default:
 			break
 		}

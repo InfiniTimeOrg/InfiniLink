@@ -12,7 +12,7 @@ import SwiftUI
 
 struct DebugViewBLE: View {
 	@ObservedObject var bleManager = BLEManager.shared
-	@ObservedObject var logFiles = DebugLogManager.shared
+	@ObservedObject var logManager = DebugLogManager.shared
 	
 	var body: some View {
 		VStack {
