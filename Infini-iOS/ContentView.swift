@@ -68,18 +68,19 @@ struct ContentView: View {
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
-						.offset(x: pageSwitcher.showMenu ? geometry.size.width/2 : 0)
+						//.offset(x: pageSwitcher.showMenu ? geometry.size.width * 0.6 : 0)
 						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
 							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0 for tap interactions
 							if pageSwitcher.showMenu {
-								Color.white
-									.opacity(pageSwitcher.showMenu ? 0.01 : 0)
+								Color.black
+									.opacity(pageSwitcher.showMenu ? 0.3 : 0)
 									.onTapGesture {
 										withAnimation {
 											pageSwitcher.showMenu = false
 										}
 									}
+									.ignoresSafeArea()
 							}
 						})
 						// alert to handle errors thrown by SetTime
@@ -97,11 +98,21 @@ struct ContentView: View {
 							})
 						}
 					if pageSwitcher.showMenu {
-						SideMenu(isOpen: $pageSwitcher.showMenu)
-							.frame(width: geometry.size.width/2)
-							.transition(.move(edge: .leading))
-							.ignoresSafeArea()
-							.zIndex(10)
+						if #available(iOS 15.0, *) {
+							SideMenu(isOpen: $pageSwitcher.showMenu)
+								.dynamicTypeSize(.large ... .accessibility5)
+								.frame(width: geometry.size.width * 0.6)
+								.transition(.move(edge: .leading))
+								.ignoresSafeArea()
+								.zIndex(10)
+						} else {
+							SideMenu(isOpen: $pageSwitcher.showMenu)
+								.frame(width: geometry.size.width * 0.6)
+								.minimumScaleFactor(1.5)
+								.transition(.move(edge: .leading))
+								.ignoresSafeArea()
+								.zIndex(10)
+						}
 					}
 				}
 				.navigationBarItems(leading: (

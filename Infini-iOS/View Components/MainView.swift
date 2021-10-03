@@ -37,6 +37,7 @@ struct MainView: View {
 						.zIndex(20)
 						.transition(.move(edge: .bottom))
 						.animation(.spring())
+						.padding(.bottom, 20)
 				}
 			}
 

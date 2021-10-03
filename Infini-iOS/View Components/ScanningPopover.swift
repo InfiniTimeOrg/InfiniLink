@@ -19,9 +19,8 @@ struct ScanningPopover: View {
 		VStack {
 			Spacer()
 			if bleManager.isConnectedToPinetime {
-				Text("Connected to \(DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString))")
+				Text("Connected to \(DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString).isEmpty ? "InfiniTime" : DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString))")
 					.padding()
-//					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)
 					.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
 					.foregroundColor(Color.white)
@@ -37,7 +36,6 @@ struct ScanningPopover: View {
 			} else if bleManager.isScanning {
 				Text("Scanning")
 					.padding()
-//					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)
 					.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
 					.foregroundColor(Color.white)

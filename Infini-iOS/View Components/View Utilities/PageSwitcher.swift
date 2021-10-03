@@ -19,7 +19,6 @@ class PageSwitcher: ObservableObject {
 	static let shared = PageSwitcher()
 	
 	@Published var currentPage: Page = .home
-//	@Published var connectViewLoad: Bool = false
 	@Published var showMenu: Bool = false
 	
 }

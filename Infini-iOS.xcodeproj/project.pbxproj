@@ -52,6 +52,7 @@
 		26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */; };
 		26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E922707D119007966F6 /* BLEUpdateHandler.swift */; };
 		26A40E952708C7F8007966F6 /* ScanningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E942708C7F8007966F6 /* ScanningPopover.swift */; };
+		26A40EE8270A1F97007966F6 /* RenameDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40EE7270A1F97007966F6 /* RenameDeviceHeader.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* BLEWriteManager.swift */; };
 		26A6315B26C49841005AE404 /* DFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315A26C49841005AE404 /* DFU.swift */; };
@@ -141,6 +142,7 @@
 		26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
 		26A40E922707D119007966F6 /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
 		26A40E942708C7F8007966F6 /* ScanningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningPopover.swift; sourceTree = "<group>"; };
+		26A40EE7270A1F97007966F6 /* RenameDeviceHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameDeviceHeader.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
 		26A6315A26C49841005AE404 /* DFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFU.swift; sourceTree = "<group>"; };
@@ -305,7 +307,7 @@
 			isa = PBXGroup;
 			children = (
 				2632388B26F265B100D72B43 /* MainView.swift */,
-				266F53E526FA7676007481A6 /* HomeScreen.swift */,
+				26A40EE6270A1F78007966F6 /* Home View */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
 				26F426EE26C72D7D00D0866B /* ChartView.swift */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
@@ -345,6 +347,15 @@
 				26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */,
 			);
 			path = "Debug View";
+			sourceTree = "<group>";
+		};
+		26A40EE6270A1F78007966F6 /* Home View */ = {
+			isa = PBXGroup;
+			children = (
+				266F53E526FA7676007481A6 /* HomeScreen.swift */,
+				26A40EE7270A1F97007966F6 /* RenameDeviceHeader.swift */,
+			);
+			path = "Home View";
 			sourceTree = "<group>";
 		};
 		26A6314E26BF0FA2005AE404 /* Music */ = {
@@ -606,6 +617,7 @@
 				26C5FAD526FBB76100921207 /* DeviceNameManager.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
+				26A40EE8270A1F97007966F6 /* RenameDeviceHeader.swift in Sources */,
 				266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

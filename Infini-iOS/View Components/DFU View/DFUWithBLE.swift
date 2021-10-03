@@ -47,7 +47,7 @@ struct DFUWithBLE: View {
 					Section(header: Text("Current Firmware")) {
 						Text(deviceInfo.firmware)
 					}
-					Section(header: ClearHeader()) {
+					Section(header: ClearSelectedFirmwareHeader()) {
 						if dfuUpdater.firmwareSelected {
 							Text(dfuUpdater.firmwareFilename)
 						} else {
@@ -93,7 +93,7 @@ struct DFUWithBLE: View {
 	}
 }
 
-struct ClearHeader: View {
+struct ClearSelectedFirmwareHeader: View {
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
 	var body: some View {
 		HStack{

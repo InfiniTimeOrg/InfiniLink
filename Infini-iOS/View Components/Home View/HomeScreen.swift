@@ -23,6 +23,11 @@ struct HomeScreen: View {
 	@State var currentUptime: TimeInterval!
 	@State var updateAvailable: Bool = false
 	
+	@State var renamingDevice: Bool = false
+	@State private var changedName: String = ""
+	private var nameManager = DeviceNameManager()
+	@State private var deviceName = ""
+	
 	private var dateFormatter = DateComponentsFormatter()
 	
 	var body: some View {
@@ -32,8 +37,17 @@ struct HomeScreen: View {
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
 			List{
-				Section(header: Text("Device Name")) {
-					Text(deviceInfo.deviceName)
+				Section(header: RenameDeviceHeader(renamingDevice: $renamingDevice)) {
+					if renamingDevice {
+						TextField(deviceName, text: $changedName, onCommit: {
+							_ = nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+						})
+							.onAppear() {
+								deviceName = String(DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString).isEmpty ? "InfiniTime" : DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString))
+							}
+					} else {
+						Text(deviceInfo.deviceName)
+					}
 				}
 				Section(header: Text("Device Information")) {
 					if !bleManager.isConnectedToPinetime {
@@ -55,7 +69,7 @@ struct HomeScreen: View {
 						Text("Last disconnect: ")
 					} else {
 						Text("Last disconnect: " + uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
-
+						
 					}
 					if currentUptime == nil {
 						Text("Uptime: ")
@@ -99,32 +113,32 @@ struct HomeScreen: View {
 			
 			// leaving this section here in case of negative feedback on removing the button.
 			
-//			Spacer()
-//			Button(action: {
-//				// if pinetime is connected, button says disconnect, and disconnects on press
-//				if bleManager.isConnectedToPinetime {
-//					self.bleManager.disconnect()
-//				} else {
-//					// show connect sheet if pinetime is not connected and autoconnect is disabled,
-//					// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
-//					if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
-//						SheetManager.shared.showSheet = true
-//					} else {
-//						// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises
-//						bleManager.startScanning()
-//					}
-//				}
-//			}) {
-//				Text(bleManager.isConnectedToPinetime ? "Disconnect from PineTime" : (bleManager.isScanning ? "Scanning" : "Connect to PineTime"))
-//					.padding()
-//					.padding(.vertical, 7)
-//					.frame(maxWidth: .infinity, alignment: .center)
-//					.background(colorScheme == .dark ? Color.darkGray : Color.blue)
-//					.foregroundColor(Color.white)
-//					.cornerRadius(10)
-//					.padding(.horizontal, 20)
-//					.padding(.bottom)
-//			}.disabled(bleManager.isScanning && autoconnect) // this button should be disabled and read "Scanning" if autoconnect is enabled and a scan is started. Any other condition when not connected should show the sheet and cover the button
+			//			Spacer()
+			//			Button(action: {
+			//				// if pinetime is connected, button says disconnect, and disconnects on press
+			//				if bleManager.isConnectedToPinetime {
+			//					self.bleManager.disconnect()
+			//				} else {
+			//					// show connect sheet if pinetime is not connected and autoconnect is disabled,
+			//					// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
+			//					if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
+			//						SheetManager.shared.showSheet = true
+			//					} else {
+			//						// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises
+			//						bleManager.startScanning()
+			//					}
+			//				}
+			//			}) {
+			//				Text(bleManager.isConnectedToPinetime ? "Disconnect from PineTime" : (bleManager.isScanning ? "Scanning" : "Connect to PineTime"))
+			//					.padding()
+			//					.padding(.vertical, 7)
+			//					.frame(maxWidth: .infinity, alignment: .center)
+			//					.background(colorScheme == .dark ? Color.darkGray : Color.blue)
+			//					.foregroundColor(Color.white)
+			//					.cornerRadius(10)
+			//					.padding(.horizontal, 20)
+			//					.padding(.bottom)
+			//			}.disabled(bleManager.isScanning && autoconnect) // this button should be disabled and read "Scanning" if autoconnect is enabled and a scan is started. Any other condition when not connected should show the sheet and cover the button
 		}
 	}
 }
