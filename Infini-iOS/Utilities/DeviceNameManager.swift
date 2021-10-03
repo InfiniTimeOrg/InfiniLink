@@ -29,7 +29,7 @@ struct DeviceNameManager {
 		do {
 			try names = viewContext.fetch(NSFetchRequest(entityName: "DeviceNames"))
 		} catch {
-			print(error.localizedDescription)
+			DebugLogManager.shared.debug(error: "Error accessing device names: \(error)", log: .app, date: Date())
 		}
 		return names
 	}
@@ -42,38 +42,31 @@ struct DeviceNameManager {
 				do {
 					try viewContext.save()
 				} catch {
-					print(error.localizedDescription)
+					DebugLogManager.shared.debug(error: "Error deleting device name for \(deviceUUID): \(error)", log: .app, date: Date())
 				}
-				print("Deleted name for \(deviceUUID)!")
+				DebugLogManager.shared.debug(error: "Deleted name for \(deviceUUID)", log: .app, date: Date())
 			}
 		}
 	}
 	
-	func updateName(deviceUUID: String, name: String) -> String {
-		var message = ""
+	func updateName(deviceUUID: String, name: String) {
 		let names = lookupNames()
 		if getName(deviceUUID: deviceUUID) == "" {
 			setName(deviceUUID: deviceUUID, name: name)
-			message = "Wrote new name for \(deviceUUID)!"
-			print(message)
 		} else {
 		writeName: for i in names {
 			guard i.uuid == deviceUUID else { continue }
-				//if i.uuid == deviceUUID {
 					i.name = name
 					do {
 						try viewContext.save()
 					} catch {
-						print(error.localizedDescription)
+						DebugLogManager.shared.debug(error: "Error saving device name for \(deviceUUID): \(error)", log: .app, date: Date())
 					}
-					message = "Updated name for \(deviceUUID)!"
-					print(message)
+					DebugLogManager.shared.debug(error: "Updated name for \(deviceUUID)", log: .app, date: Date())
 					break writeName
-				//}
 			}
 		}
 		DeviceInfoManager().setDeviceName(uuid: deviceUUID)
-		return message
 	}
 	
 	func setName(deviceUUID: String, name: String) {
@@ -84,7 +77,7 @@ struct DeviceNameManager {
 		do {
 			try viewContext.save()
 		} catch {
-			print(error.localizedDescription)
+			DebugLogManager.shared.debug(error: "Saved new name for \(deviceUUID): \(error)", log: .app, date: Date())
 		}
 	}
 }

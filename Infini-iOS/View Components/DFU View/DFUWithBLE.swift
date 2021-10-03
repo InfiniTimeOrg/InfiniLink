@@ -64,11 +64,8 @@ struct DFUWithBLE: View {
 						.frame(height: 40 ,alignment: .center)
 						.padding()
 				}
-				
-//				DFUFileSelectButton(openFile: $openFile)
 					
 				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
-					.environmentObject(dfuUpdater)
 			}
 			VStack{
 				if dfuUpdater.transferCompleted {

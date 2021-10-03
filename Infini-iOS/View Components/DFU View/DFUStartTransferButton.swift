@@ -44,11 +44,12 @@ struct DFUStartTransferButton: View {
 				.padding()
 				.padding(.vertical, 7)
 				.frame(maxWidth: .infinity, alignment: .center)
-				.background(colorScheme == .dark ? (firmwareSelected ? Color.darkGray : Color.darkestGray) : (firmwareSelected ? Color.blue : Color.lightGray))
-				.foregroundColor(firmwareSelected ? Color.white : Color.gray)
+				.background(colorChooser())
+				.foregroundColor(firmwareSelected ? Color.white : (updateStarted ? Color.white : Color.gray))
 				.cornerRadius(10)
 				.padding(.horizontal, 20)
 				.padding(.bottom)
-			}.disabled((dfuUpdater.local ? !firmwareSelected : (!firmwareSelected || downloadManager.downloading)))
+			}.disabled(buttonDisabled())
+		
 	}
 }

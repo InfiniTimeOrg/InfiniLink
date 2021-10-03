@@ -37,7 +37,6 @@ struct BLEDiscoveredCharacteristics {
 				try peripheral.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
 			} catch {
 				bleManager.setTimeError = true
-				print("Error setting time: \(error)")
 			}
 		default:
 			break

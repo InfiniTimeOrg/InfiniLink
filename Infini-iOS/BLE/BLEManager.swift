@@ -112,6 +112,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			firstConnect = true
 			isConnectedToPinetime = false
 			heartChartReconnect = false
+			infiniTime = nil
 		}
 	}
 	
@@ -155,7 +156,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	}
 	
 	func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-		bleLogger.debug(error: error, log: .ble, date: Date()) // MARK: logging
+		if error != nil {
+			bleLogger.debug(error: "Failed to connect: \(error!)", log: .ble, date: Date()) // MARK: logging
+		}
 	}
 	
 	func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -169,10 +172,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			heartChartReconnect = true
 			//connect(peripheral: peripheral)
 			central.connect(peripheral)
-			bleLogger.debug(error: error, log: .ble, date: Date()) // MARK: logging
+			bleLogger.debug(error: "Peripheral disconnected. Reason: \(error!)", log: .ble, date: Date()) // MARK: logging
 		} else {
 			DeviceInfoManager.init().clearDeviceInfo()
-			bleLogger.debug(error: nil, log: .ble, additionalInfo: "User initiated disconnect", date: Date()) // MARK: logging
+			bleLogger.debug(error: "User initiated disconnect", log: .ble, date: Date()) // MARK: logging
 		}
 		UptimeManager.shared.lastDisconnect = Date()
 		UptimeManager.shared.connectTime = nil

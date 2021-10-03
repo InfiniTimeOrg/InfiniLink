@@ -40,7 +40,7 @@ struct HomeScreen: View {
 				Section(header: RenameDeviceHeader(renamingDevice: $renamingDevice)) {
 					if renamingDevice {
 						TextField(deviceName, text: $changedName, onCommit: {
-							_ = nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+							nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
 						})
 							.onAppear() {
 								deviceName = String(DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString).isEmpty ? "InfiniTime" : DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString))
@@ -59,7 +59,8 @@ struct HomeScreen: View {
 							.onAppear() {
 								// check if an update has been made in the last 24 hours
 								if downloadManager.lastCheck == nil || downloadManager.lastCheck.timeIntervalSince(Date()) <  -86400 {
-									DownloadManager.shared.getDownloadUrls()
+									downloadManager.getDownloadUrls()
+									downloadManager.lastCheck = Date()
 								}
 							}
 					}

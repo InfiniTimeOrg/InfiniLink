@@ -55,7 +55,6 @@ class DownloadManager: NSObject, ObservableObject {
 	
 	func getDownloadUrls() {
 		results = []
-		print("start of json fetch. results array count: \(results.count)")
 		guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases") else {
 			return
 		}
@@ -65,7 +64,6 @@ class DownloadManager: NSObject, ObservableObject {
 					let res = try JSONDecoder().decode([Result].self, from: data)
 					DispatchQueue.main.async {
 						for i in res {
-							print(i.tag_name)
 							if i.tag_name.first != "v" {
 								if UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true {
 									let comparison = BLEDeviceInfo.shared.firmware.compare(i.tag_name, options: .numeric)
@@ -80,13 +78,10 @@ class DownloadManager: NSObject, ObservableObject {
 						self.updateAvailable = self.checkForUpdates()
 					}
 				} catch {
-					print("urlsession catch")
-					print(error)
-					
+					DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
 				}
 			}
 		}.resume()
-		print("end of json fetch")
 	}
 	
 	func chooseAsset(response: Result) -> Asset {
@@ -117,8 +112,6 @@ class DownloadManager: NSObject, ObservableObject {
 
 extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
 	func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didWriteData _: Int64, totalBytesWritten _: Int64, totalBytesExpectedToWrite _: Int64) {
-		// uncomment for progress updates in console
-		//print("Progress " + String(downloadTask.progress.fractionCompleted))
 	}
 	
 	func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
@@ -131,7 +124,6 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
 			// check for existing file and delete it if there is anything.
 			if FileManager.default.fileExists(atPath: savedURL.path) {
 				try? FileManager.default.removeItem(at: savedURL)
-				print("old file deleted")
 			}
 			
 			// move downloaded file out of ephemeral storage and tell DFU where to look
@@ -139,7 +131,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
 			DFU_Updater.shared.firmwareURL = savedURL
 			
 			} catch let fmerror {
-				print("filesystem error: \(fmerror)")
+				DebugLogManager.shared.debug(error: "Error saving downloaded firmware file: \(fmerror)", log: .app, date: Date())
 				// handle filesystem error
 			}
 		DispatchQueue.main.async {
@@ -149,10 +141,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
 	
 	func urlSession(_: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
 		if let error = error {
-			print("Download error: %@" + String(describing: error))
-//		uncomment to print that it finished
-//		} else {
-//			print("Task finished: %@" )//+ task)
+			DebugLogManager.shared.debug(error: "Download error: \(String(describing: error))", log: .app, date: Date())
 		}
 	}
 }

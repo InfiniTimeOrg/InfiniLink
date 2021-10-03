@@ -23,7 +23,6 @@ class DebugLogManager: ObservableObject {
 		let date: String
 		let message: String
 		let log: DebugLog
-		let additionalInfo: String
 	}
 
 	struct LogFiles {
@@ -39,11 +38,10 @@ class DebugLogManager: ObservableObject {
 		case app
 	}
 	
-	func debug(error: Error?, log: DebugLog, additionalInfo: String = "", date: Date! = nil) {
+	func debug(error: String, log: DebugLog, date: Date! = nil) {
 		let settings = UserDefaults.standard
 		let debugMode = settings.object(forKey: "debugMode") as? Bool ?? false
 		if debugMode {
-			print(error.debugDescription)
 			var dateString = ""
 			if date != nil {
 				let dateFormatter = DateFormatter()
@@ -51,7 +49,7 @@ class DebugLogManager: ObservableObject {
 				dateString = dateFormatter.string(from: date)
 			}
 			
-			let logEntry = LogEntry(date: dateString, message: error?.localizedDescription ?? "", log: log, additionalInfo: additionalInfo)
+			let logEntry = LogEntry(date: dateString, message: error, log: log)
 			DebugLogManager.shared.addLogEntry(entry: logEntry)
 		}
 	}

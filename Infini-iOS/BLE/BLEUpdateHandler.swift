@@ -41,7 +41,7 @@ struct BLEUpdatedCharacteristicHandler {
 			}
 		case bleManager.cbuuidList.bat:
 			let batData = [UInt8](characteristic.value!)
-			DebugLogManager.shared.debug(error: nil, log: .ble, additionalInfo: "battery level report: \(String(batData[0]))", date: Date())
+			DebugLogManager.shared.debug(error: "battery level report: \(String(batData[0]))", log: .ble, date: Date())
 			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
 			bleManager.batteryLevel = Double(batData[0])
 		default:

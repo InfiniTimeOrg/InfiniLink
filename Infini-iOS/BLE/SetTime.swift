@@ -56,22 +56,14 @@ class SetTime {
 		for part in dateString.components(separatedBy: " ") {
 			debugString.append(String("\(part), "))
 			guard let intPart = Int(part) else {
-				logManager.debug(error: nil, log: .app, additionalInfo: "Failed to set date!", date: Date())
-				logManager.debug(error: nil, log: .app, additionalInfo: "Full date string: \(dateString)")
-				logManager.debug(error: nil, log: .app, additionalInfo: debugString)
-				if part.isEmpty {
-					logManager.debug(error: nil, log: .app, additionalInfo: "Tried to convert a nil value")
-				} else {
-					logManager.debug(error: nil, log: .app, additionalInfo: "'\(part)' was unable to be converted to an Integer")
-				}
+				logManager.debug(error: "Failed to set date!", log: .app, date: Date())
+				logManager.debug(error: "Full date string: \(dateString)", log: .app)
+				logManager.debug(error: "'\(part)' was unable to be converted to an Integer", log: .app)
 				throw SetTimeError.nilValue
 			}
 			let hex = String(format: "%02X", intPart)
 			fullDateString.append(hex)
-
 		}
-		
-		// print(fullDateString) // debug
 		return fullDateString
 	}
 }

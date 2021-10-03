@@ -24,7 +24,6 @@ class MusicController {
 	struct songInfo {
 		var trackName: String!
 		var artistName: String!
-		//var currentDuration: Int
 	}
 	
 	enum musicState {
@@ -42,13 +41,15 @@ class MusicController {
 				musicPlayer.play()
 			}
 		case 2:
-			print("volUp") // system volume controls are not accessible from an app
+			// system volume controls are not accessible from an app
+			break
 		case 3:
 			musicPlayer.skipToNextItem()
 		case 4:
 			musicPlayer.skipToPreviousItem()
 		case 5:
-			print("volDown") // system volume controls are not accessible from an app
+			// system volume controls are not accessible from an app
+			break
 		default:
 			break
 		}

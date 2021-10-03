@@ -21,15 +21,15 @@ struct DebugView: View {
 		switch activeTab {
 		case 1:
 			for entry in 0..<logManager.logFiles.bleLogEntries.count {
-				items.append("\(logManager.logFiles.bleLogEntries[entry].date + " - " + logManager.logFiles.bleLogEntries[entry].message)")
+				items.append("\(logManager.logFiles.bleLogEntries[entry].date + " - " + logManager.logFiles.bleLogEntries[entry].message)\n")
 			}
 		case 2:
 			for entry in 0..<logManager.logFiles.dfuLogEntries.count {
-				items.append("\(logManager.logFiles.dfuLogEntries[entry].date + " - " + logManager.logFiles.dfuLogEntries[entry].message)")
+				items.append("\(logManager.logFiles.dfuLogEntries[entry].date + " - " + logManager.logFiles.dfuLogEntries[entry].message)\n")
 			}
 		case 3:
 			for entry in 0..<logManager.logFiles.appLogEntries.count {
-				items.append("\(logManager.logFiles.appLogEntries[entry].date + " - " + logManager.logFiles.appLogEntries[entry].additionalInfo)\n")
+				items.append("\(logManager.logFiles.appLogEntries[entry].date + " - " + logManager.logFiles.appLogEntries[entry].message)\n")
 			}
 		default:
 			return

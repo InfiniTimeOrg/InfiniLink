@@ -22,10 +22,10 @@ struct BLEWriteManager {
 	
 	func sendNotification(title: String, body: String) {
 		guard let titleData = ("   " + title + "\0").data(using: .ascii) else {
-			DebugLogManager.shared.debug(error: nil, log: .app, additionalInfo: "Failed to convert notification title to ASCII", date: Date())
+			DebugLogManager.shared.debug(error: "Failed to convert notification title to ASCII. Title: '\(title)'", log: .app, date: Date())
 			return }
 		guard let bodyData = (body + "\0").data(using: .ascii) else {
-			DebugLogManager.shared.debug(error: nil, log: .app, additionalInfo: "Failed to convert notification body to ASCII", date: Date())
+			DebugLogManager.shared.debug(error: "Failed to convert notification body to ASCII. Body: '\(body)'", log: .app, date: Date())
 			return }
 		var notification = titleData
 		notification.append(bodyData)

@@ -80,6 +80,8 @@ struct SideMenu: View {
 						// show connect sheet if pinetime is not connected and autoconnect is disabled,
 						// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
 						if BLEAutoconnectManager.shared.shouldDisplayConnectSheet() {
+							pageSwitcher.showMenu = false
+							SheetManager.shared.sheetSelection = .connect
 							SheetManager.shared.showSheet = true
 						} else {
 							// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises

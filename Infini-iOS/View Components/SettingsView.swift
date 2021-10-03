@@ -30,7 +30,6 @@ struct Settings_Page: View {
 	
 	@State private var changedName: String = ""
 	private var nameManager = DeviceNameManager()
-	@State private var resultMessage = ""
 	@State private var deviceName = ""
 	
 	var body: some View {
@@ -44,13 +43,13 @@ struct Settings_Page: View {
 					Toggle("Autoconnect to PineTime", isOn: $autoconnect)
 					Button {
 						autoconnectUUID = bleManager.setAutoconnectUUID
-						print(autoconnectUUID)
+						DebugLogManager.shared.debug(error: "Autoconnect Device UUID: \(autoconnectUUID)", log: .app, date: Date())
 					} label: {
 						Text("Use Current Device for Autoconnect")
 					}.disabled(!bleManager.isConnectedToPinetime || (!autoconnect || (autoconnectUUID == bleManager.infiniTime.identifier.uuidString)))
 					Button {
 						autoconnectUUID = ""
-						print(autoconnectUUID)
+						DebugLogManager.shared.debug(error: "Autoconnect Device Cleared", log: .app, date: Date())
 					} label: {
 						Text("Clear Autoconnect Device")
 					}.disabled(!autoconnect || autoconnectUUID.isEmpty)
@@ -58,13 +57,14 @@ struct Settings_Page: View {
 				Section(header: Text("Device Name")) {
 					Text("Current Device Name: " + deviceInfo.deviceName)
 					TextField("Enter New Name", text: $changedName)
+						.disabled(!bleManager.isConnectedToPinetime)
 					Button {
 						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-						resultMessage = nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+						nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
 						changedName = ""
 					} label: {
 						Text("Rename Device")
-					}
+					}.disabled(!bleManager.isConnectedToPinetime)
 				}
 				
 				Section(header: Text("Firmware Update Downloads")) {

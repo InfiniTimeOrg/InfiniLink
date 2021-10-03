@@ -29,14 +29,6 @@ extension BLEManager: CBPeripheralDelegate {
 		}
 	}
 	
-	func peripheral(_ peripheral: CBPeripheral, didUpdateNotificationStateFor characteristic: CBCharacteristic, error: Error?) {
-		if (error == nil) {
-			print("notification state updated for \(characteristic.uuid)")
-		} else {
-			print(error!.localizedDescription)
-		}
-	}
-	
 	func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
 		DeviceInfoManager().updateInfo(characteristic: characteristic)
 		BLEUpdatedCharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)

@@ -34,7 +34,10 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	func transfer() {
 		guard let url = firmwareURL else {return}
 		guard url.startAccessingSecurityScopedResource() else { return }
-		guard let selectedFirmware = DFUFirmware(urlToZipFile:url) else { return }
+		guard let selectedFirmware = DFUFirmware(urlToZipFile:url) else {
+			DebugLogManager.shared.debug(error: "Error loading firmware file. Is the file a DFU zip?", log: .dfu, date: Date())
+			return
+		}
 		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
 		
 		// Optional:
@@ -51,10 +54,10 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	}
 	
 	func downloadTransfer() {
-		print("transfer function:")
-
-		
-		guard let selectedFirmware = DFUFirmware(urlToZipFile: firmwareURL) else { print("failed to load file"); return }
+		guard let selectedFirmware = DFUFirmware(urlToZipFile: firmwareURL) else {
+			DebugLogManager.shared.debug(error: "Error loading firmware file. Is the file a DFU zip?", log: .dfu, date: Date())
+			return
+		}
 	
 		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
 
@@ -83,19 +86,15 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	// stubs added automatically.
 	func dfuStateDidChange(to state: DFUState) {
 		dfuState = state.description()
-		print(dfuState)
 		if state.rawValue == 6 {
 			transferCompleted = true
-			print(transferCompleted)
 			dfuController = nil
 			percentComplete = 0
 		}
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-//		print("DFU Error:", message)
-		
-		DebugLogManager.shared.debug(error: nil, log: .dfu, additionalInfo: "DFU Error: \(message)", date: Date())
+		DebugLogManager.shared.debug(error: "DFU Error: \(message)", log: .dfu, date: Date())
 		
 		dfuController = nil
 		transferCompleted = false
@@ -108,8 +107,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	
 	func logWith(_ level: LogLevel, message: String) {
 		let logManager = DebugLogManager.shared
-		logManager.debug(error: nil, log: .dfu, additionalInfo: "DFU \(level.name()): \(message)", date: nil)
-//		print("DFU \(level.name()): \(message)")
+		logManager.debug(error: "DFU \(level.name()): \(message)", log: .dfu, date: nil)
 	}
 
 	

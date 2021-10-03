@@ -68,7 +68,7 @@ struct ContentView: View {
 						.onChange(of: bleManager.batteryLevel) { bat in
 							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
 						}
-						//.offset(x: pageSwitcher.showMenu ? geometry.size.width * 0.6 : 0)
+						.offset(x: pageSwitcher.showMenu ? geometry.size.width * 0.6 : 0)
 						.disabled(pageSwitcher.showMenu ? true : false)
 						.overlay(Group {
 							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0 for tap interactions

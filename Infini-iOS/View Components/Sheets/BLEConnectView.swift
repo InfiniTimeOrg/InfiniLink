@@ -68,6 +68,5 @@ struct Connect: View {
 struct ConnectView_Previews: PreviewProvider {
 	static var previews: some View {
 		Connect()
-			.environmentObject(BLEManager())
 	}
 }
