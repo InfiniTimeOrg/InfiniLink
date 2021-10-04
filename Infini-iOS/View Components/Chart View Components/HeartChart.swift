@@ -29,6 +29,13 @@ struct HeartChart: View {
 		}
 	}
 
+	func setGraphType(data: LineChartData) -> some View {
+		if heartChartFill {
+			return AnyView(FilledLineChart(chartData: data))
+		} else {
+			return AnyView(LineChart(chartData: data))
+		}
+	}
 	
 	var body: some View {
 		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 50), topLine: .maximum(of: 160))
@@ -39,22 +46,13 @@ struct HeartChart: View {
 		)
 		
 		if chartPoints.count > 1 {
-			if heartChartFill {
-				FilledLineChart(chartData: data)
-					.animation(.easeIn)
-					.floatingInfoBox(chartData: data)
-					.touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
-					.yAxisLabels(chartData: data)
-					.padding()
-				
-			} else {
-				LineChart(chartData: data)
-					.animation(.easeIn)
-					.floatingInfoBox(chartData: data)
-					.touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
-					.yAxisLabels(chartData: data)
-					.padding()
-			}
+			setGraphType(data: data)
+				.animation(.easeIn)
+				.floatingInfoBox(chartData: data)
+				.touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
+				.yAxisLabels(chartData: data)
+				.xAxisLabels(chartData: data)
+				.padding()
 		} else {
 			VStack (alignment: .center) {
 				Spacer()

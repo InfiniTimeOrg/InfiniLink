@@ -26,31 +26,30 @@ struct BatteryChart: View {
 		}
 	}
 	
+	func setGraphType(data: LineChartData) -> some View {
+		if batChartFill {
+			return AnyView(FilledLineChart(chartData: data))
+		} else {
+			return AnyView(LineChart(chartData: data))
+		}
+	}
 	
 	var body: some View {
 		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 0), topLine: .maximum(of: 100))
 		let data = LineChartData(dataSets: LineDataSet(
 			dataPoints: ChartManager.shared.convert(results: chartPoints),
 			style: setLineStyle()),
+			metadata: ChartMetadata(title: " ", subtitle: " "),
 			chartStyle: chartStyle
 		)
 		
 		if chartPoints.count > 1 {
-			if batChartFill {
-				FilledLineChart(chartData: data)
-					.animation(.easeIn)
-					.floatingInfoBox(chartData: data)
-					.touchOverlay(chartData: data, unit: .suffix(of: "%"))
-					.yAxisLabels(chartData: data)
-					.padding()
-			} else {
-				LineChart(chartData: data)
-					.animation(.easeIn)
-					.floatingInfoBox(chartData: data)
-					.touchOverlay(chartData: data, unit: .suffix(of: "%"))
-					.yAxisLabels(chartData: data)
-					.padding()
-			}
+			setGraphType(data: data)
+				.animation(.easeIn)
+				.floatingInfoBox(chartData: data)
+				.touchOverlay(chartData: data, unit: .suffix(of: "%"))
+				.yAxisLabels(chartData: data)
+				.padding()
 		} else {
 			VStack (alignment: .center) {
 				Spacer()
