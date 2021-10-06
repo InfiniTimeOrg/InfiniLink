@@ -129,6 +129,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			
 			setAutoconnectUUID = peripheral.identifier.uuidString
 			isConnectedToPinetime = true
+		} else {
+			DebugLogManager.shared.debug(error: "Could not connect to device not named 'InfiniTime'. Device name: \(peripheral.name!)", log: .ble, date: Date())
 		}
 	}
 		
@@ -145,7 +147,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID, stringUUID: peripheral.identifier.uuidString)
 			
 			guard BLEAutoconnectManager.shared.connect(peripheral: peripheral) else {
-				// compare peripheral UUIDs to make sure we're only adding each device once -- super helpful if you have a very noisy BLE advertiser nearby!
 				if !peripherals.contains(where: {$0.deviceUUID == newPeripheral.deviceUUID}) {
 					peripherals.append(newPeripheral)
 					peripheralDictionary[newPeripheral.peripheralHash] = peripheral
@@ -165,6 +166,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		self.infiniTime.discoverServices(nil)
 		DeviceInfoManager().setDeviceName(uuid: peripheral.identifier.uuidString)
 		UptimeManager.shared.connectTime = Date()
+		bleLogger.debug(error: "Successfully connected to \(peripheral.name!)", log: .ble, date: Date())
 	}
 	
 	func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
