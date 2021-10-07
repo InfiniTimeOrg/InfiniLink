@@ -64,7 +64,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var blePermissions: Bool!
 
 	// Selecting and connecting variables
-	@Published var peripherals = [Peripheral]() 						// used to print human-readable device names to UI in selection process
+	@Published var peripherals = [Peripheral]()
+	@Published var newPeripherals: [CBPeripheral] = []					// used to print human-readable device names to UI in selection process
 	@Published var deviceToConnect: Int!								// When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
 	@Published var peripheralDictionary: [Int: CBPeripheral] = [:] 		// this is the dictionary that relates human-readable peripheral names to the CBPeripheral class that CoreBluetooth actually interacts with
 	@Published var infiniTime: CBPeripheral!							// variable to save the CBPeripheral that you're connecting to
@@ -99,6 +100,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		isScanning = true
 		peripherals = [Peripheral]()
 		peripheralDictionary = [:]
+		newPeripherals = []
 	}
 	
 	func stopScanning() {
@@ -138,18 +140,22 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 
 	func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
 		
-		var peripheralName: String!
+//		var peripheralName: String!
 		
-		if let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
-			peripheralName = name
-			let devUUIDString: String = peripheral.identifier.uuidString
-			let devUUID: CBUUID = CBUUID(string: devUUIDString)
-			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID, stringUUID: peripheral.identifier.uuidString)
+		if let _ = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
+//			peripheralName = name
+//			let devUUIDString: String = peripheral.identifier.uuidString
+//			let devUUID: CBUUID = CBUUID(string: devUUIDString)
+//			let newPeripheral = Peripheral(id: peripheralDictionary.count, name: peripheralName, rssi: RSSI.intValue, peripheralHash: peripheral.hash, deviceUUID: devUUID, stringUUID: peripheral.identifier.uuidString)
 			
 			guard BLEAutoconnectManager.shared.connect(peripheral: peripheral) else {
-				if !peripherals.contains(where: {$0.deviceUUID == newPeripheral.deviceUUID}) {
-					peripherals.append(newPeripheral)
-					peripheralDictionary[newPeripheral.peripheralHash] = peripheral
+//				if !peripherals.contains(where: {$0.deviceUUID == newPeripheral.deviceUUID}) {
+//					peripherals.append(newPeripheral)
+//					peripheralDictionary[newPeripheral.peripheralHash] = peripheral
+//				}
+				if !newPeripherals.contains(where: {$0.identifier.uuidString == peripheral.identifier.uuidString}) {
+					newPeripherals.append(peripheral)
+					print(newPeripherals.count)
 				}
 				return
 			}

@@ -15,7 +15,7 @@ struct Connect: View {
 	@Environment(\.presentationMode) var presentation
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-
+	
 	var body: some View {
 		SheetCloseButton()
 		VStack (){
@@ -37,25 +37,41 @@ struct Connect: View {
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
 			}
-			List(bleManager.peripherals) { peripheral in
-				let deviceName = DeviceNameManager.init().getName(deviceUUID: peripheral.stringUUID)
-				HStack {
-					Button(action: {
-						self.bleManager.deviceToConnect = peripheral.peripheralHash
-						self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
-						presentation.wrappedValue.dismiss()
-					}) {
-						if deviceName == "" {
-							Text(peripheral.name)
-						} else {
-							Text(deviceName)
-						}
+//			List(bleManager.peripherals) { peripheral in
+//				let deviceName = DeviceNameManager.init().getName(deviceUUID: peripheral.stringUUID)
+//				HStack {
+//					Button(action: {
+//						//self.bleManager.deviceToConnect = peripheral.peripheralHash
+//						self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
+//						presentation.wrappedValue.dismiss()
+//					}) {
+//						if deviceName == "" {
+//							Text(peripheral.name)
+//						} else {
+//							Text(deviceName)
+//						}
+//					}
+//					Spacer()
+//					Text("RSSI: " + String(peripheral.rssi))
+//				}
+//			}
+//			Divider()
+//			Text("new list")
+			List(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
+				let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
+				Button {
+					bleManager.connect(peripheral: i)
+					presentation.wrappedValue.dismiss()
+				} label: {
+					if deviceName == "" {
+						Text(i.name ?? "Unnamed")
+					} else {
+						Text(deviceName)
 					}
-					Spacer()
-					Text("RSSI: " + String(peripheral.rssi))
 				}
+//				Spacer()
 			}
-		
+			
 			Spacer()
 		}.onDisappear {
 			if bleManager.isScanning {
