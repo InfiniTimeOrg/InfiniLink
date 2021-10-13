@@ -8,7 +8,7 @@
 import Foundation
 import NordicDFU
 
-class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate  {
+class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
 	
 	static let shared = DFU_Updater()
 	

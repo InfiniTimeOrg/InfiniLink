@@ -117,7 +117,7 @@ class ChartManager: ObservableObject {
 		var dataPoints: [LineChartDataPoint] = []
 		let dateFormat = DateFormatter()
 		let timeRange = setTimeRange()
-		dateFormat.dateFormat = "H:mm:ss"
+		dateFormat.dateFormat = "MMM d\nH:mm:ss"
 		for data in results {
 			if timeRange == 0 {
 				dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))

@@ -39,7 +39,6 @@ struct BatteryChart: View {
 		let data = LineChartData(dataSets: LineDataSet(
 			dataPoints: ChartManager.shared.convert(results: chartPoints),
 			style: setLineStyle()),
-			metadata: ChartMetadata(title: " ", subtitle: " "),
 			chartStyle: chartStyle
 		)
 		

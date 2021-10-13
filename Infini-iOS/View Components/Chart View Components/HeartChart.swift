@@ -51,7 +51,6 @@ struct HeartChart: View {
 				.floatingInfoBox(chartData: data)
 				.touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
 				.yAxisLabels(chartData: data)
-				.xAxisLabels(chartData: data)
 				.padding()
 		} else {
 			VStack (alignment: .center) {

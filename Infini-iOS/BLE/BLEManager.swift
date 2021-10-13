@@ -155,7 +155,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 //				}
 				if !newPeripherals.contains(where: {$0.identifier.uuidString == peripheral.identifier.uuidString}) {
 					newPeripherals.append(peripheral)
-					print(newPeripherals.count)
 				}
 				return
 			}
