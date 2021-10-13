@@ -15,11 +15,23 @@ struct ChartView: View {
 	
 	var body: some View {
 		VStack {
-			Text("Charts")
-				.font(.largeTitle)
-				.padding()
-				.frame(maxWidth: .infinity, alignment: .leading)
-			TimeRangeTabs()
+			HStack {
+				Text("Charts")
+					.font(.largeTitle)
+					.padding(.leading)
+					.padding(.vertical)
+					.frame(alignment: .leading)
+				Button {
+					SheetManager.shared.sheetSelection = .chartSettings
+					SheetManager.shared.showSheet = true
+				} label: {
+					Image(systemName: "gear")
+						.imageScale(.large)
+						.padding(.vertical)
+				}
+				Spacer()
+			}
+//			TimeRangeTabs()
 			StatusTabs()
 			CurrentChart()
 		}

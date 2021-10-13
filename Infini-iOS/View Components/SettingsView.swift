@@ -88,7 +88,7 @@ struct Settings_Page: View {
 				}
 				Section(header: Text("Graph Data")) {
 					Button (action: {
-						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
 					}) {
 						(Text("Clear All HRM Chart Data"))
 					}

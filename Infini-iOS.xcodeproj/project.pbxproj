@@ -42,8 +42,10 @@
 		266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E326F7FCA6007481A6 /* ChartManager.swift */; };
 		266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E526FA7676007481A6 /* HomeScreen.swift */; };
 		266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E926FA91F3007481A6 /* DeviceInfo.swift */; };
-		266F53EC26FAABE7007481A6 /* TimeRangeTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */; };
 		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
+		268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */; };
+		268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */; };
+		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
 		26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E842704E6F3007966F6 /* SheetManager.swift */; };
 		26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E882704E97C007966F6 /* DebugViewBLE.swift */; };
 		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
@@ -133,8 +135,10 @@
 		266F53E326F7FCA6007481A6 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		266F53E526FA7676007481A6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
-		266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeRangeTabs.swift; sourceTree = "<group>"; };
 		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
+		268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetMain.swift; sourceTree = "<group>"; };
+		268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetSliders.swift; sourceTree = "<group>"; };
+		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
 		26A40E842704E6F3007966F6 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		26A40E882704E97C007966F6 /* DebugViewBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewBLE.swift; sourceTree = "<group>"; };
 		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
@@ -213,7 +217,6 @@
 		263B20B626CD673D00676BF0 /* Chart View Components */ = {
 			isa = PBXGroup;
 			children = (
-				266F53EB26FAABE7007481A6 /* TimeRangeTabs.swift */,
 				263B20B426CD673900676BF0 /* ChartTabs.swift */,
 				263B20B926CDF13400676BF0 /* HeartChart.swift */,
 				263B20BB26CDF20400676BF0 /* BatteryChart.swift */,
@@ -332,6 +335,16 @@
 			path = "View Utilities";
 			sourceTree = "<group>";
 		};
+		268E773D27174B6D000DF90D /* ChartSettingsSheet */ = {
+			isa = PBXGroup;
+			children = (
+				268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */,
+				268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */,
+				268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */,
+			);
+			path = ChartSettingsSheet;
+			sourceTree = "<group>";
+		};
 		26A40E862704E7FD007966F6 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
@@ -398,6 +411,7 @@
 			children = (
 				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
 				26A40E842704E6F3007966F6 /* SheetManager.swift */,
+				268E773D27174B6D000DF90D /* ChartSettingsSheet */,
 				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
 				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
 				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
@@ -583,6 +597,7 @@
 				2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,
 				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
+				268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */,
 				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
 				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
@@ -598,7 +613,6 @@
 				26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
 				26318B1626CB27E70036051E /* Infini_iOS.xcdatamodeld in Sources */,
-				266F53EC26FAABE7007481A6 /* TimeRangeTabs.swift in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
 				2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */,
 				26A40E952708C7F8007966F6 /* ScanningPopover.swift in Sources */,
@@ -611,6 +625,7 @@
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */,
+				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
 				263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
@@ -620,6 +635,7 @@
 				26C5FAD526FBB76100921207 /* DeviceNameManager.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
+				268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */,
 				26A40EEA270A5F39007966F6 /* DFUStartButtonColorSelector.swift in Sources */,
 				26A40EE8270A1F97007966F6 /* RenameDeviceHeader.swift in Sources */,
 				266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */,
