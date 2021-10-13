@@ -21,6 +21,7 @@ struct HeartChart: View {
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 0"))
 	private var chartPoints: FetchedResults<ChartDataPoint>
 	
+	
 	func setLineStyle() -> LineStyle {
 		if heartChartFill {
 			return LineStyle(lineColour: ColourStyle(colours: [Color.red.opacity(0.7), Color.red.opacity(0.3)], startPoint: .top, endPoint: .bottom), lineType: .curvedLine, ignoreZero: false)
@@ -38,6 +39,7 @@ struct HeartChart: View {
 	}
 	
 	var body: some View {
+		let dataPoints = ChartManager.shared.convert(results: chartPoints)
 		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 50), topLine: .maximum(of: 160))
 		let data = LineChartData(dataSets: LineDataSet(
 			dataPoints: ChartManager.shared.convert(results: chartPoints),
@@ -45,7 +47,7 @@ struct HeartChart: View {
 			chartStyle: chartStyle
 		)
 		
-		if chartPoints.count > 1 {
+		if dataPoints.count > 1 {
 			setGraphType(data: data)
 				.animation(.easeIn)
 				.floatingInfoBox(chartData: data)

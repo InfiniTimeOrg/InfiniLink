@@ -14,7 +14,7 @@ struct ChartSettingsSheet: View {
 	@AppStorage("heartChartFill") var heartChartFill: Bool = true
 	@AppStorage("batChartFill") var batChartFill: Bool = true
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
-	private var chartPoints: FetchedResults<ChartDataPoint>
+	var chartPoints: FetchedResults<ChartDataPoint>
 	
 	@State var chartRangeState: ChartManager.DateSelectionState = ChartManager.DateSelectionState(dateRangeSelection: 1)
 	
@@ -29,48 +29,59 @@ struct ChartSettingsSheet: View {
 	var body: some View {
 		VStack {
 			SheetCloseButton()
+			Divider()
+				.padding(.horizontal)
 			VStack {
 				if chartManager.currentChart == .battery {
 					Toggle("Filled Battery Graph", isOn: $batChartFill)
-						.padding()
+						.padding(.horizontal)
 						.frame(maxWidth: .infinity)
+					Divider()
+						.padding(.horizontal)
 					Button (action: {
 						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
 					}) {
 						(Text("Clear All Battery Chart Data"))
 					}
 					.frame(maxWidth: .infinity, alignment: .leading)
-					.padding(.horizontal)
+					.padding()
 				} else {
 					Toggle("Filled HRM Graph", isOn: $heartChartFill)
-						.padding()
+						.padding(.horizontal)
 						.frame(maxWidth: .infinity)
+					Divider()
+						.padding(.horizontal)
 					Button (action: {
 						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
 					}) {
 						(Text("Clear All HRM Chart Data"))
 					}
 					.frame(maxWidth: .infinity, alignment: .leading)
-					.padding(.horizontal)
+					.padding()
 				}
-			}.padding()
+			}
+			Divider()
+				.padding(.horizontal)
 			Text("Select Date Range")
-				.font(.title2)
+//				.font(.title2)
 				.padding()
-				.frame(alignment: .leading)
+				.frame(maxWidth: .infinity, alignment: .leading)
 			Picker("Date Range Selection", selection: $chartRangeState.dateRangeSelection) {
 				Text("Show All").tag(0)
 				Text("Sliders").tag(1)
 				Text("Select Dates").tag(2)
 			}.pickerStyle(.segmented)
-				.padding()
+				.padding(.bottom)
+				.padding(.horizontal)
 			switch chartRangeState.dateRangeSelection {
 			case 0:
-				EmptyView()
+				Text("All Data Selected")
+					.padding()
+					.font(.title)
 			case 1:
 				ChartSettingsSheetSliders(chartRangeState: self.$chartRangeState)
 			case 2:
-				ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState)
+				ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: chartPoints[0].timestamp)
 			default:
 				EmptyView()
 			}

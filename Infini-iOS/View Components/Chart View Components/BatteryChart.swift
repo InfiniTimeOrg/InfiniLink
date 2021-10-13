@@ -35,14 +35,15 @@ struct BatteryChart: View {
 	}
 	
 	var body: some View {
+		let dataPoints = ChartManager.shared.convert(results: chartPoints)
 		let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 0), topLine: .maximum(of: 100))
 		let data = LineChartData(dataSets: LineDataSet(
-			dataPoints: ChartManager.shared.convert(results: chartPoints),
+			dataPoints: dataPoints,
 			style: setLineStyle()),
 			chartStyle: chartStyle
 		)
 		
-		if chartPoints.count > 1 {
+		if dataPoints.count > 1 {
 			setGraphType(data: data)
 				.animation(.easeIn)
 				.floatingInfoBox(chartData: data)

@@ -10,14 +10,9 @@
 import SwiftUI
 
 struct ChartSettingsSheetSliders: View {
-//	@Binding var hours: Float// = 1
-//	@Binding var days: Float// = 0
-//	@Binding var weeks: Float// = 0
-
 	@Binding var chartRangeState: ChartManager.DateSelectionState
 	
 	var body: some View{
-//		VStack {
 		List{
 			Slider(value: $chartRangeState.hours, in: 0...23, step: 1) {
 				Text("Hours")
@@ -42,10 +37,7 @@ struct ChartSettingsSheetSliders: View {
 			} maximumValueLabel: {
 				Text("")
 			}
-//			}
-//			Spacer()
 		}
 		.listStyle(.insetGrouped)
-//		.padding()
 	}
 }
