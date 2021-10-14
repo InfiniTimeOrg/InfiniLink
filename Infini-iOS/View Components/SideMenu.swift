@@ -106,6 +106,6 @@ struct SideMenu: View {
 		}
 			.padding(20)
 			.frame(maxWidth: .infinity, alignment: .leading)
-			.background(colorScheme == .dark ? Color.darkGray : Color.lightGray)
+			.background(colorScheme == .dark ? Color.darkGray : Color.white)
 	}
 }

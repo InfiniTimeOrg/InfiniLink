@@ -79,10 +79,6 @@ struct DFUWithBLE: View {
 							dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
 							dfuUpdater.firmwareSelected = false
 							dfuUpdater.firmwareFilename = ""
-							BLEAutoconnectManager.shared.uuid = bleManager.infiniTime.identifier.uuidString
-							BLEAutoconnectManager.shared.dfu = true
-							bleManager.disconnect()
-							bleManager.startScanning()
 						}
 				}
 			}.transition(.opacity).animation(.easeInOut(duration: 1.0))

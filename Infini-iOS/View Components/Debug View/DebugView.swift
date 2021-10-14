@@ -71,18 +71,21 @@ struct DebugView: View {
 					Image(systemName: "radiowaves.right")
 					Text("BLE")
 				}
+				.padding(.top)
 				.tag(1)
 			DebugViewDFU()
 				.tabItem {
 					Image(systemName: "arrow.up.doc")
 					Text("DFU")
 				}
+				.padding(.top)
 				.tag(2)
 			DebugViewApp()
 				.tabItem {
 					Image(systemName: "ant")
 					Text("App")
 				}
+				.padding(.top)
 				.tag(3)
 		}
 	}

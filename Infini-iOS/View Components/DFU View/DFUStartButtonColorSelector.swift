@@ -41,16 +41,6 @@ extension DFUStartTransferButton {
 	func colorChooser() -> Color {
 		if colorScheme == .dark {
 			if firmwareSelected {
-				return Color.darkGray
-			} else {
-				if updateStarted {
-					return Color.darkGray
-				} else {
-					return Color.darkestGray
-				}
-			}
-		} else {
-			if firmwareSelected {
 				if downloadManager.downloading {
 					return Color.darkestGray
 				} else {
@@ -61,6 +51,20 @@ extension DFUStartTransferButton {
 					return Color.darkGray
 				} else {
 					return Color.darkestGray
+				}
+			}
+		} else {
+			if firmwareSelected {
+				if downloadManager.downloading {
+					return Color.lightGray
+				} else {
+					return Color.blue
+				}
+			} else {
+				if updateStarted {
+					return Color.blue
+				} else {
+					return Color.lightGray
 				}
 			}
 		}

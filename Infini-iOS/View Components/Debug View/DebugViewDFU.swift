@@ -19,7 +19,7 @@ struct DebugViewDFU: View {
 				ForEach(0..<logManager.logFiles.dfuLogEntries.count, id: \.self) { entry in
 					Text(
 						// if a date is included, prepend '[date] -', otherwise start with empty string
-						logManager.logFiles.dfuLogEntries[entry].date.isEmpty ? "" : logManager.logFiles.dfuLogEntries[entry].date + " - "  + logManager.logFiles.dfuLogEntries[entry].message
+						(logManager.logFiles.dfuLogEntries[entry].date.isEmpty ? "" : logManager.logFiles.dfuLogEntries[entry].date + " - ") + logManager.logFiles.dfuLogEntries[entry].message
 					)
 				}
 			}
