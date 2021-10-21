@@ -41,6 +41,7 @@ struct HomeScreen: View {
 					if renamingDevice {
 						TextField(deviceName, text: $changedName, onCommit: {
 							nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+							renamingDevice = false
 						})
 							.onAppear() {
 								deviceName = String(DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString).isEmpty ? "InfiniTime" : DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString))
