@@ -1,4 +1,4 @@
-# Infini-iOS - an InfiniTime Companion App for iOS
+# InfiniLink - an InfiniTime Companion App for iOS
 
 This iOS application allows you to interact with your PineTime smartwatch running [InfiniTime](https://github.com/JF002/InfiniTime) (and perhaps other watches/OSes, pending testing).
 
