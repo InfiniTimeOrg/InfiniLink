@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */; };
 		2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */; };
 		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
 		2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */; };
-		26318B1626CB27E70036051E /* InfiniLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 26318B1426CB27E70036051E /* InfiniLink.xcdatamodeld */; };
 		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
 		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
 		2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */; };
@@ -94,10 +94,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InfiniLink.xcdatamodel; sourceTree = "<group>"; };
 		2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewSelector.swift; sourceTree = "<group>"; };
 		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
 		2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewBody.swift; sourceTree = "<group>"; };
-		26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Infini_iOS.xcdatamodel; sourceTree = "<group>"; };
 		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
 		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
 		2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUFileSelectButton.swift; sourceTree = "<group>"; };
@@ -277,7 +277,7 @@
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
-				26318B1426CB27E70036051E /* InfiniLink.xcdatamodeld */,
+				2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */,
 				264BFE4726BC51CF0050A223 /* Preview Content */,
 			);
 			path = InfiniLink;
@@ -585,6 +585,7 @@
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
 				26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */,
 				26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */,
 				26C5FAE126FE98F500921207 /* BLEAutoconnectManager.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
@@ -612,7 +613,6 @@
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
-				26318B1626CB27E70036051E /* InfiniLink.xcdatamodeld in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
 				2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */,
 				26A40E952708C7F8007966F6 /* ScanningPopover.swift in Sources */,
@@ -996,12 +996,12 @@
 /* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
-		26318B1426CB27E70036051E /* InfiniLink.xcdatamodeld */ = {
+		2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
-				26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */,
+				2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */,
 			);
-			currentVersion = 26318B1526CB27E70036051E /* Infini_iOS.xcdatamodel */;
+			currentVersion = 2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */;
 			path = InfiniLink.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;

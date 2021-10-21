@@ -1,5 +1,5 @@
 //
-//  Infini_iOSApp.swift
+//  InfiniLinkApp.swift
 //  InfiniLink
 //
 //  Created by Alex Emry on 8/5/21.

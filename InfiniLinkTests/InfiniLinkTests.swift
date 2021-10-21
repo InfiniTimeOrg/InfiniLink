@@ -1,5 +1,5 @@
 //
-//  Infini_iOSTests.swift
+//  InfiniLinkTests.swift
 //  InfiniLinkTests
 //
 //  Created by Alex Emry on 8/5/21.
