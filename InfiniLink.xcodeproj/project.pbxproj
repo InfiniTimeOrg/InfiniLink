@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */; };
+		2601AF6727220CED00D999EF /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF6627220CED00D999EF /* StepsView.swift */; };
+		2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF692722110700D999EF /* StepProgressGauge.swift */; };
 		2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */; };
 		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
 		2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */; };
@@ -95,6 +97,8 @@
 
 /* Begin PBXFileReference section */
 		2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InfiniLink.xcdatamodel; sourceTree = "<group>"; };
+		2601AF6627220CED00D999EF /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
+		2601AF692722110700D999EF /* StepProgressGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepProgressGauge.swift; sourceTree = "<group>"; };
 		2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewSelector.swift; sourceTree = "<group>"; };
 		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
 		2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewBody.swift; sourceTree = "<group>"; };
@@ -195,6 +199,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2601AF68272210EB00D999EF /* Steps View */ = {
+			isa = PBXGroup;
+			children = (
+				2601AF6627220CED00D999EF /* StepsView.swift */,
+				2601AF692722110700D999EF /* StepProgressGauge.swift */,
+			);
+			path = "Steps View";
+			sourceTree = "<group>";
+		};
 		2617EF3A27036D9100FE6F48 /* What's New */ = {
 			isa = PBXGroup;
 			children = (
@@ -316,6 +329,7 @@
 				26A40EE6270A1F78007966F6 /* Home View */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
 				26F426EE26C72D7D00D0866B /* ChartView.swift */,
+				2601AF68272210EB00D999EF /* Steps View */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
 				26A40E942708C7F8007966F6 /* ScanningPopover.swift */,
 				26A40E872704E964007966F6 /* Debug View */,
@@ -623,11 +637,13 @@
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
+				2601AF6727220CED00D999EF /* StepsView.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
 				263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
+				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */,
 				26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */,
@@ -807,7 +823,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alexemry.InfiniLink;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -831,7 +847,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.9.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.alexemry.InfiniLink;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

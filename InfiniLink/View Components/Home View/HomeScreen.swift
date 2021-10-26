@@ -83,6 +83,9 @@ struct HomeScreen: View {
 						currentUptime = -uptimeManager.connectTime.timeIntervalSinceNow
 					}
 				})
+				Section(header: Text("Step Count")) {
+					Text(String(bleManager.stepCount))
+				}
 				Section(header: Text("Firmware Updates")) {
 					if bleManager.isConnectedToPinetime {
 						if self.updateAvailable {

@@ -30,6 +30,8 @@ struct MainView: View {
 				HomeScreen()
 			case .debug:
 				DebugView()
+			case .steps:
+				StepsView()
 			}
 			if showScanView && !BLEAutoconnectManager.shared.shouldDisplayConnectSheet() {
 				withAnimation {

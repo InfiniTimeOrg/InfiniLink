@@ -32,6 +32,9 @@ struct BLEDiscoveredCharacteristics {
 				BLEWriteManager.init().sendNotification(title: "", body: "iOS Connected!")
 				bleManager.firstConnect = false
 			}
+		case bleManager.cbuuidList.stepCount:
+			peripheral.readValue(for: characteristic)
+			peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.time:
 			do {
 				try peripheral.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)

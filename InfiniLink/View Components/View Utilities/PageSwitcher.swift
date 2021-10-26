@@ -13,6 +13,7 @@ enum Page {
 	case settings
 	case home
 	case debug // MARK: logging
+	case steps
 }
 
 class PageSwitcher: ObservableObject {

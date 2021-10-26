@@ -46,6 +46,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
 		let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
 		let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
+		let stepCount = CBUUID(string: "00030001-78FC-48FE-8E23-433B3A1942D0")
 	}
 	
 	let cbuuidList = cbuuidList()
@@ -62,6 +63,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var firmwareVersion: String = "Disconnected"
 	@Published var setTimeError = false
 	@Published var blePermissions: Bool!
+	
+	@Published var stepCount: Int = 0
 
 	// Selecting and connecting variables
 	@Published var peripherals = [Peripheral]()
