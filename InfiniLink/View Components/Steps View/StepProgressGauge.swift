@@ -10,18 +10,28 @@
 import SwiftUI
 
 struct StepProgressGauge: View {
-	@Binding var currentCount: Float
+	@ObservedObject var bleManager = BLEManager.shared
+	@Binding var currentPercentage: Float
+	@Binding var stepCountGoal: Int
 	
 	var body: some View {
 		ZStack {
 			Circle()
-				.stroke(lineWidth: 20.0)
+				.stroke(lineWidth: 10.0)
 				.opacity(0.3)
-				.foregroundColor(Color.blue)
+				.foregroundColor(Color.gray)
 			Circle()
-				.trim(from: 0.0, to: CGFloat(min(currentCount, 1.0)))
+				.trim(from: 0.0, to: CGFloat(min(currentPercentage, 1.0)))
 				.stroke(style: StrokeStyle(lineWidth: 20.0, lineCap: .round, lineJoin: .round))
 				.foregroundColor(Color.blue)
+				.rotationEffect(Angle(degrees: 270.0))
+				.animation(.linear)
+			VStack {
+				Text(String(bleManager.stepCount))
+					.font(.largeTitle)
+					.bold()
+				Text("Step Goal: \(stepCountGoal)")
+			}
 		}
 	}
 }

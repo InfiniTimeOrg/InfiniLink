@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "264BFE3D26BC51CE0050A223"
-               BuildableName = "Infini-iOS.app"
+               BuildableName = "InfiniLink.app"
                BlueprintName = "InfiniLink"
                ReferencedContainer = "container:InfiniLink.xcodeproj">
             </BuildableReference>
@@ -33,7 +33,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "264BFE5326BC51CF0050A223"
-               BuildableName = "Infini-iOSTests.xctest"
+               BuildableName = "InfiniLinkTests.xctest"
                BlueprintName = "InfiniLinkTests"
                ReferencedContainer = "container:InfiniLink.xcodeproj">
             </BuildableReference>
@@ -43,7 +43,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "264BFE5E26BC51CF0050A223"
-               BuildableName = "Infini-iOSUITests.xctest"
+               BuildableName = "InfiniLinkUITests.xctest"
                BlueprintName = "InfiniLinkUITests"
                ReferencedContainer = "container:InfiniLink.xcodeproj">
             </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "264BFE3D26BC51CE0050A223"
-            BuildableName = "Infini-iOS.app"
+            BuildableName = "InfiniLink.app"
             BlueprintName = "InfiniLink"
             ReferencedContainer = "container:InfiniLink.xcodeproj">
          </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "264BFE3D26BC51CE0050A223"
-            BuildableName = "Infini-iOS.app"
+            BuildableName = "InfiniLink.app"
             BlueprintName = "InfiniLink"
             ReferencedContainer = "container:InfiniLink.xcodeproj">
          </BuildableReference>

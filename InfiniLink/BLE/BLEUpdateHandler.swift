@@ -54,7 +54,7 @@ struct BLEUpdatedCharacteristicHandler {
 				break
 			}
 			let stepData = [UInt8](value)
-			bleManager.stepCount = Int(stepData[0])
+			bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
 		default:
 			break
 		}

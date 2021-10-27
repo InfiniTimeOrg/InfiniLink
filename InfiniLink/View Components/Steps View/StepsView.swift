@@ -13,29 +13,31 @@ struct StepsView: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
-	var stepCountGoal = 10000
+	@State var stepCountGoal = 10000
 	@State var stepGoalPercentage: Float = 0.0
 	
 	
 	var body: some View {
-		
-		VStack {
-			HStack {
-				Text("Charts")
-					.font(.largeTitle)
-					.padding(.leading)
-					.padding(.vertical)
-					.frame(alignment: .leading)
-				Spacer()
+		GeometryReader { g in
+			VStack {
+				HStack {
+					Text("Steps")
+						.font(.largeTitle)
+						.padding(.leading)
+						.padding(.vertical)
+						.frame(alignment: .leading)
+					Spacer()
+				}
+				StepProgressGauge(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal)
+					.padding()
+					.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3))
 			}
-//			ProgressView(value: Float(bleManager.stepCount), total: Float(stepCountGoal)) {
-//				Text("Step Goal")
-//			}
-			StepProgressGauge(currentCount: $stepGoalPercentage)
-				.padding()
-		}
-		.onChange(of: bleManager.stepCount) { _ in
-			stepGoalPercentage = (Float(bleManager.stepCount)/Float(stepCountGoal))
+			.onChange(of: bleManager.stepCount) { _ in
+				stepGoalPercentage = (Float(bleManager.stepCount)/Float(stepCountGoal))
+			}
+			.onAppear {
+				stepGoalPercentage = (Float(bleManager.stepCount)/Float(stepCountGoal))
+			}
 		}
 	}
 }

@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SideMenu: View {
 	
-	@Binding var isOpen: Bool
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
@@ -18,9 +17,9 @@ struct SideMenu: View {
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	
 	func changePage(newPage: Page) {
+		pageSwitcher.currentPage = newPage
 		withAnimation() {
-			pageSwitcher.currentPage = newPage
-			self.isOpen = false
+			pageSwitcher.showMenu = false
 		}
 	}
 	
