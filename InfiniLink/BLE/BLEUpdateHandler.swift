@@ -8,6 +8,7 @@
     
 
 import CoreBluetooth
+import CoreData
 
 struct BLEUpdatedCharacteristicHandler {
 	
@@ -55,6 +56,8 @@ struct BLEUpdatedCharacteristicHandler {
 			}
 			let stepData = [UInt8](value)
 			bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
+			let stepPersistence = StepCountPersistenceManager()
+			stepPersistence.setStepCount(steps: bleManager.stepCount)
 		default:
 			break
 		}

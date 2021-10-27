@@ -28,9 +28,13 @@ struct StepsView: View {
 						.frame(alignment: .leading)
 					Spacer()
 				}
-				StepProgressGauge(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal)
-					.padding()
-					.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3))
+				ScrollView{
+					StepProgressGauge(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal, calendar: false)
+						.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3))
+						.padding()
+					StepCalendarView(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal)
+						.padding(.horizontal)
+				}
 			}
 			.onChange(of: bleManager.stepCount) { _ in
 				stepGoalPercentage = (Float(bleManager.stepCount)/Float(stepCountGoal))
