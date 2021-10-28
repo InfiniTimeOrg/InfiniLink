@@ -36,6 +36,7 @@ struct StepProgressGauge: View {
 				}
 			}
 		}
+		
 	}
 }
 

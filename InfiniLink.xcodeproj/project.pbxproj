@@ -207,14 +207,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2601AF68272210EB00D999EF /* Steps View */ = {
+		2601AF68272210EB00D999EF /* Steps View Components */ = {
 			isa = PBXGroup;
 			children = (
-				2601AF6627220CED00D999EF /* StepsView.swift */,
 				2601AF692722110700D999EF /* StepProgressGauge.swift */,
 				263462EB2729F64600D3278D /* StepCalendar */,
 			);
-			path = "Steps View";
+			path = "Steps View Components";
 			sourceTree = "<group>";
 		};
 		2617EF3A27036D9100FE6F48 /* What's New */ = {
@@ -348,7 +347,8 @@
 				26A40EE6270A1F78007966F6 /* Home View */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
 				26F426EE26C72D7D00D0866B /* ChartView.swift */,
-				2601AF68272210EB00D999EF /* Steps View */,
+				2601AF6627220CED00D999EF /* StepsView.swift */,
+				2601AF68272210EB00D999EF /* Steps View Components */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
 				26A40E942708C7F8007966F6 /* ScanningPopover.swift */,
 				26A40E872704E964007966F6 /* Debug View */,

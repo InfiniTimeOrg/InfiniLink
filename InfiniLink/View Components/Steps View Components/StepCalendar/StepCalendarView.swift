@@ -9,11 +9,6 @@
 
 import SwiftUI
 
-
-
-
-
-
 struct StepCalendarView: View {
 	@Environment(\.calendar) var calendar
 	
