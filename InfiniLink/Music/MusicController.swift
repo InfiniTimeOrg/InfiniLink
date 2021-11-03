@@ -20,6 +20,7 @@ class MusicController {
 	let bleManager = BLEManager.shared
 	
 	var musicPlayer = MPMusicPlayerController.systemMusicPlayer
+    var musicPlaying = 0
 	
 	struct songInfo {
 		var trackName: String!
@@ -33,13 +34,16 @@ class MusicController {
 	func controlMusic(controlNumber: Int) {
 		
 		// when CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are relatively up to date
+        
+        musicPlaying = musicPlayer.playbackState.rawValue
+        
 		switch controlNumber {
 		case 0:
-			if musicPlayer.playbackState.rawValue == 1 {
-				musicPlayer.pause()
-			} else {
-				musicPlayer.play()
-			}
+            musicPlayer.play()
+            musicPlaying = 1
+        case 1:
+            musicPlayer.pause()
+            musicPlaying = 2
 		case 2:
 			// system volume controls are not accessible from an app
 			break
@@ -69,5 +73,11 @@ class MusicController {
 		
 		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
 		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
+        
+        if musicPlaying == 1 {
+            bleWriteManager.writeHexToMusicApp(message: 0x01, characteristic: bleManager.musicChars.status)
+        } else {
+            bleWriteManager.writeHexToMusicApp(message: 0x00, characteristic: bleManager.musicChars.status)
+        }
 	}
 }
