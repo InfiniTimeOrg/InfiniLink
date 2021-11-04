@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreBluetooth
+import simd
 
 struct BLEWriteManager {
 	let bleManager = BLEManager.shared
@@ -20,8 +21,8 @@ struct BLEWriteManager {
 		bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
 	}
     
-    func writeHexToMusicApp(message: UInt8, characteristic: CBCharacteristic) -> Void {
-        let bytes : [UInt8] = [message]; let writeData = Data(bytes: bytes, count: 1)
+    func writeHexToMusicApp(message: [UInt8], characteristic: CBCharacteristic) -> Void {
+        let writeData = Data(bytes: message, count: message.capacity)
         bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
     }
 	

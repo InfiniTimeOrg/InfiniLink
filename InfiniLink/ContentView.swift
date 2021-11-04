@@ -10,11 +10,11 @@ import SwiftUI
 struct ContentView: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
-	
 	@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@ObservedObject var batteryNotifications = BatteryNotifications()
 	@ObservedObject var sheetManager = SheetManager.shared
-
+    
+    
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false

@@ -23,6 +23,10 @@ struct BLEDiscoveredCharacteristics {
 			bleManager.musicChars.track = characteristic
 		case bleManager.cbuuidList.musicArtist:
 			bleManager.musicChars.artist = characteristic
+        case bleManager.cbuuidList.positionTrack:
+            bleManager.musicChars.position = characteristic
+        case bleManager.cbuuidList.lengthTrack:
+            bleManager.musicChars.length = characteristic
 		case bleManager.cbuuidList.hrm:
 			peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.bat:
