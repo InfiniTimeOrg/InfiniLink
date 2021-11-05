@@ -18,4 +18,3 @@ xcuserdata/
 *.xcworkspace
 *.xcuserstate // <--- Here
 !default.xcworkspace
-InfiniLink.xcodeproj/project.pbxproj
