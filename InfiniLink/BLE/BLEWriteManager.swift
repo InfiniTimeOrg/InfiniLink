@@ -7,7 +7,6 @@
 
 import Foundation
 import CoreBluetooth
-import simd
 
 struct BLEWriteManager {
 	let bleManager = BLEManager.shared
