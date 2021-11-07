@@ -79,9 +79,9 @@ class MusicController {
 		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
 		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
         
-        var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem!.playbackDuration {playbackTime = 0.0}
+        var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem!.playbackDuration), characteristic: bleManager.musicChars.length)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
         
         if musicPlaying == 1 {
             bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManager.musicChars.status)
