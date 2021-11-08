@@ -36,6 +36,7 @@ class MusicController {
 	init() {
 		musicPlayer.beginGeneratingPlaybackNotifications()
 		NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+		NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
 	}
 	
 	@objc func onNotificationReceipt(_ notification: Notification) {
@@ -69,6 +70,8 @@ class MusicController {
             if volume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(volume + (1 / volumeSlots))}
         case 6:
             if volume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(volume - (1 / volumeSlots))}
+		case 224:
+			updateMusicInformation(songInfo: getCurrentSongInfo())
 		default:
 			break
 		}
