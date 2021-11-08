@@ -21,6 +21,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		var control: CBCharacteristic!
 		var track: CBCharacteristic!
 		var artist: CBCharacteristic!
+        var status: CBCharacteristic!
+        var position: CBCharacteristic!
+        var length: CBCharacteristic!
 	}
 	
 	struct Peripheral: Identifiable {
@@ -44,8 +47,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let softwareRevision = CBUUID(string: "2A28")
 		let manufacturer = CBUUID(string: "2A29")
 		let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+        let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
 		let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
 		let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
+        let positionTrack = CBUUID(string: "00000006-78FC-48FE-8E23-433B3A1942D0")
+        let lengthTrack = CBUUID(string: "00000007-78FC-48FE-8E23-433B3A1942D0")
 	}
 	
 	let cbuuidList = cbuuidList()
@@ -73,7 +79,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	@Published var setAutoconnectUUID: String = ""							// placeholder for now while I figure out how to save the whole device in UserDefaults to save "favorite" devices
 	
 	@Published var bleLogger = DebugLogManager.shared // MARK: logging
-	
+
 	var firstConnect: Bool = true										// makes iOS connected message only show up on first connect, not if device drops connection and reconnects
 	var heartChartReconnect: Bool = true								// skip first HRM transmission on every fresh connection to prevent saving of BS data
 	var batChartReconnect: Bool = true								// skip first HRM transmission on every fresh connection to prevent saving of BS data

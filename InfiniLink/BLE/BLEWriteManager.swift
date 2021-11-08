@@ -19,6 +19,11 @@ struct BLEWriteManager {
 		}
 		bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
 	}
+    
+    func writeHexToMusicApp(message: [UInt8], characteristic: CBCharacteristic) -> Void {
+        let writeData = Data(bytes: message, count: message.capacity)
+        bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
+    }
 	
 	func sendNotification(title: String, body: String) {
 		guard let titleData = ("   " + title + "\0").data(using: .ascii) else {

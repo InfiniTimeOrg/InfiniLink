@@ -20,6 +20,9 @@ class MusicController {
 	let bleManager = BLEManager.shared
 	
 	var musicPlayer = MPMusicPlayerController.systemMusicPlayer
+    var musicPlaying = 0
+    
+    let volumeSlots : Float = 15.0
 	
 	struct songInfo {
 		var trackName: String!
@@ -33,27 +36,33 @@ class MusicController {
 	func controlMusic(controlNumber: Int) {
 		
 		// when CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are relatively up to date
+        
+        
+        let session = AVAudioSession.sharedInstance()
+        do {try session.setActive(false)} catch let error as NSError {print("Unable to activate audio session:  \(error.localizedDescription)")}
+        //if musicPlaying == 1 {musicPlayer.play()}
+        
+        let volume = AVAudioSession.sharedInstance().outputVolume
+        //do {try session.setActive(false)} catch let error as NSError {print("Unable to activate audio session:  \(error.localizedDescription)")}
+        musicPlaying = musicPlayer.playbackState.rawValue
+        
 		switch controlNumber {
 		case 0:
-			if musicPlayer.playbackState.rawValue == 1 {
-				musicPlayer.pause()
-			} else {
-				musicPlayer.play()
-			}
-		case 2:
-			// system volume controls are not accessible from an app
-			break
+            musicPlayer.play(); musicPlaying = 1
+        case 1:
+            musicPlayer.pause(); musicPlaying = 2
 		case 3:
-			musicPlayer.skipToNextItem()
+            musicPlayer.skipToNextItem()
 		case 4:
 			musicPlayer.skipToPreviousItem()
 		case 5:
-			// system volume controls are not accessible from an app
-			break
+            if volume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(volume + (1 / volumeSlots))}
+        case 6:
+            if volume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(volume - (1 / volumeSlots))}
 		default:
 			break
 		}
-		updateMusicInformation(songInfo: getCurrentSongInfo())
+        updateMusicInformation(songInfo: getCurrentSongInfo())
 	}
 	
 	
@@ -63,11 +72,43 @@ class MusicController {
 		return currentSongInfo
 	}
 	
-	func updateMusicInformation(songInfo: MusicController.songInfo) {
-		let bleWriteManager = BLEWriteManager()
+    func updateMusicInformation(songInfo: MusicController.songInfo) {
+        let bleWriteManager = BLEWriteManager()
 		let songInfo = getCurrentSongInfo()
 		
 		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
 		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
+        
+        var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
+        
+        if musicPlaying == 1 {
+            bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManager.musicChars.status)
+        } else {
+            bleWriteManager.writeHexToMusicApp(message: [0x00], characteristic: bleManager.musicChars.status)
+        }
 	}
+    
+    func convertTime(value: Double) -> [UInt8] {
+        let val32 : UInt32 = UInt32(floor(value))
+
+        let byte1 = UInt8(val32 & 0x000000FF)
+        let byte2 = UInt8((val32 & 0x0000FF00) >> 8)
+        let byte3 = UInt8((val32 & 0x00FF0000) >> 16)
+        let byte4 = UInt8((val32 & 0xFF000000) >> 24)
+        
+        return [byte4, byte3, byte2, byte1]
+    }
+}
+
+extension MPVolumeView {
+    static func setVolume(_ volume: Float) {
+        let volumeView = MPVolumeView()
+        let slider = volumeView.subviews.first(where: { $0 is UISlider }) as? UISlider
+
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
+            slider?.value = volume
+        }
+    }
 }
