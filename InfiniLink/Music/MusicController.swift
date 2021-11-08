@@ -7,6 +7,7 @@
 
 import Foundation
 import MediaPlayer
+import NotificationCenter
 
 class MusicController {
 	/*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
@@ -16,7 +17,7 @@ class MusicController {
 	
 	TODO: figure out the formatting that PineTime expects for time elapsed/total time. Hex value of 0101 = 12:32, 0102 = 04:48. Writing decimal does nothing. ASCII also gives wacky results
 	*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
-	
+	static let shared = MusicController()
 	let bleManager = BLEManager.shared
 	
 	var musicPlayer = MPMusicPlayerController.systemMusicPlayer
@@ -31,6 +32,15 @@ class MusicController {
 	
 	enum musicState {
 		case play, pause, nextTrack, prevTrack
+	}
+	init() {
+		musicPlayer.beginGeneratingPlaybackNotifications()
+		NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+	}
+	
+	@objc func onNotificationReceipt(_ notification: Notification) {
+		musicPlaying = musicPlayer.playbackState.rawValue
+		updateMusicInformation(songInfo: getCurrentSongInfo())
 	}
 	
 	func controlMusic(controlNumber: Int) {

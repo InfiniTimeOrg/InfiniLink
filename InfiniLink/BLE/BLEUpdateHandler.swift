@@ -32,7 +32,7 @@ struct BLEUpdatedCharacteristicHandler {
 		switch characteristic.uuid {
 		case bleManager.cbuuidList.musicControl:
 			let musicControl = [UInt8](characteristic.value!)
-			MusicController().controlMusic(controlNumber: Int(musicControl[0]))
+			MusicController.shared.controlMusic(controlNumber: Int(musicControl[0]))
 		case bleManager.cbuuidList.hrm:
 			let bpm = heartRate(from: characteristic)
 			bleManager.heartBPM = Double(bpm)
