@@ -23,13 +23,14 @@ struct StepSettingsSheetDatePicker: View {
 	
 	var body: some View {
 		Text("Manually Add Step Count")
-			.font(.title)
+			.font(.title2)
 			.padding()
 		DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date])
 			.padding()
-		TextField("Number of Steps", text: $addDateValue.value)
+		TextField("Enter Number of Steps", text: $addDateValue.value)
+			.textFieldStyle(.roundedBorder)
 			.padding()
-			.keyboardType(.decimalPad)
+			.keyboardType(.numberPad)
 		Button {
 			StepCountPersistenceManager().setStepCount(steps: Int(addDateValue.value)!, arbitrary: true, date: selectedDate)
 		} label: {

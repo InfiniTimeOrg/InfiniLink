@@ -10,18 +10,29 @@
 import SwiftUI
 
 struct StepSettingsSheet: View {
+	@State var pickerState = 0
 	
 	var body: some View {
 		VStack (alignment: .leading) {
 			SheetCloseButton()
-			Text("Step Count Settings")
+			Text("Steps Settings")
 				.font(.largeTitle)
 				.padding()
 				.padding(.bottom, 20)
-			StepSettingsSheetGoalChange()
-			Divider()
-				.padding()
-			StepSettingsSheetDatePicker()
+			Picker("", selection: $pickerState) {
+				Text("Step Goal").tag(0)
+				Text("Add Steps").tag(1)
+			}.pickerStyle(.segmented)
+				.padding(.bottom)
+				.padding(.horizontal)
+			switch pickerState {
+			case 0:
+				StepSettingsSheetGoalChange()
+			case 1:
+				StepSettingsSheetDatePicker()
+			default:
+				EmptyView()
+			}
 			Spacer()
 		}
 	}

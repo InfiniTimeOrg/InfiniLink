@@ -23,11 +23,12 @@ struct StepSettingsSheetGoalChange: View {
 	
 	var body: some View {
 		Text("Change Step Count Goal")
-			.font(.title)
+			.font(.title2)
 			.padding()
-		TextField("Step Goal", text: $setStepGoal.value)
+		TextField("Enter Step Goal", text: $setStepGoal.value)
+			.textFieldStyle(.roundedBorder)
 			.padding()
-			.keyboardType(.decimalPad)
+			.keyboardType(.numberPad)
 		Button {
 			stepCountGoal = Int(setStepGoal.value)!
 		} label: {
