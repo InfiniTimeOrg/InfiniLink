@@ -89,7 +89,6 @@ struct ChartSettingsSheet: View {
 		Spacer()
 		.onDisappear(){
 			setDateRange()
-			print()
 		}
 		.onAppear() {
 			if chartManager.currentChart == .heart {

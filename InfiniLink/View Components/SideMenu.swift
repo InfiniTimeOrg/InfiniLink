@@ -9,7 +9,6 @@ import SwiftUI
 
 struct SideMenu: View {
 	
-	@Binding var isOpen: Bool
 	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
@@ -18,9 +17,9 @@ struct SideMenu: View {
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
 	
 	func changePage(newPage: Page) {
+		pageSwitcher.currentPage = newPage
 		withAnimation() {
-			pageSwitcher.currentPage = newPage
-			self.isOpen = false
+			pageSwitcher.showMenu = false
 		}
 	}
 	
@@ -38,6 +37,17 @@ struct SideMenu: View {
 			}
 				.padding(.top, 100)
 			HStack {
+				Button(action: {changePage(newPage: .steps)}) {
+					Image(systemName: "figure.walk")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+//						.imageScale(.large)
+					Text("Steps")
+						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
+						.padding(5)
+				}
+			}
+				.padding(.top, 20)
+			HStack {
 				Button(action: {changePage(newPage: .status)}) {
 					Image(systemName: "waveform.path.ecg")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
@@ -47,7 +57,8 @@ struct SideMenu: View {
 						.padding(5)
 				}
 			}
-				.padding(.top, 20)
+			.padding(.top, 20)
+
 			HStack {
 				Button(action: {changePage(newPage: .dfu)}) {
 					Image(systemName: "arrow.up.doc")

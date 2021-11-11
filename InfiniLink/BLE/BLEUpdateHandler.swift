@@ -8,6 +8,7 @@
     
 
 import CoreBluetooth
+import CoreData
 
 struct BLEUpdatedCharacteristicHandler {
 	
@@ -40,10 +41,22 @@ struct BLEUpdatedCharacteristicHandler {
 				ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
 			}
 		case bleManager.cbuuidList.bat:
-			let batData = [UInt8](characteristic.value!)
+			guard let value = characteristic.value else {
+				DebugLogManager.shared.debug(error: "Could not read battery level", log: .ble, date: Date())
+				break
+			}
+			let batData = [UInt8](value)
 			DebugLogManager.shared.debug(error: "battery level report: \(String(batData[0]))", log: .ble, date: Date())
 			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
 			bleManager.batteryLevel = Double(batData[0])
+		case bleManager.cbuuidList.stepCount:
+			guard let value = characteristic.value else {
+				DebugLogManager.shared.debug(error: "Could not read step count", log: .ble, date: Date())
+				break
+			}
+			let stepData = [UInt8](value)
+			bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
+			StepCountPersistenceManager().setStepCount(steps: bleManager.stepCount)
 		default:
 			break
 		}

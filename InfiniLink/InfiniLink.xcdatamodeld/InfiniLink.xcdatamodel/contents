@@ -10,8 +10,13 @@
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="uuid" optional="YES" attributeType="String"/>
     </entity>
+    <entity name="StepCounts" representedClassName="StepCounts" syncable="YES" codeGenerationType="class">
+        <attribute name="steps" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    </entity>
     <elements>
         <element name="ChartDataPoint" positionX="-63" positionY="-18" width="128" height="89"/>
         <element name="DeviceNames" positionX="-54" positionY="18" width="128" height="59"/>
+        <element name="StepCounts" positionX="-54" positionY="18" width="128" height="59"/>
     </elements>
 </model>

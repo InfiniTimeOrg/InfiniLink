@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */; };
+		2601AF6727220CED00D999EF /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF6627220CED00D999EF /* StepsView.swift */; };
+		2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF692722110700D999EF /* StepProgressGauge.swift */; };
 		2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */; };
 		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
 		2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */; };
@@ -18,6 +20,9 @@
 		2632388C26F265B100D72B43 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388B26F265B100D72B43 /* MainView.swift */; };
 		2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388D26F297CB00D72B43 /* OnboardingBody.swift */; };
 		2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */; };
+		263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462E92729B71500D3278D /* StepCalendarView.swift */; };
+		263462ED2729F68600D3278D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EC2729F68600D3278D /* CalendarView.swift */; };
+		263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */; };
 		263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B426CD673900676BF0 /* ChartTabs.swift */; };
 		263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B926CDF13400676BF0 /* HeartChart.swift */; };
 		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
@@ -43,9 +48,11 @@
 		266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E526FA7676007481A6 /* HomeScreen.swift */; };
 		266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E926FA91F3007481A6 /* DeviceInfo.swift */; };
 		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
+		267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */; };
 		268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */; };
 		268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */; };
 		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
+		26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */; };
 		26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E842704E6F3007966F6 /* SheetManager.swift */; };
 		26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E882704E97C007966F6 /* DebugViewBLE.swift */; };
 		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
@@ -95,6 +102,8 @@
 
 /* Begin PBXFileReference section */
 		2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InfiniLink.xcdatamodel; sourceTree = "<group>"; };
+		2601AF6627220CED00D999EF /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
+		2601AF692722110700D999EF /* StepProgressGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepProgressGauge.swift; sourceTree = "<group>"; };
 		2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewSelector.swift; sourceTree = "<group>"; };
 		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
 		2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewBody.swift; sourceTree = "<group>"; };
@@ -105,6 +114,9 @@
 		2632388B26F265B100D72B43 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
 		2632388D26F297CB00D72B43 /* OnboardingBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBody.swift; sourceTree = "<group>"; };
 		2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDismissButton.swift; sourceTree = "<group>"; };
+		263462E92729B71500D3278D /* StepCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCalendarView.swift; sourceTree = "<group>"; };
+		263462EC2729F68600D3278D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
+		263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewExtensions.swift; sourceTree = "<group>"; };
 		263B20B426CD673900676BF0 /* ChartTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTabs.swift; sourceTree = "<group>"; };
 		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
 		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
@@ -136,9 +148,11 @@
 		266F53E526FA7676007481A6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
+		267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWeeklyGraph.swift; sourceTree = "<group>"; };
 		268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetMain.swift; sourceTree = "<group>"; };
 		268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetSliders.swift; sourceTree = "<group>"; };
 		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
+		2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountPersistenceManager.swift; sourceTree = "<group>"; };
 		26A40E842704E6F3007966F6 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		26A40E882704E97C007966F6 /* DebugViewBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewBLE.swift; sourceTree = "<group>"; };
 		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
@@ -195,6 +209,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2601AF68272210EB00D999EF /* Steps View Components */ = {
+			isa = PBXGroup;
+			children = (
+				2601AF692722110700D999EF /* StepProgressGauge.swift */,
+				267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */,
+				263462EB2729F64600D3278D /* StepCalendar */,
+			);
+			path = "Steps View Components";
+			sourceTree = "<group>";
+		};
 		2617EF3A27036D9100FE6F48 /* What's New */ = {
 			isa = PBXGroup;
 			children = (
@@ -212,6 +236,16 @@
 				2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */,
 			);
 			path = Onboarding;
+			sourceTree = "<group>";
+		};
+		263462EB2729F64600D3278D /* StepCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				263462E92729B71500D3278D /* StepCalendarView.swift */,
+				263462EC2729F68600D3278D /* CalendarView.swift */,
+				263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */,
+			);
+			path = StepCalendar;
 			sourceTree = "<group>";
 		};
 		263B20B626CD673D00676BF0 /* Chart View Components */ = {
@@ -316,6 +350,8 @@
 				26A40EE6270A1F78007966F6 /* Home View */,
 				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
 				26F426EE26C72D7D00D0866B /* ChartView.swift */,
+				2601AF6627220CED00D999EF /* StepsView.swift */,
+				2601AF68272210EB00D999EF /* Steps View Components */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
 				26A40E942708C7F8007966F6 /* ScanningPopover.swift */,
 				26A40E872704E964007966F6 /* Debug View */,
@@ -437,6 +473,7 @@
 				264AE04527026BD6001504A7 /* UptimeManager.swift */,
 				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
 				26C5FAD426FBB76100921207 /* DeviceNameManager.swift */,
+				2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -591,6 +628,7 @@
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
 				26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */,
 				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
+				263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */,
 				26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */,
 				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
 				264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */,
@@ -612,26 +650,32 @@
 				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */,
+				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
 				2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */,
 				26A40E952708C7F8007966F6 /* ScanningPopover.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
+				26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */,
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
+				2601AF6727220CED00D999EF /* StepsView.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
+				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
 				266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
 				263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
+				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */,
 				26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
+				267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */,
 				26C5FAD526FBB76100921207 /* DeviceNameManager.swift in Sources */,
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
@@ -793,10 +837,11 @@
 		264BFE6926BC51CF0050A223 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
 				DEVELOPMENT_TEAM = 99BHY6DC82;
 				ENABLE_PREVIEWS = YES;
@@ -806,7 +851,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.2;
+				MARKETING_VERSION = 0.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
@@ -817,10 +862,11 @@
 		264BFE6A26BC51CF0050A223 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
 				DEVELOPMENT_TEAM = 99BHY6DC82;
 				ENABLE_PREVIEWS = YES;
@@ -830,7 +876,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.2;
+				MARKETING_VERSION = 0.9.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;

@@ -106,7 +106,6 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
-		print("DFU \(level.name()): \(message)")
 		let level = level.name()
 		DebugLogManager.shared.debug(error: "DFU \(level): \(message)", log: .dfu, date: nil)
 	}
