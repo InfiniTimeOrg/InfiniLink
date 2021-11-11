@@ -14,8 +14,6 @@ struct StepCalendarView: View {
 	
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
 	private var existingStepCounts: FetchedResults<StepCounts>
-	
-	@Binding var currentPercentage: Float
 	@Binding var stepCountGoal: Int
 
 	private var year: DateInterval {

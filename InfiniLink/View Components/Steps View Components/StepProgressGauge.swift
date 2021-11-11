@@ -13,7 +13,6 @@ struct StepProgressGauge: View {
 	@ObservedObject var bleManager = BLEManager.shared
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
 	private var existingStepCounts: FetchedResults<StepCounts>
-	@Binding var currentPercentage: Float
 	@Binding var stepCountGoal: Int
 	var calendar: Bool
 	@State var backgroundColor = Color.clear

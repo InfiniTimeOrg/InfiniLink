@@ -10,14 +10,8 @@
 import CoreData
 import SwiftUI
 
-class StepCountPersistenceManager: ObservableObject {
-	static let shared = StepCountPersistenceManager()
-	@Published var currentCount: Int32 = 0
+struct StepCountPersistenceManager {
 	let viewContext = PersistenceController.shared.container.viewContext
-	
-	init() {
-		retrieveStepCount(date: Date())
-	}
 	
 	func lookupStepCounts(write: Bool) -> [StepCounts] {
 		var existingCounts: [StepCounts] = []
@@ -28,15 +22,6 @@ class StepCountPersistenceManager: ObservableObject {
 			DebugLogManager.shared.debug(error: "Error accessing step counts: \(error)", log: .app, date: Date())
 		}
 		return existingCounts
-	}
-	
-	func retrieveStepCount(date: Date) {
-		let existingCounts = lookupStepCounts(write: true)
-		for i in existingCounts {
-			if Calendar.current.isDate(i.timestamp!, inSameDayAs: date) {
-				currentCount = i.steps
-			}
-		}
 	}
 	
 	func setStepCount(steps: Int, arbitrary: Bool, date: Date) {
@@ -76,7 +61,6 @@ class StepCountPersistenceManager: ObservableObject {
 		} catch {
 			DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
 		}
-		retrieveStepCount(date: Date())
 	}
 	
 	func saveNewStepCount(steps: Int, date: Date) {
@@ -88,6 +72,5 @@ class StepCountPersistenceManager: ObservableObject {
 		} catch {
 			DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
 		}
-		retrieveStepCount(date: Date())
 	}
 }

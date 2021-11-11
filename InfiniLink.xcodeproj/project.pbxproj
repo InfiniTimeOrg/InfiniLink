@@ -50,6 +50,8 @@
 		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
 		267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */; };
 		267C2EFA273DB62800F464B0 /* StepsSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */; };
+		267C2EFD273DDB5500F464B0 /* StepSettingsGoalChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EFC273DDB5500F464B0 /* StepSettingsGoalChange.swift */; };
+		267C2EFF273DDBFF00F464B0 /* StepSettingsDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EFE273DDBFF00F464B0 /* StepSettingsDatePicker.swift */; };
 		268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */; };
 		268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */; };
 		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
@@ -151,6 +153,8 @@
 		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
 		267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWeeklyGraph.swift; sourceTree = "<group>"; };
 		267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsSettingsSheet.swift; sourceTree = "<group>"; };
+		267C2EFC273DDB5500F464B0 /* StepSettingsGoalChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepSettingsGoalChange.swift; sourceTree = "<group>"; };
+		267C2EFE273DDBFF00F464B0 /* StepSettingsDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepSettingsDatePicker.swift; sourceTree = "<group>"; };
 		268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetMain.swift; sourceTree = "<group>"; };
 		268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetSliders.swift; sourceTree = "<group>"; };
 		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
@@ -373,6 +377,16 @@
 			path = "View Utilities";
 			sourceTree = "<group>";
 		};
+		267C2EFB273DDB3B00F464B0 /* StepsSettingsSheet */ = {
+			isa = PBXGroup;
+			children = (
+				267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */,
+				267C2EFC273DDB5500F464B0 /* StepSettingsGoalChange.swift */,
+				267C2EFE273DDBFF00F464B0 /* StepSettingsDatePicker.swift */,
+			);
+			path = StepsSettingsSheet;
+			sourceTree = "<group>";
+		};
 		268E773D27174B6D000DF90D /* ChartSettingsSheet */ = {
 			isa = PBXGroup;
 			children = (
@@ -451,7 +465,7 @@
 				26A40E842704E6F3007966F6 /* SheetManager.swift */,
 				268E773D27174B6D000DF90D /* ChartSettingsSheet */,
 				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
-				267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */,
+				267C2EFB273DDB3B00F464B0 /* StepsSettingsSheet */,
 				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
 				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
 				2617EF3A27036D9100FE6F48 /* What's New */,
@@ -641,6 +655,7 @@
 				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,
 				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
 				268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */,
+				267C2EFF273DDBFF00F464B0 /* StepSettingsDatePicker.swift in Sources */,
 				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
 				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
@@ -678,6 +693,7 @@
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */,
 				26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */,
+				267C2EFD273DDB5500F464B0 /* StepSettingsGoalChange.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */,
 				26C5FAD526FBB76100921207 /* DeviceNameManager.swift in Sources */,

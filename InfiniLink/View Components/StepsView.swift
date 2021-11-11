@@ -12,12 +12,10 @@ import SwiftUI
 struct StepsView: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
-	@ObservedObject var stepManager = StepCountPersistenceManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("stepCountGoal") var stepCountGoal = 10000
 	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
 	private var chartPoints: FetchedResults<StepCounts>
-	@State var stepGoalPercentage: Float = 0.0
 	@State var selection: Int = 2
 	
 	var body: some View {
@@ -48,7 +46,7 @@ struct StepsView: View {
 						}
 						.padding(.top)
 						.tag(1)
-					StepProgressGauge(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal, calendar: false)
+					StepProgressGauge(stepCountGoal: $stepCountGoal, calendar: false)
 							.padding()
 							.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3), alignment: .center)
 						.tabItem {
@@ -57,7 +55,7 @@ struct StepsView: View {
 						}
 						.padding(.top)
 						.tag(2)
-					StepCalendarView(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal)
+					StepCalendarView(stepCountGoal: $stepCountGoal)
 							.padding()
 							.frame(alignment: .init(horizontal: .center, vertical: .top))
 						.tabItem {
@@ -66,15 +64,6 @@ struct StepsView: View {
 						}
 						.padding(.top)
 						.tag(3)
-				}
-				.onChange(of: stepManager.currentCount) { _ in
-					stepGoalPercentage = (Float(stepManager.currentCount)/Float(stepCountGoal))
-				}
-				.onChange(of: stepCountGoal) { _ in
-					stepGoalPercentage = (Float(stepManager.currentCount)/Float(stepCountGoal))
-				}
-				.onAppear {
-					stepGoalPercentage = (Float(stepManager.currentCount)/Float(stepCountGoal))
 				}
 			}
 		}
