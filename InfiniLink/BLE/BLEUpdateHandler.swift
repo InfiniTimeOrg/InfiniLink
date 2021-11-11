@@ -56,7 +56,7 @@ struct BLEUpdatedCharacteristicHandler {
 			}
 			let stepData = [UInt8](value)
 			bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
-			StepCountPersistenceManager().setStepCount(steps: bleManager.stepCount)
+			StepCountPersistenceManager().setStepCount(steps: bleManager.stepCount, arbitrary: false, date: Date())
 		default:
 			break
 		}

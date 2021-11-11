@@ -25,20 +25,19 @@ struct StepWeeklyChart: View {
 		let today = calendar.startOfDay(for: Date())
 		var week = [Date]()
 		if let thisWeek = calendar.dateInterval(of: .weekOfYear, for: today) {
-			for i in 0...6 {
-				if let day = calendar.date(byAdding: .day, value: i, to: thisWeek.start) {
+			for n in 0...6 {
+				if let day = calendar.date(byAdding: .day, value: n, to: thisWeek.start) {
 					week += [day]
 					let shortFormatter = DateFormatter()
 					shortFormatter.dateFormat = "EEEEE"
 					let longFormatter = DateFormatter()
 					longFormatter.dateFormat = "EEEE"
 					let color = ColourStyle(colour: .blue)
+					dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: day, colour: color))
 					
 					for i in chartPoints {
 						if calendar.isDate(i.timestamp!, inSameDayAs: day) {
-							dataPoints.append(BarChartDataPoint(value: Double(i.steps), xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color))
-						} else {
-							dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color))
+							dataPoints[n] = BarChartDataPoint(value: Double(i.steps), xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color)
 						}
 					}
 				}
@@ -85,6 +84,6 @@ struct StepWeeklyChart: View {
 			.touchOverlay(chartData: chartData)
 			.xAxisLabels(chartData: chartData)
 			.yAxisLabels(chartData: chartData)
-			.id(chartData.id)
+//			.id(chartData.id)
 	}
 }

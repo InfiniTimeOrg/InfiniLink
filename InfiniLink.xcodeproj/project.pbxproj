@@ -49,6 +49,7 @@
 		266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E926FA91F3007481A6 /* DeviceInfo.swift */; };
 		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
 		267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */; };
+		267C2EFA273DB62800F464B0 /* StepsSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */; };
 		268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */; };
 		268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */; };
 		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
@@ -149,6 +150,7 @@
 		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
 		267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWeeklyGraph.swift; sourceTree = "<group>"; };
+		267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsSettingsSheet.swift; sourceTree = "<group>"; };
 		268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetMain.swift; sourceTree = "<group>"; };
 		268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetSliders.swift; sourceTree = "<group>"; };
 		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
@@ -449,6 +451,7 @@
 				26A40E842704E6F3007966F6 /* SheetManager.swift */,
 				268E773D27174B6D000DF90D /* ChartSettingsSheet */,
 				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
+				267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */,
 				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
 				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
 				2617EF3A27036D9100FE6F48 /* What's New */,
@@ -632,6 +635,7 @@
 				26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */,
 				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
 				264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */,
+				267C2EFA273DB62800F464B0 /* StepsSettingsSheet.swift in Sources */,
 				2632388C26F265B100D72B43 /* MainView.swift in Sources */,
 				2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */,
 				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,

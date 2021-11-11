@@ -12,8 +12,11 @@ import SwiftUI
 struct StepsView: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
+	@ObservedObject var stepManager = StepCountPersistenceManager.shared
 	@Environment(\.colorScheme) var colorScheme
-	@State var stepCountGoal = 10000
+	@AppStorage("stepCountGoal") var stepCountGoal = 10000
+	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
+	private var chartPoints: FetchedResults<StepCounts>
 	@State var stepGoalPercentage: Float = 0.0
 	@State var selection: Int = 2
 	
@@ -26,6 +29,14 @@ struct StepsView: View {
 						.padding(.leading)
 						.padding(.vertical)
 						.frame(alignment: .leading)
+					Button {
+						SheetManager.shared.sheetSelection = .stepSettings
+						SheetManager.shared.showSheet = true
+					} label: {
+						Image(systemName: "gear")
+							.imageScale(.large)
+							.padding(.vertical)
+					}
 					Spacer()
 				}
 				TabView(selection: $selection) {
@@ -56,11 +67,14 @@ struct StepsView: View {
 						.padding(.top)
 						.tag(3)
 				}
-				.onChange(of: bleManager.stepCount) { _ in
-					stepGoalPercentage = (Float(bleManager.stepCount)/Float(stepCountGoal))
+				.onChange(of: stepManager.currentCount) { _ in
+					stepGoalPercentage = (Float(stepManager.currentCount)/Float(stepCountGoal))
+				}
+				.onChange(of: stepCountGoal) { _ in
+					stepGoalPercentage = (Float(stepManager.currentCount)/Float(stepCountGoal))
 				}
 				.onAppear {
-					stepGoalPercentage = (Float(bleManager.stepCount)/Float(stepCountGoal))
+					stepGoalPercentage = (Float(stepManager.currentCount)/Float(stepCountGoal))
 				}
 			}
 		}
