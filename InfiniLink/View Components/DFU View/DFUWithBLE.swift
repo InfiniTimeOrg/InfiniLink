@@ -39,8 +39,7 @@ struct DFUWithBLE: View {
 							
 							fileUrl.stopAccessingSecurityScopedResource()
 						} catch{
-							print ("error reading")
-							print (error.localizedDescription)
+							DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
 						}
 					}
 				List {

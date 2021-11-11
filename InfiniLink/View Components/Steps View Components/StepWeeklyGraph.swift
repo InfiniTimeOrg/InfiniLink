@@ -41,7 +41,6 @@ struct StepWeeklyChart: View {
 							dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color))
 						}
 					}
-					print("data point for \(longFormatter.string(from: day)): \(dataPoints[i])")
 				}
 			}
 		}
