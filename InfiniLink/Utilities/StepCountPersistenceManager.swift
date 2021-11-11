@@ -15,10 +15,6 @@ struct StepCountPersistenceManager {
 	func lookupStepCounts(write: Bool) -> [StepCounts] {
 		var existingCounts: [StepCounts] = []
 		let request = NSFetchRequest<StepCounts>(entityName: "StepCounts")
-		if write {
-			request.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-			request.fetchLimit = 1
-		}
 		do {
 			try existingCounts = viewContext.fetch(request)
 		} catch {
@@ -30,29 +26,38 @@ struct StepCountPersistenceManager {
 	func setStepCount(steps: Int) {
 		let existingCounts = lookupStepCounts(write: true)
 		
-		for i in existingCounts {
-			if Calendar.current.isDateInToday(i.timestamp!) {
-				if steps > i.steps {
-					i.timestamp = Date()
-					i.steps = Int32(steps)
-					do {
-						try viewContext.save()
-					} catch {
-						DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
-					}
-					return
-				}
+		let countExists = existingCounts.contains { count in
+			if Calendar.current.isDateInToday(count.timestamp!) {
+				return true
+			} else {
+				return false
 			}
 		}
 		
-		let newCount = StepCounts(context: viewContext)
-		newCount.steps = Int32(steps)
-		newCount.timestamp = Date()
-
-		do {
-			try viewContext.save()
-		} catch {
-			DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
+		if countExists {
+			for i in existingCounts {
+				if Calendar.current.isDateInToday(i.timestamp!) {
+					if steps > i.steps {
+						i.timestamp = Date()
+						i.steps = Int32(steps)
+						do {
+							try viewContext.save()
+						} catch {
+							DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
+						}
+						return
+					}
+				}
+			}
+		} else {
+			let newCount = StepCounts(context: viewContext)
+			newCount.steps = Int32(steps)
+			newCount.timestamp = Date()
+			do {
+				try viewContext.save()
+			} catch {
+				DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
+			}
 		}
 	}
 }

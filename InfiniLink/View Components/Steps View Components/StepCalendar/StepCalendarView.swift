@@ -26,32 +26,34 @@ struct StepCalendarView: View {
 	}
 
 	var body: some View {
-		CalendarView() { date in
-			ZStack{
-				Text("30")
-					.hidden()
-					.padding(8)
-					.padding(.vertical, 2)
-					.overlay(
-						Text(String(self.calendar.component(.day, from: date)))
-					)
-					.overlay(
-						setStepHistory(date: date)
-					)
+		VStack {
+			CalendarView() { date in
+				ZStack{
+					setStepHistory(date: date)
+					Text("30")
+						.hidden()
+						.padding(8)
+						.padding(.vertical, 2)
+						.overlay(
+							Text(String(self.calendar.component(.day, from: date)))
+						)
+				}
 			}
+			Spacer()
 		}
 	}
 	
-	func setStepHistory(date: Date) -> AnyView {
-		if Calendar.current.isDateInToday(date) {
-			return AnyView(StepProgressGauge(currentPercentage: $currentPercentage, stepCountGoal: $stepCountGoal, calendar: true))
-		} else {
-			for stepCount in existingStepCounts {
-				if Calendar.current.compare(stepCount.timestamp!, to: date, toGranularity: .day) == .orderedSame {
-					return AnyView(CalendarGauge(stepCountGoal: $stepCountGoal, oldCount: stepCount.steps))
-				}
+	func getStepHistory(date: Date) -> Int32 {
+		for stepCount in existingStepCounts {
+			if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) { //(stepCount.timestamp!, to: date, toGranularity: .day) == .orderedSame {
+				return stepCount.steps
 			}
-			return AnyView(CalendarGauge(stepCountGoal: $stepCountGoal, oldCount: 0))
 		}
+		return 0
+	}
+	
+	func setStepHistory(date: Date) -> AnyView {
+		let steps = getStepHistory(date: date)
+		return AnyView(CalendarGauge(stepCountGoal: $stepCountGoal, oldCount: steps))
 	}
 }

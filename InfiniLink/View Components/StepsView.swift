@@ -29,10 +29,8 @@ struct StepsView: View {
 					Spacer()
 				}
 				TabView(selection: $selection) {
-					StepProgressGauge(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal, calendar: false)
+					StepWeeklyChart(stepCountGoal: $stepCountGoal)
 							.padding()
-							.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3), alignment: .center)
-
 						.tabItem {
 							Image(systemName: "chart.bar.xaxis")
 							Text("Week")
@@ -41,7 +39,7 @@ struct StepsView: View {
 						.tag(1)
 					StepProgressGauge(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal, calendar: false)
 							.padding()
-							.frame(alignment: .center)
+							.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3), alignment: .center)
 						.tabItem {
 							Image(systemName: "figure.walk")
 							Text("Current")
@@ -50,7 +48,7 @@ struct StepsView: View {
 						.tag(2)
 					StepCalendarView(currentPercentage: $stepGoalPercentage, stepCountGoal: $stepCountGoal)
 							.padding()
-							.frame(alignment: .center)
+							.frame(alignment: .init(horizontal: .center, vertical: .top))
 						.tabItem {
 							Image(systemName: "calendar")
 							Text("Month")

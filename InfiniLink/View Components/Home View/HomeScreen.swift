@@ -37,7 +37,7 @@ struct HomeScreen: View {
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
 			List{
-				Section(header: RenameDeviceHeader(renamingDevice: $renamingDevice)) {
+				Section(header: RenameDeviceHeader(renamingDevice: $renamingDevice, fieldText: $changedName)) {
 					if renamingDevice {
 						TextField(deviceName, text: $changedName, onCommit: {
 							nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
