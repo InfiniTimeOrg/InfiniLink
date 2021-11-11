@@ -8,6 +8,7 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Read and chart battery level data and heart rate data from watch
 - Chart persistence, with filters for last hour, last day, and last week
 - Music controls on InfiniTime can control Apple Music.
+- Step counter with current step count, weekly chart, and monthly calendar
 - Check for updates to InfiniTime using the GitHub API, download them directly with the app, and send them to the PineTime. 
     - Manual updates can be completed with DFU zip files downloaded from [InfiniTime's GitHub Releases Page](https://github.com/JF002/InfiniTime/releases)
 
