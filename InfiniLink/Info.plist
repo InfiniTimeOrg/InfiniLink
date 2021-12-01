@@ -25,7 +25,7 @@
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This app needs permission to allow your PineTime to control your music.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app uses bletooth to communicate with your PineTime.</string>
+	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
