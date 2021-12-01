@@ -17,7 +17,7 @@ struct WhatsNewBody: View {
 				.padding()
 			Text("Improved Apple Music Functionality:\n- Big thanks to @WowieMan on Github for this!\n- Current time and total run time the currently playing track is shown on InfiniTime now\n- Play/pause state is reflected on InfiniTime\n- Volume buttons in InfiniTime work now.\n- *Please note that this still only applies to Apple Music for now.*")
 				.padding()
-			Text("New Logo:\n- Again, big thanks to @WowieMan for the new logo! This logo was submitted a long time ago, and I kept meaning to add it before submitting releases to TestFlight, and then forgetting. ")
+			Text("New Logo:\n- Big thanks to @WowieMan for the new logo as well! This logo was submitted a long time ago, and I kept meaning to add it before submitting releases to TestFlight, and then forgetting. ")
 				.padding()
 		}
 	}
