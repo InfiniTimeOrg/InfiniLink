@@ -104,7 +104,7 @@ class MusicController {
 	}
     
     func convertTime(value: Double) -> [UInt8] {
-        let val32 : UInt32 = UInt32(floor(value))
+        var val32 : UInt32 = UInt32(0); if value < Double(UInt32.max) && Double(UInt32.max) >= 0.0 {val32 = UInt32(floor(value))}
 
         let byte1 = UInt8(val32 & 0x000000FF)
         let byte2 = UInt8((val32 & 0x0000FF00) >> 8)
