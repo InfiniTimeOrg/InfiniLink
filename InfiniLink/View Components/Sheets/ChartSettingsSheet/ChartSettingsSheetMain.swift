@@ -81,7 +81,11 @@ struct ChartSettingsSheet: View {
 			case 1:
 				ChartSettingsSheetSliders(chartRangeState: self.$chartRangeState)
 			case 2:
-				ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: chartPoints[0].timestamp)
+				if chartPoints.count > 0 {
+					ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: chartPoints[0].timestamp!)
+				} else {
+					ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? (Date() - 2419200))
+				}
 			default:
 				EmptyView()
 			}
