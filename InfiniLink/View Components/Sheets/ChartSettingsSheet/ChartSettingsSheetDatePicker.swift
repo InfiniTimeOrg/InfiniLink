@@ -19,13 +19,13 @@ struct ChartSettingsSheetDatePicker: View {
 	var body: some View {
 		List {
 			DatePicker(
-				"Start Date",
+				NSLocalizedString("start_date", comment: ""),
 				selection: $chartRangeState.startDate,
 				in: (oldestPoint ?? oneMonthAgo)...today,
 				displayedComponents: [.date, .hourAndMinute]
 			)
 			DatePicker(
-				"End Date",
+				NSLocalizedString("end_date", comment: ""),
 				selection: $chartRangeState.endDate,
 				in: chartRangeState.startDate...today,
 				displayedComponents: [.date, .hourAndMinute]

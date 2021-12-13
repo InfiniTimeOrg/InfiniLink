@@ -23,7 +23,7 @@ struct DFUWithBLE: View {
 	var body: some View {
 		ZStack {
 			VStack (alignment: .leading){
-				Text("Update Firmware")
+				Text(NSLocalizedString("update_firmware", comment: ""))
 					.font(.largeTitle)
 					.padding()
 					.fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
@@ -43,7 +43,7 @@ struct DFUWithBLE: View {
 						}
 					}
 				List {
-					Section(header: Text("Current Firmware")) {
+					Section(header: Text(NSLocalizedString("current_firmware", comment: ""))) {
 						Text(deviceInfo.firmware)
 					}
 					Section(header: ClearSelectedFirmwareHeader()) {
@@ -89,7 +89,7 @@ struct ClearSelectedFirmwareHeader: View {
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
 	var body: some View {
 		HStack{
-			Text("Firmware File")
+			Text(NSLocalizedString("firmware_file", comment: ""))
 			Spacer()
 			if dfuUpdater.firmwareSelected {
 				Button{
@@ -97,7 +97,7 @@ struct ClearSelectedFirmwareHeader: View {
 					dfuUpdater.firmwareSelected = false
 					dfuUpdater.firmwareFilename = ""
 				} label: {
-					Text("Clear")
+					Text(NSLocalizedString("clear", comment: ""))
 				}
 			}
 		}

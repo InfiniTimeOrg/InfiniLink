@@ -16,7 +16,7 @@ struct ChartView: View {
 	var body: some View {
 		VStack {
 			HStack {
-				Text("Charts")
+				Text(NSLocalizedString("charts", comment: ""))
 					.font(.largeTitle)
 					.padding(.leading)
 					.padding(.vertical)

@@ -13,9 +13,9 @@ import SwiftUI
 struct DFUWithoutBLE: View {
 	var body: some View{
 		VStack {
-			Text("Bluetooth Not Available")
+			Text(NSLocalizedString("bluetooth_not_available", comment: ""))
 				.font(.largeTitle)
-			Text("Please enable Bluetooth and try again.")
+			Text(NSLocalizedString("please_enable_bluetooth_try_again", comment: ""))
 				.font(.title)
 		}
 	}

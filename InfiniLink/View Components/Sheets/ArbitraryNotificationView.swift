@@ -20,13 +20,13 @@ struct ArbitraryNotificationSheet: View {
 	var body: some View {
 		SheetCloseButton()
 		VStack{
-			Text("Send Notification")
+			Text(NSLocalizedString("send_notification", comment: ""))
 				.font(.title)
 				.padding()
 			Divider()
 				.padding(.horizontal)
 			HStack {
-				Text("Title: ")
+				Text("\(NSLocalizedString("title", comment: "")): ")
 					.padding(.leading)
 				TextField("", text: $notificationTitle)
 			}
@@ -42,7 +42,7 @@ struct ArbitraryNotificationSheet: View {
 				SheetManager.shared.showSheet = false
 				SheetManager.shared.sheetSelection = .connect
 			}) {
-				Text("Send Notification")
+				Text(NSLocalizedString("send_notification", comment: ""))
 					.padding()
 					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)

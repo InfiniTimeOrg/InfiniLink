@@ -50,13 +50,13 @@ struct HomeScreen: View {
 						Text(deviceInfo.deviceName)
 					}
 				}
-				Section(header: Text("Device Information")) {
+				Section(header: Text(NSLocalizedString("device_information", comment: ""))) {
 					if !bleManager.isConnectedToPinetime {
-						Text("Firmware Version: ")
-						Text("Model: ")
+						Text(NSLocalizedString("firmware_version", comment: ""))
+						Text(NSLocalizedString("model", comment: ""))
 					} else {
-						Text("Firmware Version: " + deviceInfo.firmware)
-						Text("Model: " + deviceInfo.modelNumber)
+						Text(NSLocalizedString("firmware_version", comment: "") + deviceInfo.firmware)
+						Text(NSLocalizedString("model", comment: "") + deviceInfo.modelNumber)
 							.onAppear() {
 								// check if an update has been made in the last 24 hours
 								if downloadManager.lastCheck == nil || downloadManager.lastCheck.timeIntervalSince(Date()) <  -86400 {
@@ -66,27 +66,27 @@ struct HomeScreen: View {
 							}
 					}
 				}
-				Section(header: Text("Uptime Stats")) {
+				Section(header: Text(NSLocalizedString("update_stats", comment: ""))) {
 					if UptimeManager.shared.lastDisconnect == nil {
-						Text("Last disconnect: ")
+						Text(NSLocalizedString("last_disconnect", comment: ""))
 					} else {
-						Text("Last disconnect: " + uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
+						Text(NSLocalizedString("last_disconnect", comment: "") + uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
 						
 					}
 					if currentUptime == nil {
-						Text("Uptime: ")
+						Text(NSLocalizedString("uptime", comment: ""))
 					} else {
-						Text("Uptime: " + (dateFormatter.string(from: currentUptime) ?? ""))
+						Text(NSLocalizedString("uptime", comment: "") + (dateFormatter.string(from: currentUptime) ?? ""))
 					}
 				}.onReceive(timer, perform: { _ in
 					if uptimeManager.connectTime != nil {
 						currentUptime = -uptimeManager.connectTime.timeIntervalSinceNow
 					}
 				})
-				Section(header: Text("Step Count")) {
+				Section(header: Text(NSLocalizedString("step_count", comment: ""))) {
 					Text(String(bleManager.stepCount))
 				}
-				Section(header: Text("Firmware Updates")) {
+				Section(header: Text(NSLocalizedString("firmware_updates", comment: ""))) {
 					if bleManager.isConnectedToPinetime {
 						if self.updateAvailable {
 							Button{
@@ -97,10 +97,10 @@ struct HomeScreen: View {
 								DownloadManager.shared.startDownload(url: asset.browser_download_url)
 								PageSwitcher.shared.currentPage = .dfu
 							} label: {
-								Text("Firmware Update is Available!")
+								Text(NSLocalizedString("firmware_update_is_available", comment: ""))
 							}.disabled(!bleManager.isConnectedToPinetime)
 						} else {
-							Text("No Updates Available")
+							Text(NSLocalizedString("no_updates_available", comment: ""))
 						}
 					} else {
 						Text("")

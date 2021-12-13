@@ -84,6 +84,7 @@
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* ChartView.swift */; };
+		F9A88B642765357600B2B94C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9A88B662765357600B2B94C /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -186,6 +187,8 @@
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		26F426EE26C72D7D00D0866B /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		F99B8DCC276778FF0096A84D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
+		F9A88B652765357600B2B94C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -319,6 +322,7 @@
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
 				2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */,
 				264BFE4726BC51CF0050A223 /* Preview Content */,
+				F9A88B662765357600B2B94C /* Localizable.strings */,
 			);
 			path = InfiniLink;
 			sourceTree = "<group>";
@@ -584,6 +588,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
@@ -607,6 +612,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				264BFE7826BCAAC00050A223 /* README.md in Resources */,
+				F9A88B642765357600B2B94C /* Localizable.strings in Resources */,
 				264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */,
 				264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */,
 			);
@@ -737,6 +743,18 @@
 		};
 /* End PBXTargetDependency section */
 
+/* Begin PBXVariantGroup section */
+		F9A88B662765357600B2B94C /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F9A88B652765357600B2B94C /* en */,
+				F99B8DCC276778FF0096A84D /* ru */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
 /* Begin XCBuildConfiguration section */
 		264BFE6626BC51CF0050A223 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -863,7 +881,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = 99BHY6DC82;
+				DEVELOPMENT_TEAM = R8KN8N4CWQ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -872,7 +890,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.9.3;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.atsygankov.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -888,7 +906,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = 99BHY6DC82;
+				DEVELOPMENT_TEAM = R8KN8N4CWQ;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -897,7 +915,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.9.3;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.atsygankov.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
