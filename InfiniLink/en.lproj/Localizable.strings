@@ -1,0 +1,200 @@
+/* 
+  Localizable.strings
+  InfiniLink
+
+  Created by Александр Цыганков on 11.12.2021.
+  
+*/
+
+// - HomeScreen
+"device_information" = "Device Information";
+"firmware_version" = "Firmware Version: ";
+"model" = "Model: ";
+"update_stats" = "Uptime Stats";
+"last_disconnect" = "Last disconnect: ";
+"uptime" = "Uptime: ";
+"step_count" = "Step Count";
+"firmware_updates" = "Firmware Updates";
+"firmware_update_is_available" = "Firmware Update is Available!";
+"no_updates_available" = "No Updates Available";
+"device_name" = "Device Name";
+"rename" = "Rename";
+
+// - SideMenu
+"home" = "Home";
+"steps" = "Steps";
+"charts" = "Charts";
+"update" = "Update";
+"settings" = "Settings";
+"bluetooth_off" = "Bluetooth Off";
+
+// - ChartView components
+"heart" = "Heart: ";
+"battery" = "Battery: ";
+
+// - HeartChart
+"bpm" = "BPM";
+"insufficient_heart_rate_data" = "Insufficient Heart Rate Data";
+
+// - BetteryChart
+"insufficient_battery_data" = "Insufficient Battery Data";
+
+// - StepsView
+"week" = "Week";
+"current" = "Current";
+"month" = "Month";
+
+// - StepProgressGauge
+"steps_goal" = "Step Goal";
+
+// - StepWeeklyChart
+"steps_this_week" = "Steps This Week";
+
+// - Settings_Page
+"connect_options" = "Connect Options";
+"autoconnect_to_pinetime" = "Autoconnect to PineTime";
+"autoconnect_device_uuid" = "Autoconnect Device UUID";
+"use_current_device_for_autoconnect" = "Use Current Device for Autoconnect";
+"autoconnect_device_cleared" = "Autoconnect Device Cleared";
+"clear_autoconnect_device" = "Clear Autoconnect Device";
+"current_device_name" = "Current Device Name: ";
+"enter_new_name" = "Enter New Name";
+"rename_device" = "Rename Device";
+"firmware_update_downloads" = "Firmware Update Downloads";
+"show_newer_versions_only" = "Show Newer Versions Only";
+"notifications" = "Notifications";
+"enable_watch_notifications" = "Enable Watch Notifications";
+"notify_about_low_battery" = "Notify about Low Battery";
+"send_notification_to_pinetime" = "Send Notification to PineTime";
+"graph_styles" = "Graph Styles";
+"filled_hrm_graph" = "Filled HRM Graph";
+"filled_battery_graph" = "Filled Battery Graph";
+"graph_data" = "Graph Data";
+"clear_all_hrm_chart_data" = "Clear All HRM Chart Data";
+"clear_all_battery_chart_data" = "Clear All Battery Chart Data";
+"onboarding_information" = "Onboarding Information";
+"open_onboarding_page" = "Open Onboarding Page";
+"whats_new_page_this_version" = "Open 'What's New' Page for This Version";
+"debug_mode" = "Debug Mode";
+"enable_debug_mode" = "Enable Debug Mode";
+"debug_logs" = "Debug Logs";
+"links" = "Links";
+"donations" = "Donations";
+
+// - ScanningPopover
+"connected_to" = "Connected to";
+"scanning" = "Scanning";
+
+// - BLEConnectView
+"available_devices" = "Available Devices";
+"waiting_for_bluetooth" = "Waiting for Bluetooth";
+"unnamed" = "Unnamed";
+
+// - ChartSettingsSheetMain
+"select_date_range" = "Select Date Range";
+"date_range_selection" = "Date Range Selection";
+"show_all" = "Show All";
+"sliders" = "Sliders";
+"select_dates" = "Select Dates";
+"all_data_selected" = "All Data Selected";
+
+// - ChartSettingsSheetSliders
+"hours" = "Hours";
+"days" = "Days";
+"weeks" = "Weeks";
+
+// - ChartSettingsSheetDatePicker
+"start_date" = "Start Date";
+"end_date" = "End Date";
+
+// - ArbitraryNotificationSheet
+"placeholder_text" = "enter text here";
+"send_notification" = "Send Notification";
+"title" = "Title";
+
+// - StepSettingsSheet
+"steps_settings" = "Steps Settings";
+"step_goal" = "Step Goal";
+"add_steps" = "Add Steps";
+
+// - StepSettingsSheetGoalChange
+"change_step_count_goal" = "Change Step Count Goal";
+"enter_step_goal" = "Enter Step Goal";
+"submit_new_step_goal" = "Submit New Step Goal";
+
+// - StepSettingsSheetDatePicker
+"manually_add_step_count" = "Manually Add Step Count";
+"select_date" = "Select Date";
+"enter_number_of_steps" = "Enter Number of Steps";
+"submit_count" = "Submit Count";
+
+// - DownloadView
+"available_downloads" = "Available Downloads";
+"firmware_download_links" = "Firmware Download Links";
+
+// - SheetCloseButton
+"close" = "Close";
+
+// - WhatsNew
+"whats_new_in" = "What's New in";
+"welcome_to_version" = "Welcome to version";
+"welcome_text" = "of InfiniLink! I hope you enjoy the features I've added to the app for this version. Please feel free to get in touch with me about any issues you experience or changes you'd like to see!";
+
+// - WhatsNewBody
+"step_counter" = "Step Counter:\n- InfiniTime 1.7.0 introduces a long-awaited feature: step count transmission to companion apps. This version of InfiniLink is set up to receive those values! I have created a pretty rudimentary UI for interpreting these values, which includes:\n- Current value: a circular guage that fills as you approach your step goal\n- Weekly value: a bar chart with the step values you've achieved for each day this week\n- A calendar view, which features the same circular guage around each day around each day of the month, for more long-term step tracking";
+"apple_music" = "Improved Apple Music Functionality:\n- Big thanks to @WowieMan on Github for this!\n- Current time and total run time the currently playing track is shown on InfiniTime now\n- Play/pause state is reflected on InfiniTime\n- Volume buttons in InfiniTime work now.\n- *Please note that this still only applies to Apple Music for now.*";
+"new_logo" = "New Logo:\n- Again, big thanks to @WowieMan for the new logo! This logo was submitted a long time ago, and I kept meaning to add it before submitting releases to TestFlight, and then forgetting. ";
+
+// - Onboarding
+"welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
+"onboarding_text" = "I'm thrilled you're willing and able to test out this beta version of my iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes to me! Your feedback allows you and me to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
+
+// - OnboardingBody
+"other_notes" = "Other notes:";
+"other_notes_1" = "- Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes_2" = "- The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
+"other_notes_3" = "- Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
+"other_notes_4" = "- If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
+
+// - OnboardingDismissButton
+"dismiss_button" = "Dismiss";
+
+// - DFUWithBLE
+"update_firmware" = "Update Firmware";
+"current_firmware" = "Current Firmware";
+"firmware_file" = "Firmware File";
+"clear" = "Clear";
+
+// - DFUWithoutBLE
+"bluetooth_not_available" = "Bluetooth Not Available";
+"please_enable_bluetooth_try_again" = "Please enable Bluetooth and try again.";
+
+// - DFUFileSelectButton
+"select_firmware_file" = "Select Firmware File";
+"select_file_source" = "Select a File Source";
+"use_local_file" = "Use Local File";
+"download_firmware_file" = "Download Firmware File";
+
+// - DFUStartTransferButton
+"stop_transfer" = "Stop Transfer";
+"start_transfer" = "Start Transfer";
+"downloading" = "Downloading";
+
+// - DFUComplete
+"transfer_completed" = "Transfer Completed!";
+
+// - BatteryNotifications
+"battery_low" = "Battery Low";
+
+// - MusicController
+"not_playing" = "Not Playing";
+
+// - SideMenu
+"disconnect" = "Disconnect";
+"scanning" = "Scanning";
+"connect" = "Connect";
+
+// - ContentView
+"failed_set_time" = "Failed to Set Time";
+"failed_set_time_description" = "There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect.";
+"dismiss" = "Dismiss";

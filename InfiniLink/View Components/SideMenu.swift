@@ -104,7 +104,7 @@ struct SideMenu: View {
 						Image(systemName: "radiowaves.right")
 							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //							.imageScale(.large)
-						Text(bleManager.isConnectedToPinetime ? "Disconnect" : (bleManager.isScanning ? "Scanning" : "Connect"))
+						Text(bleManager.isConnectedToPinetime ? NSLocalizedString("disconnect", comment: "") : (bleManager.isScanning ? NSLocalizedString("scanning", comment: "") : NSLocalizedString("connect", comment: "")))
 							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.padding(5)
 					} else {

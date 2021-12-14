@@ -69,3 +69,9 @@ struct StepsView: View {
 		}
 	}
 }
+
+struct StepView_Previews: PreviewProvider {
+    static var previews: some View {
+        StepsView()
+    }
+}

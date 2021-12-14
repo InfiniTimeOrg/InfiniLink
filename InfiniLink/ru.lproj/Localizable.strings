@@ -41,7 +41,7 @@
 
 // - StepsView
 "week" = "Неделя";
-"current" = "Текущие";
+"current" = "Сегодня";
 "month" = "Месяц";
 
 // - StepProgressGauge
@@ -157,7 +157,7 @@
 "other_notes_4" = "- If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
 
 // - OnboardingDismissButton
-"dismiss_button" = "Закрыть";
+"dismiss_button" = "Свободен";
 
 // - DFUWithBLE
 "update_firmware" = "Обновить прошивку";
@@ -188,3 +188,13 @@
 
 // - MusicController
 "not_playing" = "Ничего не играет";
+
+//- SideMenu
+"disconnect" = "Разъединить";
+"scanning" = "Сканирование";
+"connect" = "Соединить";
+
+// - ContentView
+"failed_set_time" = "Невозможно установить время";
+"failed_set_time_description" = "Не удалось установить время на ваших часах. Пожалуйста, отключите часы, а затем снова подключите.";
+"dismiss" = "Свободен";

@@ -19,7 +19,7 @@ struct StatusTabs: View {
 
 	var body: some View{
 		Picker("Chart", selection: $chartManager.currentChart) {
-			Text(NSLocalizedString("heart", comment: "") + String(format: "%.0f", bleManager.heartBPM) + " BPM")
+			Text(NSLocalizedString("heart", comment: "") + String(format: "%.0f", bleManager.heartBPM) + " \(NSLocalizedString("bpm", comment: ""))")
 				.tag(ChartManager.chartSelection.heart)
 			Text(NSLocalizedString("battery", comment: "") + String(format: "%.0f", bleManager.batteryLevel) + "%")
 				.tag(ChartManager.chartSelection.battery)
