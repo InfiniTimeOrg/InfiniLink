@@ -14,14 +14,14 @@ struct ChartSettingsSheetDatePicker: View {
 	let oneMonthAgo = Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? (Date() - 2419200)
 	
 	@Binding var chartRangeState: ChartManager.DateSelectionState
-	let oldestPoint: Date?
+	let oldestPoint: Date
 
 	var body: some View {
 		List {
 			DatePicker(
 				NSLocalizedString("start_date", comment: ""),
 				selection: $chartRangeState.startDate,
-				in: (oldestPoint ?? oneMonthAgo)...today,
+				in: (oldestPoint)...today,
 				displayedComponents: [.date, .hourAndMinute]
 			)
 			DatePicker(
