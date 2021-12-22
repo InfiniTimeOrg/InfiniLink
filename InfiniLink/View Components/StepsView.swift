@@ -22,7 +22,7 @@ struct StepsView: View {
 		GeometryReader { g in
 			VStack {
 				HStack {
-					Text("Steps")
+					Text(NSLocalizedString("steps", comment: ""))
 						.font(.largeTitle)
 						.padding(.leading)
 						.padding(.vertical)
@@ -42,7 +42,7 @@ struct StepsView: View {
 							.padding()
 						.tabItem {
 							Image(systemName: "chart.bar.xaxis")
-							Text("Week")
+							Text(NSLocalizedString("week", comment: ""))
 						}
 						.padding(.top)
 						.tag(1)
@@ -51,7 +51,7 @@ struct StepsView: View {
 							.frame(width: (g.size.width / 1.3), height: (g.size.width / 1.3), alignment: .center)
 						.tabItem {
 							Image(systemName: "figure.walk")
-							Text("Current")
+							Text(NSLocalizedString("current", comment: ""))
 						}
 						.padding(.top)
 						.tag(2)
@@ -60,7 +60,7 @@ struct StepsView: View {
 							.frame(alignment: .init(horizontal: .center, vertical: .top))
 						.tabItem {
 							Image(systemName: "calendar")
-							Text("Month")
+							Text(NSLocalizedString("month", comment: ""))
 						}
 						.padding(.top)
 						.tag(3)
@@ -68,4 +68,10 @@ struct StepsView: View {
 			}
 		}
 	}
+}
+
+struct StepView_Previews: PreviewProvider {
+    static var previews: some View {
+        StepsView()
+    }
 }

@@ -18,7 +18,7 @@ struct DownloadView: View {
 	var body: some View {
 		VStack {
 			HStack {
-				Text("Available Downloads")
+				Text(NSLocalizedString("available_downloads", comment: ""))
 					.font(.largeTitle)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
@@ -31,7 +31,7 @@ struct DownloadView: View {
 				}
 			}
 			List{
-				Section(header: Text("Firmware Download Links")) {
+				Section(header: Text(NSLocalizedString("firmware_download_links", comment: ""))) {
 					ForEach(downloadManager.results, id: \.tag_name) { i in
 						Button {
 							let asset = downloadManager.chooseAsset(response: i)

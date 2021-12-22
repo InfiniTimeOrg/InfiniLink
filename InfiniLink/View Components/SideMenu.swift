@@ -30,7 +30,7 @@ struct SideMenu: View {
 					Image(systemName: "house.fill")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //						.imageScale(.large)
-					Text("Home")
+					Text(NSLocalizedString("home", comment: ""))
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
@@ -41,7 +41,7 @@ struct SideMenu: View {
 					Image(systemName: "figure.walk")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //						.imageScale(.large)
-					Text("Steps")
+					Text(NSLocalizedString("steps", comment: ""))
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
@@ -52,7 +52,7 @@ struct SideMenu: View {
 					Image(systemName: "waveform.path.ecg")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //						.imageScale(.large)
-					Text("Charts")
+					Text(NSLocalizedString("charts", comment: ""))
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
@@ -64,7 +64,7 @@ struct SideMenu: View {
 					Image(systemName: "arrow.up.doc")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //						.imageScale(.large)
-					Text("Update")
+					Text(NSLocalizedString("update", comment: ""))
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
@@ -75,7 +75,7 @@ struct SideMenu: View {
 					Image(systemName: "gear")
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //						.imageScale(.large)
-					Text("Settings")
+					Text(NSLocalizedString("settings", comment: ""))
 						.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 						.padding(5)
 				}
@@ -104,11 +104,11 @@ struct SideMenu: View {
 						Image(systemName: "radiowaves.right")
 							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 //							.imageScale(.large)
-						Text(bleManager.isConnectedToPinetime ? "Disconnect" : (bleManager.isScanning ? "Scanning" : "Connect"))
+						Text(bleManager.isConnectedToPinetime ? NSLocalizedString("disconnect", comment: "") : (bleManager.isScanning ? NSLocalizedString("scanning", comment: "") : NSLocalizedString("connect", comment: "")))
 							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.padding(5)
 					} else {
-						Text("Bluetooth Off")
+						Text(NSLocalizedString("bluetooth_off", comment: ""))
 							.foregroundColor(colorScheme == .dark ? Color.gray : Color.darkGray)
 							.padding(5)
 					}

@@ -33,7 +33,7 @@ struct ChartSettingsSheet: View {
 				.padding(.horizontal)
 			VStack {
 				if chartManager.currentChart == .battery {
-					Toggle("Filled Battery Graph", isOn: $batChartFill)
+					Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
 						.padding(.horizontal)
 						.frame(maxWidth: .infinity)
 					Divider()
@@ -41,12 +41,12 @@ struct ChartSettingsSheet: View {
 					Button (action: {
 						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
 					}) {
-						(Text("Clear All Battery Chart Data"))
+						(Text(NSLocalizedString("clear_all_battery_chart_data", comment: "")))
 					}
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding()
 				} else {
-					Toggle("Filled HRM Graph", isOn: $heartChartFill)
+					Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
 						.padding(.horizontal)
 						.frame(maxWidth: .infinity)
 					Divider()
@@ -54,7 +54,7 @@ struct ChartSettingsSheet: View {
 					Button (action: {
 						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
 					}) {
-						(Text("Clear All HRM Chart Data"))
+						(Text(NSLocalizedString("clear_all_hrm_chart_data", comment: "")))
 					}
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding()
@@ -62,20 +62,20 @@ struct ChartSettingsSheet: View {
 			}
 			Divider()
 				.padding(.horizontal)
-			Text("Select Date Range")
+			Text(NSLocalizedString("select_date_range", comment: ""))
 //				.font(.title2)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			Picker("Date Range Selection", selection: $chartRangeState.dateRangeSelection) {
-				Text("Show All").tag(0)
-				Text("Sliders").tag(1)
-				Text("Select Dates").tag(2)
+			Picker(NSLocalizedString("date_range_selection", comment: ""), selection: $chartRangeState.dateRangeSelection) {
+				Text(NSLocalizedString("show_all", comment: "")).tag(0)
+				Text(NSLocalizedString("sliders", comment: "")).tag(1)
+				Text(NSLocalizedString("select_dates", comment: "")).tag(2)
 			}.pickerStyle(.segmented)
 				.padding(.bottom)
 				.padding(.horizontal)
 			switch chartRangeState.dateRangeSelection {
 			case 0:
-				Text("All Data Selected")
+				Text(NSLocalizedString("all_data_selected", comment: ""))
 					.padding()
 					.font(.title)
 			case 1:

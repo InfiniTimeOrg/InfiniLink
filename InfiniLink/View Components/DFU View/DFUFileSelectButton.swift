@@ -20,7 +20,7 @@ struct DFUFileSelectButton: View {
 		Button(action:{
 			actionSheet.toggle()
 		}) {
-			Text("Select Firmware File")
+			Text(NSLocalizedString("select_firmware_file", comment: ""))
 //				.padding()
 //				.padding(.vertical, 7)
 //				.frame(maxWidth: .infinity, alignment: .center)
@@ -30,12 +30,12 @@ struct DFUFileSelectButton: View {
 //				.padding(.horizontal, 20)
 		}.disabled(!bleManager.isConnectedToPinetime)
 			.actionSheet(isPresented: $actionSheet) {
-				ActionSheet(title: Text("Select a File Source"), buttons: [
-					.default(Text("Use Local File"), action: {
+				ActionSheet(title: Text(NSLocalizedString("select_file_source", comment: "")), buttons: [
+					.default(Text(NSLocalizedString("use_local_file", comment: "")), action: {
 						openFile.toggle()
 						DFU_Updater.shared.local = true
 					}),
-					.default(Text("Download Firmware File"), action: {
+					.default(Text(NSLocalizedString("download_firmware_file", comment: "")), action: {
 						//DownloadManager.shared.results = []
 						SheetManager.shared.sheetSelection = .downloadUpdate
 						SheetManager.shared.showSheet = true

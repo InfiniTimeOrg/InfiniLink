@@ -51,14 +51,14 @@ struct HeartChart: View {
 			setGraphType(data: data)
 				.animation(.easeIn)
 				.floatingInfoBox(chartData: data)
-				.touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
+				.touchOverlay(chartData: data, unit: .suffix(of: NSLocalizedString("bpm", comment: "")))
 				.yAxisLabels(chartData: data)
 				.padding()
 		} else {
 			VStack (alignment: .center) {
 				Spacer()
 				HStack (alignment: .center) {
-					Text("Insufficient Heart Rate Data")
+					Text(NSLocalizedString("insufficient_heart_rate_data", comment: ""))
 						.font(.title)
 				}
 				Spacer()

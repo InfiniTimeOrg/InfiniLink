@@ -20,7 +20,7 @@ struct Connect: View {
 		SheetCloseButton()
 		VStack (){
 			if bleManager.isSwitchedOn {
-				Text("Available Devices")
+				Text(NSLocalizedString("available_devices", comment: ""))
 					.font(.largeTitle)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
@@ -28,11 +28,11 @@ struct Connect: View {
 						bleManager.startScanning()
 					}
 			} else {
-				Text("Available Devices")
+				Text(NSLocalizedString("available_devices", comment: ""))
 					.font(.largeTitle)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
-				Text("Waiting for Bluetooth")
+				Text(NSLocalizedString("waiting_for_bluetooth", comment: ""))
 					.font(.title)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
@@ -64,7 +64,7 @@ struct Connect: View {
 					presentation.wrappedValue.dismiss()
 				} label: {
 					if deviceName == "" {
-						Text(i.name ?? "Unnamed")
+						Text(i.name ?? NSLocalizedString("unnamed", comment: ""))
 					} else {
 						Text(deviceName)
 					}

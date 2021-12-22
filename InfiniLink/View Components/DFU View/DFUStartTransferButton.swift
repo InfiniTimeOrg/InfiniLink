@@ -38,9 +38,9 @@ struct DFUStartTransferButton: View {
 					updateStarted = true
 				}
 			}} label: {
-				Text(updateStarted ? "Stop Transfer" :
-						(dfuUpdater.local ? "Start Transfer" :
-						(downloadManager.downloading ? "Downloading" : "Start Transfer")))
+				Text(updateStarted ? NSLocalizedString("stop_transfer", comment: "") :
+						(dfuUpdater.local ? NSLocalizedString("start_transfer", comment: "") :
+						(downloadManager.downloading ? NSLocalizedString("downloading", comment: "") : NSLocalizedString("start_transfer", comment: ""))))
 				.padding()
 				.padding(.vertical, 7)
 				.frame(maxWidth: .infinity, alignment: .center)

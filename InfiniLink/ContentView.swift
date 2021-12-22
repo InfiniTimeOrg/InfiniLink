@@ -85,7 +85,7 @@ struct ContentView: View {
 						})
 						// alert to handle errors thrown by SetTime
 						.alert(isPresented: $bleManager.setTimeError, content: {
-							Alert(title: Text("Failed to Set Time"), message: Text("There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect."), dismissButton: .default(Text("Dismiss")))
+							Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss", comment: ""))))
 						})
 
 						.onAppear(){
