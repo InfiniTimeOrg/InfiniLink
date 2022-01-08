@@ -51,7 +51,12 @@ struct ArbitraryNotificationSheet: View {
 =======
 				Text("Title: ")
 					.padding(.horizontal)
+<<<<<<< HEAD
 >>>>>>> d1c98d0 (Removed some superfluous padding and labels from the step adjustment sheet for better usability on small screens)
+=======
+				Text("\(NSLocalizedString("title", comment: "")): ")
+					.padding(.leading)
+>>>>>>> d738921 (resolving git issue)
 				TextField("", text: $notificationTitle)
 			}
 			Divider()
@@ -59,6 +64,9 @@ struct ArbitraryNotificationSheet: View {
 			TextEditor(text: $notificationBody)
 				.padding(.horizontal)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> d738921 (resolving git issue)
 			Button(action: {
 				UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
 				if !notificationBody.isEmpty || !notificationTitle.isEmpty {
@@ -77,8 +85,11 @@ struct ArbitraryNotificationSheet: View {
 					.padding(.horizontal, 20)
 					.padding(.bottom)
 			}
+<<<<<<< HEAD
 =======
 >>>>>>> 7869ee0 (Removed large button from send notification sheet and replaced it with a simple "send" button at the top that matches the "close" button. This should help people with smaller screens and/or accessibility tweaks)
+=======
+>>>>>>> d738921 (resolving git issue)
 		}
 	}
 }
