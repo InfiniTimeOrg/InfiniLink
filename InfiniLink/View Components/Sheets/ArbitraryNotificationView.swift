@@ -45,8 +45,13 @@ struct ArbitraryNotificationSheet: View {
 			Divider()
 				.padding(.horizontal)
 			HStack {
+<<<<<<< HEAD
 				Text("\(NSLocalizedString("title", comment: "")): ")
 					.padding(.leading)
+=======
+				Text("Title: ")
+					.padding(.horizontal)
+>>>>>>> d1c98d0 (Removed some superfluous padding and labels from the step adjustment sheet for better usability on small screens)
 				TextField("", text: $notificationTitle)
 			}
 			Divider()

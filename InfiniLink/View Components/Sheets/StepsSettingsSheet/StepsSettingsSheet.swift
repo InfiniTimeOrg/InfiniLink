@@ -15,10 +15,13 @@ struct StepSettingsSheet: View {
 	var body: some View {
 		VStack (alignment: .leading) {
 			SheetCloseButton()
+<<<<<<< HEAD
 			Text(NSLocalizedString("steps_settings", comment: ""))
 				.font(.largeTitle)
 				.padding()
 				.padding(.bottom, 20)
+=======
+>>>>>>> d1c98d0 (Removed some superfluous padding and labels from the step adjustment sheet for better usability on small screens)
 			Picker("", selection: $pickerState) {
 				Text(NSLocalizedString("step_goal", comment: "")).tag(0)
 				Text(NSLocalizedString("add_steps", comment: "")).tag(1)
