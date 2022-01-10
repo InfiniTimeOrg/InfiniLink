@@ -17,6 +17,7 @@ class BLEDeviceInfo: ObservableObject {
 	var hardwareRevision = ""
 	var softwareRevision = ""
 	var manufacturer = ""
+	var blefsVersion = ""
 }
 
 struct DeviceInfoManager {
@@ -28,6 +29,7 @@ struct DeviceInfoManager {
 		let hardwareRevision = CBUUID(string: "2A27")
 		let softwareRevision = CBUUID(string: "2A28")
 		let manufacturer = CBUUID(string: "2A29")
+		let blefsVersion = CBUUID(string: "adaf0100-4669-6c65-5472-616e73666572")
 	}
 	let cbuuids = cbuuid()
 	
@@ -47,6 +49,9 @@ struct DeviceInfoManager {
 			BLEDeviceInfo.shared.softwareRevision = String(data: value, encoding: .utf8) ?? ""
 		case cbuuids.manufacturer:
 			BLEDeviceInfo.shared.manufacturer = String(data: value, encoding: .utf8) ?? ""
+		case cbuuids.blefsVersion:
+			let byteArray = [UInt8](characteristic.value!)
+			BLEDeviceInfo.shared.blefsVersion = String(Int(byteArray[1])) + String(Int(byteArray[0]))
 		default:
 			break
 		}
@@ -54,7 +59,7 @@ struct DeviceInfoManager {
 	
 	func readInfoCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
 		switch characteristic.uuid {
-		case cbuuids.modelNumber, cbuuids.serial, cbuuids.firmware, cbuuids.hardwareRevision, cbuuids.softwareRevision, cbuuids.manufacturer:
+		case cbuuids.modelNumber, cbuuids.serial, cbuuids.firmware, cbuuids.hardwareRevision, cbuuids.softwareRevision, cbuuids.manufacturer, cbuuids.blefsVersion:
 			peripheral.readValue(for: characteristic)
 		default:
 			break

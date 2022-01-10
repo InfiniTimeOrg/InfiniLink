@@ -56,6 +56,7 @@
 		268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */; };
 		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
 		26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */; };
+		2695B142278925F8007DF27D /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2695B141278925F8007DF27D /* BLE_FS.swift */; };
 		26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E842704E6F3007966F6 /* SheetManager.swift */; };
 		26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E882704E97C007966F6 /* DebugViewBLE.swift */; };
 		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
@@ -160,6 +161,7 @@
 		268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetSliders.swift; sourceTree = "<group>"; };
 		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
 		2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountPersistenceManager.swift; sourceTree = "<group>"; };
+		2695B141278925F8007DF27D /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
 		26A40E842704E6F3007966F6 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
 		26A40E882704E97C007966F6 /* DebugViewBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewBLE.swift; sourceTree = "<group>"; };
 		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
@@ -314,7 +316,6 @@
 				264DB80926C62EAC00E812C3 /* View Components */,
 				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
-				26A6315926C49839005AE404 /* DFU */,
 				26A6314E26BF0FA2005AE404 /* Music */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
@@ -451,6 +452,7 @@
 			isa = PBXGroup;
 			children = (
 				264BFE7326BC526C0050A223 /* BLEManager.swift */,
+				2695B141278925F8007DF27D /* BLE_FS.swift */,
 				26D7816426C9EB3800BBF555 /* BLEDelegates.swift */,
 				26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */,
 				26A40E922707D119007966F6 /* BLEUpdateHandler.swift */,
@@ -458,6 +460,7 @@
 				26A6315426C0297A005AE404 /* BLEWriteManager.swift */,
 				2644261126DC093D009BD54A /* SetTime.swift */,
 				266F53E926FA91F3007481A6 /* DeviceInfo.swift */,
+				26A6315926C49839005AE404 /* DFU */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -643,6 +646,7 @@
 				26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */,
 				26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */,
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
+				2695B142278925F8007DF27D /* BLE_FS.swift in Sources */,
 				26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */,

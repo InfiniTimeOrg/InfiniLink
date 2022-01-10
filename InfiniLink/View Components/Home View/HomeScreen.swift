@@ -111,6 +111,13 @@ struct HomeScreen: View {
 						self.updateAvailable = true
 					}
 				}
+				Section(header: Text("BLE FS")) {
+					Button {
+						BLEFSHandler.shared.listDir(path: "/")
+					} label: {
+						Text("list files")
+					}
+				}
 			}
 			.listStyle(.insetGrouped)
 			

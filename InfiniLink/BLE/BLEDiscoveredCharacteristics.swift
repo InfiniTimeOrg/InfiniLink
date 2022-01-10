@@ -14,6 +14,7 @@ struct BLEDiscoveredCharacteristics {
 	func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
 		
 		switch characteristic.uuid {
+			// music controller UUIDs
 		case bleManager.cbuuidList.musicControl:
 			peripheral.setNotifyValue(true, for: characteristic)
 			bleManager.musicChars.control = characteristic
@@ -27,10 +28,15 @@ struct BLEDiscoveredCharacteristics {
             bleManager.musicChars.position = characteristic
         case bleManager.cbuuidList.lengthTrack:
             bleManager.musicChars.length = characteristic
+			//HRM and battery
 		case bleManager.cbuuidList.hrm:
 			peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.bat:
 			peripheral.readValue(for: characteristic)
+			peripheral.setNotifyValue(true, for: characteristic)
+			// ANS notifications
+		case bleManager.cbuuidList.blefsTransfer:
+			bleManager.blefsTransfer = characteristic
 			peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.notify:
 			bleManager.notifyCharacteristic = characteristic

@@ -16,6 +16,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 	
 	var myCentral: CBCentralManager!
 	var notifyCharacteristic: CBCharacteristic!
+	var blefsTransfer: CBCharacteristic!
 	
 	struct musicCharacteristics {
 		var control: CBCharacteristic!
@@ -40,12 +41,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
 		let bat = CBUUID(string: "2A19")
 		let time = CBUUID(string: "2A2B")
 		let notify = CBUUID(string: "2A46")
-		let modelNumber = CBUUID(string: "2A24")
-		let serial = CBUUID(string: "2A25")
-		let firmware = CBUUID(string: "2A26")
-		let hardwareRevision = CBUUID(string: "2A27")
-		let softwareRevision = CBUUID(string: "2A28")
-		let manufacturer = CBUUID(string: "2A29")
+		let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
 		let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
         let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
 		let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
