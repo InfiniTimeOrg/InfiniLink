@@ -75,7 +75,6 @@ class DownloadManager: NSObject, ObservableObject {
 								}
 							}
 						}
-						self.updateAvailable = self.checkForUpdates()
 					}
 				} catch {
 					DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())

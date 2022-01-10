@@ -13,11 +13,11 @@ struct WhatsNewBody: View {
 	
 	var body: some View {
 		ScrollView{
-			Text(NSLocalizedString("step_counter", comment: ""))
+			Text(NSLocalizedString("whats_new_body_1", comment: ""))
 				.padding()
-			Text(NSLocalizedString("apple_music", comment: ""))
+			Text(NSLocalizedString("whats_new_body_2", comment: ""))
 				.padding()
-			Text(NSLocalizedString("new_logo", comment: ""))
+			Text(NSLocalizedString("whats_new_body_3", comment: ""))
 				.padding()
 		}
 	}

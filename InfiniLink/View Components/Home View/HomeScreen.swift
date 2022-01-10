@@ -107,9 +107,7 @@ struct HomeScreen: View {
 					}
 				}
 				.onChange(of: downloadManager.updateAvailable) { _ in
-					if downloadManager.updateAvailable {
-						self.updateAvailable = true
-					}
+					self.updateAvailable = downloadManager.updateAvailable
 				}
 			}
 			.listStyle(.insetGrouped)
