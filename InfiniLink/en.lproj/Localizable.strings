@@ -142,8 +142,8 @@
 
 // - WhatsNewBody
 "whats_new_body_1" = "First localization!\n- Thank you so much to @friendlytsy for creating a Russian localization for InfiniLink! If anyone else would like to localize the app, the work that @friendlytsy put in laid the groundwork for new localizations. If any polyglots out there would like to contribute localizations for other languages, let me know and I can help you get started!";
-"whats_new_body_2" = "Bug fixes:\n- This release should fix a few bugs causing crashes when the Apple Music feature is accessed.\n- Fixes some UI issues for users with smaller screens.";
-"whats_new_body_3" = "Updates Available fixed on home screen:\n- This field on the home screen should now correctly show if an update for InfiniTime is available.";
+"whats_new_body_2" = "Bug fixes:\n- This release should fix a few bugs causing crashes when the Apple Music feature is accessed.\n- Fixes some UI issues for users with smaller screens.n-\"Updates Available\" field on the home screen should now correctly show if an update for InfiniTime is available, and should reset on disconnect.";
+"whats_new_body_3" = "*** Please note***: the secure pairing implemented in v1.8.0 of InfiniTime is not currently compatible with the way that iOS initiates bonding. I am working with the wonderful devs at InfiniTime to sort this out, but in the meantime, your BLE connection to your watch will still be unencrypted.";
 
 // - Onboarding
 "welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
