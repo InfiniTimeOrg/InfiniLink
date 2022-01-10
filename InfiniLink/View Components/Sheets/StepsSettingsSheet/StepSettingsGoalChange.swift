@@ -22,24 +22,11 @@ struct StepSettingsSheetGoalChange: View {
 	}
 	
 	var body: some View {
-<<<<<<< HEAD
-<<<<<<< HEAD
 		Text(NSLocalizedString("change_step_count_goal", comment: ""))
 			.font(.title2)
 			.padding()
 		TextField(NSLocalizedString("enter_step_goal", comment: ""), text: $setStepGoal.value)
-=======
-		TextField("Enter Step Goal", text: $setStepGoal.value)
->>>>>>> d1c98d0 (Removed some superfluous padding and labels from the step adjustment sheet for better usability on small screens)
-=======
-		TextField("Enter Step Goal", text: $setStepGoal.value)
-=======
-		Text(NSLocalizedString("change_step_count_goal", comment: ""))
-			.font(.title2)
-			.padding()
-		TextField(NSLocalizedString("enter_step_goal", comment: ""), text: $setStepGoal.value)
->>>>>>> main
->>>>>>> d738921 (resolving git issue)
+
 			.textFieldStyle(.roundedBorder)
 			.padding()
 			.keyboardType(.numberPad)
