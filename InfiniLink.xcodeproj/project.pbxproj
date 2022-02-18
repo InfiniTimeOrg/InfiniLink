@@ -105,6 +105,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		22F9534327AF34C200729BF5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InfiniLink.xcdatamodel; sourceTree = "<group>"; };
 		2601AF6627220CED00D999EF /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
 		2601AF692722110700D999EF /* StepProgressGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepProgressGauge.swift; sourceTree = "<group>"; };
@@ -587,8 +588,9 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				ru,
+				fr,
+				Base,
 			);
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
@@ -749,6 +751,7 @@
 			children = (
 				F9A88B652765357600B2B94C /* en */,
 				F99B8DCC276778FF0096A84D /* ru */,
+				22F9534327AF34C200729BF5 /* fr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
