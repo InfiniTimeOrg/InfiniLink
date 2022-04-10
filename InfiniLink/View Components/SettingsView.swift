@@ -128,12 +128,7 @@ struct Settings_Page: View {
 				}
 				Section(header: Text(NSLocalizedString("links", comment: ""))) {
 					Link("InfiniLink GitHub", destination: URL(string: "https://github.com/xan-m/InfiniLink")!)
-					Link("Matrix", destination: URL(string: "https://matrix.to/#/@xanm:matrix.org")!)
-					Link("Mastodon", destination: URL(string: "https://fosstodon.org/@xanm")!)
 					Link("InfiniTime Firmware Releases", destination: URL(string: "https://github.com/JF002/InfiniTime/releases")!)
-				}
-				Section(header: Text(NSLocalizedString("donations", comment: ""))) {
-					Link("PayPal Donation", destination: URL(string: "https://paypal.me/alexemry")!)
 				}
 			}
 			.listStyle(.insetGrouped)
