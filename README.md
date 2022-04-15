@@ -18,9 +18,4 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Phone notifications pushing to watch -- This requires a proprietary Apple service as well.
 
 ### How to try it out:
-Join the TestFlight beta now! Click this link from your iOS device: https://testflight.apple.com/join/Z7u1Jxp4
-
-### Contributions:
-I'm not interested in profiting from this app, but the Apple Developer License was not cheap! If you've enjoyed the app and have some disposable income, consider donating. If not, no problem!
-
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/alexemry)
+Join the TestFlight beta now! Click this link from your iOS device: https://testflight.apple.com/join/Z7u1Jxp
