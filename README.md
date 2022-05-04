@@ -1,7 +1,8 @@
 # InfiniLink - an InfiniTime Companion App for iOS
 
 This is a UI redesign for the InfiniLink app, currently still needs work though.
-![IMG_1233](https://user-images.githubusercontent.com/87885710/166743292-312daed2-857f-4a10-9301-9bb82b50eb98.jpg)
+![IMG_1235](https://user-images.githubusercontent.com/87885710/166810295-43358d55-6eaf-4525-a45b-bf90b5b34965.png)
+
 
 
 ### Todo List:
