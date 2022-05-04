@@ -6,7 +6,7 @@ This is a UI redesign for the InfiniLink app, currently still needs work though.
 
 ### Todo List:
 - Add back the manual update from files.
-- Fix bug when the user frist clicks the pair button and then dismisses the menu, it reopen ones.
+- Fix bug with the pair menu that causes it to reopen ones when dismiss.
 - Redesign the heart and battery views.
 - Finish customize favorites menu.
 - Add the ability to manually set the theme to light or dark.
