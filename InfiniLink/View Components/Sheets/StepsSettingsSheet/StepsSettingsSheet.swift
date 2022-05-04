@@ -15,9 +15,13 @@ struct StepSettingsSheet: View {
 	var body: some View {
 		VStack (alignment: .leading) {
 			SheetCloseButton()
+			Text("Steps Settings")
+				.font(.largeTitle)
+				.padding()
+				.padding(.bottom, 20)
 			Picker("", selection: $pickerState) {
-				Text(NSLocalizedString("step_goal", comment: "")).tag(0)
-				Text(NSLocalizedString("add_steps", comment: "")).tag(1)
+				Text("Step Goal").tag(0)
+				Text("Add Steps").tag(1)
 			}.pickerStyle(.segmented)
 				.padding(.bottom)
 				.padding(.horizontal)

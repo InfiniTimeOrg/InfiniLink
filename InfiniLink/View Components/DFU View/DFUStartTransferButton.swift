@@ -20,6 +20,8 @@ struct DFUStartTransferButton: View {
 	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var downloadManager = DownloadManager.shared
 	
+    //var startDownload: Bool = false
+    
 	var body: some View {
 		Button {
 			if updateStarted {
@@ -34,21 +36,27 @@ struct DFUStartTransferButton: View {
 					dfuUpdater.transfer()
 					updateStarted = true
 				} else {
-					dfuUpdater.downloadTransfer()
+                    downloadManager.startTransfer = true
+                    print(downloadManager.browser_download_url)
+                    downloadManager.startDownload(url: downloadManager.browser_download_url)
+                    print(downloadManager.downloading)
+                    
+                    downloadManager.downloading
+                    
 					updateStarted = true
 				}
 			}} label: {
-				Text(updateStarted ? NSLocalizedString("stop_transfer", comment: "") :
-						(dfuUpdater.local ? NSLocalizedString("start_transfer", comment: "") :
-						(downloadManager.downloading ? NSLocalizedString("downloading", comment: "") : NSLocalizedString("start_transfer", comment: ""))))
-				.padding()
-				.padding(.vertical, 7)
-				.frame(maxWidth: .infinity, alignment: .center)
-				.background(colorChooser())
-				.foregroundColor(firmwareSelected ? Color.white : (updateStarted ? Color.white : Color.gray))
-				.cornerRadius(10)
-				.padding(.horizontal, 20)
-				.padding(.bottom)
+				Text(updateStarted ? "Stop Transfer" :
+						(dfuUpdater.local ? "Download and Install" :
+						(downloadManager.downloading ? "Downloading" : "Download and Install")))
+				//.padding()
+				//.padding(.vertical, 7)
+				//.frame(maxWidth: .infinity, alignment: .center)
+				//.background(colorChooser())
+				//.foregroundColor(firmwareSelected ? Color.white : (updateStarted ? Color.white : Color.gray))
+				//.cornerRadius(10)
+				//.padding(.horizontal, 20)
+				//.padding(.bottom)
 			}.disabled(buttonDisabled())
 		
 	}

@@ -18,38 +18,15 @@ struct ArbitraryNotificationSheet: View {
 	var placeholderString = "enter text here"
 	
 	var body: some View {
-		ZStack {
-			SheetCloseButton()
-			HStack {
-				Spacer()
-				Button {
-					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-					if !notificationBody.isEmpty || !notificationTitle.isEmpty {
-						BLEWriteManager.init().sendNotification(title: notificationTitle, body: notificationBody)
-					}
-					SheetManager.shared.showSheet = false
-					SheetManager.shared.sheetSelection = .connect
-				} label: {
-					Text("Send")
-						.font(.title2)
-				}
-				.padding()
-				
-			}
-		}
-
+		SheetCloseButton()
 		VStack{
-			Text(NSLocalizedString("send_notification", comment: ""))
+			Text("Send Notification")
 				.font(.title)
 				.padding()
 			Divider()
 				.padding(.horizontal)
 			HStack {
-				Text("\(NSLocalizedString("title", comment: "")): ")
-					.padding(.leading)
 				Text("Title: ")
-					.padding(.horizontal)
-				Text("\(NSLocalizedString("title", comment: "")): ")
 					.padding(.leading)
 				TextField("", text: $notificationTitle)
 			}
@@ -65,7 +42,7 @@ struct ArbitraryNotificationSheet: View {
 				SheetManager.shared.showSheet = false
 				SheetManager.shared.sheetSelection = .connect
 			}) {
-				Text(NSLocalizedString("send_notification", comment: ""))
+				Text("Send Notification")
 					.padding()
 					.padding(.vertical, 7)
 					.frame(maxWidth: .infinity, alignment: .center)

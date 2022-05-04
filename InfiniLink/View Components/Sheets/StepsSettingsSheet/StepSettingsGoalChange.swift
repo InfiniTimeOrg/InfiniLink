@@ -22,18 +22,17 @@ struct StepSettingsSheetGoalChange: View {
 	}
 	
 	var body: some View {
-		Text(NSLocalizedString("change_step_count_goal", comment: ""))
+		Text("Change Step Count Goal")
 			.font(.title2)
 			.padding()
-		TextField(NSLocalizedString("enter_step_goal", comment: ""), text: $setStepGoal.value)
-
+		TextField("Enter Step Goal", text: $setStepGoal.value)
 			.textFieldStyle(.roundedBorder)
 			.padding()
 			.keyboardType(.numberPad)
 		Button {
 			stepCountGoal = Int(setStepGoal.value)!
 		} label: {
-			Text(NSLocalizedString("submit_new_step_goal", comment: ""))
+			Text("Submit New Step Goal")
 		}.disabled(readyToSubmit(value: setStepGoal.value))
 			.padding()
 	}

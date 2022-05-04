@@ -10,8 +10,8 @@ import SwiftUI
 
 struct Connect: View {
 	
-	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
-	@ObservedObject var bleManager = BLEManager.shared
+	//@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
+    @ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.presentationMode) var presentation
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
@@ -20,7 +20,7 @@ struct Connect: View {
 		SheetCloseButton()
 		VStack (){
 			if bleManager.isSwitchedOn {
-				Text(NSLocalizedString("available_devices", comment: ""))
+				Text("Available Devices")
 					.font(.largeTitle)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
@@ -28,11 +28,11 @@ struct Connect: View {
 						bleManager.startScanning()
 					}
 			} else {
-				Text(NSLocalizedString("available_devices", comment: ""))
+				Text("Available Devices")
 					.font(.largeTitle)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
-				Text(NSLocalizedString("waiting_for_bluetooth", comment: ""))
+				Text("Waiting for Bluetooth")
 					.font(.title)
 					.padding()
 					.frame(maxWidth: .infinity, alignment: .leading)
@@ -64,7 +64,7 @@ struct Connect: View {
 					presentation.wrappedValue.dismiss()
 				} label: {
 					if deviceName == "" {
-						Text(i.name ?? NSLocalizedString("unnamed", comment: ""))
+						Text(i.name ?? "Unnamed")
 					} else {
 						Text(deviceName)
 					}

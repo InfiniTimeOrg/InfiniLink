@@ -31,7 +31,7 @@ struct BLEAutoconnectManager {
 		let autoconnectUUID = UserDefaults.standard.object(forKey: "autoconnectUUID") as? String ?? ""
 		
 		if autoconnect && peripheral.identifier.uuidString == autoconnectUUID {
-			BLEManager.shared.connect(peripheral: peripheral)
+            BLEManager.shared.connect(peripheral: peripheral)
 			return true
 		}
 		return false

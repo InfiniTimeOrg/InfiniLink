@@ -138,12 +138,12 @@
 // - WhatsNew
 "whats_new_in" = "Nouveautés dans";
 "welcome_to_version" = "Bienvenue dans la version";
-"welcome_text" = "Je suis désolé de dire que ce sera la dernière mise à jour d’InfiniLink. J’ai commencé un nouvel emploi il y a quelques mois et je n’ai plus le temps libre de poursuivre le développement de ce projet. Si quelqu’un est intéressé à prendre la relève, s’il vous plaît laissez-moi savoir et je peux tout transférer. Merci pour tout votre soutien et vos suggestions en cours de route!";
+"welcome_text" = "d'InfiniLink! J'espère que vous apprécierez les fonctionnalités que j'ai ajoutées à l'application pour cette version. N'hésitez pas à me contacter pour tout problème que vous rencontrez ou tout changement que vous aimeriez voir!";
 
 // - WhatsNewBody
-"whats_new_body_1" = "- Fusion des localisations coréenne et Français";
-"whats_new_body_2" = "";
-"whats_new_body_3" = "";
+"whats_new_body_1" = "Première traduction!\n- Merci beaucoup à @friendlytsy d'avoir créé une traduction russe pour InfiniLink! Si quelqu'un d'autre  souhaite traduire l'application, le travail effectué par @friendlytsy a jeté les bases pour de nouvelles traductions. Si des polyglottes souhaitent contribuer à la traduction d'autres langues, faites-le moi savoir et je pourrai vous aider à démarrer!";
+"whats_new_body_2" = "Corrections de bugs:\n- Cette version devrait corriger quelques bugs provoquant des plantages lors de l'accès à la fonctionnalité Apple Music.\n- Corrige certains problèmes d'interface utilisateur pour les utilisateurs disposants d'écrans plus petit.n- Le champs \"Mise à jour disponible\" sur l'écan d'accueil devrait désormais s'afficher correctement si une mise à jour pour InfiniTime est disponible et devrait être réinitialisé lors de la déconnection.";
+"whats_new_body_3" = "*** Veuillez noter***: Le couplage sécurisé implémenté dans la version 1.8.0 d'InfiniTime  n'est actuellement pas compatible avec la manière dont iOS initi la liaison. Je travail avec les merveilleux développeurs d'InfiniTime pour résoudre ce problème, mais en attendant, votre connexion BLE à votre montre sera toujours non chiffrée.";
 
 // - Onboarding
 "welcome_to_InfiniLink" = "🎉 Bienvenue sur InfiniLink! 🎉";

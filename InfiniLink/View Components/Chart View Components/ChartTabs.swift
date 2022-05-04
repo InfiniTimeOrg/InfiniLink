@@ -12,16 +12,17 @@ import SwiftUI
 
 struct StatusTabs: View {
 	
-	@ObservedObject var bleManager = BLEManager.shared
+	@ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @ObservedObject var bleManager = BLEManager.shared
 	@Environment(\.colorScheme) var colorScheme
 	@AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false
 	@ObservedObject var chartManager = ChartManager.shared
 
 	var body: some View{
 		Picker("Chart", selection: $chartManager.currentChart) {
-			Text(NSLocalizedString("heart", comment: "") + String(format: "%.0f", bleManager.heartBPM) + " \(NSLocalizedString("bpm", comment: ""))")
+			Text("Heart: " + String(format: "%.0f", bleManagerVal.heartBPM) + " BPM")
 				.tag(ChartManager.chartSelection.heart)
-			Text(NSLocalizedString("battery", comment: "") + String(format: "%.0f", bleManager.batteryLevel) + "%")
+			Text("Battery: " + String(format: "%.0f", bleManager.batteryLevel) + "%")
 				.tag(ChartManager.chartSelection.battery)
 		}
 		.pickerStyle(.segmented)

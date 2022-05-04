@@ -7,21 +7,21 @@
 
 import Foundation
 
-enum Page {
-	case dfu
-	case status
-	case settings
-	case home
-	case debug // MARK: logging
-	case steps
-}
+//enum Page {
+	//case dfu
+	//case status
+	//case settings
+	//case home
+	//case debug // MARK: logging
+	//case steps
+//}
 
-class PageSwitcher: ObservableObject {
-	static let shared = PageSwitcher()
-	
-	@Published var currentPage: Page = .home
-	@Published var showMenu: Bool = false
-	
-}
+//class PageSwitcher: ObservableObject {
+//	static let shared = PageSwitcher()
+//
+//	@Published var currentPage: Page = .home
+//	@Published var showMenu: Bool = false
+//
+//}
 
 

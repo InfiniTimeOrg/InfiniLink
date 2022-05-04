@@ -33,7 +33,7 @@ struct ChartSettingsSheet: View {
 				.padding(.horizontal)
 			VStack {
 				if chartManager.currentChart == .battery {
-					Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
+					Toggle("Filled Battery Graph", isOn: $batChartFill)
 						.padding(.horizontal)
 						.frame(maxWidth: .infinity)
 					Divider()
@@ -41,12 +41,12 @@ struct ChartSettingsSheet: View {
 					Button (action: {
 						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
 					}) {
-						(Text(NSLocalizedString("clear_all_battery_chart_data", comment: "")))
+						(Text("Clear All Battery Chart Data"))
 					}
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding()
 				} else {
-					Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
+					Toggle("Filled HRM Graph", isOn: $heartChartFill)
 						.padding(.horizontal)
 						.frame(maxWidth: .infinity)
 					Divider()
@@ -54,7 +54,7 @@ struct ChartSettingsSheet: View {
 					Button (action: {
 						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
 					}) {
-						(Text(NSLocalizedString("clear_all_hrm_chart_data", comment: "")))
+						(Text("Clear All HRM Chart Data"))
 					}
 					.frame(maxWidth: .infinity, alignment: .leading)
 					.padding()
@@ -62,30 +62,26 @@ struct ChartSettingsSheet: View {
 			}
 			Divider()
 				.padding(.horizontal)
-			Text(NSLocalizedString("select_date_range", comment: ""))
+			Text("Select Date Range")
 //				.font(.title2)
 				.padding()
 				.frame(maxWidth: .infinity, alignment: .leading)
-			Picker(NSLocalizedString("date_range_selection", comment: ""), selection: $chartRangeState.dateRangeSelection) {
-				Text(NSLocalizedString("show_all", comment: "")).tag(0)
-				Text(NSLocalizedString("sliders", comment: "")).tag(1)
-				Text(NSLocalizedString("select_dates", comment: "")).tag(2)
+			Picker("Date Range Selection", selection: $chartRangeState.dateRangeSelection) {
+				Text("Show All").tag(0)
+				Text("Sliders").tag(1)
+				Text("Select Dates").tag(2)
 			}.pickerStyle(.segmented)
 				.padding(.bottom)
 				.padding(.horizontal)
 			switch chartRangeState.dateRangeSelection {
 			case 0:
-				Text(NSLocalizedString("all_data_selected", comment: ""))
+				Text("All Data Selected")
 					.padding()
 					.font(.title)
 			case 1:
 				ChartSettingsSheetSliders(chartRangeState: self.$chartRangeState)
 			case 2:
-				if chartPoints.count > 0 {
-					ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: chartPoints[0].timestamp!)
-				} else {
-					ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: Calendar.current.date(byAdding: .month, value: -1, to: Date()) ?? (Date() - 2419200))
-				}
+				ChartSettingsSheetDatePicker(chartRangeState: self.$chartRangeState, oldestPoint: chartPoints[0].timestamp)
 			default:
 				EmptyView()
 			}

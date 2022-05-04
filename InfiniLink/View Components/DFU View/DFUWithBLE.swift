@@ -10,62 +10,101 @@
 import Foundation
 import SwiftUI
 
+extension UIScreen{
+    static let screenWidth = UIScreen.main.bounds.size.width
+    static let screenHeight = UIScreen.main.bounds.size.height
+    static let screenSize = UIScreen.main.bounds.size
+}
+
 struct DFUWithBLE: View {
 	@Environment(\.colorScheme) var colorScheme
-	@ObservedObject var bleManager = BLEManager.shared
+	//@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
+    @ObservedObject var downloadManager = DownloadManager.shared
+    
+    //@ObservedObject var downloadManager
+    //@AppStorage("updateAvailable") var updateAvailable: Bool = false
 	
 	@State var openFile = false
-	@State private var updateStarted: Bool = false
 	
 	
 	var body: some View {
 		ZStack {
-			VStack (alignment: .leading){
-				Text(NSLocalizedString("update_firmware", comment: ""))
-					.font(.largeTitle)
-					.padding()
-					.fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
+			VStack (alignment: .leading) {
+				//Text("Update Firmware")
+					//.font(.largeTitle)
+                    //.padding()
+					//.fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
 						// this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
-						do{
-							let fileUrl = try res.get()
+					//	do{
+					//		let fileUrl = try res.get()
 							
-							guard fileUrl.startAccessingSecurityScopedResource() else { return }
+					//		guard fileUrl.startAccessingSecurityScopedResource() else { return }
 							
-							dfuUpdater.firmwareSelected = true
-							dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
-							dfuUpdater.firmwareURL = fileUrl.absoluteURL
+					//		dfuUpdater.firmwareSelected = true
+					//		dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
+					//		dfuUpdater.firmwareURL = fileUrl.absoluteURL
 							
-							fileUrl.stopAccessingSecurityScopedResource()
-						} catch{
-							DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
-						}
-					}
+					//		fileUrl.stopAccessingSecurityScopedResource()
+					//	} catch{
+					//		DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+					//	}
+					//}
 				List {
-					Section(header: Text(NSLocalizedString("current_firmware", comment: ""))) {
-						Text(deviceInfo.firmware)
-					}
-					Section(header: ClearSelectedFirmwareHeader()) {
-						if dfuUpdater.firmwareSelected {
-							Text(dfuUpdater.firmwareFilename)
-						} else {
-							DFUFileSelectButton(openFile: $openFile)
-						}
-					}
+                    //Section() {
+                    //    NavigationLink(destination: RenameView()) {
+                    //        Text("Install Older Version")
+                    //    }
+                    //}
+                    
+                    if downloadManager.updateAvailable {
+                        NewUpdate(updateStarted: $downloadManager.updateStarted)
+                    } else {
+                        NoUpdate()
+                    }
+                    
+                    
+					//Section(header: Text("Current Firmware")) {
+					//	Text(deviceInfo.firmware)
+					//}
+					//Section(header: ClearSelectedFirmwareHeader()) {
+					//	if dfuUpdater.firmwareSelected {
+					//		Text(dfuUpdater.firmwareFilename)
+					//	} else {
+					//		DFUFileSelectButton(openFile: $openFile)
+					//	}
+					//}
 				}
-					.listStyle(.inset)
+                .listStyle(.insetGrouped)
+                //.listStyle(.inset)
 				
-				Spacer()
+				//Spacer()
 				
-				if updateStarted {
-					DFUProgressBar().environmentObject(dfuUpdater)
-						.frame(height: 40 ,alignment: .center)
-						.padding()
-				}
+				//if updateStarted {
+				//	DFUProgressBar().environmentObject(dfuUpdater)
+				//		.frame(height: 40 ,alignment: .center)
+				//		.padding()
+				//}
 					
-				DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
+				//DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
 			}
+            .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
+                // this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
+                do{
+                    let fileUrl = try res.get()
+                    
+                    guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                    
+                    dfuUpdater.firmwareSelected = true
+                    dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
+                    dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                    
+                    fileUrl.stopAccessingSecurityScopedResource()
+                } catch{
+                    DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+                }
+            }
 			VStack{
 				if dfuUpdater.transferCompleted {
 					DFUComplete()
@@ -74,14 +113,22 @@ struct DFUWithBLE: View {
 							DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
 								dfuUpdater.transferCompleted = false
 							})
-							updateStarted = false
+                            downloadManager.updateStarted = false
 							dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
 							dfuUpdater.firmwareSelected = false
 							dfuUpdater.firmwareFilename = ""
+                            downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: downloadManager.updateVersion)
 						}
 				}
 			}.transition(.opacity).animation(.easeInOut(duration: 1.0))
 		}
+        .navigationBarItems(trailing: (
+            Button(action: {downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)}) {
+                Image(systemName: "arrow.counterclockwise")
+                    .imageScale(.large)
+            }
+        ))
+        .navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
 	}
 }
 
@@ -89,7 +136,7 @@ struct ClearSelectedFirmwareHeader: View {
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
 	var body: some View {
 		HStack{
-			Text(NSLocalizedString("firmware_file", comment: ""))
+			Text("Firmware File")
 			Spacer()
 			if dfuUpdater.firmwareSelected {
 				Button{
@@ -97,9 +144,98 @@ struct ClearSelectedFirmwareHeader: View {
 					dfuUpdater.firmwareSelected = false
 					dfuUpdater.firmwareFilename = ""
 				} label: {
-					Text(NSLocalizedString("clear", comment: ""))
+					Text("Clear")
 				}
 			}
 		}
 	}
+}
+
+struct NewUpdate: View {
+    @Binding var updateStarted: Bool
+    //@ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var dfuUpdater = DFU_Updater.shared
+    @Environment(\.colorScheme) var scheme
+    
+    //@State var updateStarted: Bool = false
+    
+    var body: some View {
+        Section() {
+            VStack(alignment: .leading) {
+                HStack(alignment: .top) {
+                    Image("InfiniTime")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .padding(5)
+                        .frame(width: 75, height: 75)
+                    VStack(alignment: .leading) {
+                        Text("InfiniTime \(DownloadManager.shared.updateVersion)")
+                            .bold()
+                        Text("\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB")
+                            .font(.caption)
+                        if updateStarted {
+                            DFUProgressBar().environmentObject(dfuUpdater)
+                                //.frame(height: 40 ,alignment: .center)
+                                //.padding()
+                        }
+                    }
+                    .padding(5)
+                }
+                HStack {
+                    Text(DownloadManager.shared.updateBody)
+                        .font(.system(size: 14))
+                        .lineLimit(3)
+                        .padding(5)
+                }
+                
+            }.frame(height: 160 ,alignment: .center)
+            
+            NavigationLink(destination: DFULearnMore()) {
+                Text("Learn More")
+            }
+        }
+        Section() {
+            DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
+            //Button("Download and Install", action: {})
+            
+            if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
+                NavigationLink(destination: DownloadView()) {
+                    Text("Install Older Version")
+                }
+            }
+        }
+    }
+}
+
+struct NoUpdate: View {
+    //@ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @Environment(\.colorScheme) var colorScheme
+    
+    var body: some View {
+        if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
+            Section() {
+                NavigationLink(destination: DownloadView()) {
+                    Text("Install Older Version")
+                }
+            }
+        }
+        
+        Section() {
+            VStack(spacing: 5) {
+                VStack(alignment: .center) {
+                    Text("InfiniTime \(deviceInfo.firmware)")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 18))
+                    Text("InfiniTime is up to date")
+                        .foregroundColor(.gray)
+                        .font(.system(size: 16))
+                }
+                .frame(maxWidth: .infinity, alignment: .bottom)
+            }
+            .padding(5)
+        }
+        .frame(height: UIScreen.screenHeight / 2.0)
+        .listRowBackground(Color.clear)
+    }
 }

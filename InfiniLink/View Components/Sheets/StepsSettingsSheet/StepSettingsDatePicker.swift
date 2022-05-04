@@ -22,19 +22,19 @@ struct StepSettingsSheetDatePicker: View {
 	}
 	
 	var body: some View {
-		Text(NSLocalizedString("manually_add_step_count", comment: ""))
+		Text("Manually Add Step Count")
 			.font(.title2)
 			.padding()
-		DatePicker(NSLocalizedString("select_date", comment: ""), selection: $selectedDate, displayedComponents: [.date])
+		DatePicker("Select Date", selection: $selectedDate, displayedComponents: [.date])
 			.padding()
-		TextField(NSLocalizedString("enter_number_of_steps", comment: ""), text: $addDateValue.value)
+		TextField("Enter Number of Steps", text: $addDateValue.value)
 			.textFieldStyle(.roundedBorder)
-			.padding(.horizontal)
+			.padding()
 			.keyboardType(.numberPad)
 		Button {
 			StepCountPersistenceManager().setStepCount(steps: Int(addDateValue.value)!, arbitrary: true, date: selectedDate)
 		} label: {
-			Text(NSLocalizedString("submit_count", comment: ""))
+			Text("Submit Count")
 		}.disabled(readyToSubmit(value: addDateValue.value))
 			.padding()
 	}

@@ -17,12 +17,10 @@ struct WhatsNew: View {
 		SheetCloseButton()
 		ScrollView{
 			VStack {
-				Text(String("\(NSLocalizedString("whats_new_in", comment: "")) v\(appVersion!)"))
+				Text(String("What's New in v\(appVersion!)"))
 					.font(.largeTitle)
 					.padding(.horizontal)
-				Text("\(NSLocalizedString("welcome_to_version", comment: "")) \(appVersion!).")
-					.padding()
-				Text("\(NSLocalizedString("welcome_text", comment: ""))")
+				Text("Welcome to version \(appVersion!) of InfiniLink! I hope you enjoy the features I've added to the app for this version. Please feel free to get in touch with me about any issues you experience or changes you'd like to see!")
 					.padding()
 				
 				WhatsNewBody()

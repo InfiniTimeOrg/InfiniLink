@@ -12,7 +12,7 @@ import SwiftUI
 struct DFUComplete: View {
 	
 	var body: some View {
-		Text(NSLocalizedString("transfer_completed", comment: ""))
+		Text("Transfer Completed!")
 			.font(.largeTitle)
 			.padding()
 			.foregroundColor(Color.white)

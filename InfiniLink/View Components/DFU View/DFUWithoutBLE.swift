@@ -13,10 +13,14 @@ import SwiftUI
 struct DFUWithoutBLE: View {
 	var body: some View{
 		VStack {
-			Text(NSLocalizedString("bluetooth_not_available", comment: ""))
-				.font(.largeTitle)
-			Text(NSLocalizedString("please_enable_bluetooth_try_again", comment: ""))
-				.font(.title)
+			Text("Bluetooth Not Available")
+				//.font(.title2)
+                .foregroundColor(.gray)
+			Text("Please enable Bluetooth and try again.")
+                .foregroundColor(.gray)
+                //.font(.system(size: 15))
+				.font(.caption)
 		}
+        //.navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
 	}
 }

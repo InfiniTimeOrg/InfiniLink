@@ -54,7 +54,7 @@ struct BatteryChart: View {
 			VStack (alignment: .center) {
 				Spacer()
 				HStack (alignment: .center) {
-					Text(NSLocalizedString("insufficient_battery_data", comment: ""))
+					Text("Insufficient Battery Data")
 						.font(.title)
 				}
 				Spacer()

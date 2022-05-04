@@ -25,6 +25,7 @@ struct StepCountPersistenceManager {
 	}
 	
 	func setStepCount(steps: Int, arbitrary: Bool, date: Date) {
+        
 		let existingCounts = lookupStepCounts(write: true)
 		
 		let countExists = existingCounts.contains { count in

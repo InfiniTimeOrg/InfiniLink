@@ -19,6 +19,7 @@ class MusicController {
 	*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
 	static let shared = MusicController()
 	let bleManager = BLEManager.shared
+    let bleManagerVal = BLEManagerVal.shared
 	
 	var musicPlayer = MPMusicPlayerController.systemMusicPlayer
     var musicPlaying = 0
@@ -81,30 +82,31 @@ class MusicController {
 	
 	func getCurrentSongInfo() -> songInfo {
 		let currentTrack = musicPlayer.nowPlayingItem
-		let currentSongInfo = songInfo(trackName: currentTrack?.title ?? NSLocalizedString("not_playing", comment: ""), artistName: currentTrack?.artist ?? NSLocalizedString("not_playing", comment: ""))
+		let currentSongInfo = songInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "Not Playing")
 		return currentSongInfo
 	}
 	
     func updateMusicInformation(songInfo: MusicController.songInfo) {
         let bleWriteManager = BLEWriteManager()
+        
 		let songInfo = getCurrentSongInfo()
 		
-		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
-		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
+		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManagerVal.musicChars.track)
+		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManagerVal.musicChars.artist)
         
         var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManagerVal.musicChars.position)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManagerVal.musicChars.length)
         
         if musicPlaying == 1 {
-            bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManager.musicChars.status)
+            bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManagerVal.musicChars.status)
         } else {
-            bleWriteManager.writeHexToMusicApp(message: [0x00], characteristic: bleManager.musicChars.status)
+            bleWriteManager.writeHexToMusicApp(message: [0x00], characteristic: bleManagerVal.musicChars.status)
         }
 	}
     
     func convertTime(value: Double) -> [UInt8] {
-        var val32 : UInt32 = UInt32(0); if value < Double(UInt32.max) && Double(UInt32.max) >= 0.0 {val32 = UInt32(floor(value))}
+        let val32 : UInt32 = UInt32(floor(value))
 
         let byte1 = UInt8(val32 & 0x000000FF)
         let byte2 = UInt8((val32 & 0x0000FF00) >> 8)

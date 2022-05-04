@@ -17,7 +17,7 @@ struct OnboardingDismissButton: View {
 		Button(action: {
 			SheetManager.shared.showSheet = false
 		}) {
-			Text(NSLocalizedString("dismiss_button", comment: ""))
+			Text("Dismiss")
 				.padding()
 				.padding(.vertical, 7)
 				.frame(maxWidth: .infinity, alignment: .center)

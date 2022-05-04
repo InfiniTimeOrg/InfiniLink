@@ -16,14 +16,14 @@ struct RenameDeviceHeader: View {
 	
 	var body: some View {
 		HStack{
-			Text(NSLocalizedString("device_name", comment: ""))
+			Text("Device Name")
 			Spacer()
 			Button{
 				fieldText = ""
 				renamingDevice = true
 			} label: {
 				Image(systemName: "square.and.pencil")
-				Text(NSLocalizedString("rename", comment: ""))
+				Text("Rename")
 			}
 			.disabled(!bleManager.isConnectedToPinetime)
 		}

@@ -15,25 +15,25 @@ struct ChartSettingsSheetSliders: View {
 	var body: some View{
 		List{
 			Slider(value: $chartRangeState.hours, in: 0...23, step: 1) {
-				Text(NSLocalizedString("hours", comment: ""))
+				Text("Hours")
 			} minimumValueLabel: {
-				Text("\(NSLocalizedString("hours", comment: "")): " + String(format: "%.0f", chartRangeState.hours))
+				Text("Hours: " + String(format: "%.0f", chartRangeState.hours))
 			} maximumValueLabel: {
 				Text("")
 			}
 			
 			Slider(value: $chartRangeState.days, in: 0...6, step: 1) {
-				Text(NSLocalizedString("days", comment: ""))
+				Text("Days")
 			}  minimumValueLabel: {
-				Text("\(NSLocalizedString("days", comment: "")): " + String(format: "%.0f", chartRangeState.days))
+				Text("Days: " + String(format: "%.0f", chartRangeState.days))
 			} maximumValueLabel: {
 				Text("")
 			}
 
 			Slider(value: $chartRangeState.weeks, in: 0...4, step: 1) {
-				Text(NSLocalizedString("weeks", comment: ""))
+				Text("Weeks")
 			}  minimumValueLabel: {
-				Text("\(NSLocalizedString("weeks", comment: "")): " + String(format: "%.0f", chartRangeState.weeks))
+				Text("Weeks: " + String(format: "%.0f", chartRangeState.weeks))
 			} maximumValueLabel: {
 				Text("")
 			}
