@@ -54,12 +54,6 @@ struct ContentView: View {
                     
                     .alert(isPresented: $bleManager.setTimeError, content: {
                             Alert(title: Text("Failed to Set Time"), message: Text("There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect."), dismissButton: .default(Text("Dismiss")))})
-
-                    // if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
-                    .onAppear() { if !bleManager.isConnectedToPinetime { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { if autoconnect && bleManager.isSwitchedOn { self.bleManager.startScanning() }
-                            //; sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
-                        
-                    }) }}
                 
                     .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
                     //.navigationBarTitle(Text("InfiniLink").font(.subheadline), displayMode: .large)
@@ -92,6 +86,11 @@ struct ContentView: View {
             }
             .tag(2)
         }
+        // if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
+        .onAppear() { if !bleManager.isConnectedToPinetime { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { if autoconnect && bleManager.isSwitchedOn { self.bleManager.startScanning() }
+                //; sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
+            
+        }) }}
         .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System Default") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
         //.accentColor(.red)
     }

@@ -88,6 +88,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     @Published var bleLogger = DebugLogManager.shared // MARK: logging
 
     var firstConnect: Bool = true                                        // makes iOS connected message only show up on first connect, not if device drops connection and reconnects
+    var disconnected: Bool = false
     var heartChartReconnect: Bool = true                                // skip first HRM transmission on every fresh connection to prevent saving of BS data
 //    var batChartReconnect: Bool = true                                // skip first HRM transmission on every fresh connection to prevent saving of BS data
     
@@ -122,6 +123,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     
     func disconnect(){
         if infiniTime != nil {
+            disconnected = true
             myCentral.cancelPeripheralConnection(infiniTime)
             firstConnect = true
             isConnectedToPinetime = false
@@ -137,6 +139,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
             if isConnectedToPinetime == true {
                 self.myCentral.cancelPeripheralConnection(self.infiniTime)
             }
+            disconnected = false
             self.myCentral.stopScan()
             isScanning = false
             

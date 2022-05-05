@@ -161,6 +161,14 @@ struct DeviceView: View {
                         Text("Send Notification to PineTime")
                     }.disabled(!watchNotifications || !bleManager.isConnectedToPinetime)
                 }
+                
+                Section() {
+                    Button {
+                        bleManager.disconnect()
+                    } label: {
+                        Text("Disconnect PineTime")
+                    }
+                }
             }
             .listStyle(.insetGrouped)
         }
