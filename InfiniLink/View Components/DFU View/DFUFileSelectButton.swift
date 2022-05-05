@@ -37,7 +37,7 @@ struct DFUFileSelectButton: View {
 					}),
 					.default(Text("Download Firmware File"), action: {
 						//DownloadManager.shared.results = []
-						SheetManager.shared.sheetSelection = .downloadUpdate
+						//SheetManager.shared.sheetSelection = .downloadUpdate
 						SheetManager.shared.showSheet = true
 						DFU_Updater.shared.local = false
 					}),

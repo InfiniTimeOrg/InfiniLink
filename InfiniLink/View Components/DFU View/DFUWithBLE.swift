@@ -58,10 +58,10 @@ struct DFUWithBLE: View {
                     //    }
                     //}
                     
-                    if downloadManager.updateAvailable {
-                        NewUpdate(updateStarted: $downloadManager.updateStarted)
+                    if downloadManager.updateAvailable && dfuUpdater.firmwareSelected {
+                        NewUpdate(updateStarted: $downloadManager.updateStarted, openFile: $openFile)
                     } else {
-                        NoUpdate()
+                        NoUpdate(openFile: $openFile)
                     }
                     
                     
@@ -156,6 +156,7 @@ struct NewUpdate: View {
     //@ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var dfuUpdater = DFU_Updater.shared
     @Environment(\.colorScheme) var scheme
+    @Binding var openFile: Bool
     
     //@State var updateStarted: Bool = false
     
@@ -169,8 +170,13 @@ struct NewUpdate: View {
                         .padding(5)
                         .frame(width: 75, height: 75)
                     VStack(alignment: .leading) {
-                        Text("InfiniTime \(DownloadManager.shared.updateVersion)")
-                            .bold()
+                        if dfuUpdater.local == false {
+                            Text("InfiniTime \(DownloadManager.shared.updateVersion)")
+                                .bold()
+                        } else {
+                            Text(dfuUpdater.firmwareFilename)
+                                .bold()
+                        }
                         Text("\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB")
                             .font(.caption)
                         if updateStarted {
@@ -182,16 +188,25 @@ struct NewUpdate: View {
                     .padding(5)
                 }
                 HStack {
-                    Text(DownloadManager.shared.updateBody)
-                        .font(.system(size: 14))
-                        .lineLimit(3)
-                        .padding(5)
+                    if dfuUpdater.local == false {
+                        Text(DownloadManager.shared.updateBody)
+                            .font(.system(size: 14))
+                            .lineLimit(3)
+                            .padding(5)
+                    } else {
+                        Text("This is a local file and may not work with your PineTime.")
+                            .font(.system(size: 14))
+                            .lineLimit(3)
+                            .padding(5)
+                    }
                 }
                 
             }.frame(height: 160 ,alignment: .center)
             
-            NavigationLink(destination: DFULearnMore()) {
-                Text("Learn More")
+            if dfuUpdater.local == false {
+                NavigationLink(destination: DFULearnMore()) {
+                    Text("Learn More")
+                }
             }
         }
         Section() {
@@ -199,7 +214,7 @@ struct NewUpdate: View {
             //Button("Download and Install", action: {})
             
             if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
-                NavigationLink(destination: DownloadView()) {
+                NavigationLink(destination: DownloadView(openFile: $openFile)) {
                     Text("Install Older Version")
                 }
             }
@@ -211,11 +226,12 @@ struct NoUpdate: View {
     //@ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @Environment(\.colorScheme) var colorScheme
+    @Binding var openFile: Bool
     
     var body: some View {
         if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
             Section() {
-                NavigationLink(destination: DownloadView()) {
+                NavigationLink(destination: DownloadView(openFile: $openFile)) {
                     Text("Install Older Version")
                 }
             }
