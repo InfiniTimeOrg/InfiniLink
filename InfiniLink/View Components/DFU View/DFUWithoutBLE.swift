@@ -24,3 +24,18 @@ struct DFUWithoutBLE: View {
         //.navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
 	}
 }
+
+struct DFUWithoutConnection: View {
+    var body: some View{
+        VStack {
+            Text("PineTime Not Available")
+                //.font(.title2)
+                .foregroundColor(.gray)
+            Text("Please check your connection and try again.")
+                .foregroundColor(.gray)
+                //.font(.system(size: 15))
+                .font(.caption)
+        }
+        //.navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
+    }
+}
