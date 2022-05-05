@@ -7,10 +7,8 @@ This is a UI redesign for the InfiniLink app, currently still needs work though.
 
 ### Todo List:
 - Add back the manual update from files.
-- Fix bug with the pair menu that causes it to reopen ones when dismiss.
 - Redesign the heart and battery views.
 - Finish customize favorites menu.
-- Add the ability to manually set the theme to light or dark.
 
 ### What works:
 - Scan nearby devices and connect to PineTimes
