@@ -2,7 +2,7 @@
 //  DeviceView.swift
 //  InfiniLink
 //
-//  Created by Micah Stanley on 11/16/21.
+//  Created by John Stanley on 11/16/21.
 //
 
 import SwiftUI

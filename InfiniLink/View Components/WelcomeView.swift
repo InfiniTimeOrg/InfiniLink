@@ -2,7 +2,7 @@
 //  WelcomeView.swift
 //  InfiniLink
 //
-//  Created by Micah Stanley on 5/2/22.
+//  Created by John Stanley on 5/2/22.
 //
 
 import SwiftUI
@@ -51,7 +51,7 @@ struct WelcomeView: View {
                                 SheetManager.shared.sheetSelection = .connect
                                 SheetManager.shared.showSheet = true
                             }
-                        }.buttonStyle(NeumorphicButtonStyle(bgColor: .darkGray))
+                        }.buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(45)
                     }

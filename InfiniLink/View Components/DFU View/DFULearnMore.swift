@@ -2,7 +2,7 @@
 //  DFULeanMore.swift
 //  InfiniLink
 //
-//  Created by Micah Stanley on 11/17/21.
+//  Created by John Stanley on 11/17/21.
 //
 
 import SwiftUI

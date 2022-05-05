@@ -2,7 +2,7 @@
 //  Test.swift
 //  InfiniLink
 //
-//  Created by Micah Stanley on 4/10/22.
+//  Created by John Stanley on 4/10/22.
 //
 
 import Foundation
@@ -36,6 +36,4 @@ class BLEManagerVal: NSObject, ObservableObject {
     @Published var autoconnectPeripheral: CBPeripheral!
 
     var batChartReconnect: Bool = true                                // skip first HRM transmission on every fresh connection to prevent saving of BS data
-    
 }
-

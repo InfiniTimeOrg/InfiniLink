@@ -85,6 +85,8 @@
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* ChartView.swift */; };
 		E57AD5712820592300E33EEA /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5702820592300E33EEA /* WelcomeView.swift */; };
+		E57AD5732823F0B300E33EEA /* ChosenThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */; };
+		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
 		E5EEB1D02803435500FB0C11 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1CF2803435500FB0C11 /* DeviceView.swift */; };
 		E5EEB1D22803435F00FB0C11 /* ChartBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D12803435F00FB0C11 /* ChartBackup.swift */; };
 		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
@@ -199,6 +201,8 @@
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		26F426EE26C72D7D00D0866B /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
 		E57AD5702820592300E33EEA /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChosenThemeView.swift; sourceTree = "<group>"; };
+		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceData.swift; sourceTree = "<group>"; };
 		E5EEB1CF2803435500FB0C11 /* DeviceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		E5EEB1D12803435F00FB0C11 /* ChartBackup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartBackup.swift; sourceTree = "<group>"; };
 		E5EEB1D32803438200FB0C11 /* RenameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
@@ -399,6 +403,8 @@
 				263B20C826CF07BE00676BF0 /* DFU View */,
 				2675CA5826DC5C9400967E4D /* View Utilities */,
 				263B20B626CD673D00676BF0 /* Chart View Components */,
+				E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */,
+				E57AD5762823F85D00E33EEA /* DeviceData.swift */,
 			);
 			path = "View Components";
 			sourceTree = "<group>";
@@ -716,6 +722,7 @@
 				26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */,
 				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
+				E57AD5732823F0B300E33EEA /* ChosenThemeView.swift in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
 				E5EEB1D62803442C00FB0C11 /* DFULearnMore.swift in Sources */,
 				2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */,
@@ -723,6 +730,7 @@
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */,
+				E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */,
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,

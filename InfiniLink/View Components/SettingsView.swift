@@ -13,10 +13,16 @@ import SwiftUI
 struct Settings_Page: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
+    //@ObservedObject var bleManagerVal = BLEManagerVal.shared
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    
+    @ObservedObject private var deviceDataForSettings: DeviceData = deviceData
+    //@ObservedObject private var selfDeviceDataForSettings: BLEManagerVal = selfDeviceData
 	//@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@Environment(\.colorScheme) var colorScheme
 	
+    
+    //@AppStorage("chosenTheme") var chosenTheme = "System Default"
 	@AppStorage("watchNotifications") var watchNotifications: Bool = true
 	@AppStorage("autoconnect") var autoconnect: Bool = false
 	@AppStorage("batteryNotification") var batteryNotification: Bool = false
@@ -35,10 +41,37 @@ struct Settings_Page: View {
 	var body: some View {
 		VStack {
 			List {
+                                
+                //if UIApplication.shared.supportsAlternateIcons {
+                //    NavigationLink {
+                //        AppIconPicker()
+                //            .environmentObject(selfDeviceDataForSettings)
+                //    } label: {
+                //        HStack {
+                //            Label("App Icon", systemImage: "app")
+                //                .accentColor(.primary)
+                //            Spacer()
+                //            selfDeviceDataForSettings.appIcon.name
+                //                .foregroundColor(.secondary)
+                //        }
+                //    }
+                //}
+                
                 Section(header: Text("App Settings")
                             .font(.system(size: 14))
                             .bold()
                             .padding(1)) {
+                            
+                    NavigationLink(destination: SettingsChosenThemeView(chosenTheme: $deviceDataForSettings.chosenTheme)) {
+                        HStack {
+                            Text("App Theme")
+                                //.accentColor(.primary)
+                            Spacer()
+                            Text(deviceData.chosenTheme)
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                                
                     NavigationLink(destination: CustomizeFavoritesView()) {
                         Text("Customize Favorites")
                     }
