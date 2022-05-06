@@ -9,78 +9,13 @@ import Foundation
 import SwiftUI
 
 
-struct StepsWidget: View {
-    @ObservedObject var bleManagerVal = BLEManagerVal.shared
-    @AppStorage("stepCountGoal") var stepCountGoal = 10000
-    @Environment(\.colorScheme) var scheme
-    var body: some View {
-        NavigationLink(destination: StepView()) {
-            VStack {
-                HStack {
-                    Image(systemName: "figure.walk")
-                        .foregroundColor(.blue)
-                    Text("Steps")
-                        .foregroundColor(.blue)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                Spacer(minLength: 24)
-                HStack(alignment: .bottom) {
-                    //bleManager.stepCount
-                    Text(String(bleManagerVal.stepCount))
-                        .foregroundColor(scheme == .dark ? .white : .black)
-                        .font(.system(size: 28))
-                        .bold()
-                    Text("with a goal of \(stepCountGoal)")
-                        .foregroundColor(.gray)
-                        .bold()
-                        .font(.system(size: 14))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            .padding(5)
-        }
-    }
-}
-
-
-struct HeartFavorite: View {
-    @ObservedObject var bleManagerVal = BLEManagerVal.shared
-    @Environment(\.colorScheme) var scheme
-    var body: some View {
-        NavigationLink(destination: HeartView()) {
-            VStack {
-                HStack {
-                    Image(systemName: "heart.fill")
-                        .foregroundColor(.red)
-                    Text("Heart Rate")
-                        .foregroundColor(.red)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                Spacer(minLength: 24)
-                HStack(alignment: .bottom) {
-                    Text(String(Int(bleManagerVal.heartBPM)))
-                        .foregroundColor(scheme == .dark ? .white : .black)
-                        .font(.system(size: 28))
-                        .bold()
-                    Text("BPM")
-                        .foregroundColor(.gray)
-                        .bold()
-                        .font(.system(size: 14))
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            .padding(5)
-        }
-    }
-}
-
-
 struct HomeScreen: View {
     
     
     @Environment(\.colorScheme) var colorScheme
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
     @AppStorage("debugMode") var debugMode: Bool = false
+    @AppStorage("favorites") var favorites: Array = ["Steps", "Heart"]
     //@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     //@ObservedObject var dfuUpdater = DFU_Updater.shared
@@ -149,12 +84,12 @@ struct HomeScreen: View {
                                         }
                                     } label: {
                                         if bleManager.isConnectedToPinetime {
-                                            Text("Connecting...")
+                                            Text(NSLocalizedString("scanning", comment: ""))
                                                 .foregroundColor(colorScheme == .dark ? .white : .black)
                                                 .bold()
                                                 .font(.system(size: 20))
                                         } else {
-                                            Text("Not Connected")
+                                            Text(NSLocalizedString("disconnect", comment: ""))
                                                 .foregroundColor(colorScheme == .dark ? .white : .black)
                                                 .bold()
                                                 .font(.system(size: 20))
@@ -173,7 +108,7 @@ struct HomeScreen: View {
                                                 .foregroundColor(colorScheme == .dark ? .white : .black)
                                                 .bold()
                                                 .font(.system(size: 20))
-                                            Text("Firmware Version: " + deviceInfo.firmware)
+                                            Text(NSLocalizedString("firmware_version", comment: "") + deviceInfo.firmware)
                                                 .foregroundColor(colorScheme == .dark ? .white : .black)
                                                 .font(.system(size: 12))
                                                 .onAppear() {
@@ -185,7 +120,7 @@ struct HomeScreen: View {
                                                         DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: BLEDeviceInfo.shared.firmware)
                                                     }
                                                 }
-                                            Text("Model: \(deviceInfo.modelNumber)")
+                                            Text(NSLocalizedString("model", comment: "")  + String(deviceInfo.modelNumber))
                                                 .foregroundColor(colorScheme == .dark ? .white : .black)
                                                 .font(.system(size: 12))
                                         }
@@ -202,26 +137,42 @@ struct HomeScreen: View {
                     //if !DownloadManager.shared.downloading {
                         if DownloadManager.shared.updateAvailable {
                             NavigationLink(destination: DFUView()) {
-                                Text("Update Available")
+                                Text(NSLocalizedString("firmware_update_is_available", comment: ""))
                             }
                         }
                     //}
                 }
                 
                 
-                Section(header: Text("Favorites")
-                            .font(.system(size: 14))
-                            .bold()
-                            .padding(1)) {
-                    StepsWidget()
-                    //StepFavorite()
+                //Section(header: Text("Favorites")
+                //            .font(.system(size: 14))
+                //            .bold()
+                //            .padding(1)) {
+                //    Widget(widgetName: "Steps")
+                //    //StepFavorite()
+                //}
+                
+                ForEach(favorites, id: \.self) { user in
+                    if favorites.firstIndex(of: user)! == 0 {
+                        Section(header: Text("Favorites")
+                                    .font(.system(size: 14))
+                                    .bold()
+                                    .padding(1)) {
+                            Widget(widgetName: user)
+                        }
+                    } else {
+                        Section {
+                            Widget(widgetName: user)
+                        }
+                    }
                 }
                 
                 //.onAppear { UITableView.appearance().separatorStyle = .none }
                 
-                Section {
-                    HeartFavorite()
-                }
+                //Section {
+                //    Widget(widgetName: "Heart")
+                //    //HeartWidget()
+                //}
                 
                 NavigationLink(destination: CustomizeFavoritesView()) {
                     Text("Customize Favorites")

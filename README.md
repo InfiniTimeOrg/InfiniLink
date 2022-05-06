@@ -6,9 +6,7 @@ This is a UI redesign for the InfiniLink app, currently still needs work though.
 
 
 ### Todo List:
-- Add back the manual update from files.
 - Redesign the heart and battery views.
-- Finish customize favorites menu.
 
 ### What works:
 - Scan nearby devices and connect to PineTimes

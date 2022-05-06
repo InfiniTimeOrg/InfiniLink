@@ -15,6 +15,8 @@ class DeviceData: ObservableObject {
         }
     }
     
+    @Published var allFavorites = ["Steps", "Heart", "Battery"]
+    
     init() {
         self.chosenTheme = UserDefaults.standard.string(forKey: "chosenTheme") ?? "System Default"
     }
