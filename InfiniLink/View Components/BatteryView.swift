@@ -7,36 +7,50 @@
 //
     
 
+
 import SwiftUI
 
 struct BatteryView: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @Environment(\.colorScheme) var colorScheme
+    //@Environment(\.colorScheme) var colorScheme
     let chartManager = ChartManager.shared
     
     var body: some View {
         return VStack {
             List() {
-                HStack {
-                    Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-                        .imageScale(.large)
-                        .foregroundColor(.green)
-                    Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                        .foregroundColor(.green)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Button {
-                        chartManager.currentChart = .battery
-                        SheetManager.shared.sheetSelection = .chartSettings
-                        SheetManager.shared.showSheet = true
-                    } label: {
-                        Image(systemName: "gear")
-                            //.imageScale()
-                            .padding(.vertical)
-                    }
-                }
                 
-                BatteryChart()
+                //Section {
+                //    HStack {
+                //        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
+                //            .imageScale(.large)
+                //            .foregroundColor(.green)
+                //        Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
+                //            .foregroundColor(.green)
+                //            .bold()
+                //            .frame(maxWidth: .infinity, alignment: .leading)
+                //        Button {
+                //            chartManager.currentChart = .battery
+                //            SheetManager.shared.sheetSelection = .chartSettings
+                //            SheetManager.shared.showSheet = true
+                //        } label: {
+                //            Image(systemName: "gear")
+                //                //.imageScale()
+                //                .padding(.vertical)
+                //        }
+                //    }
+                //}
+                
+                Section {
+                    BatteryContentView()
+                }
+                //Section {
+                //    HStack {
+                //        Text("Battery Level: ")
+                //        Text("100%")
+                //            .frame(maxWidth: .infinity, alignment: .trailing)
+                //    }
+                //}
+                //BatteryChart()
             }
             .navigationBarTitle(Text("Battery").font(.subheadline), displayMode: .inline)
             //.listStyle(.insetGrouped)

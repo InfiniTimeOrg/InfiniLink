@@ -24,6 +24,7 @@ struct HomeScreen: View {
     @ObservedObject var uptimeManager = UptimeManager.shared
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
+    
     @State var currentUptime: TimeInterval!
     @State var updateAvailable: Bool = false
     

@@ -87,6 +87,7 @@
 		E57AD5712820592300E33EEA /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5702820592300E33EEA /* WelcomeView.swift */; };
 		E57AD5732823F0B300E33EEA /* ChosenThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
+		E57AD57F2825865500E33EEA /* BatteryChart2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD57E2825865500E33EEA /* BatteryChart2.swift */; };
 		E5EEB1D02803435500FB0C11 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1CF2803435500FB0C11 /* DeviceView.swift */; };
 		E5EEB1D22803435F00FB0C11 /* ChartBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D12803435F00FB0C11 /* ChartBackup.swift */; };
 		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
@@ -204,6 +205,7 @@
 		E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChosenThemeView.swift; sourceTree = "<group>"; };
 		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceData.swift; sourceTree = "<group>"; };
 		E57AD57D282462D900E33EEA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E57AD57E2825865500E33EEA /* BatteryChart2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart2.swift; sourceTree = "<group>"; };
 		E5EEB1CF2803435500FB0C11 /* DeviceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		E5EEB1D12803435F00FB0C11 /* ChartBackup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartBackup.swift; sourceTree = "<group>"; };
 		E5EEB1D32803438200FB0C11 /* RenameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
@@ -392,6 +394,7 @@
 				E5EEB1D828034EA500FB0C11 /* BatteryView.swift */,
 				E5EEB1D728034EA500FB0C11 /* HeartView.swift */,
 				E5EEB1DB28036C9800FB0C11 /* CustomizeFavoritesView.swift */,
+				E57AD57E2825865500E33EEA /* BatteryChart2.swift */,
 				E57AD5702820592300E33EEA /* WelcomeView.swift */,
 				2601AF68272210EB00D999EF /* Steps View Components */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
@@ -689,6 +692,7 @@
 				2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */,
 				26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */,
 				26C5FAE126FE98F500921207 /* BLEAutoconnectManager.swift in Sources */,
+				E57AD57F2825865500E33EEA /* BatteryChart2.swift in Sources */,
 				26A6316026C4BC25005AE404 /* DFUView.swift in Sources */,
 				26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */,
 				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
