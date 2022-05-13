@@ -185,6 +185,7 @@
 
 // - BatteryNotifications
 "battery_low" = "Battery faible";
+"battery_low_message" = "";
 
 // - MusicController
 "not_playing" = "Pas d'activité";
