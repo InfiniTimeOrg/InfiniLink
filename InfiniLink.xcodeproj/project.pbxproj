@@ -84,6 +84,8 @@
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* ChartView.swift */; };
+		E528604E282C5EA600C06FA0 /* HeartChart2.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528604D282C5EA600C06FA0 /* HeartChart2.swift */; };
+		E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */; };
 		E57AD5712820592300E33EEA /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5702820592300E33EEA /* WelcomeView.swift */; };
 		E57AD5732823F0B300E33EEA /* ChosenThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
@@ -201,6 +203,8 @@
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		26F426EE26C72D7D00D0866B /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		E528604D282C5EA600C06FA0 /* HeartChart2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart2.swift; sourceTree = "<group>"; };
+		E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewComponents.swift; sourceTree = "<group>"; };
 		E57AD5702820592300E33EEA /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChosenThemeView.swift; sourceTree = "<group>"; };
 		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceData.swift; sourceTree = "<group>"; };
@@ -288,6 +292,9 @@
 		263B20B626CD673D00676BF0 /* Chart View Components */ = {
 			isa = PBXGroup;
 			children = (
+				E57AD57E2825865500E33EEA /* BatteryChart2.swift */,
+				E528604D282C5EA600C06FA0 /* HeartChart2.swift */,
+				E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */,
 				263B20B426CD673900676BF0 /* ChartTabs.swift */,
 				263B20B926CDF13400676BF0 /* HeartChart.swift */,
 				263B20BB26CDF20400676BF0 /* BatteryChart.swift */,
@@ -394,7 +401,6 @@
 				E5EEB1D828034EA500FB0C11 /* BatteryView.swift */,
 				E5EEB1D728034EA500FB0C11 /* HeartView.swift */,
 				E5EEB1DB28036C9800FB0C11 /* CustomizeFavoritesView.swift */,
-				E57AD57E2825865500E33EEA /* BatteryChart2.swift */,
 				E57AD5702820592300E33EEA /* WelcomeView.swift */,
 				2601AF68272210EB00D999EF /* Steps View Components */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
@@ -709,6 +715,7 @@
 				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,
 				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
 				268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */,
+				E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */,
 				267C2EFF273DDBFF00F464B0 /* StepSettingsDatePicker.swift in Sources */,
 				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
 				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
@@ -742,6 +749,7 @@
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
+				E528604E282C5EA600C06FA0 /* HeartChart2.swift in Sources */,
 				2601AF6727220CED00D999EF /* StepView.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,

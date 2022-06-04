@@ -24,6 +24,7 @@ struct BatteryIcon: View {
 
 
 struct ContentView: View {
+    //@Environment(\.scenePhase) var scenePhase
     @ObservedObject var bleManager = BLEManager.shared
     //@ObservedObject var pageSwitcher = PageSwitcher.shared
     @ObservedObject var batteryNotifications = BatteryNotifications()
@@ -45,6 +46,10 @@ struct ContentView: View {
     init() {
         UINavigationBar.appearance().titleTextAttributes = [.font : UIFont.systemFont(ofSize: 18.0, weight: .bold)]
     }
+    
+    //deinit {
+    //    observers.forEach(NotificationCenter.default.removeObserver)
+    //}
     
     var body: some View {
         TabView(selection: $selection) {
@@ -92,7 +97,14 @@ struct ContentView: View {
             
         }) }}
         .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System Default") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
-        //.accentColor(.red)
+        .onChange(of: bleManager.batteryLevel) { bat in
+            batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification), perform: { output in
+            if bleManager.isConnectedToPinetime {
+                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 0, chart: ChartsAsInts.connected.rawValue))
+            }
+        })
     }
 }
 

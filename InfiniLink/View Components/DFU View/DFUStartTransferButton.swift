@@ -37,9 +37,9 @@ struct DFUStartTransferButton: View {
 					updateStarted = true
 				} else {
                     downloadManager.startTransfer = true
-                    print(downloadManager.browser_download_url)
+                    //print(downloadManager.browser_download_url)
                     downloadManager.startDownload(url: downloadManager.browser_download_url)
-                    print(downloadManager.downloading)
+                    //print(downloadManager.downloading)
                     
                     downloadManager.downloading
                     

@@ -14,11 +14,12 @@ struct CurrentChart: View {
 	@ObservedObject var chartManager = ChartManager.shared
 	
 	var body: some View {
-		switch chartManager.currentChart {
-		case .heart:
-			HeartChart()
-		case .battery:
-			BatteryChart()
-		}
+        Text("None")
+		//switch chartManager.currentChart {
+		//case .heart:
+		//	HeartChart()
+		//case .battery:
+		//	BatteryChart()
+		//}
 	}
 }

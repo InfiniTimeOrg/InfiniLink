@@ -39,7 +39,7 @@ struct BLEUpdatedCharacteristicHandler {
 			let bpm = heartRate(from: characteristic)
             bleManagerVal.heartBPM = Double(bpm)
 			if bpm != 0{
-				ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
+                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
 			}
 		case bleManagerVal.cbuuidList.bat:
 			guard let value = characteristic.value else {
@@ -48,7 +48,7 @@ struct BLEUpdatedCharacteristicHandler {
 			}
 			let batData = [UInt8](value)
 			DebugLogManager.shared.debug(error: "battery level report: \(String(batData[0]))", log: .ble, date: Date())
-			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
+            ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
             bleManager.batteryLevel = Double(batData[0])
 		case bleManagerVal.cbuuidList.stepCount:
             guard let value = characteristic.value else {

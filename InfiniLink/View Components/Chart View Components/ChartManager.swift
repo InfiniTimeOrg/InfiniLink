@@ -14,6 +14,7 @@ import SwiftUICharts
 enum ChartsAsInts: Int16 {
 	case heart = 0
 	case battery = 1
+    case connected = 2
 }
 
 struct DataPoint {
@@ -67,6 +68,7 @@ class ChartManager: ObservableObject {
 	enum chartSelection {
 		case heart
 		case battery
+        case connected
 	}
 	
 	enum DateValue: Double {
@@ -115,29 +117,29 @@ class ChartManager: ObservableObject {
 	}
 	
 	func convert(results: FetchedResults<ChartDataPoint>) -> [LineChartDataPoint] {
-		var dateRangeSelection: DateSelectionState
-		if currentChart == .heart {
-			dateRangeSelection = heartRangeSelectionState
-		} else {
-			dateRangeSelection = batteryRangeSelectionState
-		}
+		//var dateRangeSelection: DateSelectionState
+		//if currentChart == .heart {
+		//	dateRangeSelection = heartRangeSelectionState
+		//} else {
+		//	dateRangeSelection = batteryRangeSelectionState
+		//}
 		var dataPoints: [LineChartDataPoint] = []
 		let dateFormat = DateFormatter()
 		dateFormat.dateFormat = "MMM d\nH:mm:ss"
 		for data in results {
-			switch dateRangeSelection.dateRangeSelection {
-			case 1:
-				let dateSum = (dateRangeSelection.hours * -3600) +	(dateRangeSelection.days * -86400) + (dateRangeSelection.weeks * -604800)
-				if data.timestamp!.timeIntervalSinceNow >= Double(dateSum) {
-					dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
-				}
-			case 2:
-				if data.timestamp! >= dateRangeSelection.startDate && data.timestamp! <= dateRangeSelection.endDate {
-					dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
-				}
-			default:
-				dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
-			}
+			//switch dateRangeSelection.dateRangeSelection {
+			//case 1:
+			//	let dateSum = (dateRangeSelection.hours * -3600) +	(dateRangeSelection.days * -86400) + (dateRangeSelection.weeks * -604800)
+			//	if data.timestamp!.timeIntervalSinceNow >= Double(dateSum) {
+			//		dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+			//	}
+			//case 2:
+			//	if data.timestamp! >= dateRangeSelection.startDate && data.timestamp! <= dateRangeSelection.endDate {
+			//		dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+			//	}
+			//default:
+            dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+			//}
 			
 		}
 		return dataPoints

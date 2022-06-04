@@ -36,6 +36,22 @@ struct HeartView: View {
                     }
                 }
                 
+                
+                
+                //Section {
+                //    HeartContentView()
+                //}
+                //Section {
+                //    HStack {
+                //        Text("Latest")
+                //            .frame(maxWidth: .infinity, alignment: .leading)
+                //        Text(Int(bleManagerVal.heartBPM) == 0 ? "--" : String(Int(bleManagerVal.heartBPM)))
+                //            .bold()
+                //        Text("BPM")
+                //            .foregroundColor(.gray)
+                //    }
+                //}
+                
                 HeartChart()
             }
             .navigationBarTitle(Text("Heart").font(.subheadline), displayMode: .inline)
