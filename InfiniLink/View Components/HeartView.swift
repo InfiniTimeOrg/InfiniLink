@@ -38,7 +38,7 @@ struct HeartView: View {
                 
                 HeartChart()
             }
-            .navigationBarTitle(Text(NSLocalizedString("heart_tilte", comment: "")).font(.subheadline), displayMode: .inline)
+            .navigationBarTitle(Text(NSLocalizedString("heart_tilte", comment: ""))) //.font(.subheadline), displayMode: .inline)
         }
         .onAppear() {
             print("Heart")

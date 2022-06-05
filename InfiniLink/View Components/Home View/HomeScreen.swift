@@ -128,7 +128,7 @@ struct HomeScreen: View {
             }
             .listStyle(.insetGrouped)
         }
-        .navigationBarTitle(Text("InfiniLink").font(.subheadline), displayMode: .large)
+		.navigationBarTitle(Text("InfiniLink")) //.font(.subheadline), displayMode: .large)
     }
 }
 

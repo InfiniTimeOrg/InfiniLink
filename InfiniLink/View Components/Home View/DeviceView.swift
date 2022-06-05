@@ -163,6 +163,6 @@ struct DeviceView: View {
             }
             .listStyle(.insetGrouped)
         }
-        .navigationBarTitle(Text(NSLocalizedString("my_device", comment: "")).font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("my_device", comment: ""))) //.font(.subheadline), displayMode: .inline)
     }
 }

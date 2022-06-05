@@ -50,8 +50,8 @@ struct ContentView: View {
                     .alert(isPresented: $bleManager.setTimeError, content: {
                             Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
                 
-                    .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-            }
+					.navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
+			}.navigationViewStyle(.stack)
             .tabItem {
                 Image(systemName: "house.fill")
                 Text(NSLocalizedString("home", comment: ""))
@@ -61,8 +61,8 @@ struct ContentView: View {
             NavigationView {
                 ChartView()
                     .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text(NSLocalizedString("charts", comment: "")).font(.subheadline), displayMode: .large)
-            }
+                    .navigationBarTitle(Text(NSLocalizedString("charts", comment: ""))) //.font(.subheadline), displayMode: .large)
+			}.navigationViewStyle(.stack)
             .tabItem {
                 Image(systemName: "chart.bar.fill")
                 Text(NSLocalizedString("charts", comment: ""))
@@ -72,8 +72,8 @@ struct ContentView: View {
             NavigationView {
                 Settings_Page()
                     .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text(NSLocalizedString("settings", comment: "")).font(.subheadline), displayMode: .large)
-            }
+                    .navigationBarTitle(Text(NSLocalizedString("settings", comment: ""))) //.font(.subheadline), displayMode: .large)
+			}.navigationViewStyle(.stack)
             .tabItem {
                 Image(systemName: "gearshape.fill")
                 Text(NSLocalizedString("settings", comment: ""))

@@ -20,7 +20,7 @@ struct SettingsChosenThemeView: View {
             }
             .pickerStyle(.wheel)
         }
-        .navigationBarTitle(Text(NSLocalizedString("choose_app_theme", comment: "")).font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("choose_app_theme", comment: ""))) //.font(.subheadline), displayMode: .inline)
     }
 }
 

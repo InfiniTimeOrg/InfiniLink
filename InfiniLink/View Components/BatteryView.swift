@@ -23,7 +23,7 @@ struct BatteryView: View {
                     BatteryContentView()
                 }
             }
-            .navigationBarTitle(Text(NSLocalizedString("battery_tilte", comment: "")).font(.subheadline), displayMode: .inline)
+			.navigationBarTitle(Text(NSLocalizedString("battery_tilte", comment: ""))) //.font(.subheadline), displayMode: .inline)
         }
         .onAppear() {
             print("Battery")

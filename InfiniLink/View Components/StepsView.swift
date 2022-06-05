@@ -55,7 +55,7 @@ struct StepView: View {
                             .padding(.vertical)
                     }
                 ))
-                .navigationBarTitle(Text(NSLocalizedString("steps", comment: "")).font(.subheadline), displayMode: .inline)
+                .navigationBarTitle(Text(NSLocalizedString("steps", comment: ""))) //.font(.subheadline), displayMode: .inline)
             }
         }
     }

@@ -53,8 +53,8 @@ struct CustomizeFavoritesView: View {
                 }
 
             }
-            .environment(\.editMode, true ? .constant(.active) : .constant(.inactive))
-            .navigationBarTitle(Text(NSLocalizedString("customize_favorites", comment: "")).font(.subheadline), displayMode: .inline)
+            //.environment(\.editMode, true ? .constant(.active) : .constant(.inactive))
+            .navigationBarTitle(Text(NSLocalizedString("customize_favorites", comment: ""))) //.font(.subheadline), displayMode: .inline)
         }
     }
     func move(from source: IndexSet, to destination: Int) {
