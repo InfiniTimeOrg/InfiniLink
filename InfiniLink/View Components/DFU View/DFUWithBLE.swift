@@ -28,62 +28,15 @@ struct DFUWithBLE: View {
 	var body: some View {
 		ZStack {
 			VStack (alignment: .leading) {
-				//Text("Update Firmware")
-					//.font(.largeTitle)
-                    //.padding()
-					//.fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
-						// this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
-					//	do{
-					//		let fileUrl = try res.get()
-							
-					//		guard fileUrl.startAccessingSecurityScopedResource() else { return }
-							
-					//		dfuUpdater.firmwareSelected = true
-					//		dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
-					//		dfuUpdater.firmwareURL = fileUrl.absoluteURL
-							
-					//		fileUrl.stopAccessingSecurityScopedResource()
-					//	} catch{
-					//		DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
-					//	}
-					//}
 				List {
-                    //Section() {
-                    //    NavigationLink(destination: RenameView()) {
-                    //        Text("Install Older Version")
-                    //    }
-                    //}
                     
                     if downloadManager.updateAvailable && dfuUpdater.firmwareSelected {
                         NewUpdate(updateStarted: $downloadManager.updateStarted, openFile: $openFile)
                     } else {
                         NoUpdate(openFile: $openFile)
                     }
-                    
-                    
-					//Section(header: Text("Current Firmware")) {
-					//	Text(deviceInfo.firmware)
-					//}
-					//Section(header: ClearSelectedFirmwareHeader()) {
-					//	if dfuUpdater.firmwareSelected {
-					//		Text(dfuUpdater.firmwareFilename)
-					//	} else {
-					//		DFUFileSelectButton(openFile: $openFile)
-					//	}
-					//}
 				}
                 .listStyle(.insetGrouped)
-                //.listStyle(.inset)
-				
-				//Spacer()
-				
-				//if updateStarted {
-				//	DFUProgressBar().environmentObject(dfuUpdater)
-				//		.frame(height: 40 ,alignment: .center)
-				//		.padding()
-				//}
-					
-				//DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
 			}
             .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
                 // this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access

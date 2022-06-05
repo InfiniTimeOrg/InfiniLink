@@ -237,3 +237,9 @@
 "last_10_days" = "";
 "battery_level_is" = "";
 "currently_unavailable" = "";
+
+"software_version" = "";
+"model_name" = "";
+"autoconnect_to_this" = "";
+"send_notification_to" = "";
+"connected_to" = "";

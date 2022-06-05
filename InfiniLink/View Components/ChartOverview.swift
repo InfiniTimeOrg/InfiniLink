@@ -28,7 +28,7 @@ struct StepsChartView: View {
                         .foregroundColor(scheme == .dark ? .white : .black)
                         .font(.system(size: 28))
                         .bold()
-                    Text(NSLocalizedString("goal", comment: "") + String(stepCountGoal))
+                    Text(NSLocalizedString("goal", comment: "") + " " + String(stepCountGoal))
                         .foregroundColor(.gray)
                         .bold()
                         .font(.system(size: 14))
