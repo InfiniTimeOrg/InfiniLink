@@ -30,7 +30,7 @@ struct StepCalendarView: View {
 					setStepHistory(date: date)
 					Text("30")
 						.hidden()
-						.padding(8)
+						.padding(6)
 						.padding(.vertical, 2)
 						.overlay(
 							Text(String(self.calendar.component(.day, from: date)))

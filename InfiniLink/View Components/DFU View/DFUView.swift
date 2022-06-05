@@ -11,11 +11,15 @@ import SwiftUI
 struct DFUView: View {
 	
 	@ObservedObject var bleManager = BLEManager.shared
-
+    @ObservedObject var uptimeManager = UptimeManager.shared
 	
 	var body: some View {
-		if bleManager.isSwitchedOn {
-			DFUWithBLE()
+        if bleManager.isSwitchedOn {
+            if uptimeManager.connectTime != nil {
+                DFUWithBLE()
+            } else {
+                DFUWithoutConnection()
+            }
 		} else {
 			DFUWithoutBLE()
 		}

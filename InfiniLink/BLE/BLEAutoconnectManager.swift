@@ -30,8 +30,8 @@ struct BLEAutoconnectManager {
 		let autoconnect = UserDefaults.standard.object(forKey: "autoconnect") as? Bool ?? true
 		let autoconnectUUID = UserDefaults.standard.object(forKey: "autoconnectUUID") as? String ?? ""
 		
-		if autoconnect && peripheral.identifier.uuidString == autoconnectUUID {
-			BLEManager.shared.connect(peripheral: peripheral)
+        if autoconnect && peripheral.identifier.uuidString == autoconnectUUID && BLEManager.shared.disconnected == false {
+            BLEManager.shared.connect(peripheral: peripheral)
 			return true
 		}
 		return false

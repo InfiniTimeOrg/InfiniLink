@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 struct DebugViewBLE: View {
-	@ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var logManager = DebugLogManager.shared
 	
 	var body: some View {

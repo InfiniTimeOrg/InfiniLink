@@ -41,7 +41,7 @@ struct DeviceInfoManager {
 			BLEDeviceInfo.shared.serial = String(data: value, encoding: .utf8) ?? ""
 		case cbuuids.firmware:
 			BLEDeviceInfo.shared.firmware = String(data: value, encoding: .utf8) ?? ""
-			DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates()
+            DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: BLEDeviceInfo.shared.firmware)
 		case cbuuids.hardwareRevision:
 			BLEDeviceInfo.shared.hardwareRevision = String(data: value, encoding: .utf8) ?? ""
 		case cbuuids.softwareRevision:
@@ -81,6 +81,5 @@ struct DeviceInfoManager {
 		BLEDeviceInfo.shared.hardwareRevision = ""
 		BLEDeviceInfo.shared.softwareRevision = ""
 		BLEDeviceInfo.shared.manufacturer = ""
-		DownloadManager.shared.updateAvailable = false
 	}
 }

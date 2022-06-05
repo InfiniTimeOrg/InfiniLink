@@ -138,12 +138,12 @@
 // - WhatsNew
 "whats_new_in" = "What's New in";
 "welcome_to_version" = "Welcome to version";
-"welcome_text" = "I'm sorry to say that this will be the last update to InfiniLink. I started a new job a couple of months ago and no longer have the spare time to continue development of this project. If anyone is interested in taking over, please let me know and I can transfer everything over. Thank you for all of your support and suggestions along the way!";
+"welcome_text" = "of InfiniLink! I hope you enjoy the features I've added to the app for this version. Please feel free to get in touch with me about any issues you experience or changes you'd like to see!";
 
 // - WhatsNewBody
-"whats_new_body_1" = "- Merged Korean and French localizations";
-"whats_new_body_2" = "";
-"whats_new_body_3" = "";
+"whats_new_body_1" = "First localization!\n- Thank you so much to @friendlytsy for creating a Russian localization for InfiniLink! If anyone else would like to localize the app, the work that @friendlytsy put in laid the groundwork for new localizations. If any polyglots out there would like to contribute localizations for other languages, let me know and I can help you get started!";
+"whats_new_body_2" = "Bug fixes:\n- This release should fix a few bugs causing crashes when the Apple Music feature is accessed.\n- Fixes some UI issues for users with smaller screens.n-\"Updates Available\" field on the home screen should now correctly show if an update for InfiniTime is available, and should reset on disconnect.";
+"whats_new_body_3" = "*** Please note***: the secure pairing implemented in v1.8.0 of InfiniTime is not currently compatible with the way that iOS initiates bonding. I am working with the wonderful devs at InfiniTime to sort this out, but in the meantime, your BLE connection to your watch will still be unencrypted.";
 
 // - Onboarding
 "welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
@@ -199,3 +199,50 @@
 "failed_set_time" = "Failed to Set Time";
 "failed_set_time_description" = "There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect.";
 "dismiss" = "Dismiss";
+
+
+// - New Stuff
+"not_connected" = "Not Connected";
+"tap_to_connect" = "Tap to connect";
+"customize_favorites" = "Customize Favorites";
+"goal" = "with a goal of";
+"heart_rate" = "Heart Rate";
+"battery_tilte" = "Battery";
+"heart_tilte" = "Heart";
+"welcome_text" = "Welcome. If you have an InfiniTime device, \n you can pair it here.";
+"connecting" = "Connecting...";
+"start_pairing" = "Start Pairing";
+"my_device" = "My Device";
+"favorites" = "Favorites";
+"app_settings" = "App Theme";
+"app_theme" = "App Theme";
+"name" = "Name";
+"avaliable_themes" = "Avaliable themes";
+"choose_app_theme" = "Choose App Theme";
+"firmware_file_link" = "Firmware File Link";
+"firmware_download_links" = "Firmware Download Links";
+"downloads" = "Downloads";
+"learn_more" = "Learn More";
+"software_update" = "Software Update";
+"local_file_info" = "This is a local file and may not work with your PineTime.";
+"install_older_version" = "Install Older Version";
+"up_to_date" = "is up to date";
+"pinetime_not_available" = "PineTime Not Available";
+"please_check_your_connection_and_try_again" = "Please check your connection and try again.";
+"download_and_install" = "Download and Install";
+
+"battery_level" = "BATTERY LEVEL";
+"battery_usage" = "BATTERY USAGE";
+
+"last_24_hours" = "Last 24 Hours";
+"last_10_days" = "Last 10 Days";
+"battery_level_is" = "Battery Level is";
+"currently_unavailable" = "Currently Unavailable";
+
+"software_version" = "Software Version";
+"model_name" = "Model Name";
+"autoconnect_to_this" = "Autoconnect to this";
+"send_notification_to" = "Send Notification to";
+"connected_to" = "Connected to";
+
+// NSLocalizedString("", comment: "")

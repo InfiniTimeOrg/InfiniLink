@@ -14,7 +14,6 @@ enum SheetSelection {
 	case onboarding
 	case connect
 	case notification
-	case downloadUpdate
 	case whatsNew
 	case chartSettings
 	case stepSettings
@@ -75,8 +74,6 @@ class SheetManager: ObservableObject {
 				Connect()
 			case .notification:
 				ArbitraryNotificationSheet()
-			case .downloadUpdate:
-				DownloadView()
 			case .whatsNew:
 				WhatsNew()
 			case .chartSettings:

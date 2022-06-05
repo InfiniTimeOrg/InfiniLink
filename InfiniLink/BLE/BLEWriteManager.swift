@@ -10,6 +10,7 @@ import CoreBluetooth
 
 struct BLEWriteManager {
 	let bleManager = BLEManager.shared
+    let bleManagerVal = BLEManagerVal.shared
 	
 	func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
 		guard let writeData = message.data(using: .ascii) else {
@@ -37,7 +38,7 @@ struct BLEWriteManager {
 		let doSend = UserDefaults.standard.object(forKey: "watchNotifications")
 		if !notification.isEmpty {
 			if (doSend == nil || doSend as! Bool) && bleManager.infiniTime != nil {
-				bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
+				bleManager.infiniTime.writeValue(notification, for: bleManagerVal.notifyCharacteristic, type: .withResponse)
 			}
 		}
 	}

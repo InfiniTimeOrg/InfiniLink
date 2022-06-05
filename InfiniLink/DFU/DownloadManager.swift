@@ -9,16 +9,47 @@
 
 import Foundation
 import NordicDFU
+import SwiftUI
+
+extension Array: RawRepresentable where Element: Codable {
+    public init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode([Element].self, from: data)
+        else {
+            return nil
+        }
+        self = result
+    }
+
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let result = String(data: data, encoding: .utf8)
+        else {
+            return "[]"
+        }
+        return result
+    }
+}
 
 class DownloadManager: NSObject, ObservableObject {
 	static var shared = DownloadManager()
 
 	@Published var tasks: [URLSessionTask] = []
-	@Published var results: [Result] = []
 	@Published var downloading = false
-	@Published var updateAvailable = false
+	//@Published var updateAvailable = false
 	@Published var autoUpgrade: Result!
 	@Published var lastCheck: Date!
+    
+    @Published var updateStarted: Bool = false
+    
+    @AppStorage("results") var results: [Result] = []
+    @Published var updateAvailable: Bool = false
+    @Published var updateVersion: String = "0.0.0"
+    @Published var updateBody: String = ""
+    @Published var updateSize: Int = 0
+    @Published var browser_download_url: URL = URL(fileURLWithPath: "")
+    
+    @Published var startTransfer: Bool = false
 	
 	private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
 	private var downloadTask: URLSessionDownloadTask!
@@ -27,25 +58,42 @@ class DownloadManager: NSObject, ObservableObject {
 		let id: Int
 		let name: String
 		let browser_download_url: URL
+        let size: Int
 	}
 	
 	struct Result: Codable {
 		let tag_name: String
+        let body: String
 		let assets: [Asset]
 		var zipAsset: Asset!
 		
 		private enum CodingKeys: String, CodingKey {
-			case tag_name, assets
+			case tag_name, body, assets
 		}
 	}
+    
+    func setupTest(firFile: String) {
+        DFU_Updater.shared.firmwareFilename = firFile
+        DFU_Updater.shared.firmwareSelected = true
+        DFU_Updater.shared.local = false
+    }
 	
-	func checkForUpdates() -> Bool {
+    func checkForUpdates(currentVersion: String) -> Bool {
 		for i in results {
 			if i.tag_name.first != "v" {
-				let comparison = BLEDeviceInfo.shared.firmware.compare(i.tag_name, options: .numeric)
-				if comparison == .orderedAscending {
-					updateAvailable = true
+                let comparison = currentVersion.compare(i.tag_name, options: .numeric)
+                if comparison == .orderedAscending && comparison != .orderedSame {
+					//updateAvailable = true
+                    DFU_Updater.shared.firmwareFilename = chooseAsset(response: i).name
+                    DFU_Updater.shared.firmwareSelected = true
+                    DFU_Updater.shared.local = false
+                    updateVersion = i.tag_name
+                    updateBody = i.body
+                    updateSize = chooseAsset(response: i).size
 					autoUpgrade = i
+                    browser_download_url = chooseAsset(response: i).browser_download_url
+
+
 					return true
 				}
 			}
@@ -53,15 +101,16 @@ class DownloadManager: NSObject, ObservableObject {
 		return false
 	}
 	
-	func getDownloadUrls() {
+    func getDownloadUrls(currentVersion: String) {
 		results = []
-		guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases") else {
-			return
+        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases") else {
+                    return
 		}
 		URLSession.shared.dataTask(with: url) { data, response, error in
 			if let data = data {
 				do {
 					let res = try JSONDecoder().decode([Result].self, from: data)
+                    //print(res)
 					DispatchQueue.main.async {
 						for i in res {
 							if i.tag_name.first != "v" {
@@ -75,6 +124,7 @@ class DownloadManager: NSObject, ObservableObject {
 								}
 							}
 						}
+                        self.updateAvailable = self.checkForUpdates(currentVersion: currentVersion)
 					}
 				} catch {
 					DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
@@ -90,7 +140,7 @@ class DownloadManager: NSObject, ObservableObject {
 				return x
 			}
 		}
-		return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""))
+        return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
 	}
 
 	func startDownload(url: URL) {
@@ -135,6 +185,13 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
 			}
 		DispatchQueue.main.async {
 			self.downloading = false
+            
+            if DownloadManager.shared.startTransfer == true {
+                DownloadManager.shared.startTransfer = false
+                DFU_Updater.shared.downloadTransfer()
+            }
+            //DFUStartTransferButton.startTransfer()
+
 		}
 	}
 	

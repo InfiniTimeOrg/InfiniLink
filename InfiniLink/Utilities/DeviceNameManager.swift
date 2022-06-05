@@ -62,7 +62,7 @@ struct DeviceNameManager {
 					} catch {
 						DebugLogManager.shared.debug(error: "Error saving device name for \(deviceUUID): \(error)", log: .app, date: Date())
 					}
-					DebugLogManager.shared.debug(error: "Updated name for \(deviceUUID)", log: .app, date: Date())
+					DebugLogManager.shared.debug(error: "Updated name to \(name) for \(deviceUUID)", log: .app, date: Date())
 					break writeName
 			}
 		}

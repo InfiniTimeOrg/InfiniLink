@@ -79,17 +79,20 @@ struct CalendarView<DateView>: View where DateView: View {
 			Image(systemName: "chevron.left")
 					.imageScale(.large)
 			}
+                .buttonStyle(BorderlessButtonStyle())
 			Button(action: {
 				self.setInterval(month: 0)
 			}) {
 				Text("Today")
 			}
+                .buttonStyle(BorderlessButtonStyle())
 			Button(action: {
 				self.setInterval(month: 1)
 			}) {
 			Image(systemName: "chevron.right")
 					.imageScale(.large)
 			}
+                .buttonStyle(BorderlessButtonStyle())
 		}
 	}
 

@@ -8,140 +8,127 @@
 import Foundation
 import SwiftUI
 
-struct HomeScreen: View {
-	
-	@Environment(\.colorScheme) var colorScheme
-	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-	@AppStorage("autoconnect") var autoconnect: Bool = false
-	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
-	@ObservedObject var dfuUpdater = DFU_Updater.shared
-	@ObservedObject var bleManager = BLEManager.shared
-	@ObservedObject var downloadManager = DownloadManager.shared
-	@ObservedObject var uptimeManager = UptimeManager.shared
-	let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-	
-	@State var currentUptime: TimeInterval!
-	@State var updateAvailable: Bool = false
-	
-	@State var renamingDevice: Bool = false
-	@State private var changedName: String = ""
-	private var nameManager = DeviceNameManager()
-	@State private var deviceName = ""
-	
-	private var dateFormatter = DateComponentsFormatter()
-	
-	var body: some View {
-		return VStack{
-			Text("InfiniLink")
-				.font(.largeTitle)
-				.padding()
-				.frame(maxWidth: .infinity, alignment: .leading)
-			List{
-				Section(header: RenameDeviceHeader(renamingDevice: $renamingDevice, fieldText: $changedName)) {
-					if renamingDevice {
-						TextField(deviceName, text: $changedName, onCommit: {
-							nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
-							renamingDevice = false
-						})
-							.onAppear() {
-								deviceName = String(DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString).isEmpty ? "InfiniTime" : DeviceNameManager().getName(deviceUUID: bleManager.infiniTime.identifier.uuidString))
-							}
-					} else {
-						Text(deviceInfo.deviceName)
-					}
-				}
-				Section(header: Text(NSLocalizedString("device_information", comment: ""))) {
-					if !bleManager.isConnectedToPinetime {
-						Text(NSLocalizedString("firmware_version", comment: ""))
-						Text(NSLocalizedString("model", comment: ""))
-					} else {
-						Text(NSLocalizedString("firmware_version", comment: "") + deviceInfo.firmware)
-						Text(NSLocalizedString("model", comment: "") + deviceInfo.modelNumber)
-							.onAppear() {
-								// check if an update has been made in the last 24 hours
-								if downloadManager.lastCheck == nil || downloadManager.lastCheck.timeIntervalSince(Date()) <  -86400 {
-									downloadManager.getDownloadUrls()
-									downloadManager.lastCheck = Date()
-								}
-							}
-					}
-				}
-				Section(header: Text(NSLocalizedString("update_stats", comment: ""))) {
-					if UptimeManager.shared.lastDisconnect == nil {
-						Text(NSLocalizedString("last_disconnect", comment: ""))
-					} else {
-						Text(NSLocalizedString("last_disconnect", comment: "") + uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
-						
-					}
-					if currentUptime == nil {
-						Text(NSLocalizedString("uptime", comment: ""))
-					} else {
-						Text(NSLocalizedString("uptime", comment: "") + (dateFormatter.string(from: currentUptime) ?? ""))
-					}
-				}.onReceive(timer, perform: { _ in
-					if uptimeManager.connectTime != nil {
-						currentUptime = -uptimeManager.connectTime.timeIntervalSinceNow
-					}
-				})
-				Section(header: Text(NSLocalizedString("step_count", comment: ""))) {
-					Text(String(bleManager.stepCount))
-				}
-				Section(header: Text(NSLocalizedString("firmware_updates", comment: ""))) {
-					if bleManager.isConnectedToPinetime {
-						if self.updateAvailable {
-							Button{
-								let asset = downloadManager.chooseAsset(response: downloadManager.autoUpgrade)
-								dfuUpdater.firmwareFilename = asset.name
-								dfuUpdater.firmwareSelected = true
-								dfuUpdater.local = false
-								DownloadManager.shared.startDownload(url: asset.browser_download_url)
-								PageSwitcher.shared.currentPage = .dfu
-							} label: {
-								Text(NSLocalizedString("firmware_update_is_available", comment: ""))
-							}.disabled(!bleManager.isConnectedToPinetime)
-						} else {
-							Text(NSLocalizedString("no_updates_available", comment: ""))
-						}
-					} else {
-						Text("")
-					}
-				}
-				.onChange(of: downloadManager.updateAvailable) { _ in
-					self.updateAvailable = downloadManager.updateAvailable
-				}
-			}
-			.listStyle(.insetGrouped)
-			
-			// leaving this section here in case of negative feedback on removing the button.
-			
-			//			Spacer()
-			//			Button(action: {
-			//				// if pinetime is connected, button says disconnect, and disconnects on press
-			//				if bleManager.isConnectedToPinetime {
-			//					self.bleManager.disconnect()
-			//				} else {
-			//					// show connect sheet if pinetime is not connected and autoconnect is disabled,
-			//					// OR if pinetime is not connected and autoconnect is enabled, BUT there's no UUID saved for autoconnect
-			//					if !autoconnect || (autoconnect && autoconnectUUID.isEmpty) {
-			//						SheetManager.shared.showSheet = true
-			//					} else {
-			//						// if autoconnect is on and no pinetime is connected, start the scan which will autoconnect if that PT advertises
-			//						bleManager.startScanning()
-			//					}
-			//				}
-			//			}) {
-			//				Text(bleManager.isConnectedToPinetime ? "Disconnect from PineTime" : (bleManager.isScanning ? "Scanning" : "Connect to PineTime"))
-			//					.padding()
-			//					.padding(.vertical, 7)
-			//					.frame(maxWidth: .infinity, alignment: .center)
-			//					.background(colorScheme == .dark ? Color.darkGray : Color.blue)
-			//					.foregroundColor(Color.white)
-			//					.cornerRadius(10)
-			//					.padding(.horizontal, 20)
-			//					.padding(.bottom)
-			//			}.disabled(bleManager.isScanning && autoconnect) // this button should be disabled and read "Scanning" if autoconnect is enabled and a scan is started. Any other condition when not connected should show the sheet and cover the button
-		}
-	}
-}
 
+struct HomeScreen: View {
+    
+    
+    @Environment(\.colorScheme) var colorScheme
+    @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+    @AppStorage("debugMode") var debugMode: Bool = false
+    @AppStorage("favorites") var favorites: Array = ["Steps", "Heart"]
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var uptimeManager = UptimeManager.shared
+    let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    
+    @State var currentUptime: TimeInterval!
+    @State var updateAvailable: Bool = false
+    private var dateFormatter = DateComponentsFormatter()
+    
+    var body: some View {
+        return VStack {
+            List() {
+                Section(header: Text(NSLocalizedString("my_device", comment: ""))
+                            .font(.system(size: 14))
+                            .bold()
+                            .padding(1)) {
+                    HStack(spacing: 5) {
+                        Image("PineTime-1")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(5)
+                            .frame(width: 110, height: 110)
+                        
+                        Spacer()
+                        VStack(alignment: .leading) {
+                            if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" {
+                                Button() {
+                                    if !bleManager.isConnectedToPinetime {
+                                        SheetManager.shared.sheetSelection = .connect
+                                        SheetManager.shared.showSheet = true
+                                    }
+                                } label: {
+                                    if bleManager.isConnectedToPinetime {
+                                        Text(NSLocalizedString("scanning", comment: ""))
+                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            .bold()
+                                            .font(.system(size: 20))
+                                    } else {
+                                        Text(NSLocalizedString("disconnect", comment: ""))
+                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            .bold()
+                                            .font(.system(size: 20))
+                                        //.padding(1)
+                                        Text(NSLocalizedString("tap_to_connect", comment: ""))
+                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            .font(.system(size: 12))
+                                        Text("")
+                                            .font(.system(size: 12))
+                                    }
+                                }
+                            } else {
+                                NavigationLink(destination: DeviceView()) {
+                                    VStack(alignment: .leading) {
+                                        Text(deviceInfo.deviceName)
+                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            .bold()
+                                            .font(.system(size: 20))
+                                        Text(NSLocalizedString("firmware_version", comment: "") + deviceInfo.firmware)
+                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            .font(.system(size: 12))
+                                            .onAppear() {
+                                                // check if an update has been made in the last //24 hours
+                                                if DownloadManager.shared.lastCheck == nil || DownloadManager.shared.lastCheck.timeIntervalSince(Date()) <  -86400 {
+                                                    DownloadManager.shared.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
+                                                    DownloadManager.shared.lastCheck = Date()
+                                                } else {
+                                                    DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: BLEDeviceInfo.shared.firmware)
+                                                }
+                                            }
+                                        Text(NSLocalizedString("model", comment: "")  + String(deviceInfo.modelNumber))
+                                            .foregroundColor(colorScheme == .dark ? .white : .black)
+                                            .font(.system(size: 12))
+                                    }
+                                }
+                            }
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .padding(5)
+                }
+            
+                if bleManager.isConnectedToPinetime {
+                    if DownloadManager.shared.updateAvailable {
+                        NavigationLink(destination: DFUView()) {
+                            Text(NSLocalizedString("firmware_update_is_available", comment: ""))
+                        }
+                    }
+                }
+                
+                ForEach(favorites, id: \.self) { user in
+                    if favorites.firstIndex(of: user)! == 0 {
+                        Section(header: Text(NSLocalizedString("favorites", comment: ""))
+                                    .font(.system(size: 14))
+                                    .bold()
+                                    .padding(1)) {
+                            Widget(widgetName: user)
+                        }
+                    } else {
+                        Section {
+                            Widget(widgetName: user)
+                        }
+                    }
+                }
+                
+                NavigationLink(destination: CustomizeFavoritesView()) {
+                    Text(NSLocalizedString("customize_favorites", comment: ""))
+                }
+              
+            }
+            .listStyle(.insetGrouped)
+        }
+        .navigationBarTitle(Text("InfiniLink").font(.subheadline), displayMode: .large)
+    }
+}
 

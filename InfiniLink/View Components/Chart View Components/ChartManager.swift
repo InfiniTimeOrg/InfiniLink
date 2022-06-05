@@ -14,6 +14,7 @@ import SwiftUICharts
 enum ChartsAsInts: Int16 {
 	case heart = 0
 	case battery = 1
+    case connected = 2
 }
 
 struct DataPoint {
@@ -24,8 +25,8 @@ struct DataPoint {
 
 class ChartManager: ObservableObject {
 	
-	@Published var currentChart: chartSelection = .battery
-	var lastChartWasHeart = UserDefaults.standard.value(forKey: "lastStatusViewWasHeart") as? Bool ?? false
+	@Published var currentChart: chartSelection = .heart
+	var lastChartWasHeart = UserDefaults.standard.value(forKey: "lastStatusViewWasHeart") as? Bool ?? true
 	@Published var heartRangeSelectionState = DateSelectionState()
 	@Published var batteryRangeSelectionState = DateSelectionState()
 	
@@ -67,6 +68,7 @@ class ChartManager: ObservableObject {
 	enum chartSelection {
 		case heart
 		case battery
+        case connected
 	}
 	
 	enum DateValue: Double {
@@ -136,7 +138,7 @@ class ChartManager: ObservableObject {
 					dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
 				}
 			default:
-				dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
+                dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
 			}
 			
 		}

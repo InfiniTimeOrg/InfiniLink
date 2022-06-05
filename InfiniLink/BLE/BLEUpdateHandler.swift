@@ -13,6 +13,7 @@ import CoreData
 struct BLEUpdatedCharacteristicHandler {
 	
 	let bleManager = BLEManager.shared
+    let bleManagerVal = BLEManagerVal.shared
 	
 	// function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
 	func heartRate(from characteristic: CBCharacteristic) -> Int {
@@ -31,32 +32,33 @@ struct BLEUpdatedCharacteristicHandler {
 	
 	func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
 		switch characteristic.uuid {
-		case bleManager.cbuuidList.musicControl:
+		case bleManagerVal.cbuuidList.musicControl:
 			let musicControl = [UInt8](characteristic.value!)
 			MusicController.shared.controlMusic(controlNumber: Int(musicControl[0]))
-		case bleManager.cbuuidList.hrm:
+		case bleManagerVal.cbuuidList.hrm:
 			let bpm = heartRate(from: characteristic)
-			bleManager.heartBPM = Double(bpm)
+            bleManagerVal.heartBPM = Double(bpm)
 			if bpm != 0{
-				ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
+                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
 			}
-		case bleManager.cbuuidList.bat:
+		case bleManagerVal.cbuuidList.bat:
 			guard let value = characteristic.value else {
 				DebugLogManager.shared.debug(error: "Could not read battery level", log: .ble, date: Date())
 				break
 			}
 			let batData = [UInt8](value)
 			DebugLogManager.shared.debug(error: "battery level report: \(String(batData[0]))", log: .ble, date: Date())
-			ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
-			bleManager.batteryLevel = Double(batData[0])
-		case bleManager.cbuuidList.stepCount:
-			guard let value = characteristic.value else {
+            ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(batData[0]), chart: ChartsAsInts.battery.rawValue))
+            bleManager.batteryLevel = Double(batData[0])
+		case bleManagerVal.cbuuidList.stepCount:
+            guard let value = characteristic.value else {
 				DebugLogManager.shared.debug(error: "Could not read step count", log: .ble, date: Date())
 				break
 			}
 			let stepData = [UInt8](value)
-			bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
-			StepCountPersistenceManager().setStepCount(steps: bleManager.stepCount, arbitrary: false, date: Date())
+            bleManagerVal.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
+            //bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
+			StepCountPersistenceManager().setStepCount(steps: bleManagerVal.stepCount, arbitrary: false, date: Date())
 		default:
 			break
 		}

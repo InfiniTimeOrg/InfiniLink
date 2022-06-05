@@ -29,7 +29,7 @@ struct StepSettingsSheetDatePicker: View {
 			.padding()
 		TextField(NSLocalizedString("enter_number_of_steps", comment: ""), text: $addDateValue.value)
 			.textFieldStyle(.roundedBorder)
-			.padding(.horizontal)
+			.padding()
 			.keyboardType(.numberPad)
 		Button {
 			StepCountPersistenceManager().setStepCount(steps: Int(addDateValue.value)!, arbitrary: true, date: selectedDate)

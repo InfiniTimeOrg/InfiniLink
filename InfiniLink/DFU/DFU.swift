@@ -26,11 +26,6 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	public var firmwareURL: URL!
 
 	
-//	func prepare(location: URL, device: BLEManager) {
-//		url = location
-//		bleManager = device
-//	}
-	
 	func transfer() {
 		guard let url = firmwareURL else {return}
 		guard url.startAccessingSecurityScopedResource() else { return }
@@ -61,7 +56,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	
 		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
 
-		// Optional:
+        // Optional:
 		// initiator.forceDfu = true/false // default false
 		// initiator.packetReceiptNotificationParameter = N // default is 12
 		initiator.logger = self // - to get log info

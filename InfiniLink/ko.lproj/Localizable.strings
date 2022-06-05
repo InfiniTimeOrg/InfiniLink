@@ -199,3 +199,47 @@
 "failed_set_time" = "시간 설정 실패";
 "failed_set_time_description" = "시간을 설정하는데 오류가 있었습니다. 시계를 연결 해제한 후 다시 연결해주세요.";
 "dismiss" = "닫기";
+
+// - New Stuff
+"not_connected" = "";
+"tap_to_connect" = "";
+"customize_favorites" = "";
+"goal" = "";
+"heart_rate" = "";
+"battery_tilte" = "";
+"heart_tilte" = "";
+"welcome_text" = "";
+"connecting" = "";
+"start_pairing" = "";
+"my_device" = "";
+"favorites" = "";
+"app_settings" = "";
+"app_theme" = "";
+"name" = "";
+"avaliable_themes" = "";
+"choose_app_theme" = "";
+"firmware_file_link" = "";
+"firmware_download_links" = "";
+"downloads" = "";
+"learn_more" = "";
+"software_update" = "";
+"local_file_info" = "";
+"install_older_version" = "";
+"up_to_date" = "";
+"pinetime_not_available" = "";
+"please_check_your_connection_and_try_again" = "";
+"download_and_install" = "";
+
+"battery_level" = "";
+"battery_usage" = "";
+
+"last_24_hours" = "";
+"last_10_days" = "";
+"battery_level_is" = "";
+"currently_unavailable" = "";
+
+"software_version" = "";
+"model_name" = "";
+"autoconnect_to_this" = "";
+"send_notification_to" = "";
+"connected_to" = "";

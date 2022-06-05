@@ -44,7 +44,7 @@ struct StepProgressGauge: View {
 						Text(String(getStepHistory(date: Date())))
 							.font(.largeTitle)
 							.bold()
-						Text("\(NSLocalizedString("steps_goal", comment: "")): \(stepCountGoal)")
+                        Text("\(NSLocalizedString("step_goal", comment: "")): \(stepCountGoal)")
 					}
 				}
 			}
