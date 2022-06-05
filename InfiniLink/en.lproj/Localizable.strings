@@ -199,3 +199,50 @@
 "failed_set_time" = "Failed to Set Time";
 "failed_set_time_description" = "There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect.";
 "dismiss" = "Dismiss";
+
+
+// - New Stuff
+"not_connected" = "Not Connected";
+"tap_to_connect" = "Tap to connect";
+"customize_favorites" = "Customize Favorites";
+"goal" = "with a goal of";
+"heart_rate" = "Heart Rate";
+"battery_tilte" = "Battery";
+"heart_tilte" = "Heart";
+"welcome_text" = "Welcome. If you have an InfiniTime device, \n you can pair it here.";
+"connecting" = "Connecting...";
+"start_pairing" = "Start Pairing";
+"my_device" = "My Device";
+"favorites" = "Favorites";
+"app_settings" = "App Theme";
+"app_theme" = "App Theme";
+"name" = "Name";
+"avaliable_themes" = "Avaliable themes";
+"choose_app_theme" = "Choose App Theme";
+"firmware_file_link" = "Firmware File Link";
+"firmware_download_links" = "Firmware Download Links";
+"downloads" = "Downloads";
+"learn_more" = "Learn More";
+"software_update" = "Software Update";
+"local_file_info" = "This is a local file and may not work with your PineTime.";
+"install_older_version" = "Install Older Version";
+"up_to_date" = "is up to date";
+"pinetime_not_available" = "PineTime Not Available";
+"please_check_your_connection_and_try_again" = "Please check your connection and try again.";
+"download_and_install" = "Download and Install";
+
+"battery_level" = "BATTERY LEVEL";
+"battery_usage" = "BATTERY USAGE";
+
+"last_24_hours" = "Last 24 Hours";
+"last_10_days" = "Last 10 Days";
+"battery_level_is" = "Battery Level is";
+"currently_unavailable" = "Currently Unavailable";
+
+"software_version" = "Software Version";
+"model_name" = "Model Name";
+"autoconnect_to_this" = "Autoconnect to this";
+"send_notification_to" = "Send Notification to";
+"connected_to" = "Connected to";
+
+// NSLocalizedString("", comment: "")

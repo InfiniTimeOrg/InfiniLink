@@ -11,12 +11,10 @@ struct BatteryIcon: View {
     @ObservedObject var bleManager = BLEManager.shared
     var body: some View{
         HStack {
-            //if bleManager.isConnectedToPinetime {
-                Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                    .font(.system(size: 15))
-                Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f", bleManager.batteryLevel))! / 25) * 25)))
-                    .imageScale(.large)
-            //}
+            Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
+                .font(.system(size: 15))
+            Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f", bleManager.batteryLevel))! / 25) * 25)))
+                .imageScale(.large)
         }
         .offset(x: -18, y: -5)
     }
@@ -24,9 +22,7 @@ struct BatteryIcon: View {
 
 
 struct ContentView: View {
-    //@Environment(\.scenePhase) var scenePhase
     @ObservedObject var bleManager = BLEManager.shared
-    //@ObservedObject var pageSwitcher = PageSwitcher.shared
     @ObservedObject var batteryNotifications = BatteryNotifications()
     @ObservedObject var sheetManager = SheetManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
@@ -47,45 +43,40 @@ struct ContentView: View {
         UINavigationBar.appearance().titleTextAttributes = [.font : UIFont.systemFont(ofSize: 18.0, weight: .bold)]
     }
     
-    //deinit {
-    //    observers.forEach(NotificationCenter.default.removeObserver)
-    //}
-    
     var body: some View {
         TabView(selection: $selection) {
             NavigationView {
                 WelcomeView()
                     .alert(isPresented: $bleManager.setTimeError, content: {
-                            Alert(title: Text("Failed to Set Time"), message: Text("There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect."), dismissButton: .default(Text("Dismiss")))})
+                            Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
                 
                     .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    //.navigationBarTitle(Text("InfiniLink").font(.subheadline), displayMode: .large)
             }
             .tabItem {
                 Image(systemName: "house.fill")
-                Text("Home")
+                Text(NSLocalizedString("home", comment: ""))
             }
             .tag(0)
 
             NavigationView {
                 ChartView()
                     .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text("Charts").font(.subheadline), displayMode: .large)
+                    .navigationBarTitle(Text(NSLocalizedString("charts", comment: "")).font(.subheadline), displayMode: .large)
             }
             .tabItem {
                 Image(systemName: "chart.bar.fill")
-                Text("Charts")
+                Text(NSLocalizedString("charts", comment: ""))
             }
             .tag(1)
             
             NavigationView {
                 Settings_Page()
                     .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text("Settings").font(.subheadline), displayMode: .large)
+                    .navigationBarTitle(Text(NSLocalizedString("settings", comment: "")).font(.subheadline), displayMode: .large)
             }
             .tabItem {
                 Image(systemName: "gearshape.fill")
-                Text("Settings")
+                Text(NSLocalizedString("settings", comment: ""))
             }
             .tag(2)
         }
@@ -93,7 +84,6 @@ struct ContentView: View {
         .sheet(isPresented: $sheetManager.showSheet, content: { SheetManager.CurrentSheet().onDisappear { if !sheetManager.upToDate { if onboarding == nil { onboarding = false } //;sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
         }} })
         .onAppear() { if !bleManager.isConnectedToPinetime { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { if autoconnect && bleManager.isSwitchedOn { self.bleManager.startScanning() }
-                //; sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
             
         }) }}
         .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System Default") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])

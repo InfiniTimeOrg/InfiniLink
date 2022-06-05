@@ -13,29 +13,23 @@ import SwiftUI
 struct DFUWithoutBLE: View {
 	var body: some View{
 		VStack {
-			Text("Bluetooth Not Available")
-				//.font(.title2)
+			Text(NSLocalizedString("bluetooth_not_available", comment: ""))
                 .foregroundColor(.gray)
-			Text("Please enable Bluetooth and try again.")
+			Text(NSLocalizedString("please_enable_bluetooth_try_again", comment: ""))
                 .foregroundColor(.gray)
-                //.font(.system(size: 15))
 				.font(.caption)
 		}
-        //.navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
 	}
 }
 
 struct DFUWithoutConnection: View {
     var body: some View{
         VStack {
-            Text("PineTime Not Available")
-                //.font(.title2)
+            Text(NSLocalizedString("pinetime_not_available", comment: ""))
                 .foregroundColor(.gray)
-            Text("Please check your connection and try again.")
+            Text(NSLocalizedString("please_check_your_connection_and_try_again", comment: ""))
                 .foregroundColor(.gray)
-                //.font(.system(size: 15))
                 .font(.caption)
         }
-        //.navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
     }
 }

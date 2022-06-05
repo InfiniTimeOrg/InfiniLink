@@ -18,18 +18,17 @@ struct StepsChartView: View {
                 HStack {
                     Image(systemName: "figure.walk")
                         .foregroundColor(.blue)
-                    Text("Steps")
+                    Text(NSLocalizedString("steps", comment: ""))
                         .foregroundColor(.blue)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 Spacer(minLength: 24)
                 HStack(alignment: .bottom) {
-                    //bleManager.stepCount
                     Text(String(bleManagerVal.stepCount))
                         .foregroundColor(scheme == .dark ? .white : .black)
                         .font(.system(size: 28))
                         .bold()
-                    Text("with a goal of \(stepCountGoal)")
+                    Text(NSLocalizedString("goal", comment: "") + String(stepCountGoal))
                         .foregroundColor(.gray)
                         .bold()
                         .font(.system(size: 14))
@@ -51,7 +50,7 @@ struct HeartChartView: View {
                 HStack {
                     Image(systemName: "heart.fill")
                         .foregroundColor(.red)
-                    Text("Heart Rate")
+                    Text(NSLocalizedString("heart_rate", comment: ""))
                         .foregroundColor(.red)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -61,7 +60,7 @@ struct HeartChartView: View {
                         .foregroundColor(scheme == .dark ? .white : .black)
                         .font(.system(size: 28))
                         .bold()
-                    Text("BPM")
+                    Text(NSLocalizedString("bpm", comment: ""))
                         .foregroundColor(.gray)
                         .bold()
                         .font(.system(size: 14))
@@ -84,7 +83,7 @@ struct BatteryMenu: View {
                     Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
                         .imageScale(.large)
                         .foregroundColor(.green)
-                    Text("Battery")
+                    Text(NSLocalizedString("battery_tilte", comment: ""))
                         .foregroundColor(.green)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -113,20 +112,20 @@ struct ChartView: View {
 	var body: some View {
         return VStack {
             List() {
-                Section(header: Text("Steps")
+                Section(header: Text(NSLocalizedString("steps", comment: ""))
                     .font(.system(size: 14))
                     .bold()
                     .padding(1)) {
                         StepsChartView()
                     }
-                Section(header: Text("Heart Rate")
+                Section(header: Text(NSLocalizedString("heart_rate", comment: ""))
                     .font(.system(size: 14))
                     .bold()
                     .padding(1)) {
                         HeartChartView()
                     }
                 if bleManager.isConnectedToPinetime {
-                    Section(header: Text("Battery")
+                    Section(header: Text(NSLocalizedString("battery_tilte", comment: ""))
                         .font(.system(size: 14))
                         .bold()
                         .padding(1)) {

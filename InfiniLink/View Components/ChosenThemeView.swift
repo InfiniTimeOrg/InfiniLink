@@ -13,14 +13,14 @@ struct SettingsChosenThemeView: View {
     
     var body: some View {
         VStack {
-            Picker("Avaliable themes", selection: $chosenTheme) {
+            Picker(NSLocalizedString("avaliable_themes", comment: ""), selection: $chosenTheme) {
                 ForEach(themes, id: \.self) {
                     Text($0)
                 }
             }
             .pickerStyle(.wheel)
         }
-        .navigationBarTitle(Text("Choose App Theme").font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("choose_app_theme", comment: "")).font(.subheadline), displayMode: .inline)
     }
 }
 

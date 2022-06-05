@@ -9,7 +9,6 @@ import SwiftUI
 import SwiftUICharts
 
 struct BatteryContentView: View {
-    //@Environment(\.colorScheme) var colorScheme
     @ObservedObject var bleManager = BLEManager.shared
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 1"))
@@ -21,7 +20,7 @@ struct BatteryContentView: View {
     @State var numberOfBars : [Int] = [72, 10]
     @State var barSpacing : [CGFloat] = [1, 15]
     @State var barLineNumb : [Int] = [9, 11]
-    @State var barTitles : [String] = ["BATTERY LEVEL", "BATTERY USAGE"]
+    @State var barTitles : [String] = [NSLocalizedString("battery_level", comment: ""), NSLocalizedString("battery_usage", comment: "")]
     @State var barTime : [[String]] =
         [
         ["12 A", "3", "6", "9", "12 P", "3", "6", "9"],
@@ -45,13 +44,13 @@ struct BatteryContentView: View {
         ZStack {
             VStack{
                 Picker("Stats", selection: $pickerSelection)   {
-                    Text("Last 24 Hours").tag(0)
-                    Text("Last 10 Days").tag(1)
+                    Text(NSLocalizedString("last_24_hours", comment: "")).tag(0)
+                    Text(NSLocalizedString("last_10_days", comment: "")).tag(1)
                 }
                     .pickerStyle(.segmented)
 
                 
-                Text("Battery Level is \(Int(bleManager.batteryLevel))%").frame(maxWidth: .infinity, alignment: .leading)
+                Text(NSLocalizedString("battery_level_is", comment: "") + " \(Int(bleManager.batteryLevel))%").frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 16))
                     
                 Divider()
@@ -86,7 +85,7 @@ struct BatteryContentView: View {
                                         }
                                         Spacer(minLength: 1)
                                     } else {
-                                        Text("Currently Unavailable")
+                                        Text(NSLocalizedString("currently_unavailable", comment: ""))
                                     }
                                     
                                 }
@@ -147,11 +146,11 @@ struct BatteryContentView: View {
     
     func getValue(data_points: [LineChartDataPoint], timeSinceNow: Double) -> CGFloat {
         let connectedDataPoints = ChartManager.shared.convert(results: connectedChartPoints)
+        if data_points.count == 0 {return 0.0}
         
         for i in 1...data_points.count {
             let value = abs(data_points[data_points.count - i].date!.timeIntervalSinceNow)
             if value > timeSinceNow {
-                //if value < (timeSinceNow + ((60 / (Double(numberOfBars[pickerSelection]) / 24)) * 60))  {
                 let valueOne = data_points[data_points.count - i].value
                 let valueTwo = (i - 1) > 0 ? data_points[data_points.count - (i - 1)].value : valueOne
                     
@@ -161,20 +160,13 @@ struct BatteryContentView: View {
                 
                 if isConnected(data_points: connectedDataPoints, timeSinceNow: interpolation(interpolation: interpolationValue, xValue: value, yValue: timeTwo)) {
                     if String(abs(interpolationValue)) != "inf" {
-                        //if Int(valueOne - 1) > Int(valueTwo) {
-                        //    return 0.0
-                        //}else {
                         return round(interpolation(interpolation: interpolationValue, xValue: valueOne, yValue: valueTwo))
-                        //}
                     } else {
                         return round(valueOne)
                     }
                 } else {
                     return 0.0
                 }
-                    
-                //print("\((timeSinceNow - timeTwo) / (value - timeTwo)), \(value), \(timeTwo)")
-                //}
             }
         }
         return 0.0
@@ -198,10 +190,3 @@ struct BatteryContentView: View {
         return(yValue * (1 - interpolation) + xValue * interpolation)
     }
 }
-
-
-//ForEach((dataPoints.count - 72)...dataPoints.count, id: \.self) {
-//    data in
-
-//    BarView(value: dataPoints[data - 1].value, cornerRadius: CGFloat(3), width: CGFloat(bar_width / 72), valueHeight:   barValues[pickerSelection].max()!, height: 100)
-//}

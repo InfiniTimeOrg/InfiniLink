@@ -12,7 +12,6 @@ struct CustomizeFavoritesView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @Environment(\.colorScheme) var colorScheme
     
-    //@State var allFavorites = ["Steps", "Heart", "Battery", "More Steps", "More Heart", "More Battery"]
     @AppStorage("favorites") var favorites: Array = ["Steps", "Heart"]
     
 
@@ -55,7 +54,7 @@ struct CustomizeFavoritesView: View {
 
             }
             .environment(\.editMode, true ? .constant(.active) : .constant(.inactive))
-            .navigationBarTitle(Text("Customize Favorites").font(.subheadline), displayMode: .inline)
+            .navigationBarTitle(Text(NSLocalizedString("customize_favorites", comment: "")).font(.subheadline), displayMode: .inline)
         }
     }
     func move(from source: IndexSet, to destination: Int) {
@@ -117,7 +116,7 @@ struct StepsWidget: View {
                         .foregroundColor(scheme == .dark ? .white : .black)
                         .font(.system(size: 28))
                         .bold()
-                    Text("with a goal of \(stepCountGoal)")
+                    Text(NSLocalizedString("goal", comment: "") + String(stepCountGoal))
                         .foregroundColor(.gray)
                         .bold()
                         .font(.system(size: 14))
@@ -139,7 +138,7 @@ struct HeartWidget: View {
                 HStack {
                     Image(systemName: "heart.fill")
                         .foregroundColor(.red)
-                    Text("Heart Rate")
+                    Text(NSLocalizedString("heart_rate", comment: ""))
                         .foregroundColor(.red)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -172,7 +171,7 @@ struct BatteryWidget: View {
                     Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
                         .imageScale(.large)
                         .foregroundColor(.green)
-                    Text("Battery")
+                    Text(NSLocalizedString("battery_tilte", comment: ""))
                         .foregroundColor(.green)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }

@@ -24,7 +24,7 @@ struct SheetCloseButton: View {
 				Button {
 					SheetManager.shared.showSheet = false
 				} label: {
-					Text("Close")
+					Text(NSLocalizedString("close", comment: ""))
 						.frame(maxWidth: .infinity, alignment: .leading)
 						.font(.title2)
 						.padding()

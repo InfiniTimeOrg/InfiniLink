@@ -28,7 +28,7 @@ struct RenameView: View {
             }
             .listStyle(.insetGrouped)
         }
-        .navigationBarTitle(Text("Name").font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("name", comment: "")).font(.subheadline), displayMode: .inline)
         
     }
 }

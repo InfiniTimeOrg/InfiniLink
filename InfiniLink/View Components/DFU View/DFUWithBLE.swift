@@ -18,13 +18,9 @@ extension UIScreen{
 
 struct DFUWithBLE: View {
 	@Environment(\.colorScheme) var colorScheme
-	//@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
-    
-    //@ObservedObject var downloadManager
-    //@AppStorage("updateAvailable") var updateAvailable: Bool = false
 	
 	@State var openFile = false
 	
@@ -128,7 +124,7 @@ struct DFUWithBLE: View {
                     .imageScale(.large)
             }
         ))
-        .navigationBarTitle(Text("Software Update").font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("software_update", comment: "")).font(.subheadline), displayMode: .inline)
 	}
 }
 
@@ -194,7 +190,7 @@ struct NewUpdate: View {
                             .lineLimit(3)
                             .padding(5)
                     } else {
-                        Text("This is a local file and may not work with your PineTime.")
+                        Text(NSLocalizedString("local_file_info", comment: ""))
                             .font(.system(size: 14))
                             .lineLimit(3)
                             .padding(5)
@@ -205,7 +201,7 @@ struct NewUpdate: View {
             
             if dfuUpdater.local == false {
                 NavigationLink(destination: DFULearnMore()) {
-                    Text("Learn More")
+                    Text(NSLocalizedString("learn_more", comment: ""))
                 }
             }
         }
@@ -215,7 +211,7 @@ struct NewUpdate: View {
             
             if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
                 NavigationLink(destination: DownloadView(openFile: $openFile)) {
-                    Text("Install Older Version")
+                    Text(NSLocalizedString("install_older_version", comment: ""))
                 }
             }
         }
@@ -232,7 +228,7 @@ struct NoUpdate: View {
         if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
             Section() {
                 NavigationLink(destination: DownloadView(openFile: $openFile)) {
-                    Text("Install Older Version")
+                    Text(NSLocalizedString("install_older_version", comment: ""))
                 }
             }
         }
@@ -243,7 +239,7 @@ struct NoUpdate: View {
                     Text("InfiniTime \(deviceInfo.firmware)")
                         .foregroundColor(.gray)
                         .font(.system(size: 18))
-                    Text("InfiniTime is up to date")
+                    Text("InfiniTime " + NSLocalizedString("up_to_date", comment: ""))
                         .foregroundColor(.gray)
                         .font(.system(size: 16))
                 }

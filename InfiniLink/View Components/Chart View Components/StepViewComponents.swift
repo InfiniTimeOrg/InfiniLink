@@ -84,7 +84,7 @@ struct StepView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                     }
                 }
-                .navigationBarTitle(Text("Steps").font(.subheadline), displayMode: .inline)
+                .navigationBarTitle(Text(NSLocalizedString("steps", comment: "")).font(.subheadline), displayMode: .inline)
             }
         }
     }

@@ -19,8 +19,6 @@ struct DFUStartTransferButton: View {
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
 	@ObservedObject var bleManager = BLEManager.shared
 	@ObservedObject var downloadManager = DownloadManager.shared
-	
-    //var startDownload: Bool = false
     
 	var body: some View {
 		Button {
@@ -37,26 +35,14 @@ struct DFUStartTransferButton: View {
 					updateStarted = true
 				} else {
                     downloadManager.startTransfer = true
-                    //print(downloadManager.browser_download_url)
                     downloadManager.startDownload(url: downloadManager.browser_download_url)
-                    //print(downloadManager.downloading)
-                    
-                    downloadManager.downloading
                     
 					updateStarted = true
 				}
 			}} label: {
-				Text(updateStarted ? "Stop Transfer" :
-						(dfuUpdater.local ? "Download and Install" :
-						(downloadManager.downloading ? "Downloading" : "Download and Install")))
-				//.padding()
-				//.padding(.vertical, 7)
-				//.frame(maxWidth: .infinity, alignment: .center)
-				//.background(colorChooser())
-				//.foregroundColor(firmwareSelected ? Color.white : (updateStarted ? Color.white : Color.gray))
-				//.cornerRadius(10)
-				//.padding(.horizontal, 20)
-				//.padding(.bottom)
+				Text(updateStarted ? NSLocalizedString("stop_transfer", comment: "") :
+						(dfuUpdater.local ? NSLocalizedString("download_and_install", comment: "") :
+						(downloadManager.downloading ? NSLocalizedString("downloading", comment: "") : NSLocalizedString("download_and_install", comment: ""))))
 			}.disabled(buttonDisabled())
 		
 	}

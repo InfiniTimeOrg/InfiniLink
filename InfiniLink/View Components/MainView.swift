@@ -12,27 +12,12 @@ import SwiftUI
 
 struct MainView: View {
 
-	//@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
 	@ObservedObject var bleManager = BLEManager.shared
 	@State var showScanView: Bool = false
 	
 	
 	var body: some View {
 		ZStack {
-			//switch pageSwitcher.currentPage {
-			//case .dfu:
-			//	DFUView()
-			//case .status:
-			//	ChartView()
-			//case .settings:
-			//	Settings_Page()
-			//case .home:
-			//	HomeScreen()
-			//case .debug:
-			//	DebugView()
-			//case .steps:
-			//	StepsView()
-			//}
 			if showScanView && !BLEAutoconnectManager.shared.shouldDisplayConnectSheet() {
 				withAnimation {
 					ScanningPopover(show: $showScanView)

@@ -17,36 +17,26 @@ struct WelcomeView: View {
             if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" {
                 VStack(spacing: 5) {
                     Text("InfiniLink")
-                        //.font(.subheadline(size: 42))
                         .font(.system(size: 42))
                         .bold()
                         .padding(5)
-                    Text("Welcome. If you have an InfiniTime device, \n you can pair it here.")
+                    Text(NSLocalizedString("welcome_text", comment: ""))
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        //.font(.subheadline(size: 42))
                         .font(.system(size: 16))
-                        //.bold()
-                    //
                     Image("WelcomePineTime")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(20)
-                        //.frame(width: 110, height: 110)
                         .frame(maxWidth: .infinity, alignment: .center)
                     
                     if bleManager.isConnectedToPinetime {
                         
-                        ProgressView("Connecting...")
+                        ProgressView(NSLocalizedString("connecting", comment: ""))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(45)
-                        //Button("") {
-                            
-                        //}.buttonStyle(NeumorphicButtonStyle(bgColor: .darkGray))
-                         //   .frame(maxWidth: .infinity, alignment: .center)
-                         //   .padding(45)
                     } else {
-                        Button("Start Pairing") {
+                        Button(NSLocalizedString("start_pairing", comment: "")) {
                             if !bleManager.isConnectedToPinetime {
                                 SheetManager.shared.sheetSelection = .connect
                                 SheetManager.shared.showSheet = true
@@ -58,17 +48,9 @@ struct WelcomeView: View {
                 }
                 .padding(5)
             }
-                //.padding(5)
             else {
                 HomeScreen()
             }
-           // List() {
-                //Section() {
-                //}
-               // .listRowBackground(Color.clear)
-            //}
-            //.listStyle(.insetGrouped)
-            //.navigationBarTitle(Text("Customize Favorites").font(.subheadline), displayMode: .inline)
         }
     }
 }

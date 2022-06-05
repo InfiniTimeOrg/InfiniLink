@@ -11,7 +11,6 @@ import Foundation
 import SwiftUI
 
 struct DebugView: View {
-	//@ObservedObject var pageSwitcher = PageSwitcher.shared
 	@ObservedObject var logManager = DebugLogManager.shared
 	@State var activeTab = 1
 	

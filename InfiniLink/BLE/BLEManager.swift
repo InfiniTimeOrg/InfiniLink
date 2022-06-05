@@ -17,7 +17,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
    static let shared = BLEManager()
     
     var myCentral: CBCentralManager!
-//    var notifyCharacteristic: CBCharacteristic!
     
     struct musicCharacteristics {
         var control: CBCharacteristic!
@@ -197,7 +196,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         DeviceInfoManager().setDeviceName(uuid: peripheral.identifier.uuidString)
         UptimeManager.shared.connectTime = Date()
         bleLogger.debug(error: "Successfully connected to \(peripheral.name!)", log: .ble, date: Date())
-        print("Peripheral Connected")
         ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 1, chart: ChartsAsInts.connected.rawValue))
     }
     
@@ -214,7 +212,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         UptimeManager.shared.lastDisconnect = Date()
         UptimeManager.shared.connectTime = nil
         
-        print("Peripheral disconnected")
         ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 0, chart: ChartsAsInts.connected.rawValue))
     }
     

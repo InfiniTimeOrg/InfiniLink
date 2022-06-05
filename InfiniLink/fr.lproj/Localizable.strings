@@ -199,3 +199,41 @@
 "failed_set_time" = "Impossible de régler l'heure";
 "failed_set_time_description" = "Un problème est survenu lors du réglage de l'heure sur votre montre. Veuillez vous déconnecter de la montre, puis vous reconnecter.";
 "dismiss" = "Fermer";
+
+// - New Stuff
+"not_connected" = "";
+"tap_to_connect" = "";
+"customize_favorites" = "";
+"goal" = "";
+"heart_rate" = "";
+"battery_tilte" = "";
+"heart_tilte" = "";
+"welcome_text" = "";
+"connecting" = "";
+"start_pairing" = "";
+"my_device" = "";
+"favorites" = "";
+"app_settings" = "";
+"app_theme" = "";
+"name" = "";
+"avaliable_themes" = "";
+"choose_app_theme" = "";
+"firmware_file_link" = "";
+"firmware_download_links" = "";
+"downloads" = "";
+"learn_more" = "";
+"software_update" = "";
+"local_file_info" = "";
+"install_older_version" = "";
+"up_to_date" = "";
+"pinetime_not_available" = "";
+"please_check_your_connection_and_try_again" = "";
+"download_and_install" = "";
+
+"battery_level" = "";
+"battery_usage" = "";
+
+"last_24_hours" = "";
+"last_10_days" = "";
+"battery_level_is" = "";
+"currently_unavailable" = "";

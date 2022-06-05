@@ -11,7 +11,6 @@ import SwiftUI
 import SwiftUICharts
 
 struct HeartContentView: View {
-    //@Environment(\.colorScheme) var colorScheme
     @ObservedObject var bleManager = BLEManager.shared
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 1"))
@@ -21,7 +20,7 @@ struct HeartContentView: View {
     @State var numberOfBars : [Int] = [72, 10]
     @State var barSpacing : [CGFloat] = [1, 15]
     @State var barLineNumb : [Int] = [5, 5, 8, 6, 7, 13]
-    @State var barTitles : [String] = ["BATTERY LEVEL", "BATTERY USAGE"]
+    //@State var barTitles : [String] = ["BATTERY LEVEL", "BATTERY USAGE"]
     @State var barTime : [[String]] =
         [
         ["12 A", "3", "6", "9", "12 P", "3", "6", "9"],

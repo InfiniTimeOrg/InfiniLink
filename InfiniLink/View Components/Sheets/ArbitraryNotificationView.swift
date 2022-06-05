@@ -15,7 +15,7 @@ struct ArbitraryNotificationSheet: View {
 	@Environment(\.colorScheme) var colorScheme
 	@State var notificationTitle: String = ""
 	@State var notificationBody: String = ""
-	var placeholderString = "enter text here"
+	var placeholderString = NSLocalizedString("placeholder_text", comment: "")
 	
 	var body: some View {
 		SheetCloseButton()
@@ -26,7 +26,7 @@ struct ArbitraryNotificationSheet: View {
 			Divider()
 				.padding(.horizontal)
 			HStack {
-				Text("Title: ")
+				Text(NSLocalizedString("title", comment: "") + ": ")
 					.padding(.leading)
 				TextField("", text: $notificationTitle)
 			}

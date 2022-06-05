@@ -18,43 +18,23 @@ struct DownloadView: View {
     
 	var body: some View {
 		VStack {
-			//HStack {
-			//	Text("Available Downloads")
-			//		.font(.largeTitle)
-			//		.padding()
-			//		.frame(maxWidth: .infinity, alignment: .leading)
-			//	Button {
-			//		DownloadManager.shared.getDownloadUrls()
-			//	} label: {
-			//		Image(systemName: "arrow.counterclockwise")
-			//			.padding()
-			//			.imageScale(.large)
-			//	}
-			//}
 			List{
-                Section(header: Text("Firmware File Link")) {
+                Section(header: Text(NSLocalizedString("firmware_file_link", comment: ""))) {
                     Button {
                         openFile.toggle()
                         
-                        //dfuUpdater.firmwareFilename = "Local File"
-                        //dfuUpdater.firmwareSelected = true
                         dfuUpdater.local = true
                         downloadManager.updateAvailable = true
-                        //downloadManager.updateVersion = i.tag_name
                         downloadManager.updateBody = ""
                         downloadManager.updateSize = 0
-                        //downloadManager.browser_download_url = asset.browser_download_url
                     } label: {
-                        Text("Select Local File")
+                        Text(NSLocalizedString("use_local_file", comment: ""))
                     }
                 }
-				Section(header: Text("Firmware Download Links")) {
+				Section(header: Text(NSLocalizedString("firmware_download_links", comment: ""))) {
 					ForEach(downloadManager.results, id: \.tag_name) { i in
 						Button {
                             let asset = downloadManager.chooseAsset(response: i)
-                            //downloadManager.setupTest(firFile: asset.name)
-                            
-                            //DFU_Updater.shared.firmwareFilename = asset.name
                             dfuUpdater.firmwareFilename = asset.name
 							dfuUpdater.firmwareSelected = true
 							dfuUpdater.local = false
@@ -79,7 +59,7 @@ struct DownloadView: View {
                     .imageScale(.large)
             }
         ))
-        .navigationBarTitle(Text("Downloads").font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("downloads", comment: "")).font(.subheadline), displayMode: .inline)
         .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
             // this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
             do{
@@ -97,8 +77,5 @@ struct DownloadView: View {
                 DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
             }
         }
-//		.onAppear(){
-//			DownloadManager.shared.getDownloadUrls()
-//		}
 	}
 }

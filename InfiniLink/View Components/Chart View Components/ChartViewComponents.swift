@@ -2,7 +2,7 @@
 //  ChartViewComponents.swift
 //  InfiniLink
 //
-//  Created by Micah Stanley on 5/11/22.
+//  Created by John Stanley on 5/11/22.
 //
 
 import SwiftUI

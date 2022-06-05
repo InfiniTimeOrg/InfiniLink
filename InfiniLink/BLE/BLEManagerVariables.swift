@@ -26,7 +26,6 @@ class BLEManagerVal: NSObject, ObservableObject {
 
     @Published var firmwareVersion: String = "Disconnected"
     
-    //@Published var stepCount: Int = 0
     @Published var stepCount: Int = 0
     @Published var stepCountTests: Int = 0
     @Published var stepCounting: Int = 0

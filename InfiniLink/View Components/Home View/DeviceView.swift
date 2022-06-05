@@ -25,27 +25,18 @@ struct DeviceInfo: View {
                 Spacer()
                 VStack(alignment: .center) {
                     if !bleManager.isConnectedToPinetime {
-                        Text("Not Connected")
+                        Text(NSLocalizedString("not_connected", comment: ""))
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                             .bold()
                             .font(.system(size: 24))
-                        //.padding(1)
-                        Text("Tap to connect")
+                        Text(NSLocalizedString("tap_to_connect", comment: ""))
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                             .font(.system(size: 12))
-                        //Text("")
-                        //    .font(.system(size: 12))
                     } else {
                         Text(deviceInfo.deviceName)
                             .foregroundColor(colorScheme == .dark ? .white : .black)
                             .bold()
                             .font(.system(size: 24))
-                        //Text("Firmware Version: " + deviceInfo.firmware)
-                        //    .foregroundColor(colorScheme == .dark ? .white : .black)
-                        //    .font(.system(size: 12))
-                        //Text("Model: \(deviceInfo.modelNumber)")
-                        //    .foregroundColor(colorScheme == .dark ? .white : .black)
-                        //    .font(.system(size: 12))
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -80,14 +71,14 @@ struct DeviceView: View {
                 
                 Section() {
                     NavigationLink(destination: DFUView()) {
-                        Text("Software Update")
+                        Text(NSLocalizedString("software_update", comment: ""))
                     }
                 }
                 
                 Section() {
                     NavigationLink(destination: RenameView()) {
                         HStack {
-                            Text("Name")
+                            Text(NSLocalizedString("name", comment: ""))
                             Text(deviceInfo.deviceName)
                                 .foregroundColor(.gray)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -95,14 +86,14 @@ struct DeviceView: View {
                         }
                     }.disabled(!bleManager.isConnectedToPinetime)
                     HStack {
-                        Text("Software Version")
+                        Text(NSLocalizedString("software_version", comment: ""))
                         Text(deviceInfo.firmware)
                             .foregroundColor(.gray)
                             .frame(maxWidth: .infinity, alignment: .trailing)
                         
                     }
                     HStack {
-                        Text("Model Name")
+                        Text(NSLocalizedString("model_name", comment: ""))
                         Text(deviceInfo.modelNumber)
                             .foregroundColor(.gray)
                             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -110,7 +101,7 @@ struct DeviceView: View {
                     }
                     NavigationLink(destination: BatteryView()) {
                         HStack {
-                            Text("Battery")
+                            Text(NSLocalizedString("battery_tilte", comment: ""))
                             Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
                                 .foregroundColor(.gray)
                                 .frame(maxWidth: .infinity, alignment: .trailing)
@@ -118,7 +109,7 @@ struct DeviceView: View {
                         }
                     }
                     HStack {
-                        Text("Last disconnect")
+                        Text(NSLocalizedString("last_disconnect", comment: ""))
                         if UptimeManager.shared.lastDisconnect != nil {
                             Text(uptimeManager.dateFormatter.string(from: uptimeManager.lastDisconnect))
                                 .foregroundColor(.gray)
@@ -126,7 +117,7 @@ struct DeviceView: View {
                         }
                     }
                     HStack {
-                        Text("Uptime")
+                        Text(NSLocalizedString("uptime", comment: ""))
                         if currentUptime != nil {
                             Text((dateFormatter.string(from: currentUptime) ?? ""))
                                 .foregroundColor(.gray)
@@ -142,7 +133,7 @@ struct DeviceView: View {
                 Section() {
                     if bleManager.isConnectedToPinetime {
                         Toggle(isOn: $bleManager.autoconnectToDevice) {
-                            Text("Autoconnect to this \(deviceInfo.modelNumber)")
+                            Text(NSLocalizedString("autoconnect_to_this", comment: "") + " \(deviceInfo.modelNumber)")
                         }.onChange(of: bleManager.autoconnectToDevice) { newValue in
                             autoconnect = bleManager.autoconnectToDevice
                             if bleManager.autoconnectToDevice == false {
@@ -152,13 +143,13 @@ struct DeviceView: View {
                             }
                         }
                     }
-                    Toggle("Enable Notifications", isOn: $watchNotifications)
-                    Toggle("Notify about Low Battery", isOn: $batteryNotification)
+                    Toggle(NSLocalizedString("enable_watch_notifications", comment: ""), isOn: $watchNotifications)
+                    Toggle(NSLocalizedString("notify_about_low_battery", comment: ""), isOn: $batteryNotification)
                     Button {
                         SheetManager.shared.sheetSelection = .notification
                         SheetManager.shared.showSheet = true
                     } label: {
-                        Text("Send Notification to PineTime")
+                        Text(NSLocalizedString("send_notification_to", comment: "") + " \(deviceInfo.modelNumber)")
                     }.disabled(!watchNotifications || !bleManager.isConnectedToPinetime)
                 }
                 
@@ -166,12 +157,12 @@ struct DeviceView: View {
                     Button {
                         bleManager.disconnect()
                     } label: {
-                        Text("Disconnect PineTime")
+                        Text(NSLocalizedString("disconnect", comment: "") + " \(deviceInfo.modelNumber)")
                     }
                 }
             }
             .listStyle(.insetGrouped)
         }
-        .navigationBarTitle(Text("My Device").font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("my_device", comment: "")).font(.subheadline), displayMode: .inline)
     }
 }

@@ -26,11 +26,6 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	public var firmwareURL: URL!
 
 	
-//	func prepare(location: URL, device: BLEManager) {
-//		url = location
-//		bleManager = device
-//	}
-	
 	func transfer() {
 		guard let url = firmwareURL else {return}
 		guard url.startAccessingSecurityScopedResource() else { return }

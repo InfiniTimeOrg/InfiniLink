@@ -14,9 +14,6 @@ struct DFULearnMore: View {
     @ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     
-    //@ObservedObject var downloadManager
-    //@AppStorage("updateAvailable") var updateAvailable: Bool = false
-    
     @State var openFile = false
     @State var updateStarted: Bool = false
     
@@ -36,6 +33,6 @@ struct DFULearnMore: View {
                 .listStyle(.insetGrouped)
             }
         }
-        .navigationBarTitle(Text("Learn More").font(.subheadline), displayMode: .inline)
+        .navigationBarTitle(Text(NSLocalizedString("learn_more", comment: "")).font(.subheadline), displayMode: .inline)
     }
 }
