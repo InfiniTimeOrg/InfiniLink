@@ -141,13 +141,13 @@
 "welcome_text" = "of InfiniLink! I hope you enjoy the features I've added to the app for this version. Please feel free to get in touch with me about any issues you experience or changes you'd like to see!";
 
 // - WhatsNewBody
-"whats_new_body_1" = "First localization!\n- Thank you so much to @friendlytsy for creating a Russian localization for InfiniLink! If anyone else would like to localize the app, the work that @friendlytsy put in laid the groundwork for new localizations. If any polyglots out there would like to contribute localizations for other languages, let me know and I can help you get started!";
-"whats_new_body_2" = "Bug fixes:\n- This release should fix a few bugs causing crashes when the Apple Music feature is accessed.\n- Fixes some UI issues for users with smaller screens.n-\"Updates Available\" field on the home screen should now correctly show if an update for InfiniTime is available, and should reset on disconnect.";
-"whats_new_body_3" = "*** Please note***: the secure pairing implemented in v1.8.0 of InfiniTime is not currently compatible with the way that iOS initiates bonding. I am working with the wonderful devs at InfiniTime to sort this out, but in the meantime, your BLE connection to your watch will still be unencrypted.";
+"whats_new_body_1" = "New UI! Big thank you to @wowieman on GitHub for the total UI overhaul.";
+"whats_new_body_2" = "We're in the App Store now!";
+"whats_new_body_3" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
 
 // - Onboarding
 "welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
-"onboarding_text" = "I'm thrilled you're willing and able to test out this beta version of my iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes to me! Your feedback allows you and me to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
+"onboarding_text" = "The open-source iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes! Your feedback allows us to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
 
 // - OnboardingBody
 "other_notes" = "Other notes:";

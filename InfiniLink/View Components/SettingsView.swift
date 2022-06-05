@@ -117,8 +117,8 @@ struct Settings_Page: View {
                             .font(.system(size: 14))
                             .bold()
                             .padding(1)) {
-                    Link("InfiniLink GitHub", destination: URL(string: "https://github.com/xan-m/InfiniLink")!)
-                    Link("InfiniTime Firmware Releases", destination: URL(string: "https://github.com/JF002/InfiniTime/releases")!)
+                    Link("InfiniLink GitHub", destination: URL(string: "https://github.com/InfiniTimeOrg/InfiniLink")!)
+                    Link("InfiniTime Firmware Releases", destination: URL(string: "https://github.com/InfiniTimeOrg/InfiniTime/releases")!)
                 }
                 
 			}
