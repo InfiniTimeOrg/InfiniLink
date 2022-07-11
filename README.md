@@ -17,5 +17,5 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Music controls for anything other than Apple Music -- This requires Apple Music Service (AMS) to be implemented in InfiniTime.
 - Phone notifications pushing to watch -- This requires a proprietary Apple service as well.
 
-### How to try it out:
-Join the TestFlight beta now! Click this link from your iOS device: https://testflight.apple.com/join/Z7u1Jxp4
+### How to install it:
+InfiniLink is now available on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814)!
