@@ -18,3 +18,4 @@ xcuserdata/
 *.xcworkspace
 *.xcuserstate // <--- Here
 !default.xcworkspace
+*.swp
