@@ -67,7 +67,7 @@ struct Settings_Page: View {
 				}
 				
 
-				Section(header: Text("Graph Styles")) {
+                Section(header: Text(NSLocalizedString("graph_styles", comment: ""))) {
 					Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
 					Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
 				}

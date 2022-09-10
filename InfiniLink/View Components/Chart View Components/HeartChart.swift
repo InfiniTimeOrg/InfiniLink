@@ -58,7 +58,7 @@ struct HeartChart: View {
 			VStack (alignment: .center) {
 				Spacer()
 				HStack (alignment: .center) {
-					Text("Insufficient Heart Rate Data")
+                    Text(NSLocalizedString("insufficient_heart_rate_data", comment: ""))
 						.font(.title)
 				}
 				Spacer()

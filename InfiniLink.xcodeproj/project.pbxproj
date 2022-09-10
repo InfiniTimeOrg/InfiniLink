@@ -190,6 +190,7 @@
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
+		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
 		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
 		E515FB10284C550E0040B582 /* CustomizeFavoritesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizeFavoritesView.swift; sourceTree = "<group>"; };
@@ -620,6 +621,7 @@
 				fr,
 				Base,
 				ko,
+				"zh-Hant",
 			);
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
@@ -791,6 +793,7 @@
 				F99B8DCC276778FF0096A84D /* ru */,
 				22F9534327AF34C200729BF5 /* fr */,
 				E57AD57D282462D900E33EEA /* ko */,
+				9255940428BB5342001602F1 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";

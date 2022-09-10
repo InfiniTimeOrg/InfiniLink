@@ -1,0 +1,248 @@
+/* 
+  Localizable.strings
+  InfiniLink
+
+  Created by Александр Цыганков on 11.12.2021.
+  
+*/
+
+// - HomeScreen
+"device_information" = "裝置資訊";
+"firmware_version" = "韌體版本： ";
+"model" = "型號： ";
+"update_stats" = "上線時間狀態";
+"last_disconnect" = "上次離線： ";
+"uptime" = "上線時間： ";
+"step_count" = "步數計數";
+"firmware_updates" = "韌體更新";
+"firmware_update_is_available" = "韌體更新已可使用！";
+"no_updates_available" = "無可用更新";
+"device_name" = "裝置名稱";
+"rename" = "重新命名";
+
+// - SideMenu
+"home" = "主頁";
+"steps" = "步數";
+"charts" = "圖表";
+"update" = "更新";
+"settings" = "設定";
+"bluetooth_off" = "藍芽關閉";
+
+// - ChartView components
+"heart" = "Heart: ";
+"battery" = "電量: ";
+
+// - HeartChart
+"bpm" = "BPM";
+"insufficient_heart_rate_data" = "沒有足夠的心率資料";
+
+// - BetteryChart
+"insufficient_battery_data" = "沒有足夠的電池資料";
+
+// - StepsView
+"week" = "週";
+"current" = "目前";
+"month" = "月";
+
+// - StepProgressGauge
+"steps_goal" = "步數目標";
+
+// - StepWeeklyChart
+"steps_this_week" = "本週步數";
+
+// - Settings_Page
+"connect_options" = "連線選項";
+"autoconnect_to_pinetime" = "自動連線至 PineTime";
+"autoconnect_device_uuid" = "自動連線至裝置 UUID";
+"use_current_device_for_autoconnect" = "自動連線至目前裝置";
+"autoconnect_device_cleared" = "自動連線裝置清除";
+"clear_autoconnect_device" = "清除自動連線裝置";
+"current_device_name" = "目前裝置名稱： ";
+"enter_new_name" = "輸入新的名稱";
+"rename_device" = "重新命名裝置";
+"firmware_update_downloads" = "韌體更新下載";
+"show_newer_versions_only" = "只顯示新的版本";
+"notifications" = "通知";
+"enable_watch_notifications" = "開啟手錶通知";
+"notify_about_low_battery" = "低電量時通知";
+"send_notification_to_pinetime" = "傳送通知至 PineTime";
+"graph_styles" = "圖表類型";
+"filled_hrm_graph" = "填滿 HRM 圖表";
+"filled_battery_graph" = "填滿電池圖表";
+"graph_data" = "圖表資料";
+"clear_all_hrm_chart_data" = "清除所有心率圖表資料";
+"clear_all_battery_chart_data" = "清除所有電池圖表資料";
+"onboarding_information" = "Onboarding 資訊";
+"open_onboarding_page" = "開啟 Onboarding 頁面";
+"whats_new_page_this_version" = "這版本開啟 'What's New' 頁面";
+"debug_mode" = "除錯模式";
+"enable_debug_mode" = "開啟除錯模式";
+"debug_logs" = "除錯紀錄";
+"links" = "連結";
+"donations" = "捐款";
+
+// - ScanningPopover
+"connected_to" = "已連線至";
+"scanning" = "掃描中";
+
+// - BLEConnectView
+"available_devices" = "可用裝置";
+"waiting_for_bluetooth" = "等待藍芽中";
+"unnamed" = "未命名";
+
+// - ChartSettingsSheetMain
+"select_date_range" = "選擇日期範圍";
+"date_range_selection" = "日期範圍選擇";
+"show_all" = "顯示全部";
+"sliders" = "Sliders";
+"select_dates" = "選擇日期";
+"all_data_selected" = "所有選擇的資料";
+
+// - ChartSettingsSheetSliders
+"hours" = "時";
+"days" = "天";
+"weeks" = "週";
+
+// - ChartSettingsSheetDatePicker
+"start_date" = "開始日期";
+"end_date" = "結束日期";
+
+// - ArbitraryNotificationSheet
+"placeholder_text" = "在這輸入文字";
+"send_notification" = "傳送通知";
+"title" = "標題";
+
+// - StepSettingsSheet
+"steps_settings" = "步數設定";
+"step_goal" = "步數目標";
+"add_steps" = "增加步數";
+
+// - StepSettingsSheetGoalChange
+"change_step_count_goal" = "更改步數目標";
+"enter_step_goal" = "輸入步數目標";
+"submit_new_step_goal" = "遞交新的步數目標";
+
+// - StepSettingsSheetDatePicker
+"manually_add_step_count" = "手動增加步數";
+"select_date" = "選擇日期";
+"enter_number_of_steps" = "輸入步數數字";
+"submit_count" = "遞交計數";
+
+// - DownloadView
+"available_downloads" = "可用的下載";
+"firmware_download_links" = "韌體下載連結";
+
+// - SheetCloseButton
+"close" = "關閉";
+
+// - WhatsNew
+"whats_new_in" = "什麼新鮮事在";
+"welcome_to_version" = "歡迎來到版本";
+"welcome_text" = "的 InfiniLink！我希望您喜歡在這版本的 app 新增的功能。若您有遇到任何情況或是您想看到的改變，請不要感覺有負擔的聯絡我！";
+
+// - WhatsNewBody
+"whats_new_body_1" = "新的 UI 介面！超級感謝 GitHub 上的 @wowieman 大修整個 UI介面。";
+"whats_new_body_2" = "我們現在已經上架到 App Store 囉！";
+"whats_new_body_3" = "一些新的本地化。 請注意並不是所有的本地化已經更新在新的 UI 上。若您可以幫忙本地化，請在 GitHub 上與我們聯絡，或是請不要感覺有負擔的提交一個本地化的 pull request。在這方面的任何幫忙都很感謝！";
+
+// - Onboarding
+"welcome_to_InfiniLink" = "🎉 歡迎使用 InfiniLink! 🎉";
+"onboarding_text" = "InfiniTime 的開放原始碼 iOS 夥伴 app！在您開始前，請確認允許此 app 可以使用藍芽。請跟我們反應任何您發現的情況，您遇過的 app 閃退，或是建議改變！您的回饋讓我們可以一起處理並擁有一個更好的夥伴 app。藉由 TestFlight 或是 GitHub、Matrix 或是 Mastodon 反應都歡迎 （在設定頁面的連結是可以使用的。）";
+
+// - OnboardingBody
+"other_notes" = "其他注意的事情：";
+"other_notes_1" = "- 通知目前尚未可以運作，因它需要 InfiniTime 實作 Apple 通知中心服務 (ANCS)協定。";
+"other_notes_2" = "- 音樂的控制在 InfiniTime 上可以運作，但是只有當您藉由蘋果的音樂 app 播放音樂的時候。 iOS 上系統的音樂控制，需要 InfiniTime 上實作專有軟體 Apple Media Service。在 app 的層級上，只能與 Apple Music 互動，並不能控制 podcasts、YouTube videos、系統音量等等，直到 AMS 在 InfiniTime 上增加。";
+"other_notes_3" = "- 您的 PineTime 目前只能一次維持一個藍芽的連線。若您在連線上有問題，請確認您的 PineTime 並未已經連線到另一個裝置，或連線到這個裝置的另一個 app。";
+"other_notes_4" = "- 若您的 PineTime 仍然未顯示為可用的裝置，請按住手錶的側邊按鈕重啟您的手錶直到您看到 Pine64 的松果 logo 為綠色時再放開按鈕。 Infinitime 的藍芽通知目前仍然還有狀況，開發者們正非常努力地處理。祝他們好運！";
+
+// - OnboardingDismissButton
+"dismiss_button" = "關閉";
+
+// - DFUWithBLE
+"update_firmware" = "更新韌體";
+"current_firmware" = "目前韌體";
+"firmware_file" = "韌體檔案";
+"clear" = "清除";
+
+// - DFUWithoutBLE
+"bluetooth_not_available" = "藍芽未啟用";
+"please_enable_bluetooth_try_again" = "請啟用藍芽並再試一次。";
+
+// - DFUFileSelectButton
+"select_firmware_file" = "選擇韌體檔案";
+"select_file_source" = "選擇檔案來源";
+"use_local_file" = "使用本地檔案";
+"download_firmware_file" = "下載韌體檔案";
+
+// - DFUStartTransferButton
+"stop_transfer" = "停止傳送";
+"start_transfer" = "開始傳送";
+"downloading" = "下載中";
+
+// - DFUComplete
+"transfer_completed" = "傳送結束！";
+
+// - BatteryNotifications
+"battery_low" = "低電量";
+"battery_low_message" = "剩餘電量";
+
+// - MusicController
+"not_playing" = "未播放";
+
+// - SideMenu
+"disconnect" = "斷線";
+"scanning" = "掃描";
+"connect" = "連線";
+
+// - ContentView
+"failed_set_time" = "設定時間失敗";
+"failed_set_time_description" = "您的手錶上設定時間有點問題。請跟您的手錶斷線再重新連線。";
+"dismiss" = "關閉";
+
+
+// - New Stuff
+"not_connected" = "未連線";
+"tap_to_connect" = "點擊以連線";
+"customize_favorites" = "自訂最愛";
+"goal" = "目標為 ";
+"heart_rate" = "心率";
+"battery_tilte" = "電量";
+"heart_tilte" = "Heart";
+"welcome_text" = "歡迎。若您有 InfiniTime 裝置，\n 您可以在這配對它。";
+"connecting" = "連線中...";
+"start_pairing" = "開始配對";
+"my_device" = "我的裝置";
+"favorites" = "最愛";
+"app_settings" = "App 佈景主題";
+"app_theme" = "App 佈景主題";
+"name" = "名稱";
+"avaliable_themes" = "可用佈景主題";
+"choose_app_theme" = "選擇佈景主題";
+"firmware_file_link" = "韌體檔案連結";
+"firmware_download_links" = "韌體下載檔案";
+"downloads" = "下載";
+"learn_more" = "Learn More";
+"software_update" = "軟體更新";
+"local_file_info" = "這是一個本地的檔案而且不一定可以在您的 PineTime 上可以運行。";
+"install_older_version" = "安裝較舊版本";
+"up_to_date" = "是最新";
+"pinetime_not_available" = "PineTime 目前不可使用";
+"please_check_your_connection_and_try_again" = "請檢查您的連線並再試一次。";
+"download_and_install" = "下載並安裝";
+
+"battery_level" = "電池電量";
+"battery_usage" = "電池用量";
+
+"last_24_hours" = "過去24小時";
+"last_10_days" = "過去10天";
+"battery_level_is" = "電量為";
+"currently_unavailable" = "目前不可使用";
+
+"software_version" = "軟體版本";
+"model_name" = "型號";
+"autoconnect_to_this" = "自動連線至本裝置";
+"send_notification_to" = "傳送通知至";
+"connected_to" = "已連線至";
+
+// NSLocalizedString("", comment: "")
