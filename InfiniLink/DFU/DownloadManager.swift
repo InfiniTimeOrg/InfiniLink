@@ -136,7 +136,7 @@ class DownloadManager: NSObject, ObservableObject {
 	func chooseAsset(response: Result) -> Asset {
 		// for now, I'm pulling the .zip file from the releases. This is not guaranteed to be successful (ie if there's more than one zip file in the release), but it's a start
 		for x in response.assets {
-			if x.name.suffix(4) == ".zip" {
+			if x.name.suffix(4) == ".zip" && x.name.contains("pinetime-mcuboot-app-dfu") {
 				return x
 			}
 		}
