@@ -104,6 +104,7 @@ struct NewUpdate: View {
     @Binding var updateStarted: Bool
     //@ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var dfuUpdater = DFU_Updater.shared
+    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     @Environment(\.colorScheme) var scheme
     @Binding var openFile: Bool
     
@@ -162,7 +163,7 @@ struct NewUpdate: View {
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
             //Button("Download and Install", action: {})
             
-            if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
+            if !(showNewDownloadsOnly) {
                 NavigationLink(destination: DownloadView(openFile: $openFile)) {
                     Text(NSLocalizedString("install_older_version", comment: ""))
                 }
@@ -174,11 +175,12 @@ struct NewUpdate: View {
 struct NoUpdate: View {
     //@ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     @Environment(\.colorScheme) var colorScheme
     @Binding var openFile: Bool
     
     var body: some View {
-        if !(UserDefaults.standard.value(forKey: "showNewDownloadsOnly") as? Bool ?? true) {
+        if !(showNewDownloadsOnly) {
             Section() {
                 NavigationLink(destination: DownloadView(openFile: $openFile)) {
                     Text(NSLocalizedString("install_older_version", comment: ""))
