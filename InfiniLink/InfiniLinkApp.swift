@@ -20,7 +20,6 @@ struct InfiniLink: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(healthKitManager)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
