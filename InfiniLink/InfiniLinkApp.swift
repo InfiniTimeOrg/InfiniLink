@@ -10,10 +10,17 @@ import SwiftUI
 @main
 struct InfiniLink: App {
     let persistenceController = PersistenceController.shared
+    
+    @ObservedObject var healthKitManager = HealthKitManager()
+    
+    init() {
+        healthKitManager.requestAuthorization()
+    }
 
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environmentObject(healthKitManager)
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }

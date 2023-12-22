@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -77,6 +77,7 @@
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
+		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
 		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
 		E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0B284C54690040B582 /* HeartChartComponents.swift */; };
 		E515FB11284C550E0040B582 /* CustomizeFavoritesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB10284C550E0040B582 /* CustomizeFavoritesView.swift */; };
@@ -191,6 +192,8 @@
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
 		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
 		E515FB10284C550E0040B582 /* CustomizeFavoritesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomizeFavoritesView.swift; sourceTree = "<group>"; };
@@ -332,6 +335,7 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
+				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
 				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				264DB80926C62EAC00E812C3 /* View Components */,
@@ -525,6 +529,7 @@
 				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
 				26C5FAD426FBB76100921207 /* DeviceNameManager.swift */,
 				2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */,
+				E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -730,6 +735,7 @@
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
 				E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */,
+				E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */,
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
@@ -925,11 +931,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = InfiniLink/InfiniLink.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = UXA3H4X42S;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -937,7 +944,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -952,11 +959,12 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = InfiniLink/InfiniLink.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = UXA3H4X42S;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
@@ -964,7 +972,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

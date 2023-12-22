@@ -9,8 +9,10 @@
 
 import CoreBluetooth
 import CoreData
+import SwiftUI
 
 struct BLEUpdatedCharacteristicHandler {
+    @ObservedObject var healthKitManager = HealthKitManager()
 	
 	let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
@@ -38,7 +40,8 @@ struct BLEUpdatedCharacteristicHandler {
 		case bleManagerVal.cbuuidList.hrm:
 			let bpm = heartRate(from: characteristic)
             bleManagerVal.heartBPM = Double(bpm)
-			if bpm != 0{
+            healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManagerVal.heartBPM)
+			if bpm != 0 {
                 ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
 			}
 		case bleManagerVal.cbuuidList.bat:
@@ -57,7 +60,7 @@ struct BLEUpdatedCharacteristicHandler {
 			}
 			let stepData = [UInt8](value)
             bleManagerVal.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
-            //bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
+            healthKitManager.writeSteps(date: Date(), stepsToAdd: Double(bleManagerVal.stepCount))
 			StepCountPersistenceManager().setStepCount(steps: bleManagerVal.stepCount, arbitrary: false, date: Date())
 		default:
 			break
