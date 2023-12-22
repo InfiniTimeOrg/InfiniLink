@@ -10,6 +10,8 @@
 import SwiftUI
 
 struct StepSettingsSheetDatePicker: View {
+    @Environment(\.presentationMode) var presMode
+    @ObservedObject var healthKitManager = HealthKitManager()
 	@ObservedObject var addDateValue = NumbersOnly()
 	@State var selectedDate: Date = Date()
 	
@@ -32,11 +34,14 @@ struct StepSettingsSheetDatePicker: View {
 			.padding()
 			.keyboardType(.numberPad)
 		Button {
-			StepCountPersistenceManager().setStepCount(steps: Int(addDateValue.value)!, arbitrary: true, date: selectedDate)
+            healthKitManager.writeSteps(date: selectedDate, stepsToAdd: Double(addDateValue.value)!)
+            StepCountPersistenceManager().setStepCount(steps: Int(addDateValue.value)!, arbitrary: true, date: selectedDate)
+            presMode.wrappedValue.dismiss()
 		} label: {
 			Text(NSLocalizedString("submit_count", comment: ""))
-		}.disabled(readyToSubmit(value: addDateValue.value))
-			.padding()
+		}
+        .disabled(readyToSubmit(value: addDateValue.value))
+        .padding()
 	}
 }
 

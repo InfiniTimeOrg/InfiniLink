@@ -30,6 +30,10 @@
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string></string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>This app optionally uses Apple Health to communicate your heart rate and step count data to your PineTime.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
