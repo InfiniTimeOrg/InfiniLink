@@ -37,7 +37,7 @@
 "insufficient_heart_rate_data" = "Données de fréquence cardiaque insuffisantes";
 
 // - BetteryChart
-"insufficient_battery_data" = "Données de batterie insuffisante";
+"insufficient_battery_data" = "Données de batterie insuffisantes";
 
 // - StepsView
 "week" = "Semaine";
@@ -48,7 +48,7 @@
 "steps_goal" = "Objectif de pas";
 
 // - StepWeeklyChart
-"steps_this_week" = "Étape cette semaine";
+"steps_this_week" = "Pas cette semaine";
 
 // - Settings_Page
 "connect_options" = "Options de connexion";
@@ -185,7 +185,7 @@
 
 // - BatteryNotifications
 "battery_low" = "Battery faible";
-"battery_low_message" = "";
+"battery_low_message" = "Batterie restante";
 
 // - MusicController
 "not_playing" = "Pas d'activité";
@@ -201,45 +201,45 @@
 "dismiss" = "Fermer";
 
 // - New Stuff
-"not_connected" = "";
-"tap_to_connect" = "";
-"customize_favorites" = "";
-"goal" = "";
-"heart_rate" = "";
-"battery_tilte" = "";
-"heart_tilte" = "";
-"welcome_text" = "";
-"connecting" = "";
-"start_pairing" = "";
-"my_device" = "";
-"favorites" = "";
-"app_settings" = "";
-"app_theme" = "";
-"name" = "";
-"avaliable_themes" = "";
-"choose_app_theme" = "";
-"firmware_file_link" = "";
-"firmware_download_links" = "";
-"downloads" = "";
-"learn_more" = "";
-"software_update" = "";
-"local_file_info" = "";
-"install_older_version" = "";
-"up_to_date" = "";
-"pinetime_not_available" = "";
-"please_check_your_connection_and_try_again" = "";
-"download_and_install" = "";
+"not_connected" = "Non connecté";
+"tap_to_connect" = "Appuyer pour se connecter";
+"customize_favorites" = "Personnaliser les favoris";
+"goal" = "avec un but de";
+"heart_rate" = "Pouls";
+"battery_tilte" = "Batterie";
+"heart_tilte" = "Coeur";
+"welcome_text" = "Bienvenue. Si vous avez un appareil InfiniTime, vous pouvez l'appairer ici";
+"connecting" = "Connexion...";
+"start_pairing" = "Commencer l'appairage";
+"my_device" = "Mon appareil";
+"favorites" = "Favoris";
+"app_settings" = "Thème de l'application";
+"app_theme" = "Thème de l'application";
+"name" = "Nom";
+"avaliable_themes" = "Thèmes disponibles";
+"choose_app_theme" = "Choisir le thème de l'application";
+"firmware_file_link" = "Lien du fichier du micrologiciel";
+"firmware_download_links" = "Lien de téléchargement du micrologiciel";
+"downloads" = "Téléchargements";
+"learn_more" = "En savoir plus";
+"software_update" = "Mise à jour du micrologiciel";
+"local_file_info" = "Ceci est un fichier local qui pourrait ne pas fonctionner avec votre PineTime";
+"install_older_version" = "Installer une version plus ancienne";
+"up_to_date" = "est à jour";
+"pinetime_not_available" = "PineTime non disponible";
+"please_check_your_connection_and_try_again" = "Veuillez vérifier votre connexion et réessayer";
+"download_and_install" = "Télécharger et installer";
 
-"battery_level" = "";
-"battery_usage" = "";
+"battery_level" = "NIVEAU DE BATTERIE";
+"battery_usage" = "UTILISATION DE LA BATTERIE";
 
-"last_24_hours" = "";
-"last_10_days" = "";
-"battery_level_is" = "";
-"currently_unavailable" = "";
+"last_24_hours" = "Dernières 24 heures";
+"last_10_days" = "10 derniers jours";
+"battery_level_is" = "Le niveau de batterie est de";
+"currently_unavailable" = "Actuellement indisponible";
 
-"software_version" = "";
-"model_name" = "";
-"autoconnect_to_this" = "";
-"send_notification_to" = "";
-"connected_to" = "";
+"software_version" = "Version du logiciel";
+"model_name" = "Nom du modèle";
+"autoconnect_to_this" = "Se connecter automatiquement";
+"send_notification_to" = "Envoyer une notification à";
+"connected_to" = "Connecté à";
