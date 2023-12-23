@@ -18,7 +18,9 @@ struct ArbitraryNotificationSheet: View {
 	var placeholderString = NSLocalizedString("placeholder_text", comment: "")
 	
 	var body: some View {
-		SheetCloseButton()
+        SheetCloseButton()
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding()
 		VStack{
 			Text("Send Notification")
 				.font(.title)

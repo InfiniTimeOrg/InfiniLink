@@ -10,27 +10,15 @@
 import SwiftUI
 
 struct SheetCloseButton: View {
-	@Environment(\.colorScheme) var colorScheme
-	
-	var body: some View {
-		ZStack (alignment: .top){
-			Capsule()
-				.frame(width: 40, height: 5, alignment: .top)
-				.foregroundColor(colorScheme == .dark ? Color.darkGray : Color.lightGray)
-				.padding(.horizontal)
-				.padding(.top, 5)
-				.ignoresSafeArea()
-			HStack () {
-				Button {
-					SheetManager.shared.showSheet = false
-				} label: {
-					Text(NSLocalizedString("close", comment: ""))
-						.frame(maxWidth: .infinity, alignment: .leading)
-						.font(.title2)
-						.padding()
-				}
-				Spacer()
-			}
-		}
-	}
+    var body: some View {
+        Button(action: {SheetManager.shared.showSheet = false}) {
+            Image(systemName: "xmark")
+                .imageScale(.medium)
+                .padding(12)
+                .font(.body.weight(.semibold))
+                .foregroundColor(Color.darkGray)
+                .background(Color.gray.opacity(0.2))
+                .clipShape(Circle())
+        }
+    }
 }

@@ -12,8 +12,10 @@ import SwiftUI
 struct Onboarding: View {
 	
 	var body: some View {
-		SheetCloseButton()
-		ScrollView{
+        SheetCloseButton()
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding()
+		ScrollView {
 			VStack {
 				Text(NSLocalizedString("welcome_to_InfiniLink", comment: ""))
 					.font(.title2)
@@ -22,7 +24,6 @@ struct Onboarding: View {
 					.padding()
 				
 				OnboardingBody()
-				OnboardingDismissButton()
 			}
 		}
 	}
