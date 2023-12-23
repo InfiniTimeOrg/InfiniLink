@@ -49,11 +49,6 @@ struct WelcomeView: View {
                 DeviceView()
             }
         }
-        // DEBUG
-        .onAppear {
-            deviceInfo.firmware = "1.13.0"
-            bleManager.isConnectedToPinetime = true
-        }
     }
 }
 

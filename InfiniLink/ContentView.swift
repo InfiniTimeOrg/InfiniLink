@@ -49,7 +49,8 @@ struct ContentView: View {
                     .alert(isPresented: $showDisconnectConfDialog) {
                         Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
                     }
-			}.navigationViewStyle(.stack)
+			}
+            .navigationViewStyle(.stack)
             .tabItem {
                 Image(systemName: "house.fill")
                 Text(NSLocalizedString("home", comment: ""))
@@ -58,9 +59,8 @@ struct ContentView: View {
             
             NavigationView {
                 Settings_Page()
-                    .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text(NSLocalizedString("settings", comment: ""))) //.font(.subheadline), displayMode: .large)
-			}.navigationViewStyle(.stack)
+			}
+            .navigationViewStyle(.stack)
             .tabItem {
                 Image(systemName: "gearshape.fill")
                 Text(NSLocalizedString("settings", comment: ""))
@@ -73,7 +73,7 @@ struct ContentView: View {
         .onAppear() { if !bleManager.isConnectedToPinetime { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { if autoconnect && bleManager.isSwitchedOn { self.bleManager.startScanning() }
             
         }) }}
-        .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System Default") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
+        .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
         .onChange(of: bleManager.batteryLevel) { bat in
             batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
         }

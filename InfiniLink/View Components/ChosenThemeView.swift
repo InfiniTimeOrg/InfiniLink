@@ -9,7 +9,7 @@ import SwiftUI
 
 struct SettingsChosenThemeView: View {
     @Binding var chosenTheme: String
-    let themes: [String] = ["System Default", "Light", "Dark"]
+    let themes: [String] = ["System", "Light", "Dark"]
     
     var body: some View {
         VStack {
@@ -26,6 +26,6 @@ struct SettingsChosenThemeView: View {
 
 struct SettingsChosenThemeView_Previews: PreviewProvider {
     static var previews: some View {
-        SettingsChosenThemeView(chosenTheme: .constant("System Default"))
+        SettingsChosenThemeView(chosenTheme: .constant("System"))
     }
 }
