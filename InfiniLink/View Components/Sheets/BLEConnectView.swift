@@ -15,8 +15,6 @@ struct Connect: View {
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
     @State var showHelpView = false
     
-    @State var testDevices = ["Test 1", "Test 2", "Test 3"]
-    
     var body: some View {
         VStack(spacing: 0) {
             VStack {
@@ -35,39 +33,40 @@ struct Connect: View {
                         .background(Color.gray.opacity(0.2))
                         .clipShape(Capsule())
                     Spacer()
-                    HStack(spacing: 7) {
-                        ProgressView()
-                        Text(NSLocalizedString("scanning", comment: "Scanning"))
+                    if bleManager.isSwitchedOn {
+                        HStack(spacing: 7) {
+                            ProgressView()
+                            Text(NSLocalizedString("scanning", comment: "Scanning"))
+                        }
+                        .padding()
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(.gray)
+                        .background(Color.gray.opacity(0.2))
+                        .clipShape(Capsule())
                     }
-                    .padding()
-                    .font(.body.weight(.semibold))
-                    .foregroundColor(.gray)
-                    .background(Color.gray.opacity(0.2))
-                    .clipShape(Capsule())
                 }
             }
             .padding(.vertical, 10)
             .padding()
             Divider()
-            //            if bleManager.isSwitchedOn {
-            //                if bleManager.newPeripherals.isEmpty {
-            if testDevices.isEmpty {
-                HStack(spacing: 7) {
-                    ProgressView()
-                    Text(NSLocalizedString("scanning", comment: "Scanning"))
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .foregroundColor(.gray)
-            } else {
-                ScrollView {
-                    VStack(spacing: 8) {
-                        ForEach(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
-                            let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
-                            Button {
-                                bleManager.connect(peripheral: i)
-                                presentation.wrappedValue.dismiss()
-                            } label: {
-                                Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
+            if bleManager.isSwitchedOn {
+                if bleManager.newPeripherals.isEmpty {
+                    HStack(spacing: 7) {
+                        ProgressView()
+                        Text(NSLocalizedString("scanning", comment: "Scanning"))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .foregroundColor(.gray)
+                } else {
+                    ScrollView {
+                        VStack(spacing: 8) {
+                            ForEach(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
+                                let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
+                                Button {
+                                    bleManager.connect(peripheral: i)
+                                    presentation.wrappedValue.dismiss()
+                                } label: {
+                                    Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
                                         .font(.body.weight(.semibold))
                                         .padding()
                                         .foregroundColor(.primary)
@@ -82,15 +81,14 @@ struct Connect: View {
                     }
                     .padding(.top)
                 }
+            } else {
+                HStack(spacing: 7) {
+                    ProgressView()
+                    Text(NSLocalizedString("waiting_for_bluetooth", comment: "Waiting for Bluetooth"))
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .foregroundColor(.gray)
             }
-            //            } else {
-            //                HStack(spacing: 7) {
-            //                    ProgressView()
-            //                    Text(NSLocalizedString("loading", comment: "Loading..."))
-            //                }
-            //                .frame(maxWidth: .infinity, maxHeight: .infinity)
-            //                .foregroundColor(.gray)
-            //            }
             Divider()
                 .padding(.bottom)
             Button(action: {
