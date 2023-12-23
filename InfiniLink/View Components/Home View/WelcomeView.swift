@@ -13,42 +13,41 @@ struct WelcomeView: View {
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
-        return VStack {
+        VStack {
             if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" {
                 VStack(spacing: 5) {
                     Text("InfiniLink")
-                        .font(.system(size: 42))
+                        .font(.system(size: 34).weight(.bold))
                         .bold()
                         .padding(5)
                     Text(NSLocalizedString("welcome_text", comment: ""))
                         .multilineTextAlignment(.center)
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .font(.system(size: 16))
+                        .foregroundColor(.gray)
+                        .font(.body)
+                    Spacer()
                     Image("WelcomePineTime")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .padding(20)
                         .frame(maxWidth: .infinity, alignment: .center)
-                    
+                    Spacer()
                     if bleManager.isConnectedToPinetime {
-                        
                         ProgressView(NSLocalizedString("connecting", comment: ""))
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(45)
                     } else {
                         Button(NSLocalizedString("start_pairing", comment: "")) {
-                            if !bleManager.isConnectedToPinetime {
-                                SheetManager.shared.sheetSelection = .connect
-                                SheetManager.shared.showSheet = true
-                            }
-                        }.buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(45)
+                            SheetManager.shared.sheetSelection = .connect
+                            SheetManager.shared.showSheet = true
+                        }
+                        .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding()
                     }
                 }
-                .padding(5)
-            }
-            else {
+                .padding()
+            } else {
                 HomeScreen()
             }
         }
@@ -62,16 +61,10 @@ struct NeumorphicButtonStyle: ButtonStyle {
         configuration.label
             .padding(15)
             .frame(maxWidth: .infinity, alignment: .center)
-            .background(
-                ZStack {
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .shadow(color: .white, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? -5: -15, y: configuration.isPressed ? -5: -15)
-                        .shadow(color: .black, radius: configuration.isPressed ? 7: 10, x: configuration.isPressed ? 5: 15, y: configuration.isPressed ? 5: 15)
-                        .blendMode(.overlay)
-                    RoundedRectangle(cornerRadius: 10, style: .continuous)
-                        .fill(bgColor)
-                }
-        )
+            .font(.body.weight(.semibold))
+            .foregroundColor(Color.white)
+            .background(Color.blue)
+            .clipShape(Capsule())
             .scaleEffect(configuration.isPressed ? 0.95: 1)
             .foregroundColor(.primary)
             .animation(.spring())

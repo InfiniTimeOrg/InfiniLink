@@ -28,7 +28,9 @@ struct ChartSettingsSheet: View {
 	
 	var body: some View {
 		VStack {
-			SheetCloseButton()
+            SheetCloseButton()
+                .frame(maxWidth: .infinity, alignment: .trailing)
+                .padding()
 			Divider()
 				.padding(.horizontal)
 			VStack {

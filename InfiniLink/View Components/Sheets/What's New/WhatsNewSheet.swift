@@ -14,7 +14,9 @@ struct WhatsNew: View {
 	let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
 	
 	var body: some View {
-		SheetCloseButton()
+        SheetCloseButton()
+            .frame(maxWidth: .infinity, alignment: .trailing)
+            .padding()
 		ScrollView{
 			VStack {
 				Text(String(NSLocalizedString("whats_new_in", comment: "") + " v\(appVersion!)"))

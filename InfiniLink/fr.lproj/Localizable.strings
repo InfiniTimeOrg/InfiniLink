@@ -89,6 +89,12 @@
 "available_devices" = "Appareil disponible";
 "waiting_for_bluetooth" = "En attente du Bluetooth";
 "unnamed" = "Anonyme";
+"loading" = "";
+"need_help_connecting" = "";
+"devices" = "";
+
+// - ConnectionHelpView
+"connection_help" = "";
 
 // - ChartSettingsSheetMain
 "select_date_range" = "Selectionner une plage de dates";
@@ -151,10 +157,10 @@
 
 // - OnboardingBody
 "other_notes" = "Autres notes:";
-"other_notes_1" = "- Les notifications ne sont actuellement pas fonctionnelles, car cela nécessite que le protocole Apple Notification Center Service (ANCS) soit implémenté dans InfiniTime.";
-"other_notes_2" = "- Les commandes de musique fonctionnent dans InfiniTime, mais uniquement si vous écoutez de la musique via l'application Apple Music. Le contrôle de la musique à l'échelle du système dans iOS nécessite que le service propriétaire Apple Media Service soit implémenté dans InfiniTime. Au niveau de l'application, je ne peux vraiment interagir qu'avec Apple Music et n'ai aucun contrôle sur les podcasts, les vidéos Youtube, le volume du système, etc. jusqu'à ce qu'AMS soit ajouté à InfiniTime.";
-"other_notes_3" = "- Votre PineTime n'est capable de maintenir qu'une seule connexion Bluetooth à la fois. Si vous rencontrez des problèmes de connexion, assurez-vous que votre PineTime n'est pas déjà connecté à un autre appareil ou à une autre application sur cet appareil.";
-"other_notes_4" = "- Si votre PineTime n'apparaît toujours pas comme un appareil disponible, veuillez redémarrer votre montre en maintenant enfoncé le bouton latéral de votre montre jusqu'à ce que vous voyiez le logo de la pomme de pin Pine64 en vert, puis relâcher. Il y a actuellement un problème avec la découverte du Bluetooth dans Infinitime sur lequel les développeurs travaillent extrêmement dur. Souhaitez-leur bonne chance!";
+"other_notes_1" = "Les notifications ne sont actuellement pas fonctionnelles, car cela nécessite que le protocole Apple Notification Center Service (ANCS) soit implémenté dans InfiniTime.";
+"other_notes_2" = "Les commandes de musique fonctionnent dans InfiniTime, mais uniquement si vous écoutez de la musique via l'application Apple Music. Le contrôle de la musique à l'échelle du système dans iOS nécessite que le service propriétaire Apple Media Service soit implémenté dans InfiniTime. Au niveau de l'application, je ne peux vraiment interagir qu'avec Apple Music et n'ai aucun contrôle sur les podcasts, les vidéos Youtube, le volume du système, etc. jusqu'à ce qu'AMS soit ajouté à InfiniTime.";
+"other_notes_3" = "Votre PineTime n'est capable de maintenir qu'une seule connexion Bluetooth à la fois. Si vous rencontrez des problèmes de connexion, assurez-vous que votre PineTime n'est pas déjà connecté à un autre appareil ou à une autre application sur cet appareil.";
+"other_notes_4" = "Si votre PineTime n'apparaît toujours pas comme un appareil disponible, veuillez redémarrer votre montre en maintenant enfoncé le bouton latéral de votre montre jusqu'à ce que vous voyiez le logo de la pomme de pin Pine64 en vert, puis relâcher. Il y a actuellement un problème avec la découverte du Bluetooth dans Infinitime sur lequel les développeurs travaillent extrêmement dur. Souhaitez-leur bonne chance!";
 
 // - OnboardingDismissButton
 "dismiss_button" = "Fermer";

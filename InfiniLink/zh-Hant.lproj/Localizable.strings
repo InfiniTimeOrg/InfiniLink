@@ -89,6 +89,12 @@
 "available_devices" = "可用裝置";
 "waiting_for_bluetooth" = "等待藍芽中";
 "unnamed" = "未命名";
+"loading" = "";
+"need_help_connecting" = "";
+"devices" = "";
+
+// - ConnectionHelpView
+"connection_help" = "";
 
 // - ChartSettingsSheetMain
 "select_date_range" = "選擇日期範圍";
@@ -151,10 +157,10 @@
 
 // - OnboardingBody
 "other_notes" = "其他注意的事情：";
-"other_notes_1" = "- 通知目前尚未可以運作，因它需要 InfiniTime 實作 Apple 通知中心服務 (ANCS)協定。";
-"other_notes_2" = "- 音樂的控制在 InfiniTime 上可以運作，但是只有當您藉由蘋果的音樂 app 播放音樂的時候。 iOS 上系統的音樂控制，需要 InfiniTime 上實作專有軟體 Apple Media Service。在 app 的層級上，只能與 Apple Music 互動，並不能控制 podcasts、YouTube videos、系統音量等等，直到 AMS 在 InfiniTime 上增加。";
-"other_notes_3" = "- 您的 PineTime 目前只能一次維持一個藍芽的連線。若您在連線上有問題，請確認您的 PineTime 並未已經連線到另一個裝置，或連線到這個裝置的另一個 app。";
-"other_notes_4" = "- 若您的 PineTime 仍然未顯示為可用的裝置，請按住手錶的側邊按鈕重啟您的手錶直到您看到 Pine64 的松果 logo 為綠色時再放開按鈕。 Infinitime 的藍芽通知目前仍然還有狀況，開發者們正非常努力地處理。祝他們好運！";
+"other_notes_1" = "通知目前尚未可以運作，因它需要 InfiniTime 實作 Apple 通知中心服務 (ANCS)協定。";
+"other_notes_2" = "音樂的控制在 InfiniTime 上可以運作，但是只有當您藉由蘋果的音樂 app 播放音樂的時候。 iOS 上系統的音樂控制，需要 InfiniTime 上實作專有軟體 Apple Media Service。在 app 的層級上，只能與 Apple Music 互動，並不能控制 podcasts、YouTube videos、系統音量等等，直到 AMS 在 InfiniTime 上增加。";
+"other_notes_3" = "您的 PineTime 目前只能一次維持一個藍芽的連線。若您在連線上有問題，請確認您的 PineTime 並未已經連線到另一個裝置，或連線到這個裝置的另一個 app。";
+"other_notes_4" = "若您的 PineTime 仍然未顯示為可用的裝置，請按住手錶的側邊按鈕重啟您的手錶直到您看到 Pine64 的松果 logo 為綠色時再放開按鈕。 Infinitime 的藍芽通知目前仍然還有狀況，開發者們正非常努力地處理。祝他們好運！";
 
 // - OnboardingDismissButton
 "dismiss_button" = "關閉";

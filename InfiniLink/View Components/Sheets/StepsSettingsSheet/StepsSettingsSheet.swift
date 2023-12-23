@@ -14,7 +14,9 @@ struct StepSettingsSheet: View {
 	
 	var body: some View {
 		VStack (alignment: .leading) {
-			SheetCloseButton()
+            SheetCloseButton()
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .trailing)
 			Text(NSLocalizedString("steps_settings", comment: ""))
 				.font(.largeTitle)
 				.padding()

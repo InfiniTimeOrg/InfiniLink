@@ -77,6 +77,7 @@
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
+		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
 		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
 		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
 		E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0B284C54690040B582 /* HeartChartComponents.swift */; };
@@ -151,7 +152,7 @@
 		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE7326BC526C0050A223 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		264BFE7526BC52720050A223 /* HexStringToData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexStringToData.swift; sourceTree = "<group>"; };
-		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
+		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = InfiniLink/README.md; sourceTree = SOURCE_ROOT; };
 		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
 		266F53E326F7FCA6007481A6 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		266F53E526FA7676007481A6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
@@ -193,6 +194,7 @@
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
 		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
 		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
@@ -313,8 +315,6 @@
 		264BFE3526BC51CE0050A223 = {
 			isa = PBXGroup;
 			children = (
-				264BFE7726BCAAC00050A223 /* README.md */,
-				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
 				264BFE4026BC51CE0050A223 /* InfiniLink */,
 				264BFE5726BC51CF0050A223 /* InfiniLinkTests */,
 				264BFE6226BC51CF0050A223 /* InfiniLinkUITests */,
@@ -335,9 +335,6 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
-				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
-				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
-				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				264DB80926C62EAC00E812C3 /* View Components */,
 				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
@@ -345,6 +342,11 @@
 				26A6314E26BF0FA2005AE404 /* Music */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
+				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
+				264BFE7726BCAAC00050A223 /* README.md */,
+				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
+				264BFE4326BC51CE0050A223 /* ContentView.swift */,
+				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
 				2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */,
@@ -393,6 +395,7 @@
 				26A40E942708C7F8007966F6 /* ScanningPopover.swift */,
 				E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */,
 				E515FB10284C550E0040B582 /* CustomizeFavoritesView.swift */,
+				E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */,
 				2601AF68272210EB00D999EF /* Steps View Components */,
 				26A40E872704E964007966F6 /* Debug View */,
 				26C5FAD626FC126F00921207 /* Sheets */,
@@ -600,8 +603,9 @@
 		264BFE3626BC51CE0050A223 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					264BFE3D26BC51CE0050A223 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -731,6 +735,7 @@
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */,
 				E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */,
+				E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */,
 				E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */,
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
@@ -811,6 +816,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -845,6 +851,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -873,6 +880,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -907,6 +915,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -939,6 +948,7 @@
 				DEVELOPMENT_TEAM = Y22PRZL3N4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -967,6 +977,7 @@
 				DEVELOPMENT_TEAM = Y22PRZL3N4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
