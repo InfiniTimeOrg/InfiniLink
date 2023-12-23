@@ -19,6 +19,7 @@
 "no_updates_available" = "사용 가능한 업데이트가 없어요";
 "device_name" = "기기 이름";
 "rename" = "이름 바꾸기";
+"disconnect_alert_title" = "";
 
 // - SideMenu
 "home" = "홈";

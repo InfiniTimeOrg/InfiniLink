@@ -19,6 +19,7 @@
 "no_updates_available" = "Aucune mises à jour disponible";
 "device_name" = "Nom de l'appareil";
 "rename" = "Renommer";
+"disconnect_alert_title" = "";
 
 // - SideMenu
 "home" = "Accueil";

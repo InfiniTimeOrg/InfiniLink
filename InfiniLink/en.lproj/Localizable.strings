@@ -19,6 +19,7 @@
 "no_updates_available" = "No Updates Available";
 "device_name" = "Device Name";
 "rename" = "Rename";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
 
 // - SideMenu
 "home" = "Home";

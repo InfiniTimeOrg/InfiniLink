@@ -104,37 +104,3 @@ struct BatteryMenu: View {
     }
 }
 
-struct ChartView: View {
-	
-	@ObservedObject var bleManager = BLEManager.shared
-	@Environment(\.colorScheme) var colorScheme
-	
-	var body: some View {
-        return VStack {
-            List() {
-                Section(header: Text(NSLocalizedString("steps", comment: ""))
-                    .font(.system(size: 14))
-                    .bold()
-                    .padding(1)) {
-                        StepsChartView()
-                    }
-                Section(header: Text(NSLocalizedString("heart_rate", comment: ""))
-                    .font(.system(size: 14))
-                    .bold()
-                    .padding(1)) {
-                        HeartChartView()
-                    }
-                if bleManager.isConnectedToPinetime {
-                    Section(header: Text(NSLocalizedString("battery_tilte", comment: ""))
-                        .font(.system(size: 14))
-                        .bold()
-                        .padding(1)) {
-                            BatteryMenu()
-                        }
-                }
-            }
-            .listStyle(.insetGrouped)
-        }
-	}
-}
-

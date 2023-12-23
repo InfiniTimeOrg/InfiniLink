@@ -15,28 +15,26 @@ struct WelcomeView: View {
     var body: some View {
         VStack {
             if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" {
-                VStack(spacing: 5) {
-                    Text("InfiniLink")
-                        .font(.system(size: 34).weight(.bold))
-                        .bold()
-                        .padding(5)
-                    Text(NSLocalizedString("welcome_text", comment: ""))
-                        .multilineTextAlignment(.center)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .foregroundColor(.gray)
-                        .font(.body)
-                    Spacer()
-                    Image("WelcomePineTime")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .padding(20)
-                        .frame(maxWidth: .infinity, alignment: .center)
-                    Spacer()
-                    if bleManager.isConnectedToPinetime {
-                        ProgressView(NSLocalizedString("connecting", comment: ""))
+                if bleManager.isConnectedToPinetime {
+                    DeviceView()
+                } else {
+                    VStack(spacing: 5) {
+                        Text("InfiniLink")
+                            .font(.system(size: 34).weight(.bold))
+                            .bold()
+                            .padding(5)
+                        Text(NSLocalizedString("welcome_text", comment: ""))
+                            .multilineTextAlignment(.center)
                             .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(45)
-                    } else {
+                            .foregroundColor(.gray)
+                            .font(.body)
+                        Spacer()
+                        Image("WelcomePineTime")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(20)
+                            .frame(maxWidth: .infinity, alignment: .center)
+                        Spacer()
                         Button(NSLocalizedString("start_pairing", comment: "")) {
                             SheetManager.shared.sheetSelection = .connect
                             SheetManager.shared.showSheet = true
@@ -45,11 +43,16 @@ struct WelcomeView: View {
                         .frame(maxWidth: .infinity, alignment: .center)
                         .padding()
                     }
+                    .padding()
                 }
-                .padding()
             } else {
-                HomeScreen()
+                DeviceView()
             }
+        }
+        // DEBUG
+        .onAppear {
+            deviceInfo.firmware = "1.13.0"
+            bleManager.isConnectedToPinetime = true
         }
     }
 }
@@ -68,6 +71,5 @@ struct NeumorphicButtonStyle: ButtonStyle {
             .scaleEffect(configuration.isPressed ? 0.95: 1)
             .foregroundColor(.primary)
             .animation(.spring())
-        
     }
 }

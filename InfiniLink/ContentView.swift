@@ -36,12 +36,9 @@ struct ContentView: View {
     @AppStorage("batteryNotification") var batteryNotification: Bool = false
     @AppStorage("onboarding") var onboarding: Bool!// = false
     @AppStorage("lastVersion") var lastVersion: String = ""
+    @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
+    
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    
-    
-    init() {
-        UINavigationBar.appearance().titleTextAttributes = [.font : UIFont.systemFont(ofSize: 18.0, weight: .bold)]
-    }
     
     var body: some View {
         TabView(selection: $selection) {
@@ -49,25 +46,15 @@ struct ContentView: View {
                 WelcomeView()
                     .alert(isPresented: $bleManager.setTimeError, content: {
                             Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
-                
-					.navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
+                    .alert(isPresented: $showDisconnectConfDialog) {
+                        Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
+                    }
 			}.navigationViewStyle(.stack)
             .tabItem {
                 Image(systemName: "house.fill")
                 Text(NSLocalizedString("home", comment: ""))
             }
             .tag(0)
-
-            NavigationView {
-                ChartView()
-                    .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text(NSLocalizedString("charts", comment: ""))) //.font(.subheadline), displayMode: .large)
-			}.navigationViewStyle(.stack)
-            .tabItem {
-                Image(systemName: "chart.bar.fill")
-                Text(NSLocalizedString("charts", comment: ""))
-            }
-            .tag(1)
             
             NavigationView {
                 Settings_Page()
@@ -78,7 +65,7 @@ struct ContentView: View {
                 Image(systemName: "gearshape.fill")
                 Text(NSLocalizedString("settings", comment: ""))
             }
-            .tag(2)
+            .tag(1)
         }
         // if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
         .sheet(isPresented: $sheetManager.showSheet, content: { SheetManager.CurrentSheet().onDisappear { if !sheetManager.upToDate { if onboarding == nil { onboarding = false } //;sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)

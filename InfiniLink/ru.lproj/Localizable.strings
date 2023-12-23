@@ -19,6 +19,7 @@
 "no_updates_available" = "Нет доступных обновлений";
 "device_name" = "Имя устройства";
 "rename" = "Переименовать";
+"disconnect_alert_title" = "";
 
 // - SideMenu
 "home" = "Домой";
