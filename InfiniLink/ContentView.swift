@@ -20,6 +20,10 @@ struct BatteryIcon: View {
     }
 }
 
+enum Tab {
+    case home
+    case settings
+}
 
 struct ContentView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -28,7 +32,7 @@ struct ContentView: View {
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     
     @ObservedObject var deviceDataForTopLevel: DeviceData = deviceData
-    @State var selection: Int = 4
+    @State var selection: Tab = .home
     
     
     @AppStorage("autoconnect") var autoconnect: Bool = false
@@ -40,32 +44,27 @@ struct ContentView: View {
     
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     
+    private func switchToTab(tab: Tab) {
+        selection = tab
+        
+        let impactMed = UIImpactFeedbackGenerator(style: .medium)
+        impactMed.impactOccurred()
+    }
+    
     var body: some View {
-        TabView(selection: $selection) {
-            NavigationView {
+        VStack(spacing: 0) {
+            switch selection {
+            case .home:
                 WelcomeView()
                     .alert(isPresented: $bleManager.setTimeError, content: {
-                            Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
+                        Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
                     .alert(isPresented: $showDisconnectConfDialog) {
                         Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
                     }
-			}
-            .navigationViewStyle(.stack)
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text(NSLocalizedString("home", comment: ""))
-            }
-            .tag(0)
-            
-            NavigationView {
+            case .settings:
                 Settings_Page()
-			}
-            .navigationViewStyle(.stack)
-            .tabItem {
-                Image(systemName: "gearshape.fill")
-                Text(NSLocalizedString("settings", comment: ""))
             }
-            .tag(1)
+            tabBar
         }
         // if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
         .sheet(isPresented: $sheetManager.showSheet, content: { SheetManager.CurrentSheet().onDisappear { if !sheetManager.upToDate { if onboarding == nil { onboarding = false } //;sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
@@ -83,17 +82,61 @@ struct ContentView: View {
             }
         })
     }
-}
-
-
     
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .environmentObject(BLEManager())
-            .environmentObject(DFU_Updater())
+    var tabBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 0) {
+                TabBarItem(selection: $selection, tab: .home, imageName: "house")
+                    .onTapGesture {
+                        switchToTab(tab: .home)
+                    }
+                    .frame(maxWidth: .infinity)
+                
+                TabBarItem(selection: $selection, tab: .settings, imageName: "gear")
+                    .onTapGesture {
+                        switchToTab(tab: .settings)
+                    }
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(12)
+        }
     }
 }
-                
+
+struct TabBarItem: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var selection: Tab
+    let tab: Tab
+    let imageName: String
+    
+    var body: some View {
+        if selection == tab {
+            HStack {
+                Image(systemName: imageName)
+                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
+            }
+            .imageScale(.large)
+            .font(.body.weight(.semibold))
+            .foregroundColor(colorScheme == .dark ? .white : .darkestGray)
+            .cornerRadius(10)
+            .padding(8)
+        } else {
+            HStack {
+                Image(systemName: imageName)
+                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
+            }
+            .foregroundColor(Color.gray)
+            .imageScale(.large)
+            .padding(8)
+        }
+    }
+}
+
+#Preview {
+    ContentView()
+        .environmentObject(BLEManager())
+        .environmentObject(DFU_Updater())
+}
 
 let deviceData: DeviceData = DeviceData()
