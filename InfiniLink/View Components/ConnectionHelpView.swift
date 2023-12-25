@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct ConnectionHelpView: View {
+    @Environment(\.colorScheme) var colorScheme
     @Binding var isDisplayed: Bool
     
     var body: some View {
@@ -23,7 +24,7 @@ struct ConnectionHelpView: View {
                         .imageScale(.medium)
                         .padding(12)
                         .font(.body.weight(.semibold))
-                        .foregroundColor(Color.darkGray)
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
                         .background(Color.gray.opacity(0.2))
                         .clipShape(Circle())
                 }
@@ -35,6 +36,7 @@ struct ConnectionHelpView: View {
             Text(NSLocalizedString("other_notes_4", comment: ""))
                 .multilineTextAlignment(.center)
                 .foregroundColor(.gray)
+                .padding(.horizontal)
             Spacer()
         }
     }

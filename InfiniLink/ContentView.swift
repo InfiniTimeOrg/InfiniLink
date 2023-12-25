@@ -53,16 +53,18 @@ struct ContentView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            switch selection {
-            case .home:
-                WelcomeView()
-                    .alert(isPresented: $bleManager.setTimeError, content: {
-                        Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
-                    .alert(isPresented: $showDisconnectConfDialog) {
-                        Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
-                    }
-            case .settings:
-                Settings_Page()
+            NavigationView {
+                switch selection {
+                case .home:
+                    WelcomeView()
+                        .alert(isPresented: $bleManager.setTimeError, content: {
+                            Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
+                        .alert(isPresented: $showDisconnectConfDialog) {
+                            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
+                        }
+                case .settings:
+                    Settings_Page()
+                }
             }
             tabBar
         }

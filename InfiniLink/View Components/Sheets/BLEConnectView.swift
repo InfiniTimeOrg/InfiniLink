@@ -33,7 +33,7 @@ struct Connect: View {
                         .background(Color.gray.opacity(0.2))
                         .clipShape(Capsule())
                     Spacer()
-                    if bleManager.isSwitchedOn {
+                    if bleManager.isSwitchedOn && !bleManager.newPeripherals.isEmpty {
                         HStack(spacing: 7) {
                             ProgressView()
                             Text(NSLocalizedString("scanning", comment: "Scanning"))
