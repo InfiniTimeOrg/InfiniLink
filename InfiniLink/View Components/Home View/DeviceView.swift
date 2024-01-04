@@ -233,7 +233,7 @@ struct DeviceView: View {
                 }
             }
             .padding()
-            .onAppear() {
+            .onAppear {
                 // check if an update has been made in the last //24 hours
                 if DownloadManager.shared.lastCheck == nil || DownloadManager.shared.lastCheck.timeIntervalSince(Date()) <  -86400 {
                     DownloadManager.shared.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)

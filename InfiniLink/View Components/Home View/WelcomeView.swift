@@ -16,7 +16,24 @@ struct WelcomeView: View {
         VStack {
             if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" {
                 if bleManager.isConnectedToPinetime {
-                    DeviceView()
+                    ZStack {
+                        DeviceView()
+                            .disabled(true)
+                            .blur(radius: 70)
+                        VStack(spacing: 16) {
+                            Text(NSLocalizedString("connecting", comment: "Connecting..."))
+                                .font(.title.weight(.bold))
+                            Button {
+                                bleManager.disconnect()
+                            } label: {
+                                Text(NSLocalizedString("stop_connecting", comment: "Stop Connecting"))
+                                    .padding()
+                                    .background(Color.red)
+                                    .foregroundColor(.white)
+                                    .clipShape(Capsule())
+                            }
+                        }
+                    }
                 } else {
                     VStack(spacing: 5) {
                         Text("InfiniLink")
@@ -41,7 +58,7 @@ struct WelcomeView: View {
                         }
                         .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                         .frame(maxWidth: .infinity, alignment: .center)
-                        .padding()
+                        .padding(.bottom)
                     }
                     .padding()
                 }

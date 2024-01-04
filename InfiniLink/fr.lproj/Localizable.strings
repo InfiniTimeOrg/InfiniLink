@@ -218,6 +218,7 @@
 "welcome_text" = "Bienvenue. Si vous avez un appareil InfiniTime, vous pouvez l'appairer ici";
 "connecting" = "Connexion...";
 "start_pairing" = "Commencer l'appairage";
+"stop_connecting" = "";
 "my_device" = "Mon appareil";
 "favorites" = "Favoris";
 "app_settings" = "Thème de l'application";

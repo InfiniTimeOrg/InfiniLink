@@ -218,6 +218,7 @@
 "welcome_text" = "";
 "connecting" = "";
 "start_pairing" = "";
+"stop_connecting" = "";
 "my_device" = "";
 "favorites" = "";
 "app_settings" = "";

@@ -219,6 +219,7 @@
 "welcome_text" = "歡迎。若您有 InfiniTime 裝置，\n 您可以在這配對它。";
 "connecting" = "連線中...";
 "start_pairing" = "開始配對";
+"stop_connecting" = "";
 "my_device" = "我的裝置";
 "favorites" = "最愛";
 "app_settings" = "App 佈景主題";

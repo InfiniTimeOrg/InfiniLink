@@ -216,6 +216,7 @@
 "welcome_text" = "Welcome. If you have an InfiniTime device, \n you can pair it here.";
 "connecting" = "Connecting...";
 "start_pairing" = "Start Pairing";
+"stop_connecting" = "Stop Connecting";
 "my_device" = "My Device";
 "favorites" = "Favorites";
 "app_settings" = "App Theme";
