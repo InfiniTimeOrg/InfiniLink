@@ -80,8 +80,6 @@ struct NeumorphicButtonStyle: ButtonStyle {
             .foregroundColor(Color.white)
             .background(Color.blue)
             .clipShape(Capsule())
-            .scaleEffect(configuration.isPressed ? 0.95: 1)
             .foregroundColor(.primary)
-            .animation(.spring())
     }
 }

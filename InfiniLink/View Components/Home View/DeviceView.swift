@@ -130,7 +130,7 @@ struct DeviceView: View {
                 }
                 
                 VStack {
-                    NavigationLink(destination: RenameView()) {
+                    NavigationLink(destination: RenameView().navigationBarBackButtonHidden()) {
                         HStack {
                             Text(NSLocalizedString("name", comment: ""))
                             Text(deviceInfo.deviceName)
@@ -138,6 +138,7 @@ struct DeviceView: View {
                                 .frame(maxWidth: .infinity, alignment: .trailing)
                             Spacer()
                             Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
                         }
                         .modifier(RowModifier(style: .capsule))
                     }

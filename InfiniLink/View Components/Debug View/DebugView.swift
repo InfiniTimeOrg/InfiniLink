@@ -136,7 +136,7 @@ struct DebugView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .imageScale(.medium)
-                        .padding(12)
+                        .padding()
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
                         .background(Color.gray.opacity(0.2))
@@ -151,7 +151,7 @@ struct DebugView: View {
                 } label: {
                     Image(systemName: "square.and.arrow.up")
                         .imageScale(.medium)
-                        .padding(12)
+                        .padding()
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
                         .background(Color.gray.opacity(0.2))
