@@ -128,7 +128,29 @@ struct DeviceView: View {
                         }
                     }
                 }
-                
+                if DownloadManager.shared.updateAvailable {
+                    NavigationLink(destination: DFUView()) {
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack {
+                                Text(NSLocalizedString("software_update_available", comment: "Software Update Available"))
+                                    .font(.title2.weight(.semibold))
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.body.weight(.medium))
+                            }
+                            Text(DownloadManager.shared.updateVersion)
+                                .foregroundColor(.gray)
+                                .font(.headline)
+                            Spacer()
+                                .frame(height: 5)
+                            Text(DownloadManager.shared.updateBody)
+                                .multilineTextAlignment(.leading)
+                                .lineLimit(4)
+                        }
+                        .foregroundColor(.primary)
+                        .modifier(RowModifier(style: .standard))
+                    }
+                }
                 VStack {
                     NavigationLink(destination: RenameView().navigationBarBackButtonHidden()) {
                         HStack {
@@ -249,7 +271,7 @@ struct DeviceView: View {
 
 enum RowModifierStyle {
     case capsule
-    case rectangle
+    case standard
 }
 
 struct RowModifier: ViewModifier {

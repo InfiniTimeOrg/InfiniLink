@@ -139,6 +139,7 @@
 // - DownloadView
 "available_downloads" = "Available Downloads";
 "firmware_download_links" = "Firmware Download Links";
+"software_update_available" = "Software Update Available";
 
 // - WhatsNew
 "whats_new_in" = "What's New in";

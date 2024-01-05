@@ -139,6 +139,7 @@
 // - DownloadView
 "available_downloads" = "사용 가능한 다운로드";
 "firmware_download_links" = "펌웨어 다운로드 링크";
+"software_update_available" = "Software Update Available";
 
 // - SheetCloseButton
 "close" = "닫기";

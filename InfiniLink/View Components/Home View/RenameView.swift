@@ -23,7 +23,7 @@ struct RenameView: View {
                 } label: {
                     Image(systemName: "chevron.left")
                         .imageScale(.medium)
-                        .padding()
+                        .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
                         .background(Color.gray.opacity(0.2))

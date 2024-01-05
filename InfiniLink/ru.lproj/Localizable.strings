@@ -139,6 +139,7 @@
 // - DownloadView
 "available_downloads" = "Доступные загрузки";
 "firmware_download_links" = "Доступные загруки, ссылки";
+"software_update_available" = "Software Update Available";
 
 // - SheetCloseButton
 "close" = "Закрыть";

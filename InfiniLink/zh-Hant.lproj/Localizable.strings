@@ -139,6 +139,7 @@
 // - DownloadView
 "available_downloads" = "可用的下載";
 "firmware_download_links" = "韌體下載連結";
+"software_update_available" = "Software Update Available";
 
 // - SheetCloseButton
 "close" = "關閉";

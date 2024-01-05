@@ -139,6 +139,7 @@
 // - DownloadView
 "available_downloads" = "Téléchargements disponibles";
 "firmware_download_links" = "Liens de téléchargement du micrologiciel";
+"software_update_available" = "Software Update Available";
 
 // - SheetCloseButton
 "close" = "Fermer";
