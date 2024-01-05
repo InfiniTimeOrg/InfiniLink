@@ -113,7 +113,7 @@ struct Settings_Page: View {
                         Toggle(NSLocalizedString("enable_debug_mode", comment: ""), isOn: $debugMode.animation(.bouncy))
                             .modifier(RowModifier(style: .capsule))
                         if debugMode {
-                            NavigationLink(destination: DebugView()) {
+                            NavigationLink(destination: DebugView().navigationBarBackButtonHidden()) {
                                 HStack {
                                     Text(NSLocalizedString("debug_logs", comment: ""))
                                     Spacer()
@@ -189,13 +189,6 @@ struct Settings_Page: View {
                         }
                     }
                     .padding(.top)
-                    //                Section(header: Text(NSLocalizedString("links", comment: ""))
-                    //                    .font(.system(size: 14))
-                    //                    .bold()
-                    //                    .padding(1)) {
-                    //                        Link("InfiniLink GitHub", destination: URL(string: "https://github.com/InfiniTimeOrg/InfiniLink")!)
-                    //                        Link("InfiniTime Firmware Releases", destination: URL(string: "https://github.com/InfiniTimeOrg/InfiniTime/releases")!)
-                    //                    }
                 }
                 .padding()
             }

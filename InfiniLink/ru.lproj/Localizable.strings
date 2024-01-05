@@ -79,6 +79,7 @@
 "debug_mode" = "Debug Mode";
 "enable_debug_mode" = "Enable Debug Mode";
 "debug_logs" = "Debug Logs";
+"no_logs" = "No Logs";
 "links" = "Ссылки";
 "donations" = "Поддержать";
 

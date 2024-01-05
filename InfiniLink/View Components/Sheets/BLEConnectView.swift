@@ -67,19 +67,17 @@ struct Connect: View {
                                     presentation.wrappedValue.dismiss()
                                 } label: {
                                     Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
+                                        .frame(maxWidth: .infinity)
                                         .font(.body.weight(.semibold))
                                         .padding()
                                         .foregroundColor(.primary)
                                         .background(Color.gray.opacity(0.2))
                                         .clipShape(Capsule())
                                 }
-                                .padding(.horizontal)
                             }
-                            .padding(.horizontal)
                         }
-                        .padding(.top)
+                        .padding()
                     }
-                    .padding(.top)
                 }
             } else {
                 HStack(spacing: 7) {

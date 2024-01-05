@@ -68,12 +68,23 @@ struct ContentView: View {
             }
             tabBar
         }
-        // if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
-        .sheet(isPresented: $sheetManager.showSheet, content: { SheetManager.CurrentSheet().onDisappear { if !sheetManager.upToDate { if onboarding == nil { onboarding = false } //;sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
-        }} })
-        .onAppear() { if !bleManager.isConnectedToPinetime { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { if autoconnect && bleManager.isSwitchedOn { self.bleManager.startScanning() }
-            
-        }) }}
+        .sheet(isPresented: $sheetManager.showSheet, content: {
+            SheetManager.CurrentSheet()
+                .onDisappear {
+                    if !sheetManager.upToDate {
+                        if onboarding == nil {
+                            onboarding = false
+                        }
+                    }
+                }
+        })
+        .onAppear {
+            if !bleManager.isConnectedToPinetime {
+                if bleManager.isSwitchedOn {
+                    self.bleManager.startScanning()
+                }
+            }
+        }
         .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
         .onChange(of: bleManager.batteryLevel) { bat in
             batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)

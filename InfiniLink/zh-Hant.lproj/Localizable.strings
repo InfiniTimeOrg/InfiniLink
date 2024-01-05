@@ -79,6 +79,7 @@
 "debug_mode" = "除錯模式";
 "enable_debug_mode" = "開啟除錯模式";
 "debug_logs" = "除錯紀錄";
+"no_logs" = "No Logs";
 "links" = "連結";
 "donations" = "捐款";
 

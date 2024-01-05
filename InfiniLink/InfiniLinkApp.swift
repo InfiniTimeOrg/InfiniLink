@@ -15,6 +15,18 @@ struct InfiniLink: App {
     
     init() {
         healthKitManager.requestAuthorization()
+        requestNotificationAuthorization()
+    }
+    
+    func requestNotificationAuthorization() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
+            if granted {
+                print("Notification authorization granted")
+            } else if let error = error {
+                print("Error requesting notification authorization: \(error.localizedDescription)")
+            }
+        }
     }
 
     var body: some Scene {

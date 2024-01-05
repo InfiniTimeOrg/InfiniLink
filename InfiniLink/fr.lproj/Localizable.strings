@@ -79,6 +79,7 @@
 "debug_mode" = "Mode débogage";
 "enable_debug_mode" = "Activer le mode débogage";
 "debug_logs" = "Débogage des logs";
+"no_logs" = "No Logs";
 "links" = "Liens";
 "donations" = "Donations";
 

@@ -79,6 +79,7 @@
 "debug_mode" = "디버그 모드";
 "enable_debug_mode" = "디버그 모드 활성화";
 "debug_logs" = "디버그 로그";
+"no_logs" = "No Logs";
 "links" = "링크";
 "donations" = "후원";
 

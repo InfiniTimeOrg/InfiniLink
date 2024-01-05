@@ -50,9 +50,6 @@
 		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
 		26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */; };
 		26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E842704E6F3007966F6 /* SheetManager.swift */; };
-		26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E882704E97C007966F6 /* DebugViewBLE.swift */; };
-		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
-		26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8C2704EB32007966F6 /* DebugViewApp.swift */; };
 		26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */; };
 		26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */; };
 		26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E922707D119007966F6 /* BLEUpdateHandler.swift */; };
@@ -76,7 +73,9 @@
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
+		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
 		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
+		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
 		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
 		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
 		E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0B284C54690040B582 /* HeartChartComponents.swift */; };
@@ -165,9 +164,6 @@
 		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
 		2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountPersistenceManager.swift; sourceTree = "<group>"; };
 		26A40E842704E6F3007966F6 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
-		26A40E882704E97C007966F6 /* DebugViewBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewBLE.swift; sourceTree = "<group>"; };
-		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
-		26A40E8C2704EB32007966F6 /* DebugViewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewApp.swift; sourceTree = "<group>"; };
 		26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewShareButton.swift; sourceTree = "<group>"; };
 		26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
 		26A40E922707D119007966F6 /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
@@ -191,8 +187,10 @@
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
+		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
 		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
@@ -445,9 +443,6 @@
 			children = (
 				26B2BAF626F139D600FBC9CE /* DebugView.swift */,
 				26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */,
-				26A40E882704E97C007966F6 /* DebugViewBLE.swift */,
-				26A40E8C2704EB32007966F6 /* DebugViewApp.swift */,
-				26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */,
 			);
 			path = "Debug View";
 			sourceTree = "<group>";
@@ -530,6 +525,8 @@
 				26C5FAD426FBB76100921207 /* DeviceNameManager.swift */,
 				2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */,
 				E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */,
+				E0EC91C02B47213F007472EC /* NotificationManager.swift */,
+				E021DAB22B489F58005C5E51 /* Extensions.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -692,7 +689,6 @@
 				26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */,
 				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
 				263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */,
-				26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */,
 				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
 				E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */,
 				264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */,
@@ -717,8 +713,8 @@
 				26C5FAE8270100FF00921207 /* DownloadManager.swift in Sources */,
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
+				E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */,
 				E515FB13284C55540040B582 /* ChartOverview.swift in Sources */,
-				26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */,
 				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
 				E515FB15284C56070040B582 /* DeviceView.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
@@ -744,10 +740,10 @@
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
+				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
 				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */,
-				26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */,
 				267C2EFD273DDB5500F464B0 /* StepSettingsGoalChange.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */,
