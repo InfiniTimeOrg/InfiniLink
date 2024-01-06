@@ -43,6 +43,26 @@ class HealthKitManager: ObservableObject {
         }
     }
     
+    func readCurrentSteps(completion: @escaping (Double?, Error?) -> Void) {
+        let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
+        let calendar = Calendar.current
+        let now = Date()
+        let startOfDay = calendar.startOfDay(for: now)
+        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: .strictStartDate)
+
+        let query = HKStatisticsQuery(quantityType: stepType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, error in
+            DispatchQueue.main.async {
+                guard let result = result, let sum = result.sumQuantity()?.doubleValue(for: HKUnit.count()) else {
+                    completion(nil, error)
+                    return
+                }
+                completion(sum, nil)
+            }
+        }
+
+        healthStore?.execute(query)
+    }
+    
     func writeHeartRate(date: Date, dataToAdd: Double) {
         let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
 
@@ -79,4 +99,3 @@ class HealthKitManager: ObservableObject {
         }
     }
 }
-
