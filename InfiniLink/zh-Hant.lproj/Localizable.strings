@@ -126,7 +126,7 @@
 "add_steps" = "增加步數";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "更改步數目標";
+"change_step_goal" = "更改步數目標";
 "enter_step_goal" = "輸入步數目標";
 "submit_new_step_goal" = "遞交新的步數目標";
 

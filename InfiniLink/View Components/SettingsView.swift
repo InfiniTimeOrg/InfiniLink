@@ -113,7 +113,7 @@ struct Settings_Page: View {
                         Toggle(NSLocalizedString("enable_debug_mode", comment: ""), isOn: $debugMode.animation(.bouncy))
                             .modifier(RowModifier(style: .capsule))
                         if debugMode {
-                            NavigationLink(destination: DebugView().navigationBarBackButtonHidden()) {
+                            NavigationLink(destination: DebugView()) {
                                 HStack {
                                     Text(NSLocalizedString("debug_logs", comment: ""))
                                     Spacer()

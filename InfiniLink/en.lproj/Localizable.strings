@@ -126,7 +126,7 @@
 "add_steps" = "Add Steps";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "Change Step Count Goal";
+"change_step_goal" = "Change Step Goal";
 "enter_step_goal" = "Enter Step Goal";
 "submit_new_step_goal" = "Submit New Step Goal";
 

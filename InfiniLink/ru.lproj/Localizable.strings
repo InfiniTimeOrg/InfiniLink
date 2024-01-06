@@ -126,7 +126,7 @@
 "add_steps" = "Добавить шаги";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "Изменить цель кол-во шагов";
+"change_step_goal" = "Изменить цель кол-во шагов";
 "enter_step_goal" = "Введите цель шагов";
 "submit_new_step_goal" = "Подтвердить новую цель шагов";
 

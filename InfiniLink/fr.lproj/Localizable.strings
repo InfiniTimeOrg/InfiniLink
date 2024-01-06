@@ -126,7 +126,7 @@
 "add_steps" = "Ajouter des pas";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "Modifier l'objectif du nombre de pas";
+"change_step_goal" = "Modifier l'objectif du nombre de pas";
 "enter_step_goal" = "Entrer l'objectif de pas";
 "submit_new_step_goal" = "Soumettre un nouvel objectif de pas";
 

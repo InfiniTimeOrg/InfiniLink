@@ -87,3 +87,11 @@ struct StepWeeklyChart: View {
 //			.id(chartData.id)
 	}
 }
+
+#Preview {
+    Group {
+        StepView()
+        StepWeeklyChart(stepCountGoal: .constant(10000))
+            .frame(height: 250)
+    }
+}

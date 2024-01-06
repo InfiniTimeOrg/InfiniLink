@@ -126,6 +126,7 @@ struct DebugView: View {
             }
             .padding(12)
         }
+        .navigationBarBackButtonHidden()
     }
     
     var body: some View {

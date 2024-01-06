@@ -83,7 +83,6 @@
 		E515FB13284C55540040B582 /* ChartOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB12284C55540040B582 /* ChartOverview.swift */; };
 		E515FB15284C56070040B582 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB14284C56070040B582 /* DeviceView.swift */; };
 		E515FB17284C56480040B582 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB16284C56480040B582 /* WelcomeView.swift */; };
-		E515FB19284C572A0040B582 /* StepViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB18284C572A0040B582 /* StepViewComponents.swift */; };
 		E515FB1B284C58AA0040B582 /* BLEManagerVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */; };
 		E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */; };
 		E57AD5732823F0B300E33EEA /* ChosenThemeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */; };
@@ -198,7 +197,6 @@
 		E515FB12284C55540040B582 /* ChartOverview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartOverview.swift; path = "InfiniLink/View Components/ChartOverview.swift"; sourceTree = SOURCE_ROOT; };
 		E515FB14284C56070040B582 /* DeviceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		E515FB16284C56480040B582 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
-		E515FB18284C572A0040B582 /* StepViewComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepViewComponents.swift; sourceTree = "<group>"; };
 		E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManagerVariables.swift; sourceTree = "<group>"; };
 		E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewComponents.swift; sourceTree = "<group>"; };
 		E57AD5722823F0B300E33EEA /* ChosenThemeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChosenThemeView.swift; sourceTree = "<group>"; };
@@ -282,7 +280,6 @@
 		263B20B626CD673D00676BF0 /* Chart View Components */ = {
 			isa = PBXGroup;
 			children = (
-				E515FB18284C572A0040B582 /* StepViewComponents.swift */,
 				E515FB0A284C54690040B582 /* BatteryChartComponents.swift */,
 				E515FB0B284C54690040B582 /* HeartChartComponents.swift */,
 				E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */,
@@ -705,7 +702,6 @@
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */,
 				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
-				E515FB19284C572A0040B582 /* StepViewComponents.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
 				2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */,
 				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,

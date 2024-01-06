@@ -33,6 +33,22 @@ struct RenameView: View {
                     .foregroundColor(.primary)
                     .font(.title.weight(.bold))
                 Spacer()
+                Button {
+                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+                    nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
+                    changedName = ""
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Text(NSLocalizedString("rename", comment: ""))
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color.white)
+                        .background(Color.blue)
+                        .clipShape(Capsule())
+                        .foregroundColor(.primary)
+                }
+                .disabled(changedName == deviceInfo.deviceName)
+                .opacity(changedName == deviceInfo.deviceName ? 0.5 : 1.0)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -43,17 +59,13 @@ struct RenameView: View {
                     .background(Color.gray.opacity(0.2))
                     .clipShape(Capsule())
                 Spacer()
-                Button {
-                    UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-                    nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
-                    changedName = ""
-                    presentationMode.wrappedValue.dismiss()
-                } label: {
-                    Text(NSLocalizedString("rename", comment: ""))
-                }
-                .buttonStyle(NeumorphicButtonStyle(bgColor: .blue))
             }
             .padding()
         }
+        .navigationBarBackButtonHidden()
     }
+}
+
+#Preview {
+    RenameView()
 }
