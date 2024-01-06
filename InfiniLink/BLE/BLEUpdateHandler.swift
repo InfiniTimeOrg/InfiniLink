@@ -60,8 +60,18 @@ struct BLEUpdatedCharacteristicHandler {
 			}
 			let stepData = [UInt8](value)
             bleManagerVal.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
-            healthKitManager.writeSteps(date: Date(), stepsToAdd: Double(bleManagerVal.stepCount))
-			StepCountPersistenceManager().setStepCount(steps: bleManagerVal.stepCount, arbitrary: false, date: Date())
+            healthKitManager.readCurrentSteps { value, error in
+                let currentSteps = value
+                let newSteps = Double(bleManagerVal.stepCount)
+
+                if let currentSteps = currentSteps {
+                    let stepsToAdd = newSteps - currentSteps
+                    healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
+                } else {
+                    healthKitManager.writeSteps(date: Date(), stepsToAdd: newSteps)
+                }
+            }
+            StepCountPersistenceManager().setStepCount(steps: Int32(bleManagerVal.stepCount), arbitrary: false, date: Date())
 		default:
 			break
 		}
