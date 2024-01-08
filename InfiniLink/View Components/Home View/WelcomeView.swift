@@ -66,6 +66,16 @@ struct WelcomeView: View {
                 DeviceView()
             }
         }
+        .onAppear {
+            if bleManager.isSwitchedOn {
+                bleManager.startScanning()
+            }
+        }
+        .onDisappear {
+            if bleManager.isScanning {
+                bleManager.stopScanning()
+            }
+        }
     }
 }
 
