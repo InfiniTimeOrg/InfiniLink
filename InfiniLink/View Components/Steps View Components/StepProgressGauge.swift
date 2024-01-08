@@ -36,7 +36,7 @@ struct StepProgressGauge: View {
 					.foregroundColor(Color.gray)
                 Circle()
                     .trim(from: 0.0, to: CGFloat(min(((Float(getStepHistory(date: Date()).replacingOccurrences(of: ",", with: "")) ?? 0)/Float(stepCountGoal)), 1.0)))
-                    .stroke(style: StrokeStyle(lineWidth: calendar ? 5.0 : 20.0, lineCap: .round, lineJoin: .round))
+                    .stroke(style: StrokeStyle(lineWidth: calendar ? 5.0 : 15.0, lineCap: .round, lineJoin: .round))
                     .foregroundColor(Color.blue)
                     .rotationEffect(Angle(degrees: 270.0))
 

@@ -42,18 +42,7 @@ struct BatteryContentView: View {
         let clockFormat = DateFormatter.dateFormat (fromTemplate: "j",options:0, locale: Locale.current) == "HH" ? 1 : 0
         
         ZStack {
-            VStack{
-                Picker("Stats", selection: $pickerSelection)   {
-                    Text(NSLocalizedString("last_24_hours", comment: "")).tag(0)
-                    Text(NSLocalizedString("last_10_days", comment: "")).tag(1)
-                }
-                    .pickerStyle(.segmented)
-
-                
-                Text(NSLocalizedString("battery_level_is", comment: "") + " \(Int(bleManager.batteryLevel))%").frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.system(size: 16))
-                    
-                Divider()
+            VStack {
                     
                 Text(barTitles[pickerSelection]).frame(maxWidth: .infinity, alignment: .leading)
                     .font(.system(size: 14))
