@@ -14,6 +14,30 @@ struct StepView: View {
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     
+    @State private var progress: Float = 0
+    
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
+    private var existingStepCounts: FetchedResults<StepCounts>
+    
+    func getStepHistory(date: Date) -> String {
+        for stepCount in existingStepCounts {
+            if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
+                let formattedSteps = NumberFormatter.localizedString(from: NSNumber(value: stepCount.steps), number: .decimal)
+                return formattedSteps
+            }
+        }
+        return "0"
+    }
+    
+    func updateProgress() {
+            let today = Date()
+            let formattedSteps = getStepHistory(date: today)
+
+            if let steps = Float(formattedSteps) {
+                progress = min(steps / Float(stepCountGoal), 1.0)
+            }
+        }
+    
     var body: some View {
         GeometryReader { g in
             VStack(spacing: 0) {
@@ -51,10 +75,16 @@ struct StepView: View {
                 Divider()
                 ScrollView {
                     VStack(spacing: 20) {
-                        VStack {
-                            StepProgressGauge(stepCountGoal: $stepCountGoal, calendar: false)
-                                .padding()
-                                .frame(width: (g.size.width / 1.8), height: (g.size.width / 1.8), alignment: .center)
+                        StepProgressGauge(stepCountGoal: $stepCountGoal, calendar: false)
+                            .padding()
+                            .frame(width: (g.size.width / 1.8), height: (g.size.width / 1.8), alignment: .center)
+                        VStack(spacing: 20) {
+                            VStack(spacing: 3) {
+                                Text(NSLocalizedString("step_goal", comment: "Step Goal"))
+                                    .font(.title2.weight(.semibold))
+                                    .padding(.bottom, 3)
+                                Text("\(stepCountGoal)" + " " + NSLocalizedString("steps", comment: "Steps"))
+                            }
                             Button(action: {
                                 SheetManager.shared.sheetSelection = .stepSettings
                                 SheetManager.shared.showSheet = true
@@ -65,10 +95,15 @@ struct StepView: View {
                                     .background(Color.blue)
                                     .foregroundColor(.white)
                                     .clipShape(Capsule())
-                                    .padding(.bottom)
                             }
                         }
                         .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(22)
+                        .background(
+                            RoundedRectangle(cornerRadius: 15)
+                                .stroke(Color.blue, lineWidth: 5)
+                        )
+                        .cornerRadius(15)
                         VStack {
                             Text("Weekly Steps")
                                 .font(.title2.weight(.semibold))

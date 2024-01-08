@@ -42,12 +42,17 @@ struct StepProgressGauge: View {
 
 					//.animation(.linear)
 				if !calendar {
-					VStack {
+                    VStack(spacing: 1) {
+                        Image(systemName: "figure.walk")
+                        Spacer()
+                            .frame(height: 2)
 						Text(String(getStepHistory(date: Date())))
-							.font(.largeTitle)
-							.bold()
-                        Text("\(NSLocalizedString("step_goal", comment: "")): \(stepCountGoal)")
+//                        Text("\(NSLocalizedString("step_goal", comment: "")): \(stepCountGoal)")
+                        Text(NSLocalizedString("steps", comment: "Steps"))
+                            .font(.body.weight(.medium))
+                            .foregroundColor(.gray)
 					}
+                    .font(.largeTitle.weight(.bold))
 				}
 			}
 			if !calendar {

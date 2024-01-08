@@ -84,14 +84,12 @@ struct StepWeeklyChart: View {
 			.touchOverlay(chartData: chartData)
 			.xAxisLabels(chartData: chartData)
 			.yAxisLabels(chartData: chartData)
+            .animation(.none)
 //			.id(chartData.id)
 	}
 }
 
 #Preview {
-    Group {
-        StepView()
-        StepWeeklyChart(stepCountGoal: .constant(10000))
-            .frame(height: 250)
-    }
+    StepWeeklyChart(stepCountGoal: .constant(10000))
+        .frame(height: 250)
 }

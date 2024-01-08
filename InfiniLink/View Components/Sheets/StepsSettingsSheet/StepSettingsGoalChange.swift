@@ -10,16 +10,10 @@
 import SwiftUI
 
 struct StepSettingsSheetGoalChange: View {
+    @Environment(\.presentationMode) var presMode
+    
 	@ObservedObject var setStepGoal = NumbersOnly()
 	@AppStorage("stepCountGoal") var stepCountGoal = 10000
-	
-	func readyToSubmit(value: String) -> Bool {
-		if value == "" {
-			return true
-		} else {
-			return false
-		}
-	}
     
     init() {
         setStepGoal.value = String(stepCountGoal)
@@ -36,12 +30,13 @@ struct StepSettingsSheetGoalChange: View {
                 .keyboardType(.numberPad)
             Button {
                 stepCountGoal = Int(setStepGoal.value)!
+                presMode.wrappedValue.dismiss()
             } label: {
                 Text(NSLocalizedString("submit_new_step_goal", comment: ""))
             }
             .buttonStyle(NeumorphicButtonStyle(bgColor: .blue))
-            .opacity(readyToSubmit(value: setStepGoal.value) ? 0.5 : 1.0)
-            .disabled(readyToSubmit(value: setStepGoal.value))
+            .opacity(setStepGoal.value.isEmpty ? 0.5 : 1.0)
+            .disabled(setStepGoal.value.isEmpty)
         }
         .padding()
 	}
