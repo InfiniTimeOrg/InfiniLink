@@ -9,10 +9,10 @@ import Foundation
 import UserNotifications
 
 class NotificationManager: ObservableObject {
-    func sendLowBatteryNotification() {
+    func sendLowBatteryNotification(bat: Int) {
         let content = UNMutableNotificationContent()
         content.title = NSLocalizedString("battery_low", comment: "")
-        content.body = NSLocalizedString("battery_low_message", comment: "")
+        content.body = "\(bat)% " + NSLocalizedString("battery_low_message", comment: "")
         content.sound = UNNotificationSound.default
         
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
