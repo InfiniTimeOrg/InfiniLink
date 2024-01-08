@@ -59,12 +59,21 @@ struct DebugView: View {
                 ScrollView {
                     VStack(spacing: 8) {
                         ForEach(0..<entries.count, id: \.self) { entry in
-                            Text(entries[entry].date.isEmpty ? "" : entries[entry].date + " - " + entries[entry].message)
+                            let entryContent = entries[entry].date.isEmpty ? "" : entries[entry].date + " - " + entries[entry].message
+                            
+                            Text(entryContent)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
                                 .background(Color.gray.opacity(0.2))
                                 .foregroundColor(colorScheme == .dark ? .white : .darkGray)
                                 .cornerRadius(15)
+                                .contextMenu {
+                                    Button {
+                                        UIPasteboard.general.string = entryContent
+                                    } label: {
+                                        Label(NSLocalizedString("copy", comment: "Copy"), systemImage: "doc.on.doc")
+                                    }
+                                }
                         }
                     }
                     .padding()

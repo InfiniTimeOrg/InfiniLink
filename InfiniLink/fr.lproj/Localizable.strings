@@ -82,6 +82,7 @@
 "no_logs" = "No Logs";
 "links" = "Liens";
 "donations" = "Donations";
+"copy" = "Copy";
 
 // - ScanningPopover
 "connected_to" = "Connecté à";

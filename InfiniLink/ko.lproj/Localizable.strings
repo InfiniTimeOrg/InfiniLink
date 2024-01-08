@@ -82,6 +82,7 @@
 "no_logs" = "No Logs";
 "links" = "링크";
 "donations" = "후원";
+"copy" = "Copy";
 
 // - ScanningPopover
 "connected_to" = "기기에 연결됨:";

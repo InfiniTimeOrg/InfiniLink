@@ -82,6 +82,7 @@
 "no_logs" = "No Logs";
 "links" = "連結";
 "donations" = "捐款";
+"copy" = "Copy";
 
 // - ScanningPopover
 "connected_to" = "已連線至";

@@ -82,6 +82,7 @@
 "no_logs" = "No Logs";
 "links" = "Ссылки";
 "donations" = "Поддержать";
+"copy" = "Copy";
 
 // - ScanningPopover
 "connected_to" = "Подключено к";
