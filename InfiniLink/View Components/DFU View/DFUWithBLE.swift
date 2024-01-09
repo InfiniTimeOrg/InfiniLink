@@ -130,25 +130,6 @@ struct DFUWithBLE: View {
     }
 }
 
-struct ClearSelectedFirmwareHeader: View {
-    @ObservedObject var dfuUpdater = DFU_Updater.shared
-    var body: some View {
-        HStack{
-            Text("Firmware File")
-            Spacer()
-            if dfuUpdater.firmwareSelected {
-                Button{
-                    dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
-                    dfuUpdater.firmwareSelected = false
-                    dfuUpdater.firmwareFilename = ""
-                } label: {
-                    Text("Clear")
-                }
-            }
-        }
-    }
-}
-
 struct NewUpdate: View {
     @Binding var updateStarted: Bool
     

@@ -7,19 +7,6 @@
 
 import SwiftUI
 
-struct BatteryIcon: View {
-    @ObservedObject var bleManager = BLEManager.shared
-    var body: some View{
-        HStack {
-            Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                .font(.system(size: 15))
-            Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f", bleManager.batteryLevel))! / 25) * 25)))
-                .imageScale(.large)
-        }
-        .offset(x: -18, y: -5)
-    }
-}
-
 enum Tab {
     case home
     case settings

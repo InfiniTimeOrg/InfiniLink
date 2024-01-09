@@ -71,14 +71,6 @@ class ChartManager: ObservableObject {
         case connected
 	}
 	
-	enum DateValue: Double {
-		case hour = -3600
-		case day = -86400
-		case week = -604800
-	}
-	
-
-	
 	func addItem(dataPoint: DataPoint) {
 		let newItem = ChartDataPoint(context: viewContext)
 		newItem.timestamp = dataPoint.date

@@ -72,35 +72,3 @@ struct HeartChartView: View {
     }
 }
 
-struct BatteryMenu: View {
-    @ObservedObject var bleManagerVal = BLEManagerVal.shared
-    @ObservedObject var bleManager = BLEManager.shared
-    @Environment(\.colorScheme) var scheme
-    var body: some View {
-        NavigationLink(destination: BatteryView()) {
-            VStack {
-                HStack {
-                    Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-                        .imageScale(.large)
-                        .foregroundColor(.green)
-                    Text(NSLocalizedString("battery_tilte", comment: ""))
-                        .foregroundColor(.green)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-                Spacer(minLength: 24)
-                HStack(alignment: .bottom) {
-                    Text(String(format: "%.0f", bleManager.batteryLevel))
-                        .foregroundColor(scheme == .dark ? .white : .black)
-                        .font(.system(size: 28))
-                        .bold()
-                    Text("%")
-                        .font(.system(size: 14))
-                        .foregroundColor(.gray)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                }
-            }
-            .padding(5)
-        }
-    }
-}
-
