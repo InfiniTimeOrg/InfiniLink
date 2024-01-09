@@ -36,6 +36,7 @@
 // - HeartChart
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "Insufficient Heart Rate Data";
+"heart_rate_settings" = "Heart Rate Settings";
 
 // - BetteryChart
 "insufficient_battery_data" = "Insufficient Battery Data";

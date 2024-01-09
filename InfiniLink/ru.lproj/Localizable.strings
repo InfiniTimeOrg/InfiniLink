@@ -36,6 +36,7 @@
 // - HeartChart
 "bpm" = "Уд. в мин.";
 "insufficient_heart_rate_data" = "Недостаточно данных о частоте пульса";
+"heart_rate_settings" = "Heart Rate Settings";
 
 // - BetteryChart
 "insufficient_battery_data" = "Недостаточно данных об аккумуляторе";

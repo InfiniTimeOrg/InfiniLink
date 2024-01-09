@@ -19,7 +19,7 @@ struct SheetCloseButton: View {
                 .padding(12)
                 .font(.body.weight(.semibold))
                 .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                .background(Color.gray.opacity(0.2))
+                .background(Color.gray.opacity(0.15))
                 .clipShape(Circle())
         }
     }

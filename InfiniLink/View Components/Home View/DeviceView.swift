@@ -120,7 +120,7 @@ struct DeviceView: View {
                                     VStack(alignment: .leading, spacing: 5) {
                                         Text(NSLocalizedString("heart_rate", comment: ""))
                                             .font(.title3.weight(.semibold))
-                                        Text(bleManagerVal.heartBPM.description)
+                                        Text(String(format: "%d", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
                                     }
                                     Spacer()
                                     Image(systemName: "chevron.right")
@@ -286,7 +286,7 @@ struct RowModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(Color.gray.opacity(0.2))
+            .background(Color.gray.opacity(0.15))
             .foregroundColor(.primary)
             .cornerRadius(style == .capsule ? 40 : 15)
     }
@@ -297,6 +297,7 @@ struct RowModifier: ViewModifier {
         DeviceView()
             .onAppear {
                 BLEManager.shared.isConnectedToPinetime = true
+                BLEManagerVal.shared.firmwareVersion = "1.13.0"
             }
     }
 }

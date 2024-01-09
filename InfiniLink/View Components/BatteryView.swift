@@ -31,7 +31,7 @@ struct BatteryView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
                 Text(NSLocalizedString("battery_tilte", comment: "Battery"))
@@ -42,33 +42,34 @@ struct BatteryView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
-            VStack {
-                Spacer()
-                ZStack {
-                    Circle()
-                        .stroke(lineWidth: 10.0)
-                        .opacity(0.3)
-                        .foregroundColor(Color.gray)
-                    Circle()
-                        .trim(from: 0.0, to: CGFloat(min(Float(bleManager.batteryLevel.rounded() / 100.0), 1.0)))
-                        .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.green)
-                        .rotationEffect(Angle(degrees: 270.0))
-                    VStack(spacing: 8) {
-                        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-                            .font(.system(size: 40).weight(.semibold))
-                            .imageScale(.large)
-                        Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
+            ScrollView {
+                VStack {
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 10.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.gray)
+                        Circle()
+                            .trim(from: 0.0, to: CGFloat(min(Float(bleManager.batteryLevel.rounded() / 100.0), 1.0)))
+                            .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(Color.green)
+                            .rotationEffect(Angle(degrees: 270.0))
+                        VStack(spacing: 8) {
+                            Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
+                                .font(.system(size: 40).weight(.semibold))
+                                .imageScale(.large)
+                            Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
+                        }
+                        .font(.system(size: 50).weight(.bold))
+                        .foregroundColor(.green)
                     }
-                    .font(.system(size: 50).weight(.bold))
-                    .foregroundColor(.green)
+                    .frame(height: 250)
+                    BatteryContentView()
                 }
-                .frame(minHeight: 180)
-                BatteryContentView()
+                .padding(30)
             }
-            .padding(30)
         }
-        .onAppear() {
+        .onAppear {
             chartManager.currentChart = .battery
             lastStatusViewWasHeart = false
         }

@@ -42,7 +42,7 @@ struct DFUWithBLE: View {
                                 .padding(14)
                                 .font(.body.weight(.semibold))
                                 .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                                .background(Color.gray.opacity(0.2))
+                                .background(Color.gray.opacity(0.15))
                                 .clipShape(Circle())
                         }
                         Text(NSLocalizedString("software_update", comment: "Software Update"))
@@ -59,7 +59,7 @@ struct DFUWithBLE: View {
                                 .padding(14)
                                 .font(.body.weight(.semibold))
                                 .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                                .background(Color.gray.opacity(0.2))
+                                .background(Color.gray.opacity(0.15))
                                 .clipShape(Circle())
                         }
                         .sheet(isPresented: $showOlderVersionView) {
@@ -74,7 +74,7 @@ struct DFUWithBLE: View {
                             .padding(14)
                             .font(.body.weight(.semibold))
                             .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Color.gray.opacity(0.2))
+                            .background(Color.gray.opacity(0.15))
                             .clipShape(Circle())
                     }
                 }
@@ -226,7 +226,7 @@ struct NewUpdate: View {
                                     .padding(14)
                                     .font(.body.weight(.semibold))
                                     .foregroundColor(scheme == .dark ? .white : .darkGray)
-                                    .background(Color.gray.opacity(0.2))
+                                    .background(Color.gray.opacity(0.15))
                                     .clipShape(Circle())
                             }
                         }

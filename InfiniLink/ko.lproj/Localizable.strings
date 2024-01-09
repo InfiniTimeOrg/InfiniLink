@@ -36,6 +36,7 @@
 // - HeartChart
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "심박수 정보 부족함";
+"heart_rate_settings" = "Heart Rate Settings";
 
 // - BetteryChart
 "insufficient_battery_data" = "배터리 정보 부족함";

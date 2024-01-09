@@ -25,7 +25,7 @@ struct StepSettingsSheetGoalChange: View {
                 .font(.title2.weight(.semibold))
             TextField(NSLocalizedString("enter_step_goal", comment: ""), text: $setStepGoal.value)
                 .padding()
-                .background(Color.gray.opacity(0.2))
+                .background(Color.gray.opacity(0.15))
                 .clipShape(Capsule())
                 .keyboardType(.numberPad)
             Button {

@@ -64,7 +64,7 @@ struct DebugView: View {
                             Text(entryContent)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding()
-                                .background(Color.gray.opacity(0.2))
+                                .background(Color.gray.opacity(0.15))
                                 .foregroundColor(colorScheme == .dark ? .white : .darkGray)
                                 .cornerRadius(15)
                                 .contextMenu {
@@ -149,7 +149,7 @@ struct DebugView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
                 Text(setPageTitle())
@@ -164,7 +164,7 @@ struct DebugView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
             }

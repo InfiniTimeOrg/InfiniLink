@@ -34,7 +34,7 @@ struct DownloadView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
                 Button {
@@ -45,7 +45,7 @@ struct DownloadView: View {
                         .padding(16)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
             }
@@ -86,7 +86,7 @@ struct DownloadView: View {
                                 Text(i.tag_name)
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.gray.opacity(0.2))
+                                    .background(Color.gray.opacity(0.15))
                                     .foregroundColor(.primary)
                                     .clipShape(Capsule())
                             }

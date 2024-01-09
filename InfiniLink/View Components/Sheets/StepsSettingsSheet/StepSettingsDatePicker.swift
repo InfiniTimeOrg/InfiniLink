@@ -35,7 +35,7 @@ struct StepSettingsSheetDatePicker: View {
             }
             TextField(NSLocalizedString("enter_number_of_steps", comment: ""), text: $addDateValue.value)
                 .padding()
-                .background(Color.gray.opacity(0.2))
+                .background(Color.gray.opacity(0.15))
                 .clipShape(Capsule())
                 .keyboardType(.numberPad)
             Button {

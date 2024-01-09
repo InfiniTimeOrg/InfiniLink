@@ -32,7 +32,7 @@ struct ArbitraryNotificationSheet: View {
                 HStack {
                     TextField(NSLocalizedString("title", comment: ""), text: $notificationTitle)
                         .padding(12)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Capsule())
                 }
                 TextEditor(text: $notificationBody)

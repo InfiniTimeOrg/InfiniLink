@@ -30,7 +30,7 @@ struct Connect: View {
                         .padding()
                         .font(.body.weight(.semibold))
                         .foregroundColor(.primary)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Capsule())
                     Spacer()
                     if bleManager.isSwitchedOn && !bleManager.newPeripherals.isEmpty {
@@ -41,7 +41,7 @@ struct Connect: View {
                         .padding()
                         .font(.body.weight(.semibold))
                         .foregroundColor(.gray)
-                        .background(Color.gray.opacity(0.2))
+                        .background(Color.gray.opacity(0.15))
                         .clipShape(Capsule())
                     }
                 }
@@ -71,7 +71,7 @@ struct Connect: View {
                                         .font(.body.weight(.semibold))
                                         .padding()
                                         .foregroundColor(.primary)
-                                        .background(Color.gray.opacity(0.2))
+                                        .background(Color.gray.opacity(0.15))
                                         .clipShape(Capsule())
                                 }
                             }

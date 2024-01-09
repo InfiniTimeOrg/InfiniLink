@@ -22,17 +22,17 @@ class BLEManagerVal: NSObject, ObservableObject {
     let settings = UserDefaults.standard
     
     // UI flag variables
-    @Published var heartBPM: Double = 0                                    // published var to communicate the HRM data to the UI.
+    @Published var heartBPM: Double = 0 // published var to communicate the HRM data to the UI.
 
-    @Published var firmwareVersion: String = "Disconnected"
+    @Published var firmwareVersion: String = ""
     
     @Published var stepCount: Int = 0
     @Published var stepCountTests: Int = 0
     @Published var stepCounting: Int = 0
 
     // Selecting and connecting variables
-    @Published var deviceToConnect: Int!                                // When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
+    @Published var deviceToConnect: Int! // When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
     @Published var autoconnectPeripheral: CBPeripheral!
 
-    var batChartReconnect: Bool = true                                // skip first HRM transmission on every fresh connection to prevent saving of BS data
+    var batChartReconnect: Bool = true // skip first HRM transmission on every fresh connection to prevent saving of BS data
 }
