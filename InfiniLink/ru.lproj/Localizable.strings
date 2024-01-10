@@ -41,6 +41,7 @@
 
 // - BetteryChart
 "insufficient_battery_data" = "Недостаточно данных об аккумуляторе";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "Неделя";

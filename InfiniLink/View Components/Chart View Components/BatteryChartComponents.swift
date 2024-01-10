@@ -118,7 +118,7 @@ struct BatteryContentView: View {
                             .font(.system(size: 10))
                     }
                     .padding(.top, -20)
-                    .padding(.bottom, 30)
+                    .padding(.bottom, 32)
                 }
             }
         }

@@ -41,6 +41,7 @@
 
 // - BetteryChart
 "insufficient_battery_data" = "沒有足夠的電池資料";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "週";

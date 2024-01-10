@@ -41,6 +41,7 @@
 
 // - BetteryChart
 "insufficient_battery_data" = "Données de batterie insuffisantes";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "Semaine";

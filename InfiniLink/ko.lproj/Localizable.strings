@@ -41,6 +41,7 @@
 
 // - BetteryChart
 "insufficient_battery_data" = "배터리 정보 부족함";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "주";

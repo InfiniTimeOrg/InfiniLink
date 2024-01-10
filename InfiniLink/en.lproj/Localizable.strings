@@ -38,8 +38,10 @@
 "insufficient_heart_rate_data" = "Insufficient Heart Rate Data";
 "heart_rate_settings" = "Heart Rate Settings";
 "oops" = "Oops!";
+
 // - BetteryChart
 "insufficient_battery_data" = "Insufficient Battery Data";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "Week";
