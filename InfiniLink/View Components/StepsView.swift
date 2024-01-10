@@ -30,13 +30,13 @@ struct StepView: View {
     }
     
     func updateProgress() {
-            let today = Date()
-            let formattedSteps = getStepHistory(date: today)
-
-            if let steps = Float(formattedSteps) {
-                progress = min(steps / Float(stepCountGoal), 1.0)
-            }
+        let today = Date()
+        let formattedSteps = getStepHistory(date: today)
+        
+        if let steps = Float(formattedSteps) {
+            progress = min(steps / Float(stepCountGoal), 1.0)
         }
+    }
     
     var body: some View {
         GeometryReader { g in
@@ -73,70 +73,43 @@ struct StepView: View {
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
                 Divider()
-                ScrollView {
-                    VStack(spacing: 20) {
-                        StepProgressGauge(stepCountGoal: $stepCountGoal, calendar: false)
-                            .padding()
-                            .frame(width: (g.size.width / 1.8), height: (g.size.width / 1.8), alignment: .center)
-                        VStack(spacing: 20) {
-                            HStack {
-                                Image(systemName: "trophy")
-                                    .imageScale(.large)
-                                    .font(.system(size: 26).weight(.medium))
-                                VStack(spacing: 3) {
-                                    Text(NSLocalizedString("step_goal", comment: "Step Goal"))
-                                        .font(.title2.weight(.bold))
-                                        .padding(.bottom, 3)
-                                    Text("\(stepCountGoal)" + " " + NSLocalizedString("steps", comment: "Steps"))
-                                        .font(.headline)
-                                        .foregroundColor(.gray)
-                                }
-                            }
-                            Button(action: {
-                                SheetManager.shared.sheetSelection = .stepSettings
-                                SheetManager.shared.showSheet = true
-                            }) {
-                                Text(NSLocalizedString("change_step_goal", comment: "Change Step Goal"))
-                                    .padding()
-                                    .padding(.horizontal, 12)
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .clipShape(Capsule())
-                            }
-                        }
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(22)
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.blue, lineWidth: 8)
-                        )
-                        .cornerRadius(15)
+                VStack {
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 10.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.gray)
+                        Circle()
+                            .trim(from: 0.0, to: CGFloat(min(Float(Double(getStepHistory(date: Date()))! / 100.0), 1.0)))
+                            .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(Color.blue)
+                            .rotationEffect(Angle(degrees: 270.0))
                         VStack {
-                            Text("Weekly Steps")
-                                .font(.title2.weight(.semibold))
-                                .padding(.bottom, 25)
-                            StepWeeklyChart(stepCountGoal: $stepCountGoal)
-                                .frame(height: (g.size.width / 2.2), alignment: .center)
+                            Image(systemName: "figure.walk")
+                                .font(.system(size: 30).weight(.semibold))
+                                .imageScale(.large)
+                            VStack(spacing: 3) {
+                                Text(getStepHistory(date: Date()))
+                                Text("\(stepCountGoal)")
+                                    .font(.body)
+                                    .foregroundColor(.gray)
+                            }
                         }
-                        .padding(22)
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray.opacity(0.2), lineWidth: 2.5)
-                        )
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        HStack {
-                            StepCalendarView(stepCountGoal: $stepCountGoal)
-                                .padding()
-                                .frame(alignment: .init(horizontal: .center, vertical: .top))
-                        }
-                        .padding(8)
-                        .background(
-                            RoundedRectangle(cornerRadius: 15)
-                                .stroke(Color.gray.opacity(0.2), lineWidth: 2.5)
-                        )
-                        .frame(maxWidth: .infinity, alignment: .center)
+                        .font(.system(size: 30).weight(.bold))
+                        .foregroundColor(.blue)
                     }
-                    .padding()
+                    .padding(30)
+                    VStack {
+                        Text("Weekly Steps")
+                            .font(.title2.weight(.semibold))
+                            .padding(.bottom, 25)
+                        StepWeeklyChart(stepCountGoal: $stepCountGoal)
+                            .frame(height: (g.size.width / 2.2), alignment: .center)
+                    }
+                    .ignoresSafeArea()
+                    .padding(20)
+                    .background(Color.gray.opacity(0.2))
+                    .cornerRadius(30, corners: [.topLeft, .topRight])
                 }
             }
             .navigationBarBackButtonHidden()

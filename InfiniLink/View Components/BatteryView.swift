@@ -42,31 +42,37 @@ struct BatteryView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
-            ScrollView {
-                VStack {
-                    ZStack {
-                        Circle()
-                            .stroke(lineWidth: 10.0)
-                            .opacity(0.3)
-                            .foregroundColor(Color.gray)
-                        Circle()
-                            .trim(from: 0.0, to: CGFloat(min(Float(bleManager.batteryLevel.rounded() / 100.0), 1.0)))
-                            .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
-                            .foregroundColor(Color.green)
-                            .rotationEffect(Angle(degrees: 270.0))
-                        VStack(spacing: 8) {
-                            Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-                                .font(.system(size: 40).weight(.semibold))
-                                .imageScale(.large)
-                            Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                        }
-                        .font(.system(size: 50).weight(.bold))
-                        .foregroundColor(.green)
+            VStack {
+                ZStack {
+                    Circle()
+                        .stroke(lineWidth: 10.0)
+                        .opacity(0.3)
+                        .foregroundColor(Color.gray)
+                    Circle()
+                        .trim(from: 0.0, to: CGFloat(min(Float(bleManager.batteryLevel.rounded() / 100.0), 1.0)))
+                        .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
+                        .foregroundColor(Color.green)
+                        .rotationEffect(Angle(degrees: 270.0))
+                    VStack(spacing: 8) {
+                        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
+                            .font(.system(size: 40).weight(.semibold))
+                            .imageScale(.large)
+                        Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
                     }
-                    .frame(height: 250)
-                    BatteryContentView()
+                    .font(.system(size: 50).weight(.bold))
+                    .foregroundColor(.green)
                 }
                 .padding(30)
+                VStack {
+                    Spacer()
+                    Text(NSLocalizedString("battery_stats", comment: "").capitalized)
+                        .font(.title2.weight(.semibold))
+                    BatteryContentView()
+                }
+                .ignoresSafeArea()
+                .padding(20)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(30, corners: [.topLeft, .topRight])
             }
         }
         .onAppear {
@@ -74,6 +80,22 @@ struct BatteryView: View {
             lastStatusViewWasHeart = false
         }
         .navigationBarBackButtonHidden()
+    }
+}
+
+extension View {
+    func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
+        clipShape( RoundedCorner(radius: radius, corners: corners) )
+    }
+}
+
+struct RoundedCorner: Shape {
+    var radius: CGFloat = .infinity
+    var corners: UIRectCorner = .allCorners
+
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(roundedRect: rect, byRoundingCorners: corners, cornerRadii: CGSize(width: radius, height: radius))
+        return Path(path.cgPath)
     }
 }
 

@@ -29,32 +29,32 @@ struct StepProgressGauge: View {
 	
 	var body: some View {
 		VStack {
-			ZStack {
-				Circle()
-					.stroke(lineWidth: calendar ? 3.0 : 10.0)
-					.opacity(0.3)
-					.foregroundColor(Color.gray)
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: calendar ? 3.0 : 10.0)
+                    .opacity(0.3)
+                    .foregroundColor(Color.gray)
                 Circle()
                     .trim(from: 0.0, to: CGFloat(min(((Float(getStepHistory(date: Date()).replacingOccurrences(of: ",", with: "")) ?? 0)/Float(stepCountGoal)), 1.0)))
                     .stroke(style: StrokeStyle(lineWidth: calendar ? 5.0 : 15.0, lineCap: .round, lineJoin: .round))
                     .foregroundColor(Color.blue)
                     .rotationEffect(Angle(degrees: 270.0))
 
-					//.animation(.linear)
-				if !calendar {
+                    //.animation(.linear)
+                if !calendar {
                     VStack(spacing: 1) {
                         Image(systemName: "figure.walk")
                         Spacer()
                             .frame(height: 2)
-						Text(String(getStepHistory(date: Date())))
+                        Text(String(getStepHistory(date: Date())))
 //                        Text("\(NSLocalizedString("step_goal", comment: "")): \(stepCountGoal)")
                         Text(NSLocalizedString("steps", comment: "Steps"))
                             .font(.body.weight(.medium))
                             .foregroundColor(.gray)
-					}
+                    }
                     .font(.largeTitle.weight(.bold))
-				}
-			}
+                }
+            }
 			if !calendar {
 				Spacer()
 			}

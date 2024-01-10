@@ -120,7 +120,7 @@ struct DeviceView: View {
                                     VStack(alignment: .leading, spacing: 5) {
                                         Text(NSLocalizedString("heart_rate", comment: ""))
                                             .font(.title3.weight(.semibold))
-                                        Text(String(format: "%d", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
+                                        Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
                                     }
                                     Spacer()
                                     Image(systemName: "chevron.right")

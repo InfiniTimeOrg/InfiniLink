@@ -19,6 +19,8 @@ struct HeartView: View {
     
     let chartManager = ChartManager.shared
     
+    @State private var animationAmount: CGFloat = 1
+    
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 0"))
     private var chartPoints: FetchedResults<ChartDataPoint>
     
@@ -67,7 +69,7 @@ struct HeartView: View {
                         .font(.system(size: 30).weight(.semibold))
                         .foregroundColor(.red)
                     VStack(spacing: 8) {
-                        Text(NSLocalizedString("oops!", comment: "").capitalized)
+                        Text(NSLocalizedString("oops", comment: ""))
                             .font(.largeTitle.weight(.bold))
                         Text(NSLocalizedString("insufficient_heart_rate_data", comment: ""))
                             .font(.title2.weight(.semibold))
@@ -75,17 +77,31 @@ struct HeartView: View {
                     Spacer()
                 }
             } else {
-                HStack {
-                    Image(systemName: "heart.fill")
-                    Text(String(format: "%d", bleManagerVal.heartBPM))
-                    Text(NSLocalizedString("bpm", comment: "BPM"))
+                VStack {
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 10.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.gray)
+                        VStack(spacing: 8) {
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 35))
+                                .imageScale(.large)
+                            Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
+                                .font(.system(size: 32).weight(.bold))
+                        }
+                        .foregroundColor(.red)
+                    }
+                    .padding(30)
                 }
-                .padding()
-                .font(.body.weight(.semibold))
-                .foregroundColor(.red)
-                Divider()
-                    .padding(.bottom)
-                HeartChart()
+                VStack {
+                    HeartChart()
+                        .padding(.top, 10)
+                }
+                .ignoresSafeArea()
+                .padding(20)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(30, corners: [.topLeft, .topRight])
             }
         }
         .navigationBarBackButtonHidden()

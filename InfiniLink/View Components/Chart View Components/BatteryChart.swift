@@ -12,7 +12,7 @@ import SwiftUI
 import SwiftUICharts
 import CoreData
 
-struct HeartChart: View {
+struct BatteryChart: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var chartManager = ChartManager.shared
     @AppStorage("heartChartFill") var heartChartFill: Bool = true
@@ -70,5 +70,5 @@ struct HeartChart: View {
 }
 
 #Preview {
-    HeartChart()
+    BatteryChart()
 }

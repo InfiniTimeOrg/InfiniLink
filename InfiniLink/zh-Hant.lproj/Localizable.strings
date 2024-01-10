@@ -37,6 +37,7 @@
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "沒有足夠的心率資料";
 "heart_rate_settings" = "Heart Rate Settings";
+"oops" = "Oops!";
 
 // - BetteryChart
 "insufficient_battery_data" = "沒有足夠的電池資料";
