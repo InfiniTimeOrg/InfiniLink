@@ -154,12 +154,11 @@
 "welcome_text" = "이것이 InfiniLink의 마지막 업데이트가 될 것이라고 유감스럽게 생각합니다. 나는 몇 달 전에 새로운 일을 시작했고 더 이상이 프로젝트의 개발을 계속할 여가 시간이 없습니다. 누구든지 인수에 관심이 있다면, 알려 주시면 모든 것을 양도 할 수 있습니다. 길을 따라 모든 지원과 제안에 감사드립니다!";
 
 // - WhatsNewBody
-"whats_new_body_1" = "- 한국어와 프랑스어 현지화 병합";
-"whats_new_body_2" = "";
-"whats_new_body_3" = "";
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
+"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
 "onboarding_text" = "I'm thrilled you're willing and able to test out this beta version of my iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes to me! Your feedback allows you and me to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
 
 // - OnboardingBody

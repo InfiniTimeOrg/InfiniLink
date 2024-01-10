@@ -202,7 +202,7 @@ struct NewUpdate: View {
                             Button {
                                 showLearnMoreView = false
                             } label: {
-                                Image(systemName: "chevron.down")
+                                Image(systemName: "xmark")
                                     .imageScale(.medium)
                                     .padding(14)
                                     .font(.body.weight(.semibold))

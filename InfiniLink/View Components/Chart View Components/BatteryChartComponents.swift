@@ -37,7 +37,6 @@ struct BatteryContentView: View {
     
     
     var body: some View {
-        
         let dataPoints = ChartManager.shared.convert(results: chartPoints)
         let clockFormat = DateFormatter.dateFormat (fromTemplate: "j",options:0, locale: Locale.current) == "HH" ? 1 : 0
         
@@ -53,7 +52,6 @@ struct BatteryContentView: View {
                             ZStack {
                                 verticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 100)
                                 HorizontalLines(numbLines: 5, sizes: geometry.size, height: 100)
-                                
                                 HStack(alignment: .center) {
                                     let hour = (Calendar.current.component(.hour, from: Date()) - Int(floor(Double(Calendar.current.component(.hour, from: Date())) / 3.0) * 3.0)) * (numberOfBars[pickerSelection] / 24)
                                     let minute = Int(ceil(Double(Calendar.current.component(.minute, from: Date())) / (60 / (Double(numberOfBars[pickerSelection]) / 24))))
@@ -104,15 +102,11 @@ struct BatteryContentView: View {
                         Text("100%")
                             .foregroundColor(.gray)
                             .font(.system(size: 10))
-                        
                         Spacer()
-                        
                         Text("50%")
                             .foregroundColor(.gray)
                             .font(.system(size: 10))
-                        
                         Spacer()
-                        
                         Text("0%")
                             .foregroundColor(.gray)
                             .font(.system(size: 10))

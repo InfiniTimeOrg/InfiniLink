@@ -154,12 +154,11 @@
 "welcome_text" = "的 InfiniLink！我希望您喜歡在這版本的 app 新增的功能。若您有遇到任何情況或是您想看到的改變，請不要感覺有負擔的聯絡我！";
 
 // - WhatsNewBody
-"whats_new_body_1" = "新的 UI 介面！超級感謝 GitHub 上的 @wowieman 大修整個 UI介面。";
-"whats_new_body_2" = "我們現在已經上架到 App Store 囉！";
-"whats_new_body_3" = "一些新的本地化。 請注意並不是所有的本地化已經更新在新的 UI 上。若您可以幫忙本地化，請在 GitHub 上與我們聯絡，或是請不要感覺有負擔的提交一個本地化的 pull request。在這方面的任何幫忙都很感謝！";
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "些新的本地化。 請注意並不是所有的本地化已經更新在新的 UI 上。若您可以幫忙本地化，請在 GitHub 上與我們聯絡，或是請不要感覺有負擔的提交一個本地化的 pull request。在這方面的任何幫忙都很感謝";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "🎉 歡迎使用 InfiniLink! 🎉";
+"welcome_to_InfiniLink" = "歡迎使用 InfiniLink!";
 "onboarding_text" = "InfiniTime 的開放原始碼 iOS 夥伴 app！在您開始前，請確認允許此 app 可以使用藍芽。請跟我們反應任何您發現的情況，您遇過的 app 閃退，或是建議改變！您的回饋讓我們可以一起處理並擁有一個更好的夥伴 app。藉由 TestFlight 或是 GitHub、Matrix 或是 Mastodon 反應都歡迎 （在設定頁面的連結是可以使用的。）";
 
 // - OnboardingBody

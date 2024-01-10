@@ -10,12 +10,9 @@
 		2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */; };
 		2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF692722110700D999EF /* StepProgressGauge.swift */; };
 		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
-		2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */; };
 		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
 		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
 		2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388926F2591900D72B43 /* DFUStartTransferButton.swift */; };
-		2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388D26F297CB00D72B43 /* OnboardingBody.swift */; };
-		2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */; };
 		263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462E92729B71500D3278D /* StepCalendarView.swift */; };
 		263462ED2729F68600D3278D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EC2729F68600D3278D /* CalendarView.swift */; };
 		263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */; };
@@ -111,12 +108,9 @@
 		2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InfiniLink.xcdatamodel; sourceTree = "<group>"; };
 		2601AF692722110700D999EF /* StepProgressGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepProgressGauge.swift; sourceTree = "<group>"; };
 		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
-		2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewBody.swift; sourceTree = "<group>"; };
 		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
 		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
 		2632388926F2591900D72B43 /* DFUStartTransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUStartTransferButton.swift; sourceTree = "<group>"; };
-		2632388D26F297CB00D72B43 /* OnboardingBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBody.swift; sourceTree = "<group>"; };
-		2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDismissButton.swift; sourceTree = "<group>"; };
 		263462E92729B71500D3278D /* StepCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCalendarView.swift; sourceTree = "<group>"; };
 		263462EC2729F68600D3278D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewExtensions.swift; sourceTree = "<group>"; };
@@ -234,25 +228,6 @@
 				263462EB2729F64600D3278D /* StepCalendar */,
 			);
 			path = "Steps View Components";
-			sourceTree = "<group>";
-		};
-		2617EF3A27036D9100FE6F48 /* What's New */ = {
-			isa = PBXGroup;
-			children = (
-				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
-				2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */,
-			);
-			path = "What's New";
-			sourceTree = "<group>";
-		};
-		2632389326F29A4100D72B43 /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				2644261526DC1D8E009BD54A /* Onboarding.swift */,
-				2632388D26F297CB00D72B43 /* OnboardingBody.swift */,
-				2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */,
-			);
-			path = Onboarding;
 			sourceTree = "<group>";
 		};
 		263462EB2729F64600D3278D /* StepCalendar */ = {
@@ -480,8 +455,8 @@
 				267C2EFB273DDB3B00F464B0 /* StepsSettingsSheet */,
 				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
 				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
-				2617EF3A27036D9100FE6F48 /* What's New */,
-				2632389326F29A4100D72B43 /* Onboarding */,
+				2644261526DC1D8E009BD54A /* Onboarding.swift */,
+				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
 			);
 			path = Sheets;
 			sourceTree = "<group>";
@@ -668,7 +643,6 @@
 				26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */,
 				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
 				263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */,
-				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
 				E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */,
 				264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */,
 				267C2EFA273DB62800F464B0 /* StepsSettingsSheet.swift in Sources */,
@@ -680,7 +654,6 @@
 				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */,
-				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
 				2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */,
 				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,
@@ -695,7 +668,6 @@
 				E515FB15284C56070040B582 /* DeviceView.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
-				2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */,
 				E515FB17284C56480040B582 /* WelcomeView.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
@@ -918,7 +890,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -947,7 +919,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.3;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
