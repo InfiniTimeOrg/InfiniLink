@@ -7,19 +7,10 @@
 
 import SwiftUI
 
-struct BatteryIcon: View {
-    @ObservedObject var bleManager = BLEManager.shared
-    var body: some View{
-        HStack {
-            Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                .font(.system(size: 15))
-            Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f", bleManager.batteryLevel))! / 25) * 25)))
-                .imageScale(.large)
-        }
-        .offset(x: -18, y: -5)
-    }
+enum Tab {
+    case home
+    case settings
 }
-
 
 struct ContentView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -28,7 +19,7 @@ struct ContentView: View {
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     
     @ObservedObject var deviceDataForTopLevel: DeviceData = deviceData
-    @State var selection: Int = 4
+    @State var selection: Tab = .home
     
     
     @AppStorage("autoconnect") var autoconnect: Bool = false
@@ -36,57 +27,52 @@ struct ContentView: View {
     @AppStorage("batteryNotification") var batteryNotification: Bool = false
     @AppStorage("onboarding") var onboarding: Bool!// = false
     @AppStorage("lastVersion") var lastVersion: String = ""
+    @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
+    
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     
-    
-    init() {
-        UINavigationBar.appearance().titleTextAttributes = [.font : UIFont.systemFont(ofSize: 18.0, weight: .bold)]
+    private func switchToTab(tab: Tab) {
+        selection = tab
+        
+        let impactMed = UIImpactFeedbackGenerator(style: .medium)
+        impactMed.impactOccurred()
     }
     
     var body: some View {
-        TabView(selection: $selection) {
+        VStack(spacing: 0) {
             NavigationView {
-                WelcomeView()
-                    .alert(isPresented: $bleManager.setTimeError, content: {
+                switch selection {
+                case .home:
+                    WelcomeView()
+                        .alert(isPresented: $bleManager.setTimeError, content: {
                             Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
-                
-					.navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-			}.navigationViewStyle(.stack)
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text(NSLocalizedString("home", comment: ""))
+                        .alert(isPresented: $showDisconnectConfDialog) {
+                            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
+                        }
+                case .settings:
+                    Settings_Page()
+                }
             }
-            .tag(0)
-
-            NavigationView {
-                ChartView()
-                    .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text(NSLocalizedString("charts", comment: ""))) //.font(.subheadline), displayMode: .large)
-			}.navigationViewStyle(.stack)
-            .tabItem {
-                Image(systemName: "chart.bar.fill")
-                Text(NSLocalizedString("charts", comment: ""))
-            }
-            .tag(1)
-            
-            NavigationView {
-                Settings_Page()
-                    .navigationBarItems(leading: ( HStack { if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" { Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25))).imageScale(.large)}}))
-                    .navigationBarTitle(Text(NSLocalizedString("settings", comment: ""))) //.font(.subheadline), displayMode: .large)
-			}.navigationViewStyle(.stack)
-            .tabItem {
-                Image(systemName: "gearshape.fill")
-                Text(NSLocalizedString("settings", comment: ""))
-            }
-            .tag(2)
+            tabBar
         }
-        // if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
-        .sheet(isPresented: $sheetManager.showSheet, content: { SheetManager.CurrentSheet().onDisappear { if !sheetManager.upToDate { if onboarding == nil { onboarding = false } //;sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
-        }} })
-        .onAppear() { if !bleManager.isConnectedToPinetime { DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: { if autoconnect && bleManager.isSwitchedOn { self.bleManager.startScanning() }
-            
-        }) }}
-        .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System Default") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
+        .sheet(isPresented: $sheetManager.showSheet, content: {
+            SheetManager.CurrentSheet()
+                .onDisappear {
+                    if !sheetManager.upToDate {
+                        if onboarding == nil {
+                            onboarding = false
+                        }
+                    }
+                }
+        })
+        .onAppear {
+            if !bleManager.isConnectedToPinetime {
+                if bleManager.isSwitchedOn {
+                    self.bleManager.startScanning()
+                }
+            }
+        }
+        .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
         .onChange(of: bleManager.batteryLevel) { bat in
             batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
         }
@@ -96,17 +82,61 @@ struct ContentView: View {
             }
         })
     }
-}
-
-
     
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
-            .environmentObject(BLEManager())
-            .environmentObject(DFU_Updater())
+    var tabBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 0) {
+                TabBarItem(selection: $selection, tab: .home, imageName: "house")
+                    .onTapGesture {
+                        switchToTab(tab: .home)
+                    }
+                    .frame(maxWidth: .infinity)
+                
+                TabBarItem(selection: $selection, tab: .settings, imageName: "gear")
+                    .onTapGesture {
+                        switchToTab(tab: .settings)
+                    }
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(12)
+        }
     }
 }
-                
+
+struct TabBarItem: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var selection: Tab
+    let tab: Tab
+    let imageName: String
+    
+    var body: some View {
+        if selection == tab {
+            HStack {
+                Image(systemName: imageName)
+                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
+            }
+            .imageScale(.large)
+            .font(.body.weight(.semibold))
+            .foregroundColor(colorScheme == .dark ? .white : .darkestGray)
+            .cornerRadius(10)
+            .padding(8)
+        } else {
+            HStack {
+                Image(systemName: imageName)
+                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
+            }
+            .foregroundColor(Color.gray)
+            .imageScale(.large)
+            .padding(8)
+        }
+    }
+}
+
+#Preview {
+    ContentView()
+        .environmentObject(BLEManager())
+        .environmentObject(DFU_Updater())
+}
 
 let deviceData: DeviceData = DeviceData()

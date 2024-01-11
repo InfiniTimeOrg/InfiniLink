@@ -12,12 +12,13 @@ import SwiftUI
 
 struct DFUWithoutBLE: View {
 	var body: some View{
-		VStack {
+        VStack(spacing: 6) {
 			Text(NSLocalizedString("bluetooth_not_available", comment: ""))
                 .foregroundColor(.gray)
+                .font(.title.weight(.bold))
 			Text(NSLocalizedString("please_enable_bluetooth_try_again", comment: ""))
                 .foregroundColor(.gray)
-				.font(.caption)
+                .font(.title3.weight(.medium))
 		}
 	}
 }
@@ -27,9 +28,10 @@ struct DFUWithoutConnection: View {
         VStack {
             Text(NSLocalizedString("pinetime_not_available", comment: ""))
                 .foregroundColor(.gray)
+                .font(.title.weight(.bold))
             Text(NSLocalizedString("please_check_your_connection_and_try_again", comment: ""))
                 .foregroundColor(.gray)
-                .font(.caption)
+                .font(.title3.weight(.medium))
         }
     }
 }

@@ -19,6 +19,7 @@
 "no_updates_available" = "사용 가능한 업데이트가 없어요";
 "device_name" = "기기 이름";
 "rename" = "이름 바꾸기";
+"disconnect_alert_title" = "";
 
 // - SideMenu
 "home" = "홈";
@@ -35,9 +36,12 @@
 // - HeartChart
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "심박수 정보 부족함";
+"heart_rate_settings" = "Heart Rate Settings";
+"oops" = "Oops!";
 
 // - BetteryChart
 "insufficient_battery_data" = "배터리 정보 부족함";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "주";
@@ -78,8 +82,10 @@
 "debug_mode" = "디버그 모드";
 "enable_debug_mode" = "디버그 모드 활성화";
 "debug_logs" = "디버그 로그";
+"no_logs" = "No Logs";
 "links" = "링크";
 "donations" = "후원";
+"copy" = "Copy";
 
 // - ScanningPopover
 "connected_to" = "기기에 연결됨:";
@@ -89,6 +95,12 @@
 "available_devices" = "사용 가능한 기기";
 "waiting_for_bluetooth" = "블루투스 대기 중";
 "unnamed" = "이름 없음";
+"loading" = "";
+"need_help_connecting" = "";
+"devices" = "";
+
+// - ConnectionHelpView
+"connection_help" = "";
 
 // - ChartSettingsSheetMain
 "select_date_range" = "날짜 범위 선택";
@@ -118,7 +130,7 @@
 "add_steps" = "걸음 수 추가";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "목표 걸음 수 변경";
+"change_step_goal" = "목표 걸음 수 변경";
 "enter_step_goal" = "목표 걸음 수를 입력하세요";
 "submit_new_step_goal" = "새 목표 걸음 수 저장";
 
@@ -131,6 +143,7 @@
 // - DownloadView
 "available_downloads" = "사용 가능한 다운로드";
 "firmware_download_links" = "펌웨어 다운로드 링크";
+"software_update_available" = "Software Update Available";
 
 // - SheetCloseButton
 "close" = "닫기";
@@ -141,20 +154,19 @@
 "welcome_text" = "이것이 InfiniLink의 마지막 업데이트가 될 것이라고 유감스럽게 생각합니다. 나는 몇 달 전에 새로운 일을 시작했고 더 이상이 프로젝트의 개발을 계속할 여가 시간이 없습니다. 누구든지 인수에 관심이 있다면, 알려 주시면 모든 것을 양도 할 수 있습니다. 길을 따라 모든 지원과 제안에 감사드립니다!";
 
 // - WhatsNewBody
-"whats_new_body_1" = "- 한국어와 프랑스어 현지화 병합";
-"whats_new_body_2" = "";
-"whats_new_body_3" = "";
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
+"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
 "onboarding_text" = "I'm thrilled you're willing and able to test out this beta version of my iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes to me! Your feedback allows you and me to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
 
 // - OnboardingBody
 "other_notes" = "Other notes:";
-"other_notes_1" = "- Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
-"other_notes_2" = "- The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
-"other_notes_3" = "- Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
-"other_notes_4" = "- If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
+"other_notes_1" = "Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes_2" = "The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
+"other_notes_3" = "Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
+"other_notes_4" = "If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
 
 // - OnboardingDismissButton
 "dismiss_button" = "완료";
@@ -211,6 +223,7 @@
 "welcome_text" = "";
 "connecting" = "";
 "start_pairing" = "";
+"stop_connecting" = "";
 "my_device" = "";
 "favorites" = "";
 "app_settings" = "";

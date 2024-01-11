@@ -19,6 +19,7 @@
 "no_updates_available" = "No Updates Available";
 "device_name" = "Device Name";
 "rename" = "Rename";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
 
 // - SideMenu
 "home" = "Home";
@@ -35,9 +36,12 @@
 // - HeartChart
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "Insufficient Heart Rate Data";
+"heart_rate_settings" = "Heart Rate Settings";
+"oops" = "Oops!";
 
 // - BetteryChart
 "insufficient_battery_data" = "Insufficient Battery Data";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "Week";
@@ -74,12 +78,14 @@
 "clear_all_battery_chart_data" = "Clear All Battery Chart Data";
 "onboarding_information" = "Onboarding Information";
 "open_onboarding_page" = "Open Onboarding Page";
-"whats_new_page_this_version" = "Open 'What's New' Page for This Version";
+"whats_new_page_this_version" = "Open 'What's New' Page";
 "debug_mode" = "Debug Mode";
 "enable_debug_mode" = "Enable Debug Mode";
 "debug_logs" = "Debug Logs";
+"no_logs" = "No Logs";
 "links" = "Links";
 "donations" = "Donations";
+"copy" = "Copy";
 
 // - ScanningPopover
 "connected_to" = "Connected to";
@@ -89,6 +95,12 @@
 "available_devices" = "Available Devices";
 "waiting_for_bluetooth" = "Waiting for Bluetooth";
 "unnamed" = "Unnamed";
+"loading" = "Loading...";
+"need_help_connecting" = "Need help connecting?";
+"devices" = "Devices";
+
+// - ConnectionHelpView
+"connection_help" = "Connection Help";
 
 // - ChartSettingsSheetMain
 "select_date_range" = "Select Date Range";
@@ -118,7 +130,7 @@
 "add_steps" = "Add Steps";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "Change Step Count Goal";
+"change_step_goal" = "Change Step Goal";
 "enter_step_goal" = "Enter Step Goal";
 "submit_new_step_goal" = "Submit New Step Goal";
 
@@ -131,9 +143,7 @@
 // - DownloadView
 "available_downloads" = "Available Downloads";
 "firmware_download_links" = "Firmware Download Links";
-
-// - SheetCloseButton
-"close" = "Close";
+"software_update_available" = "Software Update Available";
 
 // - WhatsNew
 "whats_new_in" = "What's New in";
@@ -141,20 +151,19 @@
 "welcome_text" = "of InfiniLink! I hope you enjoy the features I've added to the app for this version. Please feel free to get in touch with me about any issues you experience or changes you'd like to see!";
 
 // - WhatsNewBody
-"whats_new_body_1" = "New UI! Big thank you to @wowieman on GitHub for the total UI overhaul.";
-"whats_new_body_2" = "We're in the App Store now!";
-"whats_new_body_3" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
+"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
 "onboarding_text" = "The open-source iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes! Your feedback allows us to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
 
 // - OnboardingBody
 "other_notes" = "Other notes:";
-"other_notes_1" = "- Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
-"other_notes_2" = "- The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
-"other_notes_3" = "- Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
-"other_notes_4" = "- If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
+"other_notes_1" = "Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes_2" = "The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
+"other_notes_3" = "Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
+"other_notes_4" = "If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release.";
 
 // - OnboardingDismissButton
 "dismiss_button" = "Dismiss";
@@ -212,6 +221,7 @@
 "welcome_text" = "Welcome. If you have an InfiniTime device, \n you can pair it here.";
 "connecting" = "Connecting...";
 "start_pairing" = "Start Pairing";
+"stop_connecting" = "Stop Connecting";
 "my_device" = "My Device";
 "favorites" = "Favorites";
 "app_settings" = "App Theme";

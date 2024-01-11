@@ -13,18 +13,23 @@ struct StepSettingsSheet: View {
 	@State var pickerState = 0
 	
 	var body: some View {
-		VStack (alignment: .leading) {
-			SheetCloseButton()
-			Text(NSLocalizedString("steps_settings", comment: ""))
-				.font(.largeTitle)
-				.padding()
-				.padding(.bottom, 20)
-			Picker("", selection: $pickerState) {
-				Text(NSLocalizedString("step_goal", comment: "")).tag(0)
-				Text(NSLocalizedString("add_steps", comment: "")).tag(1)
-			}.pickerStyle(.segmented)
-				.padding(.bottom)
-				.padding(.horizontal)
+		VStack(alignment: .leading) {
+            VStack {
+                HStack {
+                    Text(NSLocalizedString("steps_settings", comment: ""))
+                        .font(.title.bold())
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    SheetCloseButton()
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                Picker("", selection: $pickerState) {
+                    Text(NSLocalizedString("step_goal", comment: "")).tag(0)
+                    Text(NSLocalizedString("add_steps", comment: "")).tag(1)
+                }
+                .pickerStyle(.segmented)
+            }
+            .padding()
+            Divider()
 			switch pickerState {
 			case 0:
 				StepSettingsSheetGoalChange()
@@ -48,4 +53,8 @@ class NumbersOnly: ObservableObject {
 			}
 		}
 	}
+}
+
+#Preview {
+    StepSettingsSheet()
 }

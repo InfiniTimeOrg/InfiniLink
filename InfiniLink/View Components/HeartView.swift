@@ -3,47 +3,117 @@
 //  InfiniLink
 //
 //  Created by Alex Emry on 10/21/21.
-//  
 //
-    
+//
+
 
 import SwiftUI
 
 struct HeartView: View {
     @AppStorage("lastStatusViewWasHeart") var lastStatusViewWasHeart: Bool = false
+    
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    
     @Environment(\.colorScheme) var colorScheme
+    @Environment(\.presentationMode) var presMode
+    
     let chartManager = ChartManager.shared
     
+    @State private var animationAmount: CGFloat = 1
+    
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)], predicate: NSPredicate(format: "chart == 0"))
+    private var chartPoints: FetchedResults<ChartDataPoint>
+    
     var body: some View {
-        return VStack {
-            List() {
-                HStack {
-                    Image(systemName: "heart.fill")
-                        .imageScale(.large)
-                        .foregroundColor(.red)
-                    Text(String(Int(bleManagerVal.heartBPM)) + " " + NSLocalizedString("bpm", comment: ""))
-                        .foregroundColor(.red)
-                        .bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                    Button {
-                        chartManager.currentChart = .heart
-                        SheetManager.shared.sheetSelection = .chartSettings
-                        SheetManager.shared.showSheet = true
-                    } label: {
-                        Image(systemName: "gear")
-                            .padding(.vertical)
-                    }
+        let dataPoints = ChartManager.shared.convert(results: chartPoints)
+        
+        VStack(spacing: 0) {
+            HStack(spacing: 15) {
+                Button {
+                    presMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Circle())
                 }
-                
-                HeartChart()
+                Text(NSLocalizedString("heart_rate", comment: "Heart Rate"))
+                    .foregroundColor(.primary)
+                    .font(.title.weight(.bold))
+                Spacer()
+                Button {
+                    chartManager.currentChart = .heart
+                    SheetManager.shared.sheetSelection = .chartSettings
+                    SheetManager.shared.showSheet = true
+                } label: {
+                    Image(systemName: "gear")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Circle())
+                }
             }
-            .navigationBarTitle(Text(NSLocalizedString("heart_tilte", comment: ""))) //.font(.subheadline), displayMode: .inline)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .center)
+            Divider()
+            if dataPoints.count < 1 {
+                VStack(alignment: .center, spacing: 14) {
+                    Spacer()
+                    Image(systemName: "heart")
+                        .imageScale(.large)
+                        .font(.system(size: 30).weight(.semibold))
+                        .foregroundColor(.red)
+                    VStack(spacing: 8) {
+                        Text(NSLocalizedString("oops", comment: ""))
+                            .font(.largeTitle.weight(.bold))
+                        Text(NSLocalizedString("insufficient_heart_rate_data", comment: ""))
+                            .font(.title2.weight(.semibold))
+                    }
+                    Spacer()
+                }
+            } else {
+                VStack {
+                    ZStack {
+                        Circle()
+                            .stroke(lineWidth: 10.0)
+                            .opacity(0.3)
+                            .foregroundColor(Color.gray)
+                        VStack(spacing: 8) {
+                            Image(systemName: "heart.fill")
+                                .font(.system(size: 35))
+                                .imageScale(.large)
+                            Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
+                                .font(.system(size: 32).weight(.bold))
+                        }
+                        .foregroundColor(.red)
+                    }
+                    .padding(30)
+                }
+                VStack {
+                    HeartChart()
+                        .padding(.top, 10)
+                }
+                .ignoresSafeArea()
+                .padding(20)
+                .background(Color.gray.opacity(0.2))
+                .cornerRadius(30, corners: [.topLeft, .topRight])
+            }
         }
-        .onAppear() {
-            print("Heart")
+        .navigationBarBackButtonHidden()
+        .onAppear {
             chartManager.currentChart = .heart
             lastStatusViewWasHeart = true
         }
+    }
+}
+
+#Preview {
+    NavigationView {
+        HeartView()
     }
 }

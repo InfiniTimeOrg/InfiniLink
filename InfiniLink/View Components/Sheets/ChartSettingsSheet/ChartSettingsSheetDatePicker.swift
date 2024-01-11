@@ -17,19 +17,24 @@ struct ChartSettingsSheetDatePicker: View {
 	let oldestPoint: Date?
 
 	var body: some View {
-		List {
-			DatePicker(
-                NSLocalizedString("start_date", comment: ""),
-				selection: $chartRangeState.startDate,
-				in: (oldestPoint ?? oneMonthAgo)...today,
-				displayedComponents: [.date, .hourAndMinute]
-			)
-			DatePicker(
-                NSLocalizedString("end_date", comment: ""),
-				selection: $chartRangeState.endDate,
-				in: chartRangeState.startDate...today,
-				displayedComponents: [.date, .hourAndMinute]
-			)
-		}.listStyle(.insetGrouped)
+        ScrollView {
+            VStack {
+                DatePicker(
+                    NSLocalizedString("start_date", comment: ""),
+                    selection: $chartRangeState.startDate,
+                    in: (oldestPoint ?? oneMonthAgo)...today,
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+                .modifier(RowModifier(style: .capsule))
+                DatePicker(
+                    NSLocalizedString("end_date", comment: ""),
+                    selection: $chartRangeState.endDate,
+                    in: chartRangeState.startDate...today,
+                    displayedComponents: [.date, .hourAndMinute]
+                )
+                .modifier(RowModifier(style: .capsule))
+            }
+            .padding(.top, 8)
+		}
 	}
 }

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct RenameView: View {
-    
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @Environment(\.colorScheme) var colorScheme
@@ -17,79 +16,56 @@ struct RenameView: View {
     private var nameManager = DeviceNameManager()
     
     var body: some View {
-        return VStack {
-            List() {
-                AutoFocusTextField("InfiniTime", text: $changedName, onCommit: {
+        VStack(spacing: 0) {
+            HStack(spacing: 15) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Circle())
+                }
+                Text(NSLocalizedString("rename", comment: ""))
+                    .foregroundColor(.primary)
+                    .font(.title.weight(.bold))
+                Spacer()
+                Button {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
                     changedName = ""
                     presentationMode.wrappedValue.dismiss()
-                })
+                } label: {
+                    Text(NSLocalizedString("rename", comment: ""))
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color.white)
+                        .background(Color.blue)
+                        .clipShape(Capsule())
+                        .foregroundColor(.primary)
+                }
+                .disabled(changedName == deviceInfo.deviceName)
+                .opacity(changedName == deviceInfo.deviceName ? 0.5 : 1.0)
             }
-            .listStyle(.insetGrouped)
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .center)
+            Divider()
+            VStack {
+                TextField("InfiniTime", text: $changedName)
+                    .padding()
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(Capsule())
+                Spacer()
+            }
+            .padding()
         }
-        .navigationBarTitle(Text(NSLocalizedString("name", comment: "")).font(.subheadline), displayMode: .inline)
-        
+        .navigationBarBackButtonHidden()
     }
 }
 
-struct AutoFocusTextField: UIViewRepresentable {
-    private let placeholder: String
-    @Binding private var text: String
-    private let onEditingChanged: ((_ focused: Bool) -> Void)?
-    private let onCommit: (() -> Void)?
-    
-    init(_ placeholder: String, text: Binding<String>, onEditingChanged: ((_ focused: Bool) -> Void)? = nil, onCommit: (() -> Void)? = nil) {
-        self.placeholder = placeholder
-        _text = text
-        self.onEditingChanged = onEditingChanged
-        self.onCommit = onCommit
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    func makeUIView(context: UIViewRepresentableContext<AutoFocusTextField>) -> UITextField {
-        let textField = UITextField()
-        textField.delegate = context.coordinator
-        textField.placeholder = placeholder
-        textField.returnKeyType = .done
-        return textField
-    }
-    
-    func updateUIView(_ uiView: UITextField, context:
-                        UIViewRepresentableContext<AutoFocusTextField>) {
-        uiView.text = text
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { // needed for modal view to show completely before aufo-focus to avoid crashes
-            if uiView.window != nil, !uiView.isFirstResponder {
-                uiView.becomeFirstResponder()
-            }
-        }
-    }
-    
-    class Coordinator: NSObject, UITextFieldDelegate {
-        var parent: AutoFocusTextField
-        
-        init(_ autoFocusTextField: AutoFocusTextField) {
-            self.parent = autoFocusTextField
-        }
-        
-        func textFieldDidChangeSelection(_ textField: UITextField) {
-            parent.text = textField.text ?? ""
-        }
-        
-        func textFieldDidEndEditing(_ textField: UITextField) {
-            parent.onEditingChanged?(false)
-        }
-        
-        func textFieldDidBeginEditing(_ textField: UITextField) {
-            parent.onEditingChanged?(true)
-        }
-        
-        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            parent.onCommit?()
-            return true
-        }
-    }
+#Preview {
+    RenameView()
 }

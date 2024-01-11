@@ -3,41 +3,95 @@
 //  DFUWithBLE
 //
 //  Created by Alex Emry on 9/15/21.
-//  
+//
 //
 
 
 import Foundation
 import SwiftUI
 
-extension UIScreen{
+extension UIScreen {
     static let screenWidth = UIScreen.main.bounds.size.width
     static let screenHeight = UIScreen.main.bounds.size.height
     static let screenSize = UIScreen.main.bounds.size
 }
 
 struct DFUWithBLE: View {
-	@Environment(\.colorScheme) var colorScheme
-	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
-	@ObservedObject var dfuUpdater = DFU_Updater.shared
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.presentationMode) var presMode
+    
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
-	
-	@State var openFile = false
-	
-	
-	var body: some View {
-		ZStack {
-			VStack (alignment: .leading) {
-				List {
-                    
-                    if downloadManager.updateAvailable && dfuUpdater.firmwareSelected {
-                        NewUpdate(updateStarted: $downloadManager.updateStarted, openFile: $openFile)
-                    } else {
-                        NoUpdate(openFile: $openFile)
+    
+    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
+    
+    @State var openFile = false
+    @State var showOlderVersionView = false
+    
+    var body: some View {
+        ZStack {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack {
+                    HStack(spacing: 15) {
+                        Button {
+                            presMode.wrappedValue.dismiss()
+                        } label: {
+                            Image(systemName: "chevron.left")
+                                .imageScale(.medium)
+                                .padding(14)
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                                .background(Color.gray.opacity(0.15))
+                                .clipShape(Circle())
+                        }
+                        Text(NSLocalizedString("software_update", comment: "Software Update"))
+                            .foregroundColor(.primary)
+                            .font(.title.weight(.bold))
                     }
-				}
-                .listStyle(.insetGrouped)
-			}
+                    Spacer()
+                    if !(showNewDownloadsOnly) {
+                        Button {
+                            showOlderVersionView.toggle()
+                        } label: {
+                            Image(systemName: "doc")
+                                .imageScale(.medium)
+                                .padding(14)
+                                .font(.body.weight(.semibold))
+                                .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                                .background(Color.gray.opacity(0.15))
+                                .clipShape(Circle())
+                        }
+                        .sheet(isPresented: $showOlderVersionView) {
+                            DownloadView(openFile: $openFile)
+                        }
+                    }
+                    Button {
+                        downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
+                    } label: {
+                        Image(systemName: "arrow.counterclockwise")
+                            .imageScale(.medium)
+                            .padding(14)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                            .background(Color.gray.opacity(0.15))
+                            .clipShape(Circle())
+                    }
+                }
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+                Divider()
+                ScrollView {
+                    VStack {
+                        if downloadManager.updateAvailable && dfuUpdater.firmwareSelected {
+                            NewUpdate(updateStarted: $downloadManager.updateStarted, openFile: $openFile)
+                        } else {
+                            NoUpdate()
+                        }
+                    }
+                    .padding()
+                }
+            }
             .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
                 // this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
                 do{
@@ -54,121 +108,128 @@ struct DFUWithBLE: View {
                     DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
                 }
             }
-			VStack{
-				if dfuUpdater.transferCompleted {
-					DFUComplete()
-						.cornerRadius(10)
-						.onAppear() {
-							DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-								dfuUpdater.transferCompleted = false
-							})
+            VStack {
+                if dfuUpdater.transferCompleted {
+                    DFUComplete()
+                        .cornerRadius(10)
+                        .onAppear() {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                                dfuUpdater.transferCompleted = false
+                            })
                             downloadManager.updateStarted = false
-							dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
-							dfuUpdater.firmwareSelected = false
-							dfuUpdater.firmwareFilename = ""
+                            dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
+                            dfuUpdater.firmwareSelected = false
+                            dfuUpdater.firmwareFilename = ""
                             downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: downloadManager.updateVersion)
-						}
-				}
-			}.transition(.opacity).animation(.easeInOut(duration: 1.0))
-		}
-        .navigationBarItems(trailing: (
-            Button(action: {downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)}) {
-                Image(systemName: "arrow.counterclockwise")
-                    .imageScale(.large)
+                        }
+                }
             }
-        ))
-        .navigationBarTitle(Text(NSLocalizedString("software_update", comment: "")).font(.subheadline), displayMode: .inline)
-	}
-}
-
-struct ClearSelectedFirmwareHeader: View {
-	@ObservedObject var dfuUpdater = DFU_Updater.shared
-	var body: some View {
-		HStack{
-			Text("Firmware File")
-			Spacer()
-			if dfuUpdater.firmwareSelected {
-				Button{
-					dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
-					dfuUpdater.firmwareSelected = false
-					dfuUpdater.firmwareFilename = ""
-				} label: {
-					Text("Clear")
-				}
-			}
-		}
-	}
+            .transition(.opacity).animation(.easeInOut(duration: 1.0))
+        }
+        .navigationBarBackButtonHidden()
+    }
 }
 
 struct NewUpdate: View {
     @Binding var updateStarted: Bool
-    //@ObservedObject var bleManager = BLEManager.shared
+    
     @ObservedObject var dfuUpdater = DFU_Updater.shared
+    
     @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
+    
     @Environment(\.colorScheme) var scheme
+    
     @Binding var openFile: Bool
     
-    //@State var updateStarted: Bool = false
+    @State var showLearnMoreView = false
     
     var body: some View {
-        Section() {
+        VStack {
             VStack(alignment: .leading) {
-                HStack(alignment: .top) {
+                HStack(alignment: .center, spacing: 10) {
                     Image("InfiniTime")
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .padding(5)
-                        .frame(width: 75, height: 75)
-                    VStack(alignment: .leading) {
+                        .frame(width: 65, height: 65)
+                    VStack(alignment: .leading, spacing: 5) {
                         if dfuUpdater.local == false {
                             Text("InfiniTime \(DownloadManager.shared.updateVersion)")
-                                .bold()
+                                .font(.headline)
                         } else {
                             Text(dfuUpdater.firmwareFilename)
-                                .bold()
+                                .font(.headline)
                         }
                         Text("\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB")
-                            .font(.caption)
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
                         if updateStarted {
-                            DFUProgressBar().environmentObject(dfuUpdater)
-                                //.frame(height: 40 ,alignment: .center)
-                                //.padding()
+                            DFUProgressBar()
+                                .environmentObject(dfuUpdater)
                         }
                     }
-                    .padding(5)
                 }
                 HStack {
                     if dfuUpdater.local == false {
-                        Text(DownloadManager.shared.updateBody)
-                            .font(.system(size: 14))
-                            .lineLimit(3)
-                            .padding(5)
+                        if #available(iOS 15.0, *) {
+                            Text(try! AttributedString(markdown: DownloadManager.shared.updateBody, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)))
+                        } else {
+                            Text(DownloadManager.shared.updateBody)
+                        }
                     } else {
                         Text(NSLocalizedString("local_file_info", comment: ""))
-                            .font(.system(size: 14))
-                            .lineLimit(3)
-                            .padding(5)
                     }
                 }
-                
-            }.frame(height: 160 ,alignment: .center)
-            
+                .lineLimit(4)
+                .padding(.vertical, 12)
+            }
             if dfuUpdater.local == false {
-                NavigationLink(destination: DFULearnMore()) {
+                Button {
+                    showLearnMoreView = true
+                } label: {
                     Text(NSLocalizedString("learn_more", comment: ""))
+                        .frame(maxWidth: .infinity)
+                        .padding(12)
+                        .background(Color.gray.opacity(0.3))
+                        .clipShape(Capsule())
+                }
+                .sheet(isPresented: $showLearnMoreView) {
+                    VStack(spacing: 0) {
+                        HStack {
+                            Text(NSLocalizedString("learn_more", comment: "Learn More"))
+                                .foregroundColor(.primary)
+                                .font(.title.weight(.bold))
+                            Spacer()
+                            Button {
+                                showLearnMoreView = false
+                            } label: {
+                                Image(systemName: "xmark")
+                                    .imageScale(.medium)
+                                    .padding(14)
+                                    .font(.body.weight(.semibold))
+                                    .foregroundColor(scheme == .dark ? .white : .darkGray)
+                                    .background(Color.gray.opacity(0.15))
+                                    .clipShape(Circle())
+                            }
+                        }
+                        .padding()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        Divider()
+                        ScrollView {
+                            VStack {
+                                if #available(iOS 15.0, *) {
+                                    Text(try! AttributedString(markdown: DownloadManager.shared.updateBody, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)))
+                                } else {
+                                    Text(DownloadManager.shared.updateBody)
+                                }
+                            }
+                            .padding()
+                        }
+                    }
                 }
             }
-        }
-        Section() {
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
-            //Button("Download and Install", action: {})
-            
-            if !(showNewDownloadsOnly) {
-                NavigationLink(destination: DownloadView(openFile: $openFile)) {
-                    Text(NSLocalizedString("install_older_version", comment: ""))
-                }
-            }
         }
+        .padding(10)
     }
 }
 
@@ -177,32 +238,28 @@ struct NoUpdate: View {
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     @Environment(\.colorScheme) var colorScheme
-    @Binding var openFile: Bool
     
     var body: some View {
-        if !(showNewDownloadsOnly) {
-            Section() {
-                NavigationLink(destination: DownloadView(openFile: $openFile)) {
-                    Text(NSLocalizedString("install_older_version", comment: ""))
-                }
+        VStack {
+            VStack(alignment: .center , spacing: 6) {
+                Text("InfiniTime \(deviceInfo.firmware)")
+                    .foregroundColor(.gray)
+                    .font(.title3.weight(.semibold))
+                Text("InfiniTime " + NSLocalizedString("up_to_date", comment: ""))
+                    .foregroundColor(.gray)
+                    .font(.system(size: 16))
             }
+            .frame(maxWidth: .infinity, alignment: .bottom)
         }
-        
-        Section() {
-            VStack(spacing: 5) {
-                VStack(alignment: .center) {
-                    Text("InfiniTime \(deviceInfo.firmware)")
-                        .foregroundColor(.gray)
-                        .font(.system(size: 18))
-                    Text("InfiniTime " + NSLocalizedString("up_to_date", comment: ""))
-                        .foregroundColor(.gray)
-                        .font(.system(size: 16))
-                }
-                .frame(maxWidth: .infinity, alignment: .bottom)
+        .frame(height: UIScreen.screenHeight / 1.6)
+    }
+}
+
+#Preview {
+    NavigationView {
+        DFUWithBLE()
+            .onAppear {
+                BLEDeviceInfo.shared.firmware = "1.13.0"
             }
-            .padding(5)
-        }
-        .frame(height: UIScreen.screenHeight / 2.0)
-        .listRowBackground(Color.clear)
     }
 }

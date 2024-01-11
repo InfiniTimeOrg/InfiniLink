@@ -73,7 +73,6 @@ struct BLEUpdatedCharacteristicHandler {
             }
             StepCountPersistenceManager().setStepCount(steps: Int32(bleManagerVal.stepCount), arbitrary: false, date: Date())
         default:
-            break
-        }
-    }
+			      break
+		}
 }
