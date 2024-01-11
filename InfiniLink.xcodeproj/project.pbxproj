@@ -135,7 +135,7 @@
 		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE7326BC526C0050A223 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		264BFE7526BC52720050A223 /* HexStringToData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexStringToData.swift; sourceTree = "<group>"; };
-		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = InfiniLink/README.md; sourceTree = SOURCE_ROOT; };
+		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
 		266F53E326F7FCA6007481A6 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
@@ -270,6 +270,8 @@
 		264BFE3526BC51CE0050A223 = {
 			isa = PBXGroup;
 			children = (
+				264BFE7726BCAAC00050A223 /* README.md */,
+				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
 				264BFE4026BC51CE0050A223 /* InfiniLink */,
 				264BFE5726BC51CF0050A223 /* InfiniLinkTests */,
 				264BFE6226BC51CF0050A223 /* InfiniLinkUITests */,
@@ -297,8 +299,6 @@
 				26A6314E26BF0FA2005AE404 /* Music */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
-				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
-				264BFE7726BCAAC00050A223 /* README.md */,
 				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
@@ -890,7 +890,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-        MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.2.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
