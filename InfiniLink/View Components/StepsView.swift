@@ -19,7 +19,7 @@ struct StepView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
     private var existingStepCounts: FetchedResults<StepCounts>
     
-    func getStepHistory(date: Date) -> String {
+    func getStepHistoryAsString(date: Date) -> String {
         for stepCount in existingStepCounts {
             if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
                 let formattedSteps = NumberFormatter.localizedString(from: NSNumber(value: stepCount.steps), number: .decimal)
@@ -29,9 +29,18 @@ struct StepView: View {
         return "0"
     }
     
+    func getStepHistoryAsInt(date: Date) -> Int32 {
+        for stepCount in existingStepCounts {
+            if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) { //(stepCount.timestamp!, to: date, toGranularity: .day) == .orderedSame {
+                return stepCount.steps
+            }
+        }
+        return 0
+    }
+    
     func updateProgress() {
         let today = Date()
-        let formattedSteps = getStepHistory(date: today)
+        let formattedSteps = getStepHistoryAsString(date: today)
         
         if let steps = Float(formattedSteps) {
             progress = min(steps / Float(stepCountGoal), 1.0)
@@ -80,7 +89,7 @@ struct StepView: View {
                             .opacity(0.3)
                             .foregroundColor(Color.gray)
                         Circle()
-                            .trim(from: 0.0, to: CGFloat(min(Float(Double(getStepHistory(date: Date()))! / 100.0), 1.0)))
+                            .trim(from: 0.0, to: CGFloat(min((Float(getStepHistoryAsInt(date: Date()))/Float(stepCountGoal)), 1.0)))
                             .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
                             .foregroundColor(Color.blue)
                             .rotationEffect(Angle(degrees: 270.0))
@@ -89,7 +98,7 @@ struct StepView: View {
                                 .font(.system(size: 30).weight(.semibold))
                                 .imageScale(.large)
                             VStack(spacing: 3) {
-                                Text(getStepHistory(date: Date()))
+                                Text(getStepHistoryAsString(date: Date()))
                                 Text("\(stepCountGoal)")
                                     .font(.body)
                                     .foregroundColor(.gray)
