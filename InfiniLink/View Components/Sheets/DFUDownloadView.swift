@@ -37,13 +37,17 @@ struct DownloadView: View {
                         .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
-                Image(systemName: "xmark")
-                    .imageScale(.medium)
-                    .padding(14)
-                    .font(.body.weight(.semibold))
-                    .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                    .background(Color.gray.opacity(0.15))
-                    .clipShape(Circle())
+                Button {
+                    presentation.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "xmark")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Circle())
+                }
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
