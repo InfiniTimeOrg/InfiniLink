@@ -8,6 +8,7 @@
     
 
 import CoreBluetooth
+import UIKit
 
 struct BLEDiscoveredCharacteristics {
 	let bleManager = BLEManager.shared
@@ -36,7 +37,11 @@ struct BLEDiscoveredCharacteristics {
 		case bleManagerVal.cbuuidList.notify:
             bleManagerVal.notifyCharacteristic = characteristic
 			if bleManager.firstConnect {
-				BLEWriteManager.init().sendNotification(title: "", body: "iOS Connected!")
+                if #available(iOS 16, *) {
+                    BLEWriteManager.init().sendNotification(title: "", body: "iOS Connected!")
+                } else {
+                    BLEWriteManager.init().sendNotification(title: "", body: "\(UIDevice.current.name) Connected!")
+                }
                 bleManager.firstConnect = false
 			}
 		case bleManagerVal.cbuuidList.stepCount:
