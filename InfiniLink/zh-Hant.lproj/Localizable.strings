@@ -70,6 +70,7 @@
 "enable_watch_notifications" = "開啟手錶通知";
 "notify_about_low_battery" = "低電量時通知";
 "send_notification_to_pinetime" = "傳送通知至 PineTime";
+"find_lost_device" = "Find Lost Device";
 "graph_styles" = "圖表類型";
 "filled_hrm_graph" = "填滿 HRM 圖表";
 "filled_battery_graph" = "填滿電池圖表";

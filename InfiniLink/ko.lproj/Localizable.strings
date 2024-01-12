@@ -70,6 +70,7 @@
 "enable_watch_notifications" = "워치 알림 표시하기";
 "notify_about_low_battery" = "낮은 배터리 알리기";
 "send_notification_to_pinetime" = "PineTime에 알림 보내기";
+"find_lost_device" = "Find Lost Device";
 "graph_styles" = "그래프 스타일";
 "filled_hrm_graph" = "심박수 그래프 채우기";
 "filled_battery_graph" = "배터리 그래프 채우기";

@@ -70,6 +70,7 @@
 "enable_watch_notifications" = "Enable Watch Notifications";
 "notify_about_low_battery" = "Notify about Low Battery";
 "send_notification_to_pinetime" = "Send Notification to PineTime";
+"find_lost_device" = "Find Lost Device";
 "graph_styles" = "Graph Styles";
 "filled_hrm_graph" = "Filled HRM Graph";
 "filled_battery_graph" = "Filled Battery Graph";

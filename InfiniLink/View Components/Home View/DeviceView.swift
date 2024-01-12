@@ -245,6 +245,16 @@ struct DeviceView: View {
                         }
                         .opacity(!watchNotifications || !bleManager.isConnectedToPinetime ? 0.5 : 1.0)
                         .disabled(!watchNotifications || !bleManager.isConnectedToPinetime)
+                        Button {
+                            BLEWriteManager.init().sendLostNotification()
+                        } label: {
+                            Text(NSLocalizedString("find_lost_device", comment: ""))
+                                .frame(maxWidth: .infinity)
+                                .foregroundColor(.blue)
+                                .modifier(RowModifier(style: .capsule))
+                        }
+                        .opacity(!watchNotifications || !bleManager.isConnectedToPinetime ? 0.5 : 1.0)
+                        .disabled(!watchNotifications || !bleManager.isConnectedToPinetime)
                     }
                     Spacer()
                         .frame(height: 6)

@@ -70,6 +70,7 @@
 "enable_watch_notifications" = "Activer les notifications de la montre";
 "notify_about_low_battery" = "Notifer lors de la batterie faible";
 "send_notification_to_pinetime" = "Envoyer une notification à la PineTime";
+"find_lost_device" = "Find Lost Device";
 "graph_styles" = "Styles de graphique";
 "filled_hrm_graph" = "Graphique HRM rempli";
 "filled_battery_graph" = "Graphique de batterie rempli";

@@ -70,6 +70,7 @@
 "enable_watch_notifications" = "Включить уведомления";
 "notify_about_low_battery" = "Уведомлять о низком заряде аккумулятора";
 "send_notification_to_pinetime" = "Отправить уведомление на PineTime";
+"find_lost_device" = "Find Lost Device";
 "graph_styles" = "Стили графиков";
 "filled_hrm_graph" = "Мониторинг сердечного ритма";
 "filled_battery_graph" = "Мониторинг аккумулятора";

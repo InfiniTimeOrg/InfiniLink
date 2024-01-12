@@ -42,5 +42,20 @@ struct BLEWriteManager {
 			}
 		}
 	}
+    
+    func sendLostNotification() {
+        let hexPrefix = Data([0x03, 0x01, 0x00]) // Hexadecimal representation of "\x03\x01\x00"
+        let nameData = "InfiniLink".data(using: .ascii) ?? Data()
+
+        let notification = hexPrefix + nameData
+
+        let doSend = UserDefaults.standard.object(forKey: "watchNotifications")
+        
+        if notification.count > 0 {
+            if (doSend == nil || doSend as! Bool) && bleManager.infiniTime != nil {
+                bleManager.infiniTime.writeValue(notification, for: bleManagerVal.notifyCharacteristic, type: .withResponse)
+            }
+        }
+    }
 }
 
