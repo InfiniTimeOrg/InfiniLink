@@ -51,12 +51,12 @@ class MusicController {
         
         
         let session = AVAudioSession.sharedInstance()
-        do {try session.setActive(false)} catch let error as NSError {print("Unable to activate audio session:  \(error.localizedDescription)")}
-        //if musicPlaying == 1 {musicPlayer.play()}
-        
-        let audioSession = AVAudioSession.sharedInstance()
-        try? audioSession.setActive(true)
-        //do {try session.setActive(false)} catch let error as NSError {print("Unable to activate audio session:  \(error.localizedDescription)")}
+        do {
+            try session.setCategory(.playback, options: .mixWithOthers)
+            try session.setActive(false)
+        } catch let error as NSError {
+            print("Unable to activate audio session:  \(error.localizedDescription)")
+        }
         musicPlaying = musicPlayer.playbackState.rawValue
         
 		switch controlNumber {
@@ -69,9 +69,9 @@ class MusicController {
 		case 4:
 			musicPlayer.skipToPreviousItem()
 		case 5:
-            if audioSession.outputVolume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(audioSession.outputVolume + (1 / volumeSlots))}
+            if session.outputVolume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(session.outputVolume + (1 / volumeSlots))}
         case 6:
-            if audioSession.outputVolume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(audioSession.outputVolume - (1 / volumeSlots))}
+            if session.outputVolume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(session.outputVolume - (1 / volumeSlots))}
 		case 224:
 			updateMusicInformation(songInfo: getCurrentSongInfo())
 		default:
