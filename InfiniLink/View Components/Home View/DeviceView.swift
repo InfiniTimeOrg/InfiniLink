@@ -248,7 +248,7 @@ struct DeviceView: View {
                         Button {
                             BLEWriteManager.init().sendLostNotification()
                         } label: {
-                            Text(NSLocalizedString("find_lost_device", comment: ""))
+                            Text(NSLocalizedString("find_lost", comment: "") + " \(deviceInfo.modelNumber)")
                                 .frame(maxWidth: .infinity)
                                 .foregroundColor(.blue)
                                 .modifier(RowModifier(style: .capsule))

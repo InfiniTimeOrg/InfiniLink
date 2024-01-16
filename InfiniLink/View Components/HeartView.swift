@@ -83,10 +83,16 @@ struct HeartView: View {
                             .stroke(lineWidth: 10.0)
                             .opacity(0.3)
                             .foregroundColor(Color.gray)
+                        Circle()
+                            .trim(from: 0.0, to: CGFloat(min(bleManagerVal.heartBPM / 250, 1.0)))
+                            .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
+                            .foregroundColor(.red)
+                            .rotationEffect(Angle(degrees: 90.0 - Double(bleManagerVal.heartBPM / 250) * 180.0))
                         VStack(spacing: 8) {
                             Image(systemName: "heart.fill")
                                 .font(.system(size: 35))
                                 .imageScale(.large)
+                            
                             Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
                                 .font(.system(size: 32).weight(.bold))
                         }
