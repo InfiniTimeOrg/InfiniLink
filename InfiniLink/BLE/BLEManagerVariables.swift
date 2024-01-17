@@ -15,6 +15,7 @@ class BLEManagerVal: NSObject, ObservableObject {
     static let shared = BLEManagerVal()
     
     var notifyCharacteristic: CBCharacteristic!
+    var weatherCharacteristic: CBCharacteristic!
     
     let cbuuidList = BLEManager.cbuuidList()
     var musicChars = BLEManager.musicCharacteristics()
@@ -29,6 +30,8 @@ class BLEManagerVal: NSObject, ObservableObject {
     @Published var stepCount: Int = 0
     @Published var stepCountTests: Int = 0
     @Published var stepCounting: Int = 0
+    
+    @Published var lastWeatherUpdate: Int = 0
 
     // Selecting and connecting variables
     @Published var deviceToConnect: Int! // When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
