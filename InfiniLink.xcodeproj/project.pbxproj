@@ -67,7 +67,6 @@
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
-		E07CCBF52B584319009CFB92 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07CCBF42B584319009CFB92 /* WeatherController.swift */; };
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
 		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
 		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
@@ -79,7 +78,9 @@
 		E515FB17284C56480040B582 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB16284C56480040B582 /* WelcomeView.swift */; };
 		E515FB1B284C58AA0040B582 /* BLEManagerVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */; };
 		E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */; };
+		E57654032B5781970059C8EF /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57654022B5781970059C8EF /* WeatherController.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
+		E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E59398F92B58DA1F00D5840A /* SwiftyJSON */; };
 		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
 		E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D728034EA500FB0C11 /* HeartView.swift */; };
 		E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D828034EA500FB0C11 /* BatteryView.swift */; };
@@ -173,7 +174,6 @@
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
-		E07CCBF42B584319009CFB92 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
 		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
@@ -185,6 +185,7 @@
 		E515FB16284C56480040B582 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManagerVariables.swift; sourceTree = "<group>"; };
 		E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewComponents.swift; sourceTree = "<group>"; };
+		E57654022B5781970059C8EF /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherController.swift; path = InfiniLink/Weather/WeatherController.swift; sourceTree = SOURCE_ROOT; };
 		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = ../DeviceData.swift; sourceTree = "<group>"; };
 		E57AD57D282462D900E33EEA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E5EEB1D32803438200FB0C11 /* RenameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
@@ -200,6 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */,
 				263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */,
 				26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */,
 			);
@@ -294,11 +296,11 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
-				E07CCBF32B58430C009CFB92 /* Weather */,
 				264DB80926C62EAC00E812C3 /* View Components */,
 				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
 				26A6315926C49839005AE404 /* DFU */,
+				E57654012B57817D0059C8EF /* Weather */,
 				26A6314E26BF0FA2005AE404 /* Music */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
@@ -488,12 +490,13 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		E07CCBF32B58430C009CFB92 /* Weather */ = {
+		E57654012B57817D0059C8EF /* Weather */ = {
 			isa = PBXGroup;
 			children = (
-				E07CCBF42B584319009CFB92 /* WeatherController.swift */,
+				E57654022B5781970059C8EF /* WeatherController.swift */,
 			);
-			path = Weather;
+			name = Weather;
+			path = Music/Weather;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -515,6 +518,7 @@
 			packageProductDependencies = (
 				26A6315D26C498B7005AE404 /* NordicDFU */,
 				263B20C426CEB46800676BF0 /* SwiftUICharts */,
+				E59398F92B58DA1F00D5840A /* SwiftyJSON */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -595,6 +599,7 @@
 			packageReferences = (
 				26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -694,7 +699,7 @@
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
-				E07CCBF52B584319009CFB92 /* WeatherController.swift in Sources */,
+				E57654032B5781970059C8EF /* WeatherController.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
@@ -1082,6 +1087,14 @@
 				kind = branch;
 			};
 		};
+		E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1094,6 +1107,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
 			productName = NordicDFU;
+		};
+		E59398F92B58DA1F00D5840A /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 
