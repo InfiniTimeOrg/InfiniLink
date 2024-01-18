@@ -142,4 +142,3 @@ struct BLEWriteManager {
         return [byte1, byte2]
     }
 }
-

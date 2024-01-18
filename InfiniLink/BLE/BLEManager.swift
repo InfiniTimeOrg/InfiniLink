@@ -226,4 +226,3 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         }
     }
 }
-
