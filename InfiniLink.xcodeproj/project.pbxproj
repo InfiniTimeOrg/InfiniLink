@@ -299,8 +299,8 @@
 				264DB80926C62EAC00E812C3 /* View Components */,
 				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
+				E03544142B59648D00FEA7AA /* Weather */,
 				26A6315926C49839005AE404 /* DFU */,
-				E57654012B57817D0059C8EF /* Weather */,
 				26A6314E26BF0FA2005AE404 /* Music */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
@@ -490,13 +490,12 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		E57654012B57817D0059C8EF /* Weather */ = {
+		E03544142B59648D00FEA7AA /* Weather */ = {
 			isa = PBXGroup;
 			children = (
 				E57654022B5781970059C8EF /* WeatherController.swift */,
 			);
-			name = Weather;
-			path = Music/Weather;
+			path = Weather;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
