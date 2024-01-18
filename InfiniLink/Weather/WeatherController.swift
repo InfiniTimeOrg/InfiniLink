@@ -14,6 +14,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     let bleWriteManager = BLEWriteManager()
     let bleManagerVal = BLEManagerVal.shared
     
+    @Published var temperature: Int?
+    @Published var icon: Int?
+    
     private let locationManager = CLLocationManager()
     
     override init() {
@@ -53,11 +56,11 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             let json = try! JSON(data: data!)
             let stationsURL = json["properties"]["observationStations"]
             let forecastURL = json["properties"]["forecastGridData"]
-            self.getWeatheStation(stationsURL: stationsURL.stringValue, forecastURL: forecastURL.stringValue)
+            self.getWeatherStation(stationsURL: stationsURL.stringValue, forecastURL: forecastURL.stringValue)
         }.resume()
     }
     
-    private func getWeatheStation(stationsURL: String, forecastURL: String) {
+    private func getWeatherStation(stationsURL: String, forecastURL: String) {
         URLSession.shared.dataTask(with: URL(string: stationsURL)!) { (data, _, err) in
             if err != nil {
                 print((err?.localizedDescription)!)
@@ -106,6 +109,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 let reversedGeoLocation = ReversedGeoLocation(with: placemark)
                 let cityName = reversedGeoLocation.city
                 
+                self.temperature = temperature
+                self.icon = 2
+                
                 self.bleWriteManager.sendNotification(title: "Wather Debug", body: """
             Temperature \(temperature)
             Max Temp \(maxTemperature)
@@ -123,7 +129,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     private func weatherDataUpdate() {
         switch locationManager.authorizationStatus {
-        case .authorizedWhenInUse:
+        case .authorizedWhenInUse, .authorizedAlways:
             retrieveWeatherData()
             break
             

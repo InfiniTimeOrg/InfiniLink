@@ -12,6 +12,7 @@ struct DeviceView: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @ObservedObject var uptimeManager = UptimeManager.shared
+    @ObservedObject var weatherController = WeatherController.shared
     
     @AppStorage("watchNotifications") var watchNotifications: Bool = true
     @AppStorage("batteryNotification") var batteryNotification: Bool = false
@@ -156,6 +157,49 @@ struct DeviceView: View {
                             .modifier(RowModifier(style: .standard))
                         }
                     }
+                    VStack {
+                        var icon: String {
+                            switch weatherController.icon {
+                            case 0:
+                                return "sun.max.fill"
+                            case 2:
+                                return "cloud.sun.fill"
+                            case 3:
+                                return "cloud.fill"
+                            case 4:
+                                return "cloud.rain.fill"
+                            case 5:
+                                return "cloud.rain.fill"
+                            case 6:
+                                return "cloud.bolt.rain.fill"
+                            case 7:
+                                return "cloud.snow.fill"
+                            case 8:
+                                return "cloud.fog.fill"
+                            default:
+                                return "slash.circle"
+                            }
+                        }
+                        
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(NSLocalizedString("Weather", comment: ""))
+                                    .font(.headline)
+                                Text(String(weatherController.temperature ?? 0) + /* DEBUG: */ "°" + "F" /*;*/)
+                                    .font(.title.weight(.semibold))
+                            }
+                            Spacer()
+                            Image(systemName: icon)
+                                .font(.title.weight(.medium))
+                        }
+                        .onAppear {
+                            // CRASH:
+                            weatherController.weatherDataUpdateCheck()
+                        }
+                    }
+                    .modifier(RowModifier(style: .standard))
+                    Spacer()
+                        .frame(height: 6)
                     VStack {
                         NavigationLink(destination: RenameView()) {
                             HStack {
