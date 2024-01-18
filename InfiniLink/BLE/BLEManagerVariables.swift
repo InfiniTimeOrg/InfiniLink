@@ -32,6 +32,8 @@ class BLEManagerVal: NSObject, ObservableObject {
     @Published var stepCounting: Int = 0
     
     @Published var lastWeatherUpdate: Int = 0
+    @Published var latitude: Double = 0.0
+    @Published var longitude: Double = 0.0
 
     // Selecting and connecting variables
     @Published var deviceToConnect: Int! // When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary

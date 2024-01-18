@@ -71,7 +71,9 @@ struct BLEWriteManager {
             bytes.append(icon)
             
             let writeData = Data(bytes: bytes as [UInt8], count: 49)
-            bleManager.infiniTime.writeValue(writeData, for: bleManagerVal.weatherCharacteristic, type: .withResponse)
+            if bleManagerVal.weatherCharacteristic != nil {
+                bleManager.infiniTime.writeValue(writeData, for: bleManagerVal.weatherCharacteristic, type: .withResponse)
+            }
             return
         }
         
@@ -85,7 +87,9 @@ struct BLEWriteManager {
         bytes.append(icon)
         
         let writeData = Data(bytes: bytes as [UInt8], count: 49)
-        bleManager.infiniTime.writeValue(writeData, for: bleManagerVal.weatherCharacteristic, type: .withResponse)
+        if bleManagerVal.weatherCharacteristic != nil {
+            bleManager.infiniTime.writeValue(writeData, for: bleManagerVal.weatherCharacteristic, type: .withResponse)
+        }
     }
     
     func writeForecastWeatherData(minimumTemperature: [Int], maximumTemperature: [Int], icon: [UInt8])  {
@@ -110,7 +114,9 @@ struct BLEWriteManager {
         
         let writeData = Data(bytes: bytes as [UInt8], count: 36)
         
-        bleManager.infiniTime.writeValue(writeData, for: bleManagerVal.weatherCharacteristic, type: .withResponse)
+        if bleManagerVal.weatherCharacteristic != nil {
+            bleManager.infiniTime.writeValue(writeData, for: bleManagerVal.weatherCharacteristic, type: .withResponse)
+        }
     }
     
     func timeSince1970() -> [UInt8] {
@@ -130,10 +136,8 @@ struct BLEWriteManager {
     }
     
     func convertTemperature(value: Int) -> [UInt8] {
-        let val16 : UInt16 = UInt16(value * 100)
-
-        let byte1 = UInt8(val16 & 0x00FF)
-        let byte2 = UInt8((val16 & 0xFF00) >> 8)
+        let byte1 = UInt8(value * 100 & 0x00FF)
+        let byte2 = UInt8((value * 100 & 0xFF00) >> 8)
         
         return [byte1, byte2]
     }

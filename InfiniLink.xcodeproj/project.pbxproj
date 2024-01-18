@@ -80,6 +80,7 @@
 		E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */; };
 		E57654032B5781970059C8EF /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57654022B5781970059C8EF /* WeatherController.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
+		E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E59398F92B58DA1F00D5840A /* SwiftyJSON */; };
 		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
 		E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D728034EA500FB0C11 /* HeartView.swift */; };
 		E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D828034EA500FB0C11 /* BatteryView.swift */; };
@@ -200,6 +201,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */,
 				263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */,
 				26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */,
 			);
@@ -516,6 +518,7 @@
 			packageProductDependencies = (
 				26A6315D26C498B7005AE404 /* NordicDFU */,
 				263B20C426CEB46800676BF0 /* SwiftUICharts */,
+				E59398F92B58DA1F00D5840A /* SwiftyJSON */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -596,6 +599,7 @@
 			packageReferences = (
 				26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -1083,6 +1087,14 @@
 				kind = branch;
 			};
 		};
+		E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1095,6 +1107,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
 			productName = NordicDFU;
+		};
+		E59398F92B58DA1F00D5840A /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 
