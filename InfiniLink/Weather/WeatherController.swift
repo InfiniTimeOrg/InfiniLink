@@ -109,6 +109,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 let reversedGeoLocation = ReversedGeoLocation(with: placemark)
                 let cityName = reversedGeoLocation.city
                 
+                // TODO: Add handling for user setting: C or F
                 self.temperature = temperature
                 self.icon = 2
                 

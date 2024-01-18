@@ -193,7 +193,6 @@ struct DeviceView: View {
                                 .font(.title.weight(.medium))
                         }
                         .onAppear {
-                            // CRASH:
                             weatherController.weatherDataUpdateCheck()
                         }
                     }
