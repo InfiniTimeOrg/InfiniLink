@@ -51,32 +51,45 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 return
             }
             let json = try! JSON(data: data!)
-            let forecastHourlyURL = json["properties"]["forecastHourly"]
+            let stationsURL = json["properties"]["observationStations"]
             let forecastURL = json["properties"]["forecastGridData"]
-            self.getWeatheForecastHourly(forecastHourlyURL: forecastHourlyURL.stringValue, forecastURL: forecastURL.stringValue)
+            self.getWeatheStation(stationsURL: stationsURL.stringValue, forecastURL: forecastURL.stringValue)
         }.resume()
     }
     
-    private func getWeatheForecastHourly(forecastHourlyURL: String, forecastURL: String) {
-        URLSession.shared.dataTask(with: URL(string: forecastHourlyURL)!) { (data, _, err) in
+    private func getWeatheStation(stationsURL: String, forecastURL: String) {
+        URLSession.shared.dataTask(with: URL(string: stationsURL)!) { (data, _, err) in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
             }
             let json = try! JSON(data: data!)
-            let temperature = json["properties"]["periods"][0]["temperature"]
-            self.getWeatherForcast(forecastURL: forecastURL, temperatureF: temperature.doubleValue)
+            let stationURL = json["observationStations"][0]
+            self.getStationTemperature(forecastURL: forecastURL, stationURL: stationURL.stringValue)
         }.resume()
     }
     
-    private func getWeatherForcast(forecastURL: String, temperatureF: Double) {
+    private func getStationTemperature(forecastURL: String, stationURL: String) {
+        URLSession.shared.dataTask(with: URL(string: "\(stationURL)/observations")!) { (data, _, err) in
+            if err != nil {
+                print((err?.localizedDescription)!)
+                return
+            }
+            let json = try! JSON(data: data!)
+            let temperatureC = json["features"][0]["properties"]["temperature"]["value"]
+            self.getWeatherForcast(forecastURL: forecastURL, temperatureC: temperatureC.doubleValue)
+        }.resume()
+    }
+    
+    private func getWeatherForcast(forecastURL: String, temperatureC: Double) {
         URLSession.shared.dataTask(with: URL(string: forecastURL)!) { [self] (data, _, err) in
             if err != nil {
                 print((err?.localizedDescription)!)
                 return
             }
             let json = try! JSON(data: data!)
-            let temperature = Int(round((temperatureF - 32.0) * (5.0 / 9.0)))
+            let temperature = Int(round(temperatureC))
+            //Int(round((temperatureF - 32.0) * (5.0 / 9.0)))
             let maxTemperature = Int(round(json["properties"]["maxTemperature"]["values"][0]["value"].doubleValue))
             let minTemperature = Int(round(json["properties"]["minTemperature"]["values"][0]["value"].doubleValue))
             
@@ -93,10 +106,14 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 let reversedGeoLocation = ReversedGeoLocation(with: placemark)
                 let cityName = reversedGeoLocation.city
                 
-                print("temperature \(temperature)")
-                print("maxTemperature \(maxTemperature)")
-                print("minTemperature \(minTemperature)")
-                print("cityName \(cityName)")
+                self.bleWriteManager.sendNotification(title: "Wather Debug", body: """
+            Temperature \(temperature)
+            Max Temp \(maxTemperature)
+            Min Temp \(minTemperature)
+            Lat \(round(self.bleManagerVal.latitude))
+            Lon \(round(self.bleManagerVal.longitude))
+            City \(cityName)
+            """)
                 
                 self.bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: cityName, icon: 2)
                 //self.bleWriteManager.writeForecastWeatherData(minimumTemperature: [0, 0, 0], maximumTemperature: [32, 32, 32], icon: [randomIcon, randomIcon, randomIcon])
