@@ -8,14 +8,14 @@
 import Foundation
 import CoreLocation
 import SwiftyJSON
+import SwiftUI
 
 class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
+    @AppStorage("userWeatherDisplay") var celsius = false
+    
     static let shared = WeatherController()
     let bleWriteManager = BLEWriteManager()
     let bleManagerVal = BLEManagerVal.shared
-    
-    @Published var temperature: Int?
-    @Published var icon: Int?
     
     private let locationManager = CLLocationManager()
     
@@ -93,6 +93,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             let json = try! JSON(data: data!)
             let temperature = Int(round(temperatureC))
             //Int(round((temperatureF - 32.0) * (5.0 / 9.0)))
+            
             let maxTemperature = Int(round(json["properties"]["maxTemperature"]["values"][0]["value"].doubleValue))
             let minTemperature = Int(round(json["properties"]["minTemperature"]["values"][0]["value"].doubleValue))
             
@@ -108,10 +109,6 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 
                 let reversedGeoLocation = ReversedGeoLocation(with: placemark)
                 let cityName = reversedGeoLocation.city
-                
-                // TODO: Add handling for user setting: C or F
-                self.temperature = temperature
-                self.icon = 2
                 
                 self.bleWriteManager.sendNotification(title: "Wather Debug", body: """
             Temperature \(temperature)

@@ -20,6 +20,7 @@ struct DeviceView: View {
     @AppStorage("autoconnectToDevice") var autoconnectToDevice: Bool = false
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
+    @AppStorage("userWeatherDisplay") var celsius = false
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -28,6 +29,27 @@ struct DeviceView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     private var dateFormatter = DateComponentsFormatter()
+    
+    var backgroundGradient: LinearGradient {
+        switch weatherController.icon {
+        case 0:
+            return LinearGradient(gradient: Gradient(colors: [.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
+        case 2, 3:
+            return LinearGradient(gradient: Gradient(colors: [.lightGray, .darkGray]), startPoint: .leading, endPoint: .trailing)
+        case 4:
+            return LinearGradient(gradient: Gradient(colors: [.blue, .gray]), startPoint: .leading, endPoint: .trailing)
+        case 5:
+            return LinearGradient(gradient: Gradient(colors: [.blue, .blue]), startPoint: .leading, endPoint: .trailing)
+        case 6:
+            return LinearGradient(gradient: Gradient(colors: [.blue, .lightGray, .yellow]), startPoint: .leading, endPoint: .trailing)
+        case 7:
+            return LinearGradient(gradient: Gradient(colors: [.white, .lightGray]), startPoint: .leading, endPoint: .trailing)
+        case 8:
+            return LinearGradient(gradient: Gradient(colors: [.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
+        default:
+            return LinearGradient(gradient: Gradient(colors: [.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
+        }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -157,46 +179,6 @@ struct DeviceView: View {
                             .modifier(RowModifier(style: .standard))
                         }
                     }
-                    VStack {
-                        var icon: String {
-                            switch weatherController.icon {
-                            case 0:
-                                return "sun.max.fill"
-                            case 2:
-                                return "cloud.sun.fill"
-                            case 3:
-                                return "cloud.fill"
-                            case 4:
-                                return "cloud.rain.fill"
-                            case 5:
-                                return "cloud.rain.fill"
-                            case 6:
-                                return "cloud.bolt.rain.fill"
-                            case 7:
-                                return "cloud.snow.fill"
-                            case 8:
-                                return "cloud.fog.fill"
-                            default:
-                                return "slash.circle"
-                            }
-                        }
-                        
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(NSLocalizedString("Weather", comment: ""))
-                                    .font(.headline)
-                                Text(String(weatherController.temperature ?? 0) + /* DEBUG: */ "°" + "F" /*;*/)
-                                    .font(.title.weight(.semibold))
-                            }
-                            Spacer()
-                            Image(systemName: icon)
-                                .font(.title.weight(.medium))
-                        }
-                        .onAppear {
-                            weatherController.weatherDataUpdateCheck()
-                        }
-                    }
-                    .modifier(RowModifier(style: .standard))
                     Spacer()
                         .frame(height: 6)
                     VStack {
