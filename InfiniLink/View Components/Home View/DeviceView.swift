@@ -158,8 +158,6 @@ struct DeviceView: View {
                             .modifier(RowModifier(style: .standard))
                         }
                     }
-                    Spacer()
-                        .frame(height: 6)
                     VStack {
                         NavigationLink(destination: RenameView()) {
                             HStack {
