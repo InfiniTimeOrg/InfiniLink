@@ -79,8 +79,15 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 return
             }
             let json = try! JSON(data: data!)
-            let temperatureC = json["features"][0]["properties"]["temperature"]["value"]
-            self.getWeatherForcast(forecastURL: forecastURL, temperatureC: temperatureC.doubleValue)
+            
+            var temperatureC = 0.0
+            for idx in 1...json["features"].count{
+                if json["features"][idx]["properties"]["temperature"]["qualityControl"].stringValue == "V" {
+                    temperatureC = json["features"][idx]["properties"]["temperature"]["value"].doubleValue
+                    break
+                }
+            }
+            self.getWeatherForcast(forecastURL: forecastURL, temperatureC: temperatureC)
         }.resume()
     }
     
