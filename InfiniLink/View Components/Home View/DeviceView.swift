@@ -30,27 +30,6 @@ struct DeviceView: View {
     
     private var dateFormatter = DateComponentsFormatter()
     
-    var backgroundGradient: LinearGradient {
-        switch weatherController.icon {
-        case 0:
-            return LinearGradient(gradient: Gradient(colors: [.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
-        case 2, 3:
-            return LinearGradient(gradient: Gradient(colors: [.lightGray, .darkGray]), startPoint: .leading, endPoint: .trailing)
-        case 4:
-            return LinearGradient(gradient: Gradient(colors: [.blue, .gray]), startPoint: .leading, endPoint: .trailing)
-        case 5:
-            return LinearGradient(gradient: Gradient(colors: [.blue, .blue]), startPoint: .leading, endPoint: .trailing)
-        case 6:
-            return LinearGradient(gradient: Gradient(colors: [.blue, .lightGray, .yellow]), startPoint: .leading, endPoint: .trailing)
-        case 7:
-            return LinearGradient(gradient: Gradient(colors: [.white, .lightGray]), startPoint: .leading, endPoint: .trailing)
-        case 8:
-            return LinearGradient(gradient: Gradient(colors: [.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
-        default:
-            return LinearGradient(gradient: Gradient(colors: [.blue, .yellow]), startPoint: .leading, endPoint: .trailing)
-        }
-    }
-    
     var body: some View {
         VStack(spacing: 0) {
             // To stop content from scrolling under safe area
