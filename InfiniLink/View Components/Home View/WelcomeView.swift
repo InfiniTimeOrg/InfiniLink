@@ -35,33 +35,27 @@ struct WelcomeView: View {
                         }
                     }
                 } else {
-                    VStack(spacing: 5) {
-                        Text("InfiniLink")
-                            .font(.system(size: 34).weight(.bold))
-                            .bold()
-                            .padding(5)
-                        Text(NSLocalizedString("welcome_text", comment: ""))
-                            .multilineTextAlignment(.center)
+                    VStack() {
+                        VStack(spacing: 5) {
+                            Spacer()
+                            Text("InfiniLink")
+                                .font(.system(size: 36).weight(.bold))
+                                .bold()
+                                .padding(.bottom)
+                            Button(NSLocalizedString("start_pairing", comment: "")) {
+                                SheetManager.shared.sheetSelection = .connect
+                                SheetManager.shared.showSheet = true
+                            }
+                            .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                             .frame(maxWidth: .infinity, alignment: .center)
-                            .foregroundColor(.gray)
-                            .font(.body)
-                        Spacer()
-                        Image("WelcomePineTime")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(20)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        Spacer()
-                        Button(NSLocalizedString("start_pairing", comment: "")) {
-                            SheetManager.shared.sheetSelection = .connect
-                            SheetManager.shared.showSheet = true
+                            .padding(.bottom)
+                            .padding(.horizontal)
                         }
-                        .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.bottom)
+                        .padding()
                     }
-                    .padding()
+                    .fullBackground(imageName: "LaunchScreen")
                 }
+                
             } else {
                 DeviceView()
             }
@@ -76,7 +70,9 @@ struct WelcomeView: View {
                 bleManager.stopScanning()
             }
         }
+        
     }
+    
 }
 
 struct NeumorphicButtonStyle: ButtonStyle {
@@ -91,5 +87,16 @@ struct NeumorphicButtonStyle: ButtonStyle {
             .background(Color.blue)
             .clipShape(Capsule())
             .foregroundColor(.primary)
+    }
+}
+
+public extension View {
+    func fullBackground(imageName: String) -> some View {
+       return background(
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+       )
     }
 }
