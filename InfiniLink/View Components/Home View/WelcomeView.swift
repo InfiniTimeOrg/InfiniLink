@@ -37,11 +37,13 @@ struct WelcomeView: View {
                 } else {
                     VStack() {
                         VStack(spacing: 5) {
+                            Text("Welcome to \nInfiniLink")
+                                .font(.system(size: 38).weight(.bold))
+                                .padding(32)
+                                //.padding(.top)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity, alignment: .center)
                             Spacer()
-                            Text("InfiniLink")
-                                .font(.system(size: 36).weight(.bold))
-                                .bold()
-                                .padding(.bottom)
                             Button(NSLocalizedString("start_pairing", comment: "")) {
                                 SheetManager.shared.sheetSelection = .connect
                                 SheetManager.shared.showSheet = true
@@ -98,5 +100,15 @@ public extension View {
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
        )
+    }
+}
+
+#Preview {
+    NavigationView {
+        ContentView()
+            .onAppear {
+                BLEManager.shared.isConnectedToPinetime = false
+                //BLEManagerVal.shared.firmwareVersion = "1.13.0"
+            }
     }
 }
