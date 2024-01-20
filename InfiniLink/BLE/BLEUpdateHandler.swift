@@ -35,7 +35,7 @@ struct BLEUpdatedCharacteristicHandler {
     }
     
     func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
-        weatherController.weatherDataUpdateCheck()
+        weatherController.retrieveWeatherData()
         
         switch characteristic.uuid {
         case bleManagerVal.cbuuidList.musicControl:

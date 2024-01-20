@@ -31,7 +31,8 @@ class BLEManagerVal: NSObject, ObservableObject {
     @Published var stepCountTests: Int = 0
     @Published var stepCounting: Int = 0
     
-    @Published var lastWeatherUpdate: Int = 0
+    @Published var lastWeatherUpdateNWS: Int = 0
+    @Published var lastWeatherUpdateWAPI: Int = 0
     @Published var latitude: Double = 0.0
     @Published var longitude: Double = 0.0
 
