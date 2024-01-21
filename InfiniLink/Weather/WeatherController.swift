@@ -89,6 +89,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         let lastLocation = locations.last!
         
         bleWriteManager.sendNotification(title: "Wather Debug", body: "Significant Location Change Detective")
+    }
     
     private func getWeatherData_WAPI() {
         let url = weatherapiBaseURL + "/forecast.json?key=" + weatherapiKey + "&q=" + String(bleManagerVal.latitude) + "," + String(bleManagerVal.longitude)

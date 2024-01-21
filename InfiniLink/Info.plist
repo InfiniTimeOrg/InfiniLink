@@ -34,12 +34,12 @@
 	<string>This app optionally uses Apple Health to communicate your heart rate and step count data to your PineTime.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app needs your location to receive local weather information when the app is in the background.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs your location to receive local weather information when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs your location to receive local weather information.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs your location to receive local weather information when the app is in the background.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
