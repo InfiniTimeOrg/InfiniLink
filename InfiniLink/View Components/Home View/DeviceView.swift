@@ -285,7 +285,7 @@ struct DeviceView: View {
                         Toggle(NSLocalizedString("enable_weather_data", comment: ""), isOn: $weatherData)
                             .onChange(of: weatherData) { value in
                                 if value {
-                                    weatherController.updateWeatherData()
+                                    weatherController.tryRefreshingWeatherData()
                                 }
                         }
                             .modifier(RowModifier(style: .capsule))
@@ -294,7 +294,7 @@ struct DeviceView: View {
                                 .modifier(RowModifier(style: .capsule))
                                 .onChange(of: useCurrentLocation) { value in
                                     if value {
-                                        weatherController.updateWeatherData()
+                                        weatherController.tryRefreshingWeatherData()
                                     }
                             }
                             if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{

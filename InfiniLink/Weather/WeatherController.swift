@@ -36,6 +36,55 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         self.locationManager.delegate = self
     }
     
+    func tryRefreshingWeatherData() {
+        if bleManagerVal.latitude == 0.0 && bleManagerVal.longitude == 0.0 {
+            bleManagerVal.lastWeatherUpdateNWS = 0
+            bleManagerVal.lastWeatherUpdateWAPI = 0
+            updateWeatherData()
+            return
+        }
+        
+        var currentLocation: CLLocation!
+        if locationManager.location != nil {
+            let old_location = CLLocation(latitude: bleManagerVal.latitude, longitude: bleManagerVal.longitude)
+            currentLocation = locationManager.location
+            CLGeocoder().reverseGeocodeLocation(currentLocation) { [self] currentPlacemarks, error in
+                
+                guard let currentPlacemark = currentPlacemarks?.first else {
+                    let errorString = error?.localizedDescription ?? "Unexpected Error"
+                    print("Unable to reverse geocode the given location. Error: \(errorString)")
+                    return
+                }
+                
+                let currentGeoLocation = ReversedGeoLocation(with: currentPlacemark)
+                
+                CLGeocoder().reverseGeocodeLocation(old_location) { [self] oldPlacemarks, error in
+                    
+                    guard let oldPlacemark = oldPlacemarks?.first else {
+                        let errorString = error?.localizedDescription ?? "Unexpected Error"
+                        print("Unable to reverse geocode the given location. Error: \(errorString)")
+                        return
+                    }
+                    
+                    let oldGeoLocation = ReversedGeoLocation(with: oldPlacemark)
+                    
+                    if currentGeoLocation.city == oldGeoLocation.city {
+                        bleManagerVal.lastWeatherUpdateNWS = 0
+                        bleManagerVal.lastWeatherUpdateWAPI = 0
+                        updateWeatherData()
+                        return
+                    }
+                    
+                }
+                
+            }
+            bleManagerVal.latitude = currentLocation.coordinate.latitude
+            bleManagerVal.longitude = currentLocation.coordinate.longitude
+        }
+        
+        updateWeatherData()
+    }
+    
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
         CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
     }
@@ -210,6 +259,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 bleManagerVal.weatherInformation.temperature = temperatureC
                 bleManagerVal.weatherInformation.maxTemperature = json["properties"]["maxTemperature"]["values"][0]["value"].doubleValue
                 bleManagerVal.weatherInformation.minTemperature = json["properties"]["minTemperature"]["values"][0]["value"].doubleValue
+                
+                if bleManagerVal.weatherInformation.maxTemperature == 0.0 && bleManagerVal.weatherInformation.minTemperature == 0.0 {
+                    print(json)
+                }
                 
                 sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, API: .nws)
             }
