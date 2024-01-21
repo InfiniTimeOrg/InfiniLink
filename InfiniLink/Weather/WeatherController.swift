@@ -21,7 +21,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     var weatherapiFailed : Bool = false
     var nwsapiFailed : Bool = false
-    let weatherapiKey : String = "" // API key for WeatherAPI goes here.
+    let weatherapiKey : String = "cc80d76d17a740ebb8a160008241801"
     let weatherapiBaseURL : String = "https://api.weatherapi.com/v1"
     
     private let locationManager = CLLocationManager()
