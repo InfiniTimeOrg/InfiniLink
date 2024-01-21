@@ -87,6 +87,7 @@
 "links" = "Links";
 "donations" = "Donations";
 "copy" = "Copy";
+"weather" = "Weather";
 
 // - ScanningPopover
 "connected_to" = "Connected to";
