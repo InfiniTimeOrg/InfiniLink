@@ -87,6 +87,7 @@
 "links" = "링크";
 "donations" = "후원";
 "copy" = "Copy";
+"weather" = "Weather";
 
 // - ScanningPopover
 "connected_to" = "기기에 연결됨:";

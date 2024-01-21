@@ -87,6 +87,7 @@
 "links" = "連結";
 "donations" = "捐款";
 "copy" = "Copy";
+"weather" = "Weather";
 
 // - ScanningPopover
 "connected_to" = "已連線至";

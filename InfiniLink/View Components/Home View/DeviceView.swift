@@ -35,6 +35,45 @@ struct DeviceView: View {
     private var dateFormatter = DateComponentsFormatter()
     private let locationManager = CLLocationManager()
     
+    var icon: String {
+        switch 0 {
+        case 0:
+            return "sun.max.fill"
+        case 2:
+            return "cloud.sun.fill"
+        case 3:
+            return "cloud.fill"
+        case 4, 5:
+            return "cloud.rain.fill"
+        case 6:
+            return "cloud.bolt.rain.fill"
+        case 7:
+            return "cloud.snow.fill"
+        case 8:
+            return "cloud.fog.fill"
+        default:
+            return "slash.circle"
+        }
+    }
+    var backgroundGradient: LinearGradient {
+        switch 0 {
+        case 0:
+            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
+        case 2:
+            return LinearGradient(colors: [.blue, .lightGray, .yellow], startPoint: .leading, endPoint: .trailing)
+        case 3:
+            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
+        case 4, 5:
+            return LinearGradient(colors: [.gray, .lightGray], startPoint: .leading, endPoint: .trailing)
+        case 6:
+            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
+        case 7, 8:
+            return LinearGradient(colors: [.white, .lightGray], startPoint: .leading, endPoint: .trailing)
+        default:
+            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             // To stop content from scrolling under safe area
@@ -42,7 +81,7 @@ struct DeviceView: View {
                 .frame(height: 1)
                 .foregroundColor(.clear)
             ScrollView {
-                VStack(spacing: 14) {
+                VStack(spacing: 10) {
                     VStack(spacing: 20) {
                         Image("PineTime-1")
                             .resizable()
@@ -140,6 +179,25 @@ struct DeviceView: View {
                             }
                         }
                     }
+                    VStack {
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(NSLocalizedString("weather", comment: ""))
+                                    .font(.headline)
+                                Text(String(32) + "°" + "F")
+                                    .font(.title.weight(.semibold))
+                            }
+                            Spacer()
+                            Image(systemName: icon)
+                                .font(.title.weight(.medium))
+                        }
+                    }
+                    .padding()
+                    .background(backgroundGradient)
+                    .foregroundColor(.primary)
+                    .cornerRadius(15)
+                    Spacer()
+                        .frame(height: 6)
                     if DownloadManager.shared.updateAvailable {
                         NavigationLink(destination: DFUView()) {
                             VStack(alignment: .leading, spacing: 6) {
