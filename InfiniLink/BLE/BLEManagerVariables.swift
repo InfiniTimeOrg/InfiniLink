@@ -22,6 +22,15 @@ class BLEManagerVal: NSObject, ObservableObject {
 
     let settings = UserDefaults.standard
     
+    struct WeatherInformation {
+        var temperature : Double = 0.0
+        var maxTemperature : Double = 0.0
+        var minTemperature : Double = 0.0
+        var icon : Int = 0
+    }
+    
+    @Published var weatherInformation = WeatherInformation()
+    
     // UI flag variables
     @Published var heartBPM: Double = 0 // published var to communicate the HRM data to the UI.
 

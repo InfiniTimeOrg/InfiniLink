@@ -184,7 +184,7 @@ struct DeviceView: View {
                             VStack(alignment: .leading) {
                                 Text(NSLocalizedString("weather", comment: ""))
                                     .font(.headline)
-                                Text(String(32) + "°" + "F")
+                                Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
                                     .font(.title.weight(.semibold))
                             }
                             Spacer()

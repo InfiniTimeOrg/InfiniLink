@@ -20,12 +20,12 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     let bleWriteManager = BLEWriteManager()
     let bleManagerVal = BLEManagerVal.shared
     
+    private let locationManager = CLLocationManager()
+    
     var weatherapiFailed : Bool = false
     var nwsapiFailed : Bool = false
     let weatherapiKey : String = "" // API key for WeatherAPI goes here.
     let weatherapiBaseURL : String = "https://api.weatherapi.com/v1"
-    
-    private let locationManager = CLLocationManager()
     
     enum WeatherAPI_Type {
         case wapi, nws
@@ -107,15 +107,13 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 return
             }
             
-            let temperature = json["current"]["temp_c"].intValue
-            let maxTemperature = json["forecast"]["forecastday"][0]["day"]["maxtemp_c"].intValue
-            let minTemperature = json["forecast"]["forecastday"][0]["day"]["mintemp_c"].intValue
-            
-            print("temperature: \(temperature)")
-            print("maxTemperature: \(maxTemperature)")
-            print("minTemperature: \(minTemperature)")
-            
-            sendWeatherData(temperature: temperature, maxTemperature: maxTemperature, minTemperature: minTemperature, API: .wapi)
+            DispatchQueue.main.async { [self] in
+                bleManagerVal.weatherInformation.temperature = json["current"]["temp_c"].doubleValue
+                bleManagerVal.weatherInformation.maxTemperature = json["forecast"]["forecastday"][0]["day"]["maxtemp_c"].doubleValue
+                bleManagerVal.weatherInformation.minTemperature = json["forecast"]["forecastday"][0]["day"]["mintemp_c"].doubleValue
+                
+                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, API: .wapi)
+            }
             
         }.resume()
     }
@@ -202,21 +200,24 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 callWeatherAPI()
                 return
             }
-            let temperature = Int(round(temperatureC))
-            let maxTemperature = Int(round(json["properties"]["maxTemperature"]["values"][0]["value"].doubleValue))
-            let minTemperature = Int(round(json["properties"]["minTemperature"]["values"][0]["value"].doubleValue))
             
             if json["status"] == 404 {
                 bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: error 404")
                 return
             }
             
-            sendWeatherData(temperature: temperature, maxTemperature: maxTemperature, minTemperature: minTemperature, API: .nws)
+            DispatchQueue.main.async { [self] in
+                bleManagerVal.weatherInformation.temperature = temperatureC
+                bleManagerVal.weatherInformation.maxTemperature = json["properties"]["maxTemperature"]["values"][0]["value"].doubleValue
+                bleManagerVal.weatherInformation.minTemperature = json["properties"]["minTemperature"]["values"][0]["value"].doubleValue
+                
+                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, API: .nws)
+            }
             
         }.resume()
     }
     
-    private func sendWeatherData(temperature: Int, maxTemperature: Int, minTemperature: Int, API: WeatherAPI_Type) {
+    private func sendWeatherData(temperature: Double, maxTemperature: Double, minTemperature: Double, API: WeatherAPI_Type) {
         let location = CLLocation(latitude: bleManagerVal.latitude, longitude: bleManagerVal.longitude)
         CLGeocoder().reverseGeocodeLocation(location) { [self] placemarks, error in
 
@@ -234,9 +235,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             let api_name = API == .nws ? "NWS" : "WAPI"
             
             bleWriteManager.sendNotification(title: "\(api_name) Wather Debug", body: """
-        Temperature \(temperature)
-        Max Temp \(maxTemperature)
-        Min Temp \(minTemperature)
+        Temperature \(round(temperature))
+        Max Temp \(round(maxTemperature))
+        Min Temp \(round(minTemperature))
         Lat \(round(bleManagerVal.latitude))
         Lon \(round(bleManagerVal.longitude))
         City \(setLocation)

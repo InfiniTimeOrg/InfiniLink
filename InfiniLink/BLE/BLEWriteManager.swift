@@ -58,12 +58,12 @@ struct BLEWriteManager {
         }
     }
     
-    func writeCurrentWeatherData(currentTemperature: Int, minimumTemperature: Int, maximumTemperature: Int, location: String, icon: UInt8)  {
+    func writeCurrentWeatherData(currentTemperature: Double, minimumTemperature: Double, maximumTemperature: Double, location: String, icon: UInt8)  {
         var bytes : [UInt8] = [0, 0] // Message Type and Message Version
         bytes.append(contentsOf: timeSince1970())
-        bytes.append(contentsOf: convertTemperature(value: currentTemperature)) // Current temperature
-        bytes.append(contentsOf: convertTemperature(value: minimumTemperature)) // Minimum temperature
-        bytes.append(contentsOf: convertTemperature(value: maximumTemperature)) // Maximum temperature
+        bytes.append(contentsOf: convertTemperature(value: Int(round(currentTemperature)))) // Current temperature
+        bytes.append(contentsOf: convertTemperature(value: Int(round(minimumTemperature)))) // Minimum temperature
+        bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature)))) // Maximum temperature
         
         guard var locationData = location.data(using: .ascii) else {
             print("Weather Location Failed!")
@@ -92,7 +92,7 @@ struct BLEWriteManager {
         }
     }
     
-    func writeForecastWeatherData(minimumTemperature: [Int], maximumTemperature: [Int], icon: [UInt8])  {
+    func writeForecastWeatherData(minimumTemperature: [Double], maximumTemperature: [Double], icon: [UInt8])  {
         if (minimumTemperature.count + maximumTemperature.count + icon.count) / 3 != minimumTemperature.count && minimumTemperature.count <= 5 && minimumTemperature.count > 0 {
             print("Forecast Data Arrays Do Not Match |or| Forecast Larger Then 5 Days |or| Forecast Data is Empty")
             return
@@ -103,8 +103,8 @@ struct BLEWriteManager {
         bytes.append(UInt8(minimumTemperature.count))
         
         for idx in 0...minimumTemperature.count-1 {
-            bytes.append(contentsOf: convertTemperature(value: minimumTemperature[idx])) // Minimum temperature
-            bytes.append(contentsOf: convertTemperature(value: maximumTemperature[idx])) // Maximum temperature
+            bytes.append(contentsOf: convertTemperature(value: Int(round(minimumTemperature[idx])))) // Minimum temperature
+            bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature[idx])))) // Maximum temperature
             bytes.append(icon[idx])
         }
         
