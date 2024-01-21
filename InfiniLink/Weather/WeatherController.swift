@@ -11,7 +11,9 @@ import SwiftyJSON
 import SwiftUI
 
 class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @AppStorage("userWeatherDisplay") var celsius = false
+    @AppStorage("userWeatherDisplay") var celsius: Bool = false
+    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
+    @AppStorage("cityName") var cityName : String = "Cupertino"
     
     static let shared = WeatherController()
     let bleWriteManager = BLEWriteManager()
@@ -30,16 +32,30 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func retrieveWeatherData() {
-        var currentLocation: CLLocation!
-        if locationManager.location != nil {
-            currentLocation = locationManager.location
-            bleManagerVal.latitude = currentLocation.coordinate.latitude
-            bleManagerVal.longitude = currentLocation.coordinate.longitude
-        }
-        
         nwsapiFailed = false
         weatherapiFailed = false
-        callWeatherAPI()
+        
+        var currentLocation: CLLocation!
+        if useCurrentLocation {
+            if locationManager.location != nil {
+                currentLocation = locationManager.location
+                bleManagerVal.latitude = currentLocation.coordinate.latitude
+                bleManagerVal.longitude = currentLocation.coordinate.longitude
+                callWeatherAPI()
+            }
+        } else {
+            getCoordinateFrom(address: cityName) { [self] coordinate, error in
+                guard let coordinate = coordinate, error == nil else { return }
+                bleManagerVal.latitude = coordinate.latitude
+                bleManagerVal.longitude = coordinate.longitude
+                callWeatherAPI()
+
+            }
+        }
+    }
+    
+    func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
+        CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
     }
     
     private func getWeatherData_WAPI() {
