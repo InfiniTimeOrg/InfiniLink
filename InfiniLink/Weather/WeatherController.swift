@@ -68,7 +68,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                     
                     let oldGeoLocation = ReversedGeoLocation(with: oldPlacemark)
                     
-                    if currentGeoLocation.city == oldGeoLocation.city {
+                    if currentGeoLocation.city != oldGeoLocation.city {
                         bleManagerVal.lastWeatherUpdateNWS = 0
                         bleManagerVal.lastWeatherUpdateWAPI = 0
                         updateWeatherData()
@@ -101,7 +101,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 currentLocation = locationManager.location
                 bleManagerVal.latitude = currentLocation.coordinate.latitude
                 bleManagerVal.longitude = currentLocation.coordinate.longitude
-                bleWriteManager.sendNotification(title: "Wather Debug", body: "Updated Location\n\n\nlatitude: \(round(bleManagerVal.latitude))\nlongitude: \(round(bleManagerVal.longitude))")
+                //bleWriteManager.sendNotification(title: "Wather Debug", body: "Updated Location\n\n\nlatitude: \(round(bleManagerVal.latitude))\nlongitude: \(round(bleManagerVal.longitude))")
             }
             if !(bleManagerVal.longitude == 0 && bleManagerVal.longitude == 0) {
                 if API == WeatherAPI_Type.nws {
@@ -224,6 +224,12 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 callWeatherAPI()
                 return
             }
+            if json["status"] == 404 || json["status"] == 500 {
+                bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: error \(json["status"])")
+                nwsapiFailed = true
+                callWeatherAPI()
+                return
+            }
             
             var temperatureC = 0.0
             for idx in 1...json["features"].count{
@@ -250,8 +256,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 return
             }
             
-            if json["status"] == 404 {
-                bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: error 404")
+            if json["status"] == 404 || json["status"] == 500 {
+                bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: error \(json["status"])")
+                callWeatherAPI()
                 return
             }
             
@@ -287,14 +294,14 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             
             let api_name = API == .nws ? "NWS" : "WAPI"
             
-            bleWriteManager.sendNotification(title: "\(api_name) Wather Debug", body: """
-        Temperature \(round(temperature))
-        Max Temp \(round(maxTemperature))
-        Min Temp \(round(minTemperature))
-        Lat \(round(bleManagerVal.latitude))
-        Lon \(round(bleManagerVal.longitude))
-        City \(setLocation)
-        """)
+//            bleWriteManager.sendNotification(title: "\(api_name) Wather Debug", body: """
+//        Temperature \(round(temperature))
+//        Max Temp \(round(maxTemperature))
+//        Min Temp \(round(minTemperature))
+//        Lat \(round(bleManagerVal.latitude))
+//        Lon \(round(bleManagerVal.longitude))
+//        City \(setLocation)
+//        """)
             
             bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: setLocation, icon: 2)
             //self.bleWriteManager.writeForecastWeatherData(minimumTemperature: [0, 0, 0], maximumTemperature: [32, 32, 32], icon: [randomIcon, randomIcon, randomIcon])
