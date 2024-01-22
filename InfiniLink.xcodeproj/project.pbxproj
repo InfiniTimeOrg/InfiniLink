@@ -68,6 +68,7 @@
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
+		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
 		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
 		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
 		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
@@ -175,6 +176,7 @@
 		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
+		E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSetLocationView.swift; sourceTree = "<group>"; };
 		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
 		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
@@ -493,9 +495,18 @@
 		E03544142B59648D00FEA7AA /* Weather */ = {
 			isa = PBXGroup;
 			children = (
+				E0A1477D2B5EC56E000193E9 /* Views */,
 				E57654022B5781970059C8EF /* WeatherController.swift */,
 			);
 			path = Weather;
+			sourceTree = "<group>";
+		};
+		E0A1477D2B5EC56E000193E9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -690,6 +701,7 @@
 				E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */,
 				E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */,
 				E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */,
+				E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */,
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
 				E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */,

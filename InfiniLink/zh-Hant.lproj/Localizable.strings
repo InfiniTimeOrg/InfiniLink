@@ -19,7 +19,8 @@
 "no_updates_available" = "無可用更新";
 "device_name" = "裝置名稱";
 "rename" = "重新命名";
-"disconnect_alert_title" = "";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"save" = "Save";
 
 // - SideMenu
 "home" = "主頁";

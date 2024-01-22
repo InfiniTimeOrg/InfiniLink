@@ -20,6 +20,7 @@
 "device_name" = "Device Name";
 "rename" = "Rename";
 "disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"save" = "Save";
 
 // - SideMenu
 "home" = "Home";

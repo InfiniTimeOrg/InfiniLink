@@ -21,9 +21,9 @@ struct DeviceView: View {
     @AppStorage("autoconnectToDevice") var autoconnectToDevice: Bool = false
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
-    @AppStorage("weatherData") var weatherData: Bool = false
+    @AppStorage("weatherData") var weatherData: Bool = true
     @AppStorage("userWeatherDisplay") var celsius = true
-    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
+    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
     @AppStorage("setLocation") var setLocation : String = "Cupertino"
     
     @Environment(\.colorScheme) var colorScheme
@@ -306,7 +306,7 @@ struct DeviceView: View {
                                 .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                                 .frame(maxWidth: .infinity, alignment: .center)
                             }
-                            NavigationLink(destination: RenameView()) {
+                            NavigationLink(destination: WeatherSetLocationView()) {
                                 HStack {
                                     Text(NSLocalizedString("set_location", comment: ""))
                                     Text(setLocation)
