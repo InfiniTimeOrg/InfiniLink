@@ -179,25 +179,27 @@ struct DeviceView: View {
                             }
                         }
                     }
-                    VStack {
-                        HStack {
-                            VStack(alignment: .leading) {
-                                Text(NSLocalizedString("weather", comment: ""))
-                                    .font(.headline)
-                                Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
-                                    .font(.title.weight(.semibold))
+                    if weatherData {
+                        VStack {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(NSLocalizedString("weather", comment: ""))
+                                        .font(.headline)
+                                    Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
+                                        .font(.title.weight(.semibold))
+                                }
+                                Spacer()
+                                Image(systemName: icon)
+                                    .font(.title.weight(.medium))
                             }
-                            Spacer()
-                            Image(systemName: icon)
-                                .font(.title.weight(.medium))
                         }
+                        .padding()
+                        .background(backgroundGradient)
+                        .foregroundColor(.primary)
+                        .cornerRadius(15)
+                        Spacer()
+                            .frame(height: 6)
                     }
-                    .padding()
-                    .background(backgroundGradient)
-                    .foregroundColor(.primary)
-                    .cornerRadius(15)
-                    Spacer()
-                        .frame(height: 6)
                     if DownloadManager.shared.updateAvailable {
                         NavigationLink(destination: DFUView()) {
                             VStack(alignment: .leading, spacing: 6) {
