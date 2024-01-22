@@ -261,3 +261,7 @@
 "connected_to" = "已連線至";
 
 // NSLocalizedString("", comment: "")
+"enable_weather_data" = "Enable Weather Data";
+"use_current_location" = "Use Current Location";
+"set_location" = "Location";
+"always_allow_location_services" = "Always Allow Current Location";

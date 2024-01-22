@@ -5,6 +5,7 @@
 //  Created by John Stanley on 11/16/21.
 //
 
+import CoreLocation
 import SwiftUI
 
 struct DeviceView: View {
@@ -20,7 +21,10 @@ struct DeviceView: View {
     @AppStorage("autoconnectToDevice") var autoconnectToDevice: Bool = false
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
-    @AppStorage("userWeatherDisplay") var celsius = false
+    @AppStorage("weatherData") var weatherData: Bool = false
+    @AppStorage("userWeatherDisplay") var celsius = true
+    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
+    @AppStorage("setLocation") var setLocation : String = "Cupertino"
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -29,6 +33,7 @@ struct DeviceView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     private var dateFormatter = DateComponentsFormatter()
+    private let locationManager = CLLocationManager()
     
     var icon: String {
         switch 0 {
@@ -179,7 +184,7 @@ struct DeviceView: View {
                             VStack(alignment: .leading) {
                                 Text(NSLocalizedString("weather", comment: ""))
                                     .font(.headline)
-                                Text(String(32) + "°" + "F")
+                                Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
                                     .font(.title.weight(.semibold))
                             }
                             Spacer()
@@ -274,6 +279,47 @@ struct DeviceView: View {
                             currentUptime = -uptimeManager.connectTime.timeIntervalSinceNow
                         }
                     })
+                    Spacer()
+                        .frame(height: 6)
+                    VStack {
+                        Toggle(NSLocalizedString("enable_weather_data", comment: ""), isOn: $weatherData)
+                            .onChange(of: weatherData) { value in
+                                if value {
+                                    weatherController.tryRefreshingWeatherData()
+                                }
+                        }
+                            .modifier(RowModifier(style: .capsule))
+                        if weatherData {
+                            Toggle(NSLocalizedString("use_current_location", comment: ""), isOn: $useCurrentLocation)
+                                .modifier(RowModifier(style: .capsule))
+                                .onChange(of: useCurrentLocation) { value in
+                                    if value {
+                                        weatherController.tryRefreshingWeatherData()
+                                    }
+                            }
+                            if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
+                                Button(NSLocalizedString("always_allow_location_services", comment: "")) {
+                                    locationManager.requestAlwaysAuthorization()
+                                }
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                            NavigationLink(destination: RenameView()) {
+                                HStack {
+                                    Text(NSLocalizedString("set_location", comment: ""))
+                                    Text(setLocation)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.gray)
+                                }
+                                .modifier(RowModifier(style: .capsule))
+                            }
+                            .opacity(!useCurrentLocation ? 1.0 : 0.5)
+                            .disabled(useCurrentLocation)
+                        }
+                    }
                     Spacer()
                         .frame(height: 6)
                     VStack {
