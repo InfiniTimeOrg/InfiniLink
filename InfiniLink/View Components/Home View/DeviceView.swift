@@ -34,10 +34,10 @@ struct DeviceView: View {
     private let locationManager = CLLocationManager()
     
     var icon: String {
-        switch 0 {
+        switch bleManagerVal.weatherInformation.icon {
         case 0:
             return "sun.max.fill"
-        case 2:
+        case 1, 2:
             return "cloud.sun.fill"
         case 3:
             return "cloud.fill"

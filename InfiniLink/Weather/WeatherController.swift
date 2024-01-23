@@ -100,7 +100,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 currentLocation = locationManager.location
                 bleManagerVal.latitude = currentLocation.coordinate.latitude
                 bleManagerVal.longitude = currentLocation.coordinate.longitude
-                //bleWriteManager.sendNotification(title: "Wather Debug", body: "Updated Location\n\n\nlatitude: \(round(bleManagerVal.latitude))\nlongitude: \(round(bleManagerVal.longitude))")
+                //bleWriteManager.sendNotification(title: "Weather Debug", body: "Updated Location\n\n\nlatitude: \(round(bleManagerVal.latitude))\nlongitude: \(round(bleManagerVal.longitude))")
             }
             if !(bleManagerVal.longitude == 0 && bleManagerVal.longitude == 0) {
                 if API == WeatherAPI_Type.nws {
@@ -136,11 +136,12 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         locations: [CLLocation]) {
         let lastLocation = locations.last!
         
-        bleWriteManager.sendNotification(title: "Wather Debug", body: "Significant Location Change Detective")
+        bleWriteManager.sendNotification(title: "Weather Debug", body: "Significant Location Change Detective")
     }
     
     private func getWeatherData_WAPI() {
         let url = weatherapiBaseURL + "/forecast.json?key=" + weatherapiKey + "&q=" + String(bleManagerVal.latitude) + "," + String(bleManagerVal.longitude)
+        
         URLSession.shared.dataTask(with: URL(string: url)!) { [self] (data, _, err) in
             if err != nil {
                 print((err?.localizedDescription)!)
@@ -160,7 +161,26 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 bleManagerVal.weatherInformation.maxTemperature = json["forecast"]["forecastday"][0]["day"]["maxtemp_c"].doubleValue
                 bleManagerVal.weatherInformation.minTemperature = json["forecast"]["forecastday"][0]["day"]["mintemp_c"].doubleValue
                 
-                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, API: .wapi)
+                switch json["forecast"]["forecastday"][0]["day"]["condition"]["text"] {
+                case "Sunny", "Clear":
+                    bleManagerVal.weatherInformation.icon = 0
+                case "Partly cloudly":
+                    bleManagerVal.weatherInformation.icon = 1
+                case "Cloudly", "Overcast", "Patchy rain possible", "Patchy sleet possible", "Patchy freezing drizzle possible", "Thundery outbreaks possible":
+                    bleManagerVal.weatherInformation.icon = 2
+                case "Patchy light drizzle", "Heavy freezing drizzle", "Drizzle", "Light rain", "Moderate rain", "Moderate rain at times", "Heavy rain at times", "Heavy rain", "Light freezing rain", "Moderate or heavy freezing rain", "Ice pellets", "Light rain shower", "Moderate or heavy rain shower", "Torrential rain shower", "Light sleet showers", "Moderate or heavy sleet showers", "Light showers of ice pellets", "Moderate or heavy showers of ice pellets":
+                    bleManagerVal.weatherInformation.icon = 4
+                case "Patchy light rain with thunder", "Moderate or heavy rain with thunder":
+                    bleManagerVal.weatherInformation.icon = 6
+                case "Blowing snow", "Blizzard", "Patchy light snow", "Light snow", "Patchy moderate snow", "Moderate snow", "Patchy heavy snow", "Heavy snow", "Light snow showers", "Moderate or heavy snow showers", "Patchy light snow with thunder", "Moderate or heavy snow with thunder":
+                    bleManagerVal.weatherInformation.icon = 7
+                case "Fog", "Freezing fog", "Mist":
+                    bleManagerVal.weatherInformation.icon = 8
+                default:
+                    break
+                }
+                
+                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, icon: bleManagerVal.weatherInformation.icon, API: .wapi)
             }
             
         }.resume()
@@ -224,16 +244,19 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 return
             }
             if json["status"] == 404 || json["status"] == 500 {
-                bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: error \(json["status"])")
+                bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: error \(json["status"])")
                 nwsapiFailed = true
                 callWeatherAPI()
                 return
             }
             
             var temperatureC = 0.0
-            for idx in 1...json["features"].count{
+            for idx in 1...json["features"].count {
                 if json["features"][idx]["properties"]["temperature"]["qualityControl"].stringValue == "V" {
                     temperatureC = json["features"][idx]["properties"]["temperature"]["value"].doubleValue
+                    
+                    // TODO: For icon - possibly add switch statement with all possible cases to determine icon?
+                    print(json["features"][idx]["properties"]["icon"])
                     break
                 }
             }
@@ -256,7 +279,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             
             if json["status"] == 404 || json["status"] == 500 {
-                bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: error \(json["status"])")
+                bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: error \(json["status"])")
                 callWeatherAPI()
                 return
             }
@@ -270,13 +293,13 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                     print(json)
                 }
                 
-                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, API: .nws)
+                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, icon: 2, API: .nws)
             }
             
         }.resume()
     }
     
-    private func sendWeatherData(temperature: Double, maxTemperature: Double, minTemperature: Double, API: WeatherAPI_Type) {
+    private func sendWeatherData(temperature: Double, maxTemperature: Double, minTemperature: Double, icon: Int, API: WeatherAPI_Type) {
         let location = CLLocation(latitude: bleManagerVal.latitude, longitude: bleManagerVal.longitude)
         CLGeocoder().reverseGeocodeLocation(location) { [self] placemarks, error in
 
@@ -291,9 +314,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             setLocation = reversedGeoLocation.city
             //let cityName = reversedGeoLocation.city
             
-            let api_name = API == .nws ? "NWS" : "WAPI"
+//            let api_name = API == .nws ? "NWS" : "WAPI"
             
-//            bleWriteManager.sendNotification(title: "\(api_name) Wather Debug", body: """
+//            bleWriteManager.sendNotification(title: "\(api_name) Weather Debug", body: """
 //        Temperature \(round(temperature))
 //        Max Temp \(round(maxTemperature))
 //        Min Temp \(round(minTemperature))
@@ -302,7 +325,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
 //        City \(setLocation)
 //        """)
             
-            bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: setLocation, icon: 2)
+            bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: setLocation, icon: UInt8(icon))
             //self.bleWriteManager.writeForecastWeatherData(minimumTemperature: [0, 0, 0], maximumTemperature: [32, 32, 32], icon: [randomIcon, randomIcon, randomIcon])
             
             bleManagerVal.loadingWeather = false
@@ -310,9 +333,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     private func callWeatherAPI() {
-        //bleWriteManager.sendNotification(title: "Wather Debug", body: "nwsapiFailed: \(nwsapiFailed), : \(weatherapiFailed)")
+        //bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: \(nwsapiFailed), : \(weatherapiFailed)")
         if nwsapiFailed == true && weatherapiFailed == true {
-            bleWriteManager.sendNotification(title: "Wather Debug", body: "Error: Both Weather APIs are unavailable.")
+            bleWriteManager.sendNotification(title: "Weather Debug", body: "Error: Both Weather APIs are unavailable.")
             print("Error: Both APIs are unavailable.")
             nwsapiFailed = false
             weatherapiFailed = false
