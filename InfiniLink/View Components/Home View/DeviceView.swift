@@ -185,8 +185,13 @@ struct DeviceView: View {
                                 VStack(alignment: .leading) {
                                     Text(NSLocalizedString("weather", comment: ""))
                                         .font(.headline)
-                                    Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
-                                        .font(.title.weight(.semibold))
+                                    if UnitTemperature.current == .celsius {
+                                        Text(String(Int(bleManagerVal.weatherInformation.temperature)) + "°" + "C")
+                                            .font(.title.weight(.semibold))
+                                    } else {
+                                        Text(String(Int(bleManagerVal.weatherInformation.temperature * 1.8 + 32)) + "°" + "F")
+                                            .font(.title.weight(.semibold))
+                                    }
                                 }
                                 Spacer()
                                 Image(systemName: icon)

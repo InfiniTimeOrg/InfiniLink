@@ -416,3 +416,32 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
 }
+
+protocol LocalizableDimension: Dimension {
+    associatedtype T: Dimension
+    static var allUnits: [T] { get }
+}
+
+extension LocalizableDimension {
+    static var current: T {
+        let baseUnit = allUnits[0]
+        let formatter = MeasurementFormatter()
+        formatter.locale = .current
+        let measurement = Measurement(value: 0, unit: baseUnit)
+        let string = formatter.string(from: measurement)
+        for unit in allUnits {
+            if string.contains(unit.symbol) {
+                return unit
+            }
+        }
+        return baseUnit
+    }
+}
+
+extension UnitTemperature: LocalizableDimension {
+    static let allUnits: [UnitTemperature] = [.celsius, .fahrenheit, .kelvin]
+}
+
+extension UnitSpeed: LocalizableDimension {
+    static let allUnits: [UnitSpeed] = [.kilometersPerHour, .milesPerHour, .metersPerSecond, .knots]
+}

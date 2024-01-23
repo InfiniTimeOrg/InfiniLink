@@ -118,7 +118,7 @@ extension MapSearch : MKLocalSearchCompleterDelegate {
     }
 }
 
-
-#Preview {
-    WeatherSetLocationView()
-}
+//
+//#Preview {
+//    WeatherSetLocationView()
+//}
