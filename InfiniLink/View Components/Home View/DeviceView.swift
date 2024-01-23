@@ -22,9 +22,6 @@ struct DeviceView: View {
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
     @AppStorage("weatherData") var weatherData: Bool = true
-    @AppStorage("userWeatherDisplay") var celsius = true
-    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
-    @AppStorage("setLocation") var setLocation : String = "Cupertino"
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -178,27 +175,27 @@ struct DeviceView: View {
                                 .cornerRadius(20)
                             }
                         }
-                    }
-                    if weatherData {
-                        VStack {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(NSLocalizedString("weather", comment: ""))
-                                        .font(.headline)
-                                    Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
-                                        .font(.title.weight(.semibold))
+                        if weatherData {
+                            VStack {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(NSLocalizedString("weather", comment: ""))
+                                            .font(.headline)
+                                        Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
+                                            .font(.title.weight(.semibold))
+                                    }
+                                    Spacer()
+                                    Image(systemName: icon)
+                                        .font(.title.weight(.medium))
                                 }
-                                Spacer()
-                                Image(systemName: icon)
-                                    .font(.title.weight(.medium))
                             }
+                            .padding()
+                            .background(backgroundGradient)
+                            .foregroundColor(.primary)
+                            .cornerRadius(15)
+                            Spacer()
+                                .frame(height: 6)
                         }
-                        .padding()
-                        .background(backgroundGradient)
-                        .foregroundColor(.primary)
-                        .cornerRadius(15)
-                        Spacer()
-                            .frame(height: 6)
                     }
                     if DownloadManager.shared.updateAvailable {
                         NavigationLink(destination: DFUView()) {
@@ -281,47 +278,6 @@ struct DeviceView: View {
                             currentUptime = -uptimeManager.connectTime.timeIntervalSinceNow
                         }
                     })
-                    Spacer()
-                        .frame(height: 6)
-                    VStack {
-                        Toggle(NSLocalizedString("enable_weather_data", comment: ""), isOn: $weatherData)
-                            .onChange(of: weatherData) { value in
-                                if value {
-                                    weatherController.tryRefreshingWeatherData()
-                                }
-                        }
-                            .modifier(RowModifier(style: .capsule))
-                        if weatherData {
-                            Toggle(NSLocalizedString("use_current_location", comment: ""), isOn: $useCurrentLocation)
-                                .modifier(RowModifier(style: .capsule))
-                                .onChange(of: useCurrentLocation) { value in
-                                    if value {
-                                        weatherController.tryRefreshingWeatherData()
-                                    }
-                            }
-                            if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
-                                Button(NSLocalizedString("always_allow_location_services", comment: "")) {
-                                    locationManager.requestAlwaysAuthorization()
-                                }
-                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            }
-                            NavigationLink(destination: WeatherSetLocationView()) {
-                                HStack {
-                                    Text(NSLocalizedString("set_location", comment: ""))
-                                    Text(setLocation)
-                                        .foregroundColor(.gray)
-                                        .frame(maxWidth: .infinity, alignment: .trailing)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.gray)
-                                }
-                                .modifier(RowModifier(style: .capsule))
-                            }
-                            .opacity(!useCurrentLocation ? 1.0 : 0.5)
-                            .disabled(useCurrentLocation)
-                        }
-                    }
                     Spacer()
                         .frame(height: 6)
                     VStack {
