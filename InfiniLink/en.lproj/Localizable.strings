@@ -89,6 +89,7 @@
 "donations" = "Donations";
 "copy" = "Copy";
 "weather" = "Weather";
+"weather_style" = "Weather Style";
 
 // - ScanningPopover
 "connected_to" = "Connected to";

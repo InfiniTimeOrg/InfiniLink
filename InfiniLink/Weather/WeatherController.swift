@@ -12,7 +12,6 @@ import SwiftUI
 
 class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     @AppStorage("weatherData") var weatherData: Bool = false
-    @AppStorage("userWeatherDisplay") var celsius: Bool = false
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
     @AppStorage("setLocation") var setLocation : String = "Cupertino"
     
@@ -305,6 +304,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             
             bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: setLocation, icon: 2)
             //self.bleWriteManager.writeForecastWeatherData(minimumTemperature: [0, 0, 0], maximumTemperature: [32, 32, 32], icon: [randomIcon, randomIcon, randomIcon])
+            
+            bleManagerVal.loadingWeather = false
         }
     }
     

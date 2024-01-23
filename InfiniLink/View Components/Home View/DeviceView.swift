@@ -22,6 +22,7 @@ struct DeviceView: View {
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
     @AppStorage("weatherData") var weatherData: Bool = true
+    @AppStorage("userWeatherDisplay") var celsius = true
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -181,12 +182,28 @@ struct DeviceView: View {
                                     VStack(alignment: .leading) {
                                         Text(NSLocalizedString("weather", comment: ""))
                                             .font(.headline)
-                                        Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
-                                            .font(.title.weight(.semibold))
+                                        VStack {
+                                            if bleManagerVal.loadingWeather {
+                                                Text(NSLocalizedString("loading", comment: "Loading..."))
+                                            } else {
+                                                if deviceData.chosenWeatherMode == "Metric" {
+                                                    Text(String(bleManagerVal.weatherInformation.temperature) + "°" + "C")
+                                                } else {
+                                                    Text(String((bleManagerVal.weatherInformation.temperature.rounded() * 9/5 + 32)) + "°" + "F")
+                                                }
+                                            }
+                                        }
+                                        .font(.title.weight(.semibold))
                                     }
                                     Spacer()
-                                    Image(systemName: icon)
-                                        .font(.title.weight(.medium))
+                                    VStack {
+                                        if bleManagerVal.loadingWeather {
+                                            Image(systemName: "circle.slash")
+                                        } else {
+                                            Image(systemName: icon)
+                                        }
+                                    }
+                                    .font(.title.weight(.medium))
                                 }
                             }
                             .padding()
