@@ -14,6 +14,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     @AppStorage("weatherData") var weatherData: Bool = false
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
     @AppStorage("setLocation") var setLocation : String = "Cupertino"
+    @AppStorage("lastLocation") var lastLocation : String = "Cupertino"
+    @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
     
     static let shared = WeatherController()
     let bleWriteManager = BLEWriteManager()
@@ -21,10 +23,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     private let locationManager = CLLocationManager()
     
-    var weatherapiFailed : Bool = false
-    var nwsapiFailed : Bool = false
     let weatherapiKey : String = "cc80d76d17a740ebb8a160008241801"
     let weatherapiBaseURL : String = "https://api.weatherapi.com/v1"
+    var weatherapiFailed : Bool = false
+    var nwsapiFailed : Bool = false
     
     enum WeatherAPI_Type {
         case wapi, nws
@@ -37,65 +39,72 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func tryRefreshingWeatherData() {
         if bleManagerVal.latitude == 0.0 && bleManagerVal.longitude == 0.0 {
-            bleManagerVal.lastWeatherUpdateNWS = 0
-            bleManagerVal.lastWeatherUpdateWAPI = 0
-            updateWeatherData()
+            updateWeatherData(ignoreTimeLimits: true)
             return
         }
         
         var currentLocation: CLLocation!
         if locationManager.location != nil {
             let old_location = CLLocation(latitude: bleManagerVal.latitude, longitude: bleManagerVal.longitude)
-            currentLocation = locationManager.location
-            CLGeocoder().reverseGeocodeLocation(currentLocation) { [self] currentPlacemarks, error in
-                
-                guard let currentPlacemark = currentPlacemarks?.first else {
-                    let errorString = error?.localizedDescription ?? "Unexpected Error"
-                    print("Unable to reverse geocode the given location. Error: \(errorString)")
-                    return
-                }
-                
-                let currentGeoLocation = ReversedGeoLocation(with: currentPlacemark)
-                
-                CLGeocoder().reverseGeocodeLocation(old_location) { [self] oldPlacemarks, error in
-                    
-                    guard let oldPlacemark = oldPlacemarks?.first else {
-                        let errorString = error?.localizedDescription ?? "Unexpected Error"
-                        print("Unable to reverse geocode the given location. Error: \(errorString)")
+            if useCurrentLocation {
+                currentLocation = locationManager.location
+                tryComparingLocations(oldLocation: old_location, newLocation: currentLocation)
+            } else {
+                getCoordinateFrom(address: setLocation) { [self] coordinate, error in
+                    guard let coordinate = coordinate, error == nil else {
+                        print("Error!")
                         return
                     }
                     
-                    let oldGeoLocation = ReversedGeoLocation(with: oldPlacemark)
-                    
-                    if currentGeoLocation.city != oldGeoLocation.city {
-                        bleManagerVal.lastWeatherUpdateNWS = 0
-                        bleManagerVal.lastWeatherUpdateWAPI = 0
-                        updateWeatherData()
-                        return
-                    }
-                    
+                    currentLocation = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+                    tryComparingLocations(oldLocation: old_location, newLocation: currentLocation)
                 }
-                
             }
-            bleManagerVal.latitude = currentLocation.coordinate.latitude
-            bleManagerVal.longitude = currentLocation.coordinate.longitude
         }
         
-        updateWeatherData()
+        updateWeatherData(ignoreTimeLimits: false)
     }
     
     func getCoordinateFrom(address: String, completion: @escaping(_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> () ) {
         CLGeocoder().geocodeAddressString(address) { completion($0?.first?.location?.coordinate, $1) }
     }
     
-    private func retrieveWeatherData() {
-        if !weatherData {return}
-        callWeatherAPI()
+    private func tryComparingLocations(oldLocation: CLLocation, newLocation: CLLocation) {
+        CLGeocoder().reverseGeocodeLocation(newLocation) { [self] currentPlacemarks, error in
+            
+            guard let currentPlacemark = currentPlacemarks?.first else {
+                let errorString = error?.localizedDescription ?? "Unexpected Error"
+                print("Unable to reverse geocode the given location. Error: \(errorString)")
+                return
+            }
+            
+            let currentGeoLocation = ReversedGeoLocation(with: currentPlacemark)
+            
+            CLGeocoder().reverseGeocodeLocation(oldLocation) { [self] oldPlacemarks, error in
+                
+                guard let oldPlacemark = oldPlacemarks?.first else {
+                    let errorString = error?.localizedDescription ?? "Unexpected Error"
+                    print("Unable to reverse geocode the given location. Error: \(errorString)")
+                    return
+                }
+                
+                let oldGeoLocation = ReversedGeoLocation(with: oldPlacemark)
+                
+                if currentGeoLocation.city != oldGeoLocation.city || currentGeoLocation.state != oldGeoLocation.state || currentGeoLocation.country != oldGeoLocation.country {
+                    updateWeatherData(ignoreTimeLimits: true)
+                    return
+                }
+                
+            }
+            
+        }
     }
+
     
     private func retrieveWeatherDataThrough(API: WeatherAPI_Type) {
         var currentLocation: CLLocation!
         if useCurrentLocation {
+            startReceivingSignificantLocationChanges()
             if locationManager.location != nil {
                 currentLocation = locationManager.location
                 bleManagerVal.latitude = currentLocation.coordinate.latitude
@@ -111,7 +120,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
         } else {
             getCoordinateFrom(address: setLocation) { [self] coordinate, error in
-                guard let coordinate = coordinate, error == nil else { return }
+                guard let coordinate = coordinate, error == nil else { 
+                    print("Error!")
+                    return
+                }
                 bleManagerVal.latitude = coordinate.latitude
                 bleManagerVal.longitude = coordinate.longitude
                 if API == WeatherAPI_Type.nws {
@@ -132,11 +144,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         locationManager.startMonitoringSignificantLocationChanges()
     }
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations
-        locations: [CLLocation]) {
-        let lastLocation = locations.last!
-        
-        bleWriteManager.sendNotification(title: "Weather Debug", body: "Significant Location Change Detective")
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //let lastLocation = locations.last!
+        if !useCurrentLocation {return}
+        tryRefreshingWeatherData()
     }
     
     private func getWeatherData_WAPI() {
@@ -146,13 +157,13 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             if err != nil {
                 print((err?.localizedDescription)!)
                 weatherapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             guard let json = try? JSON(data: data!) else {
                 print("Failed to access weather API")
                 weatherapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             
@@ -192,17 +203,17 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             if err != nil {
                 print((err?.localizedDescription)!)
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             guard let json = try? JSON(data: data!) else {
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             if json["status"] == 404 {
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             
@@ -217,12 +228,12 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             if err != nil {
                 print((err?.localizedDescription)!)
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             guard let json = try? JSON(data: data!) else {
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             let stationURL = json["observationStations"][0]
@@ -233,20 +244,20 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     private func getStationTemperature_NWS(forecastURL: String, stationURL: String) {
         URLSession.shared.dataTask(with: URL(string: "\(stationURL)/observations")!) { [self] (data, _, err) in
             if err != nil {
-                print((err?.localizedDescription)!)
+                print("Error: \((err?.localizedDescription)!)")
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             guard let json = try? JSON(data: data!) else {
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             if json["status"] == 404 || json["status"] == 500 {
                 bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: error \(json["status"])")
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             
@@ -269,18 +280,19 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             if err != nil {
                 print((err?.localizedDescription)!)
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             guard let json = try? JSON(data: data!) else {
                 nwsapiFailed = true
-                callWeatherAPI()
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             
             if json["status"] == 404 || json["status"] == 500 {
                 bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: error \(json["status"])")
-                callWeatherAPI()
+                bleManagerVal.lastWeatherUpdateNWS = 0
+                callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
             
@@ -311,9 +323,12 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
 
             
             let reversedGeoLocation = ReversedGeoLocation(with: placemark)
-            setLocation = reversedGeoLocation.city
+            lastLocation = reversedGeoLocation.city + ", " + reversedGeoLocation.state + ", " + reversedGeoLocation.country
+            if useCurrentLocation {setLocation = reversedGeoLocation.city + ", " + reversedGeoLocation.state + ", " + reversedGeoLocation.country}
+            displayLocation = reversedGeoLocation.city
             //let cityName = reversedGeoLocation.city
             
+
 //            let api_name = API == .nws ? "NWS" : "WAPI"
             
 //            bleWriteManager.sendNotification(title: "\(api_name) Weather Debug", body: """
@@ -325,50 +340,58 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
 //        City \(setLocation)
 //        """)
             
-            bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: setLocation, icon: UInt8(icon))
+            bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: reversedGeoLocation.city, icon: UInt8(icon))
             //self.bleWriteManager.writeForecastWeatherData(minimumTemperature: [0, 0, 0], maximumTemperature: [32, 32, 32], icon: [randomIcon, randomIcon, randomIcon])
             
+            nwsapiFailed = false
+            weatherapiFailed = false
             bleManagerVal.loadingWeather = false
         }
     }
     
-    private func callWeatherAPI() {
-        //bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: \(nwsapiFailed), : \(weatherapiFailed)")
+    private func callWeatherAPI(canUpdateNWS: Bool, canUpdateWAPI: Bool) {
         if nwsapiFailed == true && weatherapiFailed == true {
             bleWriteManager.sendNotification(title: "Weather Debug", body: "Error: Both Weather APIs are unavailable.")
             print("Error: Both APIs are unavailable.")
             nwsapiFailed = false
             weatherapiFailed = false
         } else if nwsapiFailed == false {
-            let currentTime = Int(NSDate().timeIntervalSince1970 / 60 / 15) // Updates roughly every 15 minutes
-            if bleManagerVal.lastWeatherUpdateNWS == currentTime {return}
-            //DispatchQueue.main.async {
-            self.bleManagerVal.lastWeatherUpdateNWS = currentTime
-            //}
+            if !canUpdateNWS {return}
             // This function updates the weather info on the watch roughly every 15 minutes. Though it's only ever checks when the watch battey percentage changes or the watch registers new steps.
             print("Retrieving weather information using the NWS API")
             retrieveWeatherDataThrough(API: .nws)
         } else {
-            let currentTime = Int(NSDate().timeIntervalSince1970 / 60 / 60)// Updates roughly every hour
-            if bleManagerVal.lastWeatherUpdateWAPI == currentTime {return}
-            //DispatchQueue.main.async {
-            self.bleManagerVal.lastWeatherUpdateWAPI = currentTime
-            //}
+            if !canUpdateWAPI {return}
             // This function updates the weather info on the watch roughly every hour. Though it's only ever checks when the watch battey percentage changes or the watch registers new steps.
             print("Retrieving weather information using WeatherAPI")
             retrieveWeatherDataThrough(API: .wapi)
         }
     }
     
-    func updateWeatherData() {
+    func updateWeatherData(ignoreTimeLimits: Bool) {
+        if !weatherData {return}
+        
+        var canUpdateNWS = true
+        var canUpdateWAPI = true
+        
+        if !ignoreTimeLimits {
+            let currentTimeNWS = Int(NSDate().timeIntervalSince1970 / 60 / 15) // Updates roughly every 15 minutes
+            let currentTimeWAPI = Int(NSDate().timeIntervalSince1970 / 60 / 60)// Updates roughly every hour
+            if bleManagerVal.lastWeatherUpdateNWS == currentTimeNWS {canUpdateNWS = false}
+            if bleManagerVal.lastWeatherUpdateWAPI == currentTimeWAPI {canUpdateWAPI = false}
+            bleManagerVal.lastWeatherUpdateNWS = currentTimeNWS
+            bleManagerVal.lastWeatherUpdateWAPI = currentTimeWAPI
+        }
+        
+        
         if !useCurrentLocation {
-            retrieveWeatherData()
+            callWeatherAPI(canUpdateNWS: canUpdateNWS, canUpdateWAPI: canUpdateWAPI)
             return
         }
         
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
-            retrieveWeatherData()
+            callWeatherAPI(canUpdateNWS: canUpdateNWS, canUpdateWAPI: canUpdateWAPI)
             break
             
         case .restricted, .denied:
@@ -423,4 +446,33 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+}
+
+protocol LocalizableDimension: Dimension {
+    associatedtype T: Dimension
+    static var allUnits: [T] { get }
+}
+
+extension LocalizableDimension {
+    static var current: T {
+        let baseUnit = allUnits[0]
+        let formatter = MeasurementFormatter()
+        formatter.locale = .current
+        let measurement = Measurement(value: 0, unit: baseUnit)
+        let string = formatter.string(from: measurement)
+        for unit in allUnits {
+            if string.contains(unit.symbol) {
+                return unit
+            }
+        }
+        return baseUnit
+    }
+}
+
+extension UnitTemperature: LocalizableDimension {
+    static let allUnits: [UnitTemperature] = [.celsius, .fahrenheit, .kelvin]
+}
+
+extension UnitSpeed: LocalizableDimension {
+    static let allUnits: [UnitSpeed] = [.kilometersPerHour, .milesPerHour, .metersPerSecond, .knots]
 }

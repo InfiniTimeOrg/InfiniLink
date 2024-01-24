@@ -66,7 +66,7 @@ struct BLEWriteManager {
         bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature)))) // Maximum temperature
         
         guard var locationData = location.data(using: .ascii) else {
-            print("Weather Location Failed!")
+            print("Weather Location String Failed!")
             for _ in 1...32 {bytes.append(0)}
             bytes.append(icon)
             
