@@ -90,6 +90,8 @@
 "copy" = "Copy";
 "weather" = "Weather";
 "weather_style" = "Weather Style";
+"search_for_locations" = "Search for Locations";
+"find_location" = "Use the search box above to find\na location";
 
 // - ScanningPopover
 "connected_to" = "Connected to";

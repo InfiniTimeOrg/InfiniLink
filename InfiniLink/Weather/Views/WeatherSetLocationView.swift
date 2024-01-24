@@ -21,35 +21,48 @@ struct WeatherSetLocationView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-                    HStack(spacing: 15) {
-                        Button {
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Image(systemName: "chevron.left")
-                                .imageScale(.medium)
-                                .padding(14)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                                .background(Color.gray.opacity(0.15))
-                                .clipShape(Circle())
-                        }
-                        Text(NSLocalizedString("set_location", comment: ""))
-                            .foregroundColor(.primary)
-                            .font(.title.weight(.bold))
+            HStack(spacing: 15) {
+                Button {
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Circle())
+                }
+                Text(NSLocalizedString("set_location", comment: ""))
+                    .foregroundColor(.primary)
+                    .font(.title.weight(.bold))
+                Spacer()
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .center)
+            Divider()
+            VStack(spacing: 0) {
+                VStack {
+                    TextField("Address", text: $mapSearch.searchTerm)
+                        .padding()
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Capsule())
+                }
+                .padding()
+                Divider()
+                if mapSearch.locationResults.isEmpty {
+                    VStack(alignment: .center, spacing: 8) {
+                        Spacer()
+                        Text(NSLocalizedString("search_for_locations", comment: "Search for Locations"))
+                            .font(.title2.weight(.semibold))
+                        Text(NSLocalizedString("find_location", comment: "Use the search box above to find\na location"))
+                            .multilineTextAlignment(.center)
+                            .foregroundColor(.gray)
                         Spacer()
                     }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    Divider()
-                    VStack {
+                } else {
+                    ScrollView {
                         VStack {
-                            TextField("Address", text: $mapSearch.searchTerm)
-                                .padding()
-                                .background(Color.gray.opacity(0.15))
-                                .clipShape(Capsule())
-                        }
-                        .padding()
-                        Form {
                             ForEach(mapSearch.locationResults, id: \.self) { location in
                                 Button {
                                     displayLocation = location.title
@@ -57,22 +70,27 @@ struct WeatherSetLocationView: View {
                                     weatherController.tryRefreshingWeatherData()
                                     presentationMode.wrappedValue.dismiss()
                                 } label: {
-                                    VStack(alignment: .leading) {
+                                    VStack(alignment: .leading, spacing: 6) {
                                         Text(location.title)
                                         Text(location.subtitle)
                                             .font(.system(.caption))
+                                            .foregroundColor(.gray)
                                     }
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .modifier(RowModifier(style: .standard))
                                 }
-                                .foregroundColor(Color(UIColor.gray))
                             }
                         }
+                        .padding()
                     }
                 }
-                .navigationBarBackButtonHidden()
+            }
+        }
+        .navigationBarBackButtonHidden()
     }
 }
-    
-    
+
+
 
 class MapSearch : NSObject, ObservableObject {
     @Published var locationResults : [MKLocalSearchCompletion] = []
@@ -113,8 +131,8 @@ class MapSearch : NSObject, ObservableObject {
 
 extension MapSearch : MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
-            currentPromise?(.success(completer.results))
-        }
+        currentPromise?(.success(completer.results))
+    }
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
         //currentPromise?(.failure(error))
