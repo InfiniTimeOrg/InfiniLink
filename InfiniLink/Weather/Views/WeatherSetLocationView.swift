@@ -10,7 +10,10 @@ import Combine
 import MapKit
 
 struct WeatherSetLocationView: View {
+    @ObservedObject var weatherController = WeatherController.shared
+    
     @AppStorage("setLocation") var setLocation: String = "Cupertino"
+    @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
     @StateObject private var mapSearch = MapSearch()
     
     @Environment(\.colorScheme) var colorScheme
@@ -34,18 +37,6 @@ struct WeatherSetLocationView: View {
                             .foregroundColor(.primary)
                             .font(.title.weight(.bold))
                         Spacer()
-                        Button {
-                            setLocation = mapSearch.searchTerm
-                            presentationMode.wrappedValue.dismiss()
-                        } label: {
-                            Text(NSLocalizedString("save", comment: ""))
-                                .padding(14)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(Color.white)
-                                .background(Color.blue)
-                                .clipShape(Capsule())
-                                .foregroundColor(.primary)
-                        }
                     }
                     .padding()
                     .frame(maxWidth: .infinity, alignment: .center)
@@ -60,11 +51,19 @@ struct WeatherSetLocationView: View {
                         .padding()
                         Form {
                             ForEach(mapSearch.locationResults, id: \.self) { location in
-                                VStack(alignment: .leading) {
-                                    Text(location.title)
-                                    Text(location.subtitle)
-                                        .font(.system(.caption))
+                                Button {
+                                    displayLocation = location.title
+                                    setLocation = "\(location.title), \(location.subtitle)"
+                                    weatherController.tryRefreshingWeatherData()
+                                    presentationMode.wrappedValue.dismiss()
+                                } label: {
+                                    VStack(alignment: .leading) {
+                                        Text(location.title)
+                                        Text(location.subtitle)
+                                            .font(.system(.caption))
+                                    }
                                 }
+                                .foregroundColor(Color(UIColor.gray))
                             }
                         }
                     }
@@ -72,6 +71,8 @@ struct WeatherSetLocationView: View {
                 .navigationBarBackButtonHidden()
     }
 }
+    
+    
 
 class MapSearch : NSObject, ObservableObject {
     @Published var locationResults : [MKLocalSearchCompletion] = []
@@ -85,6 +86,8 @@ class MapSearch : NSObject, ObservableObject {
     override init() {
         super.init()
         searchCompleter.delegate = self
+        searchCompleter.region = MKCoordinateRegion(.world)
+        searchCompleter.resultTypes = MKLocalSearchCompleter.ResultType([.address])
         
         $searchTerm
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)

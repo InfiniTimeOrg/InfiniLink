@@ -22,7 +22,6 @@ struct DeviceView: View {
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
     @AppStorage("weatherData") var weatherData: Bool = true
-    @AppStorage("userWeatherDisplay") var celsius = true
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -182,20 +181,19 @@ struct DeviceView: View {
                                     VStack(alignment: .leading) {
                                         Text(NSLocalizedString("weather", comment: ""))
                                             .font(.headline)
-                                            if bleManagerVal.loadingWeather {
-                                                Text(NSLocalizedString("loading", comment: "Loading..."))
+                                        if bleManagerVal.loadingWeather {
+                                            Text(NSLocalizedString("loading", comment: "Loading..."))
+                                        } else {
+                                            if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
+                                                Text(String(Int(bleManagerVal.weatherInformation.temperature)) + "°" + "C")
+                                                    .font(.title.weight(.semibold))
                                             } else {
-                                                if UnitTemperature.current == .celsius {
-                                            	   Text(String(Int(bleManagerVal.weatherInformation.temperature)) + "°" + "C")
-                                                    	.font(.title.weight(.semibold))
-                                    	       } else {
-                                        	       Text(String(Int(bleManagerVal.weatherInformation.temperature * 1.8 + 32)) + "°" + "F")
-                                                	   .font(.title.weight(.semibold))
-                                    	       }
+                                                Text(String(Int(bleManagerVal.weatherInformation.temperature * 1.8 + 32)) + "°" + "F")
+                                                    .font(.title.weight(.semibold))
                                             }
                                         }
-                                        .font(.title.weight(.semibold))
                                     }
+                                    .font(.title.weight(.semibold))
                                     Spacer()
                                     VStack {
                                         if bleManagerVal.loadingWeather {

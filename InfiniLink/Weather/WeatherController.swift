@@ -14,6 +14,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     @AppStorage("weatherData") var weatherData: Bool = false
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
     @AppStorage("setLocation") var setLocation : String = "Cupertino"
+    @AppStorage("lastLocation") var lastLocation : String = "Cupertino"
+    @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
     
     static let shared = WeatherController()
     let bleWriteManager = BLEWriteManager()
@@ -321,7 +323,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
 
             
             let reversedGeoLocation = ReversedGeoLocation(with: placemark)
-            setLocation = reversedGeoLocation.city + ", " + reversedGeoLocation.state + ", " + reversedGeoLocation.country
+            lastLocation = reversedGeoLocation.city + ", " + reversedGeoLocation.state + ", " + reversedGeoLocation.country
+            if useCurrentLocation {setLocation = reversedGeoLocation.city + ", " + reversedGeoLocation.state + ", " + reversedGeoLocation.country}
+            displayLocation = reversedGeoLocation.city
             //let cityName = reversedGeoLocation.city
             
 
@@ -336,9 +340,11 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
 //        City \(setLocation)
 //        """)
             
-            bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: setLocation, icon: UInt8(icon))
+            bleWriteManager.writeCurrentWeatherData(currentTemperature: temperature, minimumTemperature: minTemperature, maximumTemperature: maxTemperature, location: reversedGeoLocation.city, icon: UInt8(icon))
             //self.bleWriteManager.writeForecastWeatherData(minimumTemperature: [0, 0, 0], maximumTemperature: [32, 32, 32], icon: [randomIcon, randomIcon, randomIcon])
             
+            nwsapiFailed = false
+            weatherapiFailed = false
             bleManagerVal.loadingWeather = false
         }
     }

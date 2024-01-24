@@ -29,14 +29,13 @@ struct Settings_Page: View {
     @AppStorage("debugMode") var debugMode: Bool = false
     @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     @AppStorage("weatherData") var weatherData: Bool = true
-    @AppStorage("userWeatherDisplay") var celsius = true
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
-    @AppStorage("setLocation") var setLocation : String = "Cupertino"
+    @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
     private var chartPoints: FetchedResults<ChartDataPoint>
     
     let themes: [String] = ["System", "Light", "Dark"]
-    let weatherModes: [String] = ["Metric", "Imperial"]
+    let weatherModes: [String] = ["System", "Metric", "Imperial"]
     
     private let nameManager = DeviceNameManager()
     private let locationManager = CLLocationManager()
@@ -165,7 +164,7 @@ struct Settings_Page: View {
                             NavigationLink(destination: WeatherSetLocationView()) {
                                 HStack {
                                     Text(NSLocalizedString("set_location", comment: ""))
-                                    Text(setLocation)
+                                    Text(displayLocation)
                                         .foregroundColor(.gray)
                                         .frame(maxWidth: .infinity, alignment: .trailing)
                                     Spacer()

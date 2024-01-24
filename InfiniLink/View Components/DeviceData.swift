@@ -22,7 +22,7 @@ class DeviceData: ObservableObject {
     
     init() {
         self.chosenTheme = UserDefaults.standard.string(forKey: "chosenTheme") ?? "System"
-        self.chosenWeatherMode = UserDefaults.standard.string(forKey: "chosenWeatherMode") ?? "Metric"
+        self.chosenWeatherMode = UserDefaults.standard.string(forKey: "chosenWeatherMode") ?? "System"
     }
 }
 
