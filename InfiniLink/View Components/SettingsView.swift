@@ -36,6 +36,7 @@ struct Settings_Page: View {
     private var chartPoints: FetchedResults<ChartDataPoint>
     
     let themes: [String] = ["System", "Light", "Dark"]
+    let weatherModes: [String] = ["Metric", "Imperial"]
     
     private let nameManager = DeviceNameManager()
     private let locationManager = CLLocationManager()
@@ -175,6 +176,16 @@ struct Settings_Page: View {
                             }
                             .opacity(!useCurrentLocation ? 1.0 : 0.5)
                             .disabled(useCurrentLocation)
+                            HStack {
+                                Text(NSLocalizedString("weather_style", comment: "Weather Style"))
+                                Spacer()
+                                Picker(deviceDataForSettings.chosenWeatherMode, selection: $deviceDataForSettings.chosenWeatherMode) {
+                                    ForEach(weatherModes, id: \.self) {
+                                        Text($0)
+                                    }
+                                }
+                            }
+                            .modifier(RowModifier(style: .capsule))
                         }
                     }
                     .padding(.top)

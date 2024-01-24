@@ -30,6 +30,7 @@ class BLEManagerVal: NSObject, ObservableObject {
     }
     
     @Published var weatherInformation = WeatherInformation()
+    @Published var loadingWeather = true
     
     // UI flag variables
     @Published var heartBPM: Double = 0 // published var to communicate the HRM data to the UI.
