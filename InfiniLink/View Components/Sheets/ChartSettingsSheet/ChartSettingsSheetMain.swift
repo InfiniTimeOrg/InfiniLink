@@ -46,37 +46,6 @@ struct ChartSettingsSheet: View {
             Divider()
             VStack {
                 VStack {
-                    if chartManager.currentChart == .battery {
-                        Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
-                            .padding(.horizontal)
-                            .frame(maxWidth: .infinity)
-                        Button (action: {
-                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
-                        }) {
-                            Text(NSLocalizedString("clear_all_battery_chart_data", comment: ""))
-                                .frame(maxWidth: .infinity)
-                                .modifier(RowModifier(style: .capsule))
-                        }
-                    } else {
-                        Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
-                            .modifier(RowModifier(style: .capsule))
-                        Button(action: {
-                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
-                        }) {
-                            Text(NSLocalizedString("clear_all_hrm_chart_data", comment: ""))
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                                .foregroundColor(.red)
-                                .modifier(RowModifier(style: .capsule))
-                        }
-                    }
-                    Divider()
-                        .padding(.vertical, 10)
-                        .padding(.horizontal, -16)
-                }
-                VStack {
-                    Text(NSLocalizedString("select_date_range", comment: ""))
-                        .font(.title2.weight(.semibold))
-                        .frame(maxWidth: .infinity, alignment: .leading)
                     Picker(NSLocalizedString("date_range_selection", comment: ""), selection: $chartRangeState.dateRangeSelection) {
                         Text(NSLocalizedString("show_all", comment: "")).tag(0)
                         Text(NSLocalizedString("sliders", comment: "")).tag(1)
@@ -88,7 +57,7 @@ struct ChartSettingsSheet: View {
                         Spacer()
                         Text(NSLocalizedString("all_data_selected", comment: ""))
                             .frame(maxWidth: .infinity)
-                            .font(.title.weight(.bold))
+                            .font(.title.weight(.semibold))
                         Spacer()
                     case 1:
                         ChartSettingsSheetSliders(chartRangeState: self.$chartRangeState)

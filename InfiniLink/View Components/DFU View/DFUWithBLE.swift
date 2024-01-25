@@ -89,7 +89,6 @@ struct DFUWithBLE: View {
                             NoUpdate()
                         }
                     }
-                    .padding()
                 }
             }
             .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
@@ -229,7 +228,7 @@ struct NewUpdate: View {
             }
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
         }
-        .padding(10)
+        .padding(20)
     }
 }
 
