@@ -207,7 +207,7 @@ struct DeviceView: View {
                             }
                             .padding()
                             .background(backgroundGradient)
-                            .foregroundColor(.primary)
+                            .foregroundColor(.white)
                             .cornerRadius(15)
                             Spacer()
                                 .frame(height: 6)
