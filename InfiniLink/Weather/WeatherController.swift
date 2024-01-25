@@ -53,6 +53,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 getCoordinateFrom(address: setLocation) { [self] coordinate, error in
                     guard let coordinate = coordinate, error == nil else {
                         print("Error!")
+                        DebugLogManager.shared.debug(error: "There was an error retrieving coordinates from user-set location", log: .app, date: Date())
                         return
                     }
                     
@@ -74,7 +75,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             
             guard let currentPlacemark = currentPlacemarks?.first else {
                 let errorString = error?.localizedDescription ?? "Unexpected Error"
-                print("Unable to reverse geocode the given location. Error: \(errorString)")
+                print("Unable to reverse geocode the given location with error: \(errorString)")
+                DebugLogManager.shared.debug(error: "Unable to reverse geocode the given location with error: \(errorString)", log: .app, date: Date())
                 return
             }
             
@@ -84,7 +86,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 
                 guard let oldPlacemark = oldPlacemarks?.first else {
                     let errorString = error?.localizedDescription ?? "Unexpected Error"
-                    print("Unable to reverse geocode the given location. Error: \(errorString)")
+                    print("Unable to reverse geocode the given location with error: \(errorString)")
+                    DebugLogManager.shared.debug(error: "Unable to reverse geocode the given location with error: \(errorString)", log: .app, date: Date())
                     return
                 }
                 
@@ -100,7 +103,6 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
 
-    
     private func retrieveWeatherDataThrough(API: WeatherAPI_Type) {
         var currentLocation: CLLocation!
         if useCurrentLocation {
@@ -109,7 +111,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 currentLocation = locationManager.location
                 bleManagerVal.latitude = currentLocation.coordinate.latitude
                 bleManagerVal.longitude = currentLocation.coordinate.longitude
-                //bleWriteManager.sendNotification(title: "Weather Debug", body: "Updated Location\n\n\nlatitude: \(round(bleManagerVal.latitude))\nlongitude: \(round(bleManagerVal.longitude))")
+                
+                DebugLogManager.shared.debug(error: "Updated Location; latitude: \(round(bleManagerVal.latitude)), longitude: \(round(bleManagerVal.longitude))", log: .app, date: Date())
             }
             if !(bleManagerVal.longitude == 0 && bleManagerVal.longitude == 0) {
                 if API == WeatherAPI_Type.nws {
@@ -121,7 +124,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         } else {
             getCoordinateFrom(address: setLocation) { [self] coordinate, error in
                 guard let coordinate = coordinate, error == nil else { 
-                    print("Error!")
+                    print("There was an error retrieving coordinates from user-set location")
+                    DebugLogManager.shared.debug(error: "There was an error retrieving coordinates from user-set location", log: .app, date: Date())
                     return
                 }
                 bleManagerVal.latitude = coordinate.latitude
@@ -138,6 +142,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     func startReceivingSignificantLocationChanges() {
         if !CLLocationManager.significantLocationChangeMonitoringAvailable() {
             print("Significant Location Change Monitoring is not Available")
+            DebugLogManager.shared.debug(error: "Significant Location Change Monitoring is not Available", log: .app, date: Date())
             return
         }
         locationManager.delegate = self
@@ -162,6 +167,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             guard let json = try? JSON(data: data!) else {
                 print("Failed to access weather API")
+                DebugLogManager.shared.debug(error: "Failed to access WeatherAPI", log: .app, date: Date())
                 weatherapiFailed = true
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -201,7 +207,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
         let url = "https://api.weather.gov/points/" + String(bleManagerVal.latitude) + "," + String(bleManagerVal.longitude)
         URLSession.shared.dataTask(with: URL(string: url)!) { [self] (data, _, err) in
             if err != nil {
-                print((err?.localizedDescription)!)
+                print("Error retrieving forecast URL with the NWS API with error: \(err!.localizedDescription)")
+                DebugLogManager.shared.debug(error: "Error retrieving forecast URL with the NWS API with error: \(err!.localizedDescription)", log: .app, date: Date())
                 nwsapiFailed = true
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -226,7 +233,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     private func getWeatherStation_NWS(stationsURL: String, forecastURL: String) {
         URLSession.shared.dataTask(with: URL(string: stationsURL)!) { [self] (data, _, err) in
             if err != nil {
-                print((err?.localizedDescription)!)
+                print("Error retrieving weather stations with the NWS API with error: \(err!.localizedDescription)")
+                DebugLogManager.shared.debug(error: "Error retrieving weather stations with the NWS API with error: \(err!.localizedDescription)", log: .app, date: Date())
                 nwsapiFailed = true
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -244,7 +252,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     private func getStationTemperature_NWS(forecastURL: String, stationURL: String) {
         URLSession.shared.dataTask(with: URL(string: "\(stationURL)/observations")!) { [self] (data, _, err) in
             if err != nil {
-                print("Error: \((err?.localizedDescription)!)")
+                print("There was an error retrieving data from the NWS API: \(err!.localizedDescription)")
+                DebugLogManager.shared.debug(error: "There was an error retrieving data from the NWS API: \(err!.localizedDescription)", log: .app, date: Date())
                 nwsapiFailed = true
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -255,7 +264,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 return
             }
             if json["status"] == 404 || json["status"] == 500 {
-                bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: error \(json["status"])")
+                print("Failed to get weather data from NWS API with error code: \(json["status"])")
+                DebugLogManager.shared.debug(error: "Failed to get weather data from NWS API with error code: \(json["status"])", log: .app, date: Date())
                 nwsapiFailed = true
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -278,7 +288,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     private func getWeatherForcast_NWS(forecastURL: String, temperatureC: Double) {
         URLSession.shared.dataTask(with: URL(string: forecastURL)!) { [self] (data, _, err) in
             if err != nil {
-                print((err?.localizedDescription)!)
+                print("Failed to get weather forecast from NWS API with error: \(err!.localizedDescription)")
+                DebugLogManager.shared.debug(error: "Failed to get weather forecast from NWS API with error: \(err!.localizedDescription)", log: .app, date: Date())
                 nwsapiFailed = true
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -290,7 +301,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             
             if json["status"] == 404 || json["status"] == 500 {
-                bleWriteManager.sendNotification(title: "Weather Debug", body: "nwsapiFailed: error \(json["status"])")
+                print("Failed to get weather data from NWS API with error code: \(json["status"])")
+                DebugLogManager.shared.debug(error: "Failed to get weather data from NWS API with error code: \(json["status"])", log: .app, date: Date())
                 bleManagerVal.lastWeatherUpdateNWS = 0
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
@@ -318,6 +330,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             guard let placemark = placemarks?.first else {
                 let errorString = error?.localizedDescription ?? "Unexpected Error"
                 print("Unable to reverse geocode the given location. Error: \(errorString)")
+                DebugLogManager.shared.debug(error: "Unable to reverse geocode the given location with error: \(errorString)", log: .app, date: Date())
                 return
             }
 
@@ -351,19 +364,21 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     private func callWeatherAPI(canUpdateNWS: Bool, canUpdateWAPI: Bool) {
         if nwsapiFailed == true && weatherapiFailed == true {
-            bleWriteManager.sendNotification(title: "Weather Debug", body: "Error: Both Weather APIs are unavailable.")
-            print("Error: Both APIs are unavailable.")
+            print("Failed to get weather data from NWS API and WeatherAPI")
+            DebugLogManager.shared.debug(error: "Error: failed to get weather data from NWS API and WeatherAPI", log: .app, date: Date())
             nwsapiFailed = false
             weatherapiFailed = false
         } else if nwsapiFailed == false {
             if !canUpdateNWS {return}
             // This function updates the weather info on the watch roughly every 15 minutes. Though it's only ever checks when the watch battey percentage changes or the watch registers new steps.
             print("Retrieving weather information using the NWS API")
+            DebugLogManager.shared.debug(error: "Retrieving weather information using the NWS API", log: .app, date: Date())
             retrieveWeatherDataThrough(API: .nws)
         } else {
             if !canUpdateWAPI {return}
             // This function updates the weather info on the watch roughly every hour. Though it's only ever checks when the watch battey percentage changes or the watch registers new steps.
             print("Retrieving weather information using WeatherAPI")
+            DebugLogManager.shared.debug(error: "Retrieving weather information using WeatherAPI", log: .app, date: Date())
             retrieveWeatherDataThrough(API: .wapi)
         }
     }
@@ -411,7 +426,8 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     private func disableLocationFeatures() {
         useCurrentLocation = false
-        print("Disable Location Features")
+        print("Location features are disabled")
+        DebugLogManager.shared.debug(error: "Location features are disabled", log: .app, date: Date())
     }
     
     struct ReversedGeoLocation {
