@@ -272,20 +272,46 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             }
             
             var temperatureC = 0.0
+            
             for idx in 1...json["features"].count {
                 if json["features"][idx]["properties"]["temperature"]["qualityControl"].stringValue == "V" {
                     temperatureC = json["features"][idx]["properties"]["temperature"]["value"].doubleValue
                     
-                    // TODO: For icon - possibly add switch statement with all possible cases to determine icon?
-                    print(json["features"][idx]["properties"]["icon"])
+                    print(json["features"][idx]["properties"]["textDescription"])
+                    
+                    switch json["features"][idx]["properties"]["textDescription"] {
+                        // The textDescription docs are out of date so these cases might be slightly different than the fetched data and may need to be updated
+                    case "Fair", "Clear", "Fair with Haze", "Clear with Haze", "Fair and Breezy", "Clear and Breezy", "Windy", "Breezy", "Fair and Windy":
+                        bleManagerVal.weatherInformation.icon = 0
+                    case "A Few Clouds", "A Few Clouds with Haze", "A Few Clouds and Breezy", "A Few Clouds and Windy":
+                        bleManagerVal.weatherInformation.icon = 1
+                    case "Partly Cloudy", "Partly Cloudy with Haze", "Partly Cloudy and Breezy", "Partly Cloudy and Windy", "Mostly Cloudy", "Mostly Cloudy with Haze", "Mostly Cloudy and Breezy", "Mostly Cloudy and Wind":
+                        bleManagerVal.weatherInformation.icon = 2
+                    case "Overcast", "Overcast with Haze", "Overcast and Breezy", "Overcast and Windy", "Hurricane Watch", "Funnel Cloud", "Funnel Cloud in Vicinity", "Tornado/Water Spout", "Tornado":
+                        bleManagerVal.weatherInformation.icon = 3
+                    case "Showers in Vicinity Snow", "Snow Showers in Vicinity", "Snow Showers in Vicinity Fog/Mist", "Snow Showers in Vicinity Fog":
+                        bleManagerVal.weatherInformation.icon = 4
+                    case "Light Rain", "Drizzle", "Light Drizzle", "Heavy Drizzle", "Light Rain and Fog/Mist", "Drizzle and Fog/Mist", "Light Drizzle and Fog/Mist", "Heavy Drizzle and Fog/Mist", "Light Rain and Fog", "Drizzle and Fog", "Light Drizzle and Fog", "Heavy Drizzle Fog", "Rain", "Heavy and Rain", "Rain and Fog/Mist", "Heavy Rain and Fog/Mist", "Rain and Fog", "Heavy Rain and Fog":
+                        bleManagerVal.weatherInformation.icon = 5
+                    case "Thunderstorm in Vicinity", "Thunderstorm in Vicinity Haze", "Hurricane Warning", "Tropical Storm Watch", "Tropical Storm Warning", "Tropical Storm Conditions presently exist w/Hurricane Warning in effect":
+                        bleManagerVal.weatherInformation.icon = 6
+                    case "Snow", "Light Snow", "Heavy Snow", "Snow Showers", "Heavy Snow Showers", "Showers Snow", "Light Showers Snow", "Heavy Showers Snow", "Snow Fog/Mist", "Light Snow Fog/Mist", "Heavy Snow Fog/Mist", "Snow Showers Fog/Mist", "Light Snow Showers", "Heavy Snow Showers Fog/Mist", "Showers Snow Fog/Mist", "Light Showers Snow Fog/Mist", "Heavy Showers Snow Fog/Mist", "Snow Fog", "Light Snow Fog", "Heavy Snow Fog", "Snow Showers Fog", "Light Snow Showers Fog", "Heavy Snow Showers Fog", "Low Drifting Snow", "Blowing Snow", "Snow Low Drifting Snow", "Snow Blowing Snow", "Light Snow Low Drifting Snow", "Light Snow Blowing Snow", "Light Snow Blowing Snow Fog/Mist", "Heavy Snow Low Drifting Snow", "Heavy Snow Blowing Snow", "Thunderstorm Snow", "Light Thunderstorm Snow", "Heavy Thunderstorm Snow", "Snow Grains", "Grains", "Heavy Snow Grains", "Heavy Blowing Snow", "Blowing Snow in Vicinity", "Blizzard":
+                        bleManagerVal.weatherInformation.icon = 7
+                    case "Dust", "Low Drifting Dust", "Blowing Dust", "Sand", "Blowing Sand", "Low Drifting Sand", "Dust/Sand Whirls", "Dust/Sand Whirls in Vicinity", "Dust Storm", "Heavy Dust Storm", "Dust Storm in Vicinity", "Sand Storm", "Heavy Sand Storm", "Sand Storm in Vicinity", "Smoke", "Haze", "Fog/Mist", "Freezing Fog", "Shallow Fog", "Partial Fog", "Patches of Fog", "Fog in Vicinity", "Freezing Fog in Vicinity", "Shallow Fog in Vicinity", "Partial Fog in Vicinity", "Patches of Fog in Vicinity", "Showers in Vicinity Fog", "Light Freezing Fog", "Heavy Freezing Fog", "Fog":
+                        bleManagerVal.weatherInformation.icon = 8
+                    default:
+                        bleManagerVal.weatherInformation.icon = 0
+                    }
                     break
                 }
             }
-            self.getWeatherForcast_NWS(forecastURL: forecastURL, temperatureC: temperatureC)
+            
+            
+            self.getWeatherForcast_NWS(forecastURL: forecastURL, temperatureC: temperatureC, icon: bleManagerVal.weatherInformation.icon)
         }.resume()
     }
     
-    private func getWeatherForcast_NWS(forecastURL: String, temperatureC: Double) {
+    private func getWeatherForcast_NWS(forecastURL: String, temperatureC: Double, icon: Int) {
         URLSession.shared.dataTask(with: URL(string: forecastURL)!) { [self] (data, _, err) in
             if err != nil {
                 print("Failed to get weather forecast from NWS API with error: \(err!.localizedDescription)")
@@ -317,7 +343,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                     print(json)
                 }
                 
-                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, icon: 2, API: .nws)
+                sendWeatherData(temperature: bleManagerVal.weatherInformation.temperature, maxTemperature: bleManagerVal.weatherInformation.maxTemperature, minTemperature: bleManagerVal.weatherInformation.minTemperature, icon: bleManagerVal.weatherInformation.icon, API: .nws)
             }
             
         }.resume()

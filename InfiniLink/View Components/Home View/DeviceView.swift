@@ -36,9 +36,9 @@ struct DeviceView: View {
         switch bleManagerVal.weatherInformation.icon {
         case 0:
             return "sun.max.fill"
-        case 1, 2:
+        case 1:
             return "cloud.sun.fill"
-        case 3:
+        case 2, 3:
             return "cloud.fill"
         case 4, 5:
             return "cloud.rain.fill"
@@ -50,24 +50,6 @@ struct DeviceView: View {
             return "cloud.fog.fill"
         default:
             return "slash.circle"
-        }
-    }
-    var backgroundGradient: LinearGradient {
-        switch 0 {
-        case 0:
-            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
-        case 2:
-            return LinearGradient(colors: [.blue, .lightGray, .yellow], startPoint: .leading, endPoint: .trailing)
-        case 3:
-            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
-        case 4, 5:
-            return LinearGradient(colors: [.gray, .lightGray], startPoint: .leading, endPoint: .trailing)
-        case 6:
-            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
-        case 7, 8:
-            return LinearGradient(colors: [.white, .lightGray], startPoint: .leading, endPoint: .trailing)
-        default:
-            return LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing)
         }
     }
     
@@ -206,7 +188,7 @@ struct DeviceView: View {
                                 }
                             }
                             .padding()
-                            .background(backgroundGradient)
+                            .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
                             .foregroundColor(.white)
                             .cornerRadius(15)
                             Spacer()
