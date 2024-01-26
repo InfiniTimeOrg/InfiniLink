@@ -58,9 +58,8 @@ struct BatteryView: View {
                             .font(.system(size: 35))
                             .imageScale(.large)
                         Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                            .font(.system(size: 32).weight(.bold))
+                            .font(.system(size: 40).weight(.bold))
                     }
-                    .font(.system(size: 50).weight(.bold))
                     .foregroundColor(.green)
                 }
                 .padding(30)

@@ -104,7 +104,7 @@ struct Settings_Page: View {
                                     .font(.body.weight(.medium))
                             }
                             .padding()
-                            .background(Color.black)
+                            .background(Color.darkestGray)
                             .foregroundColor(.white)
                             .cornerRadius(20)
                         }
