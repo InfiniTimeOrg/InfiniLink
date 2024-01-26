@@ -54,7 +54,6 @@ struct WelcomeView: View {
                                 .padding(.bottom)
                                 .padding(.horizontal)
                                 .onAppear {
-                                    print("bleManager.isSwitchedOn \(bleManager.isSwitchedOn)")
                                     if bleManager.isSwitchedOn {
                                         bleManager.startScanning()
                                     }
