@@ -18,7 +18,7 @@ struct DFUProgressBar: View {
 	var body: some View {
 		VStack {
 				ProgressView(dfuUpdater.dfuState, value: dfuUpdater.percentComplete, total: Double(100))
-					.padding()
+                .font(.system(size: 16))
 		}
 	}
 }

@@ -9,80 +9,124 @@ import Foundation
 import SwiftUI
 
 struct Connect: View {
-	
-	@ObservedObject var pageSwitcher: PageSwitcher = PageSwitcher.shared
-	@ObservedObject var bleManager = BLEManager.shared
-	@Environment(\.presentationMode) var presentation
-	@AppStorage("autoconnect") var autoconnect: Bool = false
-	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-	
-	var body: some View {
-		SheetCloseButton()
-		VStack (){
-			if bleManager.isSwitchedOn {
-				Text(NSLocalizedString("available_devices", comment: ""))
-					.font(.largeTitle)
-					.padding()
-					.frame(maxWidth: .infinity, alignment: .leading)
-					.onAppear {
-						bleManager.startScanning()
-					}
-			} else {
-				Text(NSLocalizedString("available_devices", comment: ""))
-					.font(.largeTitle)
-					.padding()
-					.frame(maxWidth: .infinity, alignment: .leading)
-				Text(NSLocalizedString("waiting_for_bluetooth", comment: ""))
-					.font(.title)
-					.padding()
-					.frame(maxWidth: .infinity, alignment: .leading)
-			}
-//			List(bleManager.peripherals) { peripheral in
-//				let deviceName = DeviceNameManager.init().getName(deviceUUID: peripheral.stringUUID)
-//				HStack {
-//					Button(action: {
-//						//self.bleManager.deviceToConnect = peripheral.peripheralHash
-//						self.bleManager.connect(peripheral: self.bleManager.peripheralDictionary[peripheral.peripheralHash]!)
-//						presentation.wrappedValue.dismiss()
-//					}) {
-//						if deviceName == "" {
-//							Text(peripheral.name)
-//						} else {
-//							Text(deviceName)
-//						}
-//					}
-//					Spacer()
-//					Text("RSSI: " + String(peripheral.rssi))
-//				}
-//			}
-//			Divider()
-//			Text("new list")
-			List(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
-				let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
-				Button {
-					bleManager.connect(peripheral: i)
-					presentation.wrappedValue.dismiss()
-				} label: {
-					if deviceName == "" {
-						Text(i.name ?? NSLocalizedString("unnamed", comment: ""))
-					} else {
-						Text(deviceName)
-					}
-				}
-//				Spacer()
-			}
-			
-			Spacer()
-		}.onDisappear {
-			if bleManager.isScanning {
-				bleManager.stopScanning()
-			}
-		}
-	}
+    @ObservedObject var bleManager = BLEManager.shared
+    @Environment(\.presentationMode) var presentation
+    @AppStorage("autoconnect") var autoconnect: Bool = false
+    @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+    @State var showHelpView = false
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            VStack {
+                HStack {
+                    Text(NSLocalizedString("available_devices", comment: ""))
+                        .font(.title.bold())
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                    SheetCloseButton()
+                        .frame(maxWidth: .infinity, alignment: .trailing)
+                }
+                HStack {
+                    Text("\(infiniTimeDevicesCount()) \(NSLocalizedString("devices", comment: "Devices"))")
+                        .padding()
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(.primary)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Capsule())
+                    Spacer()
+                    if bleManager.isSwitchedOn && !bleManager.newPeripherals.isEmpty {
+                        HStack(spacing: 7) {
+                            ProgressView()
+                            Text(NSLocalizedString("scanning", comment: "Scanning"))
+                        }
+                        .padding()
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(.gray)
+                        .background(Color.gray.opacity(0.15))
+                        .clipShape(Capsule())
+                    }
+                }
+            }
+            .padding(.vertical, 10)
+            .padding()
+            Divider()
+            if bleManager.isSwitchedOn {
+                if bleManager.newPeripherals.isEmpty {
+                    HStack(spacing: 7) {
+                        ProgressView()
+                        Text(NSLocalizedString("scanning", comment: "Scanning"))
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .foregroundColor(.gray)
+                } else {
+                    ScrollView {
+                        VStack(spacing: 8) {
+                            ForEach(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
+                                if i.name == "InfiniTime" || i.name == "Pinetime-JF" {
+                                    let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
+                                    Button {
+                                        bleManager.connect(peripheral: i)
+                                        presentation.wrappedValue.dismiss()
+                                    } label: {
+                                        Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
+                                            .frame(maxWidth: .infinity)
+                                            .font(.body.weight(.semibold))
+                                            .padding()
+                                            .foregroundColor(.primary)
+                                            .background(Color.gray.opacity(0.15))
+                                            .clipShape(Capsule())
+                                    }
+                                }
+                            }
+                        }
+                        .padding()
+                    }
+                }
+            } else {
+                HStack(spacing: 7) {
+                    ProgressView()
+                    Text(NSLocalizedString("waiting_for_bluetooth", comment: "Waiting for Bluetooth"))
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .foregroundColor(.gray)
+            }
+            Divider()
+                .padding(.bottom)
+            Button(action: {
+                showHelpView.toggle()
+            }) {
+                Text(NSLocalizedString("need_help_connecting", comment: "Need help connecting?"))
+                    .padding(11)
+                    .padding(.horizontal, 6)
+                    .foregroundColor(.white)
+                    .background(Color.blue)
+                    .clipShape(Capsule())
+            }
+            .sheet(isPresented: $showHelpView) {
+                ConnectionHelpView(isDisplayed: $showHelpView)
+            }
+            .padding(.bottom)
+        }
+        .onAppear {
+            if bleManager.isSwitchedOn {
+                bleManager.startScanning()
+            }
+        }
+        .onDisappear {
+            if bleManager.isScanning {
+                bleManager.stopScanning()
+            }
+        }
+    }
+    
+    func infiniTimeDevicesCount() -> Int {
+        var count: Int = 0
+        bleManager.newPeripherals.forEach {if $0.name == "InfiniTime" || $0.name == "Pinetime-JF" {count += 1}}
+        return count
+    }
 }
 
 struct ConnectView_Previews: PreviewProvider {
-	static var previews: some View {
-		Connect()
-	}
+    static var previews: some View {
+        Connect()
+    }
 }

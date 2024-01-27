@@ -1,0 +1,270 @@
+/*
+  Localizable.strings
+  InfiniLink
+
+  Created by Александр Цыганков on 11.12.2021.
+  
+*/
+
+// - HomeScreen
+"device_information" = "기기 정보";
+"firmware_version" = "펌웨어 버전: ";
+"model" = "모델: ";
+"update_stats" = "업타임 상태";
+"last_disconnect" = "마지막 연결 해제: ";
+"uptime" = "마지막 연결: ";
+"step_count" = "걸음 수";
+"firmware_updates" = "펌웨어 업데이트";
+"firmware_update_is_available" = "펌웨어 업데이트가 사용 가능해요!";
+"no_updates_available" = "사용 가능한 업데이트가 없어요";
+"device_name" = "기기 이름";
+"rename" = "이름 바꾸기";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"save" = "Save";
+
+// - SideMenu
+"home" = "홈";
+"steps" = "걸음";
+"charts" = "차트";
+"update" = "업데이트";
+"settings" = "설정";
+"bluetooth_off" = "블루투스 꺼짐";
+
+// - ChartView components
+"heart" = "심박수: ";
+"battery" = "배터리: ";
+
+// - HeartChart
+"bpm" = "BPM";
+"insufficient_heart_rate_data" = "심박수 정보 부족함";
+"heart_rate_settings" = "Heart Rate Settings";
+"oops" = "Oops!";
+
+// - BetteryChart
+"insufficient_battery_data" = "배터리 정보 부족함";
+"battery_stats" = "Battery Stats";
+
+// - StepsView
+"week" = "주";
+"current" = "현재";
+"month" = "달";
+
+// - StepProgressGauge
+"steps_goal" = "걸음 수 목표";
+
+// - StepWeeklyChart
+"steps_this_week" = "이번 주 걸음 수";
+
+// - Settings_Page
+"connect_options" = "연결 옵션";
+"autoconnect_to_pinetime" = "PineTime에 자동 연결";
+"autoconnect_device_uuid" = "기기 UUID 자동 연결";
+"use_current_device_for_autoconnect" = "이 기기 자동 연결에 사용하기";
+"autoconnect_device_cleared" = "자동 연결 기기 초기화됨";
+"clear_autoconnect_device" = "자동 연결 기기 초기화";
+"current_device_name" = "현재 기기 이름: ";
+"enter_new_name" = "새 이름을 입력";
+"rename_device" = "기기 이름 바꾸기";
+"firmware_update_downloads" = "펌웨어 업데이트 다운로드";
+"show_newer_versions_only" = "새 버전만 표시하기";
+"notifications" = "알림";
+"enable_watch_notifications" = "워치 알림 표시하기";
+"notify_about_low_battery" = "낮은 배터리 알리기";
+"send_notification_to_pinetime" = "PineTime에 알림 보내기";
+"find_lost_device" = "Find Lost";
+"graph_styles" = "그래프 스타일";
+"filled_hrm_graph" = "심박수 그래프 채우기";
+"filled_battery_graph" = "배터리 그래프 채우기";
+"graph_data" = "그래프 데이터";
+"clear_all_hrm_chart_data" = "심박수 차트 데이터 삭제";
+"clear_all_battery_chart_data" = "배터리 차트 데이터 삭제";
+"onboarding_information" = "짧은 정보";
+"open_onboarding_page" = "짧은 정보 페이지 열기";
+"whats_new_page_this_version" = "이 버전의 '새로운 기능' 페이지 열기";
+"debug_mode" = "디버그 모드";
+"enable_debug_mode" = "디버그 모드 활성화";
+"debug_logs" = "디버그 로그";
+"no_logs" = "No Logs";
+"links" = "링크";
+"donations" = "후원";
+"copy" = "Copy";
+"weather" = "Weather";
+"weather_style" = "Weather Style";
+"search_for_locations" = "Search for Locations";
+"find_location" = "Use the search box above to find\na location";
+
+// - ScanningPopover
+"connected_to" = "기기에 연결됨:";
+"scanning" = "스캔 중";
+
+// - BLEConnectView
+"available_devices" = "사용 가능한 기기";
+"waiting_for_bluetooth" = "블루투스 대기 중";
+"unnamed" = "이름 없음";
+"loading" = "";
+"need_help_connecting" = "";
+"devices" = "";
+
+// - ConnectionHelpView
+"connection_help" = "";
+
+// - ChartSettingsSheetMain
+"select_date_range" = "날짜 범위 선택";
+"date_range_selection" = "날짜 범위 선택";
+"show_all" = "모두 표시";
+"sliders" = "슬라이더";
+"select_dates" = "날짜 선택";
+"all_data_selected" = "모든 데이터 선택됨";
+
+// - ChartSettingsSheetSliders
+"hours" = "시간";
+"days" = "일";
+"weeks" = "주";
+
+// - ChartSettingsSheetDatePicker
+"start_date" = "시작 날짜";
+"end_date" = "끝 날짜";
+
+// - ArbitraryNotificationSheet
+"placeholder_text" = "여기에 입력하세요";
+"send_notification" = "알림 보내기";
+"title" = "제목";
+
+// - StepSettingsSheet
+"steps_settings" = "걸음 수 설정";
+"step_goal" = "걸음 수 목표";
+"add_steps" = "걸음 수 추가";
+
+// - StepSettingsSheetGoalChange
+"change_step_goal" = "목표 걸음 수 변경";
+"enter_step_goal" = "목표 걸음 수를 입력하세요";
+"submit_new_step_goal" = "새 목표 걸음 수 저장";
+
+// - StepSettingsSheetDatePicker
+"manually_add_step_count" = "걸음 수 직접 추가";
+"select_date" = "날짜 선택";
+"enter_number_of_steps" = "걸음 수를 입력하세요";
+"submit_count" = "걸음 수 저장";
+
+// - DownloadView
+"available_downloads" = "사용 가능한 다운로드";
+"firmware_download_links" = "펌웨어 다운로드 링크";
+"software_update_available" = "Software Update Available";
+
+// - SheetCloseButton
+"close" = "닫기";
+
+// - WhatsNew
+"whats_new_in" = "What's New in";
+"welcome_to_version" = "Welcome to version";
+"welcome_text" = "이것이 InfiniLink의 마지막 업데이트가 될 것이라고 유감스럽게 생각합니다. 나는 몇 달 전에 새로운 일을 시작했고 더 이상이 프로젝트의 개발을 계속할 여가 시간이 없습니다. 누구든지 인수에 관심이 있다면, 알려 주시면 모든 것을 양도 할 수 있습니다. 길을 따라 모든 지원과 제안에 감사드립니다!";
+
+// - WhatsNewBody
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
+
+// - Onboarding
+"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
+"onboarding_text" = "I'm thrilled you're willing and able to test out this beta version of my iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes to me! Your feedback allows you and me to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
+
+// - OnboardingBody
+"other_notes" = "Other notes:";
+"other_notes_1" = "Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes_2" = "The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
+"other_notes_3" = "Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
+"other_notes_4" = "If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
+
+// - OnboardingDismissButton
+"dismiss_button" = "완료";
+
+// - DFUWithBLE
+"update_firmware" = "펌웨어 업데이트";
+"current_firmware" = "현재 펌웨어";
+"firmware_file" = "펌웨어 파일";
+"clear" = "Clear";
+
+// - DFUWithoutBLE
+"bluetooth_not_available" = "블루투스 사용 불가능";
+"please_enable_bluetooth_try_again" = "블루투스를 활성화하고 다시 시도해주세요.";
+
+// - DFUFileSelectButton
+"select_firmware_file" = "펌웨어 파일 선택";
+"select_file_source" = "파일 소스 선택";
+"use_local_file" = "로컬 파일 사용";
+"download_firmware_file" = "펌웨어 파일 다운로드";
+
+// - DFUStartTransferButton
+"stop_transfer" = "전송 중지";
+"start_transfer" = "전송 시작";
+"downloading" = "다운로드 중";
+
+// - DFUComplete
+"transfer_completed" = "전송이 완료됐어요!";
+
+// - BatteryNotifications
+"battery_low" = "배터리 부족";
+"battery_low_message" = "";
+
+// - MusicController
+"not_playing" = "Not Playing";
+
+// - SideMenu
+"disconnect" = "연결 해제";
+"scanning" = "스캔 중";
+"connect" = "연결";
+
+// - ContentView
+"failed_set_time" = "시간 설정 실패";
+"failed_set_time_description" = "시간을 설정하는데 오류가 있었습니다. 시계를 연결 해제한 후 다시 연결해주세요.";
+"dismiss" = "닫기";
+
+// - New Stuff
+"not_connected" = "";
+"tap_to_connect" = "";
+"customize_favorites" = "";
+"goal" = "";
+"heart_rate" = "";
+"battery_tilte" = "";
+"heart_tilte" = "";
+"welcome_text" = "";
+"connecting" = "";
+"start_pairing" = "";
+"stop_connecting" = "";
+"my_device" = "";
+"favorites" = "";
+"app_settings" = "";
+"app_theme" = "";
+"name" = "";
+"avaliable_themes" = "";
+"choose_app_theme" = "";
+"firmware_file_link" = "";
+"firmware_download_links" = "";
+"downloads" = "";
+"learn_more" = "";
+"software_update" = "";
+"local_file_info" = "";
+"install_older_version" = "";
+"up_to_date" = "";
+"pinetime_not_available" = "";
+"please_check_your_connection_and_try_again" = "";
+"download_and_install" = "";
+
+"battery_level" = "";
+"battery_usage" = "";
+
+"last_24_hours" = "";
+"last_10_days" = "";
+"battery_level_is" = "";
+"currently_unavailable" = "";
+
+"software_version" = "";
+"file_system_version" = "File System Version";
+"model_name" = "";
+"autoconnect_to_this" = "";
+"send_notification_to" = "";
+"connected_to" = "";
+
+"enable_weather_data" = "Enable Weather Data";
+"use_current_location" = "Use Current Location";
+"set_location" = "Location";
+"always_allow_location_services" = "Always Allow Current Location";

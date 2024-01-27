@@ -10,6 +10,8 @@
 import SwiftUI
 
 struct StepSettingsSheetDatePicker: View {
+    @Environment(\.presentationMode) var presMode
+    @ObservedObject var healthKitManager = HealthKitManager()
 	@ObservedObject var addDateValue = NumbersOnly()
 	@State var selectedDate: Date = Date()
 	
@@ -22,18 +24,35 @@ struct StepSettingsSheetDatePicker: View {
 	}
 	
 	var body: some View {
-		DatePicker(NSLocalizedString("select_date", comment: ""), selection: $selectedDate, displayedComponents: [.date])
-			.padding()
-		TextField(NSLocalizedString("enter_number_of_steps", comment: ""), text: $addDateValue.value)
-			.textFieldStyle(.roundedBorder)
-			.padding(.horizontal)
-			.keyboardType(.numberPad)
-		Button {
-			StepCountPersistenceManager().setStepCount(steps: Int(addDateValue.value)!, arbitrary: true, date: selectedDate)
-		} label: {
-			Text(NSLocalizedString("submit_count", comment: ""))
-		}.disabled(readyToSubmit(value: addDateValue.value))
-			.padding()
+        VStack(alignment: .leading, spacing: 20) {
+            Text(NSLocalizedString("manually_add_step_count", comment: ""))
+                .font(.title2.weight(.semibold))
+            HStack {
+                Text(NSLocalizedString("select_date", comment: "") + ":")
+                    .fontWeight(.medium)
+                Spacer()
+                DatePicker("", selection: $selectedDate, displayedComponents: [.date])
+            }
+            TextField(NSLocalizedString("enter_number_of_steps", comment: ""), text: $addDateValue.value)
+                .padding()
+                .background(Color.gray.opacity(0.15))
+                .clipShape(Capsule())
+                .keyboardType(.numberPad)
+            Button {
+                healthKitManager.writeSteps(date: selectedDate, stepsToAdd: Double(addDateValue.value)!)
+                StepCountPersistenceManager().setStepCount(steps: Int32(addDateValue.value)!, arbitrary: true, date: selectedDate)
+                presMode.wrappedValue.dismiss()
+            } label: {
+                Text(NSLocalizedString("submit_count", comment: ""))
+            }
+            .buttonStyle(NeumorphicButtonStyle(bgColor: .blue))
+            .opacity(readyToSubmit(value: addDateValue.value) ? 0.5 : 1.0)
+            .disabled(readyToSubmit(value: addDateValue.value))
+        }
+        .padding()
 	}
 }
 
+#Preview {
+    StepSettingsSheetDatePicker()
+}

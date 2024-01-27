@@ -19,6 +19,8 @@
 "no_updates_available" = "No Updates Available";
 "device_name" = "Device Name";
 "rename" = "Rename";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"save" = "Save";
 
 // - SideMenu
 "home" = "Home";
@@ -35,9 +37,12 @@
 // - HeartChart
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "Insufficient Heart Rate Data";
+"heart_rate_settings" = "Heart Rate Settings";
+"oops" = "Oops!";
 
 // - BetteryChart
 "insufficient_battery_data" = "Insufficient Battery Data";
+"battery_stats" = "Battery Stats";
 
 // - StepsView
 "week" = "Week";
@@ -66,6 +71,7 @@
 "enable_watch_notifications" = "Enable Watch Notifications";
 "notify_about_low_battery" = "Notify about Low Battery";
 "send_notification_to_pinetime" = "Send Notification to PineTime";
+"find_lost_device" = "Find Lost";
 "graph_styles" = "Graph Styles";
 "filled_hrm_graph" = "Filled HRM Graph";
 "filled_battery_graph" = "Filled Battery Graph";
@@ -74,12 +80,18 @@
 "clear_all_battery_chart_data" = "Clear All Battery Chart Data";
 "onboarding_information" = "Onboarding Information";
 "open_onboarding_page" = "Open Onboarding Page";
-"whats_new_page_this_version" = "Open 'What's New' Page for This Version";
+"whats_new_page_this_version" = "Open 'What's New' Page";
 "debug_mode" = "Debug Mode";
 "enable_debug_mode" = "Enable Debug Mode";
 "debug_logs" = "Debug Logs";
+"no_logs" = "No Logs";
 "links" = "Links";
 "donations" = "Donations";
+"copy" = "Copy";
+"weather" = "Weather";
+"weather_style" = "Weather Style";
+"search_for_locations" = "Search for Locations";
+"find_location" = "Use the search box above to find\na location";
 
 // - ScanningPopover
 "connected_to" = "Connected to";
@@ -89,6 +101,12 @@
 "available_devices" = "Available Devices";
 "waiting_for_bluetooth" = "Waiting for Bluetooth";
 "unnamed" = "Unnamed";
+"loading" = "Loading...";
+"need_help_connecting" = "Need help connecting?";
+"devices" = "Devices";
+
+// - ConnectionHelpView
+"connection_help" = "Connection Help";
 
 // - ChartSettingsSheetMain
 "select_date_range" = "Select Date Range";
@@ -118,7 +136,7 @@
 "add_steps" = "Add Steps";
 
 // - StepSettingsSheetGoalChange
-"change_step_count_goal" = "Change Step Count Goal";
+"change_step_goal" = "Change Step Goal";
 "enter_step_goal" = "Enter Step Goal";
 "submit_new_step_goal" = "Submit New Step Goal";
 
@@ -131,9 +149,7 @@
 // - DownloadView
 "available_downloads" = "Available Downloads";
 "firmware_download_links" = "Firmware Download Links";
-
-// - SheetCloseButton
-"close" = "Close";
+"software_update_available" = "Software Update Available";
 
 // - WhatsNew
 "whats_new_in" = "What's New in";
@@ -141,20 +157,19 @@
 "welcome_text" = "of InfiniLink! I hope you enjoy the features I've added to the app for this version. Please feel free to get in touch with me about any issues you experience or changes you'd like to see!";
 
 // - WhatsNewBody
-"step_counter" = "Step Counter:\n- InfiniTime 1.7.0 introduces a long-awaited feature: step count transmission to companion apps. This version of InfiniLink is set up to receive those values! I have created a pretty rudimentary UI for interpreting these values, which includes:\n- Current value: a circular guage that fills as you approach your step goal\n- Weekly value: a bar chart with the step values you've achieved for each day this week\n- A calendar view, which features the same circular guage around each day around each day of the month, for more long-term step tracking";
-"apple_music" = "Improved Apple Music Functionality:\n- Big thanks to @WowieMan on Github for this!\n- Current time and total run time the currently playing track is shown on InfiniTime now\n- Play/pause state is reflected on InfiniTime\n- Volume buttons in InfiniTime work now.\n- *Please note that this still only applies to Apple Music for now.*";
-"new_logo" = "New Logo:\n- Again, big thanks to @WowieMan for the new logo! This logo was submitted a long time ago, and I kept meaning to add it before submitting releases to TestFlight, and then forgetting. ";
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "🎉 Welcome to InfiniLink! 🎉";
-"onboarding_text" = "I'm thrilled you're willing and able to test out this beta version of my iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes to me! Your feedback allows you and me to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
+"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
+"onboarding_text" = "The open-source iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes! Your feedback allows us to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon (links are available in the settings tab).";
 
 // - OnboardingBody
 "other_notes" = "Other notes:";
-"other_notes_1" = "- Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
-"other_notes_2" = "- The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
-"other_notes_3" = "- Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
-"other_notes_4" = "- If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release. There is currently an issue with Bluetooth advertising in Infinitime that the developers are working extremely hard on. Wish them luck!";
+"other_notes_1" = "Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes_2" = "The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, system volume, etc. until AMS is added to InfiniTime.";
+"other_notes_3" = "Your PineTime is only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
+"other_notes_4" = "If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release.";
 
 // - OnboardingDismissButton
 "dismiss_button" = "Dismiss";
@@ -185,6 +200,7 @@
 
 // - BatteryNotifications
 "battery_low" = "Battery Low";
+"battery_low_message" = "battery remaining";
 
 // - MusicController
 "not_playing" = "Not Playing";
@@ -198,3 +214,57 @@
 "failed_set_time" = "Failed to Set Time";
 "failed_set_time_description" = "There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect.";
 "dismiss" = "Dismiss";
+
+
+// - New Stuff
+"not_connected" = "Not Connected";
+"tap_to_connect" = "Tap to connect";
+"customize_favorites" = "Customize Favorites";
+"goal" = "with a goal of";
+"heart_rate" = "Heart Rate";
+"battery_tilte" = "Battery";
+"heart_tilte" = "Heart";
+"welcome_text" = "Welcome. If you have an InfiniTime device, \n you can pair it here.";
+"connecting" = "Connecting...";
+"start_pairing" = "Pair Device";
+"stop_connecting" = "Stop Connecting";
+"my_device" = "My Device";
+"favorites" = "Favorites";
+"app_settings" = "App Theme";
+"app_theme" = "App Theme";
+"name" = "Name";
+"avaliable_themes" = "Avaliable themes";
+"choose_app_theme" = "Choose App Theme";
+"firmware_file_link" = "Firmware File Link";
+"firmware_download_links" = "Firmware Download Links";
+"downloads" = "Downloads";
+"learn_more" = "Learn More";
+"software_update" = "Software Update";
+"local_file_info" = "This is a local file and may not work with your PineTime.";
+"install_older_version" = "Install Older Version";
+"up_to_date" = "is up to date";
+"pinetime_not_available" = "PineTime Not Available";
+"please_check_your_connection_and_try_again" = "Please check your connection and try again.";
+"download_and_install" = "Download and Install";
+
+"battery_level" = "BATTERY LEVEL";
+"battery_usage" = "BATTERY USAGE";
+
+"last_24_hours" = "Last 24 Hours";
+"last_10_days" = "Last 10 Days";
+"battery_level_is" = "Battery Level is";
+"currently_unavailable" = "Currently Unavailable";
+
+"software_version" = "Software Version";
+"file_system_version" = "File System Version";
+"model_name" = "Model Name";
+"autoconnect_to_this" = "Autoconnect to this";
+"send_notification_to" = "Send Notification to";
+"connected_to" = "Connected to";
+
+"enable_weather_data" = "Enable Weather Data";
+"use_current_location" = "Use Current Location";
+"set_location" = "Location";
+"always_allow_location_services" = "Always Allow Current Location";
+
+// NSLocalizedString("", comment: "")

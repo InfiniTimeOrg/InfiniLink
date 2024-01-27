@@ -7,139 +7,136 @@
 
 import SwiftUI
 
+enum Tab {
+    case home
+    case settings
+}
+
 struct ContentView: View {
-	
-	@ObservedObject var bleManager = BLEManager.shared
-	@ObservedObject var pageSwitcher = PageSwitcher.shared
-	@ObservedObject var batteryNotifications = BatteryNotifications()
-	@ObservedObject var sheetManager = SheetManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var batteryNotifications = BatteryNotifications()
+    @ObservedObject var sheetManager = SheetManager.shared
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    
+    @ObservedObject var deviceDataForTopLevel: DeviceData = deviceData
+    @State var selection: Tab = .home
     
     
-	@AppStorage("autoconnect") var autoconnect: Bool = false
-	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-	@AppStorage("batteryNotification") var batteryNotification: Bool = false
-	@AppStorage("onboarding") var onboarding: Bool!// = false
-	@AppStorage("lastVersion") var lastVersion: String = ""
-	let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-	
-
-	
-	
-	init() {
-		UINavigationBar.appearance().setBackgroundImage(UIImage(), for: UIBarMetrics.default)
-		UINavigationBar.appearance().shadowImage = UIImage()
-		UINavigationBar.appearance().isTranslucent = true
-		UINavigationBar.appearance().tintColor = .clear
-		UINavigationBar.appearance().backgroundColor = .clear
-	}
-	
-	var body: some View {
-		let drag = DragGesture()
-			// this drag gesture allows swiping right to open the side menu and left to close the side menu
-			.onEnded {
-				if $0.translation.width < -100 {
-					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-					withAnimation {
-						pageSwitcher.showMenu = false
-					}
-				} else if $0.translation.width > 100 {
-					UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-					withAnimation {
-						pageSwitcher.showMenu = true
-					}
-				}
-			}
-
-		NavigationView {
-			GeometryReader { geometry in
-				ZStack(alignment: .leading) {
-					MainView()
-						.sheet(isPresented: $sheetManager.showSheet, content: {
-							SheetManager.CurrentSheet()
-								.onDisappear {
-									if !sheetManager.upToDate {
-										if onboarding == nil {
-											onboarding = false
-										}
-										sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
-									}
-								}
-						})
-						.onChange(of: bleManager.batteryLevel) { bat in
-							batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
-						}
-//						.offset(x: pageSwitcher.showMenu ? geometry.size.width * 0.6 : 0)
-						.disabled(pageSwitcher.showMenu ? true : false)
-						.overlay(Group {
-							// this overlay lets you tap on the main screen to close the side menu. swiftUI requires a view that is not Color.clear and has any opacity level > 0 for tap interactions
-							if pageSwitcher.showMenu {
-								Color.black
-									.opacity(pageSwitcher.showMenu ? 0.3 : 0)
-									.onTapGesture {
-										withAnimation {
-											pageSwitcher.showMenu = false
-										}
-									}
-									.ignoresSafeArea()
-							}
-						})
-						// alert to handle errors thrown by SetTime
-						.alert(isPresented: $bleManager.setTimeError, content: {
-							Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss", comment: ""))))
-						})
-
-						.onAppear(){
-							// if autoconnect is set, start scan ASAP, but give bleManager half a second to start up
-							DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
-								if autoconnect && bleManager.isSwitchedOn {
-									self.bleManager.startScanning()
-								}
-								sheetManager.setNextSheet(autoconnect: autoconnect, autoconnectUUID: autoconnectUUID)
-							})
-						}
-					if pageSwitcher.showMenu {
-						if #available(iOS 15.0, *) {
-							SideMenu()
-								.dynamicTypeSize(.large ... .accessibility5)
-								.frame(width: geometry.size.width * 0.6)
-								.transition(.move(edge: .leading))
-								.ignoresSafeArea()
-								.zIndex(10)
-						} else {
-							SideMenu()
-								.frame(width: geometry.size.width * 0.6)
-								.minimumScaleFactor(1.5)
-								.transition(.move(edge: .leading))
-								.ignoresSafeArea()
-								.zIndex(10)
-						}
-					}
-				}
-				.navigationBarItems(leading: (
-					Button(action: {
-						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-						withAnimation {
-							pageSwitcher.showMenu.toggle()
-						}
-					}) {
-						Image(systemName: "line.horizontal.3")
-							.padding(.vertical, 10)
-							.padding(.horizontal, 7)
-							.imageScale(.large)
-							.foregroundColor(Color.gray)
-					}))
-				.navigationBarTitleDisplayMode(.inline)
-			}
-			
-		}.gesture(drag)
-	}
+    @AppStorage("autoconnect") var autoconnect: Bool = false
+    @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+    @AppStorage("batteryNotification") var batteryNotification: Bool = false
+    @AppStorage("onboarding") var onboarding: Bool!// = false
+    @AppStorage("lastVersion") var lastVersion: String = ""
+    @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
+    
+    let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+    
+    private func switchToTab(tab: Tab) {
+        selection = tab
+        
+        let impactMed = UIImpactFeedbackGenerator(style: .medium)
+        impactMed.impactOccurred()
+    }
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            NavigationView {
+                switch selection {
+                case .home:
+                    WelcomeView()
+                        .alert(isPresented: $bleManager.setTimeError, content: {
+                            Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
+                        .alert(isPresented: $showDisconnectConfDialog) {
+                            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
+                        }
+                case .settings:
+                    Settings_Page()
+                }
+            }
+            tabBar
+        }
+        .sheet(isPresented: $sheetManager.showSheet, content: {
+            SheetManager.CurrentSheet()
+                .onDisappear {
+                    if !sheetManager.upToDate {
+                        if onboarding == nil {
+                            onboarding = false
+                        }
+                    }
+                }
+        })
+        .onAppear {
+            if !bleManager.isConnectedToPinetime {
+                if bleManager.isSwitchedOn {
+                    self.bleManager.startScanning()
+                }
+            }
+        }
+        .preferredColorScheme((deviceDataForTopLevel.chosenTheme == "System") ? nil : appThemes[deviceDataForTopLevel.chosenTheme])
+        .onChange(of: bleManager.batteryLevel) { bat in
+            batteryNotifications.notify(bat: Int(bat), bleManager: bleManager)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification), perform: { output in
+            if bleManager.isConnectedToPinetime {
+                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 0, chart: ChartsAsInts.connected.rawValue))
+            }
+        })
+    }
+    
+    var tabBar: some View {
+        VStack(spacing: 0) {
+            Divider()
+            HStack(spacing: 0) {
+                TabBarItem(selection: $selection, tab: .home, imageName: "house")
+                    .onTapGesture {
+                        switchToTab(tab: .home)
+                    }
+                    .frame(maxWidth: .infinity)
+                
+                TabBarItem(selection: $selection, tab: .settings, imageName: "gear")
+                    .onTapGesture {
+                        switchToTab(tab: .settings)
+                    }
+                    .frame(maxWidth: .infinity)
+            }
+            .padding(12)
+        }
+    }
 }
 
-	
-struct ContentView_Previews: PreviewProvider {
-	static var previews: some View {
-		ContentView()
-			.environmentObject(BLEManager())
-			.environmentObject(DFU_Updater())
-	}
+struct TabBarItem: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var selection: Tab
+    let tab: Tab
+    let imageName: String
+    
+    var body: some View {
+        if selection == tab {
+            HStack {
+                Image(systemName: imageName)
+                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
+            }
+            .imageScale(.large)
+            .font(.body.weight(.semibold))
+            .foregroundColor(colorScheme == .dark ? .white : .darkestGray)
+            .cornerRadius(10)
+            .padding(8)
+        } else {
+            HStack {
+                Image(systemName: imageName)
+                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
+            }
+            .foregroundColor(Color.gray)
+            .imageScale(.large)
+            .padding(8)
+        }
+    }
 }
+
+#Preview {
+    ContentView()
+        .environmentObject(BLEManager())
+        .environmentObject(DFU_Updater())
+}
+
+let deviceData: DeviceData = DeviceData()

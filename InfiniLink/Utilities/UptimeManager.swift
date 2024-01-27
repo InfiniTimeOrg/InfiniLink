@@ -16,7 +16,6 @@ class UptimeManager: ObservableObject {
 	@Published var lastDisconnect: Date!
 	@Published var dateFormatter = DateFormatter()
 	@Published var uptimeFormatter = DateIntervalFormatter()
-	//@Published var uptimeDateComponents
 	
 	init() {
 		dateFormatter.dateFormat = "M/dd H:mm:ss"

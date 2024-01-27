@@ -26,15 +26,10 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	public var firmwareURL: URL!
 
 	
-//	func prepare(location: URL, device: BLEManager) {
-//		url = location
-//		bleManager = device
-//	}
-	
 	func transfer() {
 		guard let url = firmwareURL else {return}
 		guard url.startAccessingSecurityScopedResource() else { return }
-		guard let selectedFirmware = DFUFirmware(urlToZipFile:url) else {
+		guard let selectedFirmware = try? DFUFirmware(urlToZipFile:url) else {
 			DebugLogManager.shared.debug(error: "Error loading firmware file. Is the file a DFU zip?", log: .dfu, date: Date())
 			return
 		}
@@ -54,14 +49,14 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	}
 	
 	func downloadTransfer() {
-		guard let selectedFirmware = DFUFirmware(urlToZipFile: firmwareURL) else {
+		guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
 			DebugLogManager.shared.debug(error: "Error loading firmware file. Is the file a DFU zip?", log: .dfu, date: Date())
 			return
 		}
 	
 		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
 
-		// Optional:
+        // Optional:
 		// initiator.forceDfu = true/false // default false
 		// initiator.packetReceiptNotificationParameter = N // default is 12
 		initiator.logger = self // - to get log info
@@ -85,7 +80,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	
 	// stubs added automatically.
 	func dfuStateDidChange(to state: DFUState) {
-		dfuState = state.description()
+		dfuState = state.description
 		if state.rawValue == 6 {
 			transferCompleted = true
 			dfuController = nil

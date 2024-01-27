@@ -3,29 +3,20 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */; };
-		2601AF6727220CED00D999EF /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF6627220CED00D999EF /* StepsView.swift */; };
 		2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2601AF692722110700D999EF /* StepProgressGauge.swift */; };
-		2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */; };
 		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
-		2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */; };
 		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
 		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
-		2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */; };
 		2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388926F2591900D72B43 /* DFUStartTransferButton.swift */; };
-		2632388C26F265B100D72B43 /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388B26F265B100D72B43 /* MainView.swift */; };
-		2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388D26F297CB00D72B43 /* OnboardingBody.swift */; };
-		2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */; };
 		263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462E92729B71500D3278D /* StepCalendarView.swift */; };
 		263462ED2729F68600D3278D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EC2729F68600D3278D /* CalendarView.swift */; };
 		263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */; };
-		263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B426CD673900676BF0 /* ChartTabs.swift */; };
 		263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20B926CDF13400676BF0 /* HeartChart.swift */; };
-		263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20BB26CDF20400676BF0 /* BatteryChart.swift */; };
 		263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = 263B20C426CEB46800676BF0 /* SwiftUICharts */; };
 		263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */; };
 		263F56E026F13E760001BA4F /* DebugManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263F56DF26F13E760001BA4F /* DebugManager.swift */; };
@@ -42,10 +33,7 @@
 		264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7326BC526C0050A223 /* BLEManager.swift */; };
 		264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE7526BC52720050A223 /* HexStringToData.swift */; };
 		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
-		264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80A26C62ED600E812C3 /* SideMenu.swift */; };
-		264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264DB80C26C633CF00E812C3 /* PageSwitcher.swift */; };
 		266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E326F7FCA6007481A6 /* ChartManager.swift */; };
-		266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E526FA7676007481A6 /* HomeScreen.swift */; };
 		266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E926FA91F3007481A6 /* DeviceInfo.swift */; };
 		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
 		267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */; };
@@ -56,16 +44,10 @@
 		268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */; };
 		268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */; };
 		26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */; };
-		2695B142278925F8007DF27D /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2695B141278925F8007DF27D /* BLE_FS.swift */; };
 		26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E842704E6F3007966F6 /* SheetManager.swift */; };
-		26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E882704E97C007966F6 /* DebugViewBLE.swift */; };
-		26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */; };
-		26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8C2704EB32007966F6 /* DebugViewApp.swift */; };
 		26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */; };
 		26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */; };
 		26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E922707D119007966F6 /* BLEUpdateHandler.swift */; };
-		26A40E952708C7F8007966F6 /* ScanningPopover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E942708C7F8007966F6 /* ScanningPopover.swift */; };
-		26A40EE8270A1F97007966F6 /* RenameDeviceHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40EE7270A1F97007966F6 /* RenameDeviceHeader.swift */; };
 		26A40EEA270A5F39007966F6 /* DFUStartButtonColorSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* BLEWriteManager.swift */; };
@@ -84,7 +66,27 @@
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
-		26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26F426EE26C72D7D00D0866B /* ChartView.swift */; };
+		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
+		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
+		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
+		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
+		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
+		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
+		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
+		E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0B284C54690040B582 /* HeartChartComponents.swift */; };
+		E515FB13284C55540040B582 /* ChartOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB12284C55540040B582 /* ChartOverview.swift */; };
+		E515FB15284C56070040B582 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB14284C56070040B582 /* DeviceView.swift */; };
+		E515FB17284C56480040B582 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB16284C56480040B582 /* WelcomeView.swift */; };
+		E515FB1B284C58AA0040B582 /* BLEManagerVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */; };
+		E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */; };
+		E57654032B5781970059C8EF /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57654022B5781970059C8EF /* WeatherController.swift */; };
+		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
+		E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E59398F92B58DA1F00D5840A /* SwiftyJSON */; };
+		E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */; };
+		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
+		E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D728034EA500FB0C11 /* HeartView.swift */; };
+		E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D828034EA500FB0C11 /* BatteryView.swift */; };
+		E5EEB1DE2803780C00FB0C11 /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1DD2803780C00FB0C11 /* StepsView.swift */; };
 		F9A88B642765357600B2B94C /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = F9A88B662765357600B2B94C /* Localizable.strings */; };
 /* End PBXBuildFile section */
 
@@ -106,25 +108,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		22F9534327AF34C200729BF5 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2601AF622721D0BF00D999EF /* InfiniLink.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = InfiniLink.xcdatamodel; sourceTree = "<group>"; };
-		2601AF6627220CED00D999EF /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
 		2601AF692722110700D999EF /* StepProgressGauge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepProgressGauge.swift; sourceTree = "<group>"; };
-		2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewSelector.swift; sourceTree = "<group>"; };
 		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
-		2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewBody.swift; sourceTree = "<group>"; };
 		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
 		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
-		2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUFileSelectButton.swift; sourceTree = "<group>"; };
 		2632388926F2591900D72B43 /* DFUStartTransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUStartTransferButton.swift; sourceTree = "<group>"; };
-		2632388B26F265B100D72B43 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
-		2632388D26F297CB00D72B43 /* OnboardingBody.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingBody.swift; sourceTree = "<group>"; };
-		2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingDismissButton.swift; sourceTree = "<group>"; };
 		263462E92729B71500D3278D /* StepCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCalendarView.swift; sourceTree = "<group>"; };
 		263462EC2729F68600D3278D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewExtensions.swift; sourceTree = "<group>"; };
-		263B20B426CD673900676BF0 /* ChartTabs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartTabs.swift; sourceTree = "<group>"; };
 		263B20B926CDF13400676BF0 /* HeartChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChart.swift; sourceTree = "<group>"; };
-		263B20BB26CDF20400676BF0 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUProgressBar.swift; sourceTree = "<group>"; };
 		263F56DF26F13E760001BA4F /* DebugManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugManager.swift; sourceTree = "<group>"; };
 		2644261126DC093D009BD54A /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
@@ -146,11 +140,8 @@
 		264BFE7326BC526C0050A223 /* BLEManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
 		264BFE7526BC52720050A223 /* HexStringToData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HexStringToData.swift; sourceTree = "<group>"; };
 		264BFE7726BCAAC00050A223 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
-		264DB80A26C62ED600E812C3 /* SideMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SideMenu.swift; sourceTree = "<group>"; };
-		264DB80C26C633CF00E812C3 /* PageSwitcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageSwitcher.swift; sourceTree = "<group>"; };
 		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
 		266F53E326F7FCA6007481A6 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
-		266F53E526FA7676007481A6 /* HomeScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreen.swift; sourceTree = "<group>"; };
 		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
 		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
 		267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWeeklyGraph.swift; sourceTree = "<group>"; };
@@ -161,16 +152,10 @@
 		268E773E27174B8B000DF90D /* ChartSettingsSheetSliders.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetSliders.swift; sourceTree = "<group>"; };
 		268E774027175830000DF90D /* ChartSettingsSheetDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSettingsSheetDatePicker.swift; sourceTree = "<group>"; };
 		2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCountPersistenceManager.swift; sourceTree = "<group>"; };
-		2695B141278925F8007DF27D /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
 		26A40E842704E6F3007966F6 /* SheetManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SheetManager.swift; sourceTree = "<group>"; };
-		26A40E882704E97C007966F6 /* DebugViewBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewBLE.swift; sourceTree = "<group>"; };
-		26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewDFU.swift; sourceTree = "<group>"; };
-		26A40E8C2704EB32007966F6 /* DebugViewApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewApp.swift; sourceTree = "<group>"; };
 		26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewShareButton.swift; sourceTree = "<group>"; };
 		26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
 		26A40E922707D119007966F6 /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
-		26A40E942708C7F8007966F6 /* ScanningPopover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanningPopover.swift; sourceTree = "<group>"; };
-		26A40EE7270A1F97007966F6 /* RenameDeviceHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameDeviceHeader.swift; sourceTree = "<group>"; };
 		26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUStartButtonColorSelector.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
@@ -188,7 +173,29 @@
 		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
-		26F426EE26C72D7D00D0866B /* ChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartView.swift; sourceTree = "<group>"; };
+		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
+		E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSetLocationView.swift; sourceTree = "<group>"; };
+		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
+		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
+		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
+		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
+		E515FB12284C55540040B582 /* ChartOverview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartOverview.swift; path = "InfiniLink/View Components/ChartOverview.swift"; sourceTree = SOURCE_ROOT; };
+		E515FB14284C56070040B582 /* DeviceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
+		E515FB16284C56480040B582 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManagerVariables.swift; sourceTree = "<group>"; };
+		E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartViewComponents.swift; sourceTree = "<group>"; };
+		E57654022B5781970059C8EF /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherController.swift; path = InfiniLink/Weather/WeatherController.swift; sourceTree = SOURCE_ROOT; };
+		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = ../DeviceData.swift; sourceTree = "<group>"; };
+		E57AD57D282462D900E33EEA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
+		E5EEB1D32803438200FB0C11 /* RenameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
+		E5EEB1D728034EA500FB0C11 /* HeartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartView.swift; sourceTree = "<group>"; };
+		E5EEB1D828034EA500FB0C11 /* BatteryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
+		E5EEB1DD2803780C00FB0C11 /* StepsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
 		F99B8DCC276778FF0096A84D /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
 		F9A88B652765357600B2B94C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -198,6 +205,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */,
 				263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */,
 				26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */,
 			);
@@ -230,25 +238,6 @@
 			path = "Steps View Components";
 			sourceTree = "<group>";
 		};
-		2617EF3A27036D9100FE6F48 /* What's New */ = {
-			isa = PBXGroup;
-			children = (
-				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
-				2617EF3C27036DC600FE6F48 /* WhatsNewBody.swift */,
-			);
-			path = "What's New";
-			sourceTree = "<group>";
-		};
-		2632389326F29A4100D72B43 /* Onboarding */ = {
-			isa = PBXGroup;
-			children = (
-				2644261526DC1D8E009BD54A /* Onboarding.swift */,
-				2632388D26F297CB00D72B43 /* OnboardingBody.swift */,
-				2632388F26F2980A00D72B43 /* OnboardingDismissButton.swift */,
-			);
-			path = Onboarding;
-			sourceTree = "<group>";
-		};
 		263462EB2729F64600D3278D /* StepCalendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,11 +251,12 @@
 		263B20B626CD673D00676BF0 /* Chart View Components */ = {
 			isa = PBXGroup;
 			children = (
-				263B20B426CD673900676BF0 /* ChartTabs.swift */,
+				E515FB0A284C54690040B582 /* BatteryChartComponents.swift */,
+				E515FB0B284C54690040B582 /* HeartChartComponents.swift */,
+				E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */,
 				263B20B926CDF13400676BF0 /* HeartChart.swift */,
-				263B20BB26CDF20400676BF0 /* BatteryChart.swift */,
+				E097C1182B4F0B7E005293D8 /* BatteryChart.swift */,
 				266F53E326F7FCA6007481A6 /* ChartManager.swift */,
-				2617EF36270364CE00FE6F48 /* ChartViewSelector.swift */,
 			);
 			path = "Chart View Components";
 			sourceTree = "<group>";
@@ -277,7 +267,6 @@
 				26A6315F26C4BC25005AE404 /* DFUView.swift */,
 				2632388326F2531C00D72B43 /* DFUWithBLE.swift */,
 				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
-				2632388726F2576D00D72B43 /* DFUFileSelectButton.swift */,
 				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
 				26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */,
 				2675CA5926DC81AA00967E4D /* DFUComplete.swift */,
@@ -311,14 +300,17 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
-				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
-				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				264DB80926C62EAC00E812C3 /* View Components */,
 				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
+				E03544142B59648D00FEA7AA /* Weather */,
+				26A6315926C49839005AE404 /* DFU */,
 				26A6314E26BF0FA2005AE404 /* Music */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4A26BC51CF0050A223 /* Persistence.swift */,
+				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
+				264BFE4326BC51CE0050A223 /* ContentView.swift */,
+				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
 				2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */,
@@ -357,14 +349,14 @@
 		264DB80926C62EAC00E812C3 /* View Components */ = {
 			isa = PBXGroup;
 			children = (
-				2632388B26F265B100D72B43 /* MainView.swift */,
 				26A40EE6270A1F78007966F6 /* Home View */,
-				264DB80A26C62ED600E812C3 /* SideMenu.swift */,
-				26F426EE26C72D7D00D0866B /* ChartView.swift */,
-				2601AF6627220CED00D999EF /* StepsView.swift */,
-				2601AF68272210EB00D999EF /* Steps View Components */,
+				E515FB12284C55540040B582 /* ChartOverview.swift */,
+				E5EEB1DD2803780C00FB0C11 /* StepsView.swift */,
+				E5EEB1D828034EA500FB0C11 /* BatteryView.swift */,
+				E5EEB1D728034EA500FB0C11 /* HeartView.swift */,
 				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
-				26A40E942708C7F8007966F6 /* ScanningPopover.swift */,
+				E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */,
+				2601AF68272210EB00D999EF /* Steps View Components */,
 				26A40E872704E964007966F6 /* Debug View */,
 				26C5FAD626FC126F00921207 /* Sheets */,
 				263B20C826CF07BE00676BF0 /* DFU View */,
@@ -377,7 +369,7 @@
 		2675CA5826DC5C9400967E4D /* View Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				264DB80C26C633CF00E812C3 /* PageSwitcher.swift */,
+				E57AD5762823F85D00E33EEA /* DeviceData.swift */,
 			);
 			path = "View Utilities";
 			sourceTree = "<group>";
@@ -415,9 +407,6 @@
 			children = (
 				26B2BAF626F139D600FBC9CE /* DebugView.swift */,
 				26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */,
-				26A40E882704E97C007966F6 /* DebugViewBLE.swift */,
-				26A40E8C2704EB32007966F6 /* DebugViewApp.swift */,
-				26A40E8A2704EB22007966F6 /* DebugViewDFU.swift */,
 			);
 			path = "Debug View";
 			sourceTree = "<group>";
@@ -425,8 +414,9 @@
 		26A40EE6270A1F78007966F6 /* Home View */ = {
 			isa = PBXGroup;
 			children = (
-				266F53E526FA7676007481A6 /* HomeScreen.swift */,
-				26A40EE7270A1F97007966F6 /* RenameDeviceHeader.swift */,
+				E515FB16284C56480040B582 /* WelcomeView.swift */,
+				E515FB14284C56070040B582 /* DeviceView.swift */,
+				E5EEB1D32803438200FB0C11 /* RenameView.swift */,
 			);
 			path = "Home View";
 			sourceTree = "<group>";
@@ -452,7 +442,6 @@
 			isa = PBXGroup;
 			children = (
 				264BFE7326BC526C0050A223 /* BLEManager.swift */,
-				2695B141278925F8007DF27D /* BLE_FS.swift */,
 				26D7816426C9EB3800BBF555 /* BLEDelegates.swift */,
 				26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */,
 				26A40E922707D119007966F6 /* BLEUpdateHandler.swift */,
@@ -460,7 +449,8 @@
 				26A6315426C0297A005AE404 /* BLEWriteManager.swift */,
 				2644261126DC093D009BD54A /* SetTime.swift */,
 				266F53E926FA91F3007481A6 /* DeviceInfo.swift */,
-				26A6315926C49839005AE404 /* DFU */,
+				E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */,
+				E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -475,8 +465,8 @@
 				267C2EFB273DDB3B00F464B0 /* StepsSettingsSheet */,
 				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
 				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
-				2617EF3A27036D9100FE6F48 /* What's New */,
-				2632389326F29A4100D72B43 /* Onboarding */,
+				2644261526DC1D8E009BD54A /* Onboarding.swift */,
+				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
 			);
 			path = Sheets;
 			sourceTree = "<group>";
@@ -498,8 +488,28 @@
 				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
 				26C5FAD426FBB76100921207 /* DeviceNameManager.swift */,
 				2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */,
+				E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */,
+				E0EC91C02B47213F007472EC /* NotificationManager.swift */,
+				E021DAB22B489F58005C5E51 /* Extensions.swift */,
 			);
 			path = Utilities;
+			sourceTree = "<group>";
+		};
+		E03544142B59648D00FEA7AA /* Weather */ = {
+			isa = PBXGroup;
+			children = (
+				E0A1477D2B5EC56E000193E9 /* Views */,
+				E57654022B5781970059C8EF /* WeatherController.swift */,
+			);
+			path = Weather;
+			sourceTree = "<group>";
+		};
+		E0A1477D2B5EC56E000193E9 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -521,6 +531,7 @@
 			packageProductDependencies = (
 				26A6315D26C498B7005AE404 /* NordicDFU */,
 				263B20C426CEB46800676BF0 /* SwiftUICharts */,
+				E59398F92B58DA1F00D5840A /* SwiftyJSON */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -568,8 +579,9 @@
 		264BFE3626BC51CE0050A223 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				BuildIndependentTargetsInParallel = YES;
 				LastSwiftUpdateCheck = 1250;
-				LastUpgradeCheck = 1300;
+				LastUpgradeCheck = 1510;
 				TargetAttributes = {
 					264BFE3D26BC51CE0050A223 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -590,13 +602,17 @@
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
-				Base,
 				ru,
+				fr,
+				Base,
+				ko,
+				"zh-Hant",
 			);
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
 				26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -644,9 +660,9 @@
 			files = (
 				263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */,
 				26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */,
+				E5EEB1DE2803780C00FB0C11 /* StepsView.swift in Sources */,
 				26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */,
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
-				2695B142278925F8007DF27D /* BLE_FS.swift in Sources */,
 				26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */,
@@ -656,53 +672,55 @@
 				26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */,
 				2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */,
 				263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */,
-				26A40E892704E97C007966F6 /* DebugViewBLE.swift in Sources */,
-				2632389026F2980A00D72B43 /* OnboardingDismissButton.swift in Sources */,
+				E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */,
 				264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */,
 				267C2EFA273DB62800F464B0 /* StepsSettingsSheet.swift in Sources */,
-				2632388C26F265B100D72B43 /* MainView.swift in Sources */,
-				2632388826F2576D00D72B43 /* DFUFileSelectButton.swift in Sources */,
-				26F426EF26C72D7D00D0866B /* ChartView.swift in Sources */,
 				266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */,
 				268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */,
+				E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */,
 				267C2EFF273DDBFF00F464B0 /* StepSettingsDatePicker.swift in Sources */,
 				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
 				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
-				2632388E26F297CB00D72B43 /* OnboardingBody.swift in Sources */,
+				E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
 				2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */,
 				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,
+				E515FB1B284C58AA0040B582 /* BLEManagerVariables.swift in Sources */,
 				26C5FAE8270100FF00921207 /* DownloadManager.swift in Sources */,
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
-				264DB80B26C62ED600E812C3 /* SideMenu.swift in Sources */,
-				264DB80D26C633CF00E812C3 /* PageSwitcher.swift in Sources */,
+				E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
-				26A40E8B2704EB22007966F6 /* DebugViewDFU.swift in Sources */,
+				E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */,
+				E515FB13284C55540040B582 /* ChartOverview.swift in Sources */,
 				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
+				E515FB15284C56070040B582 /* DeviceView.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
 				26C5FAD826FC129400921207 /* ArbitraryNotificationView.swift in Sources */,
-				2617EF3D27036DC600FE6F48 /* WhatsNewBody.swift in Sources */,
-				26A40E952708C7F8007966F6 /* ScanningPopover.swift in Sources */,
+				E515FB17284C56480040B582 /* WelcomeView.swift in Sources */,
 				264BFE7626BC52720050A223 /* HexStringToData.swift in Sources */,
 				2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */,
 				26914730272A09D8004A61BD /* StepCountPersistenceManager.swift in Sources */,
+				E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */,
+				E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */,
+				E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */,
+				E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */,
 				26C5FADC26FE7EB000921207 /* SheetCloseButton.swift in Sources */,
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
+				E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */,
+				E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */,
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
-				263B20BC26CDF20400676BF0 /* BatteryChart.swift in Sources */,
-				2601AF6727220CED00D999EF /* StepsView.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
-				266F53E626FA7676007481A6 /* HomeScreen.swift in Sources */,
+				E57654032B5781970059C8EF /* WeatherController.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
-				263B20B526CD673900676BF0 /* ChartTabs.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
+				E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */,
+				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
 				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
-				2617EF37270364CE00FE6F48 /* ChartViewSelector.swift in Sources */,
-				26A40E8D2704EB32007966F6 /* DebugViewApp.swift in Sources */,
+				E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */,
 				267C2EFD273DDB5500F464B0 /* StepSettingsGoalChange.swift in Sources */,
 				26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */,
 				267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */,
@@ -711,7 +729,6 @@
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
 				268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */,
 				26A40EEA270A5F39007966F6 /* DFUStartButtonColorSelector.swift in Sources */,
-				26A40EE8270A1F97007966F6 /* RenameDeviceHeader.swift in Sources */,
 				266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -753,6 +770,9 @@
 			children = (
 				F9A88B652765357600B2B94C /* en */,
 				F99B8DCC276778FF0096A84D /* ru */,
+				22F9534327AF34C200729BF5 /* fr */,
+				E57AD57D282462D900E33EEA /* ko */,
+				9255940428BB5342001602F1 /* zh-Hant */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -764,6 +784,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -798,6 +819,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -826,6 +848,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
@@ -860,6 +883,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -881,23 +905,27 @@
 		264BFE6926BC51CF0050A223 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = InfiniLink/InfiniLink.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = 99BHY6DC82;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.3;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
+				MARKETING_VERSION = 1.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -906,23 +934,27 @@
 		264BFE6A26BC51CF0050A223 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-2";
+				ASSETCATALOG_COMPILER_APPICON_NAME = "AppIcon-3";
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = InfiniLink/InfiniLink.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = 99BHY6DC82;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
 				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.9.3;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
+				MARKETING_VERSION = 1.2.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1066,8 +1098,16 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library.git";
 			requirement = {
-				branch = master;
+				branch = main;
 				kind = branch;
+			};
+		};
+		E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SwiftyJSON/SwiftyJSON";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.0.1;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
@@ -1082,6 +1122,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
 			productName = NordicDFU;
+		};
+		E59398F92B58DA1F00D5840A /* SwiftyJSON */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */;
+			productName = SwiftyJSON;
 		};
 /* End XCSwiftPackageProductDependency section */
 

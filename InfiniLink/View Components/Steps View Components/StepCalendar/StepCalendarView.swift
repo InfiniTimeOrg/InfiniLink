@@ -25,19 +25,18 @@ struct StepCalendarView: View {
 
 	var body: some View {
 		VStack {
-			CalendarView() { date in
-				ZStack{
+			CalendarView { date in
+				ZStack {
 					setStepHistory(date: date)
 					Text("30")
 						.hidden()
 						.padding(8)
-						.padding(.vertical, 2)
+						.padding(.vertical, 3)
 						.overlay(
 							Text(String(self.calendar.component(.day, from: date)))
 						)
 				}
 			}
-			Spacer()
 		}
 	}
 	
@@ -54,4 +53,9 @@ struct StepCalendarView: View {
 		let steps = getStepHistory(date: date)
 		return AnyView(CalendarGauge(stepCountGoal: $stepCountGoal, oldCount: steps))
 	}
+}
+
+#Preview {
+    StepCalendarView(stepCountGoal: .constant(1000))
+        .padding(30)
 }

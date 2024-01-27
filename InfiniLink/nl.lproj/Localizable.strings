@@ -1,0 +1,200 @@
+/* 
+  Localizable.strings
+  InfiniLink
+
+  Created by Arjan Vlek on 31.01.2022.
+  
+*/
+
+// - HomeScreen
+"device_information" = "Informatie horloge";
+"firmware_version" = "Firmwareversie: ";
+"model" = "Model: ";
+"update_stats" = "Verbindingsstatistieken";
+"last_disconnect" = "Laatst verbroken: ";
+"uptime" = "Tijd verbonden: ";
+"step_count" = "Stappenteller";
+"firmware_updates" = "Firmware-updates";
+"firmware_update_is_available" = "Firmware-update beschikbaar!";
+"no_updates_available" = "Geen update beschikbaar";
+"device_name" = "Naam horloge";
+"rename" = "Hernoem";
+
+// - SideMenu
+"home" = "Start";
+"steps" = "Stappenteller";
+"charts" = "Grafieken";
+"update" = "Firmware-update";
+"settings" = "Instellingen";
+"bluetooth_off" = "Bluetooth Uit";
+
+// - ChartView components
+"heart" = "Hartslag: ";
+"battery" = "Batterij: ";
+
+// - HeartChart
+"bpm" = "SPM";
+"insufficient_heart_rate_data" = "Onvoldoende hartslaggevens";
+
+// - BetteryChart
+"insufficient_battery_data" = "Onvoldoende batterijgegevens";
+
+// - StepsView
+"week" = "Week";
+"current" = "Huidig";
+"month" = "Maand";
+
+// - StepProgressGauge
+"steps_goal" = "Doel aantal stappen";
+
+// - StepWeeklyChart
+"steps_this_week" = "Stappen deze week";
+
+// - Settings_Page
+"connect_options" = "Verbindingsopties";
+"autoconnect_to_pinetime" = "Automatisch met PineTime verbinden";
+"autoconnect_device_uuid" = "Automatisch met apparaat-UUID verbinden";
+"use_current_device_for_autoconnect" = "Verbind automatisch met dit horloge";
+"autoconnect_device_cleared" = "Horloge om automatisch mee te verbinden gewist";
+"clear_autoconnect_device" = "Wis horloge om automatisch mee te verbinden";
+"current_device_name" = "Huidige naam horloge: ";
+"enter_new_name" = "Voer nieuwe naam in";
+"rename_device" = "Hernoem horloge";
+"firmware_update_downloads" = "Downloaden firmware-updates";
+"show_newer_versions_only" = "Toon alleen nieuwere versies";
+"notifications" = "Meldingen";
+"enable_watch_notifications" = "Toon meldingen op horloge";
+"notify_about_low_battery" = "Toon melding bij laag batterijniveau";
+"send_notification_to_pinetime" = "Verstuur melding naar PineTime";
+"graph_styles" = "Grafiekstijlen";
+"filled_hrm_graph" = "Gevulde hartslaggrafiek";
+"filled_battery_graph" = "Gevulde batterijgrafiek";
+"graph_data" = "Grafiekgegevens";
+"clear_all_hrm_chart_data" = "Verwijder gegevens hartslaggrafiek";
+"clear_all_battery_chart_data" = "Verwijder gegevens batterijgrafiek";
+"onboarding_information" = "Introductie";
+"open_onboarding_page" = "Open introductiepagina";
+"whats_new_page_this_version" = "Open 'Wat is er nieuw'-pagina voor deze appversie";
+"debug_mode" = "Foutopsporingsmodus";
+"enable_debug_mode" = "Schakel foutopsporingsmodus in";
+"debug_logs" = "Foutopsporings-logboeken";
+"links" = "Links";
+"donations" = "Donaties";
+
+// - ScanningPopover
+"connected_to" = "Verbonden met";
+"scanning" = "Aan het scannen";
+
+// - BLEConnectView
+"available_devices" = "Beschikbare apparaten";
+"waiting_for_bluetooth" = "Wachten op Bluetooth";
+"unnamed" = "Naamloos";
+
+// - ChartSettingsSheetMain
+"select_date_range" = "Selecteer datumbereik";
+"date_range_selection" = "Geselecteerd datumbereik";
+"show_all" = "Toon alles";
+"sliders" = "Gegevensbereik";
+"select_dates" = "Selecteer datums";
+"all_data_selected" = "Alle datums geselecteerd";
+
+// - ChartSettingsSheetSliders
+"hours" = "Uren";
+"days" = "Dagen";
+"weeks" = "Weken";
+
+// - ChartSettingsSheetDatePicker
+"start_date" = "Startdatum";
+"end_date" = "Einddatum";
+
+// - ArbitraryNotificationSheet
+"placeholder_text" = "voer meldingstekst in";
+"send_notification" = "Verstuur melding";
+"title" = "Titel";
+
+// - StepSettingsSheet
+"steps_settings" = "Instellingen stappenteller";
+"step_goal" = "Doel aantal stappen";
+"add_steps" = "Stappen verhogen";
+
+// - StepSettingsSheetGoalChange
+"change_step_count_goal" = "Verander doel aantal stappen";
+"enter_step_goal" = "Voer doel aantal stappen in";
+"submit_new_step_goal" = "Stel doel aantal stappen in";
+
+// - StepSettingsSheetDatePicker
+"manually_add_step_count" = "Aantal stappen handmatig verhogen";
+"select_date" = "Selecteer datum";
+"enter_number_of_steps" = "Voer aantal stappen in";
+"submit_count" = "Stel aantal stappen in";
+
+// - DownloadView
+"available_downloads" = "Beschikbare downloads";
+"firmware_download_links" = "Downloadlinks firmware";
+
+// - SheetCloseButton
+"close" = "Sluiten";
+
+// - WhatsNew
+"whats_new_in" = "Wat is er nieuw in";
+"welcome_to_version" = "Welkom bij versie";
+"welcome_text" = "van InfiniLink! Ik hoop dat je van de nieuwe functies in deze versie zult genieten. Wees vrij om met mij in contact te komen (in het Engels) om te praten over suggesties en nieuwe functies die je in deze app wilt zien!";
+
+// - WhatsNewBody
+"whats_new_body_1" = "First localization!\n- Thank you so much to @friendlytsy for creating a Russian localization for InfiniLink! If anyone else would like to localize the app, the work that @friendlytsy put in laid the groundwork for new localizations. If any polyglots out there would like to contribute localizations for other languages, let me know and I can help you get started!";
+"whats_new_body_2" = "Bug fixes:\n- This release should fix a few bugs causing crashes when the Apple Music feature is accessed.\n- Fixes some UI issues for users with smaller screens.n-\"Updates Available\" field on the home screen should now correctly show if an update for InfiniTime is available, and should reset on disconnect.";
+"whats_new_body_3" = "*** Please note***: the secure pairing implemented in v1.8.0 of InfiniTime is not currently compatible with the way that iOS initiates bonding. I am working with the wonderful devs at InfiniTime to sort this out, but in the meantime, your BLE connection to your watch will still be unencrypted.";
+
+// - Onboarding
+"welcome_to_InfiniLink" = "🎉 Welkom bij InfiniLink! 🎉";
+"onboarding_text" = "Ik ben superblij dat je deze betaversie van mijn iOS-app voor InfiniTime wilt uitproberen! Vergeet niet om deze app toegang tot Bluetooth te geven voordat je begint. Vind je een probleem, of heb je een suggestie, vergeet het niet te melden! (in het Engels)! Met jouw feedback kan ik deze app nóg beter maken. Feedback is welkom via TestFlight, of via GitHub, Matrix, of Mastodon (links staan bij het tabje 'instellingen').";
+
+// - OnboardingBody
+"other_notes" = "Overige opmerkingen:";
+"other_notes_1" = "- Meldingen werken nog niet, omdat het Apple Notification Center Service (ANCS) protocol in InfiniTime moet worden ingebouwd.";
+"other_notes_2" = "- Muziekbesturing werkt in InfiniTime, maar alleen voor muziek die via de Apple Music-app wordt afgespeeld. Systeembrede muziekbesturing in iOS vereist dat de gesloten Apple Media Service in InfiniTime moet worden ingebouwd. De app kan geen andere muziek-apps dan Apple Music bedienen totdat AMS is toegevoegd aan InfiniTime.";
+"other_notes_3" = "- Je PineTime kan maar één bluetoothverbinding tegelijkertijd maken. Als je problemen hebt met verbinden, controleer dat je PineTime niet al met een ander apparaat is verbonden, of met een andere app op dit apparaat.";
+"other_notes_4" = "- Als je PineTime nog steeds niet tussen de beschikbare apparaten verschijnt, start dan het horloge opnieuw op door de knop aan de zijkant ingeddrukt te houden tot je het Pine64 pinecone logo in beeld ziet, en laat de knop dan los. Er is momenteel een probleem met bluetooth-indicatie in Infinitime waaraan hard wordt gewerkt om het op te lossen.";
+
+// - OnboardingDismissButton
+"dismiss_button" = "Sluiten";
+
+// - DFUWithBLE
+"update_firmware" = "Firmware bijwerken";
+"current_firmware" = "Huidige Firmware";
+"firmware_file" = "Firmware-bestand";
+"clear" = "Wissen";
+
+// - DFUWithoutBLE
+"bluetooth_not_available" = "Bluetooth niet beschikbaar";
+"please_enable_bluetooth_try_again" = "Schakel a.u.b. Bluetooth in en probeer opnieuw.";
+
+// - DFUFileSelectButton
+"select_firmware_file" = "Selecteer firmwarebestand";
+"select_file_source" = "Selecteer een bestandslocatie";
+"use_local_file" = "Gebruik eigen bestand";
+"download_firmware_file" = "Download firmwarebestand";
+
+// - DFUStartTransferButton
+"stop_transfer" = "Stop overdracht";
+"start_transfer" = "Start overdracht";
+"downloading" = "Aan het downloaden";
+
+// - DFUComplete
+"transfer_completed" = "Overdracht voltooid!";
+
+// - BatteryNotifications
+"battery_low" = "Batterij bijna leeg";
+
+// - MusicController
+"not_playing" = "Wordt niet afgespeeld";
+
+// - SideMenu
+"disconnect" = "Verbr. verbinding";
+"scanning" = "Scannen";
+"connect" = "Verbinden";
+
+// - ContentView
+"failed_set_time" = "Kan tijd niet instellen";
+"failed_set_time_description" = "Er deed zich een probleem voor bij het instellen van de tijd op het horloge. Verbreek de verbinding, verbind opnieuw en probeer het nogmaals.";
+"dismiss" = "Sluiten";

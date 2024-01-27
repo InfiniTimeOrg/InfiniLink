@@ -17,37 +17,44 @@ struct StepProgressGauge: View {
 	var calendar: Bool
 	@State var backgroundColor = Color.clear
 	
-	func getStepHistory(date: Date) -> Int32 {
-		for stepCount in existingStepCounts {
-			if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) { //(stepCount.timestamp!, to: date, toGranularity: .day) == .orderedSame {
-				return stepCount.steps
-			}
-		}
-		return 0
-	}
+    func getStepHistory(date: Date) -> String {
+        for stepCount in existingStepCounts {
+            if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
+                let formattedSteps = NumberFormatter.localizedString(from: NSNumber(value: stepCount.steps), number: .decimal)
+                return formattedSteps
+            }
+        }
+        return "0"
+    }
 	
 	var body: some View {
 		VStack {
-			ZStack {
-				Circle()
-					.stroke(lineWidth: calendar ? 3.0 : 10.0)
-					.opacity(0.3)
-					.foregroundColor(Color.gray)
-				Circle()
-					.trim(from: 0.0, to: CGFloat(min((Float(getStepHistory(date: Date()))/Float(stepCountGoal)), 1.0)))
-					.stroke(style: StrokeStyle(lineWidth: calendar ? 5.0 : 20.0, lineCap: .round, lineJoin: .round))
-					.foregroundColor(Color.blue)
-					.rotationEffect(Angle(degrees: 270.0))
-					//.animation(.linear)
-				if !calendar {
-					VStack {
-						Text(String(getStepHistory(date: Date())))
-							.font(.largeTitle)
-							.bold()
-						Text("\(NSLocalizedString("steps_goal", comment: "")): \(stepCountGoal)")
-					}
-				}
-			}
+            ZStack {
+                Circle()
+                    .stroke(lineWidth: calendar ? 3.0 : 10.0)
+                    .opacity(0.3)
+                    .foregroundColor(Color.gray)
+                Circle()
+                    .trim(from: 0.0, to: CGFloat(min(((Float(getStepHistory(date: Date()).replacingOccurrences(of: ",", with: "")) ?? 0)/Float(stepCountGoal)), 1.0)))
+                    .stroke(style: StrokeStyle(lineWidth: calendar ? 5.0 : 15.0, lineCap: .round, lineJoin: .round))
+                    .foregroundColor(Color.blue)
+                    .rotationEffect(Angle(degrees: 270.0))
+
+                    //.animation(.linear)
+                if !calendar {
+                    VStack(spacing: 1) {
+                        Image(systemName: "figure.walk")
+                        Spacer()
+                            .frame(height: 2)
+                        Text(String(getStepHistory(date: Date())))
+//                        Text("\(NSLocalizedString("step_goal", comment: "")): \(stepCountGoal)")
+                        Text(NSLocalizedString("steps", comment: "Steps"))
+                            .font(.body.weight(.medium))
+                            .foregroundColor(.gray)
+                    }
+                    .font(.largeTitle.weight(.bold))
+                }
+            }
 			if !calendar {
 				Spacer()
 			}
@@ -83,7 +90,6 @@ struct CalendarGauge: View {
 				.stroke(style: StrokeStyle(lineWidth: 5.0, lineCap: .round, lineJoin: .round))
 				.foregroundColor(Color.blue)
 				.rotationEffect(Angle(degrees: 270.0))
-				.animation(.linear)
 		}
 	}
 }

@@ -1,0 +1,270 @@
+/* 
+  Localizable.strings
+  InfiniLink
+
+  Created by LE BARO Romain on 06.03.2021.
+  
+*/
+
+// - HomeScreen
+"device_information" = "Informations sur l'appareil";
+"firmware_version" = "Version du micrologiciel: ";
+"model" = "Modèle: ";
+"update_stats" = "Statistiques de disponibilité ";
+"last_disconnect" = "Dernière déconnexion: ";
+"uptime" = "Durée de fonctionnement: ";
+"step_count" = "Nombre de pas";
+"firmware_updates" = "Mise à jour du micrologiciel";
+"firmware_update_is_available" = "Une mise à jour du micrologiciel est disponible!";
+"no_updates_available" = "Aucune mises à jour disponible";
+"device_name" = "Nom de l'appareil";
+"rename" = "Renommer";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"save" = "Save";
+
+// - SideMenu
+"home" = "Accueil";
+"steps" = "Pas";
+"charts" = "Graphique";
+"update" = "Mise à jour";
+"settings" = "Paramètres";
+"bluetooth_off" = "Bluetooth désactivé";
+
+// - ChartView components
+"heart" = "Cœur: ";
+"battery" = "Batterie: ";
+
+// - HeartChart
+"bpm" = "BPM";
+"insufficient_heart_rate_data" = "Données de fréquence cardiaque insuffisantes";
+"heart_rate_settings" = "Heart Rate Settings";
+"oops" = "Oops!";
+
+// - BetteryChart
+"insufficient_battery_data" = "Données de batterie insuffisantes";
+"battery_stats" = "Battery Stats";
+
+// - StepsView
+"week" = "Semaine";
+"current" = "Actuelle";
+"month" = "Mois";
+
+// - StepProgressGauge
+"steps_goal" = "Objectif de pas";
+
+// - StepWeeklyChart
+"steps_this_week" = "Pas cette semaine";
+
+// - Settings_Page
+"connect_options" = "Options de connexion";
+"autoconnect_to_pinetime" = "Connexion automatique à la PineTime";
+"autoconnect_device_uuid" = "UUID de l'appareil pour la connexion automatique";
+"use_current_device_for_autoconnect" = "Utiliser l'appareil actuel pour la connexion automatique";
+"autoconnect_device_cleared" = "Connexion automatique à l'appareil supprimé";
+"clear_autoconnect_device" = "Supprimer la connexion automatique à l'appareil";
+"current_device_name" = "Nom de l'appareil actuel: ";
+"enter_new_name" = "Saisir un nouveau nom";
+"rename_device" = "Renommé l'appareil";
+"firmware_update_downloads" = "Téléchargement de la mise à jour du micrologiciel";
+"show_newer_versions_only" = "Ne monter que les nouvelles versions";
+"notifications" = "Notifications";
+"enable_watch_notifications" = "Activer les notifications de la montre";
+"notify_about_low_battery" = "Notifer lors de la batterie faible";
+"send_notification_to_pinetime" = "Envoyer une notification à la PineTime";
+"find_lost_device" = "Find Lost";
+"graph_styles" = "Styles de graphique";
+"filled_hrm_graph" = "Graphique HRM rempli";
+"filled_battery_graph" = "Graphique de batterie rempli";
+"graph_data" = "Données graphiques";
+"clear_all_hrm_chart_data" = "Effacer toutes les données du graphique HRM";
+"clear_all_battery_chart_data" = "Effacer toutes les données du graphique de la Batterie";
+"onboarding_information" = "Information d'intégration";
+"open_onboarding_page" = "Ouvrir la page d'intégration";
+"whats_new_page_this_version" = "Ouvrir la page 'Nouveautés' pour cette version";
+"debug_mode" = "Mode débogage";
+"enable_debug_mode" = "Activer le mode débogage";
+"debug_logs" = "Débogage des logs";
+"no_logs" = "No Logs";
+"links" = "Liens";
+"donations" = "Donations";
+"copy" = "Copy";
+"weather" = "Weather";
+"weather_style" = "Weather Style";
+"search_for_locations" = "Search for Locations";
+"find_location" = "Use the search box above to find\na location";
+
+// - ScanningPopover
+"connected_to" = "Connecté à";
+"scanning" = "Balayage";
+
+// - BLEConnectView
+"available_devices" = "Appareil disponible";
+"waiting_for_bluetooth" = "En attente du Bluetooth";
+"unnamed" = "Anonyme";
+"loading" = "";
+"need_help_connecting" = "";
+"devices" = "";
+
+// - ConnectionHelpView
+"connection_help" = "";
+
+// - ChartSettingsSheetMain
+"select_date_range" = "Selectionner une plage de dates";
+"date_range_selection" = "Sélection de la plage de dates";
+"show_all" = "Afficher tout";
+"sliders" = "Sliders";
+"select_dates" = "Selectionner les dates";
+"all_data_selected" = "Toutes les données sélectionnées";
+
+// - ChartSettingsSheetSliders
+"hours" = "Heures";
+"days" = "Jours";
+"weeks" = "Semaines";
+
+// - ChartSettingsSheetDatePicker
+"start_date" = "Date de début";
+"end_date" = "Date de fin";
+
+// - ArbitraryNotificationSheet
+"placeholder_text" = "Entrer du text ici";
+"send_notification" = "Envoyer une notification";
+"title" = "Titre";
+
+// - StepSettingsSheet
+"steps_settings" = "Paramètres des pas";
+"step_goal" = "Objectif de pas";
+"add_steps" = "Ajouter des pas";
+
+// - StepSettingsSheetGoalChange
+"change_step_goal" = "Modifier l'objectif du nombre de pas";
+"enter_step_goal" = "Entrer l'objectif de pas";
+"submit_new_step_goal" = "Soumettre un nouvel objectif de pas";
+
+// - StepSettingsSheetDatePicker
+"manually_add_step_count" = "Ajouter un nombre de pas manuellement";
+"select_date" = "Selectionner une date";
+"enter_number_of_steps" = "Entrer un nombre de pas";
+"submit_count" = "Soumettre le nombre";
+
+// - DownloadView
+"available_downloads" = "Téléchargements disponibles";
+"firmware_download_links" = "Liens de téléchargement du micrologiciel";
+"software_update_available" = "Software Update Available";
+
+// - SheetCloseButton
+"close" = "Fermer";
+
+// - WhatsNew
+"whats_new_in" = "Nouveautés dans";
+"welcome_to_version" = "Bienvenue dans la version";
+"welcome_text" = "d'InfiniLink! J'espère que vous apprécierez les fonctionnalités que j'ai ajoutées à l'application pour cette version. N'hésitez pas à me contacter pour tout problème que vous rencontrez ou tout changement que vous aimeriez voir!";
+
+// - WhatsNewBody
+"whats_new_body_1" = "Another new UI!";
+"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
+
+// - Onboarding
+"welcome_to_InfiniLink" = "Bienvenue sur InfiniLink!";
+"onboarding_text" = "Je suis ravi que vous vouliez et puissiez tester cette version bêtâ de mon application compagnon iOS pour InfiniTime! Avant de commencer, assurez-vous d'autoriser cette application à utiliser le Bluetooth. Veuillez me signaler tout problème ou plantages que vous rencontrez ou les modifications suggérées ! Vos commentaires nous permettent, à vous et à moi, de travailler ensemble pour avoir une excellente application compagnon. Les rapports sont les bienvenus via TestFlight, ou via Github, Matrix, ou Mastodon (Les liens sont dispnibles dans l'onglet paramètres)";
+
+// - OnboardingBody
+"other_notes" = "Autres notes:";
+"other_notes_1" = "Les notifications ne sont actuellement pas fonctionnelles, car cela nécessite que le protocole Apple Notification Center Service (ANCS) soit implémenté dans InfiniTime.";
+"other_notes_2" = "Les commandes de musique fonctionnent dans InfiniTime, mais uniquement si vous écoutez de la musique via l'application Apple Music. Le contrôle de la musique à l'échelle du système dans iOS nécessite que le service propriétaire Apple Media Service soit implémenté dans InfiniTime. Au niveau de l'application, je ne peux vraiment interagir qu'avec Apple Music et n'ai aucun contrôle sur les podcasts, les vidéos Youtube, le volume du système, etc. jusqu'à ce qu'AMS soit ajouté à InfiniTime.";
+"other_notes_3" = "Votre PineTime n'est capable de maintenir qu'une seule connexion Bluetooth à la fois. Si vous rencontrez des problèmes de connexion, assurez-vous que votre PineTime n'est pas déjà connecté à un autre appareil ou à une autre application sur cet appareil.";
+"other_notes_4" = "Si votre PineTime n'apparaît toujours pas comme un appareil disponible, veuillez redémarrer votre montre en maintenant enfoncé le bouton latéral de votre montre jusqu'à ce que vous voyiez le logo de la pomme de pin Pine64 en vert, puis relâcher. Il y a actuellement un problème avec la découverte du Bluetooth dans Infinitime sur lequel les développeurs travaillent extrêmement dur. Souhaitez-leur bonne chance!";
+
+// - OnboardingDismissButton
+"dismiss_button" = "Fermer";
+
+// - DFUWithBLE
+"update_firmware" = "Mise à jour du micrologiciel";
+"current_firmware" = "Micrologiciel actuel";
+"firmware_file" = "Fichier du micrologiciel";
+"clear" = "Nettoyer";
+
+// - DFUWithoutBLE
+"bluetooth_not_available" = "Bluetooth non disponible";
+"please_enable_bluetooth_try_again" = "Veuillez activer le Bluetooth et essayer à nouveau.";
+
+// - DFUFileSelectButton
+"select_firmware_file" = "Sélectionner le fichier du micrologiciel";
+"select_file_source" = "Sélectionner un fichier source";
+"use_local_file" = "Utiliser un fichier local";
+"download_firmware_file" = "Télécharger un fichier de micrologiciel";
+
+// - DFUStartTransferButton
+"stop_transfer" = "Stopper le transfert";
+"start_transfer" = "Démarrer le transfert";
+"downloading" = "Téléchargement";
+
+// - DFUComplete
+"transfer_completed" = "Transfert complété!";
+
+// - BatteryNotifications
+"battery_low" = "Battery faible";
+"battery_low_message" = "Batterie restante";
+
+// - MusicController
+"not_playing" = "Pas d'activité";
+
+// - SideMenu
+"disconnect" = "Déconnecter";
+"scanning" = "Balayage";
+"connect" = "Connecter";
+
+// - ContentView
+"failed_set_time" = "Impossible de régler l'heure";
+"failed_set_time_description" = "Un problème est survenu lors du réglage de l'heure sur votre montre. Veuillez vous déconnecter de la montre, puis vous reconnecter.";
+"dismiss" = "Fermer";
+
+// - New Stuff
+"not_connected" = "Non connecté";
+"tap_to_connect" = "Appuyer pour se connecter";
+"customize_favorites" = "Personnaliser les favoris";
+"goal" = "avec un but de";
+"heart_rate" = "Pouls";
+"battery_tilte" = "Batterie";
+"heart_tilte" = "Coeur";
+"welcome_text" = "Bienvenue. Si vous avez un appareil InfiniTime, vous pouvez l'appairer ici";
+"connecting" = "Connexion...";
+"start_pairing" = "Commencer l'appairage";
+"stop_connecting" = "";
+"my_device" = "Mon appareil";
+"favorites" = "Favoris";
+"app_settings" = "Thème de l'application";
+"app_theme" = "Thème de l'application";
+"name" = "Nom";
+"avaliable_themes" = "Thèmes disponibles";
+"choose_app_theme" = "Choisir le thème de l'application";
+"firmware_file_link" = "Lien du fichier du micrologiciel";
+"firmware_download_links" = "Lien de téléchargement du micrologiciel";
+"downloads" = "Téléchargements";
+"learn_more" = "En savoir plus";
+"software_update" = "Mise à jour du micrologiciel";
+"local_file_info" = "Ceci est un fichier local qui pourrait ne pas fonctionner avec votre PineTime";
+"install_older_version" = "Installer une version plus ancienne";
+"up_to_date" = "est à jour";
+"pinetime_not_available" = "PineTime non disponible";
+"please_check_your_connection_and_try_again" = "Veuillez vérifier votre connexion et réessayer";
+"download_and_install" = "Télécharger et installer";
+
+"battery_level" = "NIVEAU DE BATTERIE";
+"battery_usage" = "UTILISATION DE LA BATTERIE";
+
+"last_24_hours" = "Dernières 24 heures";
+"last_10_days" = "10 derniers jours";
+"battery_level_is" = "Le niveau de batterie est de";
+"currently_unavailable" = "Actuellement indisponible";
+
+"software_version" = "Version du logiciel";
+"file_system_version" = "File System Version";
+"model_name" = "Nom du modèle";
+"autoconnect_to_this" = "Se connecter automatiquement";
+"send_notification_to" = "Envoyer une notification à";
+"connected_to" = "Connecté à";
+
+"enable_weather_data" = "Enable Weather Data";
+"use_current_location" = "Use Current Location";
+"set_location" = "Location";
+"always_allow_location_services" = "Always Allow Current Location";

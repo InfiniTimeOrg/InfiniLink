@@ -1,0 +1,200 @@
+/* 
+  Localizable.strings
+  InfiniLink
+
+  Created by Loris H. on 25.01.2022.
+  
+*/
+
+// - HomeScreen
+"device_information" = "Geräteinformationen";
+"firmware_version" = "Firmwareversion: ";
+"model" = "Modell: ";
+"update_stats" = "Betriebszeitstatistik";
+"last_disconnect" = "Letztes Trennen der Verbindung: ";
+"uptime" = "Betriebszeit: ";
+"step_count" = "Schrittzahl";
+"firmware_updates" = "Firmwareupdates";
+"firmware_update_is_available" = "Firmwareupdate ist verfügbar!";
+"no_updates_available" = "Keine Updates verfügbar";
+"device_name" = "Gerätename";
+"rename" = "Umbenennen";
+
+// - SideMenu
+"home" = "Start";
+"steps" = "Schritte";
+"charts" = "Diagramme";
+"update" = "Update";
+"settings" = "Einstellungen";
+"bluetooth_off" = "Bluetooth aus";
+
+// - ChartView components
+"heart" = "Puls: ";
+"battery" = "Akku: ";
+
+// - HeartChart
+"bpm" = "Schläge pro Minute";
+"insufficient_heart_rate_data" = "Nicht ausreichende Pulsdaten";
+
+// - BetteryChart
+"insufficient_battery_data" = "Nicht ausreichende Batteriedaten";
+
+// - StepsView
+"week" = "Woche";
+"current" = "Aktuell";
+"month" = "Monat";
+
+// - StepProgressGauge
+"steps_goal" = "Schrittziel";
+
+// - StepWeeklyChart
+"steps_this_week" = "Schritte diese Woche";
+
+// - Settings_Page
+"connect_options" = "Verbindungsoptionen";
+"autoconnect_to_pinetime" = "PineTime automatisch verbinden";
+"autoconnect_device_uuid" = "UUID des Gerätes, zu welchem die automatische Verbindung eingerichtet ist";
+"use_current_device_for_autoconnect" = "Dieses Gerät automatiscj verbinden";
+"autoconnect_device_cleared" = "Gerät zur automatischen Verbindung gelöscht";
+"clear_autoconnect_device" = "Gerät zur automatischen Verbindung löschen";
+"current_device_name" = "Aktueller Gerätename: ";
+"enter_new_name" = "Neuen Namen eingeben";
+"rename_device" = "Gerät umbenennen";
+"firmware_update_downloads" = "Firmwareupdatedownloads";
+"show_newer_versions_only" = "Nur neuere Versionen anzeigen";
+"notifications" = "Benachrichtigungen";
+"enable_watch_notifications" = "Uhrenbenachrichtigungen aktivieren";
+"notify_about_low_battery" = "Bei niedrigem Batteriestand benachrichtigen";
+"send_notification_to_pinetime" = "Nachricht an PineTime senden";
+"graph_styles" = "Diagrammansichten";
+"filled_hrm_graph" = "Pulsdiagramm aufgefüllt";
+"filled_battery_graph" = "Akkudiagramm aufgefüllt";
+"graph_data" = "Diagrammdaten";
+"clear_all_hrm_chart_data" = "Alle Pulsdiagrammdaten löschen";
+"clear_all_battery_chart_data" = "Alle Batteriediagrammdaten löschen";
+"onboarding_information" = "Onboarding-Informationen";
+"open_onboarding_page" = "Onboarding-Seite öffnen";
+"whats_new_page_this_version" = "Seite mit neuen Funktionen für diese Version öffnen";
+"debug_mode" = "Debug-Modus";
+"enable_debug_mode" = "Debug-Modus aktivieren";
+"debug_logs" = "Debug-Logs";
+"links" = "Links";
+"donations" = "Spenden";
+
+// - ScanningPopover
+"connected_to" = "Verbunden mit";
+"scanning" = "Scannt";
+
+// - BLEConnectView
+"available_devices" = "Verfügbare Geräte";
+"waiting_for_bluetooth" = "Wartet auf Bluetooth";
+"unnamed" = "Unbenannt";
+
+// - ChartSettingsSheetMain
+"select_date_range" = "Datumsbereich auswählen";
+"date_range_selection" = "Datumsbereichsauswahl";
+"show_all" = "Alles anzeigen";
+"sliders" = "Schieberegler";
+"select_dates" = "Daten auswählen";
+"all_data_selected" = "Alle Daten ausgewählt";
+
+// - ChartSettingsSheetSliders
+"hours" = "Stunden";
+"days" = "Tage";
+"weeks" = "Wochen";
+
+// - ChartSettingsSheetDatePicker
+"start_date" = "Startdatum";
+"end_date" = "Enddatum";
+
+// - ArbitraryNotificationSheet
+"placeholder_text" = "Text hier eingeben";
+"send_notification" = "Benachrichtigung senden";
+"title" = "Titel";
+
+// - StepSettingsSheet
+"steps_settings" = "Schrittzählereinstellungen";
+"step_goal" = "Schrittziel";
+"add_steps" = "Schritte hinzufügen";
+
+// - StepSettingsSheetGoalChange
+"change_step_count_goal" = "Schrittzählerziel ändern";
+"enter_step_goal" = "Schrittziel eingeben";
+"submit_new_step_goal" = "Neues Schrittziel an Gerät senden";
+
+// - StepSettingsSheetDatePicker
+"manually_add_step_count" = "Schrittzahl manuell hinzufügen";
+"select_date" = "Datum auswählen";
+"enter_number_of_steps" = "Schrittnummer eingeben";
+"submit_count" = "Nummer an Gerät senden";
+
+// - DownloadView
+"available_downloads" = "Verfügbare Downloads";
+"firmware_download_links" = "Firmwaredownloadlinks";
+
+// - SheetCloseButton
+"close" = "Schliessen";
+
+// - WhatsNew
+"whats_new_in" = "Was ist neu in der Version";
+"welcome_to_version" = "Willkommen zur Version";
+"welcome_text" = "von InfiniLink! ich hoffe, dass Sie sich an den Funktionen, welche ich in dieser Version hinzugefügt habe, erfreuen. Sie können mir gerne schreiben, wenn Sie Fehler bemerken oder Vorschläge haben!";
+
+// - WhatsNewBody
+"whats_new_body_1" = "Die erste Lokalisation!\n- Vielen Dank an @friendlytsy für das Erstellen einer russischen Übersetzung von InfiniLink! Wenn irgendeine andere Person Interesse daran hat, die App zu übersetzen, die Arbeit, welche @friendlytsy investiert hat, hat das Grundgerüst für neue Übersetzungen gelegt. Wenn irgendwelche mehrsprachigen Personen da draussen Übersetzungen beitragen will, benachrichtigen Sie mich und ich werde Ihnen den Beginn erleichtern!";
+"whats_new_body_2" = "Bugfixes:\n-Diese Version sollte einige Fehler beheben, welche Abstürze verursachen, wenn das Apple Music-Feature verwendet wird.\n- Fehlerbehebungen für einige Benutzerinterfaceprobleme für Benutzer mit kleineren Bildschirmen.n-\"Updates Verfügbar\"-Feld auf dem Home-Bildschirm sollte nun korrekt angezeigt werden, wenn eine InfiniTime-Uhr verfügbar ist, und sollte sich zurücksetzen, wenn die Verbindung getrennt wird.";
+"whats_new_body_3" = "*** Bitte beachten ***: Die Funktion zur sicheren Verbindung, welche in der Version 1.8.0 von InfiniTime eingeführt wurde, ist zur Zeit nicht mit iOS kompatibel. Ich arbeite zur Zeit mit den wunderbaren Entwicklern von InfiniTime an einer Lösung dieses Problems, aber in der Zwischenzeit wird die Verbindung zur Uhr nicht verschlüsselt sein.";
+
+// - Onboarding
+"welcome_to_InfiniLink" = "🎉 Willkommen zu InfiniLink! 🎉";
+"onboarding_text" = "Ich freue mich, dass Sie diese Beta-Version von meiner iOS-Begleiter-App für InfiniTime-Geräte! Bevor Sie beginnen, stellen Sie sicher, dass diese App Bluetooth verwenden kann. Bitte melden Sie mir alle Fehler, welche Sie finden. Ihr Feedback erlaubt uns, diese App zu perfektionieren. Sie können Fehler über die folgenden Dienste melden: TestFlight, GitHub, Matrix und Mastodon. Die Links finden Sie in den Einstellungen der App.";
+
+// - OnboardingBody
+"other_notes" = "Andere Informationen:";
+"other_notes_1" = "- Benachrichtgungen sind zur Zeit nicht funktional, da dies den Apple-Notifiktionscenterservice bedingt.";
+"other_notes_2" = "- Die Musiksteuerung funktioniert in InfiniTime, aber nur, wenn Musik über die Apple-Musik-App abgespielt wird. Dies ist so, da etwas anderes den propertiären Apple-Medienservice bedingt.";
+"other_notes_3" = "- Die PineTime kann nur eine Verbindung auf einmal aufrechterhalten. Falls es zu Verbindungsproblemen kommt, stellen Sie bitte sicher, dass die Uhr nicht mit einem anderen Gerät oder einer anderen App verbunden ist.";
+"other_notes_4" = "- Wenn Ihre PineTime immer noch nicht funktioniert, bitte starten Sie diese neu, indem Sie die Seitentaste gedrückt halten, bis der Pine64-Tannenzapfen erscheint. Dies löst ein Problem, an dem die Entwickler zur Zeit dran arbeiten. Wünschen Sie denen Glück!";
+
+// - OnboardingDismissButton
+"dismiss_button" = "Ignorieren";
+
+// - DFUWithBLE
+"update_firmware" = "Firmware updaten";
+"current_firmware" = "Jetzige Firmware";
+"firmware_file" = "Firmwaredatei";
+"clear" = "Entfernen";
+
+// - DFUWithoutBLE
+"bluetooth_not_available" = "Bluetooth nicht verfügbar";
+"please_enable_bluetooth_try_again" = "Bitte aktivieren Sie Bluetooth und versuchen Sie es erneut";
+
+// - DFUFileSelectButton
+"select_firmware_file" = "Firmwaredatei auswählen";
+"select_file_source" = "Eine Dateiquelle auswählen";
+"use_local_file" = "Lokale Datei verwenden";
+"download_firmware_file" = "Firmwaredatei herunterladen";
+
+// - DFUStartTransferButton
+"stop_transfer" = "Übertragung unterbrechen";
+"start_transfer" = "Übertragung starten";
+"downloading" = "Lädt herunter";
+
+// - DFUComplete
+"transfer_completed" = "Übertragung abgeschlossen!";
+
+// - BatteryNotifications
+"battery_low" = "Akkustand niedrig";
+
+// - MusicController
+"not_playing" = "Keine Widergabe";
+
+// - SideMenu
+"disconnect" = "Trennen";
+"scanning" = "Scannt";
+"connect" = "Verbinden";
+
+// - ContentView
+"failed_set_time" = "Zeit konnte nicht eingestellt werden";
+"failed_set_time_description" = "Es gab ein Problem bei dem Versuch, die Zeit auf Ihrer Uhr einzustellen. Bitte trennen Sie die Verbindung und stellen Sie diese wieder her.";
+"dismiss" = "Ignorieren";

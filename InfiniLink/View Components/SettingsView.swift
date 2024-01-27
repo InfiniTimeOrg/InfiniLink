@@ -3,140 +3,256 @@
 //  InfiniLink
 //
 //  Created by Alex Emry on 8/15/21.
-//  
 //
-    
+//
+
 
 import Foundation
 import SwiftUI
+import CoreLocation
 
 struct Settings_Page: View {
-	
-	@ObservedObject var bleManager = BLEManager.shared
-	@ObservedObject var deviceInfo = BLEDeviceInfo.shared
-	@ObservedObject var pageSwitcher = PageSwitcher.shared
-	@Environment(\.colorScheme) var colorScheme
-	
-	@AppStorage("watchNotifications") var watchNotifications: Bool = true
-	@AppStorage("autoconnect") var autoconnect: Bool = false
-	@AppStorage("batteryNotification") var batteryNotification: Bool = false
-	@AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-	@AppStorage("heartChartFill") var heartChartFill: Bool = true
-	@AppStorage("batChartFill") var batChartFill: Bool = true
-	@AppStorage("debugMode") var debugMode: Bool = false
-	@AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
-	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
-	private var chartPoints: FetchedResults<ChartDataPoint>
-	
-	@State private var changedName: String = ""
-	private var nameManager = DeviceNameManager()
-	@State private var deviceName = ""
-	
-	var body: some View {
-		VStack {
-			Text(NSLocalizedString("settings", comment: ""))
-				.font(.largeTitle)
-				.padding()
-				.frame(maxWidth: .infinity, alignment: .leading)
-			List {
-				Section(header: Text(NSLocalizedString("connect_options", comment: ""))) {
-					Toggle(NSLocalizedString("autoconnect_to_pinetime", comment: ""), isOn: $autoconnect)
-					Button {
-						autoconnectUUID = bleManager.setAutoconnectUUID
-						DebugLogManager.shared.debug(error: "\(NSLocalizedString("autoconnect_device_uuid", comment: "")): \(autoconnectUUID)", log: .app, date: Date())
-					} label: {
-						Text(NSLocalizedString("use_current_device_for_autoconnect", comment: ""))
-					}.disabled(!bleManager.isConnectedToPinetime || (!autoconnect || (autoconnectUUID == bleManager.infiniTime.identifier.uuidString)))
-					Button {
-						autoconnectUUID = ""
-						DebugLogManager.shared.debug(error: NSLocalizedString("autoconnect_device_cleared", comment: ""), log: .app, date: Date())
-					} label: {
-						Text(NSLocalizedString("clear_autoconnect_device", comment: ""))
-					}.disabled(!autoconnect || autoconnectUUID.isEmpty)
-				}
-				Section(header: Text(NSLocalizedString("device_name", comment: ""))) {
-					Text(NSLocalizedString("current_device_name", comment: "") + deviceInfo.deviceName)
-					TextField(NSLocalizedString("enter_new_name", comment: ""), text: $changedName)
-						.disabled(!bleManager.isConnectedToPinetime)
-					Button {
-						UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
-						nameManager.updateName(deviceUUID: bleManager.infiniTime.identifier.uuidString, name: changedName)
-						changedName = ""
-					} label: {
-						Text(NSLocalizedString("rename_device", comment: ""))
-					}.disabled(!bleManager.isConnectedToPinetime)
-				}
-				
-				Section(header: Text(NSLocalizedString("firmware_update_downloads", comment: ""))) {
-					Toggle(NSLocalizedString("show_newer_versions_only", comment: ""), isOn: $showNewDownloadsOnly)
-				}
-				
-
-				Section(header: Text(NSLocalizedString("notifications", comment: ""))) {
-					Toggle(NSLocalizedString("enable_watch_notifications", comment: ""), isOn: $watchNotifications)
-					Toggle(NSLocalizedString("notify_about_low_battery", comment: ""), isOn: $batteryNotification)
-					Button {
-						SheetManager.shared.sheetSelection = .notification
-						SheetManager.shared.showSheet = true
-					} label: {
-						Text(NSLocalizedString("send_notification_to_pinetime", comment: ""))
-					}.disabled(!watchNotifications || !bleManager.isConnectedToPinetime)
-				}
-				Section(header: Text(NSLocalizedString("graph_styles", comment: ""))) {
-					Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
-					Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
-				}
-				Section(header: Text(NSLocalizedString("graph_data", comment: ""))) {
-					Button (action: {
-						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
-					}) {
-						(Text(NSLocalizedString("clear_all_hrm_chart_data", comment: "")))
-					}
-					Button (action: {
-						ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
-					}) {
-						(Text(NSLocalizedString("clear_all_battery_chart_data", comment: "")))
-					}
-				}
-				
-				Section(header: Text(NSLocalizedString("onboarding_information", comment: ""))) {
-					
-					Button {
-						SheetManager.shared.sheetSelection = .onboarding
-						SheetManager.shared.showSheet = true
-					} label: {
-						Text(NSLocalizedString("open_onboarding_page", comment: ""))
-					}
-					Button {
-						SheetManager.shared.sheetSelection = .whatsNew
-						SheetManager.shared.showSheet = true
-					} label: {
-						Text(NSLocalizedString("whats_new_page_this_version", comment: ""))
-					}
-				}
-
-				// MARK: logging
-				Section(header: Text(NSLocalizedString("debug_mode", comment: ""))) {
-					Toggle(NSLocalizedString("enable_debug_mode", comment: ""), isOn: $debugMode)
-					if debugMode {
-						Button {
-							pageSwitcher.currentPage = Page.debug
-						} label: {
-							Text(NSLocalizedString("debug_logs", comment: ""))
-						}
-					}
-				}
-				Section(header: Text(NSLocalizedString("links", comment: ""))) {
-					Link("InfiniLink GitHub", destination: URL(string: "https://github.com/xan-m/InfiniLink")!)
-					Link("Matrix", destination: URL(string: "https://matrix.to/#/@xanm:matrix.org")!)
-					Link("Mastodon", destination: URL(string: "https://fosstodon.org/@xanm")!)
-					Link("InfiniTime Firmware Releases", destination: URL(string: "https://github.com/JF002/InfiniTime/releases")!)
-				}
-				Section(header: Text(NSLocalizedString("donations", comment: ""))) {
-					Link("PayPal Donation", destination: URL(string: "https://paypal.me/alexemry")!)
-				}
-			}
-			.listStyle(.insetGrouped)
-		}
-	}
+    @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @ObservedObject var weatherController = WeatherController.shared
+    
+    @ObservedObject private var deviceDataForSettings: DeviceData = deviceData
+    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.openURL) private var openURL
+    
+    @AppStorage("watchNotifications") var watchNotifications: Bool = true
+    @AppStorage("autoconnect") var autoconnect: Bool = false
+    @AppStorage("batteryNotification") var batteryNotification: Bool = false
+    @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+    @AppStorage("heartChartFill") var heartChartFill: Bool = true
+    @AppStorage("batChartFill") var batChartFill: Bool = true
+    @AppStorage("debugMode") var debugMode: Bool = false
+    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
+    @AppStorage("weatherData") var weatherData: Bool = true
+    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
+    @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
+    private var chartPoints: FetchedResults<ChartDataPoint>
+    
+    let themes: [String] = ["System", "Light", "Dark"]
+    let weatherModes: [String] = ["System", "Metric", "Imperial"]
+    
+    private let nameManager = DeviceNameManager()
+    private let locationManager = CLLocationManager()
+    
+    var body: some View {
+        VStack(spacing: 0) {
+            HStack(spacing: 12) {
+                Text(NSLocalizedString("settings", comment: ""))
+                    .foregroundColor(.primary)
+                    .font(.title.weight(.bold))
+                Spacer()
+                HStack {
+                    if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" {
+                        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
+                            .imageScale(.large)
+                    }
+                }
+            }
+            .padding()
+            .frame(maxWidth: .infinity, alignment: .center)
+            Divider()
+            ScrollView {
+                VStack(spacing: 14) {
+                    HStack(spacing: 8) {
+                        Menu {
+                            Picker("", selection: $deviceDataForSettings.chosenTheme) {
+                                ForEach(themes, id: \.self) {
+                                    Text($0)
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(NSLocalizedString("app_theme", comment: ""))
+                                        .font(.title3.weight(.semibold))
+                                    Text(deviceDataForSettings.chosenTheme)
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.body.weight(.medium))
+                            }
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
+                        }
+                        Menu {
+                            Button(action: {
+                                if let url = URL(string: "https://github.com/InfiniTimeOrg/InfiniTime") {
+                                    openURL(url)
+                                }
+                            }) {
+                                Text("InfiniTime")
+                            }
+                            Button(action: {
+                                if let url = URL(string: "https://github.com/InfiniTimeOrg/InfiniLink") {
+                                    openURL(url)
+                                }
+                            }) {
+                                Text("InfiniLink")
+                            }
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text("GitHub")
+                                        .font(.title3.weight(.semibold))
+                                    Text(NSLocalizedString("links", comment: "Links"))
+                                }
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.body.weight(.medium))
+                            }
+                            .padding()
+                            .background(Color.darkestGray)
+                            .foregroundColor(.white)
+                            .cornerRadius(20)
+                        }
+                    }
+                    VStack {
+                        Toggle(NSLocalizedString("enable_debug_mode", comment: ""), isOn: $debugMode.animation(.bouncy))
+                            .modifier(RowModifier(style: .capsule))
+                        if debugMode {
+                            NavigationLink(destination: DebugView()) {
+                                HStack {
+                                    Text(NSLocalizedString("debug_logs", comment: ""))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                }
+                                .modifier(RowModifier(style: .capsule))
+                            }
+                        }
+                    }
+                    Spacer()
+                        .frame(height: 6)
+                    Toggle(NSLocalizedString("show_newer_versions_only", comment: ""), isOn: $showNewDownloadsOnly)
+                        .modifier(RowModifier(style: .capsule))
+                    Spacer()
+                        .frame(height: 6)
+                    VStack {
+                        Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
+                            .modifier(RowModifier(style: .capsule))
+                        Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
+                            .modifier(RowModifier(style: .capsule))
+                    }
+                    Spacer()
+                        .frame(height: 6)
+                    VStack {
+                        Toggle(NSLocalizedString("enable_weather_data", comment: ""), isOn: $weatherData)
+                            .onChange(of: weatherData) { value in
+                                if value {
+                                    weatherController.tryRefreshingWeatherData()
+                                }
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                        if weatherData {
+                            Toggle(NSLocalizedString("use_current_location", comment: ""), isOn: $useCurrentLocation)
+                                .modifier(RowModifier(style: .capsule))
+                                .onChange(of: useCurrentLocation) { value in
+                                    if value {
+                                        weatherController.tryRefreshingWeatherData()
+                                    }
+                                }
+                            if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
+                                Button(NSLocalizedString("always_allow_location_services", comment: "")) {
+                                    locationManager.requestAlwaysAuthorization()
+                                }
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                            NavigationLink(destination: WeatherSetLocationView()) {
+                                HStack {
+                                    Text(NSLocalizedString("set_location", comment: ""))
+                                    Text(displayLocation)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.gray)
+                                }
+                                .modifier(RowModifier(style: .capsule))
+                            }
+                            .opacity(!useCurrentLocation ? 1.0 : 0.5)
+                            .disabled(useCurrentLocation)
+                            HStack {
+                                Text(NSLocalizedString("weather_style", comment: "Weather Style"))
+                                Spacer()
+                                Picker(deviceDataForSettings.chosenWeatherMode, selection: $deviceDataForSettings.chosenWeatherMode) {
+                                    ForEach(weatherModes, id: \.self) {
+                                        Text($0)
+                                    }
+                                }
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                        }
+                    }
+                    Spacer()
+                        .frame(height: 6)
+                    if autoconnectUUID != "" {
+                        VStack {
+                            Button {
+                                autoconnectUUID = ""
+                                bleManager.autoconnectToDevice = false
+                                DebugLogManager.shared.debug(error: NSLocalizedString("autoconnect_device_cleared", comment: ""), log: .app, date: Date())
+                            } label: {
+                                Text(NSLocalizedString("clear_autoconnect_device", comment: ""))
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .modifier(RowModifier(style: .capsule))
+                            }
+                            .opacity(!autoconnect || autoconnectUUID.isEmpty ? 0.5 : 1.0)
+                            .disabled(!autoconnect || autoconnectUUID.isEmpty)
+                        }
+                        Spacer()
+                            .frame(height: 6)
+                    }
+                    VStack {
+                        Button(action: {
+                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
+                        }) {
+                            Text(NSLocalizedString("clear_all_hrm_chart_data", comment: ""))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundColor(.red)
+                                .modifier(RowModifier(style: .capsule))
+                        }
+                        Button(action: {
+                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+                        }) {
+                            Text(NSLocalizedString("clear_all_battery_chart_data", comment: ""))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundColor(.red)
+                                .modifier(RowModifier(style: .capsule))
+                        }
+                    }
+                    Spacer()
+                        .frame(height: 6)
+                    VStack {
+                        Button {
+                            SheetManager.shared.sheetSelection = .onboarding
+                            SheetManager.shared.showSheet = true
+                        } label: {
+                            Text(NSLocalizedString("open_onboarding_page", comment: ""))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundColor(.blue)
+                                .modifier(RowModifier(style: .capsule))
+                        }
+                        Button {
+                            SheetManager.shared.sheetSelection = .whatsNew
+                            SheetManager.shared.showSheet = true
+                        } label: {
+                            Text(NSLocalizedString("whats_new_page_this_version", comment: ""))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundColor(.blue)
+                                .modifier(RowModifier(style: .capsule))
+                        }
+                    }
+                }
+                .padding()
+            }
+        }
+    }
 }

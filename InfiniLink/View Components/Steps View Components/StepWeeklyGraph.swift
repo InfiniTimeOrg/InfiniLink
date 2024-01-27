@@ -48,7 +48,7 @@ struct StepWeeklyChart: View {
 	
 	func getChartData() -> BarChartData {
 		
-		let metadata   = ChartMetadata(title: NSLocalizedString("steps_this_week", comment: ""))
+		let metadata   = ChartMetadata(title: "Steps This Week")
 		
 		let gridStyle  = GridStyle(numberOfLines: 5,
 								   lineColour   : Color(.lightGray).opacity(0.25),
@@ -79,11 +79,17 @@ struct StepWeeklyChart: View {
 	var body: some View {
 		let chartData = getChartData()
 		BarChart(chartData: chartData)
-			.yAxisPOI(chartData: chartData, markerName: NSLocalizedString("steps_goal", comment: ""), markerValue: Double(stepCountGoal), labelColour: Color(.lightGray).opacity(0.25), lineColour: Color(.lightGray).opacity(0.25), strokeStyle: StrokeStyle.init(dash: [5]))
+			.yAxisPOI(chartData: chartData, markerName: "Step Goal", markerValue: Double(stepCountGoal), labelColour: Color(.lightGray).opacity(0.25), lineColour: Color(.lightGray).opacity(0.25), strokeStyle: StrokeStyle.init(dash: [5]))
 			.floatingInfoBox(chartData: chartData)
 			.touchOverlay(chartData: chartData)
 			.xAxisLabels(chartData: chartData)
 			.yAxisLabels(chartData: chartData)
+            .animation(.none)
 //			.id(chartData.id)
 	}
+}
+
+#Preview {
+    StepWeeklyChart(stepCountGoal: .constant(10000))
+        .frame(height: 250)
 }
