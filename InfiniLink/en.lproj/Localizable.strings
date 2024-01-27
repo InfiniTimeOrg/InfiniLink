@@ -226,7 +226,7 @@
 "heart_tilte" = "Heart";
 "welcome_text" = "Welcome. If you have an InfiniTime device, \n you can pair it here.";
 "connecting" = "Connecting...";
-"start_pairing" = "Start Pairing";
+"start_pairing" = "Pair Device";
 "stop_connecting" = "Stop Connecting";
 "my_device" = "My Device";
 "favorites" = "Favorites";

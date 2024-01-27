@@ -26,7 +26,7 @@ struct Connect: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 HStack {
-                    Text("\(bleManager.newPeripherals.count) \(NSLocalizedString("devices", comment: "Devices"))")
+                    Text("\(infiniTimeDevicesCount()) \(NSLocalizedString("devices", comment: "Devices"))")
                         .padding()
                         .font(.body.weight(.semibold))
                         .foregroundColor(.primary)
@@ -61,18 +61,20 @@ struct Connect: View {
                     ScrollView {
                         VStack(spacing: 8) {
                             ForEach(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
-                                let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
-                                Button {
-                                    bleManager.connect(peripheral: i)
-                                    presentation.wrappedValue.dismiss()
-                                } label: {
-                                    Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
-                                        .frame(maxWidth: .infinity)
-                                        .font(.body.weight(.semibold))
-                                        .padding()
-                                        .foregroundColor(.primary)
-                                        .background(Color.gray.opacity(0.15))
-                                        .clipShape(Capsule())
+                                if i.name == "InfiniTime" || i.name == "Pinetime-JF" {
+                                    let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
+                                    Button {
+                                        bleManager.connect(peripheral: i)
+                                        presentation.wrappedValue.dismiss()
+                                    } label: {
+                                        Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
+                                            .frame(maxWidth: .infinity)
+                                            .font(.body.weight(.semibold))
+                                            .padding()
+                                            .foregroundColor(.primary)
+                                            .background(Color.gray.opacity(0.15))
+                                            .clipShape(Capsule())
+                                    }
                                 }
                             }
                         }
@@ -114,6 +116,12 @@ struct Connect: View {
                 bleManager.stopScanning()
             }
         }
+    }
+    
+    func infiniTimeDevicesCount() -> Int {
+        var count: Int = 0
+        bleManager.newPeripherals.forEach {if $0.name == "InfiniTime" || $0.name == "Pinetime-JF" {count += 1}}
+        return count
     }
 }
 

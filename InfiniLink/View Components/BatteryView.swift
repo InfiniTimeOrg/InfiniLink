@@ -55,11 +55,11 @@ struct BatteryView: View {
                         .rotationEffect(Angle(degrees: 270.0))
                     VStack(spacing: 8) {
                         Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-                            .font(.system(size: 40).weight(.semibold))
+                            .font(.system(size: 35))
                             .imageScale(.large)
                         Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
+                            .font(.system(size: 40).weight(.bold))
                     }
-                    .font(.system(size: 50).weight(.bold))
                     .foregroundColor(.green)
                 }
                 .padding(30)
@@ -101,7 +101,4 @@ struct RoundedCorner: Shape {
 
 #Preview {
     BatteryView()
-        .onAppear {
-            BLEManager.shared.batteryLevel = 38
-        }
 }

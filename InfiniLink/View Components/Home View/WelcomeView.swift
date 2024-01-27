@@ -35,33 +35,42 @@ struct WelcomeView: View {
                         }
                     }
                 } else {
-                    VStack(spacing: 5) {
-                        Text("InfiniLink")
-                            .font(.system(size: 34).weight(.bold))
-                            .bold()
-                            .padding(5)
-                        Text(NSLocalizedString("welcome_text", comment: ""))
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .foregroundColor(.gray)
-                            .font(.body)
-                        Spacer()
-                        Image("WelcomePineTime")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding(20)
-                            .frame(maxWidth: .infinity, alignment: .center)
-                        Spacer()
-                        Button(NSLocalizedString("start_pairing", comment: "")) {
-                            SheetManager.shared.sheetSelection = .connect
-                            SheetManager.shared.showSheet = true
+                    VStack() {
+                        VStack(spacing: 5) {
+                            Text("Welcome to \nInfiniLink")
+                                .font(.system(size: 38).weight(.bold))
+                                .padding(32)
+                                //.padding(.top)
+                                .multilineTextAlignment(.center)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            Spacer()
+                            if bleManager.isSwitchedOn {
+                                Button(NSLocalizedString("start_pairing", comment: "")) {
+                                    SheetManager.shared.sheetSelection = .connect
+                                    SheetManager.shared.showSheet = true
+                                }
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.bottom)
+                                .padding(.horizontal)
+                                .onAppear {
+                                    if bleManager.isSwitchedOn {
+                                        bleManager.startScanning()
+                                    }
+                                }
+                            } else {
+                                Text("Bluetooth is Disabled")
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(.bottom)
+                                    .padding(.bottom)
+                                    .padding(.horizontal)
+                            }
                         }
-                        .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                        .frame(maxWidth: .infinity, alignment: .center)
-                        .padding(.bottom)
+                        .padding()
                     }
-                    .padding()
+                    .fullBackground(imageName: "LaunchScreen")
                 }
+                
             } else {
                 DeviceView()
             }
@@ -76,7 +85,9 @@ struct WelcomeView: View {
                 bleManager.stopScanning()
             }
         }
+        
     }
+    
 }
 
 struct NeumorphicButtonStyle: ButtonStyle {
@@ -91,5 +102,26 @@ struct NeumorphicButtonStyle: ButtonStyle {
             .background(Color.blue)
             .clipShape(Capsule())
             .foregroundColor(.primary)
+    }
+}
+
+public extension View {
+    func fullBackground(imageName: String) -> some View {
+       return background(
+                Image(imageName)
+                    .resizable()
+                    .scaledToFill()
+                    .edgesIgnoringSafeArea(.all)
+       )
+    }
+}
+
+#Preview {
+    NavigationView {
+        ContentView()
+            .onAppear {
+                BLEManager.shared.isConnectedToPinetime = false
+                //BLEManagerVal.shared.firmwareVersion = "1.13.0"
+            }
     }
 }

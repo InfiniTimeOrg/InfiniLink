@@ -58,7 +58,7 @@ struct Settings_Page: View {
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
             ScrollView {
-                VStack {
+                VStack(spacing: 14) {
                     HStack(spacing: 8) {
                         Menu {
                             Picker("", selection: $deviceDataForSettings.chosenTheme) {
@@ -109,7 +109,7 @@ struct Settings_Page: View {
                                     .font(.body.weight(.medium))
                             }
                             .padding()
-                            .background(Color.black)
+                            .background(Color.darkestGray)
                             .foregroundColor(.white)
                             .cornerRadius(20)
                         }
@@ -128,23 +128,27 @@ struct Settings_Page: View {
                             }
                         }
                     }
+                    Spacer()
+                        .frame(height: 6)
                     Toggle(NSLocalizedString("show_newer_versions_only", comment: ""), isOn: $showNewDownloadsOnly)
                         .modifier(RowModifier(style: .capsule))
-                        .padding(.top)
+                    Spacer()
+                        .frame(height: 6)
                     VStack {
                         Toggle(NSLocalizedString("filled_hrm_graph", comment: ""), isOn: $heartChartFill)
                             .modifier(RowModifier(style: .capsule))
                         Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
                             .modifier(RowModifier(style: .capsule))
                     }
-                    .padding(.top)
+                    Spacer()
+                        .frame(height: 6)
                     VStack {
                         Toggle(NSLocalizedString("enable_weather_data", comment: ""), isOn: $weatherData)
                             .onChange(of: weatherData) { value in
                                 if value {
                                     weatherController.tryRefreshingWeatherData()
                                 }
-                        }
+                            }
                             .modifier(RowModifier(style: .capsule))
                         if weatherData {
                             Toggle(NSLocalizedString("use_current_location", comment: ""), isOn: $useCurrentLocation)
@@ -153,7 +157,7 @@ struct Settings_Page: View {
                                     if value {
                                         weatherController.tryRefreshingWeatherData()
                                     }
-                            }
+                                }
                             if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
                                 Button(NSLocalizedString("always_allow_location_services", comment: "")) {
                                     locationManager.requestAlwaysAuthorization()
@@ -187,7 +191,8 @@ struct Settings_Page: View {
                             .modifier(RowModifier(style: .capsule))
                         }
                     }
-                    .padding(.top)
+                    Spacer()
+                        .frame(height: 6)
                     if autoconnectUUID != "" {
                         VStack {
                             Button {
@@ -202,7 +207,8 @@ struct Settings_Page: View {
                             .opacity(!autoconnect || autoconnectUUID.isEmpty ? 0.5 : 1.0)
                             .disabled(!autoconnect || autoconnectUUID.isEmpty)
                         }
-                        .padding(.top)
+                        Spacer()
+                            .frame(height: 6)
                     }
                     VStack {
                         Button(action: {
@@ -222,7 +228,8 @@ struct Settings_Page: View {
                                 .modifier(RowModifier(style: .capsule))
                         }
                     }
-                    .padding(.top)
+                    Spacer()
+                        .frame(height: 6)
                     VStack {
                         Button {
                             SheetManager.shared.sheetSelection = .onboarding
@@ -243,7 +250,6 @@ struct Settings_Page: View {
                                 .modifier(RowModifier(style: .capsule))
                         }
                     }
-                    .padding(.top)
                 }
                 .padding()
             }

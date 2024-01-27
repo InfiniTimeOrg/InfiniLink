@@ -89,7 +89,6 @@ struct DFUWithBLE: View {
                             NoUpdate()
                         }
                     }
-                    .padding()
                 }
             }
             .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
@@ -229,7 +228,7 @@ struct NewUpdate: View {
             }
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
         }
-        .padding(10)
+        .padding(20)
     }
 }
 
@@ -244,10 +243,9 @@ struct NoUpdate: View {
             VStack(alignment: .center , spacing: 6) {
                 Text("InfiniTime \(deviceInfo.firmware)")
                     .foregroundColor(.gray)
-                    .font(.title3.weight(.semibold))
+                    .font(.title2.weight(.semibold))
                 Text("InfiniTime " + NSLocalizedString("up_to_date", comment: ""))
                     .foregroundColor(.gray)
-                    .font(.system(size: 16))
             }
             .frame(maxWidth: .infinity, alignment: .bottom)
         }
