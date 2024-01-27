@@ -10,6 +10,7 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Music controls on InfiniTime can control Apple Music.
 - Step counter with current step count and weekly chart
 - HealthKit integration (Not yet fully implemented)
+- Weather fetch (using the NWS API and a secondary fallback on the WeatherAPI) and push (using the InfiniTime 1.14's Simple Weather Service)
 - Check for updates to InfiniTime using the GitHub API, download them directly with the app, and send them to the PineTime. 
     - Manual updates can be completed with DFU zip files downloaded from [InfiniTime's GitHub Releases Page](https://github.com/JF002/InfiniTime/releases)
 
