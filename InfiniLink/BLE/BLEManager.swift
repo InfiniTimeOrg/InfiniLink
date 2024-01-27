@@ -47,7 +47,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         let hardwareRevision = CBUUID(string: "2A27")
         let softwareRevision = CBUUID(string: "2A28")
         let manufacturer = CBUUID(string: "2A29")
-        let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+        let weather =       CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
+        let musicControl =  CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
         let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
         let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
         let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
@@ -225,4 +226,3 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         }
     }
 }
-

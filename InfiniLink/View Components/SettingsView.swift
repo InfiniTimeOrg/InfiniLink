@@ -9,10 +9,12 @@
 
 import Foundation
 import SwiftUI
+import CoreLocation
 
 struct Settings_Page: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @ObservedObject var weatherController = WeatherController.shared
     
     @ObservedObject private var deviceDataForSettings: DeviceData = deviceData
     @Environment(\.colorScheme) var colorScheme
@@ -26,14 +28,17 @@ struct Settings_Page: View {
     @AppStorage("batChartFill") var batChartFill: Bool = true
     @AppStorage("debugMode") var debugMode: Bool = false
     @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
+    @AppStorage("weatherData") var weatherData: Bool = true
+    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
+    @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
     private var chartPoints: FetchedResults<ChartDataPoint>
     
     let themes: [String] = ["System", "Light", "Dark"]
+    let weatherModes: [String] = ["System", "Metric", "Imperial"]
     
-    @State private var changedName: String = ""
-    private var nameManager = DeviceNameManager()
-    @State private var deviceName = ""
+    private let nameManager = DeviceNameManager()
+    private let locationManager = CLLocationManager()
     
     var body: some View {
         VStack(spacing: 0) {
@@ -134,6 +139,57 @@ struct Settings_Page: View {
                             .modifier(RowModifier(style: .capsule))
                         Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
                             .modifier(RowModifier(style: .capsule))
+                    }
+                    Spacer()
+                        .frame(height: 6)
+                    VStack {
+                        Toggle(NSLocalizedString("enable_weather_data", comment: ""), isOn: $weatherData)
+                            .onChange(of: weatherData) { value in
+                                if value {
+                                    weatherController.tryRefreshingWeatherData()
+                                }
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                        if weatherData {
+                            Toggle(NSLocalizedString("use_current_location", comment: ""), isOn: $useCurrentLocation)
+                                .modifier(RowModifier(style: .capsule))
+                                .onChange(of: useCurrentLocation) { value in
+                                    if value {
+                                        weatherController.tryRefreshingWeatherData()
+                                    }
+                                }
+                            if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
+                                Button(NSLocalizedString("always_allow_location_services", comment: "")) {
+                                    locationManager.requestAlwaysAuthorization()
+                                }
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                            }
+                            NavigationLink(destination: WeatherSetLocationView()) {
+                                HStack {
+                                    Text(NSLocalizedString("set_location", comment: ""))
+                                    Text(displayLocation)
+                                        .foregroundColor(.gray)
+                                        .frame(maxWidth: .infinity, alignment: .trailing)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.gray)
+                                }
+                                .modifier(RowModifier(style: .capsule))
+                            }
+                            .opacity(!useCurrentLocation ? 1.0 : 0.5)
+                            .disabled(useCurrentLocation)
+                            HStack {
+                                Text(NSLocalizedString("weather_style", comment: "Weather Style"))
+                                Spacer()
+                                Picker(deviceDataForSettings.chosenWeatherMode, selection: $deviceDataForSettings.chosenWeatherMode) {
+                                    ForEach(weatherModes, id: \.self) {
+                                        Text($0)
+                                    }
+                                }
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                        }
                     }
                     Spacer()
                         .frame(height: 6)

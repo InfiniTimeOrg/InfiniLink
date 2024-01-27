@@ -49,6 +49,8 @@ struct BLEDiscoveredCharacteristics {
 			} catch {
                 bleManager.setTimeError = true
 			}
+        case bleManagerVal.cbuuidList.weather:
+            bleManagerVal.weatherCharacteristic = characteristic
 		default:
 			break
 		}

@@ -16,6 +16,8 @@ struct BLEUpdatedCharacteristicHandler {
     
     let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
+    let weatherController = WeatherController()
+    
     
     // function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
     func heartRate(from characteristic: CBCharacteristic) -> Int {
@@ -33,6 +35,8 @@ struct BLEUpdatedCharacteristicHandler {
     }
     
     func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
+        weatherController.updateWeatherData(ignoreTimeLimits: false)
+        
         switch characteristic.uuid {
         case bleManagerVal.cbuuidList.musicControl:
             let musicControl = [UInt8](characteristic.value!)

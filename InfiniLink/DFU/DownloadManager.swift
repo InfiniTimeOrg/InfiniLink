@@ -111,6 +111,7 @@ class DownloadManager: NSObject, ObservableObject {
 				do {
 					let res = try JSONDecoder().decode([Result].self, from: data)
                     //print(res)
+                    //print(res)
 					DispatchQueue.main.async {
 						for i in res {
 							if i.tag_name.first != "v" {

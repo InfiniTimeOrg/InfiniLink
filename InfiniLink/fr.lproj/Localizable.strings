@@ -19,7 +19,8 @@
 "no_updates_available" = "Aucune mises à jour disponible";
 "device_name" = "Nom de l'appareil";
 "rename" = "Renommer";
-"disconnect_alert_title" = "";
+"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"save" = "Save";
 
 // - SideMenu
 "home" = "Accueil";
@@ -87,6 +88,10 @@
 "links" = "Liens";
 "donations" = "Donations";
 "copy" = "Copy";
+"weather" = "Weather";
+"weather_style" = "Weather Style";
+"search_for_locations" = "Search for Locations";
+"find_location" = "Use the search box above to find\na location";
 
 // - ScanningPopover
 "connected_to" = "Connecté à";
@@ -257,3 +262,8 @@
 "autoconnect_to_this" = "Se connecter automatiquement";
 "send_notification_to" = "Envoyer une notification à";
 "connected_to" = "Connecté à";
+
+"enable_weather_data" = "Enable Weather Data";
+"use_current_location" = "Use Current Location";
+"set_location" = "Location";
+"always_allow_location_services" = "Always Allow Current Location";

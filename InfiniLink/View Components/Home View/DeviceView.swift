@@ -5,6 +5,7 @@
 //  Created by John Stanley on 11/16/21.
 //
 
+import CoreLocation
 import SwiftUI
 
 struct DeviceView: View {
@@ -12,6 +13,7 @@ struct DeviceView: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @ObservedObject var uptimeManager = UptimeManager.shared
+    @ObservedObject var weatherController = WeatherController.shared
     
     @AppStorage("watchNotifications") var watchNotifications: Bool = true
     @AppStorage("batteryNotification") var batteryNotification: Bool = false
@@ -19,6 +21,7 @@ struct DeviceView: View {
     @AppStorage("autoconnectToDevice") var autoconnectToDevice: Bool = false
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
+    @AppStorage("weatherData") var weatherData: Bool = true
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -27,6 +30,28 @@ struct DeviceView: View {
     let timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     private var dateFormatter = DateComponentsFormatter()
+    private let locationManager = CLLocationManager()
+    
+    var icon: String {
+        switch bleManagerVal.weatherInformation.icon {
+        case 0:
+            return "sun.max.fill"
+        case 1:
+            return "cloud.sun.fill"
+        case 2, 3:
+            return "cloud.fill"
+        case 4, 5:
+            return "cloud.rain.fill"
+        case 6:
+            return "cloud.bolt.rain.fill"
+        case 7:
+            return "cloud.snow.fill"
+        case 8:
+            return "cloud.fog.fill"
+        default:
+            return "slash.circle"
+        }
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -35,7 +60,7 @@ struct DeviceView: View {
                 .frame(height: 1)
                 .foregroundColor(.clear)
             ScrollView {
-                VStack(spacing: 14) {
+                VStack(spacing: 10) {
                     VStack(spacing: 20) {
                         Image("PineTime-1")
                             .resizable()
@@ -131,6 +156,43 @@ struct DeviceView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(20)
                             }
+                        }
+                        if weatherData {
+                            VStack {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(NSLocalizedString("weather", comment: ""))
+                                            .font(.headline)
+                                        if bleManagerVal.loadingWeather {
+                                            Text(NSLocalizedString("loading", comment: "Loading..."))
+                                        } else {
+                                            if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
+                                                Text(String(Int(bleManagerVal.weatherInformation.temperature)) + "°" + "C")
+                                                    .font(.title.weight(.semibold))
+                                            } else {
+                                                Text(String(Int(bleManagerVal.weatherInformation.temperature * 1.8 + 32)) + "°" + "F")
+                                                    .font(.title.weight(.semibold))
+                                            }
+                                        }
+                                    }
+                                    .font(.title.weight(.semibold))
+                                    Spacer()
+                                    VStack {
+                                        if bleManagerVal.loadingWeather {
+                                            Image(systemName: "circle.slash")
+                                        } else {
+                                            Image(systemName: icon)
+                                        }
+                                    }
+                                    .font(.title.weight(.medium))
+                                }
+                            }
+                            .padding()
+                            .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
+                            Spacer()
+                                .frame(height: 6)
                         }
                     }
                     if DownloadManager.shared.updateAvailable {
