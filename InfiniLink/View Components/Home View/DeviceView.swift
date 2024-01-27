@@ -195,6 +195,7 @@ struct DeviceView: View {
                                 .frame(height: 6)
                         }
                     }
+                    
                     if DownloadManager.shared.updateAvailable {
                         NavigationLink(destination: DFUView()) {
                             VStack(alignment: .leading, spacing: 6) {
@@ -320,6 +321,14 @@ struct DeviceView: View {
                     }
                     Spacer()
                         .frame(height: 6)
+                    Section(header: Text("BLE FS")) {
+                        Button {
+                            BLEFSHandler.shared.listDir(path: "/")
+                        } label: {
+                            Text("list files")
+                        }
+                    }
+                    Spacer()
                     VStack {
                         Button {
                             showDisconnectConfDialog.toggle()

@@ -82,6 +82,7 @@
 		E57654032B5781970059C8EF /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57654022B5781970059C8EF /* WeatherController.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
 		E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E59398F92B58DA1F00D5840A /* SwiftyJSON */; };
+		E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */; };
 		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
 		E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D728034EA500FB0C11 /* HeartView.swift */; };
 		E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D828034EA500FB0C11 /* BatteryView.swift */; };
@@ -190,6 +191,7 @@
 		E57654022B5781970059C8EF /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherController.swift; path = InfiniLink/Weather/WeatherController.swift; sourceTree = SOURCE_ROOT; };
 		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = ../DeviceData.swift; sourceTree = "<group>"; };
 		E57AD57D282462D900E33EEA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
+		E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
 		E5EEB1D32803438200FB0C11 /* RenameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
 		E5EEB1D728034EA500FB0C11 /* HeartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartView.swift; sourceTree = "<group>"; };
 		E5EEB1D828034EA500FB0C11 /* BatteryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
@@ -448,6 +450,7 @@
 				2644261126DC093D009BD54A /* SetTime.swift */,
 				266F53E926FA91F3007481A6 /* DeviceInfo.swift */,
 				E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */,
+				E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -713,6 +716,7 @@
 				E57654032B5781970059C8EF /* WeatherController.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
+				E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */,
 				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
 				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,

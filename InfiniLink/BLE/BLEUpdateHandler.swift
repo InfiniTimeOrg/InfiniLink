@@ -77,6 +77,14 @@ struct BLEUpdatedCharacteristicHandler {
                 healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
             }
             StepCountPersistenceManager().setStepCount(steps: Int32(bleManagerVal.stepCount), arbitrary: false, date: Date())
+        case bleManagerVal.cbuuidList.blefsTransfer:
+            guard let value = characteristic.value else {
+                DebugLogManager.shared.debug(error: "Could not read BLE FS response", log: .ble, date: Date())
+                break
+            }
+            let responseData = value.hexString
+            print("response: \(responseData)")
+            //BLEFSHandler.shared.handleResponse(responseData: responseData)
         default:
             break
         }
