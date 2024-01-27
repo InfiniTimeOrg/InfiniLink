@@ -44,14 +44,27 @@ struct WelcomeView: View {
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .center)
                             Spacer()
-                            Button(NSLocalizedString("start_pairing", comment: "")) {
-                                SheetManager.shared.sheetSelection = .connect
-                                SheetManager.shared.showSheet = true
+                            if bleManager.isSwitchedOn {
+                                Button(NSLocalizedString("start_pairing", comment: "")) {
+                                    SheetManager.shared.sheetSelection = .connect
+                                    SheetManager.shared.showSheet = true
+                                }
+                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(.bottom)
+                                .padding(.horizontal)
+                                .onAppear {
+                                    if bleManager.isSwitchedOn {
+                                        bleManager.startScanning()
+                                    }
+                                }
+                            } else {
+                                Text("Bluetooth is Disabled")
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(.bottom)
+                                    .padding(.bottom)
+                                    .padding(.horizontal)
                             }
-                            .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(.bottom)
-                            .padding(.horizontal)
                         }
                         .padding()
                     }
