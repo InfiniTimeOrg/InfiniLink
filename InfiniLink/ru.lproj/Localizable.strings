@@ -258,6 +258,7 @@
 "currently_unavailable" = "";
 
 "software_version" = "";
+"file_system_version" = "File System Version";
 "model_name" = "";
 "autoconnect_to_this" = "";
 "send_notification_to" = "";

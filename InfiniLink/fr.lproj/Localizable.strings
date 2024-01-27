@@ -258,6 +258,7 @@
 "currently_unavailable" = "Actuellement indisponible";
 
 "software_version" = "Version du logiciel";
+"file_system_version" = "File System Version";
 "model_name" = "Nom du modèle";
 "autoconnect_to_this" = "Se connecter automatiquement";
 "send_notification_to" = "Envoyer une notification à";

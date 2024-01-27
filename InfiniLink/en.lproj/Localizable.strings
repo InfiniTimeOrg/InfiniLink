@@ -256,6 +256,7 @@
 "currently_unavailable" = "Currently Unavailable";
 
 "software_version" = "Software Version";
+"file_system_version" = "File System Version";
 "model_name" = "Model Name";
 "autoconnect_to_this" = "Autoconnect to this";
 "send_notification_to" = "Send Notification to";

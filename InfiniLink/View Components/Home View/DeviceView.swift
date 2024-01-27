@@ -244,6 +244,14 @@ struct DeviceView: View {
                         }
                         .modifier(RowModifier(style: .capsule))
                         HStack {
+                            Text(NSLocalizedString("file_system_version", comment: ""))
+                            Text(deviceInfo.blefsVersion)
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
+                            
+                        }
+                        .modifier(RowModifier(style: .capsule))
+                        HStack {
                             Text(NSLocalizedString("model_name", comment: ""))
                             Text(deviceInfo.modelNumber)
                                 .foregroundColor(.gray)
@@ -321,14 +329,6 @@ struct DeviceView: View {
                     }
                     Spacer()
                         .frame(height: 6)
-                    Section(header: Text("BLE FS")) {
-                        Button {
-                            BLEFSHandler.shared.listDir(path: "/")
-                        } label: {
-                            Text("list files")
-                        }
-                    }
-                    Spacer()
                     VStack {
                         Button {
                             showDisconnectConfDialog.toggle()
@@ -340,6 +340,15 @@ struct DeviceView: View {
                                 .modifier(RowModifier(style: .capsule))
                         }
                     }
+                    Spacer()
+                    Section(header: Text("BLE FS")) {
+                        Button {
+                            BLEFSHandler.shared.listDir(path: "/")
+                        } label: {
+                            Text("list files")
+                        }
+                    }
+                    Spacer()
                 }
                 .padding()
                 .onAppear {

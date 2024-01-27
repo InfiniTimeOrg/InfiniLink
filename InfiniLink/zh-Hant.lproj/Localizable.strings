@@ -259,6 +259,7 @@
 "currently_unavailable" = "目前不可使用";
 
 "software_version" = "軟體版本";
+"file_system_version" = "File System Version";
 "model_name" = "型號";
 "autoconnect_to_this" = "自動連線至本裝置";
 "send_notification_to" = "傳送通知至";
