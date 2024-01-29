@@ -9,21 +9,32 @@
 import CoreBluetooth
 
 /** TODO:
-    - read file
+    O read file
     - write file
-    - delete file                       #DONE
-    - make directory               #DONE
-    - list directory                   #DONE
-    - move file or directory
+    O delete file
+    O make directory
+    O list directory
+    O move file or directory
 */
 class BLEFSHandler {
     static var shared = BLEFSHandler()
     let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
     
-    var informationTrandfer : [informationFS] = []
+    var informationTrandfer : [InformationFS] = []
+    var readFileFS : ReadFileFS = ReadFileFS()
     
-    struct informationFS {
+    struct ReadFileFS {
+        var group = DispatchGroup()
+        var chunkOffset : UInt32 = 0
+        var totalLength : UInt32  = 0
+        var chunkLength : UInt32  = 0
+        var data = Data()
+        var completed : Bool = false
+        var valid : Bool = false
+    }
+    
+    struct InformationFS {
         var group = DispatchGroup()
         var dirList : DirList = DirList()
         var valid : Bool = false
@@ -80,37 +91,54 @@ class BLEFSHandler {
         case dirNotEmptyError = 0x0A
     }
 
-    func readFile(path: String) {
-        //bleManagerVal.fsBusy = true
-        //var header = Data()
+    func readFile(path: String, offset: Int) -> ReadFileFS {
+        var read = ReadFileFS()
+        read.group = DispatchGroup()
+        read.group.enter()
         var writeData = Data()
 
-        // add heading
         writeData.append(Commands.readInit.rawValue)
         writeData.append(Commands.padding.rawValue)
 
-        // compute path length and append to writeData
         writeData.append(UInt8(path.count & 0x00FF))
         writeData.append(UInt8((path.count & 0xFF00) >> 8))
         
-        writeData.append(contentsOf: convertUInt32ToUInt8Array(value: 0))
+        writeData.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(offset)))
         writeData.append(contentsOf: convertUInt32ToUInt8Array(value: 490))
 
         let pathData = path.data(using: .utf8)!
         writeData.append(pathData)
 
-        print("final: \(writeData.hexString)")
+        readFileFS = read
         bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        readFileFS.group.wait()
+        
+        while !readFileFS.completed {
+            readFileFS.group.enter()
+            writeData = Data()
+            
+            writeData.append(Commands.readData.rawValue)
+            writeData.append(Responses.ok.rawValue)
+            
+            writeData.append(Commands.padding.rawValue)
+            writeData.append(Commands.padding.rawValue)
+            
+            writeData.append(contentsOf: convertUInt32ToUInt8Array(value: readFileFS.chunkOffset + readFileFS.chunkLength))
+            writeData.append(contentsOf: convertUInt32ToUInt8Array(value: 490))
+            
+            bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+            readFileFS.group.wait()
+        }
+        
+        return readFileFS
     }
 
     func writeFile(){
         // TODO
     }
-    
-    var deletedFile : Bool = false
 
     func deleteFile(path: String) -> Bool {
-        var rm = informationFS()
+        var rm = InformationFS()
         rm.group = DispatchGroup()
         rm.group.enter()
         var writeData = Data()
@@ -134,7 +162,7 @@ class BLEFSHandler {
     }
     
     func makeDir(path: String) -> Bool {
-        var mk = informationFS()
+        var mk = InformationFS()
         mk.group = DispatchGroup()
         mk.group.enter()
         var writeData = Data()
@@ -163,33 +191,9 @@ class BLEFSHandler {
         informationTrandfer.removeFirst()
         return isValid
     }
-    
-    func timeSince1970() -> [UInt8] {
-        let timeInterval = NSDate().timeIntervalSince1970
-        let val64 : UInt64 = UInt64(round(timeInterval))
-
-        let byte1 = UInt8(val64 & 0x00000000000000FF)
-        let byte2 = UInt8((val64 & 0x000000000000FF00) >> 8)
-        let byte3 = UInt8((val64 & 0x0000000000FF0000) >> 16)
-        let byte4 = UInt8((val64 & 0x00000000FF000000) >> 24)
-        let byte5 = UInt8((val64 & 0x000000FF00000000) >> 32)
-        let byte6 = UInt8((val64 & 0x0000FF0000000000) >> 40)
-        let byte7 = UInt8((val64 & 0x00FF000000000000) >> 48)
-        let byte8 = UInt8((val64 & 0xFF00000000000000) >> 56)
-        
-        return [byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8]
-    }
-    
-    func convertUInt32ToUInt8Array(value: UInt32) -> [UInt8] {
-        let byte1 = UInt8(value & 0x000000FF)
-        let byte2 = UInt8((value & 0x0000FF00) >> 8)
-        let byte3 = UInt8((value & 0x00FF0000) >> 16)
-        let byte4 = UInt8((value & 0xFF000000) >> 24)
-        return [byte1, byte2, byte3, byte4]
-    }
 
     func listDir(path: String) -> DirList {
-        var ls = informationFS()
+        var ls = InformationFS()
         ls.group = DispatchGroup()
         ls.group.enter()
         var writeData = Data()
@@ -213,53 +217,88 @@ class BLEFSHandler {
         return ls.dirList
     }
 
-    func moveFileOrDir() {
-        // TODO
+    func moveFileOrDir(oldPath: String, newPath: String) -> Bool {
+        var mv = InformationFS()
+        mv.group = DispatchGroup()
+        mv.group.enter()
+        var writeData = Data()
+
+        writeData.append(Commands.mv.rawValue)
+        writeData.append(Commands.padding.rawValue)
+
+        writeData.append(UInt8(oldPath.count & 0x00FF))
+        writeData.append(UInt8((oldPath.count & 0xFF00) >> 8))
+        
+        writeData.append(UInt8(newPath.count & 0x00FF))
+        writeData.append(UInt8((newPath.count & 0xFF00) >> 8))
+        
+        let oldPathData = oldPath.data(using: .utf8)!
+        let newPathData = newPath.data(using: .utf8)!
+        
+        writeData.append(oldPathData)
+        writeData.append(Commands.padding.rawValue)
+        writeData.append(newPathData)
+
+        informationTrandfer.append(mv)
+        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        
+        informationTrandfer[0].group.wait()
+        let isValid = informationTrandfer[0].valid
+        informationTrandfer.removeFirst()
+        return isValid
     }
 
     func handleResponse(responseData: [UInt8] ) {
-        if responseData[0] == UInt8(0x11) {
+        if responseData[0] == Commands.readResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
-                print("Hello, World!")
+                let chunkOffset: UInt32 = UInt32(responseData[7]) << 24 | UInt32(responseData[6]) << 16 | UInt32(responseData[5]) << 8 | UInt32(responseData[4])
+                let totalLength: UInt32 = UInt32(responseData[11]) << 24 | UInt32(responseData[10]) << 16 | UInt32(responseData[9]) << 8 | UInt32(responseData[8])
+                let chunkLength: UInt32 = UInt32(responseData[15]) << 24 | UInt32(responseData[14]) << 16 | UInt32(responseData[13]) << 8 | UInt32(responseData[12])
+                
+                readFileFS.chunkOffset = chunkOffset
+                readFileFS.totalLength = totalLength
+                readFileFS.chunkLength = chunkLength
+                
+                for idx in 16...responseData.count-1 {
+                    readFileFS.data.append(responseData[idx])
+                }
+                
+                print("chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)")
+                
+                if chunkOffset + chunkLength == totalLength {
+                    readFileFS.completed = true
+                    readFileFS.valid = true
+                }
             case Responses.error.rawValue:
+                readFileFS.completed = true
                 print("error")
             case Responses.noFile.rawValue:
+                readFileFS.completed = true
                 print("no file")
             case Responses.protocolError.rawValue:
+                readFileFS.completed = true
                 print("protocol error")
             case Responses.readOnly.rawValue:
+                readFileFS.completed = true
                 print("read only")
             case Responses.dirNotEmptyError.rawValue:
+                readFileFS.completed = true
                 print("dir not empty")
             default:
+                readFileFS.completed = true
                 print("unknown error, response code \(responseData[1])")
             }
-        } else if responseData[0] == UInt8(0x41) || responseData[0] == UInt8(0x31) {
+            readFileFS.group.leave()
+        } else if responseData[0] == Commands.mvResponse.rawValue || responseData[0] == Commands.mkdirResponse.rawValue || responseData[0] == Commands.deleteResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
                 informationTrandfer[0].valid = true
-                informationTrandfer[0].group.leave()
-            case Responses.error.rawValue:
-                informationTrandfer[0].group.leave()
-                print("error")
-            case Responses.noFile.rawValue:
-                informationTrandfer[0].group.leave()
-                print("no file")
-            case Responses.protocolError.rawValue:
-                informationTrandfer[0].group.leave()
-                print("protocol error")
-            case Responses.readOnly.rawValue:
-                informationTrandfer[0].group.leave()
-                print("read only")
-            case Responses.dirNotEmptyError.rawValue:
-                informationTrandfer[0].group.leave()
-                print("dir not empty")
             default:
-                informationTrandfer[0].group.leave()
-                print("unknown error, response code \(responseData[1])")
+                print("error response code \(responseData[1])")
             }
-        } else if responseData[0] == UInt8(0x51) {
+            informationTrandfer[0].group.leave()
+        } else if responseData[0] == Commands.lsResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
                 let filePathLength: UInt16 = (UInt16(responseData[3]) << 8) | UInt16(responseData[2])
@@ -306,8 +345,32 @@ class BLEFSHandler {
                 print("dir not empty")
             default:
                 informationTrandfer[0].group.leave()
-                print("unknown error, response code \(responseData[1])")
+                //print("unknown error, response code \(responseData[1])")
             }
         }
+    }
+    
+    func timeSince1970() -> [UInt8] {
+        let timeInterval = NSDate().timeIntervalSince1970
+        let val64 : UInt64 = UInt64(round(timeInterval))
+
+        let byte1 = UInt8(val64 & 0x00000000000000FF)
+        let byte2 = UInt8((val64 & 0x000000000000FF00) >> 8)
+        let byte3 = UInt8((val64 & 0x0000000000FF0000) >> 16)
+        let byte4 = UInt8((val64 & 0x00000000FF000000) >> 24)
+        let byte5 = UInt8((val64 & 0x000000FF00000000) >> 32)
+        let byte6 = UInt8((val64 & 0x0000FF0000000000) >> 40)
+        let byte7 = UInt8((val64 & 0x00FF000000000000) >> 48)
+        let byte8 = UInt8((val64 & 0xFF00000000000000) >> 56)
+        
+        return [byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8]
+    }
+    
+    func convertUInt32ToUInt8Array(value: UInt32) -> [UInt8] {
+        let byte1 = UInt8(value & 0x000000FF)
+        let byte2 = UInt8((value & 0x0000FF00) >> 8)
+        let byte3 = UInt8((value & 0x00FF0000) >> 16)
+        let byte4 = UInt8((value & 0xFF000000) >> 24)
+        return [byte1, byte2, byte3, byte4]
     }
 }

@@ -100,12 +100,42 @@ struct FileSystemDebug: View {
         //    isTextFieldFocused = true
         //}
     }
+
+    struct Settings {
+        let version: Int32
+        let stepsGoal: Int32
+        let screenTimeOut: Int32
+    }
     
     func handleCommand(command: String) {
         fsBusy = true
         let commands = command.components(separatedBy: " ")
         
         switch commands[0] {
+        case "read":
+            if commands.count <= 1 {
+                commandHistory.append("ERROR: insignificant arguments.")
+                fsBusy = false
+                return
+            }
+            let path = getDir(input: commands[1])
+            
+            DispatchQueue.global(qos: .default).async {
+                let readFile = BLEFSHandler.shared.readFile(path: path, offset: 0)
+                if !readFile.valid {commandHistory.append("ERROR: failed to move '\(commands[1])'.")} else {
+                    if commands[1] == "settings.dat" {
+                        let settings = readFile.data.withUnsafeBytes { ptr -> Settings in
+                            return ptr.load(as: Settings.self)
+                        }
+                        commandHistory.append("Version: \(settings.version)")
+                        commandHistory.append("StepsGoal: \(settings.stepsGoal)")
+                        commandHistory.append("ScreenTimeOut: \(settings.screenTimeOut)")
+                        
+                    }
+                    commandHistory.append("Total File Length: \(readFile.totalLength)")
+                }
+                fsBusy = false
+            }
         case "ls":
             DispatchQueue.global(qos: .default).async {
                 let newDir = commands.count == 1 ? directory : getDir(input: commands[1])
@@ -150,7 +180,7 @@ struct FileSystemDebug: View {
             }
         case "rm":
             if commands.count <= 1 {
-                commandHistory.append("ERROR: no arguments.")
+                commandHistory.append("ERROR: insignificant arguments.")
                 fsBusy = false
                 return
             }
@@ -159,6 +189,20 @@ struct FileSystemDebug: View {
             DispatchQueue.global(qos: .default).async {
                 let rmDir = BLEFSHandler.shared.deleteFile(path: newDir)
                 if !rmDir {commandHistory.append("ERROR: failed to remove '\(commands[1])'.")}
+                fsBusy = false
+            }
+        case "mv":
+            if commands.count <= 2 {
+                commandHistory.append("ERROR: insignificant arguments.")
+                fsBusy = false
+                return
+            }
+            let oldPath = getDir(input: commands[1])
+            let newPath = getDir(input: commands[2])
+            
+            DispatchQueue.global(qos: .default).async {
+                let rmDir = BLEFSHandler.shared.moveFileOrDir(oldPath: oldPath, newPath: newPath)
+                if !rmDir {commandHistory.append("ERROR: failed to move '\(commands[1])' to '\(commands[2])'.")}
                 fsBusy = false
             }
         default:
