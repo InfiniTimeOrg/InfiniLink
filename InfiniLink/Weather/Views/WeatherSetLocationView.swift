@@ -47,6 +47,7 @@ struct WeatherSetLocationView: View {
                         .padding()
                         .background(Color.gray.opacity(0.15))
                         .clipShape(Capsule())
+                        .autocorrectionDisabled()
                 }
                 .padding()
                 Divider()

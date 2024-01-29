@@ -16,6 +16,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     @AppStorage("setLocation") var setLocation : String = "Cupertino"
     @AppStorage("lastLocation") var lastLocation : String = "Cupertino"
     @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
+    @AppStorage("debugMode") var debugMode: Bool = false
     
     static let shared = WeatherController()
     let bleWriteManager = BLEWriteManager()
@@ -178,6 +179,13 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 bleManagerVal.weatherInformation.maxTemperature = json["forecast"]["forecastday"][0]["day"]["maxtemp_c"].doubleValue
                 bleManagerVal.weatherInformation.minTemperature = json["forecast"]["forecastday"][0]["day"]["mintemp_c"].doubleValue
                 
+                let debugDescription = "WeatherAPI short description: \(json["forecast"]["forecastday"][0]["day"]["condition"]["text"])"
+                
+                print(debugDescription)
+                if debugMode {
+                    bleWriteManager.sendNotification(title: "NWS API Debug", body: debugDescription)
+                }
+                
                 switch json["forecast"]["forecastday"][0]["day"]["condition"]["text"] {
                 case "Sunny", "Clear":
                     bleManagerVal.weatherInformation.icon = 0
@@ -277,15 +285,17 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 if json["features"][idx]["properties"]["temperature"]["qualityControl"].stringValue == "V" {
                     temperatureC = json["features"][idx]["properties"]["temperature"]["value"].doubleValue
                     
-                    print(json["features"][idx]["properties"]["textDescription"])
+                    let debugDescription = "NWS API short description: \(json["features"][idx]["properties"]["textDescription"])"
+                    print(debugDescription)
+                    bleWriteManager.sendNotification(title: "NWS API Debug", body: debugDescription)
                     
                     switch json["features"][idx]["properties"]["textDescription"] {
                         // The textDescription docs are out of date so these cases might be slightly different than the fetched data and may need to be updated
-                    case "Fair", "Clear", "Fair with Haze", "Clear with Haze", "Fair and Breezy", "Clear and Breezy", "Windy", "Breezy", "Fair and Windy":
+                    case "Fair", "Clear", "Fair with Haze", "Clear with Haze", "Fair and Breezy", "Clear and Breezy", "Windy", "Breezy", "Fair and Windy", "Mostly Clear":
                         bleManagerVal.weatherInformation.icon = 0
-                    case "A Few Clouds", "A Few Clouds with Haze", "A Few Clouds and Breezy", "A Few Clouds and Windy":
+                    case "A Few Clouds", "A Few Clouds with Haze", "A Few Clouds and Breezy", "A Few Clouds and Windy", "Partly Cloudy", "Partly Cloudy with Haze", "Partly Cloudy and Breezy", "Partly Cloudy and Windy":
                         bleManagerVal.weatherInformation.icon = 1
-                    case "Partly Cloudy", "Partly Cloudy with Haze", "Partly Cloudy and Breezy", "Partly Cloudy and Windy", "Mostly Cloudy", "Mostly Cloudy with Haze", "Mostly Cloudy and Breezy", "Mostly Cloudy and Wind":
+                    case "Cloudy", "Mostly Cloudy", "Mostly Cloudy with Haze", "Mostly Cloudy and Breezy", "Mostly Cloudy and Wind":
                         bleManagerVal.weatherInformation.icon = 2
                     case "Overcast", "Overcast with Haze", "Overcast and Breezy", "Overcast and Windy", "Hurricane Watch", "Funnel Cloud", "Funnel Cloud in Vicinity", "Tornado/Water Spout", "Tornado":
                         bleManagerVal.weatherInformation.icon = 3
@@ -295,7 +305,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                         bleManagerVal.weatherInformation.icon = 5
                     case "Thunderstorm in Vicinity", "Thunderstorm in Vicinity Haze", "Hurricane Warning", "Tropical Storm Watch", "Tropical Storm Warning", "Tropical Storm Conditions presently exist w/Hurricane Warning in effect":
                         bleManagerVal.weatherInformation.icon = 6
-                    case "Snow", "Light Snow", "Heavy Snow", "Snow Showers", "Heavy Snow Showers", "Showers Snow", "Light Showers Snow", "Heavy Showers Snow", "Snow Fog/Mist", "Light Snow Fog/Mist", "Heavy Snow Fog/Mist", "Snow Showers Fog/Mist", "Light Snow Showers", "Heavy Snow Showers Fog/Mist", "Showers Snow Fog/Mist", "Light Showers Snow Fog/Mist", "Heavy Showers Snow Fog/Mist", "Snow Fog", "Light Snow Fog", "Heavy Snow Fog", "Snow Showers Fog", "Light Snow Showers Fog", "Heavy Snow Showers Fog", "Low Drifting Snow", "Blowing Snow", "Snow Low Drifting Snow", "Snow Blowing Snow", "Light Snow Low Drifting Snow", "Light Snow Blowing Snow", "Light Snow Blowing Snow Fog/Mist", "Heavy Snow Low Drifting Snow", "Heavy Snow Blowing Snow", "Thunderstorm Snow", "Light Thunderstorm Snow", "Heavy Thunderstorm Snow", "Snow Grains", "Grains", "Heavy Snow Grains", "Heavy Blowing Snow", "Blowing Snow in Vicinity", "Blizzard":
+                    case "Snow", "Light Snow", "Light Snow and Fog/Mist", "Heavy Snow", "Snow Showers", "Heavy Snow Showers", "Showers Snow", "Light Showers Snow", "Heavy Showers Snow", "Snow Fog/Mist", "Light Snow Fog/Mist", "Heavy Snow Fog/Mist", "Snow Showers Fog/Mist", "Light Snow Showers", "Heavy Snow Showers Fog/Mist", "Showers Snow Fog/Mist", "Light Showers Snow Fog/Mist", "Heavy Showers Snow Fog/Mist", "Snow Fog", "Light Snow Fog", "Heavy Snow Fog", "Snow Showers Fog", "Light Snow Showers Fog", "Heavy Snow Showers Fog", "Low Drifting Snow", "Blowing Snow", "Snow Low Drifting Snow", "Snow Blowing Snow", "Light Snow Low Drifting Snow", "Light Snow Blowing Snow", "Light Snow Blowing Snow Fog/Mist", "Heavy Snow Low Drifting Snow", "Heavy Snow Blowing Snow", "Thunderstorm Snow", "Light Thunderstorm Snow", "Heavy Thunderstorm Snow", "Snow Grains", "Grains", "Heavy Snow Grains", "Heavy Blowing Snow", "Blowing Snow in Vicinity", "Blizzard":
                         bleManagerVal.weatherInformation.icon = 7
                     case "Dust", "Low Drifting Dust", "Blowing Dust", "Sand", "Blowing Sand", "Low Drifting Sand", "Dust/Sand Whirls", "Dust/Sand Whirls in Vicinity", "Dust Storm", "Heavy Dust Storm", "Dust Storm in Vicinity", "Sand Storm", "Heavy Sand Storm", "Sand Storm in Vicinity", "Smoke", "Haze", "Fog/Mist", "Freezing Fog", "Shallow Fog", "Partial Fog", "Patches of Fog", "Fog in Vicinity", "Freezing Fog in Vicinity", "Shallow Fog in Vicinity", "Partial Fog in Vicinity", "Patches of Fog in Vicinity", "Showers in Vicinity Fog", "Light Freezing Fog", "Heavy Freezing Fog", "Fog":
                         bleManagerVal.weatherInformation.icon = 8
@@ -329,7 +339,9 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             if json["status"] == 404 || json["status"] == 500 {
                 print("Failed to get weather data from NWS API with error code: \(json["status"])")
                 DebugLogManager.shared.debug(error: "Failed to get weather data from NWS API with error code: \(json["status"])", log: .app, date: Date())
-                bleManagerVal.lastWeatherUpdateNWS = 0
+                DispatchQueue.main.async {
+                    self.bleManagerVal.lastWeatherUpdateNWS = 0
+                }
                 callWeatherAPI(canUpdateNWS: true, canUpdateWAPI: true)
                 return
             }
