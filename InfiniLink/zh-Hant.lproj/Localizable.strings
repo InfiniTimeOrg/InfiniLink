@@ -265,6 +265,8 @@
 "send_notification_to" = "傳送通知至";
 "connected_to" = "已連線至";
 
+"file_system" = "File System";
+
 // NSLocalizedString("", comment: "")
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

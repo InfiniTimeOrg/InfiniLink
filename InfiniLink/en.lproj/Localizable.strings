@@ -262,6 +262,8 @@
 "send_notification_to" = "Send Notification to";
 "connected_to" = "Connected to";
 
+"file_system" = "File System";
+
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";
 "set_location" = "Location";
