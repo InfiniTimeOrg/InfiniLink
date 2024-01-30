@@ -332,7 +332,7 @@ class BLEFSHandler {
                 readFileFS.chunkLength = chunkLength
                 
                 
-                if responseData.count > 15 {for idx in 16...responseData.count-1 {
+                if responseData.count > 16 {for idx in 16...responseData.count-1 {
                         readFileFS.data.append(responseData[idx])
                     }
                 } else {
