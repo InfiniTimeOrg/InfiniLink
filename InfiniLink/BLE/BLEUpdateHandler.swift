@@ -17,6 +17,7 @@ struct BLEUpdatedCharacteristicHandler {
     let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
     let weatherController = WeatherController()
+    let ble_fs = BLEFSHandler.shared
     
     
     // function to translate heart rate to decimal, copied straight up from this tut: https://www.raywenderlich.com/231-core-bluetooth-tutorial-for-ios-heart-rate-monitor#toc-anchor-014
@@ -82,9 +83,7 @@ struct BLEUpdatedCharacteristicHandler {
                 DebugLogManager.shared.debug(error: "Could not read BLE FS response", log: .ble, date: Date())
                 break
             }
-            let responseData = value.hexString
-            print("response: \(responseData)")
-            //BLEFSHandler.shared.handleResponse(responseData: responseData)
+            ble_fs.handleResponse(responseData: [UInt8](value))
         default:
             break
         }
