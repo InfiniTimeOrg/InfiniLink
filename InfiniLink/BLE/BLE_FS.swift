@@ -331,8 +331,15 @@ class BLEFSHandler {
                 readFileFS.totalLength = totalLength
                 readFileFS.chunkLength = chunkLength
                 
-                for idx in 16...responseData.count-1 {
-                    readFileFS.data.append(responseData[idx])
+                
+                if responseData.count > 15 {for idx in 16...responseData.count-1 {
+                        readFileFS.data.append(responseData[idx])
+                    }
+                } else {
+                    print("ERROR: debug info - chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)")
+                    readFileFS.valid = false
+                    readFileFS.completed = true
+                    return
                 }
                 
                 print("chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)")
