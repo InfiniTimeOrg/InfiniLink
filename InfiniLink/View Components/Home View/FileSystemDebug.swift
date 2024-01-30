@@ -136,6 +136,21 @@ struct FileSystemDebug: View {
                 }
                 fsBusy = false
             }
+        case "write":
+            if commands.count <= 1 {
+                commandHistory.append("ERROR: insignificant arguments.")
+                fsBusy = false
+                return
+            }
+            let path = getDir(input: commands[1])
+            let data = "0700000088130000983a00000100000200031111010000000100000000000000000000009600000002000000".hexToData()!
+            
+            DispatchQueue.global(qos: .default).async {
+                let writeFile = BLEFSHandler.shared.writeFile(data: data, path: path, offset: 0)
+                if !writeFile.valid {commandHistory.append("ERROR: failed to move '\(commands[1])'.")}
+                commandHistory.append("Total Free Space: \(writeFile.freeSpace)")
+                fsBusy = false
+            }
         case "ls":
             DispatchQueue.global(qos: .default).async {
                 let newDir = commands.count == 1 ? directory : getDir(input: commands[1])
@@ -213,6 +228,24 @@ struct FileSystemDebug: View {
     
     func getDir(input: String) -> String {
         return input.first == "/" ? input : directory.last == "/" ? "\(directory)\(input)" : "\(directory)/\(input)"
+    }
+}
+
+extension String {
+    func hexToData() -> Data? {
+        let len = self.count / 2
+        var data = Data(capacity: len)
+        for i in 0..<len {
+            let j = self.index(self.startIndex, offsetBy: i*2)
+            let k = self.index(j, offsetBy: 2)
+            let bytes = self[j..<k]
+            if var num = UInt8(bytes, radix: 16) {
+                data.append(&num, count: 1)
+            } else {
+                return nil
+            }
+        }
+        return data
     }
 }
 
