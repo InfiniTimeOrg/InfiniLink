@@ -7,13 +7,20 @@
 
 import Foundation
 import SwiftUI
+import CoreBluetooth
 
 struct Connect: View {
     @ObservedObject var bleManager = BLEManager.shared
     @Environment(\.presentationMode) var presentation
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+    
     @State var showHelpView = false
+    @State var showUnsupportedDeviceAlert = false
+    
+    func isDeviceInfiniTime(device: CBPeripheral) -> Bool {
+        return device.name == "InfiniTime" || device.name == "Pinetime-JF"
+    }
     
     var body: some View {
         VStack(spacing: 0) {
@@ -26,7 +33,7 @@ struct Connect: View {
                         .frame(maxWidth: .infinity, alignment: .trailing)
                 }
                 HStack {
-                    Text("\(infiniTimeDevicesCount()) \(NSLocalizedString("devices", comment: "Devices"))")
+                    Text("\(bleManager.newPeripherals.count) \(NSLocalizedString("devices", comment: "Devices"))")
                         .padding()
                         .font(.body.weight(.semibold))
                         .foregroundColor(.primary)
@@ -61,20 +68,23 @@ struct Connect: View {
                     ScrollView {
                         VStack(spacing: 8) {
                             ForEach(bleManager.newPeripherals, id: \.identifier.uuidString) { i in
-                                if i.name == "InfiniTime" || i.name == "Pinetime-JF" {
-                                    let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
-                                    Button {
-                                        bleManager.connect(peripheral: i)
-                                        presentation.wrappedValue.dismiss()
-                                    } label: {
-                                        Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
-                                            .frame(maxWidth: .infinity)
-                                            .font(.body.weight(.semibold))
-                                            .padding()
-                                            .foregroundColor(.primary)
-                                            .background(Color.gray.opacity(0.15))
-                                            .clipShape(Capsule())
+                                let deviceName = DeviceNameManager.init().getName(deviceUUID: i.identifier.uuidString)
+                                Button {
+                                    bleManager.connect(peripheral: i)
+                                    if !isDeviceInfiniTime(device: i) {
+                                        showUnsupportedDeviceAlert = true
                                     }
+                                    if isDeviceInfiniTime(device: i) {
+                                        presentation.wrappedValue.dismiss()
+                                    }
+                                } label: {
+                                    Text(deviceName == "" ? i.name ?? NSLocalizedString("unnamed", comment: "") : deviceName)
+                                        .frame(maxWidth: .infinity)
+                                        .font(.body.weight(.semibold))
+                                        .padding()
+                                        .foregroundColor(.primary)
+                                        .background(Color.gray.opacity(0.15))
+                                        .clipShape(Capsule())
                                 }
                             }
                         }
@@ -116,12 +126,9 @@ struct Connect: View {
                 bleManager.stopScanning()
             }
         }
-    }
-    
-    func infiniTimeDevicesCount() -> Int {
-        var count: Int = 0
-        bleManager.newPeripherals.forEach {if $0.name == "InfiniTime" || $0.name == "Pinetime-JF" {count += 1}}
-        return count
+        .alert(isPresented: $showUnsupportedDeviceAlert) {
+            Alert(title: Text(NSLocalizedString("oops", comment: "Oops!")), message: Text(NSLocalizedString("not_infinitime_device", comment: "It doesn't look like the device you selected is running InfiniTime.")), dismissButton: .cancel())
+        }
     }
 }
 

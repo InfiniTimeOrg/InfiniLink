@@ -93,10 +93,6 @@
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
 
-// - ScanningPopover
-"connected_to" = "Connecté à";
-"scanning" = "Balayage";
-
 // - BLEConnectView
 "available_devices" = "Appareil disponible";
 "waiting_for_bluetooth" = "En attente du Bluetooth";
@@ -104,6 +100,9 @@
 "loading" = "";
 "need_help_connecting" = "";
 "devices" = "";
+"not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
+"disconnect" = "Déconnecter";
+"scanning" = "Balayage";
 
 // - ConnectionHelpView
 "connection_help" = "";
@@ -150,9 +149,6 @@
 "available_downloads" = "Téléchargements disponibles";
 "firmware_download_links" = "Liens de téléchargement du micrologiciel";
 "software_update_available" = "Software Update Available";
-
-// - SheetCloseButton
-"close" = "Fermer";
 
 // - WhatsNew
 "whats_new_in" = "Nouveautés dans";
@@ -207,11 +203,6 @@
 
 // - MusicController
 "not_playing" = "Pas d'activité";
-
-// - SideMenu
-"disconnect" = "Déconnecter";
-"scanning" = "Balayage";
-"connect" = "Connecter";
 
 // - ContentView
 "failed_set_time" = "Impossible de régler l'heure";

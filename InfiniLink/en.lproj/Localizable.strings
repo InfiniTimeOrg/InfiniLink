@@ -93,10 +93,6 @@
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
 
-// - ScanningPopover
-"connected_to" = "Connected to";
-"scanning" = "Scanning";
-
 // - BLEConnectView
 "available_devices" = "Available Devices";
 "waiting_for_bluetooth" = "Waiting for Bluetooth";
@@ -104,6 +100,9 @@
 "loading" = "Loading...";
 "need_help_connecting" = "Need help connecting?";
 "devices" = "Devices";
+"not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
+"disconnect" = "Disconnect";
+"scanning" = "Scanning";
 
 // - ConnectionHelpView
 "connection_help" = "Connection Help";
@@ -205,11 +204,6 @@
 // - MusicController
 "not_playing" = "Not Playing";
 
-// - SideMenu
-"disconnect" = "Disconnect";
-"scanning" = "Scanning";
-"connect" = "Connect";
-
 // - ContentView
 "failed_set_time" = "Failed to Set Time";
 "failed_set_time_description" = "There was an issue setting the time on your watch. Please disconnect from the watch, and then reconnect.";
@@ -265,5 +259,3 @@
 "use_current_location" = "Use Current Location";
 "set_location" = "Location";
 "always_allow_location_services" = "Always Allow Current Location";
-
-// NSLocalizedString("", comment: "")

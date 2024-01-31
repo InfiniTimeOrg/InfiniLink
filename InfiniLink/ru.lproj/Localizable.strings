@@ -93,10 +93,6 @@
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
 
-// - ScanningPopover
-"connected_to" = "Подключено к";
-"scanning" = "Сканирование";
-
 // - BLEConnectView
 "available_devices" = "Доступные устройства";
 "waiting_for_bluetooth" = "Ожидание Bluetooth";
@@ -104,6 +100,9 @@
 "loading" = "";
 "need_help_connecting" = "";
 "devices" = "";
+"not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
+"disconnect" = "Разъединить";
+"scanning" = "Сканирование";
 
 // - ConnectionHelpView
 "connection_help" = "";
@@ -150,9 +149,6 @@
 "available_downloads" = "Доступные загрузки";
 "firmware_download_links" = "Доступные загруки, ссылки";
 "software_update_available" = "Software Update Available";
-
-// - SheetCloseButton
-"close" = "Закрыть";
 
 // - WhatsNew
 "whats_new_in" = "Что нового";
@@ -207,11 +203,6 @@
 
 // - MusicController
 "not_playing" = "Ничего не играет";
-
-//- SideMenu
-"disconnect" = "Разъединить";
-"scanning" = "Сканирование";
-"connect" = "Соединить";
 
 // - ContentView
 "failed_set_time" = "Невозможно установить время";

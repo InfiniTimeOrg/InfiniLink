@@ -93,10 +93,6 @@
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
 
-// - ScanningPopover
-"connected_to" = "기기에 연결됨:";
-"scanning" = "스캔 중";
-
 // - BLEConnectView
 "available_devices" = "사용 가능한 기기";
 "waiting_for_bluetooth" = "블루투스 대기 중";
@@ -104,6 +100,9 @@
 "loading" = "";
 "need_help_connecting" = "";
 "devices" = "";
+"not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
+"disconnect" = "연결 해제";
+"scanning" = "스캔 중";
 
 // - ConnectionHelpView
 "connection_help" = "";
@@ -150,9 +149,6 @@
 "available_downloads" = "사용 가능한 다운로드";
 "firmware_download_links" = "펌웨어 다운로드 링크";
 "software_update_available" = "Software Update Available";
-
-// - SheetCloseButton
-"close" = "닫기";
 
 // - WhatsNew
 "whats_new_in" = "What's New in";
@@ -207,11 +203,6 @@
 
 // - MusicController
 "not_playing" = "Not Playing";
-
-// - SideMenu
-"disconnect" = "연결 해제";
-"scanning" = "스캔 중";
-"connect" = "연결";
 
 // - ContentView
 "failed_set_time" = "시간 설정 실패";
