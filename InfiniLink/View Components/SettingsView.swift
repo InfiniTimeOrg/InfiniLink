@@ -46,13 +46,13 @@ struct Settings_Page: View {
                 Text(NSLocalizedString("settings", comment: ""))
                     .foregroundColor(.primary)
                     .font(.title.weight(.bold))
-                Spacer()
-                HStack {
-                    if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" {
-                        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-                            .imageScale(.large)
-                    }
-                }
+//                Spacer()
+//                HStack {
+//                    if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" {
+//                        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
+//                            .imageScale(.large)
+//                    }
+//                }
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
