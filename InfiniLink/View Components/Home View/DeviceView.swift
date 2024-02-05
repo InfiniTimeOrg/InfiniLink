@@ -319,6 +319,8 @@ struct CustomScrollView<Content: View>: View {
     
     @State private var scrollPosition: CGFloat = 0
     
+    @State private var showDivider: Bool = false
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack() {
@@ -349,17 +351,22 @@ struct CustomScrollView<Content: View>: View {
                     }
                     VStack(spacing: 0) {
                         HStack(spacing: 12) {
-                            Text("Space")
-                                .foregroundColor(.clear)
-                                .font(.title.weight(.bold))
+                            if !bleManager.isConnectedToPinetime {
+                                Text(NSLocalizedString("not_connected", comment: ""))
+                                    .foregroundColor(.gray)
+                            } else {
+                                Text(deviceInfo.deviceName == "" ? "InfiniTime" : deviceInfo.deviceName)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                            }
                         }
-                        .padding()
+                        .padding(18)
+                        .font(.title.weight(.bold))
                         .frame(maxWidth: .infinity, alignment: .center)
-                        if scrollPosition - geometry.safeAreaInsets.top <= 64 {
+                        if showDivider {
                             Divider()
                         }
                         ScrollView(showsIndicators: false) {
-                            Spacer(minLength: geometry.size.height * 0.375)
+                            Spacer(minLength: geometry.size.height * 0.335)
                             VStack() {
                                 GeometryReader{ geo in
                                     AnyView(Color.clear
@@ -367,37 +374,22 @@ struct CustomScrollView<Content: View>: View {
                                         .preference(key: SizePreferenceKey.self, value: geo.frame(in: .global).minY)
                                     )}.onPreferenceChange(SizePreferenceKey.self) { preferences in
                                         self.scrollPosition = preferences
+                                        
+                                        if scrollPosition - geometry.safeAreaInsets.top <= 64 {
+                                            withAnimation(.easeInOut(duration: 0.15)) {
+                                                self.showDivider = true
+                                            }
+                                        } else {
+                                            withAnimation(.easeInOut(duration: 0.15)) {
+                                                self.showDivider = false
+                                            }
+                                        }
                                     }
                                 content
                             }
                         }
                         .onAppear {
                             DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: BLEDeviceInfo.shared.firmware)
-                        }
-                    }
-                    VStack(spacing: 20) {
-                        GeometryReader { geometry in
-                            ZStack {
-                                VStack(alignment: .center, spacing: 12) {
-                                    
-                                    if !bleManager.isConnectedToPinetime {
-                                        Text(NSLocalizedString("not_connected", comment: ""))
-                                            .foregroundColor(.gray)
-                                            .bold()
-                                            .font(.title.weight(.thin))
-                                            .position(x: geometry.size.width / 2, y: (((self.scrollPosition - geometry.safeAreaInsets.top - 100) * 0.06)).clamped(to: 0...geometry.size.height*0.3))
-                                    } else {
-                                        Text(deviceInfo.deviceName == "" ? "InfiniTime" : deviceInfo.deviceName)
-                                            .foregroundColor(colorScheme == .dark ? .white : .black)
-                                            .bold()
-                                            .font(.title.weight(.thin))
-                                            .position(x: geometry.size.width / 2, y: (((self.scrollPosition - geometry.safeAreaInsets.top - 100) * 0.06)).clamped(to: 0...geometry.size.height*0.3))
-                                    }
-                                }
-                                .padding(.top)
-                                .padding(.top)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            }
                         }
                     }
                 }
@@ -428,19 +420,19 @@ struct RowModifier: ViewModifier {
         DeviceView()
             .onAppear {
                 BLEManager.shared.isConnectedToPinetime = true
-                BLEManagerVal.shared.firmwareVersion = "1.13.0"
+                BLEManagerVal.shared.firmwareVersion = "1.14.0"
             }
     }
 }
 
 
 struct SizePreferenceKey: PreferenceKey {
-        typealias Value = CGFloat
-        static var defaultValue: Value = 0
-
-        static func reduce(value: inout Value, nextValue: () -> Value) {
-            value = nextValue()
-        }
+    typealias Value = CGFloat
+    static var defaultValue: Value = 0
+    
+    static func reduce(value: inout Value, nextValue: () -> Value) {
+        value = nextValue()
+    }
 }
 
 extension FloatingPoint {
@@ -450,13 +442,13 @@ extension FloatingPoint {
 }
 
 public extension Color {
-    #if os(macOS)
+#if os(macOS)
     static let background = Color(NSColor.windowBackgroundColor)
     static let secondaryBackground = Color(NSColor.underPageBackgroundColor)
     static let tertiaryBackground = Color(NSColor.controlBackgroundColor)
-    #else
+#else
     static let background = Color(UIColor.systemBackground)
     static let secondaryBackground = Color(UIColor.secondarySystemBackground)
     static let tertiaryBackground = Color(UIColor.tertiarySystemBackground)
-    #endif
+#endif
 }
