@@ -12,7 +12,6 @@
 		2617EF3927036C9B00FE6F48 /* WhatsNewSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */; };
 		2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388326F2531C00D72B43 /* DFUWithBLE.swift */; };
 		2632388626F2548600D72B43 /* DFUWithoutBLE.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388526F2548600D72B43 /* DFUWithoutBLE.swift */; };
-		2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2632388926F2591900D72B43 /* DFUStartTransferButton.swift */; };
 		263462EA2729B71500D3278D /* StepCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462E92729B71500D3278D /* StepCalendarView.swift */; };
 		263462ED2729F68600D3278D /* CalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EC2729F68600D3278D /* CalendarView.swift */; };
 		263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */; };
@@ -66,6 +65,7 @@
 		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
+		E015A6F52B7197DA00369851 /* DFUStartTransferButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = E015A6F42B7197DA00369851 /* DFUStartTransferButton.swift */; };
 		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
 		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
@@ -113,7 +113,6 @@
 		2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewSheet.swift; sourceTree = "<group>"; };
 		2632388326F2531C00D72B43 /* DFUWithBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithBLE.swift; sourceTree = "<group>"; };
 		2632388526F2548600D72B43 /* DFUWithoutBLE.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUWithoutBLE.swift; sourceTree = "<group>"; };
-		2632388926F2591900D72B43 /* DFUStartTransferButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUStartTransferButton.swift; sourceTree = "<group>"; };
 		263462E92729B71500D3278D /* StepCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepCalendarView.swift; sourceTree = "<group>"; };
 		263462EC2729F68600D3278D /* CalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarView.swift; sourceTree = "<group>"; };
 		263462EE2729F6C000D3278D /* CalendarViewExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarViewExtensions.swift; sourceTree = "<group>"; };
@@ -173,6 +172,7 @@
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		E015A6F42B7197DA00369851 /* DFUStartTransferButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DFUStartTransferButton.swift; sourceTree = "<group>"; };
 		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
@@ -264,8 +264,8 @@
 			children = (
 				26A6315F26C4BC25005AE404 /* DFUView.swift */,
 				2632388326F2531C00D72B43 /* DFUWithBLE.swift */,
+				E015A6F42B7197DA00369851 /* DFUStartTransferButton.swift */,
 				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
-				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
 				26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */,
 				2675CA5926DC81AA00967E4D /* DFUComplete.swift */,
 				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
@@ -706,12 +706,12 @@
 				26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */,
 				E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */,
 				E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */,
-				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
 				E57654032B5781970059C8EF /* WeatherController.swift in Sources */,
 				268E774127175830000DF90D /* ChartSettingsSheetDatePicker.swift in Sources */,
+				E015A6F52B7197DA00369851 /* DFUStartTransferButton.swift in Sources */,
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
 				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,

@@ -26,17 +26,7 @@ struct DownloadView: View {
                     .foregroundColor(.primary)
                     .font(.title.weight(.bold))
                 Spacer()
-                Button {
-                    downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
-                } label: {
-                    Image(systemName: "arrow.counterclockwise")
-                        .imageScale(.medium)
-                        .padding(14)
-                        .font(.body.weight(.semibold))
-                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.15))
-                        .clipShape(Circle())
-                }
+                DFURefreshButton()
                 Button {
                     presentation.wrappedValue.dismiss()
                 } label: {

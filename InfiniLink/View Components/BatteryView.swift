@@ -20,6 +20,16 @@ struct BatteryView: View {
     
     let chartManager = ChartManager.shared
     
+    var foregroundColor: Color {
+        if bleManager.batteryLevel <= 10 {
+            return .red
+        } else if bleManager.batteryLevel <= 20 {
+            return .orange
+        } else {
+            return .green
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 15) {
@@ -51,7 +61,6 @@ struct BatteryView: View {
                     Circle()
                         .trim(from: 0.0, to: CGFloat(min(Float(bleManager.batteryLevel.rounded() / 100.0), 1.0)))
                         .stroke(style: StrokeStyle(lineWidth: 15.0, lineCap: .round, lineJoin: .round))
-                        .foregroundColor(Color.green)
                         .rotationEffect(Angle(degrees: 270.0))
                     VStack(spacing: 8) {
                         Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
@@ -60,8 +69,8 @@ struct BatteryView: View {
                         Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
                             .font(.system(size: 40).weight(.bold))
                     }
-                    .foregroundColor(.green)
                 }
+                .foregroundColor(foregroundColor)
                 .padding(30)
                 VStack {
                     Spacer()

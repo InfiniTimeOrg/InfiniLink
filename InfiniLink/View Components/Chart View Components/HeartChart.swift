@@ -43,29 +43,12 @@ struct HeartChart: View {
         let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 50), topLine: .maximum(of: 160))
         let data = LineChartData(dataSets: LineDataSet(dataPoints: ChartManager.shared.convert(results: chartPoints), style: setLineStyle()), chartStyle: chartStyle)
         
-        if dataPoints.count > 1 {
-            setGraphType(data: data)
-                .animation(.easeIn)
-                .floatingInfoBox(chartData: data)
-                .touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
-                .yAxisLabels(chartData: data)
-                .padding(.leading)
-        } else {
-            VStack(alignment: .center, spacing: 14) {
-                Spacer()
-                Image(systemName: "heart")
-                    .imageScale(.large)
-                    .font(.system(size: 30).weight(.semibold))
-                    .foregroundColor(.red)
-                VStack(spacing: 8) {
-                    Text(NSLocalizedString("oops", comment: ""))
-                        .font(.largeTitle.weight(.bold))
-                    Text(NSLocalizedString("insufficient_heart_rate_data", comment: ""))
-                        .font(.title2.weight(.semibold))
-                }
-                Spacer()
-            }
-        }
+        setGraphType(data: data)
+            .animation(.easeIn)
+            .floatingInfoBox(chartData: data)
+            .touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
+            .yAxisLabels(chartData: data)
+            .padding(.leading)
     }
 }
 

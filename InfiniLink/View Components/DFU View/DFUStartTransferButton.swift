@@ -40,18 +40,18 @@ struct DFUStartTransferButton: View {
                 }
             }
         } label: {
-                Text(updateStarted ? NSLocalizedString("stop_transfer", comment: "") :
-                        (dfuUpdater.local ? NSLocalizedString("download_and_install", comment: "") :
-                            (downloadManager.downloading ? NSLocalizedString("downloading", comment: "") : NSLocalizedString("download_and_install", comment: ""))))
-                .frame(maxWidth: .infinity)
-                .font(.body.weight(.semibold))
-                .padding(12)
-                .background(Color.blue)
-                .foregroundColor(.white)
-                .clipShape(Capsule())
-            }
-            .disabled(buttonDisabled())
-            .opacity(buttonDisabled() ? 0.5 : 1.0)
+            Text(updateStarted ? NSLocalizedString("stop_transfer", comment: "") :
+                    (dfuUpdater.local ? NSLocalizedString("download_and_install", comment: "") :
+                        (downloadManager.downloading ? NSLocalizedString("downloading", comment: "") : NSLocalizedString("download_and_install", comment: ""))))
+            .frame(maxWidth: .infinity)
+            .font(.body.weight(.semibold))
+            .padding(12)
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .clipShape(Capsule())
+        }
+        .disabled(buttonDisabled())
+        .opacity(buttonDisabled() ? 0.5 : 1.0)
     }
 }
 

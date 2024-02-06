@@ -61,7 +61,7 @@ struct HeartView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
-            if dataPoints.count < 1 {
+            if dataPoints.count < 2 {
                 VStack(alignment: .center, spacing: 14) {
                     Spacer()
                     Image(systemName: "heart")

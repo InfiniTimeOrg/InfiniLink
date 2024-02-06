@@ -18,16 +18,14 @@ struct DFUView: View {
             if uptimeManager.connectTime != nil {
                 DFUWithBLE()
             } else {
-                DFUWithoutConnection()
+                DFUWithoutBLE(title: NSLocalizedString("pinetime_not_available", comment: ""), subtitle: NSLocalizedString("please_check_your_connection_and_try_again", comment: ""))
             }
 		} else {
-			DFUWithoutBLE()
+			DFUWithoutBLE(title: NSLocalizedString("bluetooth_not_available", comment: ""), subtitle: NSLocalizedString("please_enable_bluetooth_try_again", comment: ""))
 		}
 	}
 }
 
-struct DFUView_Previews: PreviewProvider {
-	static var previews: some View {
-		DFUView()
-	}
+#Preview {
+    DFUView()
 }

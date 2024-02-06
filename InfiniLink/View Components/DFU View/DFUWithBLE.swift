@@ -66,17 +66,7 @@ struct DFUWithBLE: View {
                             DownloadView(openFile: $openFile)
                         }
                     }
-                    Button {
-                        downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
-                    } label: {
-                        Image(systemName: "arrow.counterclockwise")
-                            .imageScale(.medium)
-                            .padding(14)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Color.gray.opacity(0.15))
-                            .clipShape(Circle())
-                    }
+                    DFURefreshButton()
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
@@ -133,6 +123,8 @@ struct NewUpdate: View {
     @Binding var updateStarted: Bool
     
     @ObservedObject var dfuUpdater = DFU_Updater.shared
+    @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     
     @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     
@@ -227,16 +219,21 @@ struct NewUpdate: View {
                 }
             }
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
+                .disabled(bleManager.batteryLevel <= 50)
+                .opacity(bleManager.batteryLevel <= 50 ? 0.5 : 1.0)
+            if bleManager.batteryLevel <= 50 {
+                Text("To update, please make sure \(deviceInfo.deviceName)'s battery level is over 50 percent")
+                    .foregroundColor(.gray)
+                    .multilineTextAlignment(.center)
+                    .padding(4)
+            }
         }
         .padding(20)
     }
 }
 
 struct NoUpdate: View {
-    //@ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
-    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
-    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack {
@@ -253,11 +250,38 @@ struct NoUpdate: View {
     }
 }
 
+struct DFURefreshButton: View {
+    @Environment(\.colorScheme) var colorScheme
+    
+    @ObservedObject var downloadManager = DownloadManager.shared
+    
+    var body: some View {
+        Button {
+            downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
+        } label: {
+            VStack {
+                if downloadManager.loadingResults {
+                    ProgressView()
+                } else {
+                    Image(systemName: "arrow.counterclockwise")
+                        .imageScale(.medium)
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                }
+            }
+            .padding(14)
+            .font(.body.weight(.semibold))
+            .background(Color.gray.opacity(0.15))
+            .clipShape(Circle())
+        }
+        .disabled(downloadManager.loadingResults)
+    }
+}
+
 #Preview {
     NavigationView {
         DFUWithBLE()
             .onAppear {
-                BLEDeviceInfo.shared.firmware = "1.13.0"
+                BLEDeviceInfo.shared.firmware = "1.14.0"
             }
     }
 }
