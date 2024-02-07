@@ -271,7 +271,7 @@ class BLEFSHandler : ObservableObject{
             
             //print("progress: \((round(Double(progress)/Double(externalResourcesSize))*100))%")
             
-            print("Progress: \(progress), Size: \(externalResourcesSize)")
+            //print("Progress: \(progress), Size: \(externalResourcesSize)")
             
             if UInt32(data.count) == newOffset {
                 writeFileFS.completed = true

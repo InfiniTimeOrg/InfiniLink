@@ -51,7 +51,7 @@ struct DFUWithBLE: View {
                     }
                     Text(NSLocalizedString("software_update", comment: "Software Update"))
                         .foregroundColor(.primary)
-                        .font(.title2.weight(.medium))
+                        .font(.title.weight(.bold))
                     if !(showNewDownloadsOnly) && !externalResources{
                         HStack(spacing: 15) {
                             Spacer()
