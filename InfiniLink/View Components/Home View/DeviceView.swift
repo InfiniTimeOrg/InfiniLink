@@ -348,8 +348,8 @@ struct CustomScrollView<Content: View>: View {
                             Image("WatchHomePage")
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.height / 4.0, height: geometry.size.height / 4.0, alignment: .center)
-                                .position(x: geometry.size.width / 2, y: (((self.scrollPosition - geometry.safeAreaInsets.top) * 0.045) + geometry.size.height * 0.25).clamped(to: geometry.size.height*0.25...geometry.size.height*1.0))
+                                .frame(width: geometry.size.height / 4.5, height: geometry.size.height / 4.5, alignment: .center)
+                                .position(x: geometry.size.width / 2, y: (((self.scrollPosition - geometry.safeAreaInsets.top - (geometry.size.height / 2.0)) * 0.045) + geometry.size.height * 0.245).clamped(to: geometry.size.height*0.1...geometry.size.height*1.0))
                                 .shadow(color: colorScheme == .dark ? Color.black : Color.secondary, radius: 16, x: 0, y: 0)
                                 .clipped()
                         }
@@ -368,6 +368,7 @@ struct CustomScrollView<Content: View>: View {
                                     .foregroundColor(.gray)
                             } else {
                                 Text(deviceInfo.deviceName == "" ? "InfiniTime" : deviceInfo.deviceName)
+                                    .font(.title.weight(.bold))
                                     .foregroundColor(colorScheme == .dark ? .white : .black)
                             }
                         }
@@ -378,7 +379,7 @@ struct CustomScrollView<Content: View>: View {
                             Divider()
                         }
                         ScrollView(showsIndicators: false) {
-                            Spacer(minLength: geometry.size.height * 0.335)
+                            Spacer(minLength: geometry.size.height * 0.315)
                             VStack() {
                                 GeometryReader{ geo in
                                     AnyView(Color.clear
