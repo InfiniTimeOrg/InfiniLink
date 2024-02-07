@@ -249,10 +249,14 @@
 "currently_unavailable" = "";
 
 "software_version" = "";
+"file_system_version" = "File System Version";
 "model_name" = "";
 "autoconnect_to_this" = "";
 "send_notification_to" = "";
 "connected_to" = "";
+
+"file_system" = "File System";
+"external_resources" = "Install External Resources";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

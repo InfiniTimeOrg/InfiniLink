@@ -21,6 +21,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	@Published var percentComplete: Double = 0
 	
 	@Published var firmwareFilename = ""
+    @Published var resourceFilename = ""
 	@Published var firmwareSelected: Bool = false
 	public var local = true
 	public var firmwareURL: URL!
