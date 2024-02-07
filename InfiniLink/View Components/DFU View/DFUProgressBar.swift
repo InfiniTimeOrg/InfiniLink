@@ -14,11 +14,17 @@ struct DFUProgressBar: View {
 	
 	@Environment(\.colorScheme) var colorScheme
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
+    @ObservedObject var ble_fs = BLEFSHandler.shared
 	
 	var body: some View {
 		VStack {
-				ProgressView(dfuUpdater.dfuState, value: dfuUpdater.percentComplete, total: Double(100))
-                .font(.system(size: 16))
+            if DownloadManager.shared.externalResources{
+                ProgressView(value: Double(ble_fs.progress), total: Double(ble_fs.externalResourcesSize))
+                    .font(.system(size: 16))
+            } else {
+                ProgressView(dfuUpdater.dfuState, value: dfuUpdater.percentComplete, total: Double(100))
+                    .font(.system(size: 16))
+            }
 		}
 	}
 }

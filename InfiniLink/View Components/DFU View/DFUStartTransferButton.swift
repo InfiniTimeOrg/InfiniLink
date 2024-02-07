@@ -14,6 +14,8 @@ struct DFUStartTransferButton: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var updateStarted: Bool
     @Binding var firmwareSelected: Bool
+    @Binding var externalResources: Bool
+    
     
     @ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var bleManager = BLEManager.shared
@@ -27,16 +29,23 @@ struct DFUStartTransferButton: View {
                 dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
                 dfuUpdater.firmwareSelected = false
                 dfuUpdater.firmwareFilename = ""
+                dfuUpdater.resourceFilename = ""
             } else {
                 dfuUpdater.percentComplete = 0
-                if dfuUpdater.local {
-                    dfuUpdater.transfer()
+                if externalResources {
+                    downloadManager.startTransfer = true
+                    downloadManager.startDownload(url: downloadManager.browser_download_resources_url, isExternalResources: externalResources)
                     updateStarted = true
                 } else {
-                    downloadManager.startTransfer = true
-                    downloadManager.startDownload(url: downloadManager.browser_download_url)
-                    
-                    updateStarted = true
+                    if dfuUpdater.local {
+                        dfuUpdater.transfer()
+                        updateStarted = true
+                    } else {
+                        downloadManager.startTransfer = true
+                        downloadManager.startDownload(url: downloadManager.browser_download_url, isExternalResources: externalResources)
+                        
+                        updateStarted = true
+                    }
                 }
             }
         } label: {
@@ -45,7 +54,7 @@ struct DFUStartTransferButton: View {
                         (downloadManager.downloading ? NSLocalizedString("downloading", comment: "") : NSLocalizedString("download_and_install", comment: ""))))
             .frame(maxWidth: .infinity)
             .font(.body.weight(.semibold))
-            .padding(12)
+            .padding(14)
             .background(Color.blue)
             .foregroundColor(.white)
             .clipShape(Capsule())
@@ -56,5 +65,5 @@ struct DFUStartTransferButton: View {
 }
 
 #Preview {
-    DFUStartTransferButton(updateStarted: .constant(false), firmwareSelected: .constant(true))
+    DFUStartTransferButton(updateStarted: .constant(false), firmwareSelected: .constant(true), externalResources: .constant(false))
 }

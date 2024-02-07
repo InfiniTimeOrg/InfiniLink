@@ -17,6 +17,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
    static let shared = BLEManager()
     
     var myCentral: CBCentralManager!
+    var blefsTransfer: CBCharacteristic!
     
     struct musicCharacteristics {
         var control: CBCharacteristic!
@@ -47,6 +48,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         let hardwareRevision = CBUUID(string: "2A27")
         let softwareRevision = CBUUID(string: "2A28")
         let manufacturer = CBUUID(string: "2A29")
+        let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
         let weather =       CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
         let musicControl =  CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
         let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
