@@ -186,7 +186,7 @@ class ChartManager: ObservableObject {
 extension Date {
     func posHour() -> Date {
         return Date(timeIntervalSinceReferenceDate:
-                        (timeIntervalSinceReferenceDate / (3600.0)).rounded(.up) * (3600.0) + ((timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) - (timeIntervalSinceReferenceDate / (3600.0 * 3.0)).rounded(.down) * (3600.0 * 3.0)))
+                        (timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) + ((timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) - (timeIntervalSinceReferenceDate / (3600.0 * 3.0)).rounded(.down) * (3600.0 * 3.0)))
     }
 }
 #Preview {
