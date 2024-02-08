@@ -113,6 +113,7 @@ class ChartManager: ObservableObject {
 		if currentChart == .heart {
 			dateRangeSelection = heartRangeSelectionState
 		} else {
+            //batteryRangeSelectionState.days = 2
 			dateRangeSelection = batteryRangeSelectionState
 		}
 		var dataPoints: [LineChartDataPoint] = []
@@ -136,4 +137,58 @@ class ChartManager: ObservableObject {
 		}
 		return dataPoints
 	}
+    
+    func convertBat(results: FetchedResults<ChartDataPoint>, connected: FetchedResults<ChartDataPoint>) -> [BarChartDataPoint] {
+        var dataPoints: [BarChartDataPoint] = []
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "MMM d\nH:mm:ss"
+        let now = Date()
+        let posHour = now.posHour()
+        let oneDayAgo = posHour.addingTimeInterval(-24*60*60)
+        let interval = (posHour.timeIntervalSince(oneDayAgo)) / 79
+
+        var isConnected : Bool = false
+        var lastValue : Double = 0.0
+        
+        for i in 0..<79 {
+            let targetTime = oneDayAgo.addingTimeInterval(Double(i) * interval)
+            
+            if targetTime > now {
+                dataPoints.append(BarChartDataPoint(value: 0.0, xAxisLabel: "Time", description: "", date: nil))
+            } else {
+                if let data = connected.last(where: { $0.timestamp!.timeIntervalSince(targetTime) < 0 }) {
+                    isConnected = (data.value == 1)
+                }
+                if let data = results.last(where: { abs($0.timestamp!.timeIntervalSince(targetTime)) < interval/2 }) {
+                    dataPoints.append(BarChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!, colour: ColourStyle(colour: colorForBatteryValue(value: data.value))))
+                    lastValue = data.value
+                } else {
+                    if isConnected, let data = results.first(where: { $0.timestamp!.timeIntervalSince(targetTime) > 0 }) {
+                        dataPoints.append(BarChartDataPoint(value: (lastValue + data.value) / 2.0, xAxisLabel: "Time", description: "", date: nil, colour: ColourStyle(colour: colorForBatteryValue(value: (lastValue + data.value) / 2.0))))
+                    } else {
+                        dataPoints.append(BarChartDataPoint(value: 0.0, xAxisLabel: "Time", description: "", date: nil))
+                    }
+                }
+            }
+        }
+        return dataPoints
+    }
+    
+    private func colorForBatteryValue(value: Double) -> Color {
+        if value > 20 {
+            return .green
+        } else {
+            return .red
+        }
+    }
+}
+
+extension Date {
+    func posHour() -> Date {
+        return Date(timeIntervalSinceReferenceDate:
+                        (timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) + ((timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) - (timeIntervalSinceReferenceDate / (3600.0 * 3.0)).rounded(.down) * (3600.0 * 3.0)))
+    }
+}
+#Preview {
+    BatteryView()
 }

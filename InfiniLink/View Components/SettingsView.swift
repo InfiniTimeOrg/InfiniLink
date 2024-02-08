@@ -221,6 +221,8 @@ struct Settings_Page: View {
                         }
                         Button(action: {
                             ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.connected.rawValue)
+                            ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: bleManager.batteryLevel, chart: ChartsAsInts.battery.rawValue))
                         }) {
                             Text(NSLocalizedString("clear_all_battery_chart_data", comment: ""))
                                 .frame(maxWidth: .infinity, alignment: .leading)
