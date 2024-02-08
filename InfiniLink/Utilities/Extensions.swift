@@ -7,10 +7,15 @@
 
 import Foundation
 import UIKit
+import SwiftUI
 
 extension UINavigationController {
     override open func viewDidLoad() {
+        @AppStorage("lockNavigation") var lockNavigation = false
+        
         super.viewDidLoad()
-        interactivePopGestureRecognizer?.delegate = nil
+        if !lockNavigation {
+            interactivePopGestureRecognizer?.delegate = nil
+        }
     }
 }

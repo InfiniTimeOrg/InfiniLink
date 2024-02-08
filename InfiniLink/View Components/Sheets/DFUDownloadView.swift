@@ -18,6 +18,9 @@ struct DownloadView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var openFile: Bool
+    @Binding var externalResources: Bool
+    
+    @State var showResourcePicker = false
     
 	var body: some View {
         VStack(spacing: 0) {
@@ -44,20 +47,33 @@ struct DownloadView: View {
             Divider()
 			ScrollView {
                 VStack(spacing: 20) {
-                    Button {
-                        openFile.toggle()
-                        
-                        dfuUpdater.local = true
-                        downloadManager.updateAvailable = true
-                        downloadManager.updateBody = ""
-                        downloadManager.updateSize = 0
-                    } label: {
-                        Text(NSLocalizedString("use_local_file", comment: ""))
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .clipShape(Capsule())
+                    VStack {
+                        Button {
+                            openFile.toggle()
+                            
+                            dfuUpdater.local = true
+                            downloadManager.updateAvailable = true
+                            downloadManager.updateBody = ""
+                            downloadManager.updateSize = 0
+                        } label: {
+                            Text(NSLocalizedString("use_local_file", comment: ""))
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .clipShape(Capsule())
+                        }
+                        Button {
+                            externalResources = true
+                            showResourcePicker = true
+                        } label: {
+                            Text(NSLocalizedString("update_external_resources", comment: ""))
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .clipShape(Capsule())
+                        }
                     }
                     VStack {
                         ForEach(downloadManager.results, id: \.tag_name) { i in
@@ -71,6 +87,9 @@ struct DownloadView: View {
                                 downloadManager.updateBody = i.body
                                 downloadManager.updateSize = asset.size
                                 downloadManager.browser_download_url = asset.browser_download_url
+                                
+                                externalResources = false
+                                
                                 presentation.wrappedValue.dismiss()
                             } label: {
                                 Text(i.tag_name)
@@ -87,7 +106,6 @@ struct DownloadView: View {
 			}
 		}
         .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
-            // this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
             do{
                 let fileUrl = try res.get()
                 
@@ -96,6 +114,26 @@ struct DownloadView: View {
                 dfuUpdater.firmwareSelected = true
                 dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
                 dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                
+                externalResources = false
+                
+                fileUrl.stopAccessingSecurityScopedResource()
+                presentation.wrappedValue.dismiss()
+            } catch{
+                DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+            }
+        }
+        .fileImporter(isPresented: $showResourcePicker, allowedContentTypes: [.zip]) {(res) in
+            do{
+                let fileUrl = try res.get()
+                
+                guard fileUrl.startAccessingSecurityScopedResource() else { return }
+        
+                dfuUpdater.firmwareSelected = true
+                dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                
+                externalResources = true
                 
                 fileUrl.stopAccessingSecurityScopedResource()
                 presentation.wrappedValue.dismiss()
@@ -108,6 +146,6 @@ struct DownloadView: View {
 
 #Preview {
     NavigationView {
-        DownloadView(openFile: .constant(false))
+        DownloadView(openFile: .constant(false), externalResources: .constant(false))
     }
 }

@@ -257,9 +257,10 @@
 "connected_to" = "已連線至";
 
 "file_system" = "File System";
-"external_resources" = "Install External Resources";
+"update_external_resources" = "Update External Resources";
+"external_resources_info" = "External resources are fonts and images stored in a seperate location on the watch to optimize storage and memory usage.";
+"success" = "Success!";
 
-// NSLocalizedString("", comment: "")
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";
 "set_location" = "Location";

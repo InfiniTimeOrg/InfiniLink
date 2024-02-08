@@ -35,7 +35,6 @@
 		264BFE7826BCAAC00050A223 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE7726BCAAC00050A223 /* README.md */; };
 		266F53E426F7FCA6007481A6 /* ChartManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E326F7FCA6007481A6 /* ChartManager.swift */; };
 		266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 266F53E926FA91F3007481A6 /* DeviceInfo.swift */; };
-		2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2675CA5926DC81AA00967E4D /* DFUComplete.swift */; };
 		267C2EF8273C8AB300F464B0 /* StepWeeklyGraph.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */; };
 		267C2EFA273DB62800F464B0 /* StepsSettingsSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */; };
 		267C2EFD273DDB5500F464B0 /* StepSettingsGoalChange.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C2EFC273DDB5500F464B0 /* StepSettingsGoalChange.swift */; };
@@ -145,7 +144,6 @@
 		2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = PrivacyPolicy.md; sourceTree = "<group>"; };
 		266F53E326F7FCA6007481A6 /* ChartManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartManager.swift; sourceTree = "<group>"; };
 		266F53E926FA91F3007481A6 /* DeviceInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfo.swift; sourceTree = "<group>"; };
-		2675CA5926DC81AA00967E4D /* DFUComplete.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUComplete.swift; sourceTree = "<group>"; };
 		267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepWeeklyGraph.swift; sourceTree = "<group>"; };
 		267C2EF9273DB62800F464B0 /* StepsSettingsSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsSettingsSheet.swift; sourceTree = "<group>"; };
 		267C2EFC273DDB5500F464B0 /* StepSettingsGoalChange.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepSettingsGoalChange.swift; sourceTree = "<group>"; };
@@ -273,7 +271,6 @@
 				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
 				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
 				26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */,
-				2675CA5926DC81AA00967E4D /* DFUComplete.swift */,
 				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
 			);
 			path = "DFU View";
@@ -718,7 +715,6 @@
 				E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */,
 				E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */,
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
-				2675CA5A26DC81AA00967E4D /* DFUComplete.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
 				E57654032B5781970059C8EF /* WeatherController.swift in Sources */,

@@ -9,6 +9,7 @@
 import CoreBluetooth
 import SwiftyJSON
 import Zip
+import SwiftUI
 
 /** TODO:
     O read file
@@ -18,7 +19,7 @@ import Zip
     O list directory
     O move file or directory
 */
-class BLEFSHandler : ObservableObject{
+class BLEFSHandler : ObservableObject {
     static var shared = BLEFSHandler()
     let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
@@ -106,6 +107,8 @@ class BLEFSHandler : ObservableObject{
     @Published var progress : Int = 0
     @Published var externalResourcesSize : Int = 0
     
+    @AppStorage("lockNavigation") var lockNavigation = false
+    
     func downloadTransfer() {
         DispatchQueue.global(qos: .default).async { [self] in
             do {
@@ -136,9 +139,11 @@ class BLEFSHandler : ObservableObject{
                 
                 DispatchQueue.main.async {
                     DFU_Updater.shared.transferCompleted = true
+                    DFU_Updater.shared.firmwareSelected = false
+                    DFU_Updater.shared.resourceFilename = ""
+                    self.lockNavigation = false
                 }
-            }
-            catch {
+            } catch {
                 print("Something went wrong")
             }
         }
@@ -444,7 +449,7 @@ class BLEFSHandler : ObservableObject{
         } else if responseData[0] == Commands.writeResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
-                let offset: UInt32 = UInt32(responseData[7]) << 24 | UInt32(responseData[6]) << 16 | UInt32(responseData[5]) << 8 | UInt32(responseData[4])
+//                let offset: UInt32 = UInt32(responseData[7]) << 24 | UInt32(responseData[6]) << 16 | UInt32(responseData[5]) << 8 | UInt32(responseData[4])
                 let freeSpace: UInt32 = UInt32(responseData[18]) << 24 | UInt32(responseData[17]) << 16 | UInt32(responseData[16]) << 8 | UInt32(responseData[15])
                 
                 //writeFileFS.offset = offset

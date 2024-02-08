@@ -87,7 +87,7 @@ class DownloadManager: NSObject, ObservableObject {
                 if comparison == .orderedAscending && comparison != .orderedSame {
                     //updateAvailable = true
                     DFU_Updater.shared.firmwareFilename = chooseAsset(response: i).name
-                    DFU_Updater.shared.resourceFilename = chooseResources(response: i).name
+//                    DFU_Updater.shared.resourceFilename = chooseResources(response: i).name
                     DFU_Updater.shared.firmwareSelected = true
                     DFU_Updater.shared.local = false
                     updateVersion = i.tag_name

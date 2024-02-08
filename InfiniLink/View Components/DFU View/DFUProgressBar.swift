@@ -11,14 +11,13 @@ import Foundation
 import SwiftUI
 
 struct DFUProgressBar: View {
-	
 	@Environment(\.colorScheme) var colorScheme
 	@ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var ble_fs = BLEFSHandler.shared
 	
 	var body: some View {
 		VStack {
-            if DownloadManager.shared.externalResources{
+            if DownloadManager.shared.externalResources {
                 ProgressView(value: Double(ble_fs.progress), total: Double(ble_fs.externalResourcesSize))
                     .font(.system(size: 16))
             } else {

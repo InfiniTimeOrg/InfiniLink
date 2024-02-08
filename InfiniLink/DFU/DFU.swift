@@ -7,6 +7,7 @@
 
 import Foundation
 import NordicDFU
+import SwiftUI
 
 class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
 	
@@ -26,6 +27,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 	public var local = true
 	public var firmwareURL: URL!
 
+    @AppStorage("lockNavigation") var lockNavigation = false
 	
 	func transfer() {
 		guard let url = firmwareURL else {return}
@@ -76,6 +78,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 		}
 		dfuState = ""
 		transferCompleted = false
+        lockNavigation = false
 		percentComplete = 0
 	}
 	
@@ -84,6 +87,7 @@ class DFU_Updater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Lo
 		dfuState = state.description
 		if state.rawValue == 6 {
 			transferCompleted = true
+            lockNavigation = false
 			dfuController = nil
 			percentComplete = 0
 		}

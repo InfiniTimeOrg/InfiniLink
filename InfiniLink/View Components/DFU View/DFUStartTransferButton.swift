@@ -16,6 +16,7 @@ struct DFUStartTransferButton: View {
     @Binding var firmwareSelected: Bool
     @Binding var externalResources: Bool
     
+    @AppStorage("lockNavigation") var lockNavigation = false
     
     @ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var bleManager = BLEManager.shared
@@ -30,6 +31,8 @@ struct DFUStartTransferButton: View {
                 dfuUpdater.firmwareSelected = false
                 dfuUpdater.firmwareFilename = ""
                 dfuUpdater.resourceFilename = ""
+                
+                lockNavigation = false
             } else {
                 dfuUpdater.percentComplete = 0
                 if externalResources {
@@ -47,6 +50,8 @@ struct DFUStartTransferButton: View {
                         updateStarted = true
                     }
                 }
+                
+                lockNavigation = true
             }
         } label: {
             Text(updateStarted ? NSLocalizedString("stop_transfer", comment: "") :

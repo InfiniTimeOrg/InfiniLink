@@ -39,7 +39,7 @@ struct HeartChart: View {
     }
     
     var body: some View {
-        let dataPoints = ChartManager.shared.convert(results: chartPoints)
+//        let dataPoints = ChartManager.shared.convert(results: chartPoints)
         let chartStyle = LineChartStyle(infoBoxPlacement: .floating, baseline: .minimumWithMaximum(of: 50), topLine: .maximum(of: 160))
         let data = LineChartData(dataSets: LineDataSet(dataPoints: ChartManager.shared.convert(results: chartPoints), style: setLineStyle()), chartStyle: chartStyle)
         
