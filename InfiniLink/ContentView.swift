@@ -21,21 +21,27 @@ struct ContentView: View {
     @ObservedObject var deviceDataForTopLevel: DeviceData = deviceData
     @State var selection: Tab = .home
     
-    
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
     @AppStorage("batteryNotification") var batteryNotification: Bool = false
     @AppStorage("onboarding") var onboarding: Bool!// = false
     @AppStorage("lastVersion") var lastVersion: String = ""
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
+    @AppStorage("showClearHRMChartConf") var showClearHRMChartConf: Bool = false
+    @AppStorage("showClearBatteryChartConf") var showClearBatteryChartConf: Bool = false
+    
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
+    private var chartPoints: FetchedResults<ChartDataPoint>
     
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     
     private func switchToTab(tab: Tab) {
-        selection = tab
-        
-        let impactMed = UIImpactFeedbackGenerator(style: .medium)
-        impactMed.impactOccurred()
+        if selection != tab {
+            selection = tab
+            
+            let impactMed = UIImpactFeedbackGenerator(style: .medium)
+            impactMed.impactOccurred()
+        }
     }
     
     var body: some View {
@@ -48,6 +54,18 @@ struct ContentView: View {
                             Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
                         .alert(isPresented: $showDisconnectConfDialog) {
                             Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
+                        }
+                        .alert(isPresented: $showClearHRMChartConf) {
+                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
+                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
+                            }), secondaryButton: .cancel())
+                        }
+                        .alert(isPresented: $showClearBatteryChartConf) {
+                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
+                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.connected.rawValue)
+                                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: bleManager.batteryLevel, chart: ChartsAsInts.battery.rawValue))
+                            }), secondaryButton: .cancel())
                         }
                 case .settings:
                     Settings_Page()

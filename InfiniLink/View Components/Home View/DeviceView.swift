@@ -7,6 +7,7 @@
 
 import CoreLocation
 import SwiftUI
+import QuartzCore
 
 struct DeviceView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -51,7 +52,6 @@ struct DeviceView: View {
     var body: some View {
         CustomScrollView() {
             VStack(spacing: 10) {
-                // Use Lazy Grids?
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 8) {
                         NavigationLink(destination: BatteryView()) {
@@ -321,7 +321,7 @@ struct DeviceView: View {
 struct CustomScrollView<Content: View>: View {
     let content: Content
     
-    init(@ViewBuilder content: () -> Content) {
+    init(@ViewBuilder content: @escaping () -> Content) {
         self.content = content()
     }
     
@@ -330,74 +330,74 @@ struct CustomScrollView<Content: View>: View {
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     
     @State private var scrollPosition: CGFloat = 0
-    
     @State private var showDivider: Bool = false
     
     var body: some View {
         VStack(spacing: 0) {
-            ZStack() {
-                HStack() {
-                    GeometryReader { geometry in
-                        Rectangle()
-                            .foregroundColor(.secondary)
-                            .frame(width: geometry.size.height / 4.0, height: geometry.size.height / 4.0, alignment: .center)
-                            .position(x: geometry.size.width / 2, y: (((self.scrollPosition - geometry.safeAreaInsets.top) * 0.045) + geometry.size.height * 0.25).clamped(to: geometry.size.height*0.25...geometry.size.height*1.0))
-                            .blur(radius: 128)
-                            .opacity(0.75)
-                        VStack {
-                            Image("WatchHomePage")
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .frame(width: geometry.size.height / 4.5, height: geometry.size.height / 4.5, alignment: .center)
-                                .position(x: geometry.size.width / 2, y: (((self.scrollPosition - geometry.safeAreaInsets.top - (geometry.size.height / 2.0)) * 0.045) + geometry.size.height * 0.245).clamped(to: geometry.size.height*0.1...geometry.size.height*1.0))
-                                .shadow(color: colorScheme == .dark ? Color.black : Color.secondary, radius: 16, x: 0, y: 0)
-                                .clipped()
-                        }
-                        .frame(width: geometry.size.width, height: (self.scrollPosition - geometry.safeAreaInsets.top).clamped(to: 0...geometry.size.height))
-                    }
-                }
+            ZStack {
                 GeometryReader { geometry in
-                    VStack {
-                        Spacer(minLength: scrollPosition.clamped(to: geometry.size.height*0.2...geometry.size.height))
-                        Color.clear
-                    }
                     VStack(spacing: 0) {
                         HStack(spacing: 12) {
-                            if !bleManager.isConnectedToPinetime {
-                                Text(NSLocalizedString("not_connected", comment: ""))
-                                    .foregroundColor(.gray)
-                            } else {
-                                Text(deviceInfo.deviceName == "" ? "InfiniTime" : deviceInfo.deviceName)
-                                    .font(.title.weight(.bold))
-                                    .foregroundColor(colorScheme == .dark ? .white : .black)
-                            }
+                            Text(bleManager.isConnectedToPinetime ? (deviceInfo.deviceName.isEmpty ? "InfiniTime" : deviceInfo.deviceName) : NSLocalizedString("not_connected", comment: ""))
+                                .font(.title.weight(.bold))
+                                .foregroundColor(colorScheme == .dark ? .white : .black)
                         }
                         .padding(18)
                         .font(.title.weight(.bold))
                         .frame(maxWidth: .infinity, alignment: .center)
-                        if showDivider {
+//                        if showDivider {
                             Divider()
-                        }
+//                        }
                         ScrollView(showsIndicators: false) {
-                            Spacer(minLength: geometry.size.height * 0.315)
-                            VStack() {
-                                GeometryReader{ geo in
-                                    AnyView(Color.clear
-                                        .frame(width: 0, height: 0)
-                                        .preference(key: SizePreferenceKey.self, value: geo.frame(in: .global).minY)
-                                    )}.onPreferenceChange(SizePreferenceKey.self) { preferences in
-                                        self.scrollPosition = preferences
-                                        
-                                        if scrollPosition - geometry.safeAreaInsets.top <= 64 {
-                                            withAnimation(.easeInOut(duration: 0.15)) {
-                                                self.showDivider = true
-                                            }
-                                        } else {
-                                            withAnimation(.easeInOut(duration: 0.15)) {
-                                                self.showDivider = false
-                                            }
-                                        }
+                            VStack(spacing: 0) {
+//                                GeometryReader { geo in
+//                                    Color.clear
+//                                        .frame(width: 0, height: 0)
+//                                        .preference(key: SizePreferenceKey.self, value: geo.frame(in: .global).minY)
+//                                }
+//                                .onPreferenceChange(SizePreferenceKey.self) { preferences in
+//                                    self.scrollPosition = preferences
+//                                    
+//                                    withAnimation(.easeInOut(duration: 0.15)) {
+//                                        self.showDivider = scrollPosition - geometry.safeAreaInsets.top <= 64
+//                                    }
+//                                }
+                                // TODO: Add function to fetch live settings
+                                VStack {
+                                    switch 2 {
+                                        // TODO: Add cases to check for time format
+                                    case 0:
+                                        Image("digital12H")
+                                            .resizable()
+                                    case 1:
+                                        Image("analog")
+                                            .resizable()
+                                    case 2:
+                                        Image("PTS12HStepStyle2")
+                                            .resizable()
+                                    case 3:
+                                        Image("terminal12H")
+                                            .resizable()
+                                    case 4:
+                                        EmptyView()
+//                                        Image("infineat12H")
+//                                            .resizable()
+                                    default:
+                                        Image("digital24H")
+                                            .resizable()
                                     }
+                                }
+                                .padding(16)
+                                .padding(.vertical, 4)
+                                .background(Color.black)
+                                .clipShape(RoundedRectangle(cornerRadius: 30))
+                                .overlay(
+                                        RoundedRectangle(cornerRadius: 32)
+                                            .stroke(.gray, lineWidth: 1)
+                                            .opacity(0.4)
+                                    )
+                                .padding(26)
+                                .frame(maxWidth: 190, maxHeight: 190)
                                 content
                             }
                         }
@@ -410,6 +410,7 @@ struct CustomScrollView<Content: View>: View {
         }
     }
 }
+
 
 enum RowModifierStyle {
     case capsule
@@ -453,6 +454,33 @@ extension FloatingPoint {
         return max(min(self, range.upperBound), range.lowerBound)
     }
 }
+
+struct Squircle: Shape {
+    var cornerRadius: CGFloat
+    var extrusion: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let width = rect.width
+        let height = rect.height
+
+        let topCurveHeight = cornerRadius * 2 * (1.0 - extrusion)
+        let controlPointOffset = cornerRadius * 0.55
+
+        var path = Path()
+
+        path.move(to: CGPoint(x: width * 0.25, y: 0))
+        path.addQuadCurve(to: CGPoint(x: width * 0.75, y: topCurveHeight), control: CGPoint(x: width * 0.75 - controlPointOffset, y: 0))
+        path.addLine(to: CGPoint(x: width * 0.75, y: height - cornerRadius))
+        path.addQuadCurve(to: CGPoint(x: width * 0.25, y: height), control: CGPoint(x: width * 0.75, y: height + controlPointOffset))
+        path.addQuadCurve(to: CGPoint(x: width * 0.25 - cornerRadius, y: height - cornerRadius), control: CGPoint(x: width * 0.25, y: height - cornerRadius))
+        path.addLine(to: CGPoint(x: width * 0.25 - cornerRadius, y: topCurveHeight + cornerRadius))
+        path.addQuadCurve(to: CGPoint(x: width * 0.25, y: topCurveHeight), control: CGPoint(x: width * 0.25 - cornerRadius, y: topCurveHeight))
+        path.closeSubpath()
+
+        return path
+    }
+}
+
 
 public extension Color {
 #if os(macOS)

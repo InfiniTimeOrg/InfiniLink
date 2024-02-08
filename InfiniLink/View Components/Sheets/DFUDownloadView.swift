@@ -49,12 +49,7 @@ struct DownloadView: View {
                 VStack(spacing: 20) {
                     VStack {
                         Button {
-                            openFile.toggle()
-                            
-                            dfuUpdater.local = true
-                            downloadManager.updateAvailable = true
-                            downloadManager.updateBody = ""
-                            downloadManager.updateSize = 0
+                            openFile = true
                         } label: {
                             Text(NSLocalizedString("use_local_file", comment: ""))
                                 .frame(maxWidth: .infinity)
@@ -62,6 +57,29 @@ struct DownloadView: View {
                                 .background(Color.blue)
                                 .foregroundColor(.white)
                                 .clipShape(Capsule())
+                        }
+                        .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) { (res) in
+                            do {
+                                let fileUrl = try res.get()
+                                
+                                guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                        
+                                dfuUpdater.local = true
+                                downloadManager.updateAvailable = true
+                                downloadManager.updateBody = ""
+                                downloadManager.updateSize = 0
+                                
+                                dfuUpdater.firmwareSelected = true
+                                dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
+                                dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                                
+                                externalResources = false
+                                
+                                fileUrl.stopAccessingSecurityScopedResource()
+                                presentation.wrappedValue.dismiss()
+                            } catch {
+                                DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+                            }
                         }
                         Button {
                             externalResources = true
@@ -73,6 +91,24 @@ struct DownloadView: View {
                                 .background(Color.blue)
                                 .foregroundColor(.white)
                                 .clipShape(Capsule())
+                        }
+                        .fileImporter(isPresented: $showResourcePicker, allowedContentTypes: [.zip]) { (res) in
+                            do{
+                                let fileUrl = try res.get()
+                                
+                                guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                        
+                                dfuUpdater.firmwareSelected = true
+                                dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                                dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                                
+                                externalResources = true
+                                
+                                fileUrl.stopAccessingSecurityScopedResource()
+                                presentation.wrappedValue.dismiss()
+                            } catch{
+                                DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+                            }
                         }
                     }
                     VStack {
@@ -105,42 +141,6 @@ struct DownloadView: View {
                 .padding()
 			}
 		}
-        .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
-            do{
-                let fileUrl = try res.get()
-                
-                guard fileUrl.startAccessingSecurityScopedResource() else { return }
-        
-                dfuUpdater.firmwareSelected = true
-                dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
-                dfuUpdater.firmwareURL = fileUrl.absoluteURL
-                
-                externalResources = false
-                
-                fileUrl.stopAccessingSecurityScopedResource()
-                presentation.wrappedValue.dismiss()
-            } catch{
-                DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
-            }
-        }
-        .fileImporter(isPresented: $showResourcePicker, allowedContentTypes: [.zip]) {(res) in
-            do{
-                let fileUrl = try res.get()
-                
-                guard fileUrl.startAccessingSecurityScopedResource() else { return }
-        
-                dfuUpdater.firmwareSelected = true
-                dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                dfuUpdater.firmwareURL = fileUrl.absoluteURL
-                
-                externalResources = true
-                
-                fileUrl.stopAccessingSecurityScopedResource()
-                presentation.wrappedValue.dismiss()
-            } catch{
-                DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
-            }
-        }
 	}
 }
 

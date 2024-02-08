@@ -11,14 +11,6 @@ import SwiftyJSON
 import Zip
 import SwiftUI
 
-/** TODO:
-    O read file
-    O write file
-    O delete file
-    O make directory
-    O list directory
-    O move file or directory
-*/
 class BLEFSHandler : ObservableObject {
     static var shared = BLEFSHandler()
     let bleManager = BLEManager.shared

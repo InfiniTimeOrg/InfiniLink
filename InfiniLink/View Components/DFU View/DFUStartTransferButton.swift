@@ -22,6 +22,34 @@ struct DFUStartTransferButton: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     
+    func buttonDisabled() -> Bool {
+        if dfuUpdater.local {
+            if firmwareSelected {
+                return false
+            } else {
+                if updateStarted {
+                    return false
+                } else {
+                    return true
+                }
+            }
+        } else {
+            if firmwareSelected {
+                if downloadManager.downloading {
+                    return true
+                } else {
+                    return false
+                }
+            } else {
+                if updateStarted {
+                    return false
+                } else {
+                    return true
+                }
+            }
+        }
+    }
+    
     var body: some View {
         Button {
             if updateStarted {

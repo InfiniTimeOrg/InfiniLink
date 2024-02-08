@@ -27,10 +27,11 @@ struct Settings_Page: View {
     @AppStorage("heartChartFill") var heartChartFill: Bool = true
     @AppStorage("batChartFill") var batChartFill: Bool = true
     @AppStorage("debugMode") var debugMode: Bool = false
-    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     @AppStorage("weatherData") var weatherData: Bool = true
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
     @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
+    @AppStorage("showClearHRMChartConf") var showClearHRMChartConf: Bool = false
+    @AppStorage("showClearBatteryChartConf") var showClearBatteryChartConf: Bool = false
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
     private var chartPoints: FetchedResults<ChartDataPoint>
     
@@ -42,20 +43,11 @@ struct Settings_Page: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HStack(spacing: 12) {
-                Text(NSLocalizedString("settings", comment: ""))
-                    .foregroundColor(.primary)
-                    .font(.title.weight(.bold))
-//                Spacer()
-//                HStack {
-//                    if bleManager.isConnectedToPinetime && deviceInfo.firmware != "" {
-//                        Image(systemName: "battery." + String(Int(round(Double(String(format: "%.0f",   bleManager.batteryLevel))! / 25) * 25)))
-//                            .imageScale(.large)
-//                    }
-//                }
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .center)
+            Text(NSLocalizedString("settings", comment: ""))
+                .foregroundColor(.primary)
+                .font(.title.weight(.bold))
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
             Divider()
             ScrollView {
                 VStack(spacing: 14) {
@@ -128,10 +120,6 @@ struct Settings_Page: View {
                             }
                         }
                     }
-                    Spacer()
-                        .frame(height: 6)
-                    Toggle(NSLocalizedString("show_newer_versions_only", comment: ""), isOn: $showNewDownloadsOnly)
-                        .modifier(RowModifier(style: .capsule))
                     Spacer()
                         .frame(height: 6)
                     VStack {
@@ -212,7 +200,7 @@ struct Settings_Page: View {
                     }
                     VStack {
                         Button(action: {
-                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
+                            showClearHRMChartConf = true
                         }) {
                             Text(NSLocalizedString("clear_all_hrm_chart_data", comment: ""))
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -220,9 +208,7 @@ struct Settings_Page: View {
                                 .modifier(RowModifier(style: .capsule))
                         }
                         Button(action: {
-                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
-                            ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.connected.rawValue)
-                            ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: bleManager.batteryLevel, chart: ChartsAsInts.battery.rawValue))
+                            showClearBatteryChartConf = true
                         }) {
                             Text(NSLocalizedString("clear_all_battery_chart_data", comment: ""))
                                 .frame(maxWidth: .infinity, alignment: .leading)

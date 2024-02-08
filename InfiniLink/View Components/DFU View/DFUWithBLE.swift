@@ -24,7 +24,6 @@ struct DFUWithBLE: View {
     @ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     
-    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     @AppStorage("lockNavigation") var lockNavigation = false
     
     @State var openFile = false
@@ -138,8 +137,6 @@ struct NewUpdate: View {
     @ObservedObject var dfuUpdater = DFU_Updater.shared
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
-    
-    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
     
     @Environment(\.colorScheme) var scheme
     

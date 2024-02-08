@@ -47,7 +47,6 @@
 		26A40E8F270509BA007966F6 /* DebugViewShareButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */; };
 		26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */; };
 		26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40E922707D119007966F6 /* BLEUpdateHandler.swift */; };
-		26A40EEA270A5F39007966F6 /* DFUStartButtonColorSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */; };
 		26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6314C26BEFD2C005AE404 /* MusicController.swift */; };
 		26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315426C0297A005AE404 /* BLEWriteManager.swift */; };
 		26A6315B26C49841005AE404 /* DFU.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A6315A26C49841005AE404 /* DFU.swift */; };
@@ -156,7 +155,6 @@
 		26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugViewShareButton.swift; sourceTree = "<group>"; };
 		26A40E902707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
 		26A40E922707D119007966F6 /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
-		26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUStartButtonColorSelector.swift; sourceTree = "<group>"; };
 		26A6314C26BEFD2C005AE404 /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		26A6315426C0297A005AE404 /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
 		26A6315A26C49841005AE404 /* DFU.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFU.swift; sourceTree = "<group>"; };
@@ -270,7 +268,6 @@
 				2632388326F2531C00D72B43 /* DFUWithBLE.swift */,
 				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
 				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
-				26A40EE9270A5F39007966F6 /* DFUStartButtonColorSelector.swift */,
 				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
 			);
 			path = "DFU View";
@@ -732,7 +729,6 @@
 				26A6315B26C49841005AE404 /* DFU.swift in Sources */,
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
 				268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */,
-				26A40EEA270A5F39007966F6 /* DFUStartButtonColorSelector.swift in Sources */,
 				266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
