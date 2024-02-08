@@ -101,8 +101,8 @@
 "need_help_connecting" = "";
 "devices" = "";
 "not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
-"disconnect" = "斷線";
-"scanning" = "掃描";
+"disconnect" = "Déconnecter";
+"scanning" = "Balayage";
 
 // - ConnectionHelpView
 "connection_help" = "";
@@ -250,11 +250,16 @@
 "currently_unavailable" = "目前不可使用";
 
 "software_version" = "軟體版本";
+"file_system_version" = "File System Version";
 "model_name" = "型號";
 "autoconnect_to_this" = "自動連線至本裝置";
 "send_notification_to" = "傳送通知至";
 "connected_to" = "已連線至";
 
+"file_system" = "File System";
+"external_resources" = "Install External Resources";
+
+// NSLocalizedString("", comment: "")
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";
 "set_location" = "Location";

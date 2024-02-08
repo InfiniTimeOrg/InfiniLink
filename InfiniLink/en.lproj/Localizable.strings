@@ -250,10 +250,14 @@
 "currently_unavailable" = "Currently Unavailable";
 
 "software_version" = "Software Version";
+"file_system_version" = "File System Version";
 "model_name" = "Model Name";
 "autoconnect_to_this" = "Autoconnect to this";
 "send_notification_to" = "Send Notification to";
 "connected_to" = "Connected to";
+
+"file_system" = "File System";
+"external_resources" = "Download External Resources";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

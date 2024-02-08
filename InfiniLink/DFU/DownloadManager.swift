@@ -3,9 +3,9 @@
 //  InfiniLink
 //
 //  Created by Alex Emry on 9/26/21.
+//  
 //
-//
-
+    
 
 import Foundation
 import NordicDFU
@@ -20,7 +20,7 @@ extension Array: RawRepresentable where Element: Codable {
         }
         self = result
     }
-    
+
     public var rawValue: String {
         guard let data = try? JSONEncoder().encode(self),
               let result = String(data: data, encoding: .utf8)
@@ -36,7 +36,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     @Published var tasks: [URLSessionTask] = []
     @Published var downloading = false
-    //@Published var updateAvailable = false
     @Published var autoUpgrade: Result!
     @Published var lastCheck: Date!
     
@@ -48,9 +47,11 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var updateBody: String = ""
     @Published var updateSize: Int = 0
     @Published var browser_download_url: URL = URL(fileURLWithPath: "")
+    @Published var browser_download_resources_url: URL = URL(fileURLWithPath: "")
     
     @Published var startTransfer: Bool = false
     @Published var loadingResults: Bool = false
+    @Published var externalResources: Bool = false
     
     private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
     private var downloadTask: URLSessionDownloadTask!
@@ -84,7 +85,9 @@ class DownloadManager: NSObject, ObservableObject {
             if i.tag_name.first != "v" {
                 let comparison = currentVersion.compare(i.tag_name, options: .numeric)
                 if comparison == .orderedAscending && comparison != .orderedSame {
+                    //updateAvailable = true
                     DFU_Updater.shared.firmwareFilename = chooseAsset(response: i).name
+                    DFU_Updater.shared.resourceFilename = chooseResources(response: i).name
                     DFU_Updater.shared.firmwareSelected = true
                     DFU_Updater.shared.local = false
                     updateVersion = i.tag_name
@@ -92,6 +95,7 @@ class DownloadManager: NSObject, ObservableObject {
                     updateSize = chooseAsset(response: i).size
                     autoUpgrade = i
                     browser_download_url = chooseAsset(response: i).browser_download_url
+                    browser_download_resources_url = chooseResources(response: i).browser_download_url
                     
                     return true
                 }
@@ -145,7 +149,17 @@ class DownloadManager: NSObject, ObservableObject {
         return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
     }
     
-    func startDownload(url: URL) {
+    func chooseResources(response: Result) -> Asset {
+        for x in response.assets {
+            if x.name.suffix(4) == ".zip" && x.name.contains("infinitime-resources") {
+                return x
+            }
+        }
+        return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
+    }
+    
+    func startDownload(url: URL, isExternalResources: Bool) {
+        externalResources = isExternalResources
         self.downloading = true
         let downloadTask = urlSession.downloadTask(with: url)
         downloadTask.resume()
@@ -190,10 +204,13 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             
             if DownloadManager.shared.startTransfer == true {
                 DownloadManager.shared.startTransfer = false
-                DFU_Updater.shared.downloadTransfer()
+                if self.externalResources {
+                    BLEFSHandler.shared.downloadTransfer()
+                } else {
+                    DFU_Updater.shared.downloadTransfer()
+                }
             }
             //DFUStartTransferButton.startTransfer()
-            
         }
     }
     

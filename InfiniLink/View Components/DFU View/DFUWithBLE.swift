@@ -28,11 +28,13 @@ struct DFUWithBLE: View {
     
     @State var openFile = false
     @State var showOlderVersionView = false
+    @State var externalResources = false
+
     
     var body: some View {
         ZStack {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
+            VStack(alignment: .center, spacing: 0) {
+                ZStack {
                     HStack(spacing: 15) {
                         Button {
                             presMode.wrappedValue.dismiss()
@@ -45,41 +47,90 @@ struct DFUWithBLE: View {
                                 .background(Color.gray.opacity(0.15))
                                 .clipShape(Circle())
                         }
-                        Text(NSLocalizedString("software_update", comment: "Software Update"))
-                            .foregroundColor(.primary)
-                            .font(.title.weight(.bold))
+                        Spacer()
                     }
-                    Spacer()
-                    if !(showNewDownloadsOnly) {
-                        Button {
-                            showOlderVersionView.toggle()
-                        } label: {
-                            Image(systemName: "doc")
-                                .imageScale(.medium)
-                                .padding(14)
-                                .font(.body.weight(.semibold))
-                                .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                                .background(Color.gray.opacity(0.15))
-                                .clipShape(Circle())
-                        }
-                        .sheet(isPresented: $showOlderVersionView) {
-                            DownloadView(openFile: $openFile)
+                    Text(NSLocalizedString("software_update", comment: "Software Update"))
+                        .foregroundColor(.primary)
+                        .font(.title.weight(.bold))
+                    if !(showNewDownloadsOnly) && !externalResources{
+                        HStack(spacing: 15) {
+                            Spacer()
+                            Button {
+                                showOlderVersionView.toggle()
+                            } label: {
+                                Image(systemName: "doc")
+                                    .imageScale(.medium)
+                                    .font(.body.weight(.semibold))
+                                    .padding(14)
+                                    .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                                    .background(Color.gray.opacity(0.15))
+                                    .clipShape(Circle())
+                            }
+                            .sheet(isPresented: $showOlderVersionView) {
+                                DownloadView(openFile: $openFile)
+                            }
                         }
                     }
-                    DFURefreshButton()
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)
                 Divider()
-                ScrollView {
-                    VStack {
-                        if downloadManager.updateAvailable && dfuUpdater.firmwareSelected {
-                            NewUpdate(updateStarted: $downloadManager.updateStarted, openFile: $openFile)
-                        } else {
-                            NoUpdate()
+                GeometryReader { geometryProxy in
+                    ScrollView {
+                        PullToRefreshView(coordinateSpaceName: "pullToRefresh") {
+                            downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
                         }
-                    }
+                        VStack {
+                            if externalResources {
+                                ExternalResources(updateStarted: $downloadManager.updateStarted, externalResources: $externalResources)
+                            } else {
+                                if downloadManager.updateAvailable && dfuUpdater.firmwareSelected {
+                                    NewUpdate(updateStarted: $downloadManager.updateStarted, openFile: $openFile)
+                                } else {
+                                    NoUpdate(externalResources: $externalResources)
+                                }
+                            }
+                            Spacer()
+                        }
+                        .frame(
+                            width: geometryProxy.size.width,
+                            height: geometryProxy.size.height,
+                            alignment: .topLeading
+                        )
+                    }.coordinateSpace(name: "pullToRefresh")
                 }
+                HStack {
+//                    Button {
+//                        externalResources.toggle()
+//                    } label: {
+//                        Text(NSLocalizedString(externalResources ? "software_update" : "external_resources", comment: ""))
+//                            .frame(maxWidth: .infinity)
+//                            .padding(16)
+//                            .background(Color.gray.opacity(0.15))
+//                            .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+//                            .clipShape(Capsule())
+//                    }
+//                    if !(showNewDownloadsOnly) && !externalResources{
+//                        Button {
+//                            showOlderVersionView.toggle()
+//                        } label: {
+//                            Image(systemName: "doc")
+//                                .aspectRatio(1, contentMode: .fit)
+//                                .imageScale(.medium)
+//                                .font(.body.weight(.semibold))
+//                                .padding(16)
+//                                .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+//                                .background(Color.gray.opacity(0.15))
+//                            //.clipShape(Circle())
+//                                .clipShape(Capsule())
+//                        }
+//                        .sheet(isPresented: $showOlderVersionView) {
+//                            DownloadView(openFile: $openFile)
+//                        }
+//                    }
+                }
+                .padding()
+                
             }
             .fileImporter(isPresented: $openFile, allowedContentTypes: [.zip]) {(res) in
                 // this fileImporter allows user to select the zip from local storage. DFU updater just wants the local URL to the file, so we're opening privileged access, grabbing the url, and closing privileged access
@@ -119,6 +170,97 @@ struct DFUWithBLE: View {
     }
 }
 
+struct PullToRefreshView: View {
+
+    var coordinateSpaceName: String
+    var action: () -> Void
+
+    @State private var ratio: CGFloat = 0
+    @State private var isRefreshing: Bool = false
+
+    private let threshold: CGFloat = 50
+
+    var body: some View {
+        GeometryReader { proxy in
+            if proxy.frame(in: .named(coordinateSpaceName)).midY > threshold {
+                Spacer()
+                    .onAppear {
+                        isRefreshing = true
+                    }
+            
+            } else if proxy.frame(in: .named(coordinateSpaceName)).maxY < 6 {
+                Spacer()
+                    .frame {
+                        let x = $0.origin.y + 6
+                        ratio = max(0, min(1, x / threshold))
+                    }
+                    .onAppear {
+                        guard isRefreshing else { return }
+                    
+                        isRefreshing = false
+                        action()
+                    }
+            }
+        
+            progressView
+        }
+        .padding(.top, -threshold)
+    }
+
+    private var progressView: some View {
+        ZStack {
+            ActivityIndicatorView(isAnimating: $isRefreshing, style: .medium)
+                .scaleEffect(1.3)
+                .padding(.top, 6)
+        }
+        .frame(maxWidth: .infinity)
+        .opacity(ratio)
+    }
+}
+
+struct ActivityIndicatorView: View {
+
+    @Binding var isAnimating: Bool
+    let style: UIActivityIndicatorView.Style
+}
+
+extension ActivityIndicatorView: UIViewRepresentable {
+    
+    func makeUIView(context: UIViewRepresentableContext<ActivityIndicatorView>) -> UIActivityIndicatorView {
+        let view = UIActivityIndicatorView(style: style)
+        view.hidesWhenStopped = false
+        return view
+    }
+
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicatorView>) {
+        isAnimating ? uiView.startAnimating() : uiView.stopAnimating()
+    }
+}
+
+extension View {
+
+    func frame(perform: @escaping (CGRect) -> Void) -> some View {
+        background(
+            GeometryReader {
+                Color.clear
+                    .preference(key: FramePreferenceKey.self, value: $0.frame(in: .global))
+            }
+        )
+        .onPreferenceChange(FramePreferenceKey.self) { value in
+            DispatchQueue.main.async { perform(value) }
+        }
+    }
+}
+
+struct FramePreferenceKey: PreferenceKey {
+     
+     static var defaultValue: CGRect = .zero
+   
+     static func reduce(value: inout CGRect, nextValue: () -> CGRect) {}
+ }
+
+
+
 struct NewUpdate: View {
     @Binding var updateStarted: Bool
     
@@ -156,7 +298,7 @@ struct NewUpdate: View {
                         if updateStarted {
                             DFUProgressBar()
                                 .environmentObject(dfuUpdater)
-                        }
+                        } else {HStack {Spacer()}}
                     }
                 }
                 HStack {
@@ -179,7 +321,7 @@ struct NewUpdate: View {
                 } label: {
                     Text(NSLocalizedString("learn_more", comment: ""))
                         .frame(maxWidth: .infinity)
-                        .padding(12)
+                        .padding(14)
                         .background(Color.gray.opacity(0.3))
                         .clipShape(Capsule())
                 }
@@ -218,7 +360,7 @@ struct NewUpdate: View {
                     }
                 }
             }
-            DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected)
+            DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected, externalResources: .constant(false))
                 .disabled(bleManager.batteryLevel <= 50)
                 .opacity(bleManager.batteryLevel <= 50 ? 0.5 : 1.0)
             if bleManager.batteryLevel <= 50 {
@@ -226,7 +368,64 @@ struct NewUpdate: View {
                     .foregroundColor(.gray)
                     .multilineTextAlignment(.center)
                     .padding(4)
+                }
+        }
+        .padding(20)
+    }
+}
+
+struct ExternalResources: View {
+    @Binding var updateStarted: Bool
+    @Binding var externalResources: Bool
+    
+    @ObservedObject var dfuUpdater = DFU_Updater.shared
+    
+    @AppStorage("showNewDownloadsOnly") var showNewDownloadsOnly: Bool = false
+    
+    @Environment(\.colorScheme) var colorScheme
+    
+    @State var showLearnMoreView = false
+    
+    
+    var body: some View {
+        VStack {
+            VStack(alignment: .leading) {
+                HStack(alignment: .center, spacing: 10) {
+                    Image("InfiniTime")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 65, height: 65)
+                    VStack(alignment: .leading, spacing: 5) {
+                        Text("External Resources")
+                            .font(.headline)
+                        Text("\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB")
+                            .font(.subheadline)
+                            .foregroundColor(.gray)
+                        if updateStarted {
+                            DFUProgressBar()
+                                .environmentObject(dfuUpdater)
+                        } else {HStack {Spacer()}}
+                    }
+                }
+                HStack {
+                    Text(NSLocalizedString("external_resources_info", comment: ""))
+                }
+                .lineLimit(4)
+                .padding(.vertical, 12)
             }
+            if !updateStarted {
+                Button {
+                    externalResources.toggle()
+                } label: {
+                    Text(NSLocalizedString("Back to Software Update", comment: ""))
+                        .frame(maxWidth: .infinity)
+                        .padding(14)
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Color.gray.opacity(0.3))
+                        .clipShape(Capsule())
+                }
+            }
+            DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected, externalResources: .constant(true))
         }
         .padding(20)
     }
@@ -235,7 +434,10 @@ struct NewUpdate: View {
 struct NoUpdate: View {
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     
+    @Binding var externalResources: Bool
+    
     var body: some View {
+        Spacer()
         VStack {
             VStack(alignment: .center , spacing: 6) {
                 Text("InfiniTime \(deviceInfo.firmware)")
@@ -243,10 +445,21 @@ struct NoUpdate: View {
                     .font(.title2.weight(.semibold))
                 Text("InfiniTime " + NSLocalizedString("up_to_date", comment: ""))
                     .foregroundColor(.gray)
+                Button {
+                    externalResources.toggle()
+                } label: {
+                    Text(NSLocalizedString("external_resources", comment: ""))
+                        .frame(maxWidth: .infinity)
+                        .foregroundColor(.blue)
+                        //.font(.subheadline.weight(.light))
+                        .padding()
+                        //.background(Color.gray.opacity(0.15))
+                        //.foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        //.clipShape(Capsule())
+                }
             }
             .frame(maxWidth: .infinity, alignment: .bottom)
         }
-        .frame(height: UIScreen.screenHeight / 1.6)
     }
 }
 
