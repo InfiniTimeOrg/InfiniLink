@@ -245,7 +245,8 @@ struct DeviceView: View {
                 })
                 Spacer()
                     .frame(height: 6)
-                NavigationLink(destination: FileSystemDebug()) {
+//                NavigationLink(destination: FileSystemDebug()) {
+                NavigationLink(destination: FileSystemView()) {
                     HStack {
                         Text(NSLocalizedString("file_system", comment: ""))
                             .frame(maxWidth: .infinity, alignment: .leading)
@@ -332,6 +333,10 @@ struct CustomScrollView<Content: View>: View {
     @State private var scrollPosition: CGFloat = 0
     @State private var showDivider: Bool = false
     
+    @State var settings: Settings?
+    @State var watchFace: UInt8 = 0
+    @State var clockType: ClockType = .H24
+    
     var body: some View {
         VStack(spacing: 0) {
             ZStack {
@@ -362,26 +367,39 @@ struct CustomScrollView<Content: View>: View {
 //                                        self.showDivider = scrollPosition - geometry.safeAreaInsets.top <= 64
 //                                    }
 //                                }
-                                // TODO: Add function to fetch live settings
                                 VStack {
-                                    switch 2 {
-                                        // TODO: Add cases to check for time format
+                                    switch watchFace {
                                     case 0:
-                                        Image("digital12H")
-                                            .resizable()
+                                        if clockType == .H12 {
+                                            Image("digital12H")
+                                                .resizable()
+                                        } else {
+                                            Image("digital24H")
+                                                .resizable()
+                                        }
                                     case 1:
                                         Image("analog")
                                             .resizable()
                                     case 2:
-                                        Image("PTS12HStepStyle2")
-                                            .resizable()
+                                        if clockType == .H12 {
+                                            Image("PTS12HStepStyle2")
+                                                .resizable()
+                                        } else {
+                                            Image("PTS24HStepStyle1")
+                                                .resizable()
+                                        }
                                     case 3:
-                                        Image("terminal12H")
-                                            .resizable()
+                                        if clockType == .H12 {
+                                            Image("terminal12H")
+                                                .resizable()
+                                        } else {
+                                            Image("terminal24H")
+                                                .resizable()
+                                        }
                                     case 4:
                                         EmptyView()
-//                                        Image("infineat12H")
-//                                            .resizable()
+                                        // Image("infineat12H")
+                                        //      .resizable()
                                     default:
                                         Image("digital24H")
                                             .resizable()
@@ -390,9 +408,9 @@ struct CustomScrollView<Content: View>: View {
                                 .padding(16)
                                 .padding(.vertical, 4)
                                 .background(Color.black)
-                                .clipShape(RoundedRectangle(cornerRadius: 30))
+                                .clipShape(RoundedRectangle(cornerRadius: 28))
                                 .overlay(
-                                        RoundedRectangle(cornerRadius: 32)
+                                        RoundedRectangle(cornerRadius: 28)
                                             .stroke(.gray, lineWidth: 1)
                                             .opacity(0.4)
                                     )
@@ -403,6 +421,14 @@ struct CustomScrollView<Content: View>: View {
                         }
                         .onAppear {
                             DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: BLEDeviceInfo.shared.firmware)
+                        }
+                        .onChange(of: deviceInfo.firmware) { firmware in
+                            if firmware != "" {
+                                BLEFSHandler.shared.readSettings { settings in
+                                    self.watchFace = settings.watchFace
+                                    self.clockType = settings.clockType
+                                }
+                            }
                         }
                     }
                 }
@@ -452,32 +478,6 @@ struct SizePreferenceKey: PreferenceKey {
 extension FloatingPoint {
     func clamped(to range: ClosedRange<Self>) -> Self {
         return max(min(self, range.upperBound), range.lowerBound)
-    }
-}
-
-struct Squircle: Shape {
-    var cornerRadius: CGFloat
-    var extrusion: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        let width = rect.width
-        let height = rect.height
-
-        let topCurveHeight = cornerRadius * 2 * (1.0 - extrusion)
-        let controlPointOffset = cornerRadius * 0.55
-
-        var path = Path()
-
-        path.move(to: CGPoint(x: width * 0.25, y: 0))
-        path.addQuadCurve(to: CGPoint(x: width * 0.75, y: topCurveHeight), control: CGPoint(x: width * 0.75 - controlPointOffset, y: 0))
-        path.addLine(to: CGPoint(x: width * 0.75, y: height - cornerRadius))
-        path.addQuadCurve(to: CGPoint(x: width * 0.25, y: height), control: CGPoint(x: width * 0.75, y: height + controlPointOffset))
-        path.addQuadCurve(to: CGPoint(x: width * 0.25 - cornerRadius, y: height - cornerRadius), control: CGPoint(x: width * 0.25, y: height - cornerRadius))
-        path.addLine(to: CGPoint(x: width * 0.25 - cornerRadius, y: topCurveHeight + cornerRadius))
-        path.addQuadCurve(to: CGPoint(x: width * 0.25, y: topCurveHeight), control: CGPoint(x: width * 0.25 - cornerRadius, y: topCurveHeight))
-        path.closeSubpath()
-
-        return path
     }
 }
 

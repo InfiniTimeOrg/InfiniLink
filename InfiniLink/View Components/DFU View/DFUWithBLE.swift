@@ -67,6 +67,8 @@ struct DFUWithBLE: View {
                         DownloadView(openFile: $openFile, externalResources: $externalResources)
                     }
                 }
+                .disabled(lockNavigation)
+                .opacity(lockNavigation ? 0.5 : 1.0)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -107,25 +109,14 @@ struct DFUWithBLE: View {
                 DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
             }
         }
-        //            VStack {
-        //                if dfuUpdater.transferCompleted {
-        //                    DFUComplete()
-        //                        .cornerRadius(10)
-        //                        .onAppear() {
-        //                            DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
-        //                                dfuUpdater.transferCompleted = false
-        //                            })
-        //                            downloadManager.updateStarted = false
-        //                            dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
-        //                            dfuUpdater.firmwareSelected = false
-        //                            dfuUpdater.firmwareFilename = ""
-        //                            downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: downloadManager.updateVersion)
-        //                        }
-        //                }
-        //            }
-        //            .transition(.opacity).animation(.easeInOut(duration: 1.0))
         .alert(isPresented: $dfuUpdater.transferCompleted) {
-            Alert(title: Text(NSLocalizedString("success", comment: "Success!")), message: Text(NSLocalizedString("The transfer was successfully completed.", comment: "The transfer was successfully completed.")))
+            Alert(title: Text(NSLocalizedString("success", comment: "Success!")), message: Text(NSLocalizedString("The transfer was successfully completed.", comment: "The transfer was successfully completed.")), dismissButton: .cancel({
+                downloadManager.updateStarted = false
+                dfuUpdater.firmwareURL = URL(fileURLWithPath: "")
+                dfuUpdater.firmwareSelected = false
+                dfuUpdater.firmwareFilename = ""
+                downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: downloadManager.updateVersion)
+            }))
         }
         .navigationBarBackButtonHidden()
     }

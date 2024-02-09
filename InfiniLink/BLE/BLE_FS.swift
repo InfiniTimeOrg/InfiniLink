@@ -557,4 +557,16 @@ class BLEFSHandler : ObservableObject {
         let byte4 = UInt8((value & 0xFF000000) >> 24)
         return [byte1, byte2, byte3, byte4]
     }
+    
+    func readSettings(completion: @escaping(Settings) -> Void){
+        DispatchQueue.global(qos: .default).async {
+            let readFile = self.readFile(path: "/settings.dat", offset: 0)
+            
+            let settings = readFile.data.withUnsafeBytes { ptr -> Settings in
+                return ptr.load(as: Settings.self)
+            }
+            
+            completion(settings)
+        }
+    }
 }

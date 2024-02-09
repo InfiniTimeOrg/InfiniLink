@@ -69,6 +69,7 @@
 		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
 		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
 		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
+		E0F599412B76CABF00BE96A3 /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F599402B76CABF00BE96A3 /* FileSystemView.swift */; };
 		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
 		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
 		E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0B284C54690040B582 /* HeartChartComponents.swift */; };
@@ -80,7 +81,6 @@
 		E53F51352B718E4A008D4CE6 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E53F51342B718E4A008D4CE6 /* Zip */; };
 		E57654032B5781970059C8EF /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57654022B5781970059C8EF /* WeatherController.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
-		E57E326F2B6682CE00173AF1 /* FileSystemDebug.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57E326E2B6682CE00173AF1 /* FileSystemDebug.swift */; };
 		E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E59398F92B58DA1F00D5840A /* SwiftyJSON */; };
 		E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */; };
 		E5EEB1D42803438200FB0C11 /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5EEB1D32803438200FB0C11 /* RenameView.swift */; };
@@ -178,6 +178,7 @@
 		E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSetLocationView.swift; sourceTree = "<group>"; };
 		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
 		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
+		E0F599402B76CABF00BE96A3 /* FileSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemView.swift; sourceTree = "<group>"; };
 		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
 		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
@@ -189,7 +190,6 @@
 		E57654022B5781970059C8EF /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherController.swift; path = InfiniLink/Weather/WeatherController.swift; sourceTree = SOURCE_ROOT; };
 		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = ../DeviceData.swift; sourceTree = "<group>"; };
 		E57AD57D282462D900E33EEA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
-		E57E326E2B6682CE00173AF1 /* FileSystemDebug.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemDebug.swift; sourceTree = "<group>"; };
 		E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
 		E5EEB1D32803438200FB0C11 /* RenameView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
 		E5EEB1D728034EA500FB0C11 /* HeartView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartView.swift; sourceTree = "<group>"; };
@@ -276,11 +276,11 @@
 		264BFE3526BC51CE0050A223 = {
 			isa = PBXGroup;
 			children = (
-				264BFE7726BCAAC00050A223 /* README.md */,
-				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
 				264BFE4026BC51CE0050A223 /* InfiniLink */,
 				264BFE5726BC51CF0050A223 /* InfiniLinkTests */,
 				264BFE6226BC51CF0050A223 /* InfiniLinkUITests */,
+				264BFE7726BCAAC00050A223 /* README.md */,
+				2656FD9A26D1B30C001EF20C /* PrivacyPolicy.md */,
 				264BFE3F26BC51CE0050A223 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -415,7 +415,7 @@
 				E515FB16284C56480040B582 /* WelcomeView.swift */,
 				E515FB14284C56070040B582 /* DeviceView.swift */,
 				E5EEB1D32803438200FB0C11 /* RenameView.swift */,
-				E57E326E2B6682CE00173AF1 /* FileSystemDebug.swift */,
+				E0F599402B76CABF00BE96A3 /* FileSystemView.swift */,
 			);
 			path = "Home View";
 			sourceTree = "<group>";
@@ -685,7 +685,6 @@
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */,
 				2644261626DC1D8E009BD54A /* Onboarding.swift in Sources */,
-				E57E326F2B6682CE00173AF1 /* FileSystemDebug.swift in Sources */,
 				2632388426F2531C00D72B43 /* DFUWithBLE.swift in Sources */,
 				263B20C726CF07BB00676BF0 /* DFUProgressBar.swift in Sources */,
 				E515FB1B284C58AA0040B582 /* BLEManagerVariables.swift in Sources */,
@@ -730,6 +729,7 @@
 				26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */,
 				268E773F27174B8B000DF90D /* ChartSettingsSheetSliders.swift in Sources */,
 				266F53EA26FA91F3007481A6 /* DeviceInfo.swift in Sources */,
+				E0F599412B76CABF00BE96A3 /* FileSystemView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

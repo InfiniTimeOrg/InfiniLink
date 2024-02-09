@@ -40,7 +40,7 @@ class MusicController {
 		NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
 	}
 	
-	@objc func onNotificationReceipt(_ notification: Notification) {
+	@objc func onNotificationReceipt(_ notification: NSNotification) {
 		musicPlaying = musicPlayer.playbackState.rawValue
 		updateMusicInformation(songInfo: getCurrentSongInfo())
 	}
