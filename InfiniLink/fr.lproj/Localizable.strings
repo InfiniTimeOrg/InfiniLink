@@ -266,6 +266,8 @@
 "delete" = "Delete";
 "unknown" = "Unknown";
 
+"apps" = "Apps";
+
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";
 "set_location" = "Location";

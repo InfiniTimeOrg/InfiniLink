@@ -46,7 +46,7 @@ struct Settings_Page: View {
             Text(NSLocalizedString("settings", comment: ""))
                 .foregroundColor(.primary)
                 .font(.title.weight(.bold))
-                .padding()
+                .padding(18)
                 .frame(maxWidth: .infinity, alignment: .center)
             Divider()
             ScrollView {

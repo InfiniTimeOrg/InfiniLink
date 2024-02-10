@@ -22,6 +22,8 @@ struct DeviceView: View {
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
     @AppStorage("weatherData") var weatherData: Bool = true
     
+    @AppStorage("installedApps") var installedApps: [String] = []
+    
     @State var currentUptime: TimeInterval!
     
     var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
@@ -255,6 +257,24 @@ struct DeviceView: View {
                             .foregroundColor(.gray)
                     }
                     .modifier(RowModifier(style: .capsule))
+                }
+                if !installedApps.isEmpty {
+                    Spacer()
+                        .frame(height: 6)
+                    VStack {
+                        ForEach(installedApps, id: \.self) { appId in
+                            NavigationLink(destination: EmptyView()) {
+                                HStack {
+                                    Text(appId)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.gray)
+                                }
+                                .modifier(RowModifier(style: .capsule))
+                            }
+                        }
+                    }
                 }
                 Spacer()
                     .frame(height: 6)

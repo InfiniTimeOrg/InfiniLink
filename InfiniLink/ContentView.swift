@@ -9,6 +9,7 @@ import SwiftUI
 
 enum Tab {
     case home
+    case apps
     case settings
 }
 
@@ -20,6 +21,8 @@ struct ContentView: View {
     
     @ObservedObject var deviceDataForTopLevel: DeviceData = deviceData
     @State var selection: Tab = .home
+    
+    @Environment(\.colorScheme) var colorScheme
     
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
@@ -35,12 +38,51 @@ struct ContentView: View {
     
     let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
     
-    private func switchToTab(tab: Tab) {
+    func switchToTab(tab: Tab) {
         if selection != tab {
             selection = tab
             
             let impactMed = UIImpactFeedbackGenerator(style: .medium)
             impactMed.impactOccurred()
+        }
+    }
+    func tabBarItem(selection: Binding<Tab>, tab: Tab, imageName: String) -> some View {
+        return HStack {
+            if selection.wrappedValue == tab {
+                HStack(spacing: 5) {
+                    Image(systemName: imageName)
+                    switch tab {
+                    case .home:
+                        Text(NSLocalizedString("home", comment: "Home"))
+                    case .apps:
+                        Text(NSLocalizedString("apps", comment: "Apps"))
+                    case .settings:
+                        Text(NSLocalizedString("settings", comment: "Settings"))
+                    }
+                }
+                .font(.body.weight(.semibold))
+                .foregroundColor(colorScheme == .dark ? .white : .darkestGray)
+            } else {
+                HStack(spacing: 5) {
+                    Image(systemName: imageName)
+                    switch tab {
+                    case .home:
+                        Text(NSLocalizedString("home", comment: "Home"))
+                    case .apps:
+                        Text(NSLocalizedString("apps", comment: "Apps"))
+                    case .settings:
+                        Text(NSLocalizedString("settings", comment: "Settings"))
+                    }
+                }
+                .foregroundColor(Color.gray)
+            }
+        }
+        .clipped()
+        .imageScale(.large)
+        .padding(8)
+        .frame(maxWidth: .infinity)
+        .onTapGesture {
+            switchToTab(tab: tab)
         }
     }
     
@@ -69,6 +111,8 @@ struct ContentView: View {
                         }
                 case .settings:
                     Settings_Page()
+                case .apps:
+                    AppsView()
                 }
             }
             tabBar
@@ -105,48 +149,21 @@ struct ContentView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 0) {
-                TabBarItem(selection: $selection, tab: .home, imageName: "house")
+                tabBarItem(selection: $selection, tab: .home, imageName: "house")
                     .onTapGesture {
                         switchToTab(tab: .home)
                     }
+                tabBarItem(selection: $selection, tab: .apps, imageName: "square.on.square")
+                    .onTapGesture {
+                        switchToTab(tab: .apps)
+                    }
                     .frame(maxWidth: .infinity)
-                
-                TabBarItem(selection: $selection, tab: .settings, imageName: "gear")
+                tabBarItem(selection: $selection, tab: .settings, imageName: "gear")
                     .onTapGesture {
                         switchToTab(tab: .settings)
                     }
-                    .frame(maxWidth: .infinity)
             }
-            .padding(12)
-        }
-    }
-}
-
-struct TabBarItem: View {
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var selection: Tab
-    let tab: Tab
-    let imageName: String
-    
-    var body: some View {
-        if selection == tab {
-            HStack {
-                Image(systemName: imageName)
-                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
-            }
-            .imageScale(.large)
-            .font(.body.weight(.semibold))
-            .foregroundColor(colorScheme == .dark ? .white : .darkestGray)
-            .cornerRadius(10)
-            .padding(8)
-        } else {
-            HStack {
-                Image(systemName: imageName)
-                Text(tab == .home ? NSLocalizedString("home", comment: "") : NSLocalizedString("settings", comment: ""))
-            }
-            .foregroundColor(Color.gray)
-            .imageScale(.large)
-            .padding(8)
+            .padding(11)
         }
     }
 }
