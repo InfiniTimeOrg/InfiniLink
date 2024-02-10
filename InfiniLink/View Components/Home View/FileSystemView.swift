@@ -258,7 +258,7 @@ struct FileSystemView: View {
                                     ForEach(files, id: \.id) { file in
                                         Text(file.filename)
                                             .padding(12)
-                                            .background(Color.gray.opacity(0.15))
+                                            .background(Color.gray.opacity(0.2))
                                             .clipShape(Capsule())
                                     }
                                 }
@@ -303,6 +303,9 @@ struct FileSystemView: View {
         .sheet(isPresented: $showNewFolderView) {
             VStack {
                 HStack {
+                    Text(NSLocalizedString("new_folder", comment: ""))
+                        .font(.title.bold())
+                    Spacer()
                     Button {
                         showNewFolderView = false
                     } label: {
@@ -317,12 +320,17 @@ struct FileSystemView: View {
                 }
                 Spacer()
                 TextField(NSLocalizedString("title", comment: "Title"), text: $newFolderName)
+                    .padding()
+                    .background(Color.gray.opacity(0.15))
+                    .clipShape(Capsule())
                 Spacer()
                 Button {
                     createDir(name: newFolderName)
                     showNewFolderView = false
                 } label: {
                     Text(NSLocalizedString("create_folder", comment: "Create Folder"))
+                        .frame(maxWidth: .infinity)
+                        .font(.body.weight(.semibold))
                         .padding()
                         .background(Color.blue)
                         .foregroundColor(.white)

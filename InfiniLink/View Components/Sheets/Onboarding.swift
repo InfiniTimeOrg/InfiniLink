@@ -19,7 +19,6 @@ struct Onboarding: View {
                 SheetCloseButton()
             }
             .padding()
-            .frame(maxWidth: .infinity, alignment: .trailing)
             Divider()
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
