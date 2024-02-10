@@ -44,8 +44,8 @@ struct StepSettingsSheetDatePicker: View {
                 presMode.wrappedValue.dismiss()
             } label: {
                 Text(NSLocalizedString("submit_count", comment: ""))
+                    .modifier(NeumorphicButtonModifer(bgColor: .blue))
             }
-            .buttonStyle(NeumorphicButtonStyle(bgColor: .blue))
             .opacity(readyToSubmit(value: addDateValue.value) ? 0.5 : 1.0)
             .disabled(readyToSubmit(value: addDateValue.value))
         }

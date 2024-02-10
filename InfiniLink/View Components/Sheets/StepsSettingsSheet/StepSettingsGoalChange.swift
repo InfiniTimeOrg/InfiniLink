@@ -13,6 +13,8 @@ struct StepSettingsSheetGoalChange: View {
     @Environment(\.presentationMode) var presMode
     
 	@ObservedObject var setStepGoal = NumbersOnly()
+    @ObservedObject var bleFSHandler = BLEFSHandler.shared
+    
 	@AppStorage("stepCountGoal") var stepCountGoal = 10000
     
     init() {
@@ -29,12 +31,19 @@ struct StepSettingsSheetGoalChange: View {
                 .clipShape(Capsule())
                 .keyboardType(.numberPad)
             Button {
-                stepCountGoal = Int(setStepGoal.value)!
+                bleFSHandler.readSettings { settings in
+                    // Get up to date settings
+                    // let settings = settings
+                    
+                    // TODO: write settings to watch
+                    stepCountGoal = Int(setStepGoal.value)!
+                }
+                
                 presMode.wrappedValue.dismiss()
             } label: {
                 Text(NSLocalizedString("submit_new_step_goal", comment: ""))
+                    .modifier(NeumorphicButtonModifer(bgColor: .blue))
             }
-            .buttonStyle(NeumorphicButtonStyle(bgColor: .blue))
             .opacity(setStepGoal.value.isEmpty ? 0.5 : 1.0)
             .disabled(setStepGoal.value.isEmpty)
         }

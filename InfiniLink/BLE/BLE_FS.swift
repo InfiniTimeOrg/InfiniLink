@@ -570,3 +570,94 @@ class BLEFSHandler : ObservableObject {
         }
     }
 }
+
+enum ClockType: UInt8 {
+    case H24 = 0
+    case H12 = 1
+}
+
+enum WeatherFormat: UInt8 {
+    case Metric = 0
+    case Imperial = 1
+}
+
+enum Notification: UInt8 {
+    case On = 0
+    case Off = 1
+    case Sleep = 2
+}
+
+enum ChimesOption: UInt8 {
+    case None = 0
+    case Hours = 1
+    case HalfHours = 2
+}
+
+//enum WakeUpMode: UInt8 {
+//    case SingleTap = 0
+//    case DoubleTap = 1
+//    case RaiseWrist = 2
+//    case Shake = 3
+//    case LowerWrist = 4
+//}
+
+enum Colors: UInt8 {
+    case White = 0
+    case Silver = 1
+    case Gray = 2
+    case Black = 3
+    case Red = 4
+    case Maroon = 5
+    case Yellow = 6
+    case Olive = 7
+    case Lime = 8
+    case Green = 9
+    case Cyan = 10
+    case Teal = 11
+    case Blue = 12
+    case Navy = 13
+    case Magenta = 14
+    case Purple = 15
+    case Orange = 16
+    case Pink = 17
+}
+
+enum PTSGaugeStyle: UInt8 {
+    case Full = 0
+    case Half = 1
+    case Numeric = 2
+}
+
+enum PTSWeather: UInt8 {
+    case On = 0
+    case Off = 1
+}
+
+struct PineTimeStyle {
+    let ColorTime : Colors = .Teal
+    let ColorBar : Colors = .Teal
+    let ColorBG : Colors = .Black
+    let gaugeStyle : PTSGaugeStyle = .Full
+    let weatherEnable : PTSWeather = .Off
+}
+
+struct WatchFaceInfineat {
+    let showSideCover : Bool = true
+    let colorIndex : UInt8 = 0
+}
+
+struct Settings {
+    let version: Int32
+    let stepsGoal: Int32
+    let screenTimeOut: Int32
+    let clockType: ClockType
+    let weatherFormat: WeatherFormat
+    let notificationStatus: Notification
+    let watchFace: UInt8
+    let chimesOption: ChimesOption
+    let pineTimeStyle: PineTimeStyle
+    let watchFaceInfineat: WatchFaceInfineat
+    //    let wakeUpMode: WakeUpMode
+    let shakeWakeThreshold: UInt16
+    let brightLevel: UInt8
+}

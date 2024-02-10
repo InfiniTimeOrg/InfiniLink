@@ -147,10 +147,12 @@ struct Settings_Page: View {
                                     }
                                 }
                             if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
-                                Button(NSLocalizedString("always_allow_location_services", comment: "")) {
+                                Button {
                                     locationManager.requestAlwaysAuthorization()
+                                } label: {
+                                    Text(NSLocalizedString("always_allow_location_services", comment: ""))
+                                        .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                                 }
-                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                                 .frame(maxWidth: .infinity, alignment: .center)
                             }
                             NavigationLink(destination: WeatherSetLocationView()) {

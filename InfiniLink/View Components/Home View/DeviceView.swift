@@ -302,7 +302,7 @@ struct DeviceView: View {
                     .frame(height: 6)
                 VStack {
                     Button {
-                        showDisconnectConfDialog.toggle()
+                        showDisconnectConfDialog = true
                     } label: {
                         Text(NSLocalizedString("disconnect", comment: "") + " \(deviceInfo.modelNumber)")
                             .frame(maxWidth: .infinity)
@@ -336,6 +336,8 @@ struct CustomScrollView<Content: View>: View {
     @State var settings: Settings?
     @State var watchFace: UInt8 = 0
     @State var clockType: ClockType = .H24
+    
+    @AppStorage("stepCountGoal") var stepCountGoal = 10000
     
     var body: some View {
         VStack(spacing: 0) {
@@ -427,6 +429,7 @@ struct CustomScrollView<Content: View>: View {
                                 BLEFSHandler.shared.readSettings { settings in
                                     self.watchFace = settings.watchFace
                                     self.clockType = settings.clockType
+                                    self.stepCountGoal = Int(settings.stepsGoal)
                                 }
                             }
                         }

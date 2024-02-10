@@ -45,11 +45,13 @@ struct WelcomeView: View {
                                 .frame(maxWidth: .infinity, alignment: .center)
                             Spacer()
                             if bleManager.isSwitchedOn {
-                                Button(NSLocalizedString("start_pairing", comment: "")) {
+                                Button {
                                     SheetManager.shared.sheetSelection = .connect
                                     SheetManager.shared.showSheet = true
+                                } label: {
+                                    Text(NSLocalizedString("start_pairing", comment: ""))
+                                        .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                                 }
-                                .buttonStyle(NeumorphicButtonStyle(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                                 .frame(maxWidth: .infinity, alignment: .center)
                                 .padding(.bottom)
                                 .padding(.horizontal)
@@ -90,12 +92,12 @@ struct WelcomeView: View {
     
 }
 
-struct NeumorphicButtonStyle: ButtonStyle {
+struct NeumorphicButtonModifer: ViewModifier {
     var bgColor: Color
 
-    func makeBody(configuration: Self.Configuration) -> some View {
-        configuration.label
-            .padding(15)
+    func body(content: Content) -> some View {
+        content
+            .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             .font(.body.weight(.semibold))
             .foregroundColor(Color.white)
