@@ -1,84 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>$(DEVELOPMENT_LANGUAGE)</string>
-	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
-	<key>CFBundleIdentifier</key>
-	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>$(PRODUCT_NAME)</string>
-	<key>CFBundlePackageType</key>
-	<string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
-	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
-	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>ITSAppUsesNonExemptEncryption</key>
-	<false/>
-	<key>LSRequiresIPhoneOS</key>
-	<true/>
-	<key>NSAppleMusicUsageDescription</key>
-	<string>This app needs permission to allow your PineTime to control your music.</string>
-	<key>NSBluetoothAlwaysUsageDescription</key>
-	<string>This app uses bluetooth to communicate with your PineTime.</string>
-	<key>NSBluetoothPeripheralUsageDescription</key>
-	<string>This app uses bluetooth to communicate with your PineTime.</string>
-	<key>NSDownloadsFolderUsageDescription</key>
-	<string></string>
-	<key>NSHealthShareUsageDescription</key>
-	<string>This app optionally uses Apple Health to communicate your heart rate and step count data to your PineTime.</string>
-	<key>NSHealthUpdateUsageDescription</key>
-	<string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs your location to receive local weather information when the app is in the background.</string>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs your location to receive local weather information when the app is in the background.</string>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs your location to receive local weather information.</string>
-    <key>UIAppFonts</key>
-    <array>
-        <string>JetBrainsMono-Bold.ttf</string>
-        <string>JetBrainsMono-ExtraBold.ttf</string>
-        <string>JetBrainsMono-Light.ttf</string>
-        <string>JetBrainsMono-Regular.ttf</string>
-        <string>open_sans_light.ttf</string>
-    </array>
-	<key>UIApplicationSceneManifest</key>
-	<dict>
-		<key>UIApplicationSupportsMultipleScenes</key>
-		<true/>
-	</dict>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>bluetooth-central</string>
-		<string>location</string>
-		<string>processing</string>
-	</array>
-	<key>UILaunchScreen</key>
-	<dict/>
-	<key>UIRequiredDeviceCapabilities</key>
-	<array>
-		<string>armv7</string>
-	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationPortraitUpsideDown</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
-	<key>kTCCServiceMediaLibrary</key>
-	<string>This app needs permission to allow your PineTime to control your music.</string>
-</dict>
+    <dict>
+        <key>CFBundleDevelopmentRegion</key>
+        <string>$(DEVELOPMENT_LANGUAGE)</string>
+        <key>CFBundleExecutable</key>
+        <string>$(EXECUTABLE_NAME)</string>
+        <key>CFBundleIdentifier</key>
+        <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+        <key>CFBundleInfoDictionaryVersion</key>
+        <string>6.0</string>
+        <key>CFBundleName</key>
+        <string>$(PRODUCT_NAME)</string>
+        <key>CFBundlePackageType</key>
+        <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+        <key>CFBundleShortVersionString</key>
+        <string>$(MARKETING_VERSION)</string>
+        <key>CFBundleVersion</key>
+        <string>$(CURRENT_PROJECT_VERSION)</string>
+        <key>ITSAppUsesNonExemptEncryption</key>
+        <false/>
+        <key>LSRequiresIPhoneOS</key>
+        <true/>
+        <key>NSAppleMusicUsageDescription</key>
+        <string>This app needs permission to allow your PineTime to control your music.</string>
+        <key>NSBluetoothAlwaysUsageDescription</key>
+        <string>This app uses bluetooth to communicate with your PineTime.</string>
+        <key>NSBluetoothPeripheralUsageDescription</key>
+        <string>This app uses bluetooth to communicate with your PineTime.</string>
+        <key>NSDownloadsFolderUsageDescription</key>
+        <string></string>
+        <key>NSHealthShareUsageDescription</key>
+        <string>This app optionally uses Apple Health to communicate your heart rate and step count data to your PineTime.</string>
+        <key>NSHealthUpdateUsageDescription</key>
+        <string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
+        <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+        <string>This app needs your location to receive local weather information when the app is in the background.</string>
+        <key>NSLocationAlwaysUsageDescription</key>
+        <string>This app needs your location to receive local weather information when the app is in the background.</string>
+        <key>NSLocationWhenInUseUsageDescription</key>
+        <string>This app needs your location to receive local weather information.</string>
+        <key>UIAppFonts</key>
+        <array>
+            <string>JetBrainsMono-Bold.ttf</string>
+            <string>JetBrainsMono-ExtraBold.ttf</string>
+            <string>JetBrainsMono-Light.ttf</string>
+            <string>JetBrainsMono-Regular.ttf</string>
+            <string>open_sans_light.ttf</string>
+        </array>
+        <key>UIApplicationSceneManifest</key>
+        <dict>
+            <key>UIApplicationSupportsMultipleScenes</key>
+            <true/>
+        </dict>
+        <key>UIApplicationSupportsIndirectInputEvents</key>
+        <true/>
+        <key>UIBackgroundModes</key>
+        <array>
+            <string>bluetooth-central</string>
+            <string>location</string>
+            <string>processing</string>
+        </array>
+        <key>UILaunchScreen</key>
+        <dict/>
+        <key>UIRequiredDeviceCapabilities</key>
+        <array>
+            <string>armv7</string>
+        </array>
+        <key>UISupportedInterfaceOrientations</key>
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+        </array>
+        <key>UISupportedInterfaceOrientations~ipad</key>
+        <array>
+            <string>UIInterfaceOrientationPortrait</string>
+            <string>UIInterfaceOrientationPortraitUpsideDown</string>
+            <string>UIInterfaceOrientationLandscapeLeft</string>
+            <string>UIInterfaceOrientationLandscapeRight</string>
+        </array>
+        <key>kTCCServiceMediaLibrary</key>
+        <string>This app needs permission to allow your PineTime to control your music.</string>
+    </dict>
 </plist>
