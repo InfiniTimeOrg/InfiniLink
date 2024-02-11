@@ -86,14 +86,13 @@ struct PineTimeStyleWF: View {
 
 struct UnknownWF: View {
     @Environment(\.colorScheme) var colorScheme
-    @Binding var geometry : GeometryProxy
+    @Binding var geometry: GeometryProxy
     
     var body: some View {
-        ZStack {
-            CustomTextView(text: "Unkown WatchFace", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.085), lineSpacing: 0)
-                .foregroundColor(.white)
-                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        VStack {
+            ProgressView()
         }
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
 

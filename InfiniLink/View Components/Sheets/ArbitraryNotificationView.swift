@@ -41,6 +41,9 @@ struct ArbitraryNotificationSheet: View {
                         RoundedRectangle(cornerRadius: 15)
                             .stroke(Color.gray.opacity(0.2), lineWidth: 2.5)
                     )
+                    .onAppear {
+                        UITextView.appearance().backgroundColor = .clear
+                    }
                 Button(action: {
                     UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
                     if !notificationBody.isEmpty || !notificationTitle.isEmpty {

@@ -111,9 +111,6 @@ struct Connect: View {
                     .background(Color.blue)
                     .clipShape(Capsule())
             }
-            .sheet(isPresented: $showHelpView) {
-                ConnectionHelpView(isDisplayed: $showHelpView)
-            }
             .padding(.bottom)
         }
         .onAppear {
@@ -128,6 +125,9 @@ struct Connect: View {
         }
         .alert(isPresented: $showUnsupportedDeviceAlert) {
             Alert(title: Text(NSLocalizedString("oops", comment: "Oops!")), message: Text(NSLocalizedString("not_infinitime_device", comment: "It doesn't look like the device you selected is running InfiniTime.")), dismissButton: .cancel())
+        }
+        .blurredSheet(.init(.regularMaterial), show: $showHelpView) {} content: {
+            ConnectionHelpView(isDisplayed: $showHelpView)
         }
     }
 }

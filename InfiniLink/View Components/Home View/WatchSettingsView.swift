@@ -14,11 +14,6 @@ struct WatchSettingsView: View {
     
     @State var settings: Settings? = nil
     
-    @State var hasMadeChanges = false
-    
-    @State var watchfaces: [String] = ["digital24H", "analog", "PTS24HStepStyle1", "terminal24H"]
-    @State var selection = 0
-    
     var body: some View {
         if UptimeManager.shared.connectTime != nil {
             content
@@ -30,10 +25,14 @@ struct WatchSettingsView: View {
     var content: some View {
         VStack(spacing: 0) {
             HStack(spacing: 15) {
+                Text(NSLocalizedString("watch_settings", comment: ""))
+                    .foregroundColor(.primary)
+                    .font(.title.weight(.bold))
+                Spacer()
                 Button {
                     presMode.wrappedValue.dismiss()
                 } label: {
-                    Image(systemName: "chevron.left")
+                    Image(systemName: "xmark")
                         .imageScale(.medium)
                         .padding(14)
                         .font(.body.weight(.semibold))
@@ -41,141 +40,94 @@ struct WatchSettingsView: View {
                         .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
-                Text(NSLocalizedString("watch_settings", comment: ""))
-                    .foregroundColor(.primary)
-                    .font(.title.weight(.bold))
-                Spacer()
-                Button {
-                    // Save updated settings to watch?
-                } label: {
-                    Text(NSLocalizedString("save", comment: ""))
-                        .padding(14)
-                        .font(.body.weight(.semibold))
-                        .foregroundColor(Color.white)
-                        .background(Color.blue)
-                        .clipShape(Capsule())
-                        .foregroundColor(.primary)
-                }
-                .disabled(!hasMadeChanges)
-                .opacity(!hasMadeChanges ? 0.5 : 1.0)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
             if let settings = settings {
-                GeometryReader { geometry in
-                    ScrollView {
-                        VStack {
-                            HStack {
-                                TabView(selection: $selection) {
-                                    ForEach(watchfaces.indices, id: \.self) { index in
-                                        HStack {
-                                            Spacer()
-                                            VStack {
-                                                Spacer()
-                                                WatchFaceView(watchface: .constant(index))
-                                                    .frame(width: geometry.size.width / 2.4, height: geometry.size.width / 2.4, alignment: .center)
-                                                Spacer()
-                                            }
-                                            Spacer()
-                                        }
-                                    }
-                                }
-                            }
-                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
-                            .frame(minHeight: 265)
-                            .padding(-16)
-                            .onChange(of: selection) { newWatchface in
-                                if newWatchface != settings.watchFace {
-                                    hasMadeChanges = true
-                                } else {
-                                    hasMadeChanges = false
-                                }
-                            }
+                ScrollView {
+                    VStack {
+                        HStack {
+                            Text(NSLocalizedString("display_timeout", comment: ""))
+                            Spacer()
+                            Text("\(settings.screenTimeOut / 1000) Seconds")
+                                .foregroundColor(.gray)
                         }
-                        VStack {
-                            HStack {
-                                Text(NSLocalizedString("display_timeout", comment: ""))
-                                Spacer()
-                                Text("\(settings.screenTimeOut / 1000) Seconds")
-                                    .foregroundColor(.gray)
-                            }
-                            .modifier(RowModifier(style: .capsule))
-                            HStack {
-                                Text(NSLocalizedString("display_wakeup", comment: ""))
-                                Spacer()
-                                Group {
-                                    // TODO: Add handling for multiple cases
-                                    switch settings.wakeUpMode {
-                                    case .SingleTap:
-                                        Text("Single Tap")
-                                    case .DoubleTap:
-                                        Text("Double Tap")
-                                    case .RaiseWrist:
-                                        Text("Raise Wrist")
-                                    case .Shake:
-                                        Text("Shake Wake")
-                                    case .LowerWrist:
-                                        Text("Lower Wrist")
-                                    }
+                        .modifier(RowModifier(style: .capsule))
+                        HStack {
+                            Text(NSLocalizedString("display_wakeup", comment: ""))
+                            Spacer()
+                            Group {
+                                // TODO: Add handling for multiple cases
+                                switch settings.wakeUpMode {
+                                case .SingleTap:
+                                    Text("Single Tap")
+                                case .DoubleTap:
+                                    Text("Double Tap")
+                                case .RaiseWrist:
+                                    Text("Raise Wrist")
+                                case .Shake:
+                                    Text("Shake Wake")
+                                case .LowerWrist:
+                                    Text("Lower Wrist")
                                 }
-                                .foregroundColor(.gray)
                             }
-                            .modifier(RowModifier(style: .capsule))
-                            HStack {
-                                Text(NSLocalizedString("time_format", comment: ""))
-                                Spacer()
-                                Group {
-                                    switch settings.clockType {
-                                    case .H12:
-                                        Text("12 Hour")
-                                    case .H24:
-                                        Text("24 Hour")
-                                    }
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            .modifier(RowModifier(style: .capsule))
-                            HStack {
-                                Text(NSLocalizedString("steps_goal", comment: ""))
-                                Spacer()
-                                Text("\(settings.stepsGoal)")
-                                    .foregroundColor(.gray)
-                            }
-                            .modifier(RowModifier(style: .capsule))
-                            HStack {
-                                Text(NSLocalizedString("weather", comment: ""))
-                                Spacer()
-                                Group {
-                                    switch settings.weatherFormat {
-                                    case .Metric:
-                                        Text("Metric")
-                                    case .Imperial:
-                                        Text("Imperial")
-                                    }
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            .modifier(RowModifier(style: .capsule))
-                            HStack {
-                                Text(NSLocalizedString("hourly_chimes", comment: ""))
-                                Spacer()
-                                Group {
-                                    switch settings.chimesOption {
-                                    case .None:
-                                        Text("None")
-                                    case .Hours:
-                                        Text("Hour")
-                                    case .HalfHours:
-                                        Text("Half Hour")
-                                    }
-                                }
-                                .foregroundColor(.gray)
-                            }
-                            .modifier(RowModifier(style: .capsule))
+                            .foregroundColor(.gray)
                         }
-                        .padding()
+                        .modifier(RowModifier(style: .capsule))
+                        HStack {
+                            Text(NSLocalizedString("time_format", comment: ""))
+                            Spacer()
+                            Group {
+                                switch settings.clockType {
+                                case .H12:
+                                    Text("12 Hour")
+                                case .H24:
+                                    Text("24 Hour")
+                                }
+                            }
+                            .foregroundColor(.gray)
+                        }
+                        .modifier(RowModifier(style: .capsule))
+                        HStack {
+                            Text(NSLocalizedString("steps_goal", comment: ""))
+                            Spacer()
+                            Text("\(settings.stepsGoal)")
+                                .foregroundColor(.gray)
+                        }
+                        .modifier(RowModifier(style: .capsule))
+                        HStack {
+                            Text(NSLocalizedString("weather", comment: ""))
+                            Spacer()
+                            Group {
+                                switch settings.weatherFormat {
+                                case .Metric:
+                                    Text("Metric")
+                                case .Imperial:
+                                    Text("Imperial")
+                                }
+                            }
+                            .foregroundColor(.gray)
+                        }
+                        .modifier(RowModifier(style: .capsule))
+                        HStack {
+                            Text(NSLocalizedString("hourly_chimes", comment: ""))
+                            Spacer()
+                            Group {
+                                switch settings.chimesOption {
+                                case .None:
+                                    Text("None")
+                                case .Hours:
+                                    Text("Hour")
+                                case .HalfHours:
+                                    Text("Half Hour")
+                                }
+                            }
+                            .foregroundColor(.gray)
+                        }
+                        .modifier(RowModifier(style: .capsule))
                     }
+                    .padding()
                 }
             } else {
                 VStack {
@@ -186,14 +138,8 @@ struct WatchSettingsView: View {
             }
         }
         .onAppear {
-            if let settings = settings {
-                self.selection = Int(settings.watchFace)
-            } else {
-                BLEFSHandler.shared.readSettings { settings in
-                    self.settings = settings
-                    self.selection = Int(settings.watchFace)
-                    self.bleManagerVal.watchFace = Int(settings.watchFace)
-                }
+            BLEFSHandler.shared.readSettings { settings in
+                self.settings = settings
             }
         }
         .navigationBarTitleDisplayMode(.inline)

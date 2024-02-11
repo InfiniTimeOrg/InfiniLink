@@ -21,6 +21,7 @@ struct FileSystemView: View {
     
     @State var loadingFs = false
     @State var showUploadSheet = false
+    @State var showSettingsView = false
     @State var fileSelected = false
     @State var showNewFolderView = false
     @State var fileUploading = false
@@ -203,10 +204,12 @@ struct FileSystemView: View {
                         ForEach(commandHistory, id: \.self) { listItem in
                             let isFile = listItem.contains(".")
                             
-                            if listItem != "." && listItem != ".." && listItem != "settings.dat" {
+                            if listItem != "." && listItem != ".." {
                                 Button {
                                     if isFile {
-                                        
+                                        if listItem == "settings.dat" {
+                                            showSettingsView = true
+                                        }
                                     } else {
                                         loadingFs = true
                                         cdAndLs(dir: listItem)
@@ -222,6 +225,9 @@ struct FileSystemView: View {
                                         }
                                     }
                                     .modifier(RowModifier(style: .capsule))
+                                }
+                                .sheet(isPresented: $showSettingsView) {
+                                    WatchSettingsView()
                                 }
                                 .contextMenu {
                                     Button {
