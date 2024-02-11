@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct WatchSettingsView: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presMode
     
@@ -62,16 +63,23 @@ struct WatchSettingsView: View {
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
             if let settings = settings {
-                ScrollView {
-                    VStack {
-                        HStack {
-                            TabView(selection: $selection) {
-                                ForEach(watchfaces.indices, id: \.self) { index in
-                                    Image(watchfaces[index])
-                                        .resizable()
-                                        .frame(width: 130, height: 130)
-                                        .modifier(WatchFaceModifier())
-                                        .tag(index)
+                GeometryReader { geometry in
+                    ScrollView {
+                        VStack {
+                            HStack {
+                                TabView(selection: $selection) {
+                                    ForEach(watchfaces.indices, id: \.self) { index in
+                                        HStack {
+                                            Spacer()
+                                            VStack {
+                                                Spacer()
+                                                WatchFaceView(watchface: .constant(index))
+                                                    .frame(width: geometry.size.width / 2.4, height: geometry.size.width / 2.4, alignment: .center)
+                                                Spacer()
+                                            }
+                                            Spacer()
+                                        }
+                                    }
                                 }
                             }
                             .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
@@ -184,6 +192,7 @@ struct WatchSettingsView: View {
                 BLEFSHandler.shared.readSettings { settings in
                     self.settings = settings
                     self.selection = Int(settings.watchFace)
+                    self.bleManagerVal.watchFace = Int(settings.watchFace)
                 }
             }
         }
