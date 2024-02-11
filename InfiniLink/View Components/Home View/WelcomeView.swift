@@ -19,7 +19,12 @@ struct WelcomeView: View {
                     ZStack {
                         DeviceView()
                             .disabled(true)
-                            .blur(radius: 70)
+                            .blur(radius: 64)
+                        Rectangle()
+                            .ignoresSafeArea()
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                            .foregroundColor(.background)
+                            .opacity(0.25)
                         VStack(spacing: 16) {
                             Text(NSLocalizedString("connecting", comment: "Connecting..."))
                                 .font(.title.weight(.bold))
@@ -35,47 +40,86 @@ struct WelcomeView: View {
                         }
                     }
                 } else {
-                    VStack() {
-                        VStack(spacing: 5) {
-                            Text("Welcome to \nInfiniLink")
-                                .font(.system(size: 38).weight(.bold))
-                                .padding(32)
-                                //.padding(.top)
+                    ZStack {
+                        GeometryReader { geometry in
+                            Image("WatchHomePagePineTime")
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: geometry.size.width * 2.15, height: geometry.size.width * 2.15, alignment: .center)
+                                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.94)
+                                .shadow(color: colorScheme == .dark ? Color.darkGray : Color.lightGray, radius: 128, x: 0, y: 0)
+                                .brightness(colorScheme == .dark ? -0.01 : 0.06)
+                            Text("Welcome to\nInfiniLink")
+                                .font(.largeTitle.weight(.bold))
+                                .foregroundColor(colorScheme == .dark ? Color.lightGray : Color.darkGray)
+                                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 7.5)
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .center)
-                            Spacer()
-                            if bleManager.isSwitchedOn {
-                                Button {
-                                    SheetManager.shared.sheetSelection = .connect
-                                    SheetManager.shared.showSheet = true
-                                } label: {
-                                    Text(NSLocalizedString("start_pairing", comment: ""))
-                                        .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                                }
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(.bottom)
-                                .padding(.horizontal)
-                                .onAppear {
-                                    if bleManager.isSwitchedOn {
-                                        bleManager.startScanning()
+                        }
+                        VStack() {
+                            VStack(spacing: 5) {
+                                Spacer()
+                                VStack(spacing: 6) {
+                                    Button {
+                                        SheetManager.shared.sheetSelection = .connect
+                                        SheetManager.shared.showSheet = true
+                                    } label: {
+                                        Text(NSLocalizedString("start_pairing", comment: ""))
+                                            .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
+                                    }
+                                    .frame(maxWidth: .infinity, alignment: .center)
+                                    .padding(.bottom, 5)
+                                    .padding(.horizontal)
+                                    .onAppear {
+                                        if bleManager.isSwitchedOn {
+                                            bleManager.startScanning()
+                                        }
+                                    }
+                                    Text("Don't have a Watch?")
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding(.horizontal)
+                                        .foregroundColor(.gray)
+                                    Link(destination: URL(string: "https://wiki.pine64.org/wiki/PineTime")!) {
+                                        Text("Learn more about the PineTime")
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .foregroundColor(.blue)
+                                            .padding(.bottom, 5)
+                                            .padding(.horizontal)
+                                            .font(.body.weight(.semibold))
                                     }
                                 }
-                            } else {
-                                Text("Bluetooth is Disabled")
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding(.bottom)
-                                    .padding(.bottom)
-                                    .padding(.horizontal)
+                                .clipped()
+                                .shadow(color: colorScheme == .dark ? Color.darkGray : Color.white, radius: 30, x: 0, y: 0)
                             }
+                            .padding()
                         }
-                        .padding()
                     }
-                    .fullBackground(imageName: "LaunchScreen")
                 }
                 
             } else {
                 DeviceView()
             }
+        }
+        .background {
+            ZStack {
+                VStack {
+                    Circle()
+                        .fill(Color("Blue"))
+                        .scaleEffect(0.7)
+                        .offset(x: 20)
+                        .blur(radius: 60)
+                    Circle()
+                        .fill(Color("Blue"))
+                        .scaleEffect(0.7, anchor: .leading)
+                        .offset(y: -20)
+                        .blur(radius: 56)
+    
+                }
+                Rectangle()
+                    .fill(colorScheme == .dark ? Color.black : Color.white)
+                    .opacity(0.9)
+            }
+            .ignoresSafeArea()
         }
         .onAppear {
             if bleManager.isSwitchedOn {
@@ -87,6 +131,7 @@ struct WelcomeView: View {
                 bleManager.stopScanning()
             }
         }
+        .navigationBarHidden(true)
         
     }
     
@@ -104,17 +149,6 @@ struct NeumorphicButtonModifer: ViewModifier {
             .background(Color.blue)
             .clipShape(Capsule())
             .foregroundColor(.primary)
-    }
-}
-
-public extension View {
-    func fullBackground(imageName: String) -> some View {
-       return background(
-                Image(imageName)
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-       )
     }
 }
 
