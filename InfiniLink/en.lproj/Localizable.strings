@@ -77,7 +77,9 @@
 "filled_battery_graph" = "Filled Battery Graph";
 "graph_data" = "Graph Data";
 "clear_all_hrm_chart_data" = "Clear All HRM Chart Data";
+"clear_all_steps_chart_data" = "Clear All Steps Chart Data";
 "clear_all_battery_chart_data" = "Clear All Battery Chart Data";
+"clear_chart_data_alert_title" = "Are you sure you want to clear all of the selected chart's data?";
 "onboarding_information" = "Onboarding Information";
 "open_onboarding_page" = "Open Onboarding Page";
 "whats_new_page_this_version" = "Open 'What's New' Page";
@@ -92,6 +94,8 @@
 "weather_style" = "Weather Style";
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
+"update_step_count_goal_on_watch_1" = "To change your step goal, navigate to settings on";
+"update_step_count_goal_on_watch_2" = "and change it there.";
 
 // - BLEConnectView
 "available_devices" = "Available Devices";
@@ -266,6 +270,7 @@
 "create_folder" = "Create Folder";
 "delete" = "Delete";
 "unknown" = "Unknown";
+"back" = "Back";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

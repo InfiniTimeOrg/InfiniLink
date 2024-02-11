@@ -19,6 +19,7 @@ struct Settings_Page: View {
     @ObservedObject private var deviceDataForSettings: DeviceData = deviceData
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.openURL) private var openURL
+    @Environment(\.managedObjectContext) var viewContext
     
     @AppStorage("watchNotifications") var watchNotifications: Bool = true
     @AppStorage("autoconnect") var autoconnect: Bool = false
@@ -32,8 +33,12 @@ struct Settings_Page: View {
     @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
     @AppStorage("showClearHRMChartConf") var showClearHRMChartConf: Bool = false
     @AppStorage("showClearBatteryChartConf") var showClearBatteryChartConf: Bool = false
+    @AppStorage("showClearStepsChartConf") var showClearStepsChartConf: Bool = false
+    
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
     private var chartPoints: FetchedResults<ChartDataPoint>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
+    private var stepCounts: FetchedResults<StepCounts>
     
     let themes: [String] = ["System", "Light", "Dark"]
     let weatherModes: [String] = ["System", "Metric", "Imperial"]
@@ -209,6 +214,24 @@ struct Settings_Page: View {
                                 .foregroundColor(.red)
                                 .modifier(RowModifier(style: .capsule))
                         }
+                        .alert(isPresented: $showClearHRMChartConf) {
+                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
+                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
+                            }), secondaryButton: .cancel())
+                        }
+                        Button(action: {
+                            showClearStepsChartConf = true
+                        }) {
+                            Text(NSLocalizedString("clear_all_steps_chart_data", comment: ""))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .foregroundColor(.red)
+                                .modifier(RowModifier(style: .capsule))
+                        }
+                        .alert(isPresented: $showClearStepsChartConf) {
+                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
+                                ChartManager.shared.deleteAllSteps(dataSet: stepCounts)
+                            }), secondaryButton: .cancel())
+                        }
                         Button(action: {
                             showClearBatteryChartConf = true
                         }) {
@@ -216,6 +239,13 @@ struct Settings_Page: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .foregroundColor(.red)
                                 .modifier(RowModifier(style: .capsule))
+                        }
+                        .alert(isPresented: $showClearBatteryChartConf) {
+                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
+                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
+                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.connected.rawValue)
+                                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: bleManager.batteryLevel, chart: ChartsAsInts.battery.rawValue))
+                            }), secondaryButton: .cancel())
                         }
                     }
                     Spacer()

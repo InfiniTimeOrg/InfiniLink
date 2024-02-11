@@ -77,7 +77,9 @@
 "filled_battery_graph" = "배터리 그래프 채우기";
 "graph_data" = "그래프 데이터";
 "clear_all_hrm_chart_data" = "심박수 차트 데이터 삭제";
+"clear_all_steps_chart_data" = "Clear All Steps Chart Data";
 "clear_all_battery_chart_data" = "배터리 차트 데이터 삭제";
+"clear_chart_data_alert_title" = "Are you sure you want to clear all of the selected chart's data?";
 "onboarding_information" = "짧은 정보";
 "open_onboarding_page" = "짧은 정보 페이지 열기";
 "whats_new_page_this_version" = "이 버전의 '새로운 기능' 페이지 열기";
@@ -92,6 +94,8 @@
 "weather_style" = "Weather Style";
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
+"update_step_count_goal_on_watch_1" = "To change your step goal, navigate to settings on";
+"update_step_count_goal_on_watch_2" = "and change it there.";
 
 // - BLEConnectView
 "available_devices" = "사용 가능한 기기";
@@ -265,6 +269,7 @@
 "create_folder" = "Create Folder";
 "delete" = "Delete";
 "unknown" = "Unknown";
+"back" = "Back";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

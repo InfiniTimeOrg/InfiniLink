@@ -96,6 +96,17 @@ class ChartManager: ObservableObject {
 			DebugLogManager.shared.debug(error: "Error deleting all chart data: \(error)", log: .app, date: Date())
 		}
 	}
+    
+    func deleteAllSteps(dataSet: FetchedResults<StepCounts>) {
+        for i in dataSet {
+            viewContext.delete(i)
+        }
+        do {
+            try viewContext.save()
+        } catch {
+            DebugLogManager.shared.debug(error: "Error deleting chart data set: \(error)", log: .app, date: Date())
+        }
+    }
 	
 	func deleteItems(dataSet: [ChartDataPoint]) {
 		for i in dataSet {

@@ -9,12 +9,15 @@
 import SwiftUI
 
 struct StepView: View {
+    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presMode
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     
     @State private var progress: Float = 0
+    @State private var showStepCountAlert: Bool = false
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
     private var existingStepCounts: FetchedResults<StepCounts>
@@ -70,7 +73,7 @@ struct StepView: View {
                         SheetManager.shared.sheetSelection = .stepSettings
                         SheetManager.shared.showSheet = true
                     } label: {
-                        Image(systemName: "gear")
+                        Image(systemName: "plus")
                             .imageScale(.medium)
                             .padding(14)
                             .font(.body.weight(.semibold))
@@ -99,9 +102,16 @@ struct StepView: View {
                                 .imageScale(.large)
                             VStack(spacing: 3) {
                                 Text(getStepHistoryAsString(date: Date()))
-                                Text("\(stepCountGoal)")
-                                    .font(.body)
-                                    .foregroundColor(.gray)
+                                Button {
+                                    showStepCountAlert.toggle()
+                                } label: {
+                                    Text("\(stepCountGoal)")
+                                        .font(.body)
+                                        .foregroundColor(.gray)
+                                }
+                                .alert(isPresented: $showStepCountAlert) {
+                                    Alert(title: Text(NSLocalizedString("update_step_count_goal_on_watch_1", comment: "To change your step goal, navigate to settings on") + " \(deviceInfo.deviceName) " + NSLocalizedString("update_step_count_goal_on_watch_2", comment: "and change it there.")))
+                                }
                             }
                         }
                         .font(.system(size: 30).weight(.bold))

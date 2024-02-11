@@ -51,27 +51,16 @@ struct ContentView: View {
                 case .home:
                     WelcomeView()
                         .alert(isPresented: $bleManager.setTimeError, content: {
-                            Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")), dismissButton: .default(Text(NSLocalizedString("dismiss_button", comment: ""))))})
-                        .alert(isPresented: $showDisconnectConfDialog) {
-                            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
-                        }
-                        .alert(isPresented: $showClearHRMChartConf) {
-                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
-                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.heart.rawValue)
-                            }), secondaryButton: .cancel())
-                        }
-                        .alert(isPresented: $showClearBatteryChartConf) {
-                            Alert(title: Text(NSLocalizedString("clear_chart_data_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("continue", comment: "Continue")), action: {
-                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.battery.rawValue)
-                                ChartManager.shared.deleteAll(dataSet: chartPoints, chart: ChartsAsInts.connected.rawValue)
-                                ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: bleManager.batteryLevel, chart: ChartsAsInts.battery.rawValue))
-                            }), secondaryButton: .cancel())
-                        }
+                            Alert(title: Text(NSLocalizedString("failed_set_time", comment: "")), message: Text(NSLocalizedString("failed_set_time_description", comment: "")))
+                        })
                 case .settings:
                     Settings_Page()
                 }
             }
             tabBar
+        }
+        .alert(isPresented: $showDisconnectConfDialog) {
+            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
         }
         .sheet(isPresented: $sheetManager.showSheet, content: {
             SheetManager.CurrentSheet()

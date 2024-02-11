@@ -77,7 +77,9 @@
 "filled_battery_graph" = "Мониторинг аккумулятора";
 "graph_data" = "Графика данных";
 "clear_all_hrm_chart_data" = "Очистить все данные мониторинга сердечного ритма";
+"clear_all_steps_chart_data" = "Clear All Steps Chart Data";
 "clear_all_battery_chart_data" = "Очистить все данные мониторинга аккумулятора";
+"clear_chart_data_alert_title" = "Are you sure you want to clear all of the selected chart's data?";
 "onboarding_information" = "Onboarding информация";
 "open_onboarding_page" = "Открыть страницу Onboarding";
 "whats_new_page_this_version" = "Открыть страницу 'Что нового' для текущей версии";
@@ -92,6 +94,8 @@
 "weather_style" = "Weather Style";
 "search_for_locations" = "Search for Locations";
 "find_location" = "Use the search box above to find\na location";
+"update_step_count_goal_on_watch_1" = "To change your step goal, navigate to settings on";
+"update_step_count_goal_on_watch_2" = "and change it there.";
 
 // - BLEConnectView
 "available_devices" = "Доступные устройства";
@@ -265,6 +269,7 @@
 "create_folder" = "Create Folder";
 "delete" = "Delete";
 "unknown" = "Unknown";
+"back" = "Back";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

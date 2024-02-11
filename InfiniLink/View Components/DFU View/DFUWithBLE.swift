@@ -223,9 +223,9 @@ struct NewUpdate: View {
                 }
             }
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected, externalResources: .constant(false))
-                .disabled(bleManager.batteryLevel <= 50)
-                .opacity(bleManager.batteryLevel <= 50 ? 0.5 : 1.0)
-            if bleManager.batteryLevel <= 50 {
+                .disabled(bleManager.batteryLevel <= 30)
+                .opacity(bleManager.batteryLevel <= 30 ? 0.5 : 1.0)
+            if bleManager.batteryLevel <= 30 {
                 Text("To update, please make sure \(deviceInfo.deviceName)'s battery level is over 50 percent")
                     .foregroundColor(.gray)
                     .font(.system(size: 15))
