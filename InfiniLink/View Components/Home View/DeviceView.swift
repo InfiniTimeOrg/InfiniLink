@@ -332,6 +332,13 @@ struct CustomScrollView<Content: View>: View {
     
     @State private var scrollPosition: CGFloat = 0
     @State private var showDivider: Bool = false
+    @State private var showWallpaperUploader: Bool = false
+    @State private var wallpaperSelected: Bool = false
+    @State private var wallpaperUploading: Bool = false
+    
+    @State private var wallpaperFilename: String = ""
+    
+    @State private var wallpaperURL: URL?
     
     @State var settings: Settings?
     @State var watchFace: UInt8 = 0
@@ -369,55 +376,108 @@ struct CustomScrollView<Content: View>: View {
 //                                        self.showDivider = scrollPosition - geometry.safeAreaInsets.top <= 64
 //                                    }
 //                                }
-                                VStack {
-                                    switch watchFace {
-                                    case 0:
-                                        if clockType == .H12 {
-                                            Image("digital12H")
-                                                .resizable()
-                                        } else {
-                                            Image("digital24H")
-                                                .resizable()
+                                VStack(spacing: 12) {
+                                    Button {
+                                        showWallpaperUploader = true
+                                    } label: {
+                                        VStack {
+                                            switch watchFace {
+                                            case 0:
+                                                if clockType == .H12 {
+                                                    Image("digital12H")
+                                                        .resizable()
+                                                } else {
+                                                    Image("digital24H")
+                                                        .resizable()
+                                                }
+                                            case 1:
+                                                Image("analog")
+                                                    .resizable()
+                                            case 2:
+                                                if clockType == .H12 {
+                                                    Image("PTS12HStepStyle2")
+                                                        .resizable()
+                                                } else {
+                                                    Image("PTS24HStepStyle1")
+                                                        .resizable()
+                                                }
+                                            case 3:
+                                                if clockType == .H12 {
+                                                    Image("terminal12H")
+                                                        .resizable()
+                                                } else {
+                                                    Image("terminal24H")
+                                                        .resizable()
+                                                }
+                                            case 4:
+                                                EmptyView()
+                                                // Image("infineat12H")
+                                                //      .resizable()
+                                            default:
+                                                Image("digital24H")
+                                                    .resizable()
+                                            }
                                         }
-                                    case 1:
-                                        Image("analog")
-                                            .resizable()
-                                    case 2:
-                                        if clockType == .H12 {
-                                            Image("PTS12HStepStyle2")
-                                                .resizable()
-                                        } else {
-                                            Image("PTS24HStepStyle1")
-                                                .resizable()
+                                        .padding(16)
+                                        .padding(.vertical, 4)
+                                        .background(Color.black)
+                                        .clipShape(RoundedRectangle(cornerRadius: 28))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 28)
+                                                .stroke(.gray, lineWidth: 1)
+                                                .opacity(0.4)
+                                        )
+                                        .frame(maxWidth: 160, maxHeight: 160)
+                                    }
+                                    .fileImporter(isPresented: $showWallpaperUploader, allowedContentTypes: [.data]) {(res) in
+                                        do {
+                                            let fileUrl = try res.get()
+                                            
+                                            guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                                            
+                                            if fileUrl.lastPathComponent.contains(".bin") {
+                                                self.wallpaperSelected = true
+                                                self.wallpaperFilename = fileUrl.lastPathComponent
+                                                self.wallpaperURL = fileUrl.absoluteURL
+                                            } else {
+                                                DebugLogManager.shared.debug(error: "Couldn't get wallpaper image because it wasn't a .bin file.", log: .app)
+                                            }
+                                        } catch {
+                                            DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
                                         }
-                                    case 3:
-                                        if clockType == .H12 {
-                                            Image("terminal12H")
-                                                .resizable()
-                                        } else {
-                                            Image("terminal24H")
-                                                .resizable()
+                                    }
+                                    if wallpaperSelected {
+                                        Button {
+                                            wallpaperUploading = true
+                                            
+                                            DispatchQueue.global(qos: .default).async {
+                                                do {
+                                                    let fileDataPath = wallpaperURL
+                                                    let fileData = try Data(contentsOf: fileDataPath!)
+                                                    let _ = BLEFSHandler.shared.writeFile(data: fileData, path: "gallery/background.bin", offset: 0)
+                                                    
+                                                    self.wallpaperUploading = false
+                                                    self.wallpaperSelected = false
+                                                } catch {
+                                                    print(error.localizedDescription)
+                                                }
+                                            }
+                                        } label: {
+                                            VStack {
+                                                if wallpaperUploading {
+                                                    ProgressView()
+                                                } else {
+                                                    Text("Upload Wallpaper")
+                                                }
+                                            }
+                                            .padding(12)
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .clipShape(Capsule())
                                         }
-                                    case 4:
-                                        EmptyView()
-                                        // Image("infineat12H")
-                                        //      .resizable()
-                                    default:
-                                        Image("digital24H")
-                                            .resizable()
                                     }
                                 }
-                                .padding(16)
-                                .padding(.vertical, 4)
-                                .background(Color.black)
-                                .clipShape(RoundedRectangle(cornerRadius: 28))
-                                .overlay(
-                                        RoundedRectangle(cornerRadius: 28)
-                                            .stroke(.gray, lineWidth: 1)
-                                            .opacity(0.4)
-                                    )
                                 .padding(26)
-                                .frame(maxWidth: 190, maxHeight: 190)
                                 content
                             }
                         }
