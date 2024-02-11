@@ -111,7 +111,7 @@ struct Connect: View {
                     .background(Color.blue)
                     .clipShape(Capsule())
             }
-            .sheet(isPresented: $showHelpView) {
+            .blurredSheet(.init(.regularMaterial), show: $showHelpView) {} content: {
                 ConnectionHelpView(isDisplayed: $showHelpView)
             }
             .padding(.bottom)

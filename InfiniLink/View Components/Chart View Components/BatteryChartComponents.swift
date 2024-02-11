@@ -40,7 +40,7 @@ struct BatteryContentView: View {
     var body: some View {
         let clockFormat = DateFormatter.dateFormat (fromTemplate: "j",options:0, locale: Locale.current) == "HH" ? 1 : 0
         
-        let chartStyle = BarChartStyle(baseline: .minimumWithMaximum(of: 100), topLine: .maximum(of: 100), globalAnimation: .linear(duration: 0))
+        let chartStyle = BarChartStyle(xAxisGridStyle: GridStyle(numberOfLines: 9, dash: [5.0]), yAxisGridStyle: GridStyle(numberOfLines: 5, dash: [1000.0]), baseline: .minimumWithMaximum(of: 100), topLine: .maximum(of: 100), globalAnimation: .linear(duration: 0))
         let data = BarChartData(dataSets: BarDataSet(dataPoints: ChartManager.shared.convertBat(results: chartPoints, connected: connectedChartPoints)), barStyle: setBarStyle(), chartStyle: chartStyle)
 
         
@@ -53,11 +53,10 @@ struct BatteryContentView: View {
                     GeometryReader { (geometry) in
                         VStack {
                             ZStack {
-                                verticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 100)
-                                HorizontalLines(numbLines: 5, sizes: geometry.size, height: 100)
-
                                 VStack {
                                     setGraphType(data: data)
+                                        .xAxisGrid(chartData: data)
+                                        .yAxisGrid(chartData: data)
                                         .animation(nil)
                                         .id(data.id)
                                     Spacer(minLength: 10)
@@ -118,6 +117,7 @@ struct BatteryContentView: View {
         return(yValue * (1 - interpolation) + xValue * interpolation)
     }
 }
+
 #Preview {
     BatteryView()
 }

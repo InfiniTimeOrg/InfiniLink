@@ -21,6 +21,7 @@ struct FileSystemView: View {
     
     @State var loadingFs = false
     @State var showUploadSheet = false
+    @State var showSettingsSheet = false
     @State var fileSelected = false
     @State var showNewFolderView = false
     @State var fileUploading = false
@@ -30,6 +31,8 @@ struct FileSystemView: View {
     @State var directory = "/"
     
     @State var commandHistory: [String] = []
+    
+    @State var settings: Settings?
     
     func clearList() {
         commandHistory = []
@@ -203,10 +206,12 @@ struct FileSystemView: View {
                         ForEach(commandHistory, id: \.self) { listItem in
                             let isFile = listItem.contains(".")
                             
-                            if listItem != "." && listItem != ".." && listItem != "settings.dat" {
+                            if listItem != "." && listItem != ".." {
                                 Button {
                                     if isFile {
-                                        
+                                        if listItem == "settings.dat" {
+                                            self.showSettingsSheet = true
+                                        }
                                     } else {
                                         loadingFs = true
                                         cdAndLs(dir: listItem)
@@ -228,6 +233,125 @@ struct FileSystemView: View {
                                         deleteFile(path: directory + "/" + listItem)
                                     } label: {
                                         Label(NSLocalizedString("delete", comment: "Delete"), systemImage: "trash")
+                                    }
+                                }
+                                .sheet(isPresented: $showSettingsSheet) {
+                                    VStack(spacing: 0) {
+                                        HStack(spacing: 15) {
+                                            Text(NSLocalizedString("watch_settings", comment: ""))
+                                                .foregroundColor(.primary)
+                                                .font(.title.weight(.bold))
+                                            Spacer()
+                                            Button {
+                                                showSettingsSheet = false
+                                            } label: {
+                                                Image(systemName: "xmark")
+                                                    .imageScale(.medium)
+                                                    .padding(14)
+                                                    .font(.body.weight(.semibold))
+                                                    .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                                                    .background(Color.gray.opacity(0.15))
+                                                    .clipShape(Circle())
+                                            }
+                                        }
+                                        .padding()
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        Divider()
+                                        ScrollView {
+                                            if let settings = settings {
+                                                VStack {
+                                                    HStack {
+                                                        Text(NSLocalizedString("display_timeout", comment: ""))
+                                                        Spacer()
+                                                        Text("\(settings.screenTimeOut / 1000) Seconds")
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    .modifier(RowModifier(style: .capsule))
+                                                    HStack {
+                                                        Text(NSLocalizedString("display_wakeup", comment: ""))
+                                                        Spacer()
+                                                        Group {
+                                                            // TODO: Add handling for multiple cases
+                                                            switch settings.wakeUpMode {
+                                                            case .SingleTap:
+                                                                Text("Single Tap")
+                                                            case .DoubleTap:
+                                                                Text("Double Tap")
+                                                            case .RaiseWrist:
+                                                                Text("Raise Wrist")
+                                                            case .Shake:
+                                                                Text("Shake Wake")
+                                                            case .LowerWrist:
+                                                                Text("Lower Wrist")
+                                                            }
+                                                        }
+                                                        .foregroundColor(.gray)
+                                                    }
+                                                    .modifier(RowModifier(style: .capsule))
+                                                    HStack {
+                                                        Text(NSLocalizedString("time_format", comment: ""))
+                                                        Spacer()
+                                                        Group {
+                                                            switch settings.clockType {
+                                                            case .H12:
+                                                                Text("12 Hour")
+                                                            case .H24:
+                                                                Text("24 Hour")
+                                                            }
+                                                        }
+                                                        .foregroundColor(.gray)
+                                                    }
+                                                    .modifier(RowModifier(style: .capsule))
+                                                    HStack {
+                                                        Text(NSLocalizedString("steps_goal", comment: ""))
+                                                        Spacer()
+                                                        Text("\(settings.stepsGoal)")
+                                                            .foregroundColor(.gray)
+                                                    }
+                                                    .modifier(RowModifier(style: .capsule))
+                                                    HStack {
+                                                        Text(NSLocalizedString("weather", comment: ""))
+                                                        Spacer()
+                                                        Group {
+                                                            switch settings.weatherFormat {
+                                                            case .Metric:
+                                                                Text("Metric")
+                                                            case .Imperial:
+                                                                Text("Imperial")
+                                                            }
+                                                        }
+                                                        .foregroundColor(.gray)
+                                                    }
+                                                    .modifier(RowModifier(style: .capsule))
+                                                    HStack {
+                                                        Text(NSLocalizedString("hourly_chimes", comment: ""))
+                                                        Spacer()
+                                                        Group {
+                                                            switch settings.chimesOption {
+                                                            case .None:
+                                                                Text("None")
+                                                            case .Hours:
+                                                                Text("Hour")
+                                                            case .HalfHours:
+                                                                Text("Half Hour")
+                                                            }
+                                                        }
+                                                        .foregroundColor(.gray)
+                                                    }
+                                                    .modifier(RowModifier(style: .capsule))
+                                                }
+                                                .padding()
+                                            } else {
+                                                ProgressView()
+                                                    .frame(maxWidth: .infinity)
+                                                    .padding()
+                                            }
+                                        }
+                                    }
+                                    .onAppear {
+                                        bleFSHandler.readSettings { settings in
+                                            self.settings = settings
+                                        }
                                     }
                                 }
                             }

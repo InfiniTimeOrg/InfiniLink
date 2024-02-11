@@ -236,17 +236,6 @@ struct DeviceView: View {
                         }
                     }
                     .modifier(RowModifier(style: .capsule))
-                    NavigationLink(destination: WatchSettingsView()) {
-                        HStack {
-                            Text(NSLocalizedString("watch_settings", comment: ""))
-                            Spacer()
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.gray)
-                        }
-                        .modifier(RowModifier(style: .capsule))
-                    }
-                    .opacity(bleManager.isConnectedToPinetime ? 1.0 : 0.5)
-                    .disabled(!bleManager.isConnectedToPinetime)
                 }
                 .onReceive(timer, perform: { _ in
                     if uptimeManager.connectTime != nil {
@@ -361,63 +350,16 @@ struct CustomScrollView<Content: View>: View {
                         .padding(18)
                         .font(.title.weight(.bold))
                         .frame(maxWidth: .infinity, alignment: .center)
-                        //                        if showDivider {
                         Divider()
-                        //                        }
                         ScrollView(showsIndicators: false) {
-                            VStack(spacing: 0) {
-                                //                                GeometryReader { geo in
-                                //                                    Color.clear
-                                //                                        .frame(width: 0, height: 0)
-                                //                                        .preference(key: SizePreferenceKey.self, value: geo.frame(in: .global).minY)
-                                //                                }
-                                //                                .onPreferenceChange(SizePreferenceKey.self) { preferences in
-                                //                                    self.scrollPosition = preferences
-                                //
-                                //                                    withAnimation(.easeInOut(duration: 0.15)) {
-                                //                                        self.showDivider = scrollPosition - geometry.safeAreaInsets.top <= 64
-                                //                                    }
-                                //                                }
+                            VStack(spacing: -16) {
                                 VStack {
-                                    switch settings?.watchFace {
-                                    case 0:
-                                        if clockType == .H12 {
-                                            Image("digital12H")
-                                                .resizable()
-                                        } else {
-                                            Image("digital24H")
-                                                .resizable()
-                                        }
-                                    case 1:
-                                        Image("analog")
-                                            .resizable()
-                                    case 2:
-                                        if clockType == .H12 {
-                                            Image("PTS12HStepStyle2")
-                                                .resizable()
-                                        } else {
-                                            Image("PTS24HStepStyle1")
-                                                .resizable()
-                                        }
-                                    case 3:
-                                        if clockType == .H12 {
-                                            Image("terminal12H")
-                                                .resizable()
-                                        } else {
-                                            Image("terminal24H")
-                                                .resizable()
-                                        }
-                                    case 4:
-                                        EmptyView()
-                                        // Image("infineat12H")
-                                        //      .resizable()
-                                    default:
-                                        Image("digital24H")
-                                            .resizable()
-                                    }
+                                    WatchFace()
+                                        .padding(26)
+                                        .frame(width: geometry.size.width / 1.6, height: geometry.size.width / 1.6, alignment: .center)
+                                        .position(x: geometry.size.width / 2, y: ((self.scrollPosition - geometry.safeAreaInsets.bottom) * 0.1) + (geometry.size.height - geometry.safeAreaInsets.bottom) * 0.1925)
+                                        .clipped(antialiased: true)
                                 }
-                                .modifier(WatchFaceModifier())
-                                .padding(26)
                                 content
                             }
                         }

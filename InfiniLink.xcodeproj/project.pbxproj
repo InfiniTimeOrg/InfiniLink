@@ -25,7 +25,6 @@
 		264AE04627026BD6001504A7 /* UptimeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264AE04527026BD6001504A7 /* UptimeManager.swift */; };
 		264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */; };
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
-		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
 		264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4A26BC51CF0050A223 /* Persistence.swift */; };
 		264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */; };
@@ -61,9 +60,26 @@
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
-		E079ED012B78903B0038C0F2 /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */; };
+		E06660652B793EB800E0CE16 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E06660642B793EB800E0CE16 /* Assets.xcassets */; };
+		E06660672B793FB600E0CE16 /* WatchFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06660662B793FB600E0CE16 /* WatchFace.swift */; };
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
 		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
+		E0B28B892B7943EC005879C0 /* JetBrainsMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B7F2B7943EC005879C0 /* JetBrainsMono-Bold.ttf */; };
+		E0B28B8A2B7943EC005879C0 /* navigation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B802B7943EC005879C0 /* navigation.ttf */; };
+		E0B28B8B2B7943EC005879C0 /* JetBrainsMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B812B7943EC005879C0 /* JetBrainsMono-Regular.ttf */; };
+		E0B28B8C2B7943EC005879C0 /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B822B7943EC005879C0 /* BebasNeue-Regular.ttf */; };
+		E0B28B8D2B7943EC005879C0 /* JetBrainsMono-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B832B7943EC005879C0 /* JetBrainsMono-Light.ttf */; };
+		E0B28B8E2B7943EC005879C0 /* JetBrainsMono-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B842B7943EC005879C0 /* JetBrainsMono-ExtraBold.ttf */; };
+		E0B28B8F2B7943EC005879C0 /* MaterialIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B852B7943EC005879C0 /* MaterialIcons-Regular.ttf */; };
+		E0B28B902B7943EC005879C0 /* open_sans_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B862B7943EC005879C0 /* open_sans_light.ttf */; };
+		E0B28B912B7943EC005879C0 /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B872B7943EC005879C0 /* repetitionscrolling.ttf */; };
+		E0B28B922B7943EC005879C0 /* Teko-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B882B7943EC005879C0 /* Teko-Light.ttf */; };
+		E0B28B9B2B7943F4005879C0 /* navigation1.png in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B952B7943F4005879C0 /* navigation1.png */; };
+		E0B28B9C2B7943F4005879C0 /* navigation0.png in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B962B7943F4005879C0 /* navigation0.png */; };
+		E0B28B9D2B7943F4005879C0 /* battery.png in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B972B7943F4005879C0 /* battery.png */; };
+		E0B28B9E2B7943F4005879C0 /* pine_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B982B7943F4005879C0 /* pine_logo.png */; };
+		E0B28B9F2B7943F4005879C0 /* pine_logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B992B7943F4005879C0 /* pine_logo.svg */; };
+		E0B28BA02B7943F4005879C0 /* infinitime-nb.png in Resources */ = {isa = PBXBuildFile; fileRef = E0B28B9A2B7943F4005879C0 /* infinitime-nb.png */; };
 		E0BFBF772B3662A600055A2B /* ConnectionHelpView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */; };
 		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
 		E0F599412B76CABF00BE96A3 /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F599402B76CABF00BE96A3 /* FileSystemView.swift */; };
@@ -124,7 +140,6 @@
 		264BFE3E26BC51CE0050A223 /* InfiniLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkApp.swift; sourceTree = "<group>"; };
 		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		264BFE4526BC51CF0050A223 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		264BFE4A26BC51CF0050A223 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -166,10 +181,27 @@
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
+		E06660642B793EB800E0CE16 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		E06660662B793FB600E0CE16 /* WatchFace.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchFace.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
-		E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettingsView.swift; sourceTree = "<group>"; };
 		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSetLocationView.swift; sourceTree = "<group>"; };
+		E0B28B7F2B7943EC005879C0 /* JetBrainsMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Bold.ttf"; sourceTree = "<group>"; };
+		E0B28B802B7943EC005879C0 /* navigation.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = navigation.ttf; sourceTree = "<group>"; };
+		E0B28B812B7943EC005879C0 /* JetBrainsMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Regular.ttf"; sourceTree = "<group>"; };
+		E0B28B822B7943EC005879C0 /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
+		E0B28B832B7943EC005879C0 /* JetBrainsMono-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Light.ttf"; sourceTree = "<group>"; };
+		E0B28B842B7943EC005879C0 /* JetBrainsMono-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-ExtraBold.ttf"; sourceTree = "<group>"; };
+		E0B28B852B7943EC005879C0 /* MaterialIcons-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MaterialIcons-Regular.ttf"; sourceTree = "<group>"; };
+		E0B28B862B7943EC005879C0 /* open_sans_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = open_sans_light.ttf; sourceTree = "<group>"; };
+		E0B28B872B7943EC005879C0 /* repetitionscrolling.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = repetitionscrolling.ttf; sourceTree = "<group>"; };
+		E0B28B882B7943EC005879C0 /* Teko-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Teko-Light.ttf"; sourceTree = "<group>"; };
+		E0B28B952B7943F4005879C0 /* navigation1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation1.png; sourceTree = "<group>"; };
+		E0B28B962B7943F4005879C0 /* navigation0.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation0.png; sourceTree = "<group>"; };
+		E0B28B972B7943F4005879C0 /* battery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = battery.png; sourceTree = "<group>"; };
+		E0B28B982B7943F4005879C0 /* pine_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pine_logo.png; sourceTree = "<group>"; };
+		E0B28B992B7943F4005879C0 /* pine_logo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pine_logo.svg; sourceTree = "<group>"; };
+		E0B28B9A2B7943F4005879C0 /* infinitime-nb.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "infinitime-nb.png"; sourceTree = "<group>"; };
 		E0BFBF762B3662A600055A2B /* ConnectionHelpView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionHelpView.swift; sourceTree = "<group>"; };
 		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0F599402B76CABF00BE96A3 /* FileSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemView.swift; sourceTree = "<group>"; };
@@ -292,6 +324,8 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
+				E0B28B7E2B7943EC005879C0 /* Fonts */,
+				E0B28B932B7943F4005879C0 /* Resources */,
 				264DB80926C62EAC00E812C3 /* View Components */,
 				26D7816826C9F02A00BBF555 /* Settings */,
 				26A6316126C4C6BB005AE404 /* BLE */,
@@ -302,7 +336,7 @@
 				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
-				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
+				E06660642B793EB800E0CE16 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
 				2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */,
 				264BFE4726BC51CF0050A223 /* Preview Content */,
@@ -389,7 +423,7 @@
 				E515FB14284C56070040B582 /* DeviceView.swift */,
 				E5EEB1D32803438200FB0C11 /* RenameView.swift */,
 				E0F599402B76CABF00BE96A3 /* FileSystemView.swift */,
-				E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */,
+				E06660662B793FB600E0CE16 /* WatchFace.swift */,
 			);
 			path = "Home View";
 			sourceTree = "<group>";
@@ -484,6 +518,44 @@
 				E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		E0B28B7E2B7943EC005879C0 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E0B28B7F2B7943EC005879C0 /* JetBrainsMono-Bold.ttf */,
+				E0B28B802B7943EC005879C0 /* navigation.ttf */,
+				E0B28B812B7943EC005879C0 /* JetBrainsMono-Regular.ttf */,
+				E0B28B822B7943EC005879C0 /* BebasNeue-Regular.ttf */,
+				E0B28B832B7943EC005879C0 /* JetBrainsMono-Light.ttf */,
+				E0B28B842B7943EC005879C0 /* JetBrainsMono-ExtraBold.ttf */,
+				E0B28B852B7943EC005879C0 /* MaterialIcons-Regular.ttf */,
+				E0B28B862B7943EC005879C0 /* open_sans_light.ttf */,
+				E0B28B872B7943EC005879C0 /* repetitionscrolling.ttf */,
+				E0B28B882B7943EC005879C0 /* Teko-Light.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		E0B28B932B7943F4005879C0 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				E0B28B942B7943F4005879C0 /* images */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		E0B28B942B7943F4005879C0 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				E0B28B952B7943F4005879C0 /* navigation1.png */,
+				E0B28B962B7943F4005879C0 /* navigation0.png */,
+				E0B28B972B7943F4005879C0 /* battery.png */,
+				E0B28B982B7943F4005879C0 /* pine_logo.png */,
+				E0B28B992B7943F4005879C0 /* pine_logo.svg */,
+				E0B28B9A2B7943F4005879C0 /* infinitime-nb.png */,
+			);
+			path = images;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -606,10 +678,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0B28B922B7943EC005879C0 /* Teko-Light.ttf in Resources */,
+				E0B28B9B2B7943F4005879C0 /* navigation1.png in Resources */,
+				E0B28B9C2B7943F4005879C0 /* navigation0.png in Resources */,
+				E0B28B902B7943EC005879C0 /* open_sans_light.ttf in Resources */,
+				E0B28B8E2B7943EC005879C0 /* JetBrainsMono-ExtraBold.ttf in Resources */,
+				E0B28BA02B7943F4005879C0 /* infinitime-nb.png in Resources */,
+				E0B28B912B7943EC005879C0 /* repetitionscrolling.ttf in Resources */,
+				E0B28B8D2B7943EC005879C0 /* JetBrainsMono-Light.ttf in Resources */,
+				E0B28B9D2B7943F4005879C0 /* battery.png in Resources */,
 				264BFE7826BCAAC00050A223 /* README.md in Resources */,
+				E0B28B892B7943EC005879C0 /* JetBrainsMono-Bold.ttf in Resources */,
+				E0B28B9E2B7943F4005879C0 /* pine_logo.png in Resources */,
+				E0B28B8C2B7943EC005879C0 /* BebasNeue-Regular.ttf in Resources */,
+				E0B28B8B2B7943EC005879C0 /* JetBrainsMono-Regular.ttf in Resources */,
 				F9A88B642765357600B2B94C /* Localizable.strings in Resources */,
+				E0B28B8F2B7943EC005879C0 /* MaterialIcons-Regular.ttf in Resources */,
+				E06660652B793EB800E0CE16 /* Assets.xcassets in Resources */,
+				E0B28B8A2B7943EC005879C0 /* navigation.ttf in Resources */,
+				E0B28B9F2B7943F4005879C0 /* pine_logo.svg in Resources */,
 				264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */,
-				264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -666,6 +754,7 @@
 				26A6314D26BEFD2C005AE404 /* MusicController.swift in Sources */,
 				E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
+				E06660672B793FB600E0CE16 /* WatchFace.swift in Sources */,
 				E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */,
 				E515FB13284C55540040B582 /* ChartOverview.swift in Sources */,
 				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
@@ -691,7 +780,6 @@
 				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */,
 				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
-				E079ED012B78903B0038C0F2 /* WatchSettingsView.swift in Sources */,
 				2601AF6A2722110700D999EF /* StepProgressGauge.swift in Sources */,
 				26A6316326C4C6D6005AE404 /* BLEConnectView.swift in Sources */,
 				E5EEB1DA28034EA500FB0C11 /* BatteryView.swift in Sources */,
@@ -889,7 +977,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -918,7 +1006,7 @@
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
