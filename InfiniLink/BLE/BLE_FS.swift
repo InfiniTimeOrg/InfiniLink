@@ -593,13 +593,13 @@ enum ChimesOption: UInt8 {
     case HalfHours = 2
 }
 
-//enum WakeUpMode: UInt8 {
-//    case SingleTap = 0
-//    case DoubleTap = 1
-//    case RaiseWrist = 2
-//    case Shake = 3
-//    case LowerWrist = 4
-//}
+enum WakeUpMode: UInt8 {
+    case SingleTap = 0
+    case DoubleTap = 1
+    case RaiseWrist = 2
+    case Shake = 3
+    case LowerWrist = 4
+}
 
 enum Colors: UInt8 {
     case White = 0
@@ -657,7 +657,7 @@ struct Settings {
     let chimesOption: ChimesOption
     let pineTimeStyle: PineTimeStyle
     let watchFaceInfineat: WatchFaceInfineat
-    //    let wakeUpMode: WakeUpMode
+    let wakeUpMode: WakeUpMode
     let shakeWakeThreshold: UInt16
     let brightLevel: UInt8
 }

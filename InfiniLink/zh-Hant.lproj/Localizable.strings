@@ -270,6 +270,10 @@
 "delete" = "Delete";
 "unknown" = "Unknown";
 "back" = "Back";
+"watch_settings" = "Watch Settings";
+"display_timeout" = "Display Timeout";
+"time_format" = "Time Format";
+"hourly_chimes" = "Hourly Chimes";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

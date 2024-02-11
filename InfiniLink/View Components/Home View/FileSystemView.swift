@@ -203,16 +203,10 @@ struct FileSystemView: View {
                         ForEach(commandHistory, id: \.self) { listItem in
                             let isFile = listItem.contains(".")
                             
-                            if listItem != "." && listItem != ".." {
+                            if listItem != "." && listItem != ".." && listItem != "settings.dat" {
                                 Button {
                                     if isFile {
-                                        if listItem == "settings.dat" {
-                                            bleFSHandler.readSettings { settings in
-                                                print(settings)
-                                            }
-                                        } else {
-                                            
-                                        }
+                                        
                                     } else {
                                         loadingFs = true
                                         cdAndLs(dir: listItem)

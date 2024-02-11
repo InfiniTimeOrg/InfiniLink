@@ -13,6 +13,11 @@ struct WatchSettingsView: View {
     
     @State var settings: Settings? = nil
     
+    @State var hasMadeChanges = false
+    
+    @State var watchfaces: [String] = ["digital24H", "analog", "PTS24HStepStyle1", "terminal24H"]
+    @State var selection = 0
+    
     var body: some View {
         VStack(spacing: 0) {
             HStack(spacing: 15) {
@@ -31,21 +36,19 @@ struct WatchSettingsView: View {
                     .foregroundColor(.primary)
                     .font(.title.weight(.bold))
                 Spacer()
-                /*
-                 Button {
-                 // Save updated settings to watch?
-                 } label: {
-                 Text(NSLocalizedString("save", comment: ""))
-                 .padding(14)
-                 .font(.body.weight(.semibold))
-                 .foregroundColor(Color.white)
-                 .background(Color.blue)
-                 .clipShape(Capsule())
-                 .foregroundColor(.primary)
-                 }
-                 .disabled(changedName == deviceInfo.deviceName)
-                 .opacity(changedName == deviceInfo.deviceName ? 0.5 : 1.0)
-                 */
+                Button {
+                    // Save updated settings to watch?
+                } label: {
+                    Text(NSLocalizedString("save", comment: ""))
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(Color.white)
+                        .background(Color.blue)
+                        .clipShape(Capsule())
+                        .foregroundColor(.primary)
+                }
+                .disabled(!hasMadeChanges)
+                .opacity(!hasMadeChanges ? 0.5 : 1.0)
             }
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
@@ -53,55 +56,109 @@ struct WatchSettingsView: View {
             if let settings = settings {
                 ScrollView {
                     VStack {
-                        VStack {
-                            switch settings.watchFace {
-                            case 0:
-                                if settings.clockType == .H12 {
-                                    Image("digital12H")
+                        HStack {
+                            TabView(selection: $selection) {
+                                ForEach(watchfaces.indices, id: \.self) { index in
+                                    Image(watchfaces[index])
                                         .resizable()
-                                } else {
-                                    Image("digital24H")
-                                        .resizable()
+                                        .frame(width: 130, height: 130)
+                                        .modifier(WatchFaceModifier())
+                                        .tag(index)
                                 }
-                            case 1:
-                                Image("analog")
-                                    .resizable()
-                            case 2:
-                                if settings.clockType == .H12 {
-                                    Image("PTS12HStepStyle2")
-                                        .resizable()
+                            }
+                            .tabViewStyle(PageTabViewStyle(indexDisplayMode: .always))
+                            .frame(minHeight: 265)
+                            .padding(-16)
+                            .onChange(of: selection) { newWatchface in
+                                if newWatchface != settings.watchFace {
+                                    hasMadeChanges = true
                                 } else {
-                                    Image("PTS24HStepStyle1")
-                                        .resizable()
+                                    hasMadeChanges = false
                                 }
-                            case 3:
-                                if settings.clockType == .H12 {
-                                    Image("terminal12H")
-                                        .resizable()
-                                } else {
-                                    Image("terminal24H")
-                                        .resizable()
-                                }
-                            case 4:
-                                EmptyView()
-                                // Image("infineat12H")
-                                //      .resizable()
-                            default:
-                                Image("digital24H")
-                                    .resizable()
                             }
                         }
-                        .padding(16)
-                        .padding(.vertical, 4)
-                        .background(Color.black)
-                        .clipShape(RoundedRectangle(cornerRadius: 28))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 28)
-                                .stroke(.gray, lineWidth: 1)
-                                .opacity(0.4)
-                        )
-                        .frame(maxWidth: 155, maxHeight: 155)
-                        .padding(26)
+                        VStack {
+                            HStack {
+                                Text(NSLocalizedString("display_timeout", comment: ""))
+                                Spacer()
+                                Text("\(settings.screenTimeOut / 1000) Seconds")
+                                    .foregroundColor(.gray)
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                            HStack {
+                                Text(NSLocalizedString("display_wakeup", comment: ""))
+                                Spacer()
+                                Group {
+                                    // TODO: Add handling for multiple cases
+                                    switch settings.wakeUpMode {
+                                    case .SingleTap:
+                                        Text("Single Tap")
+                                    case .DoubleTap:
+                                        Text("Double Tap")
+                                    case .RaiseWrist:
+                                        Text("Raise Wrist")
+                                    case .Shake:
+                                        Text("Shake Wake")
+                                    case .LowerWrist:
+                                        Text("Lower Wrist")
+                                    }
+                                }
+                                .foregroundColor(.gray)
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                            HStack {
+                                Text(NSLocalizedString("time_format", comment: ""))
+                                Spacer()
+                                Group {
+                                    switch settings.clockType {
+                                    case .H12:
+                                        Text("12 Hour")
+                                    case .H24:
+                                        Text("24 Hour")
+                                    }
+                                }
+                                .foregroundColor(.gray)
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                            HStack {
+                                Text(NSLocalizedString("steps_goal", comment: ""))
+                                Spacer()
+                                Text("\(settings.stepsGoal)")
+                                    .foregroundColor(.gray)
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                            HStack {
+                                Text(NSLocalizedString("weather", comment: ""))
+                                Spacer()
+                                Group {
+                                    switch settings.weatherFormat {
+                                    case .Metric:
+                                        Text("Metric")
+                                    case .Imperial:
+                                        Text("Imperial")
+                                    }
+                                }
+                                .foregroundColor(.gray)
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                            HStack {
+                                Text(NSLocalizedString("hourly_chimes", comment: ""))
+                                Spacer()
+                                Group {
+                                    switch settings.chimesOption {
+                                    case .None:
+                                        Text("None")
+                                    case .Hours:
+                                        Text("Hour")
+                                    case .HalfHours:
+                                        Text("Half Hour")
+                                    }
+                                }
+                                .foregroundColor(.gray)
+                            }
+                            .modifier(RowModifier(style: .capsule))
+                        }
+                        .padding()
                     }
                 }
             } else {
@@ -113,8 +170,13 @@ struct WatchSettingsView: View {
             }
         }
         .onAppear {
-            BLEFSHandler.shared.readSettings { settings in
-                self.settings = settings
+            if let settings = settings {
+                self.selection = Int(settings.watchFace)
+            } else {
+                BLEFSHandler.shared.readSettings { settings in
+                    self.settings = settings
+                    self.selection = Int(settings.watchFace)
+                }
             }
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -122,6 +184,22 @@ struct WatchSettingsView: View {
     }
 }
 
+struct WatchFaceModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(16)
+            .padding(.vertical, 4)
+            .background(Color.black)
+            .clipShape(RoundedRectangle(cornerRadius: 28))
+            .overlay(
+                RoundedRectangle(cornerRadius: 28)
+                    .stroke(.gray, lineWidth: 1)
+                    .opacity(0.4)
+            )
+            .frame(maxWidth: 155, maxHeight: 155)
+    }
+}
+
 #Preview {
-    WatchSettingsView(settings: Settings(version: 7, stepsGoal: 10000, screenTimeOut: 1500, clockType: .H12, weatherFormat: .Imperial, notificationStatus: .On, watchFace: 2, chimesOption: .None, pineTimeStyle: .init(), watchFaceInfineat: .init(), shakeWakeThreshold: 1500, brightLevel: 1))
+    WatchSettingsView(settings: Settings(version: 7, stepsGoal: 10000, screenTimeOut: 1500, clockType: .H12, weatherFormat: .Imperial, notificationStatus: .On, watchFace: 2, chimesOption: .None, pineTimeStyle: .init(), watchFaceInfineat: .init(), wakeUpMode: .SingleTap, shakeWakeThreshold: 1500, brightLevel: 1))
 }
