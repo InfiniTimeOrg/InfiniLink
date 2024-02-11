@@ -38,13 +38,12 @@ struct WelcomeView: View {
                     VStack() {
                         VStack(spacing: 5) {
                             Text("Welcome to \nInfiniLink")
-                                .font(.system(size: 38).weight(.bold))
-                                .padding(32)
-                                //.padding(.top)
+                                .font(.system(size: 33).weight(.bold))
+                                .padding(9)
                                 .multilineTextAlignment(.center)
                                 .frame(maxWidth: .infinity, alignment: .center)
                             Spacer()
-                            if bleManager.isSwitchedOn {
+                            VStack(spacing: 12) {
                                 Button {
                                     SheetManager.shared.sheetSelection = .connect
                                     SheetManager.shared.showSheet = true
@@ -53,20 +52,30 @@ struct WelcomeView: View {
                                         .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
                                 }
                                 .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(.bottom)
+                                .padding(.bottom, 5)
                                 .padding(.horizontal)
                                 .onAppear {
                                     if bleManager.isSwitchedOn {
                                         bleManager.startScanning()
                                     }
                                 }
-                            } else {
-                                Text("Bluetooth is Disabled")
-                                    .frame(maxWidth: .infinity, alignment: .center)
-                                    .padding(.bottom)
-                                    .padding(.bottom)
-                                    .padding(.horizontal)
+                                VStack(spacing: 7) {
+                                    Text("Don't have a Watch?")
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                        .padding(.horizontal)
+                                        .foregroundColor(.gray)
+                                    Link(destination: URL(string: "https://wiki.pine64.org/wiki/PineTime")!) {
+                                        Text("Learn more about the PineTime")
+                                            .frame(maxWidth: .infinity, alignment: .center)
+                                            .foregroundColor(.blue)
+                                            .padding(.bottom, 5)
+                                            .padding(.horizontal)
+                                            .font(.body.weight(.semibold))
+                                    }
+                                }
                             }
+                            .clipped()
+                            .shadow(color: colorScheme == .dark ? Color.darkGray : Color.white, radius: 30, x: 0, y: 0)
                         }
                         .padding()
                     }
@@ -114,6 +123,7 @@ public extension View {
                     .resizable()
                     .scaledToFill()
                     .edgesIgnoringSafeArea(.all)
+                    .offset(y: -23)
        )
     }
 }
