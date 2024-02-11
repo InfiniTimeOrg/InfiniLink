@@ -633,7 +633,7 @@ enum PTSWeather: UInt8 {
     case Off = 1
 }
 
-struct PineTimeStyleSettings {
+struct PineTimeStyleData {
     let ColorTime : Colors = .Teal
     let ColorBar : Colors = .Teal
     let ColorBG : Colors = .Black
@@ -655,7 +655,7 @@ struct Settings {
     let notificationStatus: Notification
     let watchFace: UInt8
     let chimesOption: ChimesOption
-    let pineTimeStyle: PineTimeStyleSettings
+    let pineTimeStyle: PineTimeStyleData
     let watchFaceInfineat: WatchFaceInfineat
     let wakeUpMode: WakeUpMode
     let shakeWakeThreshold: UInt16

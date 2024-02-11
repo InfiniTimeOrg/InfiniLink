@@ -10,11 +10,12 @@ import SwiftUI
 import Combine
 
 
-struct WatchFace: View {
+struct WatchFaceView: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @Environment(\.colorScheme) var colorScheme
     let date = Date()
-    
-    var Watchface = 0
+
+    @Binding var watchface : Int
     
     var body: some View {
         GeometryReader { geometry in
@@ -26,7 +27,12 @@ struct WatchFace: View {
                     .brightness(colorScheme == .dark ? -0.02 : 0.035)
                 ZStack() {
                     ZStack {
-                        PineTimeStyle(geometry: .constant(geometry))
+                        switch watchface == -1 ? bleManagerVal.watchFace : watchface {
+                        case 2:
+                            PineTimeStyleWF(geometry: .constant(geometry))
+                        default:
+                            UnknownWF(geometry: .constant(geometry))
+                        }
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
                     .scaleEffect(0.53, anchor: .center)
@@ -46,10 +52,9 @@ struct WatchFace: View {
     }
 }
 
-struct PineTimeStyle: View {
+struct PineTimeStyleWF: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry : GeometryProxy
-    let date = Date()
     
     var hour24 : Bool = false
     
@@ -60,12 +65,12 @@ struct PineTimeStyle: View {
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
-            if Calendar.current.component(.hour, from: date) > 12 && !hour24{
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: date) - 12))\n\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
+            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24{
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12))\n\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
                     .foregroundColor(.white)
                     .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
             } else {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: date)))\n\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date())))\n\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
                     .foregroundColor(.white)
                     .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
             }
@@ -79,11 +84,23 @@ struct PineTimeStyle: View {
     }
 }
 
+struct UnknownWF: View {
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var geometry : GeometryProxy
+    
+    var body: some View {
+        ZStack {
+            CustomTextView(text: "Unkown WatchFace", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.085), lineSpacing: 0)
+                .foregroundColor(.white)
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        }
+    }
+}
+
 struct CustomTextView: View {
     var text: String
     var font: Font
     var lineSpacing: CGFloat
-
     var body: some View {
         VStack(alignment: .leading, spacing: lineSpacing) {
             ForEach(text.components(separatedBy: "\n"), id: \.self) { line in

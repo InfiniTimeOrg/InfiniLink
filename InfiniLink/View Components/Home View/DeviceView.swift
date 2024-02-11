@@ -327,6 +327,7 @@ struct CustomScrollView<Content: View>: View {
     
     @Environment(\.colorScheme) var colorScheme
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     
     @State private var scrollPosition: CGFloat = 0
@@ -337,29 +338,73 @@ struct CustomScrollView<Content: View>: View {
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     
+    let watchSpace = 0.28
+    let watchScrollSpeed = 0.045
+    
     var body: some View {
         VStack(spacing: 0) {
-            ZStack {
-                GeometryReader { geometry in
+            GeometryReader { geometry in
+                ZStack() {
+                    ZStack() {
+                        Rectangle()
+                            .foregroundColor(.secondary)
+                            .frame(width:  geometry.size.width / 2.65, height:  geometry.size.width / 2.65, alignment: .center)
+                            .position(x: geometry.size.width / 2, y: (((geometry.size.height) * watchSpace / 2) + 60 + (self.scrollPosition - (geometry.size.height * watchSpace) * 1.45) * watchScrollSpeed).clamped(to: geometry.size.height*0.25...geometry.size.height*1.0))
+                            .blur(radius: 128)
+                            .opacity(0.75)
+                        GeometryReader { geometry in
+                            ZStack {
+                                WatchFaceView(watchface: .constant(-1))
+                                    .frame(width: geometry.size.width / 2.4, height: geometry.size.width / 2.4, alignment: .center)
+                                    .position(x: geometry.size.width / 2, y: (((geometry.size.height) * watchSpace / 2) + 60 + (self.scrollPosition - (geometry.size.height * watchSpace) * 1.45) * watchScrollSpeed))
+                            }
+                            .clipped(antialiased: true)
+                            .frame(width: geometry.size.width, height: (self.scrollPosition - geometry.safeAreaInsets.top).clamped(to: 0...geometry.size.height), alignment: .center)
+                        }
+                    }
+                    VStack {
+                        Spacer(minLength: scrollPosition.clamped(to: geometry.size.height*0.2...geometry.size.height))
+                        Color.clear
+                    }
                     VStack(spacing: 0) {
                         HStack(spacing: 12) {
-                            Text(bleManager.isConnectedToPinetime ? (deviceInfo.deviceName.isEmpty ? "InfiniTime" : deviceInfo.deviceName) : NSLocalizedString("not_connected", comment: ""))
-                                .font(.title.weight(.bold))
-                                .foregroundColor(colorScheme == .dark ? .white : .black)
+                            ZStack {
+                                Text("Blank")
+                                    .opacity(0.0)
+                                    .font(.system(size: 30))
+                                
+                                Text(deviceInfo.deviceName == "" ? "InfiniTime" : deviceInfo.deviceName)
+                                    .font(.title.weight(.bold))
+                                    //.animation(Animation.easeInOut(duration: 0.1), value: showDivider)
+                                    .foregroundColor(colorScheme == .dark ? .white : .black)
+                            }
                         }
                         .padding(18)
                         .font(.title.weight(.bold))
                         .frame(maxWidth: .infinity, alignment: .center)
-                        Divider()
+                        if showDivider {
+                            Divider()
+                        }
                         ScrollView(showsIndicators: false) {
-                            VStack(spacing: -16) {
-                                VStack {
-                                    WatchFace()
-                                        .padding(26)
-                                        .frame(width: geometry.size.width / 1.6, height: geometry.size.width / 1.6, alignment: .center)
-                                        .position(x: geometry.size.width / 2, y: ((self.scrollPosition - geometry.safeAreaInsets.bottom) * 0.1) + (geometry.size.height - geometry.safeAreaInsets.bottom) * 0.1925)
-                                        .clipped(antialiased: true)
-                                }
+                            Spacer(minLength: (geometry.size.height) * watchSpace)
+                            VStack() {
+                                GeometryReader{ geo in
+                                    AnyView(Color.clear
+                                        .frame(width: 0, height: 0)
+                                        .preference(key: SizePreferenceKey.self, value: geo.frame(in: .global).minY)
+                                    )}.onPreferenceChange(SizePreferenceKey.self) { preferences in
+                                        self.scrollPosition = preferences
+                                        
+                                        if scrollPosition - geometry.safeAreaInsets.top <= 64 {
+                                            withAnimation(.easeInOut(duration: 0.1)) {
+                                                self.showDivider = true
+                                            }
+                                        } else {
+                                            withAnimation(.easeInOut(duration: 0.1)) {
+                                                self.showDivider = false
+                                            }
+                                        }
+                                    }
                                 content
                             }
                         }
@@ -371,6 +416,7 @@ struct CustomScrollView<Content: View>: View {
                                 BLEFSHandler.shared.readSettings { settings in
                                     self.settings = settings
                                     self.stepCountGoal = Int(settings.stepsGoal)
+                                    self.bleManagerVal.watchFace = Int(settings.watchFace)
                                 }
                             }
                         }

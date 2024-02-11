@@ -29,6 +29,8 @@ class BLEManagerVal: NSObject, ObservableObject {
         var icon : Int = 0
     }
     
+    @Published var watchFace: Int = 0
+    
     @Published var weatherInformation = WeatherInformation()
     @Published var loadingWeather = true
     

@@ -60,7 +60,10 @@ struct ContentView: View {
             tabBar
         }
         .alert(isPresented: $showDisconnectConfDialog) {
-            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: bleManager.disconnect), secondaryButton: .cancel())
+            Alert(title: Text(NSLocalizedString("disconnect_alert_title", comment: "")), primaryButton: .destructive(Text(NSLocalizedString("disconnect", comment: "Disconnect")), action: {
+                bleManager.disconnect()
+                deviceInfo.firmware = ""
+            }), secondaryButton: .cancel())
         }
         .blurredSheet(.init(.regularMaterial), show: $sheetManager.showSheet) {} content: {
             SheetManager.CurrentSheet()
