@@ -416,16 +416,7 @@ struct CustomScrollView<Content: View>: View {
                                             .resizable()
                                     }
                                 }
-                                .padding(16)
-                                .padding(.vertical, 4)
-                                .background(Color.black)
-                                .clipShape(RoundedRectangle(cornerRadius: 28))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 28)
-                                        .stroke(.gray, lineWidth: 1)
-                                        .opacity(0.4)
-                                )
-                                .frame(maxWidth: 155, maxHeight: 155)
+                                .modifier(WatchFaceModifier())
                                 .padding(26)
                                 content
                             }
