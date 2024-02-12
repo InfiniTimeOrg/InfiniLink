@@ -51,6 +51,7 @@ struct DeviceView: View {
     var body: some View {
         CustomScrollView(settings: $settings) {
             VStack(spacing: 10) {
+                VStack {
                 VStack(alignment: .leading, spacing: 8) {
                     HStack(spacing: 8) {
                         NavigationLink(destination: BatteryView()) {
@@ -122,7 +123,6 @@ struct DeviceView: View {
                             .cornerRadius(20)
                         }
                     }
-                    
                     if weatherData {
                         VStack {
                             HStack {
@@ -184,7 +184,6 @@ struct DeviceView: View {
                         .modifier(RowModifier(style: .standard))
                     }
                 }
-                VStack {
                     NavigationLink(destination: RenameView()) {
                         HStack {
                             Text(NSLocalizedString("name", comment: ""))
@@ -329,17 +328,14 @@ struct CustomScrollView<Content: View>: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    @ObservedObject var deviceDataForSettings: DeviceData = deviceData
     
     @State private var scrollPosition: CGFloat = 0
     @State private var showDivider: Bool = false
     
     @Binding var settings: Settings?
-    @State var clockType: ClockType = .H24
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
-    
-    let watchSpace = 0.28
-    let watchScrollSpeed = 0.045
     
     var body: some View {
         VStack(spacing: 0) {
@@ -361,8 +357,8 @@ struct CustomScrollView<Content: View>: View {
                             ZStack {
                                 Rectangle()
                                     .foregroundColor(.secondary)
-                                    .frame(width:  geometry.size.width / 2.65, height:  geometry.size.width / 2.65, alignment: .center)
-                                    .blur(radius: 128)
+                                    .frame(width:  geometry.size.width / 3.95, height:  geometry.size.width / 3.95, alignment: .center)
+                                    .blur(radius: 90)
                                     .opacity(0.75)
                                 WatchFaceView(watchface: .constant(-1))
                                     .padding(22)
@@ -381,6 +377,14 @@ struct CustomScrollView<Content: View>: View {
                                 self.settings = settings
                                 self.stepCountGoal = Int(settings.stepsGoal)
                                 self.bleManagerVal.watchFace = Int(settings.watchFace)
+                                self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
+                                self.bleManagerVal.timeFormat = settings.clockType
+                                switch settings.weatherFormat {
+                                case .Metric:
+                                    self.deviceDataForSettings.chosenWeatherMode = "Metric"
+                                case .Imperial:
+                                    self.deviceDataForSettings.chosenWeatherMode = "Imperial"
+                                }
                             }
                         }
                     }

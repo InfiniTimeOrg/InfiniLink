@@ -13,9 +13,10 @@ import Combine
 struct WatchFaceView: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @Environment(\.colorScheme) var colorScheme
+    
     let date = Date()
     
-    @Binding var watchface : Int
+    @Binding var watchface: Int
     
     var body: some View {
         GeometryReader { geometry in
@@ -53,30 +54,183 @@ struct WatchFaceView: View {
 }
 
 struct PineTimeStyleWF: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @Environment(\.colorScheme) var colorScheme
-    @Binding var geometry : GeometryProxy
+    @Binding var geometry: GeometryProxy
     
-    var hour24 : Bool = false
+    var hour24: Bool {
+        switch bleManagerVal.timeFormat {
+        case .H12:
+            return false
+        case .H24:
+            return true
+        default:
+            return true
+        }
+    }
+    
+    var backgroundColor: Color {
+        switch bleManagerVal.pineTimeStyleData?.ColorBG {
+        case .White:
+            return .white
+        case .Silver:
+            return .lightGray
+        case .Gray:
+            return .gray
+        case .Black:
+            return .black
+        case .Red:
+            return .red
+        case .Maroon:
+            // Add more accurate color
+            return .red
+        case .Yellow:
+            return .yellow
+        case .Olive:
+            // Add more accurate color
+            return .green
+        case .Lime:
+            // Add more accurate color
+            return .green
+        case .Green:
+            return .green
+        case .Cyan:
+            return .cyan
+        case .Teal:
+            return .teal
+        case .Blue:
+            return .blue
+        case .Navy:
+            // Add more accurate color
+            return .blue
+        case .Magenta:
+            // Add more accurate color
+            return .purple
+        case .Purple:
+            return .white
+        case .Orange:
+            return .orange
+        case .Pink:
+            return .pink
+        case nil:
+            return .teal
+        }
+    }
+    var barColor: Color {
+        switch bleManagerVal.pineTimeStyleData?.ColorBar {
+        case .White:
+            return .white
+        case .Silver:
+            return .lightGray
+        case .Gray:
+            return .gray
+        case .Black:
+            return .black
+        case .Red:
+            return .red
+        case .Maroon:
+            // Add more accurate color
+            return .red
+        case .Yellow:
+            return .yellow
+        case .Olive:
+            // Add more accurate color
+            return .green
+        case .Lime:
+            // Add more accurate color
+            return .green
+        case .Green:
+            return .green
+        case .Cyan:
+            return .cyan
+        case .Teal:
+            return .teal
+        case .Blue:
+            return .blue
+        case .Navy:
+            // Add more accurate color
+            return .blue
+        case .Magenta:
+            // Add more accurate color
+            return .purple
+        case .Purple:
+            return .white
+        case .Orange:
+            return .orange
+        case .Pink:
+            return .pink
+        case nil:
+            return .teal
+        }
+    }
+    var timeColor: Color {
+        switch bleManagerVal.pineTimeStyleData?.ColorTime {
+        case .White:
+            return .white
+        case .Silver:
+            return .lightGray
+        case .Gray:
+            return .gray
+        case .Black:
+            return .black
+        case .Red:
+            return .red
+        case .Maroon:
+            // Add more accurate color
+            return .red
+        case .Yellow:
+            return .yellow
+        case .Olive:
+            // Add more accurate color
+            return .green
+        case .Lime:
+            // Add more accurate color
+            return .green
+        case .Green:
+            return .green
+        case .Cyan:
+            return .cyan
+        case .Teal:
+            return .teal
+        case .Blue:
+            return .blue
+        case .Navy:
+            // Add more accurate color
+            return .blue
+        case .Magenta:
+            // Add more accurate color
+            return .purple
+        case .Purple:
+            return .white
+        case .Orange:
+            return .orange
+        case .Pink:
+            return .pink
+        case nil:
+            return .teal
+        }
+    }
     
     var body: some View {
         ZStack {
+            backgroundColor
             if !hour24 {
-                CustomTextView(text: "P\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
-                    .foregroundColor(.white)
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
+                    .foregroundColor(timeColor)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24{
+            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
                 CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12))\n\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
-                    .foregroundColor(.white)
+                    .foregroundColor(timeColor)
                     .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
             } else {
                 CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date())))\n\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
-                    .foregroundColor(.white)
+                    .foregroundColor(timeColor)
                     .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
             }
             GeometryReader { geometry in
                 Rectangle()
-                    .foregroundColor(.gray)
+                    .foregroundColor(barColor)
                     .position(x: geometry.size.width - ((geometry.size.width / 6.0) / 2), y: geometry.size.height / 2 - 2)
                     .frame(width: geometry.size.width / 6.0, height: geometry.size.height + 4, alignment: .center)
             }

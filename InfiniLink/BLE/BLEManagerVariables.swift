@@ -30,6 +30,8 @@ class BLEManagerVal: NSObject, ObservableObject {
     }
     
     @Published var watchFace: Int = 0
+    @Published var pineTimeStyleData: PineTimeStyleData?
+    @Published var timeFormat: ClockType?
     
     @Published var weatherInformation = WeatherInformation()
     @Published var loadingWeather = true
