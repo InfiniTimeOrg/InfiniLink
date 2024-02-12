@@ -1,6 +1,23 @@
+<br>
+
+<div align="center">
+
+[![GitHub tag](https://img.shields.io/github/tag/InfiniTimeOrg/InfiniLink?include_prereleases=&sort=semver&color=blue)](https://github.com/InfiniTimeOrg/InfiniLink/releases/)
+[![License](https://img.shields.io/badge/License-MIT-blue)](#license)
+[![Issues - InfiniLink](https://img.shields.io/github/issues/InfiniTimeOrg/InfiniLink)](https://github.com/InfiniTimeOrg/InfiniLink/issues)
+[![Pull Requests - InfiniLink](https://img.shields.io/github/issues-pr/InfiniTimeOrg/InfiniLink)](https://github.com/InfiniTimeOrg/InfiniLink/pulls)
+[![Stars - InfiniLink](https://img.shields.io/github/stars/InfiniTimeOrg/InfiniLink?style=social)](https://github.com/InfiniTimeOrg/InfiniLink)
+[![Forks - InfiniLink](https://img.shields.io/github/forks/InfiniTimeOrg/InfiniLink?style=social)](https://github.com/InfiniTimeOrg/InfiniLink)
+
+<br>
+
+<img src="InfiniLink/Assets.xcassets/AppIcon-3.appiconset/icon_1024.png" width="115" height="115">
+
 # InfiniLink - The official iOS companion app for InfiniTime
 
 This iOS application allows you to interact with your PineTime smartwatch running [InfiniTime](https://github.com/InfiniTimeOrg/InfiniTime) (and perhaps other watches/OSes, pending testing).
+
+</div>
 
 ### Features:
 - Discover and connect to nearby InfiniTime devices
@@ -19,3 +36,6 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 
 ### Installation:
 InfiniLink is now accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814)!
+
+## License
+Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
