@@ -29,7 +29,7 @@ class BLEManagerVal: NSObject, ObservableObject {
         var icon : Int = 0
     }
     
-    @Published var watchFace: Int = 0
+    @Published var watchFace: Int = -1
     @Published var pineTimeStyleData: PineTimeStyleData?
     @Published var timeFormat: ClockType?
     
