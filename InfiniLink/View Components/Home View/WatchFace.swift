@@ -25,12 +25,14 @@ struct WatchFaceView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .shadow(color: colorScheme == .dark ? Color.black : Color.secondary, radius: 16, x: 0, y: 0)
-                    .brightness(colorScheme == .dark ? -0.02 : 0.035)
+                    .brightness(colorScheme == .dark ? -0.03 : 0.015)
                 ZStack() {
                     ZStack {
                         switch watchface == -1 ? bleManagerVal.watchFace : watchface {
                         case 0:
                             DigitalWF(geometry: .constant(geometry))
+                        case 1:
+                            AnalogWF(geometry: .constant(geometry))
                         case 2:
                             PineTimeStyleWF(geometry: .constant(geometry))
                         default:
@@ -61,7 +63,7 @@ struct PineTimeStyleWF: View {
     @Binding var geometry: GeometryProxy
     
     var hour24: Bool {
-        switch bleManagerVal.timeFormat {
+    switch bleManagerVal.timeFormat {
         case .H12:
             return false
         case .H24:
@@ -80,7 +82,7 @@ struct PineTimeStyleWF: View {
         case .Gray:
             return .gray
         case .Black:
-            return .black
+            return .clear
         case .Red:
             return .red
         case .Maroon:
@@ -127,7 +129,7 @@ struct PineTimeStyleWF: View {
         case .Gray:
             return .gray
         case .Black:
-            return .black
+            return .clear
         case .Red:
             return .red
         case .Maroon:
@@ -174,7 +176,7 @@ struct PineTimeStyleWF: View {
         case .Gray:
             return .gray
         case .Black:
-            return .black
+            return .clear
         case .Red:
             return .red
         case .Maroon:
@@ -237,8 +239,36 @@ struct PineTimeStyleWF: View {
                     .frame(width: geometry.size.width / 6.0, height: geometry.size.height + 4, alignment: .center)
             }
         }
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
+
+struct AnalogWF: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var geometry: GeometryProxy
+
+    var body: some View {
+        ZStack {
+            let hour = Calendar.current.component(.hour, from: Date())
+            let hour12 = Double(hour >= 12 ? hour - 12 : hour)
+            let minute = Double(Calendar.current.component(.minute, from: Date()))
+            Image("AnalogFace")
+                .resizable()
+            Image("AnalogHour")
+                .resizable()
+                .rotationEffect(Angle(degrees: ((hour12 * 60) + minute) / 2))
+            Image("AnalogMin")
+                .resizable()
+                .rotationEffect(Angle(degrees: minute * 6))
+            Image("AnalogSec")
+                .resizable()
+                .rotationEffect(Angle(degrees: Double(Calendar.current.component(.second, from: Date())) * 6))
+        }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+    }
+}
+
 
 struct DigitalWF: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
@@ -255,24 +285,27 @@ struct DigitalWF: View {
             return true
         }
     }
-    
+
     var body: some View {
         ZStack {
             if !hour24 {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
                     .foregroundColor(.white)
-                    .frame(width: geometry.size.width, height: geometry.size.height / 2.15, alignment: .topTrailing)
+                    .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
             }
             if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12)):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.335), lineSpacing: 0)
+                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.8)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
             } else {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.335), lineSpacing: 0)
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.8)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
             }
         }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
 
