@@ -80,7 +80,7 @@ struct BatteryView: View {
                 }
                 .ignoresSafeArea()
                 .padding(20)
-                .background(Color.gray.opacity(0.2))
+                .background(Material.regular)
                 .cornerRadius(30, corners: [.topLeft, .topRight])
             }
         }

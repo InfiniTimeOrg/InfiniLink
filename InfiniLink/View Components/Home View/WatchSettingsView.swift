@@ -37,7 +37,7 @@ struct WatchSettingsView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.15))
+                        .background(Material.regular)
                         .clipShape(Circle())
                 }
             }

@@ -30,7 +30,7 @@ struct WeatherSetLocationView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.15))
+                        .background(Material.regular)
                         .clipShape(Circle())
                 }
                 Text(NSLocalizedString("set_location", comment: ""))
@@ -45,7 +45,7 @@ struct WeatherSetLocationView: View {
                 VStack {
                     TextField("Address", text: $mapSearch.searchTerm)
                         .padding()
-                        .background(Color.gray.opacity(0.15))
+                        .background(Material.regular)
                         .clipShape(Capsule())
                         .autocorrectionDisabled()
                 }

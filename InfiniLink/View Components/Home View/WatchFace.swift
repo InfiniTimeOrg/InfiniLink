@@ -29,6 +29,8 @@ struct WatchFaceView: View {
                 ZStack() {
                     ZStack {
                         switch watchface == -1 ? bleManagerVal.watchFace : watchface {
+                        case 0:
+                            DigitalWF(geometry: .constant(geometry))
                         case 2:
                             PineTimeStyleWF(geometry: .constant(geometry))
                         default:
@@ -233,6 +235,42 @@ struct PineTimeStyleWF: View {
                     .foregroundColor(barColor)
                     .position(x: geometry.size.width - ((geometry.size.width / 6.0) / 2), y: geometry.size.height / 2 - 2)
                     .frame(width: geometry.size.width / 6.0, height: geometry.size.height + 4, alignment: .center)
+            }
+        }
+    }
+}
+
+struct DigitalWF: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var geometry: GeometryProxy
+    
+    var hour24: Bool {
+        switch bleManagerVal.timeFormat {
+        case .H12:
+            return false
+        case .H24:
+            return true
+        default:
+            return true
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            if !hour24 {
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
+                    .foregroundColor(.white)
+                    .frame(width: geometry.size.width, height: geometry.size.height / 2.15, alignment: .topTrailing)
+            }
+            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12)):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.335), lineSpacing: 0)
+                    .foregroundColor(.white)
+                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.8)
+            } else {
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.335), lineSpacing: 0)
+                    .foregroundColor(.white)
+                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.8)
             }
         }
     }

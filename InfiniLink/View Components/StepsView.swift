@@ -62,7 +62,7 @@ struct StepView: View {
                             .padding(14)
                             .font(.body.weight(.semibold))
                             .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Color.gray.opacity(0.15))
+                            .background(Material.regular)
                             .clipShape(Circle())
                     }
                     Text(NSLocalizedString("steps", comment: "Steps"))
@@ -78,7 +78,7 @@ struct StepView: View {
                             .padding(14)
                             .font(.body.weight(.semibold))
                             .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Color.gray.opacity(0.15))
+                            .background(Material.regular)
                             .clipShape(Circle())
                     }
                 }
@@ -127,7 +127,7 @@ struct StepView: View {
                     }
                     .ignoresSafeArea()
                     .padding(20)
-                    .background(Color.gray.opacity(0.2))
+                    .background(Material.regular)
                     .cornerRadius(30, corners: [.topLeft, .topRight])
                 }
             }

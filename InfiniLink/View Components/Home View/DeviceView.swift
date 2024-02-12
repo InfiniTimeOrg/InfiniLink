@@ -82,7 +82,7 @@ struct DeviceView: View {
                             }
                             .aspectRatio(1, contentMode: .fill)
                             .padding()
-                            .background(Color.gray.opacity(0.3))
+                            .background(Material.regular)
                             .foregroundColor(.primary)
                             .cornerRadius(20)
                         }
@@ -406,7 +406,7 @@ struct RowModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .padding()
-            .background(Color.gray.opacity(0.15))
+            .background(Material.regular)
             .foregroundColor(.primary)
             .cornerRadius(style == .capsule ? 40 : 15)
     }

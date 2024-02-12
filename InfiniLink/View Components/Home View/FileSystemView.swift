@@ -126,7 +126,7 @@ struct FileSystemView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.15))
+                        .background(Material.regular)
                         .clipShape(Circle())
                 }
                 .disabled(fileUploading)
@@ -200,6 +200,8 @@ struct FileSystemView: View {
                                 .modifier(RowModifier(style: .capsule))
                                 .frame(maxWidth: .infinity, alignment: .leading)
                             }
+                            .disabled(loadingFs || fileUploading)
+                            .opacity(loadingFs || fileUploading ? 0.5 : 1.0)
                         }
                         ForEach(commandHistory, id: \.self) { listItem in
                             let isFile = listItem.contains(".")
@@ -258,7 +260,7 @@ struct FileSystemView: View {
                                     ForEach(files, id: \.id) { file in
                                         Text(file.filename)
                                             .padding(12)
-                                            .background(Color.gray.opacity(0.2))
+                                            .background(Material.regular)
                                             .clipShape(Capsule())
                                     }
                                 }
@@ -274,7 +276,7 @@ struct FileSystemView: View {
                                     for file in files {
                                         let fileDataPath = file.url
                                         let fileData = try Data(contentsOf: fileDataPath!)
-                                        let _ = bleFSHandler.writeFile(data: fileData, path: directory + "/" + file.filename, offset: 0)
+                                        var _ = bleFSHandler.writeFile(data: fileData, path: directory + "/" + file.filename, offset: 0)
                                     }
                                     
                                     self.fileUploading = false
@@ -285,6 +287,7 @@ struct FileSystemView: View {
                                     lsDir(dir: directory)
                                 } catch {
                                     print(error.localizedDescription)
+                                    self.fileUploading = false
                                 }
                             }
                         } label: {
@@ -314,14 +317,14 @@ struct FileSystemView: View {
                             .padding(14)
                             .font(.body.weight(.semibold))
                             .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Color.gray.opacity(0.15))
+                            .background(Material.regular)
                             .clipShape(Circle())
                     }
                 }
                 Spacer()
                 TextField(NSLocalizedString("title", comment: "Title"), text: $newFolderName)
                     .padding()
-                    .background(Color.gray.opacity(0.15))
+                    .background(Material.regular)
                     .clipShape(Capsule())
                 Spacer()
                 Button {

@@ -26,7 +26,7 @@ struct RenameView: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.15))
+                        .background(Material.regular)
                         .clipShape(Circle())
                 }
                 Text(NSLocalizedString("rename", comment: ""))
@@ -56,7 +56,7 @@ struct RenameView: View {
             VStack {
                 TextField("InfiniTime", text: $changedName)
                     .padding()
-                    .background(Color.gray.opacity(0.15))
+                    .background(Material.regular)
                     .clipShape(Capsule())
                 Spacer()
             }

@@ -30,6 +30,10 @@ struct DFUWithBLE: View {
     @State var showOlderVersionView = false
     @State var externalResources = false
     
+    init() {
+        lockNavigation = false
+    }
+    
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(spacing: 15) {
@@ -41,7 +45,7 @@ struct DFUWithBLE: View {
                         .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Color.gray.opacity(0.15))
+                        .background(Material.regular)
                         .clipShape(Circle())
                 }
                 .disabled(lockNavigation)
@@ -60,7 +64,7 @@ struct DFUWithBLE: View {
                             .font(.body.weight(.semibold))
                             .padding(14)
                             .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Color.gray.opacity(0.15))
+                            .background(Material.regular)
                             .clipShape(Circle())
                     }
                     .sheet(isPresented: $showOlderVersionView) {
@@ -202,7 +206,7 @@ struct NewUpdate: View {
                                     .padding(14)
                                     .font(.body.weight(.semibold))
                                     .foregroundColor(scheme == .dark ? .white : .darkGray)
-                                    .background(Color.gray.opacity(0.15))
+                                    .background(Material.regular)
                                     .clipShape(Circle())
                             }
                         }
@@ -323,7 +327,7 @@ struct DFURefreshButton: View {
             }
             .padding(14)
             .font(.body.weight(.semibold))
-            .background(Color.gray.opacity(0.15))
+            .background(Material.regular)
             .clipShape(Circle())
         }
         .disabled(downloadManager.loadingResults)
