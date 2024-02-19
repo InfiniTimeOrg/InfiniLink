@@ -72,19 +72,27 @@ struct DeviceView: View {
                             .cornerRadius(20)
                         }
                         NavigationLink(destination: DFUView()) {
-                            HStack {
-                                Text(NSLocalizedString("software_update", comment: ""))
-                                    .multilineTextAlignment(.leading)
-                                    .font(.title3.weight(.semibold))
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.body.weight(.medium))
+                            ZStack(alignment: .topTrailing) {
+                                HStack {
+                                    Text(NSLocalizedString("software_update", comment: ""))
+                                        .multilineTextAlignment(.leading)
+                                        .font(.title3.weight(.semibold))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.body.weight(.medium))
+                                }
+                                .aspectRatio(1, contentMode: .fill)
+                                .padding()
+                                .background(Material.regular)
+                                .foregroundColor(.primary)
+                                .cornerRadius(20)
+                                if DownloadManager.shared.updateAvailable {
+                                    Circle()
+                                        .frame(width: 15, height: 15, alignment: .topTrailing)
+                                        .foregroundColor(.blue)
+                                        .offset(x: 2, y: -2)
+                                }
                             }
-                            .aspectRatio(1, contentMode: .fill)
-                            .padding()
-                            .background(Material.regular)
-                            .foregroundColor(.primary)
-                            .cornerRadius(20)
                         }
                     }
                     HStack(spacing: 8) {
