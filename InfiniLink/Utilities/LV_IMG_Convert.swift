@@ -150,37 +150,30 @@ func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPH
 
 extension CGImage {
     func getPixel(x: Int, y: Int, fade: Bool, height: Int) -> (red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8)? {
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue
         var pixelData: [UInt8] = [0, 0, 0, 0]
-
-        guard let context = CGContext(data: &pixelData,
-                                      width: 1,
-                                      height: 1,
-                                      bitsPerComponent: 8,
-                                      bytesPerRow: 4,
-                                      space: colorSpace,
-                                      bitmapInfo: bitmapInfo),
-              let cgImage = self.cropping(to: CGRect(x: x, y: y, width: 1, height: 1)) else {
+        
+        guard
+            let context = CGContext(data: &pixelData, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue),
+            let cgImage = self.cropping(to: CGRect(x: x, y: y, width: 1, height: 1))
+        else {
             return nil
         }
-
+        
         context.draw(cgImage, in: CGRect(x: 0, y: 0, width: 1, height: 1))
         
-        let add = Double(height) * 0.25
-        let div = Double(height) * 0.65
-
-        let red = fade ? UInt8(Double(pixelData[0]) * ((Double(y) + add) / div).clamped(to: 0...1)) : pixelData[0]
-        let green = fade ? UInt8(Double(pixelData[1]) * ((Double(y) + add) / div).clamped(to: 0...1)) : pixelData[1]
-        let blue = fade ? UInt8(Double(pixelData[2]) * ((Double(y) + add) / div).clamped(to: 0...1)) : pixelData[2]
+        let factor = fade ? ((Double(y) + Double(height) * 0.25) / (Double(height) * 0.65)).clamped(to: 0...1) : 1.0
+        
+        let red = UInt8(Double(pixelData[0]) * factor)
+        let green = UInt8(Double(pixelData[1]) * factor)
+        let blue = UInt8(Double(pixelData[2]) * factor)
         let alpha = pixelData[3]
-
+        
         return (red, green, blue, alpha)
     }
 }
 
-extension Strideable where Stride: SignedInteger {
-    func clamped(to limits: CountableClosedRange<Self>) -> Self {
-        return min(max(self, limits.lowerBound), limits.upperBound)
+extension Comparable {
+    func clamped(to range: ClosedRange<Self>) -> Self {
+        return min(max(self, range.lowerBound), range.upperBound)
     }
 }

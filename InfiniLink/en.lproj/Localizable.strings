@@ -264,7 +264,7 @@
 "update_external_resources" = "Update External Resources";
 "external_resources_info" = "External resources are fonts and images stored in a seperate location on the watch to optimize storage and memory usage.";
 "success" = "Success!";
-"upload_files" = "Upload File(s)";
+"upload_files" = "Upload Files";
 "upload_selected_files" = "Upload Selected File(s)";
 "new_folder" = "New Folder";
 "create_folder" = "Create Folder";

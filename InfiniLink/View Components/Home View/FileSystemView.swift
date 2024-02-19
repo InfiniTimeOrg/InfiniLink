@@ -25,6 +25,9 @@ struct FileSystemView: View {
     @State var fileSelected = false
     @State var showNewFolderView = false
     @State var fileUploading = false
+    @State var fileConverting = false
+    
+    @State var fileSize = 0
     
     @State var files: [File] = []
     @State var newFolderName = ""
@@ -247,8 +250,21 @@ struct FileSystemView: View {
             if fileSelected {
                 Divider()
                 if fileUploading {
-                    ProgressView()
+                    VStack(spacing: 6) {
+                        HStack(spacing: 8) {
+                            ProgressView()
+                            Group {
+                                if fileConverting {
+                                    Text("Converting...")
+                                } else {
+                                    Text("Uploading...\(Int(Double(bleFSHandler.progress) / Double(fileSize) * 100))%")
+
+                                }
+                            }
+                            .foregroundColor(.gray)
+                        }
                         .padding()
+                    }
                 } else {
                     VStack(spacing: 16) {
                         if files.count < 2 {
@@ -269,26 +285,56 @@ struct FileSystemView: View {
                             .padding(-16)
                         }
                         Button {
-                            self.fileUploading = true
-                            
                             DispatchQueue.global(qos: .default).async {
-                                do {
-                                    for file in files {
-                                        let fileDataPath = file.url
-                                        let fileData = try Data(contentsOf: fileDataPath!)
-                                        var _ = bleFSHandler.writeFile(data: fileData, path: directory + "/" + file.filename, offset: 0)
+                                for file in files {
+                                    let lowercaseFilename = file.filename.lowercased()
+                                    
+                                    guard let fileDataPath = file.url else {
+                                        continue
                                     }
                                     
-                                    self.fileUploading = false
-                                    
-                                    self.fileSelected = false
-                                    self.files = []
-                                    
-                                    lsDir(dir: directory)
-                                } catch {
-                                    print(error.localizedDescription)
-                                    self.fileUploading = false
+                                    do {
+                                        if lowercaseFilename.hasSuffix(".png") ||
+                                            lowercaseFilename.hasSuffix(".jpg") ||
+                                            lowercaseFilename.hasSuffix(".jpeg") ||
+                                            lowercaseFilename.hasSuffix(".gif") || lowercaseFilename.hasSuffix(".bmp") ||
+                                            lowercaseFilename.hasSuffix(".tiff") ||
+                                            lowercaseFilename.hasSuffix(".webp") ||
+                                            lowercaseFilename.hasSuffix(".heif") ||
+                                            lowercaseFilename.hasSuffix(".heic") {
+                                            
+                                            guard let img = UIImage(contentsOfFile: fileDataPath.path),
+                                                  let cgImage = img.cgImage else {
+                                                continue
+                                            }
+                                            
+                                            self.fileConverting = true
+                                            let convertedImage = lvImageConvert(img: cgImage)
+                                            self.fileConverting = false
+                                            
+                                            let fileNameWithoutExtension = (file.filename as NSString).deletingPathExtension
+                                            if let convertedImage = convertedImage {
+                                                self.fileSize = convertedImage.count
+                                                self.fileUploading = true
+                                                var _ = bleFSHandler.writeFile(data: convertedImage, path: directory + "/" + fileNameWithoutExtension + ".bin", offset: 0)
+                                            }
+                                        } else {
+                                            let fileData = try Data(contentsOf: fileDataPath)
+                                            
+                                            self.fileUploading = true
+                                            var _ = bleFSHandler.writeFile(data: fileData, path: directory + "/" + file.filename, offset: 0)
+                                        }
+                                    } catch {
+                                        print("Error: \(error.localizedDescription)")
+                                    }
                                 }
+                                
+                                self.fileUploading = false
+                                
+                                self.fileSelected = false
+                                self.files = []
+                                
+                                lsDir(dir: directory)
                             }
                         } label: {
                             Text(NSLocalizedString("upload_selected_files", comment: "Upload Selected File(s)"))

@@ -16,7 +16,7 @@ class BLEFSHandler : ObservableObject {
     let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
     
-    var informationTrandfer : [InformationFS] = []
+    var informationTransfer : [InformationFS] = []
     var readFileFS : ReadFileFS = ReadFileFS()
     var writeFileFS : WriteFileFS = WriteFileFS()
     
@@ -197,7 +197,7 @@ class BLEFSHandler : ObservableObject {
             readFileFS.group.wait()
         }
         
-        //print(readFileFS.data.hexString)
+//        print(readFileFS.data.hexString)
         
         return readFileFS
     }
@@ -293,12 +293,12 @@ class BLEFSHandler : ObservableObject {
         let pathData = path.data(using: .utf8)!
         writeData.append(pathData)
 
-        informationTrandfer.append(rm)
+        informationTransfer.append(rm)
         bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
-        informationTrandfer[0].group.wait()
-        let isValid = informationTrandfer[0].valid
-        informationTrandfer.removeFirst()
+        informationTransfer[0].group.wait()
+        let isValid = informationTransfer[0].valid
+        informationTransfer.removeFirst()
         return isValid
     }
     
@@ -324,12 +324,12 @@ class BLEFSHandler : ObservableObject {
         let pathData = path.data(using: .utf8)!
         writeData.append(pathData)
         
-        informationTrandfer.append(mk)
+        informationTransfer.append(mk)
         bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
-        informationTrandfer[0].group.wait()
-        let isValid = informationTrandfer[0].valid
-        informationTrandfer.removeFirst()
+        informationTransfer[0].group.wait()
+        let isValid = informationTransfer[0].valid
+        informationTransfer.removeFirst()
         return isValid
     }
 
@@ -349,12 +349,12 @@ class BLEFSHandler : ObservableObject {
         writeData.append(pathData)
         
         ls.dirList.parentPath = path
-        informationTrandfer.append(ls)
+        informationTransfer.append(ls)
         bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
-        informationTrandfer[0].group.wait()
-        ls = informationTrandfer[0]
-        informationTrandfer.removeFirst()
+        informationTransfer[0].group.wait()
+        ls = informationTransfer[0]
+        informationTransfer.removeFirst()
         return ls.dirList
     }
 
@@ -380,12 +380,12 @@ class BLEFSHandler : ObservableObject {
         writeData.append(Commands.padding.rawValue)
         writeData.append(newPathData)
 
-        informationTrandfer.append(mv)
+        informationTransfer.append(mv)
         bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
-        informationTrandfer[0].group.wait()
-        let isValid = informationTrandfer[0].valid
-        informationTrandfer.removeFirst()
+        informationTransfer[0].group.wait()
+        let isValid = informationTransfer[0].valid
+        informationTransfer.removeFirst()
         return isValid
     }
 
@@ -477,11 +477,11 @@ class BLEFSHandler : ObservableObject {
         } else if responseData[0] == Commands.mvResponse.rawValue || responseData[0] == Commands.mkdirResponse.rawValue || responseData[0] == Commands.deleteResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
-                informationTrandfer[0].valid = true
+                informationTransfer[0].valid = true
             default: break
                 //print("error response code \(responseData[1])")
             }
-            informationTrandfer[0].group.leave()
+            informationTransfer[0].group.leave()
         } else if responseData[0] == Commands.lsResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
@@ -493,10 +493,10 @@ class BLEFSHandler : ObservableObject {
                 let fileSize: UInt32 = UInt32(responseData[27]) << 24 | UInt32(responseData[26]) << 16 | UInt32(responseData[25]) << 8 | UInt32(responseData[24])
 
                 if entryNumber == 0 {
-                    informationTrandfer[0].dirList.ls = []
+                    informationTransfer[0].dirList.ls = []
                 } else if entryNumber == totalEntryNumber {
-                    informationTrandfer[0].dirList.valid = true
-                    informationTrandfer[0].group.leave()
+                    informationTransfer[0].dirList.valid = true
+                    informationTransfer[0].group.leave()
                     return
                 }
                 let filePath = responseData.suffix(Int(filePathLength))
@@ -507,28 +507,28 @@ class BLEFSHandler : ObservableObject {
                     dir.fileSize = Int(fileSize)
                     dir.flags = Int(flags)
                     dir.pathNames = decodedString
-                    informationTrandfer[0].dirList.ls.append(dir)
+                    informationTransfer[0].dirList.ls.append(dir)
                 } else {
                     print("Decoding failed.")
                 }
                 
             case Responses.error.rawValue:
-                informationTrandfer[0].group.leave()
+                informationTransfer[0].group.leave()
                 print("error")
             case Responses.noFile.rawValue:
-                informationTrandfer[0].group.leave()
+                informationTransfer[0].group.leave()
                 print("no file")
             case Responses.protocolError.rawValue:
-                informationTrandfer[0].group.leave()
+                informationTransfer[0].group.leave()
                 print("protocol error")
             case Responses.readOnly.rawValue:
-                informationTrandfer[0].group.leave()
+                informationTransfer[0].group.leave()
                 print("read only")
             case Responses.dirNotEmptyError.rawValue:
-                informationTrandfer[0].group.leave()
+                informationTransfer[0].group.leave()
                 print("dir not empty")
             default:
-                informationTrandfer[0].group.leave()
+                informationTransfer[0].group.leave()
                 //print("unknown error, response code \(responseData[1])")
             }
         }
