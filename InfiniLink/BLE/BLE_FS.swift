@@ -240,7 +240,7 @@ class BLEFSHandler : ObservableObject {
             writeData.append(Commands.padding.rawValue)
             
             var dataToSend : Data = Data()
-            for _ in 0...128-1 {
+            for _ in 0...170-1 {
                 if dataQueue.count > 0 {
                     dataToSend.append(dataQueue.removeFirst())
                 } else {
@@ -264,7 +264,7 @@ class BLEFSHandler : ObservableObject {
                 self.progress = newProgress
             }
             //writeFileFS.offset = writeFileFS.offset + dataToSend.count
-            //print("Count: \(data.count), Offset: \(writeFileFS.offset)")
+            //print("Count: \(data.count), Offset: \(newOffset)")
             
             //print("progress: \((round(Double(progress)/Double(externalResourcesSize))*100))%")
             
