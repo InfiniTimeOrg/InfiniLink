@@ -27,6 +27,10 @@ class BLEManagerVal: NSObject, ObservableObject {
         var maxTemperature : Double = 0.0
         var minTemperature : Double = 0.0
         var icon : Int = 0
+        
+        var forecastIcon : [UInt8] = []
+        var forecastMaxTemperature : [Double] = []
+        var forecastMinTemperature : [Double] = []
     }
     
     @Published var watchFace: Int = -1
