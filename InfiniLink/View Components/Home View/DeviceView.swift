@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreBluetooth
 
 struct DeviceView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -52,146 +53,146 @@ struct DeviceView: View {
         CustomScrollView(settings: $settings) {
             VStack(spacing: 10) {
                 VStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 8) {
-                        NavigationLink(destination: BatteryView()) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(NSLocalizedString("battery_tilte", comment: ""))
-                                        .font(.title3.weight(.semibold))
-                                    Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
-                                }
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.body.weight(.medium))
-                            }
-                            .aspectRatio(1, contentMode: .fill)
-                            .padding()
-                            .background(Color.green)
-                            .foregroundColor(.white)
-                            .cornerRadius(20)
-                        }
-                        NavigationLink(destination: DFUView()) {
-                            ZStack(alignment: .topTrailing) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(spacing: 8) {
+                            NavigationLink(destination: BatteryView()) {
                                 HStack {
-                                    Text(NSLocalizedString("software_update", comment: ""))
-                                        .multilineTextAlignment(.leading)
-                                        .font(.title3.weight(.semibold))
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text(NSLocalizedString("battery_tilte", comment: ""))
+                                            .font(.title3.weight(.semibold))
+                                        Text(String(format: "%.0f", bleManager.batteryLevel) + "%")
+                                    }
                                     Spacer()
                                     Image(systemName: "chevron.right")
                                         .font(.body.weight(.medium))
                                 }
                                 .aspectRatio(1, contentMode: .fill)
                                 .padding()
-                                .background(Material.regular)
-                                .foregroundColor(.primary)
+                                .background(Color.green)
+                                .foregroundColor(.white)
                                 .cornerRadius(20)
-                                if DownloadManager.shared.updateAvailable {
-                                    Circle()
-                                        .frame(width: 15, height: 15, alignment: .topTrailing)
-                                        .foregroundColor(.blue)
-                                        .offset(x: 2, y: -2)
+                            }
+                            NavigationLink(destination: DFUView()) {
+                                ZStack(alignment: .topTrailing) {
+                                    HStack {
+                                        Text(NSLocalizedString("software_update", comment: ""))
+                                            .multilineTextAlignment(.leading)
+                                            .font(.title3.weight(.semibold))
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .font(.body.weight(.medium))
+                                    }
+                                    .aspectRatio(1, contentMode: .fill)
+                                    .padding()
+                                    .background(Material.regular)
+                                    .foregroundColor(.primary)
+                                    .cornerRadius(20)
+                                    if DownloadManager.shared.updateAvailable {
+                                        Circle()
+                                            .frame(width: 15, height: 15, alignment: .topTrailing)
+                                            .foregroundColor(.blue)
+                                            .offset(x: 2, y: -2)
+                                    }
                                 }
                             }
                         }
-                    }
-                    HStack(spacing: 8) {
-                        NavigationLink(destination: StepView().navigationBarHidden(true)) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(NSLocalizedString("step_count", comment: ""))
-                                        .font(.title3.weight(.semibold))
-                                    Text("\(bleManagerVal.stepCount)")
+                        HStack(spacing: 8) {
+                            NavigationLink(destination: StepView().navigationBarHidden(true)) {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text(NSLocalizedString("step_count", comment: ""))
+                                            .font(.title3.weight(.semibold))
+                                        Text("\(bleManagerVal.stepCount)")
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.body.weight(.medium))
                                 }
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.body.weight(.medium))
+                                .aspectRatio(1, contentMode: .fill)
+                                .padding()
+                                .background(Color.blue)
+                                .foregroundColor(.white)
+                                .cornerRadius(20)
                             }
-                            .aspectRatio(1, contentMode: .fill)
-                            .padding()
-                            .background(Color.blue)
-                            .foregroundColor(.white)
-                            .cornerRadius(20)
-                        }
-                        NavigationLink(destination: HeartView()) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(NSLocalizedString("heart_rate", comment: ""))
-                                        .font(.title3.weight(.semibold))
-                                    Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
+                            NavigationLink(destination: HeartView()) {
+                                HStack {
+                                    VStack(alignment: .leading, spacing: 5) {
+                                        Text(NSLocalizedString("heart_rate", comment: ""))
+                                            .font(.title3.weight(.semibold))
+                                        Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
+                                    }
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.body.weight(.medium))
                                 }
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.body.weight(.medium))
+                                .aspectRatio(1, contentMode: .fill)
+                                .padding()
+                                .background(Color.red)
+                                .foregroundColor(.white)
+                                .cornerRadius(20)
                             }
-                            .aspectRatio(1, contentMode: .fill)
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .cornerRadius(20)
                         }
-                    }
-                    if weatherData {
-                        VStack {
-                            HStack {
-                                VStack(alignment: .leading) {
-                                    Text(NSLocalizedString("weather", comment: ""))
-                                        .font(.headline)
-                                    if bleManagerVal.loadingWeather {
-                                        Text(NSLocalizedString("loading", comment: "Loading..."))
-                                    } else {
-                                        if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
-                                            Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
-                                                .font(.title.weight(.semibold))
+                        if weatherData {
+                            VStack {
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(NSLocalizedString("weather", comment: ""))
+                                            .font(.headline)
+                                        if bleManagerVal.loadingWeather {
+                                            Text(NSLocalizedString("loading", comment: "Loading..."))
                                         } else {
-                                            Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
-                                                .font(.title.weight(.semibold))
+                                            if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
+                                                Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
+                                                    .font(.title.weight(.semibold))
+                                            } else {
+                                                Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
+                                                    .font(.title.weight(.semibold))
+                                            }
                                         }
                                     }
-                                }
-                                .font(.title.weight(.semibold))
-                                Spacer()
-                                VStack {
-                                    if bleManagerVal.loadingWeather {
-                                        Image(systemName: "circle.slash")
-                                    } else {
-                                        Image(systemName: icon)
+                                    .font(.title.weight(.semibold))
+                                    Spacer()
+                                    VStack {
+                                        if bleManagerVal.loadingWeather {
+                                            Image(systemName: "circle.slash")
+                                        } else {
+                                            Image(systemName: icon)
+                                        }
                                     }
+                                    .font(.title.weight(.medium))
                                 }
-                                .font(.title.weight(.medium))
                             }
-                        }
-                        .padding()
-                        .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
-                        .foregroundColor(.white)
-                        .cornerRadius(15)
-                        Spacer()
-                            .frame(height: 6)
-                    }
-                }
-                if DownloadManager.shared.updateAvailable {
-                    NavigationLink(destination: DFUView()) {
-                        VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Text(NSLocalizedString("software_update_available", comment: "Software Update Available"))
-                                    .font(.title2.weight(.semibold))
-                                Spacer()
-                                Image(systemName: "chevron.right")
-                                    .font(.body.weight(.medium))
-                            }
-                            Text(DownloadManager.shared.updateVersion)
-                                .foregroundColor(.gray)
-                                .font(.headline)
+                            .padding()
+                            .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
+                            .foregroundColor(.white)
+                            .cornerRadius(15)
                             Spacer()
-                                .frame(height: 5)
-                            Text(DownloadManager.shared.updateBody)
-                                .multilineTextAlignment(.leading)
-                                .lineLimit(4)
+                                .frame(height: 6)
                         }
-                        .foregroundColor(.primary)
-                        .modifier(RowModifier(style: .standard))
                     }
-                }
+                    if DownloadManager.shared.updateAvailable {
+                        NavigationLink(destination: DFUView()) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text(NSLocalizedString("software_update_available", comment: "Software Update Available"))
+                                        .font(.title2.weight(.semibold))
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .font(.body.weight(.medium))
+                                }
+                                Text(DownloadManager.shared.updateVersion)
+                                    .foregroundColor(.gray)
+                                    .font(.headline)
+                                Spacer()
+                                    .frame(height: 5)
+                                Text(DownloadManager.shared.updateBody)
+                                    .multilineTextAlignment(.leading)
+                                    .lineLimit(4)
+                            }
+                            .foregroundColor(.primary)
+                            .modifier(RowModifier(style: .standard))
+                        }
+                    }
                     NavigationLink(destination: RenameView()) {
                         HStack {
                             Text(NSLocalizedString("name", comment: ""))
@@ -281,6 +282,14 @@ struct DeviceView: View {
                         .modifier(RowModifier(style: .capsule))
                     Toggle(NSLocalizedString("notify_about_low_battery", comment: ""), isOn: $batteryNotification)
                         .modifier(RowModifier(style: .capsule))
+                    Button {
+                        BLEWriteManager.init().setTime(characteristic: bleManager.currentTimeService)
+                    } label: {
+                        Text(NSLocalizedString("manually_sync_time", comment: ""))
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.blue)
+                            .modifier(RowModifier(style: .capsule))
+                    }
                     Button {
                         SheetManager.shared.sheetSelection = .notification
                         SheetManager.shared.showSheet = true

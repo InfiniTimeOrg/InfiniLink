@@ -43,7 +43,7 @@ class ChartManager: ObservableObject {
 	}
 	
 	struct DateSelectionState {
-		var dateRangeSelection: Int = 0
+		@AppStorage("dataRangeSelection") var dateRangeSelection: Int = 0
 		
 		// state variables for slider
 		var hours: Float = 1

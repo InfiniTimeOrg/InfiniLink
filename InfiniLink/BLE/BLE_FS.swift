@@ -228,6 +228,7 @@ class BLEFSHandler : ObservableObject {
         
         var dataQueue = data
         var newOffset = 0
+        self.progress = 0
         
         while !writeFileFS.completed {
             writeFileFS.group.enter()

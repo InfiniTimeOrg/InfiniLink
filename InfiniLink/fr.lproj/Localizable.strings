@@ -96,6 +96,7 @@
 "find_location" = "Use the search box above to find\na location";
 "update_step_count_goal_on_watch_1" = "To change your step goal, navigate to settings on";
 "update_step_count_goal_on_watch_2" = "and change it there.";
+"manually_sync_time" = "Manually Sync Time";
 
 // - BLEConnectView
 "available_devices" = "Appareil disponible";

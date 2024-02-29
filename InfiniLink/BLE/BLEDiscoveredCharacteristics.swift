@@ -14,7 +14,6 @@ struct BLEDiscoveredCharacteristics {
 	let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
 	func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
-		
 		switch characteristic.uuid {
 		case bleManagerVal.cbuuidList.musicControl:
 			peripheral.setNotifyValue(true, for: characteristic)
@@ -47,11 +46,8 @@ struct BLEDiscoveredCharacteristics {
 			peripheral.readValue(for: characteristic)
 			peripheral.setNotifyValue(true, for: characteristic)
 		case bleManagerVal.cbuuidList.time:
-			do {
-				try peripheral.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
-			} catch {
-                bleManager.setTimeError = true
-			}
+            bleManager.currentTimeService = characteristic
+            BLEWriteManager.init().setTime(characteristic: characteristic)
         case bleManagerVal.cbuuidList.weather:
             bleManagerVal.weatherCharacteristic = characteristic
 		default:

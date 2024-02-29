@@ -133,7 +133,7 @@ public extension View {
         ContentView()
             .onAppear {
                 BLEManager.shared.isConnectedToPinetime = false
-                //BLEManagerVal.shared.firmwareVersion = "1.13.0"
+                //BLEManagerVal.shared.firmwareVersion = "1.14.0"
             }
     }
 }

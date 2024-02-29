@@ -165,16 +165,14 @@ struct FileSystemView: View {
                         let fileURLs = try result.get()
                         
                         for fileURL in fileURLs {
-                            // Add more supported file types?
-//                            if ["bin", "txt"].contains(fileURL.pathExtension.lowercased()) {
-                                guard fileURL.startAccessingSecurityScopedResource() else { continue }
-                                
-                                self.fileSelected = true
-                                self.files.append(File(url: fileURL, filename: fileURL.lastPathComponent))
-                                
-                                // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
-                                // fileURL.stopAccessingSecurityScopedResource()
-//                            }
+                            guard fileURL.startAccessingSecurityScopedResource() else { continue }
+                            
+                            self.fileSelected = true
+                            self.files.removeAll()
+                            self.files.append(File(url: fileURL, filename: fileURL.lastPathComponent))
+                            
+                            // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
+                            // fileURL.stopAccessingSecurityScopedResource()
                         }
                     } catch {
                         DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
@@ -258,7 +256,7 @@ struct FileSystemView: View {
                                     Text("Converting...")
                                 } else {
                                     Text("Uploading...\(Int(Double(bleFSHandler.progress) / Double(fileSize) * 100))%")
-
+                                    
                                 }
                             }
                             .foregroundColor(.gray)
@@ -270,6 +268,8 @@ struct FileSystemView: View {
                         if files.count < 2 {
                             Text(files.first?.filename ?? NSLocalizedString("unknown", comment: "Unknown"))
                                 .padding(12)
+                                .background(Material.regular)
+                                .clipShape(Capsule())
                         } else {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 8) {
@@ -307,6 +307,8 @@ struct FileSystemView: View {
                                                   let cgImage = img.cgImage else {
                                                 continue
                                             }
+                                            
+                                            self.fileSize = 0
                                             
                                             self.fileConverting = true
                                             let convertedImage = lvImageConvert(img: cgImage)

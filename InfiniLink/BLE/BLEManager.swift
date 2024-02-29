@@ -18,6 +18,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     
     var myCentral: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
+    var currentTimeService: CBCharacteristic!
     
     struct musicCharacteristics {
         var control: CBCharacteristic!

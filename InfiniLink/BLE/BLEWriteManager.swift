@@ -26,6 +26,14 @@ struct BLEWriteManager {
         bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
     }
     
+    func setTime(characteristic: CBCharacteristic) {
+        do {
+            try bleManager.infiniTime.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
+        } catch {
+            bleManager.setTimeError = true
+        }
+    }
+    
     func sendNotification(title: String, body: String) {
         guard let titleData = ("   " + title + "\0").data(using: .ascii) else {
             DebugLogManager.shared.debug(error: "Failed to convert notification title to ASCII. Title: '\(title)'", log: .app, date: Date())
