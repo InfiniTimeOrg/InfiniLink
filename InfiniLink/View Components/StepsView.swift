@@ -69,18 +69,6 @@ struct StepView: View {
                         .foregroundColor(.primary)
                         .font(.title.weight(.bold))
                     Spacer()
-                    Button {
-                        SheetManager.shared.sheetSelection = .stepSettings
-                        SheetManager.shared.showSheet = true
-                    } label: {
-                        Image(systemName: "plus")
-                            .imageScale(.medium)
-                            .padding(14)
-                            .font(.body.weight(.semibold))
-                            .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                            .background(Material.regular)
-                            .clipShape(Circle())
-                    }
                 }
                 .padding()
                 .frame(maxWidth: .infinity, alignment: .center)

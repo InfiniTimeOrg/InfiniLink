@@ -126,8 +126,8 @@ struct Connect: View {
         .alert(isPresented: $showUnsupportedDeviceAlert) {
             Alert(title: Text(NSLocalizedString("oops", comment: "Oops!")), message: Text(NSLocalizedString("not_infinitime_device", comment: "It doesn't look like the device you selected is running InfiniTime.")), dismissButton: .cancel())
         }
-        .sheet(isPresented: $showHelpView) {
-            ConnectionHelpView(isDisplayed: $showHelpView)
+        .alert(isPresented: $showHelpView) {
+            Alert(title: Text(NSLocalizedString("connection_help", comment: "Connection Help")), message: Text(NSLocalizedString("other_notes_4", comment: "")), dismissButton: .cancel(Text(NSLocalizedString("ok", comment: ""))))
         }
     }
 }

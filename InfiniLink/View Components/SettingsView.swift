@@ -28,6 +28,7 @@ struct Settings_Page: View {
     @AppStorage("heartChartFill") var heartChartFill: Bool = true
     @AppStorage("batChartFill") var batChartFill: Bool = true
     @AppStorage("debugMode") var debugMode: Bool = false
+    @AppStorage("sendFirstConnectNotification") var sendFirstConnectNotification: Bool = true
     @AppStorage("weatherData") var weatherData: Bool = true
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
     @AppStorage("displayLocation") var displayLocation : String = "Cupertino"
@@ -132,6 +133,10 @@ struct Settings_Page: View {
                         Toggle(NSLocalizedString("filled_battery_graph", comment: ""), isOn: $batChartFill)
                             .modifier(RowModifier(style: .capsule))
                     }
+                    Spacer()
+                        .frame(height: 6)
+                    Toggle(NSLocalizedString("enable_first_connect_notification", comment: ""), isOn: $sendFirstConnectNotification)
+                        .modifier(RowModifier(style: .capsule))
                     Spacer()
                         .frame(height: 6)
                     VStack {

@@ -24,9 +24,10 @@ struct WhatsNew: View {
             .frame(maxWidth: .infinity, alignment: .trailing)
             Divider()
             ScrollView {
-                VStack(alignment: .leading, spacing: 15) {
-                    Text(NSLocalizedString("whats_new_body_1", comment: ""))
-                    Text(NSLocalizedString("whats_new_body_2", comment: ""))
+                VStack(alignment: .leading, spacing: 20) {
+                    ForEach(0...5, id: \.self) { index in
+                        Text(NSLocalizedString("whats_new_\(index + 1)", comment: ""))
+                    }
                 }
                 .padding()
             }

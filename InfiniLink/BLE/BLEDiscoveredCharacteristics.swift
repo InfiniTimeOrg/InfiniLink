@@ -9,10 +9,14 @@
 
 import CoreBluetooth
 import UIKit
+import SwiftUI
 
 struct BLEDiscoveredCharacteristics {
 	let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
+    
+    @AppStorage("sendFirstConnectNotification") var sendFirstConnectNotification: Bool = true
+    
 	func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
 		switch characteristic.uuid {
 		case bleManagerVal.cbuuidList.musicControl:
@@ -38,7 +42,7 @@ struct BLEDiscoveredCharacteristics {
             peripheral.setNotifyValue(true, for: characteristic)
 		case bleManagerVal.cbuuidList.notify:
             bleManagerVal.notifyCharacteristic = characteristic
-			if bleManager.firstConnect {
+			if bleManager.firstConnect && sendFirstConnectNotification {
                 BLEWriteManager.init().sendNotification(title: "", body: "\(UIDevice.current.name) Connected!")
                 bleManager.firstConnect = false
 			}

@@ -75,6 +75,7 @@
 "graph_styles" = "Styles de graphique";
 "filled_hrm_graph" = "Graphique HRM rempli";
 "filled_battery_graph" = "Graphique de batterie rempli";
+"enable_first_connect_notification" = "Notify on First Connect";
 "graph_data" = "Données graphiques";
 "clear_all_hrm_chart_data" = "Effacer toutes les données du graphique HRM";
 "clear_all_steps_chart_data" = "Clear All Steps Chart Data";
@@ -108,6 +109,7 @@
 "not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
 "disconnect" = "Déconnecter";
 "scanning" = "Balayage";
+"ok" = "OK";
 
 // - ConnectionHelpView
 "connection_help" = "";
@@ -156,24 +158,23 @@
 "software_update_available" = "Software Update Available";
 
 // - WhatsNew
-"whats_new_in" = "Nouveautés dans";
-"welcome_to_version" = "Bienvenue dans la version";
-"welcome_text" = "d'InfiniLink! J'espère que vous apprécierez les fonctionnalités que j'ai ajoutées à l'application pour cette version. N'hésitez pas à me contacter pour tout problème que vous rencontrez ou tout changement que vous aimeriez voir!";
-
-// - WhatsNewBody
-"whats_new_body_1" = "Another new UI!";
-"whats_new_body_2" = "Some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub page, or feel free to submit a pull request with localizations. Any help in this capcity is MUCH appreciated!";
+"whats_new_in" = "What's New in";
+"welcome_to_version" = "Welcome to version";
+"whats_new_1" = "The UI has been completely refreshed!";
+"whats_new_2" = "Apple HealthKit is now supported to sync step count and heart rate data with Apple Health.";
+"whats_new_3" = "InfiniLink users can now upload and delete files on their watch's Bluetooth filesystem, as well as upload external resource packages. Users can also convert images to the supported image format within the app.";
+"whats_new_4" = "Weather support has also been added in this release, using the National Weather Service API (for users in the United States) and the WeatherAPI API for users outside of the United States. The weather data is pushed using InfiniTime 1.14's new Simple Weather Service. Please make sure your InfiniTime device is updated to InfiniTime 1.14 to use the implementation.";
+"whats_new_5" = "This release also contains some new localizations. Please note that not all localizations have been updated for the new UI. If you're able to assist with localizations, please get in touch with us on the GitHub repo, or feel free to submit a pull request with localizations. Any help in this capacity is much appreciated!";
+"whats_new_6" = "Huge thanks to @JenJell on GitHub for implementing external resource support, weather support, and much more!";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "Bienvenue sur InfiniLink!";
-"onboarding_text" = "Je suis ravi que vous vouliez et puissiez tester cette version bêtâ de mon application compagnon iOS pour InfiniTime! Avant de commencer, assurez-vous d'autoriser cette application à utiliser le Bluetooth. Veuillez me signaler tout problème ou plantages que vous rencontrez ou les modifications suggérées ! Vos commentaires nous permettent, à vous et à moi, de travailler ensemble pour avoir une excellente application compagnon. Les rapports sont les bienvenus via TestFlight, ou via Github, Matrix, ou Mastodon (Les liens sont dispnibles dans l'onglet paramètres)";
-
-// - OnboardingBody
-"other_notes" = "Autres notes:";
-"other_notes_1" = "Les notifications ne sont actuellement pas fonctionnelles, car cela nécessite que le protocole Apple Notification Center Service (ANCS) soit implémenté dans InfiniTime.";
-"other_notes_2" = "Les commandes de musique fonctionnent dans InfiniTime, mais uniquement si vous écoutez de la musique via l'application Apple Music. Le contrôle de la musique à l'échelle du système dans iOS nécessite que le service propriétaire Apple Media Service soit implémenté dans InfiniTime. Au niveau de l'application, je ne peux vraiment interagir qu'avec Apple Music et n'ai aucun contrôle sur les podcasts, les vidéos Youtube, le volume du système, etc. jusqu'à ce qu'AMS soit ajouté à InfiniTime.";
-"other_notes_3" = "Votre PineTime n'est capable de maintenir qu'une seule connexion Bluetooth à la fois. Si vous rencontrez des problèmes de connexion, assurez-vous que votre PineTime n'est pas déjà connecté à un autre appareil ou à une autre application sur cet appareil.";
-"other_notes_4" = "Si votre PineTime n'apparaît toujours pas comme un appareil disponible, veuillez redémarrer votre montre en maintenant enfoncé le bouton latéral de votre montre jusqu'à ce que vous voyiez le logo de la pomme de pin Pine64 en vert, puis relâcher. Il y a actuellement un problème avec la découverte du Bluetooth dans Infinitime sur lequel les développeurs travaillent extrêmement dur. Souhaitez-leur bonne chance!";
+"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
+"onboarding_text" = "The official open-source iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes! Your feedback allows us to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon.";
+"other_notes" = "Other notes:";
+"other_notes_1" = "Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes_2" = "The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, etc. until AMS is added to InfiniTime.";
+"other_notes_3" = "Your InfiniTime device is currently only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
+"other_notes_4" = "If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release.";
 
 // - OnboardingDismissButton
 "dismiss_button" = "Fermer";
