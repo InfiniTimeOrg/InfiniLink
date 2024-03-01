@@ -1,0 +1,53 @@
+name: "Build & Analyze"
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  build_app:
+    runs-on: macos-14
+    steps:
+      - name: List Xcode installations
+        run: sudo ls -1 /Applications | grep "Xcode"
+
+      - name: Select Xcode 15.2
+        run: sudo xcode-select -s /Applications/Xcode_15.2.app/Contents/Developer
+
+      - name: Run uname
+        run: uname -a
+
+      - name: Check Xcode version
+        run: /usr/bin/xcodebuild -version
+
+      - name: Checkout source files
+        uses: actions/checkout@v3
+
+      - name: Build unsigned archive
+        run: |
+          xcodebuild archive \
+            -project InfiniLink.xcodeproj \
+            -scheme InfiniLink \
+            -archivePath unsigned.xcarchive \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination generic/platform=iOS \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO     
+
+      - name: Make IPA
+        run: |
+          find .
+          mv ./unsigned.xcarchive/Products/Applications ./Payload
+          zip -r infinilink.zip ./Payload
+          mv infinilink.zip infinilink.ipa
+          find .
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: app
+          path: infinilink.ipa
