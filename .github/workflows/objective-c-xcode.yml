@@ -48,9 +48,3 @@ jobs:
         with:
           name: infinilink.ipa
           path: infinilink.ipa
-
-      - name: Upload build artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: infinilink.ipa
-          path: infinilink.ipa
