@@ -37,6 +37,8 @@ struct StepCountPersistenceManager {
                     if arbitrary {
                         overwriteStepCount(oldStepCount: i, newSteps: Int(i.steps + steps), date)
                     } else {
+                        clearCurrentDaySteps()
+                        
                         let newTotalSteps = max(i.steps, steps)
                         overwriteStepCount(oldStepCount: i, newSteps: Int(newTotalSteps), date)
                         return
@@ -66,6 +68,19 @@ struct StepCountPersistenceManager {
             try viewContext.save()
         } catch {
             DebugLogManager.shared.debug(error: "Couldn't save step count: \(error)", log: .app, date: Date())
+        }
+    }
+    
+    func clearCurrentDaySteps() {
+        let currentDate = Date()
+        let existingCounts = lookupStepCounts(write: true)
+        
+        if let currentDayStepCount = existingCounts.first(where: {
+            Calendar.current.isDate($0.timestamp!, inSameDayAs: currentDate)
+        }) {
+            overwriteStepCount(oldStepCount: currentDayStepCount, newSteps: 0, currentDate)
+        } else {
+            saveNewStepCount(steps: 0, date: currentDate)
         }
     }
 }

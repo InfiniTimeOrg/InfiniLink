@@ -101,12 +101,22 @@ func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage? {
 func cropImage(image: UIImage) -> UIImage? {
     let shorterSide = min(image.size.width, image.size.height)
     let squareRect = CGRect(x: 0, y: 0, width: shorterSide, height: shorterSide)
-
+    
     guard let cgImage = image.cgImage,
           let croppedCGImage = cgImage.cropping(to: squareRect)
     else {
         return nil
     }
-
+    
     return UIImage(cgImage: croppedCGImage)
+}
+
+extension Date: RawRepresentable {
+    public var rawValue: String {
+        self.timeIntervalSinceReferenceDate.description
+    }
+    
+    public init?(rawValue: String) {
+        self = Date(timeIntervalSinceReferenceDate: Double(rawValue) ?? 0.0)
+    }
 }

@@ -183,6 +183,8 @@
 "current_firmware" = "Current Firmware";
 "firmware_file" = "Firmware File";
 "clear" = "Clear";
+"update_requirement_1" = "To update, please make sure ";
+"update_requirement_2" = "'s battery level is over 30 percent";
 
 // - DFUWithoutBLE
 "bluetooth_not_available" = "Bluetooth Not Available";

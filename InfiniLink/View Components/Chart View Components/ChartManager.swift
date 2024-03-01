@@ -24,11 +24,15 @@ struct DataPoint {
 }
 
 class ChartManager: ObservableObject {
-	
+    @AppStorage("dataRangeSelection") var dateRangeSelection: Int = 0
+    @AppStorage("weeks") var weeks: Double = 0
+    @AppStorage("days") var days: Double = 0
+    @AppStorage("hours") var hours: Double = 1
+    @AppStorage("startDate") var startDate: Date = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? (Date() - 2419200)
+    @AppStorage("endDate") var endDate: Date = Date()
+    
 	@Published var currentChart: chartSelection = .heart
 	var lastChartWasHeart = UserDefaults.standard.value(forKey: "lastStatusViewWasHeart") as? Bool ?? true
-	@Published var heartRangeSelectionState = DateSelectionState()
-	@Published var batteryRangeSelectionState = DateSelectionState()
 	
 	let viewContext = PersistenceController.shared.container.viewContext
 	
@@ -40,19 +44,6 @@ class ChartManager: ObservableObject {
 		} else {
 			currentChart = .battery
 		}
-	}
-	
-	struct DateSelectionState {
-		@AppStorage("dataRangeSelection") var dateRangeSelection: Int = 0
-		
-		// state variables for slider
-		var hours: Float = 1
-		var days: Float = 0
-		var weeks: Float = 0
-		
-		// state variables for date picker
-		var endDate = Date()
-		var startDate = Calendar.current.date(byAdding: .hour, value: -1, to: Date()) ?? (Date() - 2419200)
 	}
 	
 	@Published var trueIfHeart = true
@@ -120,25 +111,25 @@ class ChartManager: ObservableObject {
 	}
 	
 	func convert(results: FetchedResults<ChartDataPoint>) -> [LineChartDataPoint] {
-		var dateRangeSelection: DateSelectionState
-		if currentChart == .heart {
-			dateRangeSelection = heartRangeSelectionState
-		} else {
+//		var dateRangeSelectionData: DateSelectionState
+//		if currentChart == .heart {
+//            dateRangeSelectionData = heartRangeSelectionState
+//		} else {
             //batteryRangeSelectionState.days = 2
-			dateRangeSelection = batteryRangeSelectionState
-		}
+//            dateRangeSelectionData = batteryRangeSelectionState
+//		}
 		var dataPoints: [LineChartDataPoint] = []
 		let dateFormat = DateFormatter()
 		dateFormat.dateFormat = "MMM d\nH:mm:ss"
 		for data in results {
-			switch dateRangeSelection.dateRangeSelection {
+			switch dateRangeSelection {
 			case 1:
-				let dateSum = (dateRangeSelection.hours * -3600) +	(dateRangeSelection.days * -86400) + (dateRangeSelection.weeks * -604800)
+				let dateSum = (hours * -3600) +	(days * -86400) + (weeks * -604800)
 				if data.timestamp!.timeIntervalSinceNow >= Double(dateSum) {
 					dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
 				}
 			case 2:
-				if data.timestamp! >= dateRangeSelection.startDate && data.timestamp! <= dateRangeSelection.endDate {
+				if data.timestamp! >= startDate && data.timestamp! <= endDate {
 					dataPoints.append(LineChartDataPoint(value: data.value, xAxisLabel: "Time", description: dateFormat.string(from: data.timestamp!), date: data.timestamp!))
 				}
 			default:

@@ -183,6 +183,8 @@
 "current_firmware" = "현재 펌웨어";
 "firmware_file" = "펌웨어 파일";
 "clear" = "Clear";
+"update_requirement_1" = "To update, please make sure ";
+"update_requirement_2" = "'s battery level is over 30 percent";
 
 // - DFUWithoutBLE
 "bluetooth_not_available" = "블루투스 사용 불가능";
