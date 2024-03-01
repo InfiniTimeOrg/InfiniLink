@@ -39,8 +39,15 @@ jobs:
         run: |
           find .
           mv ./unsigned.xcarchive/Products/Applications ./Payload
-          mv ./Payload/InfiniLink.app ./infinilink.ipa
+          zip -r infinilink.zip ./Payload
+          mv infinilink.zip infinilink.ipa
           find .
+          
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: infinilink.ipa
+          path: infinilink.ipa
 
       - name: Upload build artifact
         uses: actions/upload-artifact@v3
