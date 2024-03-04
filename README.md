@@ -1,7 +1,8 @@
 <br>
 
 <div align="center">
-
+  
+[![Build & Analyze](https://github.com/InfiniTimeOrg/InfiniLink/actions/workflows/objective-c-xcode.yml/badge.svg)](https://github.com/InfiniTimeOrg/InfiniLink/actions/workflows/objective-c-xcode.yml)
 [![Platforms](https://img.shields.io/badge/platforms-iOS-333333.svg)](https://github.com/InfiniTimeOrg/InfiniLink)
 [![GitHub tag](https://img.shields.io/github/tag/InfiniTimeOrg/InfiniLink?include_prereleases=&sort=semver&color=blue)](https://github.com/InfiniTimeOrg/InfiniLink/releases)
 [![License](https://img.shields.io/badge/License-MIT-blue)](https://github.com/InfiniTimeOrg/InfiniLink/blob/main/LICENSE)
