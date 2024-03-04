@@ -35,6 +35,14 @@ struct WatchFaceView: View {
                             AnalogWF(geometry: .constant(geometry))
                         case 2:
                             PineTimeStyleWF(geometry: .constant(geometry))
+                        case 3:
+                            TerminalWF(geometry: .constant(geometry))
+                        case 4:
+                            // Infineat
+                            EmptyView()
+                        case 5:
+                            // Casio G7710
+                            EmptyView()
                         default:
                             UnknownWF(geometry: .constant(geometry))
                         }
@@ -63,7 +71,7 @@ struct PineTimeStyleWF: View {
     @Binding var geometry: GeometryProxy
     
     var hour24: Bool {
-    switch bleManagerVal.timeFormat {
+        switch bleManagerVal.timeFormat {
         case .H12:
             return false
         case .H24:
@@ -247,7 +255,7 @@ struct AnalogWF: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry: GeometryProxy
-
+    
     var body: some View {
         ZStack {
             let hour = Calendar.current.component(.hour, from: Date())
@@ -265,7 +273,7 @@ struct AnalogWF: View {
                 .resizable()
                 .rotationEffect(Angle(degrees: Double(Calendar.current.component(.second, from: Date())) * 6))
         }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
 
@@ -285,7 +293,7 @@ struct DigitalWF: View {
             return true
         }
     }
-
+    
     var body: some View {
         ZStack {
             if !hour24 {
@@ -305,7 +313,91 @@ struct DigitalWF: View {
                     .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
             }
         }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+    }
+}
+
+struct TerminalWF: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @ObservedObject var bleManager = BLEManager.shared
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var geometry: GeometryProxy
+    
+    var hour24: Bool {
+        switch bleManagerVal.timeFormat {
+        case .H12:
+            return false
+        case .H24:
+            return true
+        default:
+            return true
+        }
+    }
+    
+    let currentHour = Calendar.current.component(.hour, from: Date())
+    let currentMinute = Calendar.current.component(.minute, from: Date())
+    let currentSecond = Calendar.current.component(.second, from: Date())
+    
+    var body: some View {
+        ZStack {
+            Text("user@watch:~ $ now")
+                .foregroundColor(.white)
+                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 3.1)
+            if !hour24 {
+                Group {
+                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", (currentHour % 12 == 0) ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
+                }
+                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.7)
+            } else {
+                Group {
+                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond))").foregroundColor(.green)
+                }
+                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.7)
+            }
+            Group {
+                Text("[DATE]").foregroundColor(.white) + Text("\(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: Date()), Calendar.current.component(.month, from: Date()), Calendar.current.component(.day, from: Date())))").foregroundColor(.blue)
+            }
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.4)
+            Group {
+                Text("[BATT]").foregroundColor(.white) + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(Color(red: 0, green: 0.4, blue: 0.2))
+            }
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.16)
+            Group {
+                Text("[STEP]").foregroundColor(.white) + Text("\(bleManagerVal.stepCount) steps").foregroundColor(Color(red: 1, green: 0.2, blue: 0.5))
+            }
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.96)
+            Group {
+                Text("[L_HR]").foregroundColor(.white) + Text("\(bleManagerVal.heartBPM == 0 ? "---" : "\(bleManagerVal.heartBPM)")").foregroundColor(.red)
+            }
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.8)
+            Group {
+                Text("[STAT]").foregroundColor(.white) + Text("Connected").foregroundColor(.blue)
+            }
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.67)
+            Text("user@watch:~ $")
+                .foregroundColor(.white)
+                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.56)
+        }
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
 
@@ -325,7 +417,7 @@ struct CustomTextView: View {
     var text: String
     var font: Font
     var lineSpacing: CGFloat
-
+    
     var body: some View {
         VStack(alignment: .leading, spacing: lineSpacing) {
             ForEach(text.components(separatedBy: "\n"), id: \.self) { line in
@@ -338,10 +430,6 @@ struct CustomTextView: View {
 
 #Preview {
     NavigationView {
-        DeviceView()
-            .onAppear {
-                BLEManager.shared.isConnectedToPinetime = true
-                BLEManagerVal.shared.firmwareVersion = "1.14.0"
-            }
+        WatchFaceView(watchface: .constant(3))
     }
 }
