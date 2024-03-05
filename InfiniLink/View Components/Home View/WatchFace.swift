@@ -277,7 +277,6 @@ struct AnalogWF: View {
     }
 }
 
-
 struct DigitalWF: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @Environment(\.colorScheme) var colorScheme
@@ -344,14 +343,14 @@ struct TerminalWF: View {
                 .foregroundColor(.white)
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 3.1)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.9)
             if !hour24 {
                 Group {
                     Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", (currentHour % 12 == 0) ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
                 }
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.7)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
             } else {
                 Group {
                     Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond))").foregroundColor(.green)
@@ -359,43 +358,43 @@ struct TerminalWF: View {
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .foregroundColor(.white)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.7)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
             }
             Group {
                 Text("[DATE]").foregroundColor(.white) + Text("\(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: Date()), Calendar.current.component(.month, from: Date()), Calendar.current.component(.day, from: Date())))").foregroundColor(.blue)
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.4)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 3)
             Group {
                 Text("[BATT]").foregroundColor(.white) + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(Color(red: 0, green: 0.4, blue: 0.2))
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.16)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.36)
             Group {
                 Text("[STEP]").foregroundColor(.white) + Text("\(bleManagerVal.stepCount) steps").foregroundColor(Color(red: 1, green: 0.2, blue: 0.5))
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.96)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.95)
             Group {
                 Text("[L_HR]").foregroundColor(.white) + Text("\(bleManagerVal.heartBPM == 0 ? "---" : "\(bleManagerVal.heartBPM)")").foregroundColor(.red)
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.8)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.655)
             Group {
                 Text("[STAT]").foregroundColor(.white) + Text("Connected").foregroundColor(.blue)
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.67)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.445)
             Text("user@watch:~ $")
                 .foregroundColor(.white)
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.56)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.27)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
@@ -430,6 +429,11 @@ struct CustomTextView: View {
 
 #Preview {
     NavigationView {
-        WatchFaceView(watchface: .constant(3))
+        GeometryReader { geometry in
+            WatchFaceView(watchface: .constant(3))
+                .padding(22)
+                .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
+                .clipped(antialiased: true)
+        }
     }
 }
