@@ -155,15 +155,6 @@ struct Settings_Page: View {
                                         weatherController.tryRefreshingWeatherData()
                                     }
                                 }
-                            if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation{
-                                Button {
-                                    locationManager.requestAlwaysAuthorization()
-                                } label: {
-                                    Text(NSLocalizedString("always_allow_location_services", comment: ""))
-                                        .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                                }
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            }
                             NavigationLink(destination: WeatherSetLocationView()) {
                                 HStack {
                                     Text(NSLocalizedString("set_location", comment: ""))
@@ -178,27 +169,26 @@ struct Settings_Page: View {
                             }
                             .opacity(!useCurrentLocation ? 1.0 : 0.5)
                             .disabled(useCurrentLocation)
+                            if locationManager.authorizationStatus == .authorizedWhenInUse && useCurrentLocation {
+                                Group {
+                                    Text("To allow InfiniLink to update your device's weather in the background, please allow background location use in ") + Text("Settings").foregroundColor(.blue) + Text(".")
+                                }
+                                .onTapGesture {
+                                    guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                                    if UIApplication.shared.canOpenURL(settingsURL) {
+                                        UIApplication.shared.open(settingsURL)
+                                    }
+                                }
+                                .font(.system(size: 14))
+                                .foregroundColor(.gray)
+                                .frame(maxWidth: .infinity, alignment: .center)
+                                .padding(3)
+                                .lineSpacing(1.1)
+                            }
                         }
                     }
                     Spacer()
                         .frame(height: 6)
-                    if autoconnectUUID != "" {
-                        VStack {
-                            Button {
-                                autoconnectUUID = ""
-                                bleManager.autoconnectToDevice = false
-                                DebugLogManager.shared.debug(error: NSLocalizedString("autoconnect_device_cleared", comment: ""), log: .app, date: Date())
-                            } label: {
-                                Text(NSLocalizedString("clear_autoconnect_device", comment: ""))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .modifier(RowModifier(style: .capsule))
-                            }
-                            .opacity(!autoconnect || autoconnectUUID.isEmpty ? 0.5 : 1.0)
-                            .disabled(!autoconnect || autoconnectUUID.isEmpty)
-                        }
-                        Spacer()
-                            .frame(height: 6)
-                    }
                     VStack {
                         Button(action: {
                             showClearHRMChartConf = true

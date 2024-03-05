@@ -81,14 +81,8 @@ struct WelcomeView: View {
                     }
                     .fullBackground(imageName: "LaunchScreen")
                 }
-                
             } else {
                 DeviceView()
-            }
-        }
-        .onAppear {
-            if bleManager.isSwitchedOn {
-                bleManager.startScanning()
             }
         }
         .onDisappear {
@@ -96,9 +90,7 @@ struct WelcomeView: View {
                 bleManager.stopScanning()
             }
         }
-        
     }
-    
 }
 
 struct NeumorphicButtonModifer: ViewModifier {

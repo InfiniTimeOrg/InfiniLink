@@ -338,7 +338,9 @@ struct DFURefreshButton: View {
     NavigationView {
         DFUWithBLE()
             .onAppear {
-                BLEDeviceInfo.shared.firmware = "1.14.0"
+                BLEDeviceInfo.shared.firmware = "1.13.0"
+                BLEManager.shared.isConnectedToPinetime = true
+                BLEManager.shared.batteryLevel = 40
             }
     }
 }

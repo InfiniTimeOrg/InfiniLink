@@ -66,7 +66,7 @@ struct HeartView: View {
                     Spacer()
                     Image(systemName: "heart")
                         .imageScale(.large)
-                        .font(.system(size: 30).weight(.semibold))
+                        .font(.system(size: 40).weight(.semibold))
                         .foregroundColor(.red)
                     VStack(spacing: 8) {
                         Text(NSLocalizedString("oops", comment: ""))

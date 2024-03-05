@@ -127,18 +127,6 @@ struct WeatherDetailView: View {
                             .padding(.horizontal, -16)
                     }
                     Spacer()
-                    Divider()
-                        .padding(.horizontal, -16)
-                    Group {
-                        if !WeatherController.shared.nwsapiFailed {
-                            Text("Data from NWS")
-                        } else if !WeatherController.shared.weatherapiFailed {
-                            Text("Data from WeatherAPI")
-                        }
-                    }
-                    .padding(8)
-                    .font(.system(size: 14).weight(.medium))
-                    .foregroundColor(.gray)
                 }
             }
             .padding()
