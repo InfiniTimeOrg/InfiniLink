@@ -56,7 +56,6 @@
 		26C5FAE326FEB0A400921207 /* DFUDownloadView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */; };
 		26C5FAE8270100FF00921207 /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26C5FAE7270100FF00921207 /* DownloadManager.swift */; };
 		26D7816526C9EB3800BBF555 /* BLEDelegates.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816426C9EB3800BBF555 /* BLEDelegates.swift */; };
-		26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */; };
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
@@ -65,12 +64,16 @@
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
 		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
 		E0C0E8612B96C24F0021E4AE /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E8602B96C24F0021E4AE /* WeatherDetailView.swift */; };
+		E0C0E86D2B96D6460021E4AE /* HeartChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E86C2B96D6460021E4AE /* HeartChartView.swift */; };
+		E0C0E86F2B96D6640021E4AE /* StepsChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E86E2B96D6640021E4AE /* StepsChartView.swift */; };
+		E0C0E8762B96D77C0021E4AE /* BatteryNotifications.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E8752B96D77C0021E4AE /* BatteryNotifications.swift */; };
+		E0C0E8782B96D7E80021E4AE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0C0E8772B96D7E80021E4AE /* Launch Screen.storyboard */; };
+		E0C0E87A2B96D8F70021E4AE /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E8792B96D8F70021E4AE /* WeatherController.swift */; };
 		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
 		E0F599412B76CABF00BE96A3 /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F599402B76CABF00BE96A3 /* FileSystemView.swift */; };
 		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
 		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
 		E515FB0D284C54690040B582 /* HeartChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0B284C54690040B582 /* HeartChartComponents.swift */; };
-		E515FB13284C55540040B582 /* ChartOverview.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB12284C55540040B582 /* ChartOverview.swift */; };
 		E515FB15284C56070040B582 /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB14284C56070040B582 /* DeviceView.swift */; };
 		E515FB17284C56480040B582 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB16284C56480040B582 /* WelcomeView.swift */; };
 		E515FB1B284C58AA0040B582 /* BLEManagerVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */; };
@@ -93,7 +96,6 @@
 		E53195502B792E6B004FECB4 /* pine_logo.svg in Resources */ = {isa = PBXBuildFile; fileRef = E531954A2B792E6B004FECB4 /* pine_logo.svg */; };
 		E53195512B792E6B004FECB4 /* navigation1.png in Resources */ = {isa = PBXBuildFile; fileRef = E531954B2B792E6B004FECB4 /* navigation1.png */; };
 		E53F51352B718E4A008D4CE6 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E53F51342B718E4A008D4CE6 /* Zip */; };
-		E57654032B5781970059C8EF /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57654022B5781970059C8EF /* WeatherController.swift */; };
 		E57AD5772823F85D00E33EEA /* DeviceData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E57AD5762823F85D00E33EEA /* DeviceData.swift */; };
 		E59398FA2B58DA1F00D5840A /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = E59398F92B58DA1F00D5840A /* SwiftyJSON */; };
 		E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */; };
@@ -177,7 +179,6 @@
 		26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUDownloadView.swift; sourceTree = "<group>"; };
 		26C5FAE7270100FF00921207 /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
 		26D7816426C9EB3800BBF555 /* BLEDelegates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDelegates.swift; sourceTree = "<group>"; };
-		26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsFunctions.swift; sourceTree = "<group>"; };
 		26D7816F26CA004B00BBF555 /* SettingsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
@@ -187,12 +188,16 @@
 		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSetLocationView.swift; sourceTree = "<group>"; };
 		E0C0E8602B96C24F0021E4AE /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
+		E0C0E86C2B96D6460021E4AE /* HeartChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChartView.swift; sourceTree = "<group>"; };
+		E0C0E86E2B96D6640021E4AE /* StepsChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsChartView.swift; sourceTree = "<group>"; };
+		E0C0E8752B96D77C0021E4AE /* BatteryNotifications.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryNotifications.swift; sourceTree = "<group>"; };
+		E0C0E8772B96D7E80021E4AE /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		E0C0E8792B96D8F70021E4AE /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		E0EC91C02B47213F007472EC /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0F599402B76CABF00BE96A3 /* FileSystemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemView.swift; sourceTree = "<group>"; };
 		E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		E515FB0A284C54690040B582 /* BatteryChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BatteryChartComponents.swift; sourceTree = "<group>"; };
 		E515FB0B284C54690040B582 /* HeartChartComponents.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HeartChartComponents.swift; sourceTree = "<group>"; };
-		E515FB12284C55540040B582 /* ChartOverview.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ChartOverview.swift; path = "InfiniLink/View Components/ChartOverview.swift"; sourceTree = SOURCE_ROOT; };
 		E515FB14284C56070040B582 /* DeviceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		E515FB16284C56480040B582 /* WelcomeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E515FB1A284C58AA0040B582 /* BLEManagerVariables.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BLEManagerVariables.swift; sourceTree = "<group>"; };
@@ -214,8 +219,7 @@
 		E53195492B792E6B004FECB4 /* battery.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = battery.png; sourceTree = "<group>"; };
 		E531954A2B792E6B004FECB4 /* pine_logo.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = pine_logo.svg; sourceTree = "<group>"; };
 		E531954B2B792E6B004FECB4 /* navigation1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = navigation1.png; sourceTree = "<group>"; };
-		E57654022B5781970059C8EF /* WeatherController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WeatherController.swift; path = InfiniLink/Weather/WeatherController.swift; sourceTree = SOURCE_ROOT; };
-		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DeviceData.swift; path = ../DeviceData.swift; sourceTree = "<group>"; };
+		E57AD5762823F85D00E33EEA /* DeviceData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceData.swift; sourceTree = "<group>"; };
 		E57AD57D282462D900E33EEA /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/Localizable.strings; sourceTree = "<group>"; };
 		E5DBC9A32B828DF4003E0A28 /* LV_IMG_Convert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LV_IMG_Convert.swift; sourceTree = "<group>"; };
 		E5E7F7A92B6564E9005E4277 /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
@@ -256,16 +260,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2601AF68272210EB00D999EF /* Steps View Components */ = {
-			isa = PBXGroup;
-			children = (
-				2601AF692722110700D999EF /* StepProgressGauge.swift */,
-				267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */,
-				263462EB2729F64600D3278D /* StepCalendar */,
-			);
-			path = "Steps View Components";
-			sourceTree = "<group>";
-		};
 		263462EB2729F64600D3278D /* StepCalendar */ = {
 			isa = PBXGroup;
 			children = (
@@ -276,29 +270,13 @@
 			path = StepCalendar;
 			sourceTree = "<group>";
 		};
-		263B20B626CD673D00676BF0 /* Chart View Components */ = {
+		263B20B626CD673D00676BF0 /* Chart */ = {
 			isa = PBXGroup;
 			children = (
-				E515FB0A284C54690040B582 /* BatteryChartComponents.swift */,
-				E515FB0B284C54690040B582 /* HeartChartComponents.swift */,
 				E528604F282C5ED300C06FA0 /* ChartViewComponents.swift */,
-				263B20B926CDF13400676BF0 /* HeartChart.swift */,
-				E097C1182B4F0B7E005293D8 /* BatteryChart.swift */,
 				266F53E326F7FCA6007481A6 /* ChartManager.swift */,
 			);
-			path = "Chart View Components";
-			sourceTree = "<group>";
-		};
-		263B20C826CF07BE00676BF0 /* DFU View */ = {
-			isa = PBXGroup;
-			children = (
-				26A6315F26C4BC25005AE404 /* DFUView.swift */,
-				2632388326F2531C00D72B43 /* DFUWithBLE.swift */,
-				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
-				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
-				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
-			);
-			path = "DFU View";
+			path = Chart;
 			sourceTree = "<group>";
 		};
 		264BFE3526BC51CE0050A223 = {
@@ -326,19 +304,19 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
-				E53195452B792E61004FECB4 /* Resources */,
 				E53195302B792E2E004FECB4 /* Fonts */,
-				264DB80926C62EAC00E812C3 /* View Components */,
-				26D7816826C9F02A00BBF555 /* Settings */,
-				26A6316126C4C6BB005AE404 /* BLE */,
-				E03544142B59648D00FEA7AA /* Weather */,
-				26A6315926C49839005AE404 /* DFU */,
+				E53195452B792E61004FECB4 /* Resources */,
+				E0C0E8622B96D4DF0021E4AE /* Core */,
+				264DB80926C62EAC00E812C3 /* Components */,
 				26A6314E26BF0FA2005AE404 /* Music */,
+				26A6316126C4C6BB005AE404 /* BLE */,
+				26A6315926C49839005AE404 /* DFU */,
 				26D7817826CAD18B00BBF555 /* Utilities */,
 				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
+				E0C0E8772B96D7E80021E4AE /* Launch Screen.storyboard */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
 				2601AF612721D0BF00D999EF /* InfiniLink.xcdatamodeld */,
 				264BFE4726BC51CF0050A223 /* Preview Content */,
@@ -373,61 +351,22 @@
 			path = InfiniLinkUITests;
 			sourceTree = "<group>";
 		};
-		264DB80926C62EAC00E812C3 /* View Components */ = {
+		264DB80926C62EAC00E812C3 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				26A40EE6270A1F78007966F6 /* Home View */,
-				E515FB12284C55540040B582 /* ChartOverview.swift */,
-				E5EEB1DD2803780C00FB0C11 /* StepsView.swift */,
-				E5EEB1D828034EA500FB0C11 /* BatteryView.swift */,
-				E5EEB1D728034EA500FB0C11 /* HeartView.swift */,
-				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
-				2601AF68272210EB00D999EF /* Steps View Components */,
-				26A40E872704E964007966F6 /* Debug View */,
 				26C5FAD626FC126F00921207 /* Sheets */,
-				263B20C826CF07BE00676BF0 /* DFU View */,
-				2675CA5826DC5C9400967E4D /* View Utilities */,
-				263B20B626CD673D00676BF0 /* Chart View Components */,
+				263B20B626CD673D00676BF0 /* Chart */,
 			);
-			path = "View Components";
+			path = Components;
 			sourceTree = "<group>";
 		};
-		2675CA5826DC5C9400967E4D /* View Utilities */ = {
-			isa = PBXGroup;
-			children = (
-				E57AD5762823F85D00E33EEA /* DeviceData.swift */,
-			);
-			path = "View Utilities";
-			sourceTree = "<group>";
-		};
-		26A40E862704E7FD007966F6 /* Debug */ = {
+		26A40E872704E964007966F6 /* Debug */ = {
 			isa = PBXGroup;
 			children = (
 				263F56DF26F13E760001BA4F /* DebugManager.swift */,
+				E0C0E8732B96D7400021E4AE /* Views */,
 			);
 			path = Debug;
-			sourceTree = "<group>";
-		};
-		26A40E872704E964007966F6 /* Debug View */ = {
-			isa = PBXGroup;
-			children = (
-				26B2BAF626F139D600FBC9CE /* DebugView.swift */,
-				26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */,
-			);
-			path = "Debug View";
-			sourceTree = "<group>";
-		};
-		26A40EE6270A1F78007966F6 /* Home View */ = {
-			isa = PBXGroup;
-			children = (
-				E515FB16284C56480040B582 /* WelcomeView.swift */,
-				E515FB14284C56070040B582 /* DeviceView.swift */,
-				E5EEB1D32803438200FB0C11 /* RenameView.swift */,
-				E0F599402B76CABF00BE96A3 /* FileSystemView.swift */,
-				E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */,
-				E531952C2B792D84004FECB4 /* WatchFace.swift */,
-			);
-			path = "Home View";
 			sourceTree = "<group>";
 		};
 		26A6314E26BF0FA2005AE404 /* Music */ = {
@@ -467,30 +406,16 @@
 		26C5FAD626FC126F00921207 /* Sheets */ = {
 			isa = PBXGroup;
 			children = (
-				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
+				E0C0E8722B96D6BC0021E4AE /* Views */,
 				26A40E842704E6F3007966F6 /* SheetManager.swift */,
-				268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */,
-				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
-				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
-				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
-				2644261526DC1D8E009BD54A /* Onboarding.swift */,
-				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
 			);
 			path = Sheets;
-			sourceTree = "<group>";
-		};
-		26D7816826C9F02A00BBF555 /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				26D7816D26CA003B00BBF555 /* SettingsFunctions.swift */,
-			);
-			path = Settings;
 			sourceTree = "<group>";
 		};
 		26D7817826CAD18B00BBF555 /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
-				26A40E862704E7FD007966F6 /* Debug */,
+				E57AD5762823F85D00E33EEA /* DeviceData.swift */,
 				264BFE7526BC52720050A223 /* HexStringToData.swift */,
 				264AE04527026BD6001504A7 /* UptimeManager.swift */,
 				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
@@ -509,7 +434,7 @@
 			isa = PBXGroup;
 			children = (
 				E0A1477D2B5EC56E000193E9 /* Views */,
-				E57654022B5781970059C8EF /* WeatherController.swift */,
+				E0C0E8792B96D8F70021E4AE /* WeatherController.swift */,
 			);
 			path = Weather;
 			sourceTree = "<group>";
@@ -521,6 +446,143 @@
 				E0C0E8602B96C24F0021E4AE /* WeatherDetailView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		E0C0E8622B96D4DF0021E4AE /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				E0C0E87B2B96E9310021E4AE /* Settings */,
+				E03544142B59648D00FEA7AA /* Weather */,
+				E0C0E8652B96D5260021E4AE /* Welcome */,
+				E0C0E8632B96D4E90021E4AE /* Home */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E0C0E8632B96D4E90021E4AE /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				E0C0E8702B96D6850021E4AE /* Battery */,
+				E0C0E86A2B96D5DD0021E4AE /* Heart */,
+				E0C0E8692B96D5BB0021E4AE /* DFU */,
+				E0C0E8672B96D5610021E4AE /* Steps */,
+				E515FB14284C56070040B582 /* DeviceView.swift */,
+				E5EEB1D32803438200FB0C11 /* RenameView.swift */,
+				E0F599402B76CABF00BE96A3 /* FileSystemView.swift */,
+				E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */,
+				E531952C2B792D84004FECB4 /* WatchFace.swift */,
+				26C5FAD726FC129400921207 /* ArbitraryNotificationView.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		E0C0E8652B96D5260021E4AE /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				E515FB16284C56480040B582 /* WelcomeView.swift */,
+				26A6316226C4C6D6005AE404 /* BLEConnectView.swift */,
+				2617EF3827036C9B00FE6F48 /* WhatsNewSheet.swift */,
+				2644261526DC1D8E009BD54A /* Onboarding.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		E0C0E8672B96D5610021E4AE /* Steps */ = {
+			isa = PBXGroup;
+			children = (
+				E0C0E8682B96D5880021E4AE /* Chart */,
+				E5EEB1DD2803780C00FB0C11 /* StepsView.swift */,
+			);
+			path = Steps;
+			sourceTree = "<group>";
+		};
+		E0C0E8682B96D5880021E4AE /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				2601AF692722110700D999EF /* StepProgressGauge.swift */,
+				267C2EF7273C8AB300F464B0 /* StepWeeklyGraph.swift */,
+				263462EB2729F64600D3278D /* StepCalendar */,
+				E0C0E86E2B96D6640021E4AE /* StepsChartView.swift */,
+			);
+			path = Chart;
+			sourceTree = "<group>";
+		};
+		E0C0E8692B96D5BB0021E4AE /* DFU */ = {
+			isa = PBXGroup;
+			children = (
+				263B20C626CF07BB00676BF0 /* DFUProgressBar.swift */,
+				2632388926F2591900D72B43 /* DFUStartTransferButton.swift */,
+				2632388526F2548600D72B43 /* DFUWithoutBLE.swift */,
+				2632388326F2531C00D72B43 /* DFUWithBLE.swift */,
+				26A6315F26C4BC25005AE404 /* DFUView.swift */,
+				26C5FAE226FEB0A400921207 /* DFUDownloadView.swift */,
+			);
+			path = DFU;
+			sourceTree = "<group>";
+		};
+		E0C0E86A2B96D5DD0021E4AE /* Heart */ = {
+			isa = PBXGroup;
+			children = (
+				E0C0E86B2B96D5E90021E4AE /* Chart */,
+				E5EEB1D728034EA500FB0C11 /* HeartView.swift */,
+			);
+			path = Heart;
+			sourceTree = "<group>";
+		};
+		E0C0E86B2B96D5E90021E4AE /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				263B20B926CDF13400676BF0 /* HeartChart.swift */,
+				268E773B27174A2B000DF90D /* ChartSettingsSheetMain.swift */,
+				E515FB0B284C54690040B582 /* HeartChartComponents.swift */,
+				E0C0E86C2B96D6460021E4AE /* HeartChartView.swift */,
+			);
+			path = Chart;
+			sourceTree = "<group>";
+		};
+		E0C0E8702B96D6850021E4AE /* Battery */ = {
+			isa = PBXGroup;
+			children = (
+				E5EEB1D828034EA500FB0C11 /* BatteryView.swift */,
+				E0C0E8712B96D68D0021E4AE /* Chart */,
+				E0C0E8752B96D77C0021E4AE /* BatteryNotifications.swift */,
+			);
+			path = Battery;
+			sourceTree = "<group>";
+		};
+		E0C0E8712B96D68D0021E4AE /* Chart */ = {
+			isa = PBXGroup;
+			children = (
+				E515FB0A284C54690040B582 /* BatteryChartComponents.swift */,
+				E097C1182B4F0B7E005293D8 /* BatteryChart.swift */,
+			);
+			path = Chart;
+			sourceTree = "<group>";
+		};
+		E0C0E8722B96D6BC0021E4AE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				26C5FADB26FE7EB000921207 /* SheetCloseButton.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E0C0E8732B96D7400021E4AE /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				26A40E8E270509BA007966F6 /* DebugViewShareButton.swift */,
+				26B2BAF626F139D600FBC9CE /* DebugView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		E0C0E87B2B96E9310021E4AE /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				26D7816F26CA004B00BBF555 /* SettingsView.swift */,
+				26A40E872704E964007966F6 /* Debug */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 		E53195302B792E2E004FECB4 /* Fonts */ = {
@@ -679,6 +741,7 @@
 				E53195432B792E3C004FECB4 /* repetitionscrolling.ttf in Resources */,
 				264BFE7826BCAAC00050A223 /* README.md in Resources */,
 				F9A88B642765357600B2B94C /* Localizable.strings in Resources */,
+				E0C0E8782B96D7E80021E4AE /* Launch Screen.storyboard in Resources */,
 				E531953C2B792E3C004FECB4 /* BebasNeue-Regular.ttf in Resources */,
 				E53195412B792E3C004FECB4 /* open_sans_light.ttf in Resources */,
 				E531954C2B792E6B004FECB4 /* navigation0.png in Resources */,
@@ -719,10 +782,12 @@
 			files = (
 				263B20BA26CDF13400676BF0 /* HeartChart.swift in Sources */,
 				26A40E852704E6F3007966F6 /* SheetManager.swift in Sources */,
+				E0C0E86F2B96D6640021E4AE /* StepsChartView.swift in Sources */,
 				E5EEB1DE2803780C00FB0C11 /* StepsView.swift in Sources */,
 				26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */,
 				264BFE4B26BC51CF0050A223 /* Persistence.swift in Sources */,
 				26A40E932707D119007966F6 /* BLEUpdateHandler.swift in Sources */,
+				E0C0E86D2B96D6460021E4AE /* HeartChartView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				2601AF632721D0BF00D999EF /* InfiniLink.xcdatamodeld in Sources */,
 				26A6315526C0297A005AE404 /* BLEWriteManager.swift in Sources */,
@@ -737,6 +802,7 @@
 				268E773C27174A2B000DF90D /* ChartSettingsSheetMain.swift in Sources */,
 				E5286050282C5ED300C06FA0 /* ChartViewComponents.swift in Sources */,
 				26B2BAF726F139D600FBC9CE /* DebugView.swift in Sources */,
+				E0C0E8762B96D77C0021E4AE /* BatteryNotifications.swift in Sources */,
 				26A40E912707C7A3007966F6 /* BLEDiscoveredCharacteristics.swift in Sources */,
 				264BFE7426BC526C0050A223 /* BLEManager.swift in Sources */,
 				E5EEB1D928034EA500FB0C11 /* HeartView.swift in Sources */,
@@ -751,7 +817,6 @@
 				E531952D2B792D84004FECB4 /* WatchFace.swift in Sources */,
 				E0754FDA2B83BBF800B35787 /* LV_IMG_Convert.swift in Sources */,
 				E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */,
-				E515FB13284C55540040B582 /* ChartOverview.swift in Sources */,
 				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
 				E515FB15284C56070040B582 /* DeviceView.swift in Sources */,
 				263F56E026F13E760001BA4F /* DebugManager.swift in Sources */,
@@ -769,9 +834,8 @@
 				E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */,
 				2632388A26F2591900D72B43 /* DFUStartTransferButton.swift in Sources */,
 				2644261226DC093D009BD54A /* SetTime.swift in Sources */,
+				E0C0E87A2B96D8F70021E4AE /* WeatherController.swift in Sources */,
 				263462EF2729F6C000D3278D /* CalendarViewExtensions.swift in Sources */,
-				E57654032B5781970059C8EF /* WeatherController.swift in Sources */,
-				26D7816E26CA003B00BBF555 /* SettingsFunctions.swift in Sources */,
 				E5E7F7AA2B6564E9005E4277 /* BLE_FS.swift in Sources */,
 				E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */,
 				E0C0E8612B96C24F0021E4AE /* WeatherDetailView.swift in Sources */,
