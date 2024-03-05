@@ -47,6 +47,8 @@
 		<string>JetBrainsMono-Light.ttf</string>
 		<string>JetBrainsMono-Regular.ttf</string>
 		<string>open_sans_light.ttf</string>
+		<string>BebasNeue-Regular.ttf</string>
+		<string>Teko-Light.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>

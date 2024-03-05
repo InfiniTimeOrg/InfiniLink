@@ -171,7 +171,6 @@ struct DeviceView: View {
                                 .foregroundColor(.white)
                                 .cornerRadius(15)
                             }
-//                            .disabled(bleManagerVal.loadingWeather)
                             Spacer()
                                 .frame(height: 6)
                         }

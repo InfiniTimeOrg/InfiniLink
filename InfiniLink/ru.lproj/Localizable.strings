@@ -283,3 +283,4 @@
 "use_current_location" = "Use Current Location";
 "set_location" = "Location";
 "always_allow_location_services" = "Always Allow Current Location";
+"loading_weather" = "Loading Weather...";

@@ -38,13 +38,13 @@ struct WatchFaceView: View {
                         case 3:
                             TerminalWF(geometry: .constant(geometry))
                         case 4:
-                            // Infineat
-                            EmptyView()
+                            InfineatWF(geometry: .constant(geometry))
                         case 5:
                             // Casio G7710
                             EmptyView()
                         default:
-                            UnknownWF(geometry: .constant(geometry))
+                            ProgressView()
+                                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
                         }
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
@@ -316,6 +316,82 @@ struct DigitalWF: View {
     }
 }
 
+struct InfineatWF: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var geometry: GeometryProxy
+    
+    var hour24: Bool {
+        switch bleManagerVal.timeFormat {
+        case .H12:
+            return false
+        case .H24:
+            return true
+        default:
+            return true
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            if hour24 {
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
+                    .foregroundColor(.white)
+                    .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
+            }
+            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+                VStack(alignment: .center, spacing: -28) {
+                    Text("\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12))")
+                    Text("\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))")
+                }
+                .font(.custom("BebasNeue-Regular", size: geometry.size.width * 0.44))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
+            } else {
+                VStack(alignment: .center, spacing: -28) {
+                    Text("\(String(format: "%02d", Calendar.current.component(.hour, from: Date())))")
+                    Text("\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))")
+                }
+                .font(.custom("BebasNeue-Regular", size: geometry.size.width * 0.44))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
+                    
+            }
+            CustomTextView(
+                text: {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "E dd"
+                    return dateFormatter.string(from: Date())
+                }(),
+                font: .custom("Teko-Light", size: geometry.size.width * 0.118),
+                lineSpacing: 0
+            )
+            .foregroundColor(.gray)
+            .frame(width: geometry.size.width, height: geometry.size.height / 2.2, alignment: .trailing)
+            Image("bluetooth")
+                .resizable()
+                .frame(width: 18, height: 20)
+                .frame(width: geometry.size.width / 1.14, height: geometry.size.height / 2.8, alignment: .bottomTrailing)
+            Image("pine_logo")
+                .resizable()
+                .frame(width: 20, height: 26)
+                .frame(width: geometry.size.width / 1.15, height: geometry.size.height, alignment: .leading)
+            HStack(spacing: 4) {
+                Image(systemName: "shoeprints.fill")
+                    .rotationEffect(Angle(degrees: 90))
+                    .font(.system(size: geometry.size.width * 0.08))
+                CustomTextView(text: "\(bleManagerVal.stepCount)", font: .custom("Teko-Light", size: geometry.size.width * 0.118), lineSpacing: 0)
+            }
+            .foregroundColor(.gray)
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
+            .padding(.bottom, -16)
+        }
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+    }
+}
+
 struct TerminalWF: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var bleManager = BLEManager.shared
@@ -400,18 +476,6 @@ struct TerminalWF: View {
     }
 }
 
-struct UnknownWF: View {
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var geometry: GeometryProxy
-    
-    var body: some View {
-        VStack {
-            ProgressView()
-        }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
-    }
-}
-
 struct CustomTextView: View {
     var text: String
     var font: Font
@@ -430,7 +494,7 @@ struct CustomTextView: View {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(3))
+            WatchFaceView(watchface: .constant(4))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

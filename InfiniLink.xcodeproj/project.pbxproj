@@ -451,10 +451,10 @@
 		E0C0E8622B96D4DF0021E4AE /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E0C0E8632B96D4E90021E4AE /* Home */,
 				E0C0E87B2B96E9310021E4AE /* Settings */,
 				E03544142B59648D00FEA7AA /* Weather */,
 				E0C0E8652B96D5260021E4AE /* Welcome */,
-				E0C0E8632B96D4E90021E4AE /* Home */,
 			);
 			path = Core;
 			sourceTree = "<group>";
