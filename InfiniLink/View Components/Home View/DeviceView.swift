@@ -133,39 +133,45 @@ struct DeviceView: View {
                             }
                         }
                         if weatherData {
-                            VStack {
-                                HStack {
-                                    VStack(alignment: .leading) {
-                                        Text(NSLocalizedString("weather", comment: ""))
-                                            .font(.headline)
-                                        if bleManagerVal.loadingWeather {
-                                            Text(NSLocalizedString("loading", comment: "Loading..."))
-                                        } else {
-                                            if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
-                                                Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
-                                                    .font(.title.weight(.semibold))
+                            Button(action: {
+                                SheetManager.shared.sheetSelection = .weather
+                                SheetManager.shared.showSheet = true
+                            }) {
+                                VStack {
+                                    HStack {
+                                        VStack(alignment: .leading) {
+                                            Text(NSLocalizedString("weather", comment: ""))
+                                                .font(.headline)
+                                            if bleManagerVal.loadingWeather {
+                                                Text(NSLocalizedString("loading", comment: "Loading..."))
                                             } else {
-                                                Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
-                                                    .font(.title.weight(.semibold))
+                                                if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
+                                                    Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
+                                                        .font(.title.weight(.semibold))
+                                                } else {
+                                                    Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
+                                                        .font(.title.weight(.semibold))
+                                                }
                                             }
                                         }
-                                    }
-                                    .font(.title.weight(.semibold))
-                                    Spacer()
-                                    VStack {
-                                        if bleManagerVal.loadingWeather {
-                                            Image(systemName: "circle.slash")
-                                        } else {
-                                            Image(systemName: icon)
+                                        .font(.title.weight(.semibold))
+                                        Spacer()
+                                        VStack {
+                                            if bleManagerVal.loadingWeather {
+                                                Image(systemName: "circle.slash")
+                                            } else {
+                                                Image(systemName: icon)
+                                            }
                                         }
+                                        .font(.title.weight(.medium))
                                     }
-                                    .font(.title.weight(.medium))
                                 }
+                                .padding()
+                                .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
+                                .foregroundColor(.white)
+                                .cornerRadius(15)
                             }
-                            .padding()
-                            .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
-                            .foregroundColor(.white)
-                            .cornerRadius(15)
+//                            .disabled(bleManagerVal.loadingWeather)
                             Spacer()
                                 .frame(height: 6)
                         }

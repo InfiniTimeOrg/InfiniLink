@@ -16,6 +16,7 @@ enum SheetSelection {
 	case notification
 	case whatsNew
 	case chartSettings
+    case weather
 }
 
 class SheetManager: ObservableObject {
@@ -77,6 +78,8 @@ class SheetManager: ObservableObject {
 				WhatsNew()
 			case .chartSettings:
 				ChartSettingsSheet()
+            case .weather:
+                WeatherDetailView()
 			}
 		}
 	}

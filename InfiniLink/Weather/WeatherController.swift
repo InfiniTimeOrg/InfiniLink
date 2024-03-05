@@ -190,6 +190,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 bleManagerVal.weatherInformation.forecastIcon = []
                 bleManagerVal.weatherInformation.forecastMaxTemperature = []
                 bleManagerVal.weatherInformation.forecastMinTemperature = []
+                bleManagerVal.weatherInformation.shortDescription = json["forecast"]["forecastday"][0]["day"]["condition"]["text"].stringValue
                 
                 if json["forecast"]["forecastday"][0].count > 1 {
                     for idx in 1...json["forecast"]["forecastday"][0].count {
@@ -309,10 +310,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                     }
                     
                     bleManagerVal.weatherInformation.icon = Int(getIcon_NWS(description: json["features"][idx]["properties"]["textDescription"].stringValue))
+                    bleManagerVal.weatherInformation.shortDescription = json["features"][idx]["properties"]["textDescription"].stringValue
                     break
                 }
             }
-            
             
             self.getWeatherForcast_NWS(forecastURL: forecastURL, temperatureC: temperatureC, icon: bleManagerVal.weatherInformation.icon)
         }.resume()
