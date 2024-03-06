@@ -59,6 +59,7 @@
 		26D7817026CA004B00BBF555 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7816F26CA004B00BBF555 /* SettingsView.swift */; };
 		26D7817A26CAD19F00BBF555 /* ColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26D7817926CAD19F00BBF555 /* ColorPalette.swift */; };
 		E021DAB32B489F58005C5E51 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = E021DAB22B489F58005C5E51 /* Extensions.swift */; };
+		E038F8EC2B98CFB600DFDE22 /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E038F8EB2B98CFB600DFDE22 /* MarkdownUI */; };
 		E0754FDA2B83BBF800B35787 /* LV_IMG_Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DBC9A32B828DF4003E0A28 /* LV_IMG_Convert.swift */; };
 		E079ED012B78903B0038C0F2 /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */; };
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
@@ -240,6 +241,7 @@
 				263B20C526CEB46800676BF0 /* SwiftUICharts in Frameworks */,
 				E53F51352B718E4A008D4CE6 /* Zip in Frameworks */,
 				26A6315E26C498B7005AE404 /* NordicDFU in Frameworks */,
+				E038F8EC2B98CFB600DFDE22 /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -636,6 +638,7 @@
 				263B20C426CEB46800676BF0 /* SwiftUICharts */,
 				E59398F92B58DA1F00D5840A /* SwiftyJSON */,
 				E53F51342B718E4A008D4CE6 /* Zip */,
+				E038F8EB2B98CFB600DFDE22 /* MarkdownUI */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -718,6 +721,7 @@
 				263B20C326CEB46800676BF0 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
 				E59398F82B58DA1F00D5840A /* XCRemoteSwiftPackageReference "SwiftyJSON" */,
 				E53F51332B718E4A008D4CE6 /* XCRemoteSwiftPackageReference "Zip" */,
+				E038F8EA2B98CFB600DFDE22 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -1224,6 +1228,14 @@
 				kind = branch;
 			};
 		};
+		E038F8EA2B98CFB600DFDE22 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.3.0;
+			};
+		};
 		E53F51332B718E4A008D4CE6 /* XCRemoteSwiftPackageReference "Zip" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/Zip.git";
@@ -1252,6 +1264,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 26A6315C26C498B7005AE404 /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
 			productName = NordicDFU;
+		};
+		E038F8EB2B98CFB600DFDE22 /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E038F8EA2B98CFB600DFDE22 /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
 		};
 		E53F51342B718E4A008D4CE6 /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;

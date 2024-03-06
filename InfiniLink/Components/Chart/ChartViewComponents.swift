@@ -30,15 +30,18 @@ struct BarView: View {
 }
 
 struct HorizontalLines: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var numbLines: Int
     var sizes: CGSize
     var height: CGFloat
     
     var body: some View {
         VStack(alignment: .center) {
-            ForEach((1...numbLines).reversed(), id: \.self) {numb in
+            ForEach((1...numbLines).reversed(), id: \.self) { numb in
                 Rectangle()
-                    .frame(width: sizes.width, height: 1).foregroundColor(Color(light: .lightGray, dark: .darkGray))
+                    .frame(width: sizes.width, height: 1)
+                    .foregroundColor(colorScheme == .dark ? Color.darkGray : Color.lightGray)
                 if numb != 1 {
                     Spacer(minLength: (height - CGFloat(numbLines)) / CGFloat(numbLines - 1))
                 }
@@ -49,6 +52,8 @@ struct HorizontalLines: View {
 }
 
 struct verticalLines: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     var numbLines: Int
     var sizes: CGSize
     var height: CGFloat
@@ -61,7 +66,8 @@ struct verticalLines: View {
                     VStack() {
                         ForEach((1...20).reversed(), id: \.self) {_ in
                             Rectangle()
-                                .frame(width: 1, height: height / ((20 * 2) - 1)).foregroundColor(Color(light: .lightGray, dark: .darkGray))
+                                .frame(width: 1, height: height / ((20 * 2) - 1))
+                                .foregroundColor(colorScheme == .dark ? Color.darkGray : Color.lightGray)
                             if numb != 15 {Spacer(minLength: height / ((20 * 2) - 1))}
                         }
                     }

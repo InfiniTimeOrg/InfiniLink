@@ -9,6 +9,7 @@
 
 import Foundation
 import SwiftUI
+import MarkdownUI
 
 extension UIScreen {
     static let screenWidth = UIScreen.main.bounds.size.width
@@ -215,11 +216,7 @@ struct NewUpdate: View {
                         Divider()
                         ScrollView {
                             VStack {
-                                if #available(iOS 15.0, *) {
-                                    Text(try! AttributedString(markdown: DownloadManager.shared.updateBody, options: AttributedString.MarkdownParsingOptions(interpretedSyntax: .inlineOnlyPreservingWhitespace)))
-                                } else {
-                                    Text(DownloadManager.shared.updateBody)
-                                }
+                                Markdown(DownloadManager.shared.updateBody)
                             }
                             .padding()
                         }
