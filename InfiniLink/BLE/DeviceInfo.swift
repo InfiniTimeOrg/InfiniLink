@@ -21,7 +21,6 @@ class BLEDeviceInfo: ObservableObject {
 }
 
 struct DeviceInfoManager {
-	
 	struct cbuuid {
 		let modelNumber = CBUUID(string: "2A24")
 		let serial = CBUUID(string: "2A25")

@@ -3,18 +3,18 @@
 //  InfiniLink
 //
 //  Created by Alex Emry on 9/24/21.
-//  
 //
-    
+//
+
 
 import Foundation
 import SwiftUI
 
 struct DownloadView: View {
-	@ObservedObject var downloadManager = DownloadManager.shared
-	@ObservedObject var dfuUpdater = DFU_Updater.shared
+    @ObservedObject var downloadManager = DownloadManager.shared
+    @ObservedObject var dfuUpdater = DFU_Updater.shared
     
-	@Environment(\.presentationMode) var presentation
+    @Environment(\.presentationMode) var presentation
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var openFile: Bool
@@ -22,31 +22,31 @@ struct DownloadView: View {
     
     @State var showResourcePicker = false
     
-	var body: some View {
-        VStack(spacing: 0) {
-            HStack(spacing: 6) {
-                Text(NSLocalizedString("downloads", comment: "Downloads"))
-                    .foregroundColor(.primary)
-                    .font(.title.weight(.bold))
-                Spacer()
-                DFURefreshButton()
-                Button {
-                    presentation.wrappedValue.dismiss()
-                } label: {
-                    Image(systemName: "xmark")
-                        .imageScale(.medium)
-                        .padding(14)
-                        .font(.body.weight(.semibold))
-                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Material.regular)
-                        .clipShape(Circle())
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 0) {
+                HStack(spacing: 6) {
+                    Text(NSLocalizedString("downloads", comment: "Downloads"))
+                        .foregroundColor(.primary)
+                        .font(.title.weight(.bold))
+                    Spacer()
+                    DFURefreshButton()
+                    Button {
+                        presentation.wrappedValue.dismiss()
+                    } label: {
+                        Image(systemName: "xmark")
+                            .imageScale(.medium)
+                            .padding(14)
+                            .font(.body.weight(.semibold))
+                            .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                            .background(Material.regular)
+                            .clipShape(Circle())
+                    }
                 }
-            }
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .center)
-            Divider()
-			ScrollView {
-                VStack(spacing: 20) {
+                .padding()
+                .frame(maxWidth: .infinity, alignment: .center)
+                Divider()
+                ScrollView {
                     VStack {
                         Button {
                             openFile = true
@@ -63,7 +63,7 @@ struct DownloadView: View {
                                 let fileUrl = try res.get()
                                 
                                 guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                        
+                                
                                 dfuUpdater.local = true
                                 downloadManager.updateAvailable = true
                                 downloadManager.updateBody = ""
@@ -93,11 +93,11 @@ struct DownloadView: View {
                                 .clipShape(Capsule())
                         }
                         .fileImporter(isPresented: $showResourcePicker, allowedContentTypes: [.zip]) { (res) in
-                            do{
+                            do {
                                 let fileUrl = try res.get()
                                 
                                 guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                        
+                                
                                 dfuUpdater.firmwareSelected = true
                                 dfuUpdater.resourceFilename = fileUrl.lastPathComponent
                                 dfuUpdater.firmwareURL = fileUrl.absoluteURL
@@ -110,8 +110,7 @@ struct DownloadView: View {
                                 DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
                             }
                         }
-                    }
-                    VStack {
+                        ListHeader(title: "Releases")
                         ForEach(downloadManager.results, id: \.tag_name) { i in
                             Button {
                                 let asset = downloadManager.chooseAsset(response: i)
@@ -136,12 +135,48 @@ struct DownloadView: View {
                                     .clipShape(Capsule())
                             }
                         }
+                        ListHeader(title: "GitHub Actions")
+                        ForEach(downloadManager.pulls, id: \.id) { pr in
+                            NavigationLink {
+                                DFUPullRequestDetailView(externalResources: $externalResources, pr: pr)
+                            } label: {
+                                HStack {
+                                    Text(pr.title)
+                                        .multilineTextAlignment(.leading)
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundColor(.gray)
+                                }
+                                .padding()
+                                .background(Material.regular)
+                                .foregroundColor(.primary)
+                                .cornerRadius(20)
+                            }
+                        }
                     }
+                    .padding()
                 }
-                .padding()
-			}
-		}
-	}
+            }
+        }
+        .navigationViewStyle(StackNavigationViewStyle())
+    }
+}
+
+struct ListHeader: View {
+    let title: String
+    
+    var body: some View {
+        Text(title)
+            .padding(12)
+            .foregroundColor(.primary)
+            .background(Material.regular)
+            .clipShape(Capsule())
+            .textCase(.uppercase)
+            .font(.footnote.weight(.semibold))
+            .padding(.bottom, 4)
+            .padding(.top)
+            .frame(maxWidth: .infinity, alignment: .leading)
+    }
 }
 
 #Preview {

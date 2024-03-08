@@ -287,6 +287,31 @@ struct DeviceView: View {
                         .modifier(RowModifier(style: .capsule))
                     Toggle(NSLocalizedString("notify_about_low_battery", comment: ""), isOn: $batteryNotification)
                         .modifier(RowModifier(style: .capsule))
+                    if !NotificationManager.shared.canSendNotifications {
+                        Group {
+                            Text("To allow InfiniLink to send a notification to your device, you need to allow notifications in ") + Text("Settings").foregroundColor(.blue) + Text(".")
+                        }
+                        .font(.system(size: 14))
+                        .foregroundColor(.gray)
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .padding(3)
+                        .lineSpacing(1.1)
+                        .onTapGesture {
+                            if #available(iOS 16.0, *) {
+                                guard let settingsURL = URL(string: UIApplication.openNotificationSettingsURLString) else { return }
+                                
+                                if UIApplication.shared.canOpenURL(settingsURL) {
+                                    UIApplication.shared.open(settingsURL)
+                                }
+                            } else {
+                                guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+                                
+                                if UIApplication.shared.canOpenURL(settingsURL) {
+                                    UIApplication.shared.open(settingsURL)
+                                }
+                            }
+                        }
+                    }
                     Button {
                         BLEWriteManager.init().setTime(characteristic: bleManager.currentTimeService)
                     } label: {
@@ -395,17 +420,19 @@ struct CustomScrollView<Content: View>: View {
                     }
                     .onChange(of: deviceInfo.firmware) { firmware in
                         if firmware != "" {
-                            BLEFSHandler.shared.readSettings { settings in
-                                self.settings = settings
-                                self.stepCountGoal = Int(settings.stepsGoal)
-                                self.bleManagerVal.watchFace = Int(settings.watchFace)
-                                self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
-                                self.bleManagerVal.timeFormat = settings.clockType
-                                switch settings.weatherFormat {
-                                case .Metric:
-                                    self.deviceDataForSettings.chosenWeatherMode = "Metric"
-                                case .Imperial:
-                                    self.deviceDataForSettings.chosenWeatherMode = "Imperial"
+                            DispatchQueue.main.async {
+                                BLEFSHandler.shared.readSettings { settings in
+                                    self.settings = settings
+                                    self.stepCountGoal = Int(settings.stepsGoal)
+                                    self.bleManagerVal.watchFace = Int(settings.watchFace)
+                                    self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
+                                    self.bleManagerVal.timeFormat = settings.clockType
+                                    switch settings.weatherFormat {
+                                    case .Metric:
+                                        self.deviceDataForSettings.chosenWeatherMode = "Metric"
+                                    case .Imperial:
+                                        self.deviceDataForSettings.chosenWeatherMode = "Imperial"
+                                    }
                                 }
                             }
                         }

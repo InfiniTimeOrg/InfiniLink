@@ -9,12 +9,13 @@ import SwiftUI
 
 struct WelcomeView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack {
-            if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" {
+            if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" || bleManagerVal.watchFace == -1 {
                 if bleManager.isConnectedToPinetime {
                     ZStack {
                         DeviceView()

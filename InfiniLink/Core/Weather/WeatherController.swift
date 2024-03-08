@@ -494,7 +494,6 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             bleManagerVal.lastWeatherUpdateWAPI = currentTimeWAPI
         }
         
-        
         if !useCurrentLocation {
             callWeatherAPI(canUpdateNWS: canUpdateNWS, canUpdateWAPI: canUpdateWAPI)
             return

@@ -9,6 +9,10 @@ import Foundation
 import UserNotifications
 
 class NotificationManager: ObservableObject {
+    static let shared = NotificationManager()
+    
+    @Published var canSendNotifications = false
+    
     func sendLowBatteryNotification(bat: Int) {
         let content = UNMutableNotificationContent()
         content.title = NSLocalizedString("battery_low", comment: "")

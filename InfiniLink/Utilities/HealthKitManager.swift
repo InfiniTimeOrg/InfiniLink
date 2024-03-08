@@ -9,6 +9,8 @@ import Foundation
 import HealthKit
 
 class HealthKitManager: ObservableObject {
+    static let shared = HealthKitManager()
+    
     var healthStore: HKHealthStore?
     
     init() {
