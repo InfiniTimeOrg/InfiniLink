@@ -187,6 +187,13 @@
 "update_requirement_1" = "To update, please make sure ";
 "update_requirement_2" = "'s battery level is over 30 percent";
 
+"not_release_builds" = "WARNING: These are not release builds! Install at your own risk.";
+"use_external_resources" = "Use External Resources";
+"use_software_update" = "Use Software Update";
+"releases" = "Releases";
+"pr_title" = "PR";
+"pull_requests" = "GitHub Pull Requests";
+
 // - DFUWithoutBLE
 "bluetooth_not_available" = "블루투스 사용 불가능";
 "please_enable_bluetooth_try_again" = "블루투스를 활성화하고 다시 시도해주세요.";

@@ -86,6 +86,9 @@ struct BLEUpdatedCharacteristicHandler {
             break
         }
         
-        weatherController.updateWeatherData(ignoreTimeLimits: false)
+        // Will hang if network connection is not available
+        if NetworkManager.shared.isConnected {
+            weatherController.updateWeatherData(ignoreTimeLimits: false)
+        }
     }
 }

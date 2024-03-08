@@ -179,13 +179,21 @@
 // - OnboardingDismissButton
 "dismiss_button" = "Dismiss";
 
-// - DFUWithBLE
+// - DFU
 "update_firmware" = "Update Firmware";
 "current_firmware" = "Current Firmware";
 "firmware_file" = "Firmware File";
 "clear" = "Clear";
 "update_requirement_1" = "To update, please make sure ";
 "update_requirement_2" = "'s battery level is over 30 percent";
+
+"not_release_builds" = "WARNING: These are not release builds! Install at your own risk.";
+"use_external_resources" = "Use External Resources";
+"use_software_update" = "Use Software Update";
+"releases" = "Releases";
+"pull_requests" = "GitHub Pull Requests";
+"pr_title" = "PR";
+"no_description_provided" = "No description provided.";
 
 // - DFUWithoutBLE
 "bluetooth_not_available" = "Bluetooth Not Available";

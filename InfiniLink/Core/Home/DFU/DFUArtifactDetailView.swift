@@ -33,7 +33,7 @@ struct DFUPullRequestDetailView: View {
                         .background(Color.gray.opacity(0.15))
                         .clipShape(Circle())
                 }
-                Text("#\(String(pr.number))")
+                Text(NSLocalizedString("pr_title", comment: "") + " #\(String(pr.number))")
                     .foregroundColor(.gray)
                     .font(.title2.weight(.semibold))
             }
@@ -76,7 +76,8 @@ struct DFUPullRequestDetailView: View {
                         .padding(.horizontal, -16)
                     Group {
                         if pr.body.isEmpty {
-                            Text("No description provided.")
+                            Text(NSLocalizedString("no_description_provided", comment: ""))
+                                .foregroundColor(.gray)
                         } else {
                             Markdown(pr.body.replacingOccurrences(of: "\n", with: "\n\n"))
                         }
@@ -84,53 +85,59 @@ struct DFUPullRequestDetailView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     Divider()
                         .padding(.horizontal, -16)
-                    VStack(spacing: 10) {
-                        Button(action: {
-                            downloadManager.fetchWorkflowRun(dfu: true, pr: pr) { artifact in
-                                print(artifact)
-                                dfuUpdater.firmwareFilename = artifact.name
-                                dfuUpdater.firmwareSelected = true
-                                dfuUpdater.local = false
-                                downloadManager.updateAvailable = true
-                                downloadManager.updateVersion = "Unknown"
-                                downloadManager.updateBody = pr.body
-                                downloadManager.updateSize = 0
-                                downloadManager.browser_download_url = artifact.archive_download_url
-                                
-                                externalResources = false
-                                
-                                presMode.wrappedValue.dismiss()
+                    VStack {
+                        VStack(spacing: 10) {
+                            Button(action: {
+                                downloadManager.fetchWorkflowRun(dfu: true, pr: pr) { artifact in
+                                    print(artifact)
+                                    dfuUpdater.firmwareFilename = artifact.name
+                                    dfuUpdater.firmwareSelected = true
+                                    dfuUpdater.local = false
+                                    downloadManager.updateAvailable = true
+                                    downloadManager.updateVersion = "DFU"
+                                    downloadManager.updateBody = pr.body.isEmpty ? NSLocalizedString("no_description_provided", comment: "") : pr.body.replacingOccurrences(of: "\n", with: "\n\n")
+                                    downloadManager.updateSize = 0
+                                    downloadManager.browser_download_url = artifact.archive_download_url
+                                    
+                                    externalResources = false
+                                    
+                                    presMode.wrappedValue.dismiss()
+                                }
+                            }) {
+                                Text(NSLocalizedString("use_software_update", comment: ""))
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .clipShape(Capsule())
                             }
-                        }) {
-                            Text("Use Software Update")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .clipShape(Capsule())
-                        }
-                        Button(action: {
-                            downloadManager.fetchWorkflowRun(dfu: false, pr: pr) { artifact in
-                                print(artifact)
-                                dfuUpdater.firmwareFilename = artifact.name
-                                dfuUpdater.firmwareSelected = true
-                                dfuUpdater.local = false
-                                downloadManager.updateAvailable = true
-                                downloadManager.updateVersion = ""
-                                downloadManager.updateSize = 0
-                                downloadManager.browser_download_url = artifact.archive_download_url
-                                
-                                externalResources = true
-                                
-                                presMode.wrappedValue.dismiss()
+                            Button(action: {
+                                downloadManager.fetchWorkflowRun(dfu: false, pr: pr) { artifact in
+                                    print(artifact)
+                                    dfuUpdater.firmwareFilename = artifact.name
+                                    dfuUpdater.firmwareSelected = true
+                                    dfuUpdater.local = false
+                                    downloadManager.updateAvailable = true
+                                    downloadManager.updateVersion = ""
+                                    downloadManager.updateSize = 0
+                                    downloadManager.browser_download_url = artifact.archive_download_url
+                                    
+                                    externalResources = true
+                                    
+                                    presMode.wrappedValue.dismiss()
+                                }
+                            }) {
+                                Text(NSLocalizedString("use_external_resources", comment: ""))
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue)
+                                    .foregroundColor(.white)
+                                    .clipShape(Capsule())
                             }
-                        }) {
-                            Text("Use External Resources")
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.blue)
-                                .foregroundColor(.white)
-                                .clipShape(Capsule())
+                            Text(NSLocalizedString("not_release_builds", comment: ""))
+                                .foregroundColor(.gray)
+                                .font(.system(size: 15))
+                                .padding(2)
                         }
                     }
                 }
@@ -144,5 +151,5 @@ struct DFUPullRequestDetailView: View {
 
 #Preview {
     // Use data from most recent PR
-    DFUPullRequestDetailView(externalResources: .constant(false), pr: PullRequest(id: 0, title: "PhotoStyle Watch Face", url: "URL", draft: false, number: 2023, user: GHUser(id: 0, login: "username", avatar_url: "https://avatars.githubusercontent.com/u/131915465?v=4"), body: "Testing...", closed_at: nil, merged_at: nil))
+    DFUPullRequestDetailView(externalResources: .constant(false), pr: PullRequest(id: 0, title: "PhotoStyle Watch Face", url: "URL", draft: false, number: 2023, user: GHUser(id: 0, login: "username", avatar_url: "https://avatars.githubusercontent.com/u/131915465?v=4"), body: "Testing...", closed_at: nil, merged: nil))
 }

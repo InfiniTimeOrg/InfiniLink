@@ -63,6 +63,7 @@
 		E0754FDA2B83BBF800B35787 /* LV_IMG_Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5DBC9A32B828DF4003E0A28 /* LV_IMG_Convert.swift */; };
 		E079ED012B78903B0038C0F2 /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */; };
 		E09057E42B9A1B93008C0CFD /* DFUArtifactDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09057E32B9A1B93008C0CFD /* DFUArtifactDetailView.swift */; };
+		E09057E62B9AC12B008C0CFD /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09057E52B9AC12B008C0CFD /* NetworkManager.swift */; };
 		E097C1192B4F0B7E005293D8 /* BatteryChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = E097C1182B4F0B7E005293D8 /* BatteryChart.swift */; };
 		E0A1477F2B5EC57F000193E9 /* WeatherSetLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */; };
 		E0C0E8612B96C24F0021E4AE /* WeatherDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E8602B96C24F0021E4AE /* WeatherDetailView.swift */; };
@@ -188,6 +189,7 @@
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettingsView.swift; sourceTree = "<group>"; };
 		E09057E32B9A1B93008C0CFD /* DFUArtifactDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUArtifactDetailView.swift; sourceTree = "<group>"; };
+		E09057E52B9AC12B008C0CFD /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E097C1182B4F0B7E005293D8 /* BatteryChart.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChart.swift; sourceTree = "<group>"; };
 		E0A1477E2B5EC57F000193E9 /* WeatherSetLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSetLocationView.swift; sourceTree = "<group>"; };
 		E0C0E8602B96C24F0021E4AE /* WeatherDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherDetailView.swift; sourceTree = "<group>"; };
@@ -425,6 +427,7 @@
 				26D7817926CAD19F00BBF555 /* ColorPalette.swift */,
 				26C5FAD426FBB76100921207 /* DeviceNameManager.swift */,
 				2691472F272A09D8004A61BD /* StepCountPersistenceManager.swift */,
+				E09057E52B9AC12B008C0CFD /* NetworkManager.swift */,
 				E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */,
 				E0EC91C02B47213F007472EC /* NotificationManager.swift */,
 				E021DAB22B489F58005C5E51 /* Extensions.swift */,
@@ -823,6 +826,7 @@
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				E531952D2B792D84004FECB4 /* WatchFace.swift in Sources */,
 				E0754FDA2B83BBF800B35787 /* LV_IMG_Convert.swift in Sources */,
+				E09057E62B9AC12B008C0CFD /* NetworkManager.swift in Sources */,
 				E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */,
 				263462ED2729F68600D3278D /* CalendarView.swift in Sources */,
 				E515FB15284C56070040B582 /* DeviceView.swift in Sources */,

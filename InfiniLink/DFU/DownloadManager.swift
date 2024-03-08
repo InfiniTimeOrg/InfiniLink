@@ -61,7 +61,7 @@ struct PullRequest: Codable {
     let user: GHUser
     let body: String
     let closed_at: String?
-    let merged_at: String?
+    let merged: Bool?
 }
 
 struct GHUser: Codable {
@@ -187,7 +187,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     func fetchPullRequests() {
         self.loadingResults = true
-        workflows = []
         
         let runsUrl = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/pulls")!
         
@@ -215,7 +214,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     func fetchWorkflowRun(dfu: Bool, pr: PullRequest, completion: @escaping(Artifact) -> Void) {
         self.loadingResults = true
-        workflows = []
         
         let runsUrl = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs")!
         
@@ -231,8 +229,10 @@ class DownloadManager: NSObject, ObservableObject {
                     let runs = try JSONDecoder().decode(WorkflowRunsResponse.self, from: data)
                     let dispatchGroup = DispatchGroup()
                     
+                    self.workflows = []
+                    
                     for run in runs.workflow_runs {
-                        if run.display_title == pr.title && (pr.closed_at == nil && pr.merged_at == nil) {
+                        if run.display_title == pr.title && (pr.closed_at == nil && pr.merged == nil) {
                             dispatchGroup.enter()
                             self.fetchArtifacts(url: URL(string: run.artifacts_url)!) {
                                 dispatchGroup.leave()
@@ -259,7 +259,6 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func fetchArtifacts(url: URL, completion: @escaping () -> Void) {
-        artifacts = []
         self.loadingArtifacts = true
         
         URLSession.shared.dataTask(with: url) { data, response, error in
@@ -270,6 +269,7 @@ class DownloadManager: NSObject, ObservableObject {
                 do {
                     let artifacts = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
                     
+                    self.artifacts = []
                     for artifact in artifacts.artifacts {
                         self.artifacts.append(artifact)
                     }

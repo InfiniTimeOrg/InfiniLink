@@ -22,6 +22,9 @@ struct DownloadView: View {
     
     @State var showResourcePicker = false
     
+    @State var showReleases = true
+    @State var showPullRequests = true
+    
     var body: some View {
         NavigationView {
             VStack(spacing: 0) {
@@ -110,47 +113,51 @@ struct DownloadView: View {
                                 DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
                             }
                         }
-                        ListHeader(title: "Releases")
-                        ForEach(downloadManager.results, id: \.tag_name) { i in
-                            Button {
-                                let asset = downloadManager.chooseAsset(response: i)
-                                dfuUpdater.firmwareFilename = asset.name
-                                dfuUpdater.firmwareSelected = true
-                                dfuUpdater.local = false
-                                downloadManager.updateAvailable = true
-                                downloadManager.updateVersion = i.tag_name
-                                downloadManager.updateBody = i.body
-                                downloadManager.updateSize = asset.size
-                                downloadManager.browser_download_url = asset.browser_download_url
-                                
-                                externalResources = false
-                                
-                                presentation.wrappedValue.dismiss()
-                            } label: {
-                                Text(i.tag_name)
-                                    .frame(maxWidth: .infinity)
+                        ListHeader(title: "Releases", showList: $showReleases)
+                        if showReleases {
+                            ForEach(downloadManager.results, id: \.tag_name) { i in
+                                Button {
+                                    let asset = downloadManager.chooseAsset(response: i)
+                                    dfuUpdater.firmwareFilename = asset.name
+                                    dfuUpdater.firmwareSelected = true
+                                    dfuUpdater.local = false
+                                    downloadManager.updateAvailable = true
+                                    downloadManager.updateVersion = i.tag_name
+                                    downloadManager.updateBody = i.body
+                                    downloadManager.updateSize = asset.size
+                                    downloadManager.browser_download_url = asset.browser_download_url
+                                    
+                                    externalResources = false
+                                    
+                                    presentation.wrappedValue.dismiss()
+                                } label: {
+                                    Text(i.tag_name)
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Material.regular)
+                                        .foregroundColor(.primary)
+                                        .clipShape(Capsule())
+                                }
+                            }
+                        }
+                        ListHeader(title: NSLocalizedString("pull_requests", comment: ""), showList: $showPullRequests)
+                        if showPullRequests {
+                            ForEach(downloadManager.pulls, id: \.id) { pr in
+                                NavigationLink {
+                                    DFUPullRequestDetailView(externalResources: $externalResources, pr: pr)
+                                } label: {
+                                    HStack {
+                                        Text(pr.title)
+                                            .multilineTextAlignment(.leading)
+                                        Spacer()
+                                        Image(systemName: "chevron.right")
+                                            .foregroundColor(.gray)
+                                    }
                                     .padding()
                                     .background(Material.regular)
                                     .foregroundColor(.primary)
-                                    .clipShape(Capsule())
-                            }
-                        }
-                        ListHeader(title: "GitHub Actions")
-                        ForEach(downloadManager.pulls, id: \.id) { pr in
-                            NavigationLink {
-                                DFUPullRequestDetailView(externalResources: $externalResources, pr: pr)
-                            } label: {
-                                HStack {
-                                    Text(pr.title)
-                                        .multilineTextAlignment(.leading)
-                                    Spacer()
-                                    Image(systemName: "chevron.right")
-                                        .foregroundColor(.gray)
+                                    .cornerRadius(20)
                                 }
-                                .padding()
-                                .background(Material.regular)
-                                .foregroundColor(.primary)
-                                .cornerRadius(20)
                             }
                         }
                     }
@@ -165,17 +172,34 @@ struct DownloadView: View {
 struct ListHeader: View {
     let title: String
     
+    @Binding var showList: Bool
+    
     var body: some View {
-        Text(title)
-            .padding(12)
-            .foregroundColor(.primary)
-            .background(Material.regular)
-            .clipShape(Capsule())
-            .textCase(.uppercase)
-            .font(.footnote.weight(.semibold))
-            .padding(.bottom, 4)
-            .padding(.top)
-            .frame(maxWidth: .infinity, alignment: .leading)
+        HStack {
+            Text(title)
+                .padding(12)
+                .foregroundColor(.primary)
+                .background(Material.regular)
+                .clipShape(Capsule())
+                .textCase(.uppercase)
+                .font(.footnote.weight(.semibold))
+            Spacer()
+            Button {
+                withAnimation(.bouncy) {
+                    showList.toggle()
+                }
+            } label: {
+                Image(systemName: "chevron.down")
+                    .rotationEffect(Angle(degrees: showList ? 0 : 90))
+                    .padding(12)
+                    .foregroundColor(.primary)
+                    .background(Material.regular)
+                    .clipShape(Circle())
+                    .font(.body.weight(.semibold))
+            }
+        }
+        .padding(.bottom, 4)
+        .padding(.top)
     }
 }
 
