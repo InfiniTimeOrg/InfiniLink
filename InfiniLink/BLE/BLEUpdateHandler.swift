@@ -36,6 +36,9 @@ struct BLEUpdatedCharacteristicHandler {
     }
     
     func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
+        // TODO: Fix hang
+        weatherController.updateWeatherData(ignoreTimeLimits: false)
+        
         switch characteristic.uuid {
         case bleManagerVal.cbuuidList.musicControl:
             let musicControl = [UInt8](characteristic.value!)
@@ -84,11 +87,6 @@ struct BLEUpdatedCharacteristicHandler {
             ble_fs.handleResponse(responseData: [UInt8](value))
         default:
             break
-        }
-        
-        // Will hang if network connection is not available
-        if NetworkManager.shared.isConnected {
-            weatherController.updateWeatherData(ignoreTimeLimits: false)
         }
     }
 }

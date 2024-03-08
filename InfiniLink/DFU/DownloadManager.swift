@@ -205,7 +205,7 @@ class DownloadManager: NSObject, ObservableObject {
                     self.loadingResults = false
                 } catch {
                     self.loadingResults = false
-                    print("ERROR with workflow runs: \(error)")
+                    print("ERROR with pull requests: \(error)")
                     DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
                 }
             }
@@ -269,10 +269,7 @@ class DownloadManager: NSObject, ObservableObject {
                 do {
                     let artifacts = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
                     
-                    self.artifacts = []
-                    for artifact in artifacts.artifacts {
-                        self.artifacts.append(artifact)
-                    }
+                    self.artifacts = artifacts.artifacts
                     
                     self.loadingArtifacts = false
                 } catch {
