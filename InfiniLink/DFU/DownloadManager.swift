@@ -32,49 +32,10 @@ extension Array: RawRepresentable where Element: Codable {
     }
 }
 
-struct Artifact: Codable {
-    let id: Int
-    let name: String
-    let size_in_bytes: Int
-    let url: String
-    let archive_download_url: URL
-    let expired: Bool
-    let created_at: String
-    let expires_at: String
-    let updated_at: String
-}
-
-struct WorkflowRun: Codable {
-    let id: Int
-    let head_branch: String
-    let artifacts_url: String
-    let display_title: String
-    let status: String
-}
-
-struct PullRequest: Codable {
-    let id: Int
-    let title: String
-    let url: String
-    let draft: Bool
-    let number: Int
-    let user: GHUser
-    let body: String
-    let closed_at: String?
-    let merged: Bool?
-}
-
-struct GHUser: Codable {
-    let id: Int
-    let login: String
-    let avatar_url: String
-}
-
 class DownloadManager: NSObject, ObservableObject {
     static var shared = DownloadManager()
     
     @Published var tasks: [URLSessionTask] = []
-    @Published var artifacts: [Artifact] = []
     @Published var downloading = false
     @Published var autoUpgrade: Result!
     @Published var lastCheck: Date!
@@ -82,8 +43,6 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var updateStarted: Bool = false
     
     @AppStorage("results") var results: [Result] = []
-    @AppStorage("workflows") var workflows: [WorkflowRun] = []
-    @AppStorage("pulls") var pulls: [PullRequest] = []
     @Published var updateAvailable: Bool = false
     @Published var updateVersion: String = "0.0.0"
     @Published var updateBody: String = ""
@@ -115,16 +74,6 @@ class DownloadManager: NSObject, ObservableObject {
         private enum CodingKeys: String, CodingKey {
             case tag_name, body, assets
         }
-    }
-    
-    struct ArtifactsResponse: Codable {
-        let total_count: Int
-        let artifacts: [Artifact]
-    }
-    
-    struct WorkflowRunsResponse: Codable {
-        let total_count: Int
-        let workflow_runs: [WorkflowRun]
     }
     
     func setupTest(forFile: String) {
@@ -185,110 +134,6 @@ class DownloadManager: NSObject, ObservableObject {
         }.resume()
     }
     
-    func fetchPullRequests() {
-        self.loadingResults = true
-        
-        let runsUrl = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/pulls")!
-        
-        URLSession.shared.dataTask(with: runsUrl) { data, response, error in
-            if let error = error {
-                DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
-                print("Error! Check debug logs for more information")
-                self.loadingResults = false
-                return
-            }
-            if let data = data {
-                do {
-                    let prs = try JSONDecoder().decode([PullRequest].self, from: data)
-                    self.pulls = prs
-                    
-                    self.loadingResults = false
-                } catch {
-                    self.loadingResults = false
-                    print("ERROR with pull requests: \(error)")
-                    DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
-                }
-            }
-        }.resume()
-    }
-    
-    func fetchWorkflowRun(dfu: Bool, pr: PullRequest, completion: @escaping(Artifact) -> Void) {
-        self.loadingResults = true
-        
-        let runsUrl = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs")!
-        
-        URLSession.shared.dataTask(with: runsUrl) { data, response, error in
-            if let error = error {
-                DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
-                print("Error! Check debug logs for more information")
-                self.loadingResults = false
-                return
-            }
-            if let data = data {
-                do {
-                    let runs = try JSONDecoder().decode(WorkflowRunsResponse.self, from: data)
-                    let dispatchGroup = DispatchGroup()
-                    
-                    self.workflows = []
-                    
-                    for run in runs.workflow_runs {
-                        if run.display_title == pr.title && (pr.closed_at == nil && pr.merged == nil) {
-                            dispatchGroup.enter()
-                            self.fetchArtifacts(url: URL(string: run.artifacts_url)!) {
-                                dispatchGroup.leave()
-                            }
-                        }
-                    }
-                    
-                    dispatchGroup.notify(queue: .main) {
-                        self.loadingResults = false
-                        
-                        if dfu {
-                            completion(self.chooseAsset())
-                        } else {
-                            completion(self.chooseResources())
-                        }
-                    }
-                } catch {
-                    self.loadingResults = false
-                    print("ERROR with workflow runs: \(error)")
-                    DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
-                }
-            }
-        }.resume()
-    }
-    
-    func fetchArtifacts(url: URL, completion: @escaping () -> Void) {
-        self.loadingArtifacts = true
-        
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            defer {
-                completion()
-            }
-            if let data = data {
-                do {
-                    let artifacts = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
-                    
-                    self.artifacts = artifacts.artifacts
-                    
-                    self.loadingArtifacts = false
-                } catch {
-                    print("ERROR with artifacts: \(error)")
-                    DebugLogManager.shared.debug(error: "JSON Decoding Error: \(error)", log: .app, date: Date())
-                }
-            }
-        }.resume()
-    }
-
-    func chooseAsset() -> Artifact {
-        for x in artifacts {
-            if x.name.contains("DFU") {
-                return x
-            }
-        }
-        return Artifact(id: 0, name: "", size_in_bytes: 0, url: "", archive_download_url: URL(string: "")!, expired: false, created_at: "", expires_at: "", updated_at: "")
-    }
-    
     func chooseAsset(response: Result) -> Asset {
         for x in response.assets {
             if x.name.suffix(4) == ".zip" && x.name.contains("pinetime-mcuboot-app-dfu") {
@@ -305,15 +150,6 @@ class DownloadManager: NSObject, ObservableObject {
             }
         }
         return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
-    }
-    
-    func chooseResources() -> Artifact {
-        for x in artifacts {
-            if x.name.contains("resources") {
-                return x
-            }
-        }
-        return Artifact(id: 0, name: "", size_in_bytes: 0, url: "", archive_download_url: URL(string: "")!, expired: false, created_at: "", expires_at: "", updated_at: "")
     }
     
     func startDownload(url: URL, isExternalResources: Bool) {

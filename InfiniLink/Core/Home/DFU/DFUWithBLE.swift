@@ -312,7 +312,6 @@ struct DFURefreshButton: View {
     var body: some View {
         Button {
             downloadManager.getDownloadUrls(currentVersion: BLEDeviceInfo.shared.firmware)
-            downloadManager.fetchPullRequests()
         } label: {
             VStack {
                 if downloadManager.loadingResults {
