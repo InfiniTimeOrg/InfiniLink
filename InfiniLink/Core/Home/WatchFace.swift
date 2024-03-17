@@ -40,8 +40,7 @@ struct WatchFaceView: View {
                         case 4:
                             InfineatWF(geometry: .constant(geometry))
                         case 5:
-                            // Casio G7710
-                            EmptyView()
+                            CasioWF(geometry: .constant(geometry))
                         default:
                             ProgressView()
                                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
@@ -476,6 +475,112 @@ struct TerminalWF: View {
     }
 }
 
+struct CasioWF: View {
+    @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @ObservedObject var bleManager = BLEManager.shared
+    @Environment(\.colorScheme) var colorScheme
+    @Binding var geometry: GeometryProxy
+    
+    let colorText: Color = Color(red: 152 / 255.0, green: 182 / 255.0, blue: 154 / 255.0)
+    
+    var hour24: Bool {
+        switch bleManagerVal.timeFormat {
+        case .H12:
+            return false
+        case .H24:
+            return true
+        default:
+            return true
+        }
+    }
+    
+    var body: some View {
+        ZStack {
+            Image("casio")
+                .scaleEffect(0.81)
+            CustomTextView(text: String(Int(bleManager.batteryLevel)), font: .custom("open_sans_light", size: geometry.size.width * 0.09), lineSpacing: 0)
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topTrailing)
+            .padding(.trailing, 22)
+            CustomTextView(
+                text: {
+                    let dateFormatter = DateFormatter()
+                    dateFormatter.dateFormat = "E"
+                    
+                    let weekOfYear = Calendar.current.component(.weekOfYear, from: Date())
+                    
+                    return "WK\(weekOfYear)\n\(dateFormatter.string(from: Date()).uppercased())"
+                }(),
+                font: .custom("repetitionscrolling", size: geometry.size.width * 0.16),
+                lineSpacing: 0
+            )
+            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.2, alignment: .topLeading)
+            CustomTextView(
+                text: {
+                    let calendar = Calendar.current
+                    let now = Date()
+                    
+                    let startOfYear = calendar.startOfDay(for: calendar.date(from: DateComponents(year: calendar.component(.year, from: now)))!)
+                    let endOfYear = calendar.startOfDay(for: calendar.date(byAdding: DateComponents(year: 1, day: -1), to: calendar.date(from: DateComponents(year: calendar.component(.year, from: now)))!)!)
+                    
+                    let daysIn = calendar.dateComponents([.day], from: startOfYear, to: now).day! + 1
+                    let daysLeft = calendar.dateComponents([.day], from: now, to: endOfYear).day! + 1
+                    
+                    return "\(daysIn)-\(daysLeft)"
+                }(),
+                font: .custom("open_sans_light ", size: geometry.size.width * 0.13),
+                lineSpacing: 0
+            )
+            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.3, alignment: .topTrailing)
+            CustomTextView(
+                text: {
+                    let calendar = Calendar.current
+                    let now = Date()
+                    
+                    let month = calendar.component(.month, from: now)
+                    let day = calendar.component(.day, from: now)
+                    
+                    return "\(month)- \(day)"
+                }(),
+                font: .custom("open_sans_light ", size: geometry.size.width * 0.13),
+                lineSpacing: 0
+            )
+            .frame(width: geometry.size.width / 1.08, height: geometry.size.height / 2.25, alignment: .topTrailing)
+            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("7-segment", size: geometry.size.width * 0.36), lineSpacing: 0)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.30)
+            } else {
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("7-segment", size: geometry.size.width * 0.36), lineSpacing: 0)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.30)
+            }
+            HStack(spacing: 4) {
+                Image(systemName: "heart.fill")
+                    .font(.system(size: geometry.size.width * 0.08))
+                    .foregroundColor(bleManagerVal.heartBPM != 0 ? colorText : .gray)
+                    .opacity(bleManagerVal.heartBPM != 0 ? 1.0 : 0.5)
+                if bleManagerVal.heartBPM != 0 {
+                    CustomTextView(text: String(Int(bleManagerVal.heartBPM)), font: .custom("open_sans_light", size: geometry.size.width * 0.11), lineSpacing: 0)
+                }
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
+            .padding(.leading, 10)
+            .padding(.bottom, bleManagerVal.heartBPM != 0 ? 0 : -4)
+            HStack(spacing: 4) {
+                Image(systemName: "shoeprints.fill")
+                    .rotationEffect(Angle(degrees: 90))
+                    .font(.system(size: geometry.size.width * 0.08))
+                CustomTextView(text: "\(bleManagerVal.stepCount)", font: .custom("open_sans_light", size: geometry.size.width * 0.11), lineSpacing: 0)
+            }
+            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomTrailing)
+            .padding(.trailing, 10)
+            .padding(.bottom, -4)
+        }
+        .foregroundColor(colorText)
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+    }
+}
+
 struct CustomTextView: View {
     var text: String
     var font: Font
@@ -494,7 +599,7 @@ struct CustomTextView: View {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(4))
+            WatchFaceView(watchface: .constant(5))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

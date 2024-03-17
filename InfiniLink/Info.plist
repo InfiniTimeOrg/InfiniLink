@@ -48,6 +48,8 @@
 		<string>JetBrainsMono-Regular.ttf</string>
 		<string>open_sans_light.ttf</string>
 		<string>BebasNeue-Regular.ttf</string>
+		<string>repetitionscrolling.ttf</string>
+		<string>7-segment.ttf</string>
 		<string>Teko-Light.ttf</string>
 	</array>
 	<key>UIApplicationSceneManifest</key>
