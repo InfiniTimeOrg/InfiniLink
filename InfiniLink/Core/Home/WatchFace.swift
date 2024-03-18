@@ -226,11 +226,11 @@ struct PineTimeStyleWF: View {
         ZStack {
             backgroundColor
             if !hour24 {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
                     .foregroundColor(timeColor)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
                 CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12))\n\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
                     .foregroundColor(timeColor)
                     .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
@@ -295,11 +295,11 @@ struct DigitalWF: View {
     var body: some View {
         ZStack {
             if !hour24 {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
@@ -330,117 +330,183 @@ struct InfineatWF: View {
             return true
         }
     }
+    
+    let orangeColors: [Color] = [
+        Color(red: 0xfd / 255.0, green: 0x87 / 255.0, blue: 0x2b / 255.0),
+        Color(red: 0xf0 / 255.0, green: 0x59 / 255.0, blue: 0x3b / 255.0),
+        Color(red: 0x6f / 255.0, green: 0x10 / 255.0, blue: 0x00 / 255.0),
+        Color(red: 0xfd / 255.0, green: 0x7a / 255.0, blue: 0x0a / 255.0),
+        Color(red: 0xe8 / 255.0, green: 0x51 / 255.0, blue: 0x02 / 255.0),
+        Color(red: 0xea / 255.0, green: 0x1c / 255.0, blue: 0x00 / 255.0)
+    ]
+    
+    let blueColors: [Color] = [
+        Color(red: 0xe7 / 255.0, green: 0xf8 / 255.0, blue: 0xff / 255.0),
+        Color(red: 0x16 / 255.0, green: 0x36 / 255.0, blue: 0xff / 255.0),
+        Color(red: 0x18 / 255.0, green: 0x2a / 255.0, blue: 0x8b / 255.0),
+        Color(red: 0xe7 / 255.0, green: 0xf8 / 255.0, blue: 0xff / 255.0),
+        Color(red: 0x59 / 255.0, green: 0x91 / 255.0, blue: 0xff / 255.0),
+        Color(red: 0x16 / 255.0, green: 0x36 / 255.0, blue: 0xff / 255.0)
+    ]
+    
+    let greenColors: [Color] = [
+        Color(red: 0xb8 / 255.0, green: 0xff / 255.0, blue: 0x9b / 255.0),
+        Color(red: 0x08 / 255.0, green: 0x86 / 255.0, blue: 0x08 / 255.0),
+        Color(red: 0x00 / 255.0, green: 0x4a / 255.0, blue: 0x00 / 255.0),
+        Color(red: 0xb8 / 255.0, green: 0xff / 255.0, blue: 0x9b / 255.0),
+        Color(red: 0x62 / 255.0, green: 0xd5 / 255.0, blue: 0x15 / 255.0),
+        Color(red: 0x00 / 255.0, green: 0x74 / 255.0, blue: 0x00 / 255.0)
+    ]
+    
+    let rainbowColors: [Color] = [
+        Color(red: 0x2d / 255.0, green: 0xa4 / 255.0, blue: 0x00 / 255.0),
+        Color(red: 0xac / 255.0, green: 0x09 / 255.0, blue: 0xc4 / 255.0),
+        Color(red: 0xfe / 255.0, green: 0x03 / 255.0, blue: 0x03 / 255.0),
+        Color(red: 0x0d / 255.0, green: 0x57 / 255.0, blue: 0xff / 255.0),
+        Color(red: 0xe0 / 255.0, green: 0xb9 / 255.0, blue: 0x00 / 255.0),
+        Color(red: 0xe8 / 255.0, green: 0x51 / 255.0, blue: 0x02 / 255.0)
+    ]
+    
+    let grayColors: [Color] = [
+        Color(red: 0xee / 255.0, green: 0xee / 255.0, blue: 0xee / 255.0),
+        Color(red: 0x98 / 255.0, green: 0x95 / 255.0, blue: 0x9b / 255.0),
+        Color(red: 0x19 / 255.0, green: 0x19 / 255.0, blue: 0x19 / 255.0),
+        Color(red: 0xee / 255.0, green: 0xee / 255.0, blue: 0xee / 255.0),
+        Color(red: 0x91 / 255.0, green: 0x91 / 255.0, blue: 0x91 / 255.0),
+        Color(red: 0x3a / 255.0, green: 0x3a / 255.0, blue: 0x3a / 255.0)
+    ]
+    
+    let nordBlueColors: [Color] = [
+        Color(red: 0xc3 / 255.0, green: 0xda / 255.0, blue: 0xf2 / 255.0),
+        Color(red: 0x4d / 255.0, green: 0x78 / 255.0, blue: 0xce / 255.0),
+        Color(red: 0x15 / 255.0, green: 0x34 / 255.0, blue: 0x51 / 255.0),
+        Color(red: 0xc3 / 255.0, green: 0xda / 255.0, blue: 0xf2 / 255.0),
+        Color(red: 0x5d / 255.0, green: 0x8a / 255.0, blue: 0xd2 / 255.0),
+        Color(red: 0x21 / 255.0, green: 0x51 / 255.0, blue: 0x8a / 255.0)
+    ]
+    
+    let nordGreenColors: [Color] = [
+        Color(red: 0xd5 / 255.0, green: 0xf0 / 255.0, blue: 0xe9 / 255.0),
+        Color(red: 0x23 / 255.0, green: 0x83 / 255.0, blue: 0x73 / 255.0),
+        Color(red: 0x1d / 255.0, green: 0x41 / 255.0, blue: 0x3f / 255.0),
+        Color(red: 0xd5 / 255.0, green: 0xf0 / 255.0, blue: 0xe9 / 255.0),
+        Color(red: 0x2f / 255.0, green: 0xb8 / 255.0, blue: 0xa2 / 255.0),
+        Color(red: 0x11 / 255.0, green: 0x70 / 255.0, blue: 0x5a / 255.0)
+    ]
+    
     func infineatColor(for item: InfineatItem) -> Color {
-        /*
-        0. orange
-        1. blue
-        2. green
-        3. rainbow
-        4. gray
-        5. nordBlue
-        6. nordGreen
-         
-        TODO: Add colors from watch face source
-        */
-        
         switch item {
         case .base:
             switch bleManagerVal.infineatColorIndex {
             case 0:
-                return Color("Maroon")
-            case 1, 5:
-                return Color("Navy")
-            case 2, 6:
-                return Color("DarkGreen")
+                return orangeColors[2]
+            case 1:
+                return blueColors[2]
+            case 2:
+                return greenColors[2]
             case 3:
-                return Color(.red)
+                return rainbowColors[2]
             case 4:
-                return Color.darkestGray
+                return grayColors[2]
+            case 5:
+                return nordBlueColors[2]
+            case 6:
+                return nordGreenColors[2]
             default:
                 break
             }
         case .bottom:
             switch bleManagerVal.infineatColorIndex {
             case 0:
-                return Color("Orange").opacity(0.9)
+                return orangeColors[1]
             case 1:
-                return Color.blue.opacity(0.9)
+                return blueColors[1]
             case 2:
-                return Color("LightGreen").opacity(0.9)
+                return greenColors[1]
             case 3:
-                return Color.purple
+                return rainbowColors[1]
             case 4:
-                return Color.gray
+                return grayColors[1]
             case 5:
-                return Color("BabyBlue").opacity(0.9)
+                return nordBlueColors[1]
             case 6:
-                return Color.mint.opacity(0.9)
+                return nordGreenColors[1]
             default:
                 break
             }
         case .topTop:
             switch bleManagerVal.infineatColorIndex {
             case 0:
-                return Color("Orange")
+                return orangeColors[4]
             case 1:
-                return Color("LightBlue")
+                return blueColors[4]
             case 2:
-                return Color("LightGreen")
+                return greenColors[4]
             case 3:
-                return Color("Yellow")
+                return rainbowColors[4]
             case 4:
-                return Color.gray
+                return grayColors[4]
             case 5:
-                return Color("BabyBlue")
+                return nordBlueColors[4]
             case 6:
-                return Color.mint
+                return nordGreenColors[4]
             default:
                 break
             }
         case .topBottom:
             switch bleManagerVal.infineatColorIndex {
             case 0:
-                return Color("Red")
+                return orangeColors[5]
             case 1:
-                return Color.blue
+                return blueColors[5]
             case 2:
-                return Color("Green")
+                return greenColors[5]
             case 3:
-                return Color("Orange")
+                return rainbowColors[5]
             case 4:
-                return Color(.darkGray)
+                return grayColors[5]
             case 5:
-                return Color("NordBlue")
+                return nordBlueColors[5]
             case 6:
-                return Color("NordGreen")
+                return nordGreenColors[5]
             default:
                 break
             }
         case .midBottom:
             switch bleManagerVal.infineatColorIndex {
             case 0:
-                return Color("Yellow")
-            case 1, 4, 5, 6:
-                // 5 and 6 aren't perfectly white on the watch
-                return Color.white
+                return orangeColors[3]
+            case 1:
+                return blueColors[3]
             case 2:
-                return Color("LightestGreen")
+                return greenColors[3]
             case 3:
-                return Color.blue
+                return rainbowColors[3]
+            case 4:
+                return grayColors[3]
+            case 5:
+                return nordBlueColors[3]
+            case 6:
+                return nordGreenColors[3]
             default:
                 break
             }
         case .midTop:
             switch bleManagerVal.infineatColorIndex {
             case 0:
-                return Color("Yellow")
-            case 1, 4, 5, 6:
-                // 5 and 6 aren't perfectly white on the watch
-                return Color.white
+                return orangeColors[0]
+            case 1:
+                return blueColors[0]
             case 2:
-                return Color("LightestGreen")
+                return greenColors[0]
             case 3:
-                return Color("Green")
+                return rainbowColors[0]
+            case 4:
+                return grayColors[0]
+            case 5:
+                return nordBlueColors[0]
+            case 6:
+                return nordGreenColors[0]
             default:
                 break
             }
@@ -451,11 +517,11 @@ struct InfineatWF: View {
     var body: some View {
         ZStack {
             if hour24 {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
+                CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
                 VStack(alignment: .center, spacing: -28) {
                     Text("\(String(format: "%02d", Calendar.current.component(.hour, from: Date()) - 12))")
                     Text("\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))")
@@ -506,46 +572,52 @@ struct InfineatWF: View {
                     .frame(maxHeight: .infinity, alignment: .topLeading)
                     .foregroundColor(infineatColor(for: .midTop))
                     .rotationEffect(Angle(degrees: 49))
-                    .offset(x: -36, y: -44)
+                    .offset(x: -36, y: -48)
                 Rectangle()
                     .frame(width: 19)
                     .frame(height: geometry.size.height / 1.5, alignment: .bottomLeading)
                     .frame(maxHeight: .infinity, alignment: .bottomLeading)
                     .foregroundColor(infineatColor(for: .bottom))
                     .opacity(0.8)
-                    .rotationEffect(Angle(degrees: -16))
-                    .offset(x: -6, y: 12)
+                    .rotationEffect(Angle(degrees: -22))
+                    .offset(x: -16, y: 14)
                 Rectangle()
                     .frame(width: 26, alignment: .leading)
-                    .offset(x: -5)
+                    .offset(x: -9)
                     .foregroundColor(infineatColor(for: .base))
                 Rectangle()
                     .frame(width: 26)
                     .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
                     .frame(maxHeight: .infinity, alignment: .bottomLeading)
                     .foregroundColor(infineatColor(for: .midBottom))
-                    .rotationEffect(Angle(degrees: -38))
-                    .offset(x: -26, y: 30)
+                    .rotationEffect(Angle(degrees: -42))
+                    .offset(x: -31, y: 38)
+                ZStack {
+                    DiamondShape()
+                        .fill(Color.white)
+                        .frame(width: 50, height: 75)
+                        .offset(x: -5)
+                    Image("pine_logo")
+                        .resizable()
+                        .frame(width: 20, height: 25)
+                        .offset(x: -1)
+                }
                 Rectangle()
                     .frame(width: 38)
                     .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
                     .frame(maxHeight: .infinity, alignment: .topLeading)
                     .foregroundColor(infineatColor(for: .topTop))
                     .rotationEffect(Angle(degrees: 18))
-                    .offset(x: -28, y: -16)
+                    .offset(x: -32, y: -16)
                 Rectangle()
                     .frame(width: 38)
                     .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
                     .frame(maxHeight: .infinity, alignment: .bottomLeading)
                     .foregroundColor(infineatColor(for: .topBottom))
                     .rotationEffect(Angle(degrees: -18))
-                    .offset(x: -28, y: 16)
+                    .offset(x: -32, y: 16)
             }
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
-            Image("pine_logo")
-                .resizable()
-                .frame(width: 20, height: 26)
-                .frame(width: geometry.size.width / 1.15, height: geometry.size.height, alignment: .leading)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
         .clipped()
@@ -706,7 +778,7 @@ struct CasioWF: View {
                 lineSpacing: 0
             )
             .frame(width: geometry.size.width / 1.08, height: geometry.size.height / 2.25, alignment: .topTrailing)
-            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("7-segment", size: geometry.size.width * 0.36), lineSpacing: 0)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
                     .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.30)
@@ -757,6 +829,26 @@ struct CustomTextView: View {
     }
 }
 
+struct DiamondShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        let topPoint = CGPoint(x: rect.midX, y: rect.minY)
+        let rightPoint = CGPoint(x: rect.maxX, y: rect.midY)
+        let bottomPoint = CGPoint(x: rect.midX, y: rect.maxY)
+        let leftPoint = CGPoint(x: rect.minX, y: rect.midY)
+        
+        path.move(to: topPoint)
+        
+        path.addLine(to: rightPoint)
+        path.addLine(to: bottomPoint)
+        path.addLine(to: leftPoint)
+        path.closeSubpath()
+        
+        return path
+    }
+}
+
 enum InfineatItem {
     case base
     case bottom
@@ -774,7 +866,7 @@ enum InfineatItem {
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)
                 .onAppear {
-                    BLEManagerVal.shared.infineatColorIndex = 6
+                    BLEManagerVal.shared.infineatColorIndex = 1
                 }
         }
     }
