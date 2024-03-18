@@ -53,14 +53,16 @@ struct RenameView: View {
             .padding()
             .frame(maxWidth: .infinity, alignment: .center)
             Divider()
-            VStack {
-                TextField("InfiniTime", text: $changedName)
-                    .padding()
-                    .background(Material.regular)
-                    .clipShape(Capsule())
-                Spacer()
+            ScrollView {
+                VStack {
+                    TextField("InfiniTime", text: $changedName)
+                        .padding()
+                        .background(Material.regular)
+                        .clipShape(Capsule())
+                    Spacer()
+                }
+                .padding()
             }
-            .padding()
         }
         .navigationBarBackButtonHidden()
     }
