@@ -36,14 +36,13 @@ class BLEManagerVal: NSObject, ObservableObject {
     
     @Published var watchFace: Int = -1
     @Published var pineTimeStyleData: PineTimeStyleData?
-    @Published var infineatWatchface: WatchFaceInfineat?
     @Published var timeFormat: ClockType?
+    @Published var infineatColorIndex: UInt8 = 0
     
     @Published var weatherInformation = WeatherInformation()
     @Published var loadingWeather = true
     
-    // UI flag variables
-    @Published var heartBPM: Double = 0 // published var to communicate the HRM data to the UI.
+    @Published var heartBPM: Double = 0
 
     @Published var firmwareVersion: String = ""
     
@@ -55,10 +54,4 @@ class BLEManagerVal: NSObject, ObservableObject {
     @Published var lastWeatherUpdateWAPI: Int = 0
     @Published var latitude: Double = 0.0
     @Published var longitude: Double = 0.0
-
-    // Selecting and connecting variables
-    @Published var deviceToConnect: Int! // When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
-    @Published var autoconnectPeripheral: CBPeripheral!
-
-    var batChartReconnect: Bool = true // skip first HRM transmission on every fresh connection to prevent saving of BS data
 }

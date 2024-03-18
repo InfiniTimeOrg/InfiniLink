@@ -82,7 +82,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     // Selecting and connecting variables
     @Published var peripherals = [Peripheral]()
     @Published var newPeripherals: [CBPeripheral] = []                    // used to print human-readable device names to UI in selection process
-    //    @Published var deviceToConnect: Int!                                // When the user selects a device from the UI, that peripheral's ID goes in this var, which is passed to the peripheralDictionary
     @Published var peripheralDictionary: [Int: CBPeripheral] = [:]         // this is the dictionary that relates human-readable peripheral names to the CBPeripheral class that CoreBluetooth actually interacts with
     @Published var infiniTime: CBPeripheral!                            // variable to save the CBPeripheral that you're connecting to
     //    @Published var autoconnectPeripheral: CBPeripheral!
@@ -90,10 +89,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     
     @Published var bleLogger = DebugLogManager.shared // MARK: logging
     
-    var firstConnect: Bool = true                                        // makes iOS connected message only show up on first connect, not if device drops connection and reconnects
+    var firstConnect: Bool = true // makes iOS connected message only show up on first connect, not if device drops connection and reconnects
     var disconnected: Bool = false
-    var heartChartReconnect: Bool = true                                // skip first HRM transmission on every fresh connection to prevent saving of BS data
-    //    var batChartReconnect: Bool = true                                // skip first HRM transmission on every fresh connection to prevent saving of BS data
+    var heartChartReconnect: Bool = true
     
     // declare some CBUUIDs for easier reference
     @Published var autoconnectToDevice: Bool = false

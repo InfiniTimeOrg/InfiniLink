@@ -290,10 +290,10 @@ struct NoUpdate: View {
         Spacer()
         VStack {
             VStack(alignment: .center , spacing: 20) {
-                VStack(alignment: .center , spacing: 6) {
+                VStack(alignment: .center , spacing: 7) {
                     Text("InfiniTime \(deviceInfo.firmware)")
                         .foregroundColor(.gray)
-                        .font(.title2.weight(.semibold))
+                        .font(.system(size: 24).weight(.semibold))
                     Text("InfiniTime " + NSLocalizedString("up_to_date", comment: ""))
                         .foregroundColor(.gray)
                 }

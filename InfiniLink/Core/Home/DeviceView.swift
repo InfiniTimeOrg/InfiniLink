@@ -423,11 +423,12 @@ struct CustomScrollView<Content: View>: View {
                             DispatchQueue.main.async {
                                 BLEFSHandler.shared.readSettings { settings in
                                     self.settings = settings
+                                    print(settings)
                                     self.stepCountGoal = Int(settings.stepsGoal)
                                     self.bleManagerVal.watchFace = Int(settings.watchFace)
                                     self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
                                     self.bleManagerVal.timeFormat = settings.clockType
-                                    self.bleManagerVal.infineatWatchface = settings.watchFaceInfineat
+                                    self.bleManagerVal.infineatColorIndex = settings.watchFaceInfineat.colorIndex
                                     switch settings.weatherFormat {
                                     case .Metric:
                                         self.deviceDataForSettings.chosenWeatherMode = "Metric"
