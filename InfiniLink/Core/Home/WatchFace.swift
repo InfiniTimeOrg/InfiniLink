@@ -26,7 +26,7 @@ struct WatchFaceView: View {
                     .aspectRatio(contentMode: .fit)
                     .shadow(color: colorScheme == .dark ? Color.black : Color.secondary, radius: 16, x: 0, y: 0)
                     .brightness(colorScheme == .dark ? -0.03 : 0.015)
-                ZStack() {
+                ZStack {
                     ZStack {
                         switch watchface == -1 ? bleManagerVal.watchFace : watchface {
                         case 0:
@@ -330,6 +330,46 @@ struct InfineatWF: View {
             return true
         }
     }
+    func infineatColor(from color: Colors) -> Color {
+        switch color {
+        case .White:
+            return Color.white
+        case .Silver:
+            return Color.gray
+        case .Gray:
+            return Color.gray
+        case .Black:
+            return Color.black
+        case .Red:
+            return Color("Red")
+        case .Maroon:
+            return Color("Maroon")
+        case .Yellow:
+            return Color("Yellow")
+        case .Olive:
+            return Color.green
+        case .Green:
+            return Color.green
+        case .Cyan:
+            return Color.cyan
+        case .Teal:
+            return Color.teal
+        case .Blue:
+            return Color.blue
+        case .Navy:
+            return Color.blue
+        case .Magenta:
+            return Color.purple
+        case .Purple:
+            return Color.purple
+        case .Orange:
+            return Color("Orange")
+        case .Pink:
+            return Color.pink
+        default:
+            return Color.red
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -373,10 +413,6 @@ struct InfineatWF: View {
                 .resizable()
                 .frame(width: 18, height: 20)
                 .frame(width: geometry.size.width / 1.14, height: geometry.size.height / 2.8, alignment: .bottomTrailing)
-            Image("pine_logo")
-                .resizable()
-                .frame(width: 20, height: 26)
-                .frame(width: geometry.size.width / 1.15, height: geometry.size.height, alignment: .leading)
             HStack(spacing: 4) {
                 Image(systemName: "shoeprints.fill")
                     .rotationEffect(Angle(degrees: 90))
@@ -386,6 +422,55 @@ struct InfineatWF: View {
             .foregroundColor(.gray)
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
             .padding(.bottom, -16)
+            if bleManagerVal.infineatWatchface?.showSideCover ?? true {
+                ZStack {
+                    Rectangle()
+                        .frame(width: 19)
+                        .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
+                        .frame(maxHeight: .infinity, alignment: .topLeading)
+                        .foregroundColor(infineatColor(from: .Yellow))
+                        .rotationEffect(Angle(degrees: 49))
+                        .offset(x: -36, y: -44)
+                    Rectangle()
+                        .frame(width: 19)
+                        .frame(height: geometry.size.height / 1.5, alignment: .bottomLeading)
+                        .frame(maxHeight: .infinity, alignment: .bottomLeading)
+                        .foregroundColor(infineatColor(from: .Orange))
+                        .opacity(0.8)
+                        .rotationEffect(Angle(degrees: -16))
+                        .offset(x: -6, y: 12)
+                    Rectangle()
+                        .frame(width: 26, alignment: .leading)
+                        .offset(x: -5)
+                        .foregroundColor(infineatColor(from: .Maroon))
+                    Rectangle()
+                        .frame(width: 26)
+                        .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
+                        .frame(maxHeight: .infinity, alignment: .bottomLeading)
+                        .foregroundColor(infineatColor(from: .Yellow))
+                        .rotationEffect(Angle(degrees: -38))
+                        .offset(x: -26, y: 30)
+                    Rectangle()
+                        .frame(width: 38)
+                        .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
+                        .frame(maxHeight: .infinity, alignment: .topLeading)
+                        .foregroundColor(infineatColor(from: .Orange))
+                        .rotationEffect(Angle(degrees: 18))
+                        .offset(x: -28, y: -16)
+                    Rectangle()
+                        .frame(width: 38)
+                        .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
+                        .frame(maxHeight: .infinity, alignment: .bottomLeading)
+                        .foregroundColor(infineatColor(from: .Red))
+                        .rotationEffect(Angle(degrees: -18))
+                        .offset(x: -28, y: 16)
+                }
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+            }
+            Image("pine_logo")
+                .resizable()
+                .frame(width: 20, height: 26)
+                .frame(width: geometry.size.width / 1.15, height: geometry.size.height, alignment: .leading)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
@@ -599,7 +684,7 @@ struct CustomTextView: View {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(5))
+            WatchFaceView(watchface: .constant(4))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

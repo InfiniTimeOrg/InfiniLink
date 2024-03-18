@@ -427,6 +427,7 @@ struct CustomScrollView<Content: View>: View {
                                     self.bleManagerVal.watchFace = Int(settings.watchFace)
                                     self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
                                     self.bleManagerVal.timeFormat = settings.clockType
+                                    self.bleManagerVal.infineatWatchface = settings.watchFaceInfineat
                                     switch settings.weatherFormat {
                                     case .Metric:
                                         self.deviceDataForSettings.chosenWeatherMode = "Metric"
