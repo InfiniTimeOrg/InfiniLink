@@ -723,7 +723,7 @@ struct CasioWF: View {
         case .H24:
             return true
         default:
-            return true
+            return false
         }
     }
     
@@ -731,9 +731,6 @@ struct CasioWF: View {
         ZStack {
             Image("casio")
                 .scaleEffect(0.81)
-            CustomTextView(text: String(Int(bleManager.batteryLevel)), font: .custom("open_sans_light", size: geometry.size.width * 0.09), lineSpacing: 0)
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topTrailing)
-            .padding(.trailing, 22)
             CustomTextView(
                 text: {
                     let dateFormatter = DateFormatter()
@@ -746,7 +743,7 @@ struct CasioWF: View {
                 font: .custom("repetitionscrolling", size: geometry.size.width * 0.16),
                 lineSpacing: 0
             )
-            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.2, alignment: .topLeading)
+            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.15, alignment: .topLeading)
             CustomTextView(
                 text: {
                     let calendar = Calendar.current
@@ -760,10 +757,10 @@ struct CasioWF: View {
                     
                     return "\(daysIn)-\(daysLeft)"
                 }(),
-                font: .custom("open_sans_light ", size: geometry.size.width * 0.13),
+                font: .custom("7-Segment", size: geometry.size.width * 0.16),
                 lineSpacing: 0
             )
-            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.3, alignment: .topTrailing)
+            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.25, alignment: .topTrailing)
             CustomTextView(
                 text: {
                     let calendar = Calendar.current
@@ -772,42 +769,27 @@ struct CasioWF: View {
                     let month = calendar.component(.month, from: now)
                     let day = calendar.component(.day, from: now)
                     
-                    return "\(month)- \(day)"
+                    return "\(month)-\(day)"
                 }(),
-                font: .custom("open_sans_light ", size: geometry.size.width * 0.13),
+                font: .custom("7-Segment", size: geometry.size.width * 0.16),
                 lineSpacing: 0
             )
             .frame(width: geometry.size.width / 1.08, height: geometry.size.height / 2.25, alignment: .topTrailing)
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
-                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("7-segment", size: geometry.size.width * 0.36), lineSpacing: 0)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.30)
-            } else {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("7-segment", size: geometry.size.width * 0.36), lineSpacing: 0)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.30)
-            }
-            HStack(spacing: 4) {
-                Image(systemName: "heart.fill")
-                    .font(.system(size: geometry.size.width * 0.08))
-                    .foregroundColor(bleManagerVal.heartBPM != 0 ? colorText : .gray)
-                    .opacity(bleManagerVal.heartBPM != 0 ? 1.0 : 0.5)
-                if bleManagerVal.heartBPM != 0 {
-                    CustomTextView(text: String(Int(bleManagerVal.heartBPM)), font: .custom("open_sans_light", size: geometry.size.width * 0.11), lineSpacing: 0)
+            CustomTextView(text: {
+                if hour24 {
+                    return "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))"
+                } else {
+                    return "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))"
                 }
+            }(), font: .custom("7-Segment", size: geometry.size.width * 0.48), lineSpacing: 0)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.165)
+            if !hour24 {
+                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
+                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+                    .padding(.leading, 6)
+                    .padding(.top, -5)
             }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
-            .padding(.leading, 10)
-            .padding(.bottom, bleManagerVal.heartBPM != 0 ? 0 : -4)
-            HStack(spacing: 4) {
-                Image(systemName: "shoeprints.fill")
-                    .rotationEffect(Angle(degrees: 90))
-                    .font(.system(size: geometry.size.width * 0.08))
-                CustomTextView(text: "\(bleManagerVal.stepCount)", font: .custom("open_sans_light", size: geometry.size.width * 0.11), lineSpacing: 0)
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomTrailing)
-            .padding(.trailing, 10)
-            .padding(.bottom, -4)
         }
         .foregroundColor(colorText)
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
@@ -861,7 +843,7 @@ enum InfineatItem {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(4))
+            WatchFaceView(watchface: .constant(5))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

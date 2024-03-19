@@ -72,6 +72,7 @@
 		E0C0E8782B96D7E80021E4AE /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0C0E8772B96D7E80021E4AE /* Launch Screen.storyboard */; };
 		E0C0E87A2B96D8F70021E4AE /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0E8792B96D8F70021E4AE /* WeatherController.swift */; };
 		E0EC91C12B47213F007472EC /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0EC91C02B47213F007472EC /* NotificationManager.swift */; };
+		E0F5480D2BA9393400153E1B /* 7-Segment.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05D11DD2B9BB99300D566EA /* 7-Segment.ttf */; };
 		E0F599412B76CABF00BE96A3 /* FileSystemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F599402B76CABF00BE96A3 /* FileSystemView.swift */; };
 		E0F69E102B35E44C00D41F94 /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F69E0F2B35E44C00D41F94 /* HealthKitManager.swift */; };
 		E515FB0C284C54690040B582 /* BatteryChartComponents.swift in Sources */ = {isa = PBXBuildFile; fileRef = E515FB0A284C54690040B582 /* BatteryChartComponents.swift */; };
@@ -185,7 +186,7 @@
 		26D7817926CAD19F00BBF555 /* ColorPalette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPalette.swift; sourceTree = "<group>"; };
 		9255940428BB5342001602F1 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		E021DAB22B489F58005C5E51 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		E05D11DD2B9BB99300D566EA /* 7segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 7segment.ttf; sourceTree = "<group>"; };
+		E05D11DD2B9BB99300D566EA /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E079ED002B78903B0038C0F2 /* WatchSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSettingsView.swift; sourceTree = "<group>"; };
 		E09057E52B9AC12B008C0CFD /* NetworkManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
@@ -603,7 +604,7 @@
 				E53195382B792E3C004FECB4 /* navigation.ttf */,
 				E53195372B792E3C004FECB4 /* open_sans_light.ttf */,
 				E53195392B792E3C004FECB4 /* repetitionscrolling.ttf */,
-				E05D11DD2B9BB99300D566EA /* 7segment.ttf */,
+				E05D11DD2B9BB99300D566EA /* 7-Segment.ttf */,
 				E53195312B792E3B004FECB4 /* Teko-Light.ttf */,
 			);
 			path = Fonts;
@@ -746,6 +747,7 @@
 			files = (
 				E53195402B792E3C004FECB4 /* JetBrainsMono-ExtraBold.ttf in Resources */,
 				E531954E2B792E6B004FECB4 /* infinitime-nb.png in Resources */,
+				E0F5480D2BA9393400153E1B /* 7-Segment.ttf in Resources */,
 				E531953F2B792E3C004FECB4 /* JetBrainsMono-Light.ttf in Resources */,
 				E53195432B792E3C004FECB4 /* repetitionscrolling.ttf in Resources */,
 				264BFE7826BCAAC00050A223 /* README.md in Resources */,
