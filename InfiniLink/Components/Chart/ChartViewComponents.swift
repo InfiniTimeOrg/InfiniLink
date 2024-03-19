@@ -51,7 +51,7 @@ struct HorizontalLines: View {
     }
 }
 
-struct verticalLines: View {
+struct VerticalLines: View {
     @Environment(\.colorScheme) var colorScheme
     
     var numbLines: Int

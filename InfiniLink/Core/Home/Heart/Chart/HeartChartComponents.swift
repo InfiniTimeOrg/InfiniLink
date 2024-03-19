@@ -96,7 +96,7 @@ struct HeartContentView: View {
                         //let bar_width = (Int(geometry.size.width - 2) - (Int(barSpacing[pickerSelection]) * (numberOfBars[pickerSelection] - 1)))
                         VStack {
                             ZStack {
-                                verticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 160)
+                                VerticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 160)
                                 HorizontalLines(numbLines: 5, sizes: geometry.size, height: 160)
                                 HStack(alignment: .center) {
                                     //let hour = (Calendar.current.component(.hour, from: Date()) - Int(floor(Double(Calendar.current.component(.hour, from: Date())) / 3.0) * 3.0)) * (numberOfBars[pickerSelection] / 24)

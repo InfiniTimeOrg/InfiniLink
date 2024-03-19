@@ -52,9 +52,11 @@ struct BatteryContentView: View {
                 HStack {
                     GeometryReader { (geometry) in
                         VStack {
+                            Divider()
                             ZStack {
-                                verticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 100)
-                                HorizontalLines(numbLines: 5, sizes: geometry.size, height: 100)
+                                // TODO: Fix lag due to these lines without removing them
+//                                VerticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 100)
+//                                HorizontalLines(numbLines: 5, sizes: geometry.size, height: 100)
 
                                 VStack {
                                     setGraphType(data: data)
