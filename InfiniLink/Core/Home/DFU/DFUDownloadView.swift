@@ -85,33 +85,35 @@ struct DownloadView: View {
                                     DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
                                 }
                             }
-                            Button {
-                                externalResources = true
-                                showResourcePicker = true
-                            } label: {
-                                Text(NSLocalizedString("update_external_resources", comment: ""))
-                                    .frame(maxWidth: .infinity)
-                                    .padding()
-                                    .background(Color.blue)
-                                    .foregroundColor(.white)
-                                    .clipShape(Capsule())
-                            }
-                            .fileImporter(isPresented: $showResourcePicker, allowedContentTypes: [.zip]) { (res) in
-                                do {
-                                    let fileUrl = try res.get()
-                                    
-                                    guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                                    
-                                    dfuUpdater.firmwareSelected = true
-                                    dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                                    dfuUpdater.firmwareURL = fileUrl.absoluteURL
-                                    
+                            if BLEManager.shared.blefsTransfer != nil {
+                                Button {
                                     externalResources = true
-                                    
-                                    fileUrl.stopAccessingSecurityScopedResource()
-                                    presentation.wrappedValue.dismiss()
-                                } catch{
-                                    DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+                                    showResourcePicker = true
+                                } label: {
+                                    Text(NSLocalizedString("update_external_resources", comment: ""))
+                                        .frame(maxWidth: .infinity)
+                                        .padding()
+                                        .background(Color.blue)
+                                        .foregroundColor(.white)
+                                        .clipShape(Capsule())
+                                }
+                                .fileImporter(isPresented: $showResourcePicker, allowedContentTypes: [.zip]) { (res) in
+                                    do {
+                                        let fileUrl = try res.get()
+                                        
+                                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                                        
+                                        dfuUpdater.firmwareSelected = true
+                                        dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                                        dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                                        
+                                        externalResources = true
+                                        
+                                        fileUrl.stopAccessingSecurityScopedResource()
+                                        presentation.wrappedValue.dismiss()
+                                    } catch {
+                                        DebugLogManager.shared.debug(error: error.localizedDescription, log: .dfu, date: Date())
+                                    }
                                 }
                             }
                         }

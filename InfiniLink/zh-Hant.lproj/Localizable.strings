@@ -7,10 +7,6 @@
 */
 
 // - HomeScreen
-"device_information" = "裝置資訊";
-"firmware_version" = "韌體版本： ";
-"model" = "型號： ";
-"update_stats" = "上線時間狀態";
 "last_disconnect" = "上次離線： ";
 "uptime" = "上線時間： ";
 "step_count" = "步數計數";
@@ -254,6 +250,8 @@
 "pinetime_not_available" = "PineTime 目前不可使用";
 "please_check_your_connection_and_try_again" = "請檢查您的連線並再試一次。";
 "download_and_install" = "下載並安裝";
+"recovery_mode" = "It looks your device is in Recovery Mode.";
+"exit_recovery_mode" = "To exit Recovery Mode, you need to install a software update.";
 
 "battery_level" = "電池電量";
 "battery_usage" = "電池用量";
@@ -285,6 +283,7 @@
 "display_timeout" = "Display Timeout";
 "time_format" = "Time Format";
 "hourly_chimes" = "Hourly Chimes";
+"brightness_level" = "Brightness Level";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

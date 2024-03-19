@@ -197,8 +197,6 @@ class BLEFSHandler : ObservableObject {
             readFileFS.group.wait()
         }
         
-//        print(readFileFS.data.hexString)
-        
         return readFileFS
     }
 
@@ -602,6 +600,12 @@ enum WakeUpMode: UInt8 {
     case LowerWrist = 4
 }
 
+enum BrightLevel: UInt8 {
+    case Low = 0
+    case Mid = 1
+    case High = 2
+}
+
 enum Colors: UInt8 {
     case White = 0
     case Silver = 1
@@ -635,16 +639,16 @@ enum PTSWeather: UInt8 {
 }
 
 struct PineTimeStyleData {
-    let ColorTime : Colors = .Teal
-    let ColorBar : Colors = .Teal
-    let ColorBG : Colors = .Black
-    let gaugeStyle : PTSGaugeStyle = .Full
-    let weatherEnable : PTSWeather = .Off
+    let ColorTime: Colors = .Teal
+    let ColorBar: Colors = .Teal
+    let ColorBG: Colors = .Black
+    let gaugeStyle: PTSGaugeStyle = .Full
+    let weatherEnable: PTSWeather = .Off
 }
 
 struct WatchFaceInfineat {
-    let showSideCover : Bool = true
-    let colorIndex : UInt8 = 0
+    let showSideCover: Bool = true
+    let colorIndex: UInt8 = 0
 }
 
 struct Settings {
@@ -660,5 +664,5 @@ struct Settings {
     let watchFaceInfineat: WatchFaceInfineat
     let wakeUpMode: WakeUpMode
     let shakeWakeThreshold: UInt16
-    let brightLevel: UInt8
+    let brightLevel: BrightLevel
 }

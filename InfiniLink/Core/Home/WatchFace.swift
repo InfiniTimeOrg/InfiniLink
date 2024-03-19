@@ -397,7 +397,7 @@ struct InfineatWF: View {
     func infineatColor(for item: InfineatItem) -> Color {
         switch item {
         case .base:
-            switch bleManagerVal.infineatColorIndex {
+            switch bleManagerVal.infineatWatchFace?.colorIndex {
             case 0:
                 return orangeColors[2]
             case 1:
@@ -413,10 +413,10 @@ struct InfineatWF: View {
             case 6:
                 return nordGreenColors[2]
             default:
-                break
+                return orangeColors[2]
             }
         case .bottom:
-            switch bleManagerVal.infineatColorIndex {
+            switch bleManagerVal.infineatWatchFace?.colorIndex {
             case 0:
                 return orangeColors[1]
             case 1:
@@ -432,10 +432,10 @@ struct InfineatWF: View {
             case 6:
                 return nordGreenColors[1]
             default:
-                break
+                return orangeColors[1]
             }
         case .topTop:
-            switch bleManagerVal.infineatColorIndex {
+            switch bleManagerVal.infineatWatchFace?.colorIndex {
             case 0:
                 return orangeColors[4]
             case 1:
@@ -451,10 +451,10 @@ struct InfineatWF: View {
             case 6:
                 return nordGreenColors[4]
             default:
-                break
+                return orangeColors[4]
             }
         case .topBottom:
-            switch bleManagerVal.infineatColorIndex {
+            switch bleManagerVal.infineatWatchFace?.colorIndex {
             case 0:
                 return orangeColors[5]
             case 1:
@@ -470,10 +470,10 @@ struct InfineatWF: View {
             case 6:
                 return nordGreenColors[5]
             default:
-                break
+                return orangeColors[5]
             }
         case .midBottom:
-            switch bleManagerVal.infineatColorIndex {
+            switch bleManagerVal.infineatWatchFace?.colorIndex {
             case 0:
                 return orangeColors[3]
             case 1:
@@ -489,10 +489,10 @@ struct InfineatWF: View {
             case 6:
                 return nordGreenColors[3]
             default:
-                break
+                return orangeColors[3]
             }
         case .midTop:
-            switch bleManagerVal.infineatColorIndex {
+            switch bleManagerVal.infineatWatchFace?.colorIndex {
             case 0:
                 return orangeColors[0]
             case 1:
@@ -508,7 +508,7 @@ struct InfineatWF: View {
             case 6:
                 return nordGreenColors[0]
             default:
-                break
+                return orangeColors[0]
             }
         }
         return .clear
@@ -516,7 +516,7 @@ struct InfineatWF: View {
     
     var body: some View {
         ZStack {
-            if hour24 {
+            if !hour24 {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
@@ -565,59 +565,59 @@ struct InfineatWF: View {
             .foregroundColor(.gray)
             .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
             .padding(.bottom, -16)
-            ZStack {
-                Rectangle()
-                    .frame(width: 19)
-                    .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .topLeading)
-                    .foregroundColor(infineatColor(for: .midTop))
-                    .rotationEffect(Angle(degrees: 49))
-                    .offset(x: -36, y: -48)
-                Rectangle()
-                    .frame(width: 19)
-                    .frame(height: geometry.size.height / 1.5, alignment: .bottomLeading)
-                    .frame(maxHeight: .infinity, alignment: .bottomLeading)
-                    .foregroundColor(infineatColor(for: .bottom))
-                    .opacity(0.8)
-                    .rotationEffect(Angle(degrees: -22))
-                    .offset(x: -16, y: 14)
-                Rectangle()
-                    .frame(width: 26, alignment: .leading)
-                    .offset(x: -9)
-                    .foregroundColor(infineatColor(for: .base))
-                Rectangle()
-                    .frame(width: 26)
-                    .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .bottomLeading)
-                    .foregroundColor(infineatColor(for: .midBottom))
-                    .rotationEffect(Angle(degrees: -42))
-                    .offset(x: -31, y: 38)
                 ZStack {
-                    DiamondShape()
-                        .fill(Color.white)
-                        .frame(width: 50, height: 75)
-                        .offset(x: -5)
+                    if bleManagerVal.infineatWatchFace?.showSideCover ?? true {
+                        Rectangle()
+                            .frame(width: 19)
+                            .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
+                            .frame(maxHeight: .infinity, alignment: .topLeading)
+                            .foregroundColor(infineatColor(for: .midTop))
+                            .rotationEffect(Angle(degrees: 49))
+                            .offset(x: -36, y: -48)
+                        Rectangle()
+                            .frame(width: 19)
+                            .frame(height: geometry.size.height / 1.5, alignment: .bottomLeading)
+                            .frame(maxHeight: .infinity, alignment: .bottomLeading)
+                            .foregroundColor(infineatColor(for: .bottom))
+                            .opacity(0.8)
+                            .rotationEffect(Angle(degrees: -22))
+                            .offset(x: -16, y: 14)
+                        Rectangle()
+                            .frame(width: 26, alignment: .leading)
+                            .offset(x: -9)
+                            .foregroundColor(infineatColor(for: .base))
+                        Rectangle()
+                            .frame(width: 26)
+                            .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
+                            .frame(maxHeight: .infinity, alignment: .bottomLeading)
+                            .foregroundColor(infineatColor(for: .midBottom))
+                            .rotationEffect(Angle(degrees: -42))
+                            .offset(x: -31, y: 38)
+                        DiamondShape()
+                            .fill(Color.white)
+                            .frame(width: 50, height: 75)
+                            .offset(x: -5)
+                        Rectangle()
+                            .frame(width: 38)
+                            .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
+                            .frame(maxHeight: .infinity, alignment: .topLeading)
+                            .foregroundColor(infineatColor(for: .topTop))
+                            .rotationEffect(Angle(degrees: 18))
+                            .offset(x: -32, y: -16)
+                        Rectangle()
+                            .frame(width: 38)
+                            .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
+                            .frame(maxHeight: .infinity, alignment: .bottomLeading)
+                            .foregroundColor(infineatColor(for: .topBottom))
+                            .rotationEffect(Angle(degrees: -18))
+                            .offset(x: -32, y: 16)
+                    }
                     Image("pine_logo")
                         .resizable()
-                        .frame(width: 20, height: 25)
+                        .frame(width: 19, height: 25)
                         .offset(x: -1)
                 }
-                Rectangle()
-                    .frame(width: 38)
-                    .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .topLeading)
-                    .foregroundColor(infineatColor(for: .topTop))
-                    .rotationEffect(Angle(degrees: 18))
-                    .offset(x: -32, y: -16)
-                Rectangle()
-                    .frame(width: 38)
-                    .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .bottomLeading)
-                    .foregroundColor(infineatColor(for: .topBottom))
-                    .rotationEffect(Angle(degrees: -18))
-                    .offset(x: -32, y: 16)
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
         .clipped()
@@ -865,9 +865,6 @@ enum InfineatItem {
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)
-                .onAppear {
-                    BLEManagerVal.shared.infineatColorIndex = 1
-                }
         }
     }
 }

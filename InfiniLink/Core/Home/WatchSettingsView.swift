@@ -54,22 +54,38 @@ struct WatchSettingsView: View {
                                 .foregroundColor(.gray)
                         }
                         .modifier(RowModifier(style: .capsule))
+                        // TODO: Don't display until handling for multiple cases is implemented
+//                        HStack {
+//                            Text(NSLocalizedString("display_wakeup", comment: ""))
+//                            Spacer()
+//                            Group {
+//                                switch settings.wakeUpMode {
+//                                case .SingleTap:
+//                                    Text("Single Tap")
+//                                case .DoubleTap:
+//                                    Text("Double Tap")
+//                                case .RaiseWrist:
+//                                    Text("Raise Wrist")
+//                                case .Shake:
+//                                    Text("Shake Wake")
+//                                case .LowerWrist:
+//                                    Text("Lower Wrist")
+//                                }
+//                            }
+//                            .foregroundColor(.gray)
+//                        }
+//                        .modifier(RowModifier(style: .capsule))
                         HStack {
-                            Text(NSLocalizedString("display_wakeup", comment: ""))
+                            Text(NSLocalizedString("brightness_level", comment: ""))
                             Spacer()
                             Group {
-                                // TODO: Add handling for multiple cases
-                                switch settings.wakeUpMode {
-                                case .SingleTap:
-                                    Text("Single Tap")
-                                case .DoubleTap:
-                                    Text("Double Tap")
-                                case .RaiseWrist:
-                                    Text("Raise Wrist")
-                                case .Shake:
-                                    Text("Shake Wake")
-                                case .LowerWrist:
-                                    Text("Lower Wrist")
+                                switch settings.brightLevel {
+                                case .Low:
+                                    Text("Low")
+                                case .Mid:
+                                    Text("Mid")
+                                case .High:
+                                    Text("High")
                                 }
                             }
                             .foregroundColor(.gray)
@@ -164,5 +180,5 @@ struct WatchFaceModifier: ViewModifier {
 }
 
 #Preview {
-    WatchSettingsView(settings: Settings(version: 7, stepsGoal: 10000, screenTimeOut: 1500, clockType: .H12, weatherFormat: .Imperial, notificationStatus: .On, watchFace: 2, chimesOption: .None, pineTimeStyle: .init(), watchFaceInfineat: .init(), wakeUpMode: .SingleTap, shakeWakeThreshold: 1500, brightLevel: 1))
+    WatchSettingsView(settings: Settings(version: 7, stepsGoal: 10000, screenTimeOut: 1500, clockType: .H12, weatherFormat: .Imperial, notificationStatus: .On, watchFace: 2, chimesOption: .None, pineTimeStyle: .init(), watchFaceInfineat: .init(), wakeUpMode: .SingleTap, shakeWakeThreshold: 1500, brightLevel: .Mid))
 }

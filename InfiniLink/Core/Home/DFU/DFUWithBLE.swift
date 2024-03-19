@@ -224,9 +224,9 @@ struct NewUpdate: View {
                 }
             }
             DFUStartTransferButton(updateStarted: $updateStarted, firmwareSelected: $dfuUpdater.firmwareSelected, externalResources: .constant(false))
-                .disabled(bleManager.batteryLevel <= 30)
-                .opacity(bleManager.batteryLevel <= 30 ? 0.5 : 1.0)
-            if bleManager.batteryLevel <= 30 {
+                .disabled((bleManager.batteryLevel <= 30 && bleManager.blefsTransfer != nil))
+                .opacity((bleManager.batteryLevel <= 30 && bleManager.blefsTransfer != nil) ? 0.5 : 1.0)
+            if bleManager.batteryLevel <= 30 && bleManager.blefsTransfer != nil {
                 Text(NSLocalizedString("update_requirement_1", comment: "") + deviceInfo.deviceName + NSLocalizedString("update_requirement_2", comment: ""))
                     .foregroundColor(.gray)
                     .font(.system(size: 15))

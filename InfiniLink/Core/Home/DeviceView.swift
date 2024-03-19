@@ -421,19 +421,21 @@ struct CustomScrollView<Content: View>: View {
                     .onChange(of: deviceInfo.firmware) { firmware in
                         if firmware != "" {
                             DispatchQueue.main.async {
-                                BLEFSHandler.shared.readSettings { settings in
-                                    self.settings = settings
-                                    print(settings)
-                                    self.stepCountGoal = Int(settings.stepsGoal)
-                                    self.bleManagerVal.watchFace = Int(settings.watchFace)
-                                    self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
-                                    self.bleManagerVal.timeFormat = settings.clockType
-                                    self.bleManagerVal.infineatColorIndex = settings.watchFaceInfineat.colorIndex
-                                    switch settings.weatherFormat {
-                                    case .Metric:
-                                        self.deviceDataForSettings.chosenWeatherMode = "Metric"
-                                    case .Imperial:
-                                        self.deviceDataForSettings.chosenWeatherMode = "Imperial"
+                                if bleManager.blefsTransfer != nil {
+                                    BLEFSHandler.shared.readSettings { settings in
+                                        self.settings = settings
+                                        print(settings)
+                                        self.stepCountGoal = Int(settings.stepsGoal)
+                                        self.bleManagerVal.watchFace = Int(settings.watchFace)
+                                        self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle
+                                        self.bleManagerVal.timeFormat = settings.clockType
+                                        self.bleManagerVal.infineatWatchFace = settings.watchFaceInfineat
+                                        switch settings.weatherFormat {
+                                        case .Metric:
+                                            self.deviceDataForSettings.chosenWeatherMode = "Metric"
+                                        case .Imperial:
+                                            self.deviceDataForSettings.chosenWeatherMode = "Imperial"
+                                        }
                                     }
                                 }
                             }

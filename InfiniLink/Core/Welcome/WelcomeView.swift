@@ -21,19 +21,56 @@ struct WelcomeView: View {
                         DeviceView()
                             .disabled(true)
                             .blur(radius: 70)
-                        VStack(spacing: 16) {
-                            Text(NSLocalizedString("connecting", comment: "Connecting..."))
-                                .font(.title.weight(.bold))
-                            Button {
-                                bleManager.disconnect()
-                            } label: {
-                                Text(NSLocalizedString("stop_connecting", comment: "Stop Connecting"))
-                                    .padding()
-                                    .background(Color.red)
-                                    .foregroundColor(.white)
-                                    .clipShape(Capsule())
+                        Group {
+                            if deviceInfo.firmware != "" && (bleManagerVal.watchFace == -1 && bleManager.blefsTransfer == nil) {
+                                VStack(spacing: 18) {
+                                    Group {
+                                        Text(NSLocalizedString("recovery_mode", comment: "It looks like your device is in recovery mode."))
+                                            .font(.title.weight(.bold))
+                                        Text(NSLocalizedString("exit_recovery_mode", comment: "To exit Recovery Mode, you need to install a software update."))
+                                    }
+                                    .multilineTextAlignment(.center)
+                                    VStack(spacing: 12) {
+                                        NavigationLink {
+                                            DFUView()
+                                        } label: {
+                                            HStack(spacing: 6) {
+                                                Text(NSLocalizedString("software_update", comment: "Software Update"))
+                                                Image(systemName: "chevron.right")
+                                            }
+                                            .padding()
+                                            .background(Material.thin)
+                                            .foregroundColor(.primary)
+                                            .clipShape(Capsule())
+                                        }
+                                        Button {
+                                            bleManager.disconnect()
+                                        } label: {
+                                            Text(NSLocalizedString("disconnect", comment: "Disconnect"))
+                                                .padding()
+                                                .background(Color.red)
+                                                .foregroundColor(.white)
+                                                .clipShape(Capsule())
+                                        }
+                                    }
+                                }
+                            } else {
+                                VStack(spacing: 16) {
+                                    Text(NSLocalizedString("connecting", comment: "Connecting..."))
+                                        .font(.title.weight(.bold))
+                                    Button {
+                                        bleManager.disconnect()
+                                    } label: {
+                                        Text(NSLocalizedString("stop_connecting", comment: "Stop Connecting"))
+                                            .padding()
+                                            .background(Color.red)
+                                            .foregroundColor(.white)
+                                            .clipShape(Capsule())
+                                    }
+                                }
                             }
                         }
+                        .padding()
                     }
                 } else {
                     VStack() {
@@ -96,7 +133,7 @@ struct WelcomeView: View {
 
 struct NeumorphicButtonModifer: ViewModifier {
     var bgColor: Color
-
+    
     func body(content: Content) -> some View {
         content
             .padding()
@@ -111,22 +148,54 @@ struct NeumorphicButtonModifer: ViewModifier {
 
 public extension View {
     func fullBackground(imageName: String) -> some View {
-       return background(
-                Image(imageName)
-                    .resizable()
-                    .scaledToFill()
-                    .edgesIgnoringSafeArea(.all)
-                    .offset(y: -23)
-       )
+        return background(
+            Image(imageName)
+                .resizable()
+                .scaledToFill()
+                .edgesIgnoringSafeArea(.all)
+                .offset(y: -23)
+        )
     }
 }
 
 #Preview {
     NavigationView {
-        ContentView()
-            .onAppear {
-                BLEManager.shared.isConnectedToPinetime = false
-                //BLEManagerVal.shared.firmwareVersion = "1.14.0"
+        ZStack {
+            DeviceView()
+                .disabled(true)
+                .blur(radius: 70)
+            VStack(spacing: 18) {
+                Group {
+                    Text(NSLocalizedString("recovery_mode", comment: "It looks like your device is in recovery mode."))
+                        .font(.title.weight(.bold))
+                    Text("To exit Recovery Mode, you need to install a software update.")
+                }
+                .multilineTextAlignment(.center)
+                VStack(spacing: 12) {
+                    NavigationLink {
+                        DFUView()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text(NSLocalizedString("software_update", comment: "Software Update"))
+                            Image(systemName: "chevron.right")
+                        }
+                        .padding()
+                        .background(Material.thin)
+                        .foregroundColor(.primary)
+                        .clipShape(Capsule())
+                    }
+                    Button {
+                        BLEManager.shared.disconnect()
+                    } label: {
+                        Text(NSLocalizedString("disconnect", comment: "Disconnect"))
+                            .padding()
+                            .background(Color.red)
+                            .foregroundColor(.white)
+                            .clipShape(Capsule())
+                    }
+                }
             }
+            .padding()
+        }
     }
 }

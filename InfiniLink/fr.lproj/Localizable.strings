@@ -7,10 +7,6 @@
 */
 
 // - HomeScreen
-"device_information" = "Informations sur l'appareil";
-"firmware_version" = "Version du micrologiciel: ";
-"model" = "Modèle: ";
-"update_stats" = "Statistiques de disponibilité ";
 "last_disconnect" = "Dernière déconnexion: ";
 "uptime" = "Durée de fonctionnement: ";
 "step_count" = "Nombre de pas";
@@ -254,6 +250,8 @@
 "pinetime_not_available" = "PineTime non disponible";
 "please_check_your_connection_and_try_again" = "Veuillez vérifier votre connexion et réessayer";
 "download_and_install" = "Télécharger et installer";
+"recovery_mode" = "It looks your device is in Recovery Mode.";
+"exit_recovery_mode" = "To exit Recovery Mode, you need to install a software update.";
 
 "battery_level" = "NIVEAU DE BATTERIE";
 "battery_usage" = "UTILISATION DE LA BATTERIE";
@@ -285,6 +283,7 @@
 "display_timeout" = "Display Timeout";
 "time_format" = "Time Format";
 "hourly_chimes" = "Hourly Chimes";
+"brightness_level" = "Brightness Level";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";

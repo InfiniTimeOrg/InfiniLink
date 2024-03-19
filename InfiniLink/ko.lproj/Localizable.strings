@@ -7,10 +7,6 @@
 */
 
 // - HomeScreen
-"device_information" = "기기 정보";
-"firmware_version" = "펌웨어 버전: ";
-"model" = "모델: ";
-"update_stats" = "업타임 상태";
 "last_disconnect" = "마지막 연결 해제: ";
 "uptime" = "마지막 연결: ";
 "step_count" = "걸음 수";
@@ -254,6 +250,8 @@
 "pinetime_not_available" = "";
 "please_check_your_connection_and_try_again" = "";
 "download_and_install" = "";
+"recovery_mode" = "It looks your device is in Recovery Mode.";
+"exit_recovery_mode" = "To exit Recovery Mode, you need to install a software update.";
 
 "battery_level" = "";
 "battery_usage" = "";
@@ -285,6 +283,7 @@
 "display_timeout" = "Display Timeout";
 "time_format" = "Time Format";
 "hourly_chimes" = "Hourly Chimes";
+"brightness_level" = "Brightness Level";
 
 "enable_weather_data" = "Enable Weather Data";
 "use_current_location" = "Use Current Location";
