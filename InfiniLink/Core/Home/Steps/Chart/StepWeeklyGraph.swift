@@ -12,15 +12,28 @@ import SwiftUI
 import SwiftUICharts
 
 struct StepWeeklyChart: View {
-	@ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     @Environment(\.managedObjectContext) var viewContext
-	@Environment(\.colorScheme) var colorScheme
+    @Environment(\.colorScheme) var colorScheme
     
-	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)]) private var chartPoints: FetchedResults<StepCounts>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)]) private var chartPoints: FetchedResults<StepCounts>
     
-	@Binding var stepCountGoal: Int
+    @Binding var stepCountGoal: Int
     @State var displayDate = Date()
+    
+    var weekTitle: String {
+        let calendar = Calendar.current
+        if calendar.isDateInToday(displayDate) {
+            return "This Week"
+        } else if calendar.isDate(displayDate, equalTo: Date().addingTimeInterval(-7*24*60*60), toGranularity: .weekOfYear) {
+            return "Last Week"
+        } else {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            return dateFormatter.string(from: displayDate)
+        }
+    }
 	
     func getStepCounts(displayWeek: DateInterval?) -> [BarChartDataPoint] {
 		var dataPoints = [BarChartDataPoint]()
@@ -84,34 +97,34 @@ struct StepWeeklyChart: View {
         
         VStack {
             HStack {
-                Button {
-                    // Update date here...
-                } label: {
+                Button(action: {
+                    self.displayDate = Calendar.current.date(byAdding: .weekOfYear, value: -1, to: self.displayDate)!
+                }) {
                     Image(systemName: "chevron.left")
                         .imageScale(.medium)
-                        .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Material.thin)
-                        .clipShape(Circle())
                 }
                 Spacer()
-                Text("Weekly Steps")
+                Text(weekTitle)
                     .font(.title2.weight(.semibold))
                 Spacer()
-                Button {
-                    // Update date here...
-                } label: {
+                Button(action: {
+                    let newDate = Calendar.current.date(byAdding: .weekOfYear, value: 1, to: self.displayDate)!
+                    if newDate <= Date() {
+                        self.displayDate = newDate
+                    }
+                }) {
                     Image(systemName: "chevron.right")
                         .imageScale(.medium)
-                        .padding(14)
                         .font(.body.weight(.semibold))
                         .foregroundColor(colorScheme == .dark ? .white : .darkGray)
-                        .background(Material.thin)
-                        .clipShape(Circle())
                 }
+                .disabled(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: self.displayDate)! > Date())
+                .opacity(Calendar.current.date(byAdding: .weekOfYear, value: 1, to: self.displayDate)! > Date() ? 0.5 : 1.0)
             }
             .padding(.bottom, 25)
+            .padding(.horizontal, 5)
             BarChart(chartData: chartData)
                 .yAxisPOI(chartData: chartData, markerName: "Step Goal", markerValue: Double(stepCountGoal), labelColour: Color(.lightGray).opacity(0.25), lineColour: Color(.lightGray).opacity(0.25), strokeStyle: StrokeStyle.init(dash: [5]))
                 .floatingInfoBox(chartData: chartData)

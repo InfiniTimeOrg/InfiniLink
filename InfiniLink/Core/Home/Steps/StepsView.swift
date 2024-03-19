@@ -90,6 +90,7 @@ struct StepView: View {
                                 .imageScale(.large)
                             VStack(spacing: 3) {
                                 Text(getStepHistoryAsString(date: Date()))
+                                    .font(.system(size: 27).weight(.bold))
                                 Button {
                                     showStepCountAlert.toggle()
                                 } label: {
