@@ -52,21 +52,27 @@ struct BatteryContentView: View {
                 HStack {
                     GeometryReader { (geometry) in
                         VStack {
-                            Divider()
                             ZStack {
-                                // TODO: Fix lag due to these lines without removing them
+                                // TODO: Fix lag due to these indicator lines without removing them
 //                                VerticalLines(numbLines: barLineNumb[pickerSelection], sizes: geometry.size, height: 100)
 //                                HorizontalLines(numbLines: 5, sizes: geometry.size, height: 100)
-
+                                VStack {
+                                    Divider()
+                                    Spacer()
+                                    Divider()
+                                    Spacer()
+                                    Spacer()
+                                        .frame(height: 5)
+                                }
                                 VStack {
                                     setGraphType(data: data)
                                         .animation(nil)
                                         .id(data.id)
                                     Spacer(minLength: 10)
                                 }
-                                .frame(maxHeight: 110)
-                                .frame(minHeight: 110, alignment: .top)
                             }
+                            .frame(maxHeight: 110)
+                            .frame(minHeight: 110, alignment: .top)
                             VStack {
                                 HStack(alignment: .top) {
                                     if pickerSelection == 0 {

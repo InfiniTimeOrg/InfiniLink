@@ -13,18 +13,21 @@ import SwiftUICharts
 
 struct StepWeeklyChart: View {
 	@ObservedObject var bleManager = BLEManager.shared
-	@Environment(\.managedObjectContext) var viewContext
-	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
-	private var chartPoints: FetchedResults<StepCounts>
+    
+    @Environment(\.managedObjectContext) var viewContext
+	@Environment(\.colorScheme) var colorScheme
+    
+	@FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)]) private var chartPoints: FetchedResults<StepCounts>
+    
 	@Binding var stepCountGoal: Int
+    @State var displayDate = Date()
 	
-	func getStepCounts() -> [BarChartDataPoint] {
+    func getStepCounts(displayWeek: DateInterval?) -> [BarChartDataPoint] {
 		var dataPoints = [BarChartDataPoint]()
 		var calendar = Calendar.autoupdatingCurrent
 		calendar.firstWeekday = 1
-		let today = calendar.startOfDay(for: Date())
 		var week = [Date]()
-		if let thisWeek = calendar.dateInterval(of: .weekOfYear, for: today) {
+		if let thisWeek = displayWeek {
 			for n in 0...6 {
 				if let day = calendar.date(byAdding: .day, value: n, to: thisWeek.start) {
 					week += [day]
@@ -67,7 +70,7 @@ struct StepWeeklyChart: View {
 									   baseline           : .zero,
 									   topLine            : .maximum(of: Double(stepCountGoal)))
 		
-		return BarChartData(dataSets  : BarDataSet(dataPoints: getStepCounts()),
+        return BarChartData(dataSets  : BarDataSet(dataPoints: getStepCounts(displayWeek: Calendar.autoupdatingCurrent.dateInterval(of: .weekOfYear, for: displayDate))),
 									metadata  : metadata,
 									barStyle  : BarStyle(barWidth: 0.9,
 														 cornerRadius: CornerRadius(top: 10, bottom: 0),
@@ -78,14 +81,45 @@ struct StepWeeklyChart: View {
 	
 	var body: some View {
 		let chartData = getChartData()
-		BarChart(chartData: chartData)
-			.yAxisPOI(chartData: chartData, markerName: "Step Goal", markerValue: Double(stepCountGoal), labelColour: Color(.lightGray).opacity(0.25), lineColour: Color(.lightGray).opacity(0.25), strokeStyle: StrokeStyle.init(dash: [5]))
-			.floatingInfoBox(chartData: chartData)
-			.touchOverlay(chartData: chartData)
-			.xAxisLabels(chartData: chartData)
-			.yAxisLabels(chartData: chartData)
-            .animation(.none)
-//			.id(chartData.id)
+        
+        VStack {
+            HStack {
+                Button {
+                    // Update date here...
+                } label: {
+                    Image(systemName: "chevron.left")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Material.thin)
+                        .clipShape(Circle())
+                }
+                Spacer()
+                Text("Weekly Steps")
+                    .font(.title2.weight(.semibold))
+                Spacer()
+                Button {
+                    // Update date here...
+                } label: {
+                    Image(systemName: "chevron.right")
+                        .imageScale(.medium)
+                        .padding(14)
+                        .font(.body.weight(.semibold))
+                        .foregroundColor(colorScheme == .dark ? .white : .darkGray)
+                        .background(Material.thin)
+                        .clipShape(Circle())
+                }
+            }
+            .padding(.bottom, 25)
+            BarChart(chartData: chartData)
+                .yAxisPOI(chartData: chartData, markerName: "Step Goal", markerValue: Double(stepCountGoal), labelColour: Color(.lightGray).opacity(0.25), lineColour: Color(.lightGray).opacity(0.25), strokeStyle: StrokeStyle.init(dash: [5]))
+                .floatingInfoBox(chartData: chartData)
+                .touchOverlay(chartData: chartData)
+                .xAxisLabels(chartData: chartData)
+                .yAxisLabels(chartData: chartData)
+                .animation(.none)
+        }
 	}
 }
 

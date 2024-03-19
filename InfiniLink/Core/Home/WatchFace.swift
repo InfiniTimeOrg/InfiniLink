@@ -511,7 +511,6 @@ struct InfineatWF: View {
                 return orangeColors[0]
             }
         }
-        return .clear
     }
     
     var body: some View {

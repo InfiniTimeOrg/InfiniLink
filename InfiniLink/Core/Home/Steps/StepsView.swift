@@ -86,7 +86,7 @@ struct StepView: View {
                             .rotationEffect(Angle(degrees: 270.0))
                         VStack {
                             Image(systemName: "figure.walk")
-                                .font(.system(size: 30).weight(.semibold))
+                                .font(.system(size: 26).weight(.semibold))
                                 .imageScale(.large)
                             VStack(spacing: 3) {
                                 Text(getStepHistoryAsString(date: Date()))
@@ -106,17 +106,12 @@ struct StepView: View {
                         .foregroundColor(.blue)
                     }
                     .padding(30)
-                    VStack {
-                        Text("Weekly Steps")
-                            .font(.title2.weight(.semibold))
-                            .padding(.bottom, 25)
-                        StepWeeklyChart(stepCountGoal: $stepCountGoal)
-                            .frame(height: (g.size.width / 2.2), alignment: .center)
-                    }
-                    .ignoresSafeArea()
-                    .padding(20)
-                    .background(Material.regular)
-                    .cornerRadius(30, corners: [.topLeft, .topRight])
+                    StepWeeklyChart(stepCountGoal: $stepCountGoal)
+                        .frame(height: (g.size.width / 1.45), alignment: .center)
+                        .ignoresSafeArea()
+                        .padding(20)
+                        .background(Material.regular)
+                        .cornerRadius(30, corners: [.topLeft, .topRight])
                 }
             }
             .navigationBarBackButtonHidden()
