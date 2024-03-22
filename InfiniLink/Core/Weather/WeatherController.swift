@@ -24,10 +24,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     private let locationManager = CLLocationManager()
     
-    let weatherapiKey : String = "cc80d76d17a740ebb8a160008241801"
-    let weatherapiBaseURL : String = "https://api.weatherapi.com/v1"
-    var weatherapiFailed : Bool = false
-    var nwsapiFailed : Bool = false
+    let weatherapiKey: String = "cc80d76d17a740ebb8a160008241801"
+    let weatherapiBaseURL: String = "https://api.weatherapi.com/v1"
+    var weatherapiFailed: Bool = false
+    var nwsapiFailed: Bool = false
     
     enum WeatherAPI_Type {
         case wapi, nws
@@ -193,11 +193,25 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 bleManagerVal.weatherInformation.shortDescription = json["forecast"]["forecastday"][0]["day"]["condition"]["text"].stringValue
                 
                 if json["forecast"]["forecastday"][0].count > 1 {
+                    let calendar = Calendar.current
+                    let currentDate = Date()
+                    
                     for idx in 1...json["forecast"]["forecastday"][0].count {
                         bleManagerVal.weatherInformation.forecastIcon.append(getIcon_WAPI(description: json["forecast"]["forecastday"][idx]["day"]["condition"]["text"].stringValue))
                         bleManagerVal.weatherInformation.forecastMaxTemperature.append(json["forecast"]["forecastday"][idx]["day"]["maxtemp_c"].doubleValue)
                         bleManagerVal.weatherInformation.forecastMinTemperature.append(json["forecast"]["forecastday"][idx]["day"]["mintemp_c"].doubleValue)
-                        if idx >= 5 {break}
+                        
+                        if let futureDate = calendar.date(byAdding: .day, value: idx, to: currentDate) {
+                            let dateFormatter = DateFormatter()
+                            dateFormatter.dateFormat = "EEE"
+                            let dayName = dateFormatter.string(from: futureDate)
+                            
+                            bleManagerVal.weatherForecastDays.append(WeatherForecastDay(maxTemperature: json["forecast"]["forecastday"][idx]["day"]["maxtemp_c"].doubleValue, minTemperature: json["forecast"]["forecastday"][idx]["day"]["mintemp_c"].doubleValue, icon: getIcon_WAPI(description: json["forecast"]["forecastday"][idx]["day"]["condition"]["text"].stringValue), name: dayName))
+                        }
+                        
+                        if idx >= 5 {
+                            break
+                        }
                     }
                 }
                 
@@ -377,10 +391,28 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 
                 bleManagerVal.weatherInformation.forecastMaxTemperature = []
                 bleManagerVal.weatherInformation.forecastMinTemperature = []
+                
+                let currentDate = Date()
+                let calendar = Calendar.current
+                
                 for idx in 1...json["properties"]["maxTemperature"]["values"].count {
-                    bleManagerVal.weatherInformation.forecastMaxTemperature.append(json["properties"]["maxTemperature"]["values"][idx]["value"].doubleValue)
-                    bleManagerVal.weatherInformation.forecastMinTemperature.append(json["properties"]["minTemperature"]["values"][idx]["value"].doubleValue)
-                    if idx >= 5 {break}
+                    let maxTemp = json["properties"]["maxTemperature"]["values"][idx]["value"].doubleValue
+                    let minTemp = json["properties"]["minTemperature"]["values"][idx]["value"].doubleValue
+                    
+                    bleManagerVal.weatherInformation.forecastMaxTemperature.append(maxTemp)
+                    bleManagerVal.weatherInformation.forecastMinTemperature.append(minTemp)
+                    
+                    if let futureDate = calendar.date(byAdding: .day, value: idx, to: currentDate) {
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "EEE"
+                        let dayName = dateFormatter.string(from: futureDate)
+                        
+                        bleManagerVal.weatherForecastDays.append(WeatherForecastDay(maxTemperature: maxTemp, minTemperature: minTemp, icon: getIcon_NWS(description: ""), name: dayName))
+                    }
+                    
+                    if idx >= 5 {
+                        break
+                    }
                 }
                 
                 if bleManagerVal.weatherInformation.maxTemperature == 0.0 && bleManagerVal.weatherInformation.minTemperature == 0.0 {

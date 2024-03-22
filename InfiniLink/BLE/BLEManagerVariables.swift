@@ -19,7 +19,7 @@ class BLEManagerVal: NSObject, ObservableObject {
     
     let cbuuidList = BLEManager.cbuuidList()
     var musicChars = BLEManager.musicCharacteristics()
-
+    
     let settings = UserDefaults.standard
     
     struct WeatherInformation {
@@ -40,18 +40,24 @@ class BLEManagerVal: NSObject, ObservableObject {
     @Published var timeFormat: ClockType?
     
     @Published var weatherInformation = WeatherInformation()
+    @Published var weatherForecastDays = [WeatherForecastDay]()
     @Published var loadingWeather = true
     
     @Published var heartBPM: Double = 0
-
+    
     @Published var firmwareVersion: String = ""
     
     @Published var stepCount: Int = 0
-    @Published var stepCountTests: Int = 0
-    @Published var stepCounting: Int = 0
     
     @Published var lastWeatherUpdateNWS: Int = 0
     @Published var lastWeatherUpdateWAPI: Int = 0
     @Published var latitude: Double = 0.0
     @Published var longitude: Double = 0.0
+}
+
+struct WeatherForecastDay {
+    var maxTemperature: Double
+    var minTemperature: Double
+    var icon: UInt8
+    var name: String
 }
