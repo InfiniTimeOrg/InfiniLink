@@ -159,9 +159,9 @@
 "whats_new_1" = "The UI has been completely refreshed!";
 "whats_new_2" = "Apple HealthKit is now supported to sync step count and heart rate data with Apple Health.";
 "whats_new_3" = "InfiniLink users can now upload and delete files on their watch's Bluetooth filesystem, as well as upload external resource packages. Users can also convert images to the format supported by InfiniTime, within the app.";
-"whats_new_4" = "Weather support has also been added in this release, using the National Weather Service API (for users in the United States) and the WeatherAPI API for users outside of the United States. The weather data is pushed using InfiniTime's new Simple Weather Service. Requires InfiniTime 1.14 or newer.";
+"whats_new_4" = "Weather support has also been added in this release, using the National Weather Service API (for users inside the United States) and the WeatherAPI API (for users outside of the United States). The weather data is pushed using InfiniTime's new Simple Weather Service. Requires InfiniTime 1.14 or newer.";
 "whats_new_5" = "This release also contains some new localizations. Please note that not all the localizations are complete. If you're able to assist with them, please feel free to submit a pull request with the updated localizations!";
-"whats_new_6" = "Special thanks to @JenJell on GitHub for implementing external resource support, weather support, and much more!";
+"whats_new_6" = "Special thanks to @JenJell on GitHub for for all of her help with this update!";
 
 // - Onboarding
 "welcome_to_InfiniLink" = "Welcome to InfiniLink!";
