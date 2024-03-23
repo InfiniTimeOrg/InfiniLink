@@ -257,18 +257,20 @@ struct DeviceView: View {
                 })
                 Spacer()
                     .frame(height: 6)
-                NavigationLink(destination: FileSystemView()) {
-                    HStack {
-                        Text(NSLocalizedString("file_system", comment: ""))
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                        Spacer()
-                        Image(systemName: "chevron.right")
-                            .foregroundColor(.gray)
+                if bleManager.blefsTransfer != nil {
+                    NavigationLink(destination: FileSystemView()) {
+                        HStack {
+                            Text(NSLocalizedString("file_system", comment: ""))
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Spacer()
+                            Image(systemName: "chevron.right")
+                                .foregroundColor(.gray)
+                        }
+                        .modifier(RowModifier(style: .capsule))
                     }
-                    .modifier(RowModifier(style: .capsule))
+                    Spacer()
+                        .frame(height: 6)
                 }
-                Spacer()
-                    .frame(height: 6)
                 VStack {
                     if bleManager.isConnectedToPinetime {
                         Toggle(isOn: $bleManager.autoconnectToDevice) {

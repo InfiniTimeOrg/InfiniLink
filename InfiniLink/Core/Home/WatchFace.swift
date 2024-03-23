@@ -662,7 +662,7 @@ struct TerminalWF: View {
                 .foregroundColor(.white)
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.9)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.5)
             if !hour24 {
                 Group {
                     Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", (currentHour % 12 == 0) ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
@@ -713,7 +713,7 @@ struct TerminalWF: View {
                 .foregroundColor(.white)
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.27)
+                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.28)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
@@ -789,13 +789,13 @@ struct CasioWF: View {
             CustomTextView(text: {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 var hourString = ""
+                
                 if hour24 {
-                    hourString = String(format: "%02d", currentHour)
+                    hourString = String(format: "%d", currentHour)
                 } else {
                     let hour12 = currentHour > 12 ? currentHour - 12 : currentHour
-                    hourString = String(format: "%02d", hour12)
+                    hourString = "\(hour12)"
                 }
-                
                 let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
                 
                 return "\(hourString):\(minuteString)"
@@ -861,7 +861,7 @@ enum InfineatItem {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(4))
+            WatchFaceView(watchface: .constant(3))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

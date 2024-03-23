@@ -197,6 +197,11 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                     let currentDate = Date()
                     
                     for idx in 1...json["forecast"]["forecastday"][0].count {
+                        bleManagerVal.weatherInformation.forecastIcon = []
+                        bleManagerVal.weatherInformation.forecastMaxTemperature = []
+                        bleManagerVal.weatherInformation.forecastMinTemperature = []
+                        bleManagerVal.weatherForecastDays = []
+                        
                         bleManagerVal.weatherInformation.forecastIcon.append(getIcon_WAPI(description: json["forecast"]["forecastday"][idx]["day"]["condition"]["text"].stringValue))
                         bleManagerVal.weatherInformation.forecastMaxTemperature.append(json["forecast"]["forecastday"][idx]["day"]["maxtemp_c"].doubleValue)
                         bleManagerVal.weatherInformation.forecastMinTemperature.append(json["forecast"]["forecastday"][idx]["day"]["mintemp_c"].doubleValue)
@@ -340,7 +345,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             return 0
         case "A Few Clouds", "A Few Clouds with Haze", "A Few Clouds and Breezy", "A Few Clouds and Windy", "Partly Cloudy", "Partly Cloudy with Haze", "Partly Cloudy and Breezy", "Partly Cloudy and Windy":
             return 1
-        case "Cloudy", "Mostly Cloudy", "Mostly Cloudy with Haze", "Mostly Cloudy and Breezy", "Mostly Cloudy and Wind":
+        case "Cloudy", "Mostly Cloudy", "Mostly Cloudy with Haze", "Mostly Cloudy and Breezy", "Mostly Cloudy and Wind", "Cloudy and Windy":
             return 2
         case "Overcast", "Overcast with Haze", "Overcast and Breezy", "Overcast and Windy", "Hurricane Watch", "Funnel Cloud", "Funnel Cloud in Vicinity", "Tornado/Water Spout", "Tornado":
             return 3
@@ -389,8 +394,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                 bleManagerVal.weatherInformation.maxTemperature = json["properties"]["maxTemperature"]["values"][0]["value"].doubleValue
                 bleManagerVal.weatherInformation.minTemperature = json["properties"]["minTemperature"]["values"][0]["value"].doubleValue
                 
+                bleManagerVal.weatherInformation.forecastIcon = []
                 bleManagerVal.weatherInformation.forecastMaxTemperature = []
                 bleManagerVal.weatherInformation.forecastMinTemperature = []
+                bleManagerVal.weatherForecastDays = []
                 
                 let currentDate = Date()
                 let calendar = Calendar.current

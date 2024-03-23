@@ -10,6 +10,10 @@ import SwiftUI
 struct WeatherDetailView: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     
+    var celsius: Bool {
+        (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric"
+    }
+    
     func getIcon(icon: Int) -> String {
         switch icon {
         case 0:
@@ -30,9 +34,12 @@ struct WeatherDetailView: View {
             return "slash.circle"
         }
     }
-    
-    var celsius: Bool {
-        (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric"
+    func temp(_ temp: Double) -> String {
+        if self.celsius {
+            return String(Int(round(temp))) + "°" + "C"
+        } else {
+            return String(Int(round(temp * 1.8 + 32))) + "°" + "F"
+        }
     }
     
     let deviceData: DeviceData = DeviceData()
@@ -45,7 +52,7 @@ struct WeatherDetailView: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HStack {
                 Text(NSLocalizedString("weather", comment: ""))
                     .font(.title.bold())
@@ -61,72 +68,56 @@ struct WeatherDetailView: View {
                     ProgressView(NSLocalizedString("loading_weather", comment: ""))
                     Spacer()
                 } else {
-                    VStack(spacing: 8) {
-                        Image(systemName: getIcon(icon: bleManagerVal.weatherInformation.icon))
-                            .font(.system(size: 45).weight(.medium))
-                        HStack {
-                            Group {
-                                if celsius {
-                                    Text(String(Int(round(bleManagerVal.weatherInformation.minTemperature))) + "°" + "C")
-                                } else {
-                                    Text(String(Int(round(bleManagerVal.weatherInformation.minTemperature * 1.8 + 32))) + "°" + "F")
-                                }
+                    ScrollView {
+                        VStack(spacing: 8) {
+                            Image(systemName: getIcon(icon: bleManagerVal.weatherInformation.icon))
+                                .font(.system(size: 45).weight(.medium))
+                            HStack {
+                                Text(temp(bleManagerVal.weatherInformation.minTemperature))
+                                    .foregroundColor(.gray)
+                                Text(temp(bleManagerVal.weatherInformation.temperature))
+                                    .font(.system(size: 35).weight(.semibold))
+                                Text(temp(bleManagerVal.weatherInformation.maxTemperature))
+                                    .foregroundColor(.gray)
                             }
-                            .foregroundColor(.gray)
-                            Group {
-                                if celsius {
-                                    Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
-                                } else {
-                                    Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
-                                }
-                            }
-                            .font(.system(size: 35).weight(.semibold))
-                            Group {
-                                if celsius {
-                                    Text(String(Int(round(bleManagerVal.weatherInformation.maxTemperature))) + "°" + "C")
-                                } else {
-                                    Text(String(Int(round(bleManagerVal.weatherInformation.maxTemperature * 1.8 + 32))) + "°" + "F")
-                                }
-                            }
-                            .foregroundColor(.gray)
+                            Text(bleManagerVal.weatherInformation.shortDescription)
+                                .foregroundColor(.gray)
+                                .font(.body.weight(.semibold))
                         }
-                        Text(bleManagerVal.weatherInformation.shortDescription)
-                            .foregroundColor(.gray)
-                            .font(.body.weight(.semibold))
-                    }
-                    .padding()
-                    Divider()
-                    VStack {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 10) {
-                                ForEach(bleManagerVal.weatherForecastDays, id: \.name) { day in
-                                    VStack(spacing: 6) {
-                                        Text(day.name)
-                                            .foregroundColor(.gray)
-                                            .font(.system(size: 14).weight(.medium))
-                                        Image(systemName: getIcon(icon: Int(day.icon)))
-                                            .imageScale(.large)
-                                            .font(.system(size: 18).weight(.medium))
-                                        VStack {
-                                            if celsius {
-                                                Text(String(Int(round(day.maxTemperature))) + "°")
-                                                Text(String(Int(round(day.minTemperature))) + "°")
-                                            } else {
-                                                Text(String(Int(round(day.maxTemperature * 1.8 + 32))) + "°")
-                                                Text(String(Int(round(day.minTemperature * 1.8 + 32))) + "°")
-                                            }
-                                        }
+                        .padding()
+                        VStack(spacing: 10) {
+                            ForEach(bleManagerVal.weatherForecastDays, id: \.name) { day in
+                                HStack(spacing: 6) {
+                                    Text(day.name)
+                                        .font(.body.weight(.medium))
+                                    Image(systemName: getIcon(icon: Int(day.icon)))
+                                        .imageScale(.large)
+                                        .font(.body.weight(.medium))
+                                    Spacer()
+                                    HStack(spacing: 6) {
+                                        Text(temp(day.maxTemperature))
+                                            .foregroundColor(.lightGray)
+                                        Rectangle()
+                                            .frame(height: 3)
+                                            .frame(width: {
+                                                let temperatureRange = day.maxTemperature - day.minTemperature
+                                                let relativeWidth = CGFloat(temperatureRange) / 40.0 * 60
+                                                return relativeWidth
+                                            }())
+                                            .cornerRadius(30)
+                                            .background(Material.thin)
+                                        Text(temp(day.minTemperature))
+                                            .foregroundColor(.lightGray)
                                     }
-                                    .padding(12)
-                                    .frame(width: 95)
-                                    .background(Color.gray.opacity(0.3))
-                                    .cornerRadius(12)
                                 }
+                                .frame(maxWidth: .infinity)
+                                .padding()
+                                .background(Color.gray.opacity(0.3))
+                                .cornerRadius(15)
                             }
-                            .padding()
                         }
+                        .padding()
                     }
-                    Spacer()
                 }
             }
         }
@@ -142,5 +133,7 @@ struct WeatherDetailView: View {
             BLEManagerVal.shared.weatherInformation.maxTemperature = 3
             BLEManagerVal.shared.weatherInformation.maxTemperature = 5
             BLEManagerVal.shared.weatherForecastDays.append(WeatherForecastDay(maxTemperature: 3, minTemperature: 2, icon: 2, name: "Sat"))
+            BLEManagerVal.shared.weatherForecastDays.append(WeatherForecastDay(maxTemperature: 1.6, minTemperature: 1.3, icon: 6, name: "Sun"))
+            BLEManagerVal.shared.weatherForecastDays.append(WeatherForecastDay(maxTemperature: 2.6, minTemperature: 1.9, icon: 3, name: "Mon"))
         }
 }
