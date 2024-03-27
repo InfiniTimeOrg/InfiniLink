@@ -87,7 +87,6 @@ struct DownloadView: View {
                             }
                             if BLEManager.shared.blefsTransfer != nil {
                                 Button {
-                                    externalResources = true
                                     showResourcePicker = true
                                 } label: {
                                     Text(NSLocalizedString("update_external_resources", comment: ""))

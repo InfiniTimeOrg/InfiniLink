@@ -299,17 +299,23 @@ struct DigitalWF: View {
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
-                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
-            } else {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
-            }
+            CustomTextView(text: {
+                let currentHour = Calendar.current.component(.hour, from: Date())
+                var hourString = ""
+                
+                if hour24 {
+                    hourString = String(format: "%d", currentHour)
+                } else {
+                    let hour12 = currentHour > 12 ? currentHour - 12 : currentHour
+                    hourString = "\(hour12)"
+                }
+                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
+                
+                return "\(hourString):\(minuteString)"
+            }(), font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
@@ -395,7 +401,7 @@ struct InfineatWF: View {
     ]
     
     func infineatColor(for item: InfineatItem) -> Color {
-//        let colorIndex = bleManagerVal.infineatWatchFace?.colorIndex
+        //        let colorIndex = bleManagerVal.infineatWatchFace?.colorIndex
         
         // State property wrapper to remove 'will never be executed' warnings
         @State var colorIndex = 0
@@ -605,7 +611,7 @@ struct InfineatWF: View {
                     .offset(x: -31, y: 38)
                 ZStack {
                     DiamondShape()
-//                        .fill(bleManagerVal.infineatWatchFace?.showSideCover ?? true ? Color.white : Color.clear)
+                    //                        .fill(bleManagerVal.infineatWatchFace?.showSideCover ?? true ? Color.white : Color.clear)
                         .fill(Color.white)
                         .frame(width: 50, height: 75)
                         .offset(x: -5)
