@@ -29,6 +29,7 @@ struct ContentView: View {
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
     @AppStorage("showClearHRMChartConf") var showClearHRMChartConf: Bool = false
     @AppStorage("showClearBatteryChartConf") var showClearBatteryChartConf: Bool = false
+    @AppStorage("lockNavigation") var lockNavigation = false
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
     private var chartPoints: FetchedResults<ChartDataPoint>
@@ -97,13 +98,17 @@ struct ContentView: View {
             HStack(spacing: 0) {
                 TabBarItem(selection: $selection, tab: .home, imageName: "house")
                     .onTapGesture {
-                        switchToTab(tab: .home)
+                        if !lockNavigation {
+                            switchToTab(tab: .home)
+                        }
                     }
                     .frame(maxWidth: .infinity)
                 
                 TabBarItem(selection: $selection, tab: .settings, imageName: "gear")
                     .onTapGesture {
-                        switchToTab(tab: .settings)
+                        if !lockNavigation {
+                            switchToTab(tab: .settings)
+                        }
                     }
                     .frame(maxWidth: .infinity)
             }

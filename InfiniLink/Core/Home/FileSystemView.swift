@@ -164,11 +164,11 @@ struct FileSystemView: View {
                     do {
                         let fileURLs = try result.get()
                         
+                        self.files.removeAll()
                         for fileURL in fileURLs {
                             guard fileURL.startAccessingSecurityScopedResource() else { continue }
                             
                             self.fileSelected = true
-                            self.files.removeAll()
                             self.files.append(File(url: fileURL, filename: fileURL.lastPathComponent))
                             
                             // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
@@ -255,8 +255,12 @@ struct FileSystemView: View {
                                 if fileConverting {
                                     Text("Converting...")
                                 } else {
-                                    Text("Uploading...\(Int(Double(bleFSHandler.progress) / Double(fileSize) * 100))%")
-                                    
+                                    if fileSize != 0 {
+                                        let progressPercentage = Int(Double(bleFSHandler.progress) / Double(fileSize) * 100)
+                                        Text("Uploading...\(progressPercentage)%")
+                                    } else {
+                                        Text("Uploading...")
+                                    }
                                 }
                             }
                             .foregroundColor(.gray)
@@ -318,10 +322,12 @@ struct FileSystemView: View {
                                             if let convertedImage = convertedImage {
                                                 self.fileSize = convertedImage.count
                                                 self.fileUploading = true
-                                                var _ = bleFSHandler.writeFile(data: convertedImage, path: directory + "/" + fileNameWithoutExtension + ".bin", offset: 0)
+                                                var _ = bleFSHandler.writeFile(data: convertedImage, path: directory + "/" + String(fileNameWithoutExtension.prefix(30).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
                                             }
                                         } else {
+                                            self.fileSize = 0
                                             let fileData = try Data(contentsOf: fileDataPath)
+                                            self.fileSize = fileData.count
                                             
                                             self.fileUploading = true
                                             var _ = bleFSHandler.writeFile(data: fileData, path: directory + "/" + file.filename, offset: 0)
