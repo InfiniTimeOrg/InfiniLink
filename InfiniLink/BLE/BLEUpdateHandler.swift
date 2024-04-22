@@ -12,7 +12,7 @@ import CoreData
 import SwiftUI
 
 struct BLEUpdatedCharacteristicHandler {
-    @ObservedObject var healthKitManager = HealthKitManager()
+    @ObservedObject var healthKitManager = HealthKitManager.shared
     
     let bleManager = BLEManager.shared
     let bleManagerVal = BLEManagerVal.shared
@@ -36,8 +36,9 @@ struct BLEUpdatedCharacteristicHandler {
     }
     
     func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
-        // TODO: Fix hang
-        weatherController.updateWeatherData(ignoreTimeLimits: false)
+        if NetworkManager.shared.getNetworkState() {
+            weatherController.updateWeatherData(ignoreTimeLimits: false)
+        }
         
         switch characteristic.uuid {
         case bleManagerVal.cbuuidList.musicControl:

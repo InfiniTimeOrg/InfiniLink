@@ -76,7 +76,6 @@ struct DFUWithBLE: View {
                 .opacity(lockNavigation ? 0.5 : 1.0)
             }
             .padding()
-            .frame(maxWidth: .infinity, alignment: .center)
             Divider()
             VStack {
                 if externalResources && !(dfuUpdater.resourceFilename.isEmpty) {

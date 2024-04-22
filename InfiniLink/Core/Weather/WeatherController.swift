@@ -106,35 +106,37 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     private func retrieveWeatherDataThrough(API: WeatherAPI_Type) {
         var currentLocation: CLLocation!
-        if useCurrentLocation {
-            startReceivingSignificantLocationChanges()
-            if locationManager.location != nil {
-                currentLocation = locationManager.location
-                bleManagerVal.latitude = currentLocation.coordinate.latitude
-                bleManagerVal.longitude = currentLocation.coordinate.longitude
-                
-                DebugLogManager.shared.debug(error: "Updated Location; latitude: \(round(bleManagerVal.latitude)), longitude: \(round(bleManagerVal.longitude))", log: .app, date: Date())
-            }
-            if !(bleManagerVal.longitude == 0 && bleManagerVal.longitude == 0) {
-                if API == WeatherAPI_Type.nws {
-                    getForecastURL_NWS()
-                } else {
-                    getWeatherData_WAPI()
+        DispatchQueue.main.async {
+            if self.useCurrentLocation {
+                self.startReceivingSignificantLocationChanges()
+                if self.locationManager.location != nil {
+                    currentLocation = self.locationManager.location
+                    self.bleManagerVal.latitude = currentLocation.coordinate.latitude
+                    self.bleManagerVal.longitude = currentLocation.coordinate.longitude
+                    
+                    DebugLogManager.shared.debug(error: "Updated Location; latitude: \(round(self.bleManagerVal.latitude)), longitude: \(round(self.bleManagerVal.longitude))", log: .app, date: Date())
                 }
-            }
-        } else {
-            getCoordinateFrom(address: setLocation) { [self] coordinate, error in
-                guard let coordinate = coordinate, error == nil else {
-                    print("There was an error retrieving coordinates from user-set location")
-                    DebugLogManager.shared.debug(error: "There was an error retrieving coordinates from user-set location", log: .app, date: Date())
-                    return
+                if !(self.bleManagerVal.longitude == 0 && self.bleManagerVal.longitude == 0) {
+                    if API == WeatherAPI_Type.nws {
+                        self.getForecastURL_NWS()
+                    } else {
+                        self.getWeatherData_WAPI()
+                    }
                 }
-                bleManagerVal.latitude = coordinate.latitude
-                bleManagerVal.longitude = coordinate.longitude
-                if API == WeatherAPI_Type.nws {
-                    getForecastURL_NWS()
-                } else {
-                    getWeatherData_WAPI()
+            } else {
+                self.getCoordinateFrom(address: self.setLocation) { [self] coordinate, error in
+                    guard let coordinate = coordinate, error == nil else {
+                        print("There was an error retrieving coordinates from user-set location")
+                        DebugLogManager.shared.debug(error: "There was an error retrieving coordinates from user-set location", log: .app, date: Date())
+                        return
+                    }
+                    bleManagerVal.latitude = coordinate.latitude
+                    bleManagerVal.longitude = coordinate.longitude
+                    if API == WeatherAPI_Type.nws {
+                        getForecastURL_NWS()
+                    } else {
+                        getWeatherData_WAPI()
+                    }
                 }
             }
         }

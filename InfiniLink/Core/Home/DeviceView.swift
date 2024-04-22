@@ -13,6 +13,7 @@ struct DeviceView: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
     @ObservedObject var uptimeManager = UptimeManager.shared
+    @ObservedObject var networkManager = NetworkManager.shared
     
     @AppStorage("watchNotifications") var watchNotifications: Bool = true
     @AppStorage("batteryNotification") var batteryNotification: Bool = false
@@ -137,39 +138,47 @@ struct DeviceView: View {
                                 SheetManager.shared.sheetSelection = .weather
                                 SheetManager.shared.showSheet = true
                             }) {
-                                VStack {
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(NSLocalizedString("weather", comment: ""))
-                                                .font(.headline)
-                                            if bleManagerVal.loadingWeather {
-                                                Text(NSLocalizedString("loading", comment: "Loading..."))
+                                HStack {
+                                    VStack(alignment: .leading) {
+                                        Text(NSLocalizedString("weather", comment: ""))
+                                            .font(.headline)
+                                        if bleManagerVal.loadingWeather {
+                                            Text(NSLocalizedString("loading", comment: "Loading..."))
+                                        } else {
+                                            if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
+                                                Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
+                                                    .font(.title.weight(.semibold))
                                             } else {
-                                                if (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric" {
-                                                    Text(String(Int(round(bleManagerVal.weatherInformation.temperature))) + "°" + "C")
-                                                        .font(.title.weight(.semibold))
-                                                } else {
-                                                    Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
-                                                        .font(.title.weight(.semibold))
-                                                }
+                                                Text(String(Int(round(bleManagerVal.weatherInformation.temperature * 1.8 + 32))) + "°" + "F")
+                                                    .font(.title.weight(.semibold))
                                             }
                                         }
-                                        .font(.title.weight(.semibold))
-                                        Spacer()
-                                        VStack {
-                                            if bleManagerVal.loadingWeather {
-                                                Image(systemName: "circle.slash")
-                                            } else {
-                                                Image(systemName: icon)
-                                            }
-                                        }
-                                        .font(.title.weight(.medium))
                                     }
+                                    .font(.title.weight(.semibold))
+                                    Spacer()
+                                    VStack {
+                                        if bleManagerVal.loadingWeather {
+                                            Image(systemName: "circle.slash")
+                                        } else {
+                                            Image(systemName: icon)
+                                        }
+                                    }
+                                    .font(.title.weight(.medium))
                                 }
                                 .padding()
                                 .background(LinearGradient(colors: [.blue, .yellow], startPoint: .leading, endPoint: .trailing))
                                 .foregroundColor(.white)
                                 .cornerRadius(15)
+                            }
+                            .disabled(!networkManager.getNetworkState())
+                            .opacity(!networkManager.getNetworkState() ? 0.4 : 1.0)
+                            .overlay {
+                                if !networkManager.getNetworkState() {
+                                    Image(systemName: "wifi.slash")
+                                        .foregroundColor(.white)
+                                        .font(.system(size: 35).weight(.semibold))
+                                        .frame(maxWidth: .infinity, alignment: .center)
+                                }
                             }
                             Spacer()
                                 .frame(height: 6)
@@ -413,6 +422,20 @@ struct CustomScrollView<Content: View>: View {
                                     .padding(22)
                                     .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                                     .clipped(antialiased: true)
+                                if !NetworkManager.shared.getNetworkState() {
+                                    HStack(spacing: 6) {
+                                        Image(systemName: "wifi.slash")
+                                            .font(.system(size: 17).weight(.medium))
+                                        Text(NSLocalizedString("youre_offline", comment: "You're offline"))
+                                            .font(.system(size: 16))
+                                    }
+                                    .padding(13)
+                                    .foregroundColor(.gray)
+                                    .background(Material.regular)
+                                    .clipShape(Capsule())
+                                    .frame(height: geometry.size.width / 1.40, alignment: .bottom)
+                                    .padding(.bottom, 12)
+                                }
                             }
                             content
                         }
@@ -426,7 +449,6 @@ struct CustomScrollView<Content: View>: View {
                                 if bleManager.blefsTransfer != nil {
                                     BLEFSHandler.shared.readSettings { settings in
                                         self.settings = settings
-                                        print(settings)
                                         self.stepCountGoal = Int(settings.stepsGoal)
                                         self.bleManagerVal.watchFace = Int(settings.watchFace)
                                         self.bleManagerVal.pineTimeStyleData = settings.pineTimeStyle

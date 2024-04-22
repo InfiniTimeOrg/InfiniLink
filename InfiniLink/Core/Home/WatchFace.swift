@@ -258,7 +258,7 @@ struct AnalogWF: View {
     var body: some View {
         ZStack {
             let hour = Calendar.current.component(.hour, from: Date())
-            let hour12 = Double(hour >= 12 ? hour - 12 : hour)
+            let hour12 = Double(hour % 12 == 0 ? 12 : hour % 12)
             let minute = Double(Calendar.current.component(.minute, from: Date()))
             Image("AnalogFace")
                 .resizable()
@@ -306,13 +306,13 @@ struct DigitalWF: View {
                 if hour24 {
                     hourString = String(format: "%d", currentHour)
                 } else {
-                    let hour12 = currentHour > 12 ? currentHour - 12 : currentHour
+                    let hour12 = currentHour % 12 == 0 ? 12 : currentHour % 12
                     hourString = "\(hour12)"
                 }
                 let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
                 
                 return "\(hourString):\(minuteString)"
-            }(), font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
+            }(), font: .custom("7-Segment", size: geometry.size.width * 0.48), lineSpacing: 0)
             .foregroundColor(.white)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
             .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
@@ -533,7 +533,7 @@ struct InfineatWF: View {
             }
             if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24 {
                 let currentHour = Calendar.current.component(.hour, from: Date())
-                let hour12 = currentHour > 12 ? currentHour - 12 : (currentHour == 0 ? 12 : currentHour) // Adjust 12 PM to 12
+                let hour12 = currentHour % 12 == 0 ? 12 : currentHour % 12
                 let hourString = String(format: "%02d", hour12)
                 let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
                 
@@ -671,7 +671,7 @@ struct TerminalWF: View {
                 .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.5)
             if !hour24 {
                 Group {
-                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", (currentHour % 12 == 0) ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
+                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour % 12 == 0 ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
                 }
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -799,7 +799,7 @@ struct CasioWF: View {
                 if hour24 {
                     hourString = String(format: "%d", currentHour)
                 } else {
-                    let hour12 = currentHour > 12 ? currentHour - 12 : currentHour
+                    let hour12 = currentHour % 12 == 0 ? 12 : currentHour
                     hourString = "\(hour12)"
                 }
                 let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))

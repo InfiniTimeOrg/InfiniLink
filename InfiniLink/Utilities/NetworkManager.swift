@@ -11,21 +11,23 @@ import Network
 class NetworkManager: ObservableObject {
     static let shared = NetworkManager()
     
-    let monitor = NWPathMonitor()
-    let queue = DispatchQueue(label: "NetworkManager")
-    @Published var isConnected = false
-
+    private let monitor = NWPathMonitor()
+    @Published var connected = true
+    
     init() {
-        checkStatus()
-    }
-
-    func checkStatus() {
         monitor.pathUpdateHandler = { path in
-            DispatchQueue.main.async {
-                self.isConnected = path.status == .satisfied
+            if path.status == .satisfied {
+                self.connected = true
+            } else {
+                self.connected = false
             }
         }
+        
+        let queue = DispatchQueue(label: "Monitor")
         monitor.start(queue: queue)
     }
+    
+    func getNetworkState() -> Bool {
+        return connected
+    }
 }
-

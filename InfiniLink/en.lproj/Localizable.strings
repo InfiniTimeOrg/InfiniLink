@@ -292,3 +292,7 @@
 "set_location" = "Location";
 "always_allow_location_services" = "Always Allow Current Location";
 "loading_weather" = "Loading weather...";
+
+"youre_offline" = "You're offline";
+"offline_desc" = "You're offline. Please connect to the internet to continue.";
+"offline" = "Offline...";

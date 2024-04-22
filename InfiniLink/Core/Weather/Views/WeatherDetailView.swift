@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherDetailView: View {
     @ObservedObject var bleManagerVal = BLEManagerVal.shared
+    @ObservedObject var networkManager = NetworkManager.shared
     
     var celsius: Bool {
         (UnitTemperature.current == .celsius && deviceData.chosenWeatherMode == "System") || deviceData.chosenWeatherMode == "Metric"
@@ -63,61 +64,73 @@ struct WeatherDetailView: View {
             .frame(maxWidth: .infinity, alignment: .trailing)
             Divider()
             VStack {
-                if bleManagerVal.loadingWeather {
-                    Spacer()
-                    ProgressView(NSLocalizedString("loading_weather", comment: ""))
-                    Spacer()
-                } else {
-                    ScrollView {
-                        VStack(spacing: 8) {
-                            Image(systemName: getIcon(icon: bleManagerVal.weatherInformation.icon))
-                                .font(.system(size: 45).weight(.medium))
-                            HStack {
-                                Text(temp(bleManagerVal.weatherInformation.minTemperature))
-                                    .foregroundColor(.gray)
-                                Text(temp(bleManagerVal.weatherInformation.temperature))
-                                    .font(.system(size: 35).weight(.semibold))
-                                Text(temp(bleManagerVal.weatherInformation.maxTemperature))
-                                    .foregroundColor(.gray)
-                            }
-                            Text(bleManagerVal.weatherInformation.shortDescription)
-                                .foregroundColor(.gray)
-                                .font(.body.weight(.semibold))
-                        }
-                        .padding()
-                        VStack(spacing: 10) {
-                            ForEach(bleManagerVal.weatherForecastDays, id: \.name) { day in
-                                HStack(spacing: 6) {
-                                    Text(day.name)
-                                        .font(.body.weight(.medium))
-                                    Image(systemName: getIcon(icon: Int(day.icon)))
-                                        .imageScale(.large)
-                                        .font(.body.weight(.medium))
-                                    Spacer()
-                                    HStack(spacing: 6) {
-                                        Text(temp(day.maxTemperature))
-                                            .foregroundColor(.lightGray)
-                                        Rectangle()
-                                            .frame(height: 3)
-                                            .frame(width: {
-                                                let temperatureRange = day.maxTemperature - day.minTemperature
-                                                let relativeWidth = CGFloat(temperatureRange) / 40.0 * 60
-                                                return relativeWidth
-                                            }())
-                                            .cornerRadius(30)
-                                            .background(Material.thin)
-                                        Text(temp(day.minTemperature))
-                                            .foregroundColor(.lightGray)
-                                    }
+                if networkManager.getNetworkState() {
+                    if bleManagerVal.loadingWeather || !networkManager.getNetworkState() {
+                        ProgressView(NSLocalizedString("loading_weather", comment: ""))
+                            .frame(maxHeight: .infinity)
+                    } else {
+                        ScrollView {
+                            VStack(spacing: 8) {
+                                Image(systemName: getIcon(icon: bleManagerVal.weatherInformation.icon))
+                                    .font(.system(size: 45).weight(.medium))
+                                HStack {
+                                    Text(temp(bleManagerVal.weatherInformation.minTemperature))
+                                        .foregroundColor(.gray)
+                                    Text(temp(bleManagerVal.weatherInformation.temperature))
+                                        .font(.system(size: 35).weight(.semibold))
+                                    Text(temp(bleManagerVal.weatherInformation.maxTemperature))
+                                        .foregroundColor(.gray)
                                 }
-                                .frame(maxWidth: .infinity)
-                                .padding()
-                                .background(Color.gray.opacity(0.3))
-                                .cornerRadius(15)
+                                Text(bleManagerVal.weatherInformation.shortDescription)
+                                    .foregroundColor(.gray)
+                                    .font(.body.weight(.semibold))
                             }
+                            .padding()
+                            VStack(spacing: 10) {
+                                ForEach(bleManagerVal.weatherForecastDays, id: \.name) { day in
+                                    HStack(spacing: 6) {
+                                        Text(day.name)
+                                            .font(.body.weight(.medium))
+                                        Image(systemName: getIcon(icon: Int(day.icon)))
+                                            .imageScale(.large)
+                                            .font(.body.weight(.medium))
+                                        Spacer()
+                                        HStack(spacing: 6) {
+                                            Text(temp(day.maxTemperature))
+                                                .foregroundColor(.lightGray)
+                                            Rectangle()
+                                                .frame(height: 3)
+                                                .frame(width: {
+                                                    let temperatureRange = day.maxTemperature - day.minTemperature
+                                                    let relativeWidth = CGFloat(temperatureRange) / 40.0 * 60
+                                                    return relativeWidth
+                                                }())
+                                                .cornerRadius(30)
+                                                .background(Material.thin)
+                                            Text(temp(day.minTemperature))
+                                                .foregroundColor(.lightGray)
+                                        }
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.3))
+                                    .cornerRadius(15)
+                                }
+                            }
+                            .padding()
                         }
-                        .padding()
                     }
+                } else {
+                    VStack(spacing: 12) {
+                        Image(systemName: "wifi.slash")
+                            .font(.system(size: 35).weight(.semibold))
+                        Text(NSLocalizedString("offline_desc", comment: ""))
+                            .font(.title2.weight(.semibold))
+                            .multilineTextAlignment(.center)
+                    }
+                    .padding()
+                    .frame(maxHeight: .infinity)
+                    .foregroundColor(.gray)
                 }
             }
         }

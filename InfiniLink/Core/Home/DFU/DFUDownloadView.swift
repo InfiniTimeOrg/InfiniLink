@@ -13,6 +13,7 @@ import SwiftUI
 struct DownloadView: View {
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var dfuUpdater = DFU_Updater.shared
+    @ObservedObject var networkManager = NetworkManager.shared
     
     @Environment(\.presentationMode) var presentation
     @Environment(\.colorScheme) var colorScheme
@@ -140,6 +141,8 @@ struct DownloadView: View {
                                         .foregroundColor(.primary)
                                         .clipShape(Capsule())
                                 }
+                                .disabled(!networkManager.getNetworkState())
+                                .opacity(!networkManager.getNetworkState() ? 0.5 : 1.0)
                             }
                         }
                     }

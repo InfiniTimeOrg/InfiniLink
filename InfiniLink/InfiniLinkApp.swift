@@ -11,11 +11,14 @@ import SwiftUI
 struct InfiniLink: App {
     let persistenceController = PersistenceController.shared
     
-    @ObservedObject var healthKitManager = HealthKitManager()
+    @ObservedObject var healthKitManager = HealthKitManager.shared
     
     init() {
         healthKitManager.requestAuthorization()
         requestNotificationAuthorization()
+        
+        // NWPathMonitor always returns true on first fetch, fetch on init to unlock
+        let _ = NetworkManager.shared.getNetworkState()
     }
     
     func requestNotificationAuthorization() {
