@@ -1045,7 +1045,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = Y22PRZL3N4;
+				DEVELOPMENT_TEAM = UXA3H4X42S;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1055,7 +1055,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
@@ -1074,7 +1074,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
-				DEVELOPMENT_TEAM = Y22PRZL3N4;
+				DEVELOPMENT_TEAM = UXA3H4X42S;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = InfiniLink/Info.plist;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
@@ -1084,7 +1084,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1;
-				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLink;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;

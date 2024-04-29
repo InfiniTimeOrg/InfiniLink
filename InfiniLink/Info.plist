@@ -63,7 +63,6 @@
 	<array>
 		<string>bluetooth-central</string>
 		<string>location</string>
-		<string>processing</string>
 	</array>
 	<key>UILaunchScreen</key>
 	<dict/>
