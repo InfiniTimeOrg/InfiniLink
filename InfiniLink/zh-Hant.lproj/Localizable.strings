@@ -15,8 +15,8 @@
 "no_updates_available" = "無可用更新";
 "device_name" = "裝置名稱";
 "rename" = "重新命名";
-"disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
-"save" = "Save";
+"disconnect_alert_title" = "您確定您想要從這裝置離線？";
+"save" = "儲存";
 
 // - SideMenu
 "home" = "主頁";
@@ -33,12 +33,12 @@
 // - HeartChart
 "bpm" = "BPM";
 "insufficient_heart_rate_data" = "沒有足夠的心率資料";
-"heart_rate_settings" = "Heart Rate Settings";
+"heart_rate_settings" = "心率設定";
 "oops" = "Oops!";
 
 // - BetteryChart
 "insufficient_battery_data" = "沒有足夠的電池資料";
-"battery_stats" = "Battery Stats";
+"battery_stats" = "電池狀態";
 
 // - StepsView
 "week" = "週";
@@ -67,14 +67,14 @@
 "enable_watch_notifications" = "開啟手錶通知";
 "notify_about_low_battery" = "低電量時通知";
 "send_notification_to_pinetime" = "傳送通知至 PineTime";
-"find_lost_device" = "Find Lost";
+"find_lost_device" = "尋找";
 "graph_styles" = "圖表類型";
 "filled_hrm_graph" = "填滿 HRM 圖表";
 "filled_battery_graph" = "填滿電池圖表";
-"enable_first_connect_notification" = "Notify on First Connect";
+"enable_first_connect_notification" = "連線通知";
 "graph_data" = "圖表資料";
 "clear_all_hrm_chart_data" = "清除所有心率圖表資料";
-"clear_all_steps_chart_data" = "Clear All Steps Chart Data";
+"clear_all_steps_chart_data" = "清除所有步數圖表資料";
 "clear_all_battery_chart_data" = "清除所有電池圖表資料";
 "onboarding_information" = "Onboarding 資訊";
 "open_onboarding_page" = "開啟 Onboarding 頁面";
@@ -82,28 +82,28 @@
 "debug_mode" = "除錯模式";
 "enable_debug_mode" = "開啟除錯模式";
 "debug_logs" = "除錯紀錄";
-"no_logs" = "No Logs";
+"no_logs" = "沒有紀錄";
 "links" = "連結";
 "donations" = "捐款";
 "copy" = "Copy";
-"weather" = "Weather";
-"weather_style" = "Weather Style";
-"search_for_locations" = "Search for Locations";
+"weather" = "天氣";
+"weather_style" = "天氣類型";
+"search_for_locations" = "搜尋位置";
 "find_location" = "Use the search box above to find\na location";
 "update_step_count_goal_on_watch_1" = "To change your step goal, navigate to settings on";
 "update_step_count_goal_on_watch_2" = "and change it there.";
-"manually_sync_time" = "Manually Sync Time";
+"manually_sync_time" = "手動同步時間";
 
 // - BLEConnectView
 "available_devices" = "可用裝置";
 "waiting_for_bluetooth" = "等待藍芽中";
 "unnamed" = "未命名";
-"loading" = "";
+"loading" = "載入中";
 "need_help_connecting" = "";
-"devices" = "";
-"not_infinitime_device" = "It doesn't look like the device you selected is running InfiniTime.";
-"disconnect" = "Déconnecter";
-"scanning" = "Balayage";
+"devices" = "裝置";
+"not_infinitime_device" = "似乎您選擇的裝置並沒有執行 InfiniTime.";
+"disconnect" = "斷線";
+"scanning" = "掃瞄中";
 "ok" = "OK";
 
 // - ConnectionHelpView
@@ -150,7 +150,7 @@
 // - DownloadView
 "available_downloads" = "可用的下載";
 "firmware_download_links" = "韌體下載連結";
-"software_update_available" = "Software Update Available";
+"software_update_available" = "有可用的軟體更新";
 
 // - WhatsNew
 "whats_new_in" = "What's New in";
@@ -179,12 +179,12 @@
 "current_firmware" = "目前韌體";
 "firmware_file" = "韌體檔案";
 "clear" = "清除";
-"update_requirement_1" = "To update, please make sure ";
-"update_requirement_2" = "'s battery level is over 30 percent";
+"update_requirement_1" = "為了更新，請確認";
+"update_requirement_2" = "的電池電量有超過 30%。";
 
 "not_release_builds" = "WARNING: These are not release builds! Install at your own risk.";
-"use_external_resources" = "Use External Resources";
-"use_software_update" = "Use Software Update";
+"use_external_resources" = "使用外部資源";
+"use_software_update" = "使用軟體更新";
 "releases" = "Releases";
 "pr_title" = "PR";
 "pull_requests" = "GitHub Pull Requests";
@@ -231,7 +231,7 @@
 "welcome_text" = "歡迎。若您有 InfiniTime 裝置，\n 您可以在這配對它。";
 "connecting" = "連線中...";
 "start_pairing" = "開始配對";
-"stop_connecting" = "";
+"stop_connecting" = "停止連線";
 "my_device" = "我的裝置";
 "favorites" = "最愛";
 "app_settings" = "App 佈景主題";
@@ -250,8 +250,8 @@
 "pinetime_not_available" = "PineTime 目前不可使用";
 "please_check_your_connection_and_try_again" = "請檢查您的連線並再試一次。";
 "download_and_install" = "下載並安裝";
-"recovery_mode" = "It looks your device is in Recovery Mode.";
-"exit_recovery_mode" = "To exit Recovery Mode, you need to install a software update.";
+"recovery_mode" = "似乎您的裝置處於復原模式。";
+"exit_recovery_mode" = "為了離開復原模式，您需要安裝軟體更新。";
 
 "battery_level" = "電池電量";
 "battery_usage" = "電池用量";
@@ -262,36 +262,36 @@
 "currently_unavailable" = "目前不可使用";
 
 "software_version" = "軟體版本";
-"file_system_version" = "File System Version";
+"file_system_version" = "檔案系統版本";
 "model_name" = "型號";
 "autoconnect_to_this" = "自動連線至本裝置";
 "send_notification_to" = "傳送通知至";
 "connected_to" = "已連線至";
 
-"file_system" = "File System";
-"update_external_resources" = "Update External Resources";
-"external_resources_info" = "External resources are fonts and images stored in a seperate location on the watch to optimize storage and memory usage.";
-"success" = "Success!";
-"upload_files" = "Upload Files";
-"upload_selected_files" = "Upload Selected File(s)";
-"new_folder" = "New Folder";
-"create_folder" = "Create Folder";
-"delete" = "Delete";
-"unknown" = "Unknown";
-"back" = "Back";
-"watch_settings" = "Watch Settings";
-"display_timeout" = "Display Timeout";
-"time_format" = "Time Format";
-"hourly_chimes" = "Hourly Chimes";
-"brightness_level" = "Brightness Level";
+"file_system" = "檔案系統";
+"update_external_resources" = "更新外部資源";
+"external_resources_info" = "外部資源是字體及圖片儲存在手錶不同的位置以最佳化儲存及記憶體的使用。";
+"success" = "成功!";
+"upload_files" = "上傳檔案";
+"upload_selected_files" = "上傳選擇的檔案";
+"new_folder" = "新資料夾";
+"create_folder" = "建立資料夾";
+"delete" = "刪除";
+"unknown" = "未知";
+"back" = "返回";
+"watch_settings" = "手錶設定";
+"display_timeout" = "顯示逾時";
+"time_format" = "時間格式";
+"hourly_chimes" = "整點報時";
+"brightness_level" = "亮度";
 
-"enable_weather_data" = "Enable Weather Data";
-"use_current_location" = "Use Current Location";
-"set_location" = "Location";
-"always_allow_location_services" = "Always Allow Current Location";
-"loading_weather" = "Loading weather...";
+"enable_weather_data" = "啟用天氣資料";
+"use_current_location" = "使用現在位置";
+"set_location" = "位置";
+"always_allow_location_services" = "總是允許使用現在位置";
+"loading_weather" = "載入天氣資料...";
 
-"youre_offline" = "You're offline";
-"offline_desc" = "You're offline. Please connect to the internet to continue.";
-"offline" = "Offline...";
+"youre_offline" = "您現在離線";
+"offline_desc" = "您現在離線。請連線到網路以繼續。";
+"offline" = "離線...";
 
