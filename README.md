@@ -37,8 +37,8 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Phone notifications and system-wide music controls - Requires implementation of Apple Media Service (AMS) and Apple Notification Center Service (ANCS) in InfiniTime.
 
 ### Installation:
-**Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
-**Version 1.1:** is now available to install via [TestFlight](https://testflight.apple.com/join/B3PY5HUV)!
+- **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
+- **Version 1.1:** is now available to install via [TestFlight](https://testflight.apple.com/join/B3PY5HUV)!
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
