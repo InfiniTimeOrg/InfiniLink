@@ -10,9 +10,14 @@ import SwiftUI
 struct RenameView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceInfo = BLEDeviceInfo.shared
+    
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.presentationMode) var presentationMode
+    
+    @FocusState var isFocused: Bool
+    
     @State private var changedName: String = BLEDeviceInfo.shared.deviceName
+    
     private var nameManager = DeviceNameManager()
     
     var body: some View {
@@ -59,12 +64,16 @@ struct RenameView: View {
                         .padding()
                         .background(Material.regular)
                         .clipShape(Capsule())
+                        .focused($isFocused)
                     Spacer()
                 }
                 .padding()
             }
         }
         .navigationBarBackButtonHidden()
+        .onAppear {
+            isFocused = true
+        }
     }
 }
 
