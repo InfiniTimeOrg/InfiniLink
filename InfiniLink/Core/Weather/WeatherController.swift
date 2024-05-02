@@ -11,7 +11,7 @@ import SwiftyJSON
 import SwiftUI
 
 class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @AppStorage("weatherData") var weatherData: Bool = false
+    @AppStorage("weatherData") var weatherData: Bool = true
     @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = false
     @AppStorage("setLocation") var setLocation : String = "Cupertino"
     @AppStorage("lastLocation") var lastLocation : String = "Cupertino"
@@ -521,7 +521,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func updateWeatherData(ignoreTimeLimits: Bool) {
-        if !weatherData {return}
+        if !weatherData, !NetworkManager.shared.getNetworkState() { return }
         
         var canUpdateNWS = true
         var canUpdateWAPI = true
