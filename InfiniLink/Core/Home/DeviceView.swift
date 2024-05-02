@@ -16,7 +16,6 @@ struct DeviceView: View {
     @ObservedObject var networkManager = NetworkManager.shared
     
     @AppStorage("watchNotifications") var watchNotifications: Bool = true
-    @AppStorage("batteryNotification") var batteryNotification: Bool = false
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
     @AppStorage("autoconnect") var autoconnect: Bool = false
     @AppStorage("showDisconnectAlert") var showDisconnectConfDialog: Bool = false
@@ -295,8 +294,6 @@ struct DeviceView: View {
                         .modifier(RowModifier(style: .capsule))
                     }
                     Toggle(NSLocalizedString("enable_watch_notifications", comment: ""), isOn: $watchNotifications)
-                        .modifier(RowModifier(style: .capsule))
-                    Toggle(NSLocalizedString("notify_about_low_battery", comment: ""), isOn: $batteryNotification)
                         .modifier(RowModifier(style: .capsule))
                     if !NotificationManager.shared.canSendNotifications {
                         Group {

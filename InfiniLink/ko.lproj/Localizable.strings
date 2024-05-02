@@ -16,6 +16,9 @@
 "device_name" = "기기 이름";
 "rename" = "이름 바꾸기";
 "disconnect_alert_title" = "Are you sure you want to disconnect from this device?";
+"disconnected" = "disconnected";
+"disconnected_from_central" = "was disconnected from ";
+"notify_on_disconnect" = "Notify on Disconnect";
 "save" = "Save";
 
 // - SideMenu

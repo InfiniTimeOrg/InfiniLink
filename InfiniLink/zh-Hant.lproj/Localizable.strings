@@ -16,6 +16,9 @@
 "device_name" = "裝置名稱";
 "rename" = "重新命名";
 "disconnect_alert_title" = "您確定您想要從這裝置離線？";
+"disconnected" = "disconnected";
+"disconnected_from_central" = "was disconnected from ";
+"notify_on_disconnect" = "Notify on Disconnect";
 "save" = "儲存";
 
 // - SideMenu

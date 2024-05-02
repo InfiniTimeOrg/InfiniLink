@@ -13,6 +13,7 @@ import SwiftUI
 
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
+    @AppStorage("sendDisconnectNotification") var sendDisconnectNotification: Bool = true
     
     static let shared = BLEManager()
     
@@ -176,7 +177,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         if error != nil {
-            bleLogger.debug(error: "Failed to connect: \(error!)", log: .ble, date: Date()) // MARK: logging
+            bleLogger.debug(error: "Failed to connect: \(error!)", log: .ble, date: Date())
         }
     }
     
@@ -192,6 +193,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         if error != nil {
             heartChartReconnect = true
             central.connect(peripheral)
+            if sendDisconnectNotification {
+                NotificationManager.shared.sendDisconnectedNotification()
+            }
             bleLogger.debug(error: "Peripheral disconnected. Reason: \(error!)", log: .ble, date: Date())
         } else {
             DeviceInfoManager.init().clearDeviceInfo()
@@ -204,7 +208,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        
         if central.state == .poweredOn {
             isSwitchedOn = true
         }

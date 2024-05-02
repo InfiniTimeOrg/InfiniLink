@@ -35,6 +35,7 @@ struct Settings_Page: View {
     @AppStorage("showClearHRMChartConf") var showClearHRMChartConf: Bool = false
     @AppStorage("showClearBatteryChartConf") var showClearBatteryChartConf: Bool = false
     @AppStorage("showClearStepsChartConf") var showClearStepsChartConf: Bool = false
+    @AppStorage("sendDisconnectNotification") var sendDisconnectNotification: Bool = true
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \ChartDataPoint.timestamp, ascending: true)])
     private var chartPoints: FetchedResults<ChartDataPoint>
@@ -135,8 +136,14 @@ struct Settings_Page: View {
                     }
                     Spacer()
                         .frame(height: 6)
-                    Toggle(NSLocalizedString("enable_first_connect_notification", comment: ""), isOn: $sendFirstConnectNotification)
-                        .modifier(RowModifier(style: .capsule))
+                    VStack {
+                        Toggle(NSLocalizedString("enable_first_connect_notification", comment: ""), isOn: $sendFirstConnectNotification)
+                            .modifier(RowModifier(style: .capsule))
+                        Toggle(NSLocalizedString("notify_about_low_battery", comment: ""), isOn: $batteryNotification)
+                            .modifier(RowModifier(style: .capsule))
+                        Toggle(NSLocalizedString("notify_on_disconnect", comment: ""), isOn: $sendDisconnectNotification)
+                            .modifier(RowModifier(style: .capsule))
+                    }
                     Spacer()
                         .frame(height: 6)
                     VStack {
