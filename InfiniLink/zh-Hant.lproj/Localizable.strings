@@ -89,9 +89,9 @@
 "weather" = "天氣";
 "weather_style" = "天氣類型";
 "search_for_locations" = "搜尋位置";
-"find_location" = "Use the search box above to find\na location";
-"update_step_count_goal_on_watch_1" = "To change your step goal, navigate to settings on";
-"update_step_count_goal_on_watch_2" = "and change it there.";
+"find_location" = "使用上面的搜尋欄尋找\n 位置";
+"update_step_count_goal_on_watch_1" = "改變您的步數目標，請至設定";
+"update_step_count_goal_on_watch_2" = "且在這變更它。";
 "manually_sync_time" = "手動同步時間";
 
 // - BLEConnectView
@@ -99,15 +99,15 @@
 "waiting_for_bluetooth" = "等待藍芽中";
 "unnamed" = "未命名";
 "loading" = "載入中";
-"need_help_connecting" = "";
+"need_help_connecting" = "需要幫忙連線嗎？";
 "devices" = "裝置";
-"not_infinitime_device" = "似乎您選擇的裝置並沒有執行 InfiniTime.";
+"not_infinitime_device" = "似乎您選擇的裝置並沒有執行 InfiniTime。";
 "disconnect" = "斷線";
-"scanning" = "掃瞄中";
+"scanning" = "掃描中";
 "ok" = "OK";
 
 // - ConnectionHelpView
-"connection_help" = "";
+"connection_help" = "連線幫助";
 
 // - ChartSettingsSheetMain
 "select_date_range" = "選擇日期範圍";
@@ -155,21 +155,21 @@
 // - WhatsNew
 "whats_new_in" = "What's New in";
 "welcome_to_version" = "Welcome to version";
-"whats_new_1" = "The UI has been completely refreshed!";
-"whats_new_2" = "Apple HealthKit is now supported to sync step count and heart rate data with Apple Health.";
-"whats_new_3" = "InfiniLink users can now upload and delete files on their watch's Bluetooth filesystem, as well as upload external resource packages. Users can also convert images to the format supported by InfiniTime, within the app.";
-"whats_new_4" = "Weather support has also been added in this release, using the National Weather Service API (for users inside the United States) and the WeatherAPI API (for users outside of the United States). The weather data is pushed using InfiniTime's new Simple Weather Service. Requires InfiniTime 1.14 or newer.";
-"whats_new_5" = "This release also contains some new localizations. Please note that not all the localizations are complete. If you're able to assist with them, please feel free to submit a pull request with the updated localizations!";
-"whats_new_6" = "Special thanks to @JenJell on GitHub for for all of her help with this update!";
+"whats_new_1" = "UI 畫面已經完全更新！";
+"whats_new_2" = "Apple HealthKit 現在支援同步步數及心率資料到 Apple Health。";
+"whats_new_3" = "InfiniLink 使用者可以在手錶的藍芽檔案系統上傳及刪除檔案，也可以上傳外部的資源包。使用者也可以在 app 內，轉換圖片為 InfiniTime 支援的格式。";
+"whats_new_4" = "天氣支援也在這版本增加，使用 National Weather Service API (在 United States) 及 WeatherAPI API (非 United States 的使用者)。 天氣資料是使用 InfiniTime 的新簡單天氣服務推送。需要 InfiniTime 1.14 或更新。";
+"whats_new_5" = "這版本也包含一些新的語言本地化。請注意語言本地化並沒有完全處理好。若您可以幫忙協助，請更新這些語言本地化並提交一個 pull request！";
+"whats_new_6" = "這次特別感謝 @JenJell 在 Github 上的所有幫忙！";
 
 // - Onboarding
-"welcome_to_InfiniLink" = "Welcome to InfiniLink!";
+"welcome_to_InfiniLink" = "歡迎使用 InfiniLink!";
 "onboarding_text" = "The official open-source iOS companion app for InfiniTime! Before you begin, make sure to allow this app to use Bluetooth. Please report any issues that you find, crashes you experience, or suggested changes! Your feedback allows us to work together to have a great companion app. Reports are welcome through TestFlight, or through GitHub, Matrix, or Mastodon.";
-"other_notes" = "Other notes:";
-"other_notes_1" = "Notifications are not currently functional, as this requires the Apple Notification Center Service (ANCS) protocol to be implemented in InfiniTime.";
+"other_notes" = "其他備註：";
+"other_notes_1" = "通知目前無作用，因為這需要實作 Apple Notification Center Service (ANCS) 協議在 InfiniTime。";
 "other_notes_2" = "The music controls do work in InfiniTime, but only if you're playing music through the Apple Music app. System-wide music control in iOS requires the proprietary Apple Media Service to be implemented in InfiniTime. At the app level, I can really only interact with Apple Music, and have no control over podcasts, YouTube videos, etc. until AMS is added to InfiniTime.";
-"other_notes_3" = "Your InfiniTime device is currently only capable of sustaining one Bluetooth connection at a time. If you're having trouble connecting, please ensure that your PineTime is not already connected to another device, or to another app on this device.";
-"other_notes_4" = "If your PineTime is still not showing up as an available device, please reboot your watch by holding down the side button on your watch until you see the Pine64 pinecone logo in green, and then release.";
+"other_notes_3" = "您的 InfiniTime 裝置目前只能一次維持一個藍芽連線。若您連線有問題，請確認您的 PineTime 沒有連線到其他裝置，或是其他這裝置的 app。";
+"other_notes_4" = "若您的 PineTime 仍然沒有顯示在可用的裝置內，請按住您手錶的側邊按鈕以重開您的手錶，直到您看到 Pine64 的松毬綠色 logo，再放開。";
 
 // - OnboardingDismissButton
 "dismiss_button" = "關閉";
