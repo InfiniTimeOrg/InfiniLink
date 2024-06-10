@@ -58,6 +58,7 @@ struct ContentView: View {
                     Settings_Page()
                 }
             }
+            .navigationViewStyle(.stack)
             tabBar
         }
         .alert(isPresented: $showDisconnectConfDialog) {
