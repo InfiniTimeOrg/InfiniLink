@@ -60,24 +60,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         let lengthTrack = CBUUID(string: "00000007-78FC-48FE-8E23-433B3A1942D0")
     }
     
-    //    let cbuuidList = cbuuidList()
-    //    var musicChars = musicCharacteristics()
-    //
-    //    let settings = UserDefaults.standard
-    
-    
-    // UI flag variables
-    @Published var isSwitchedOn = false                                    // for now this is used to display if bluetooth is on in the main app screen. maybe an alert in the future?
-    @Published var isScanning = false                                    // another UI flag. Probably not necessary for anything but debugging. I dunno maybe a little swirly animation or something could be triggered by this
-    @Published var isConnectedToPinetime = false                        // another flag published to update UI stuff. Can probably be implemented better in the future
-    //    @Published var heartBPM: Double = 0                                    // published var to communicate the HRM data to the UI.
-    @Published var batteryLevel: Double = 0                                // Same as heartBPM but for battery data
-    //    @Published var firmwareVersion: String = "Disconnected"
+    @Published var isSwitchedOn = false
+    @Published var isScanning = false
+    @Published var isConnectedToPinetime = false
+    @Published var rssi: Int = 0
+    @Published var batteryLevel: Double = 0
     @Published var setTimeError = false
     @Published var blePermissions: Bool!
-    
-    //    @Published var stepCount: Int = 0
-    //    @Published var stepCounting: Int = 0
     
     // Selecting and connecting variables
     @Published var peripherals = [Peripheral]()
@@ -87,7 +76,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     //    @Published var autoconnectPeripheral: CBPeripheral!
     @Published var setAutoconnectUUID: String = ""                            // placeholder for now while I figure out how to save the whole device in UserDefaults to save "favorite" devices
     
-    @Published var bleLogger = DebugLogManager.shared // MARK: logging
+    @Published var bleLogger = DebugLogManager.shared
     
     var firstConnect: Bool = true // makes iOS connected message only show up on first connect, not if device drops connection and reconnects
     var disconnected: Bool = false
@@ -185,6 +174,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         DeviceInfoManager().setDeviceName(uuid: peripheral.identifier.uuidString)
         UptimeManager.shared.connectTime = Date()
         bleLogger.debug(error: "Successfully connected to \(peripheral.name!)", log: .ble, date: Date())
+        if SheetManager.shared.sheetSelection == .connect {
+            SheetManager.shared.showSheet = false
+        }
         ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 1, chart: ChartsAsInts.connected.rawValue))
     }
     
@@ -204,7 +196,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        
         if central.state == .poweredOn {
             isSwitchedOn = true
         }

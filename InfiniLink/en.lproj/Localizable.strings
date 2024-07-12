@@ -245,6 +245,7 @@
 "downloads" = "Downloads";
 "learn_more" = "Learn More";
 "software_update" = "Software Update";
+"software_update_w/n" = "Software\nUpdate";
 "local_file_info" = "This is a local file and may not work with your PineTime.";
 "install_older_version" = "Install Older Version";
 "up_to_date" = "is up to date";

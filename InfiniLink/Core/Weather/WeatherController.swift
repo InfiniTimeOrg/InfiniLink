@@ -234,7 +234,7 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
             return 0
         case "Partly cloudly":
             return 1
-        case "Cloudly", "Overcast", "Patchy rain possible", "Patchy sleet possible", "Patchy freezing drizzle possible", "Thundery outbreaks possible":
+        case "Cloudly", "Overcast", "Patchy rain possible", "Patchy sleet possible", "Patchy rain nearby", "Patchy freezing drizzle possible", "Thundery outbreaks possible":
             return 2
         case "Patchy light drizzle", "Heavy freezing drizzle", "Drizzle", "Light rain", "Moderate rain", "Moderate rain at times", "Heavy rain at times", "Heavy rain", "Light freezing rain", "Moderate or heavy freezing rain", "Ice pellets", "Light rain shower", "Moderate or heavy rain shower", "Torrential rain shower", "Light sleet showers", "Moderate or heavy sleet showers", "Light showers of ice pellets", "Moderate or heavy showers of ice pellets":
             return 4

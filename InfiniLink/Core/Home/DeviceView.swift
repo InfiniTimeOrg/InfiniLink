@@ -67,7 +67,6 @@ struct DeviceView: View {
                                     Image(systemName: "chevron.right")
                                         .font(.body.weight(.medium))
                                 }
-                                .aspectRatio(1, contentMode: .fill)
                                 .padding()
                                 .background(Color.green)
                                 .foregroundColor(.white)
@@ -76,14 +75,13 @@ struct DeviceView: View {
                             NavigationLink(destination: DFUView()) {
                                 ZStack(alignment: .topTrailing) {
                                     HStack {
-                                        Text(NSLocalizedString("software_update", comment: ""))
+                                        Text(NSLocalizedString("software_update_w/n", comment: ""))
                                             .multilineTextAlignment(.leading)
                                             .font(.title3.weight(.semibold))
                                         Spacer()
                                         Image(systemName: "chevron.right")
                                             .font(.body.weight(.medium))
                                     }
-                                    .aspectRatio(1, contentMode: .fill)
                                     .padding()
                                     .background(Material.regular)
                                     .foregroundColor(.primary)
@@ -109,7 +107,6 @@ struct DeviceView: View {
                                     Image(systemName: "chevron.right")
                                         .font(.body.weight(.medium))
                                 }
-                                .aspectRatio(1, contentMode: .fill)
                                 .padding()
                                 .background(Color.blue)
                                 .foregroundColor(.white)
@@ -126,7 +123,6 @@ struct DeviceView: View {
                                     Image(systemName: "chevron.right")
                                         .font(.body.weight(.medium))
                                 }
-                                .aspectRatio(1, contentMode: .fill)
                                 .padding()
                                 .background(Color.red)
                                 .foregroundColor(.white)
@@ -172,14 +168,6 @@ struct DeviceView: View {
                             }
                             .disabled(!networkManager.getNetworkState())
                             .opacity(!networkManager.getNetworkState() ? 0.4 : 1.0)
-                            .overlay {
-                                if !networkManager.getNetworkState() {
-                                    Image(systemName: "wifi.slash")
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 35).weight(.semibold))
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                }
-                            }
                             Spacer()
                                 .frame(height: 6)
                         }
