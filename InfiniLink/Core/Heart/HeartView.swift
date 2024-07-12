@@ -6,7 +6,7 @@
 //
 //
 
-
+import Accelerate
 import SwiftUI
 
 struct HeartView: View {
@@ -88,13 +88,14 @@ struct HeartView: View {
                             .stroke(style: StrokeStyle(lineWidth: 10.0, lineCap: .round, lineJoin: .round))
                             .foregroundColor(.red)
                             .rotationEffect(Angle(degrees: 90.0 - Double(bleManagerVal.heartBPM / 250) * 180.0))
-                        VStack(spacing: 8) {
+                        VStack(spacing: 5) {
                             Image(systemName: "heart.fill")
                                 .font(.system(size: 35))
                                 .imageScale(.large)
-                            
                             Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
                                 .font(.system(size: 32).weight(.bold))
+                            Text("Avg: " + String(Int(vDSP.mean(dataPoints.map({ $0.value })))) + " " + NSLocalizedString("bpm", comment: "BPM"))
+                                .foregroundColor(.primary)
                         }
                         .foregroundColor(.red)
                     }
