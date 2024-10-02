@@ -94,8 +94,17 @@ struct HeartView: View {
                                 .imageScale(.large)
                             Text(String(format: "%.0f", bleManagerVal.heartBPM) + " " + NSLocalizedString("bpm", comment: "BPM"))
                                 .font(.system(size: 32).weight(.bold))
-                            Text("Avg: " + String(Int(vDSP.mean(dataPoints.map({ $0.value })))) + " " + NSLocalizedString("bpm", comment: "BPM"))
-                                .foregroundColor(.primary)
+                            if dataPoints.count >= 5 {
+                                let points = dataPoints.map { $0.value }.filter { $0 > 50 && $0 < 200 }
+                                
+                                if !points.isEmpty {
+                                    let meanValue = vDSP.mean(points)
+                                    let formattedAvg = String(Int(meanValue))
+                                    
+                                    Text("Avg: " + formattedAvg + " " + NSLocalizedString("bpm", comment: "BPM"))
+                                        .foregroundColor(.primary)
+                                }
+                            }
                         }
                         .foregroundColor(.red)
                     }

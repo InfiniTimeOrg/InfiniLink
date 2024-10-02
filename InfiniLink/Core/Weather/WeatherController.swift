@@ -330,8 +330,10 @@ class WeatherController: NSObject, ObservableObject, CLLocationManagerDelegate {
                         DebugLogManager.shared.debug(error: debugDescription, log: .app, date: Date())
                     }
                     
-                    bleManagerVal.weatherInformation.icon = Int(getIcon_NWS(description: json["features"][idx]["properties"]["textDescription"].stringValue))
-                    bleManagerVal.weatherInformation.shortDescription = json["features"][idx]["properties"]["textDescription"].stringValue
+                    DispatchQueue.main.async {
+                        self.bleManagerVal.weatherInformation.icon = Int(self.getIcon_NWS(description: json["features"][idx]["properties"]["textDescription"].stringValue))
+                        self.bleManagerVal.weatherInformation.shortDescription = json["features"][idx]["properties"]["textDescription"].stringValue
+                    }
                     break
                 }
             }
