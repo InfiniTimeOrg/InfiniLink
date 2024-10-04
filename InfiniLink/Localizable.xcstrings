@@ -1,0 +1,208 @@
+{
+  "sourceLanguage" : "en",
+  "strings" : {
+    "[BATT]" : {
+
+    },
+    "[DATE]" : {
+
+    },
+    "[L_HR]" : {
+
+    },
+    "[STAT]" : {
+
+    },
+    "[STEP]" : {
+
+    },
+    "[TIME]" : {
+
+    },
+    "%@" : {
+
+    },
+    "%@:%@:%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@:%2$@:%3$@"
+          }
+        }
+      }
+    },
+    "%@:%@:%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@:%2$@:%3$@ %4$@"
+          }
+        }
+      }
+    },
+    "%@!" : {
+
+    },
+    "%lld more device%@ found" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld more device%2$@ found"
+          }
+        }
+      }
+    },
+    "%lld steps" : {
+
+    },
+    "%lld time%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld time%2$@"
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+
+    },
+    "1 device discovered" : {
+
+    },
+    "About" : {
+
+    },
+    "Allow Access..." : {
+
+    },
+    "Allow Music Control" : {
+
+    },
+    "Allow your watch to control the currently playing music from Apple Music." : {
+
+    },
+    "Battery" : {
+
+    },
+    "Bluetooth needs to be enabled to pair a watch." : {
+
+    },
+    "Cancel" : {
+
+    },
+    "Connect" : {
+
+    },
+    "Connected" : {
+
+    },
+    "Connecting..." : {
+
+    },
+    "Device not appearing?" : {
+
+    },
+    "Disconnected" : {
+
+    },
+    "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
+
+    },
+    "General" : {
+
+    },
+    "Good afternoon" : {
+
+    },
+    "Good evening" : {
+
+    },
+    "Good morning" : {
+
+    },
+    "Have your watch remind you when to stand up if you've been sedentary for too long." : {
+
+    },
+    "Health" : {
+
+    },
+    "Hello" : {
+
+    },
+    "Hello, World!" : {
+
+    },
+    "If you have an InfiniTime device, you can pair it here." : {
+
+    },
+    "Interval" : {
+
+    },
+    "Learn more" : {
+
+    },
+    "Looking for your watch..." : {
+
+    },
+    "Music" : {
+
+    },
+    "not_playing" : {
+
+    },
+    "Notifications" : {
+
+    },
+    "Notify on Low Battery" : {
+
+    },
+    "Notify on Reconnect" : {
+
+    },
+    "Other" : {
+
+    },
+    "Receive a reminder to drink water for the set amount of times a day." : {
+
+    },
+    "Send a notification to your devices when your watch is on low battery." : {
+
+    },
+    "Send to iPhone" : {
+
+    },
+    "Send to Watch" : {
+
+    },
+    "Software Update" : {
+
+    },
+    "Stand-up Reminder" : {
+
+    },
+    "Start Pairing" : {
+
+    },
+    "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music." : {
+
+    },
+    "user@watch:~ $" : {
+
+    },
+    "user@watch:~ $ now" : {
+
+    },
+    "Water Reminder" : {
+
+    },
+    "We need access to your Music Library." : {
+
+    }
+  },
+  "version" : "1.0"
+}

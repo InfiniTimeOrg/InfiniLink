@@ -13,47 +13,42 @@ import SwiftUI
 
 struct BLEDiscoveredCharacteristics {
 	let bleManager = BLEManager.shared
-    let bleManagerVal = BLEManagerVal.shared
-    
-    @AppStorage("sendFirstConnectNotification") var sendFirstConnectNotification: Bool = true
     
 	func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
+        bleManager.isConnectedToPinetime = true
+        
 		switch characteristic.uuid {
-		case bleManagerVal.cbuuidList.musicControl:
+		case bleManager.cbuuidList.musicControl:
 			peripheral.setNotifyValue(true, for: characteristic)
-            bleManagerVal.musicChars.control = characteristic
-        case bleManagerVal.cbuuidList.statusControl:
-            bleManagerVal.musicChars.status = characteristic
-		case bleManagerVal.cbuuidList.musicTrack:
-            bleManagerVal.musicChars.track = characteristic
-		case bleManagerVal.cbuuidList.musicArtist:
-            bleManagerVal.musicChars.artist = characteristic
-        case bleManagerVal.cbuuidList.positionTrack:
-            bleManagerVal.musicChars.position = characteristic
-        case bleManagerVal.cbuuidList.lengthTrack:
-            bleManagerVal.musicChars.length = characteristic
-		case bleManagerVal.cbuuidList.hrm:
+            bleManager.musicChars.control = characteristic
+        case bleManager.cbuuidList.statusControl:
+            bleManager.musicChars.status = characteristic
+		case bleManager.cbuuidList.musicTrack:
+            bleManager.musicChars.track = characteristic
+		case bleManager.cbuuidList.musicArtist:
+            bleManager.musicChars.artist = characteristic
+        case bleManager.cbuuidList.positionTrack:
+            bleManager.musicChars.position = characteristic
+        case bleManager.cbuuidList.lengthTrack:
+            bleManager.musicChars.length = characteristic
+		case bleManager.cbuuidList.hrm:
 			peripheral.setNotifyValue(true, for: characteristic)
-		case bleManagerVal.cbuuidList.bat:
+		case bleManager.cbuuidList.bat:
 			peripheral.readValue(for: characteristic)
 			peripheral.setNotifyValue(true, for: characteristic)
-        case bleManagerVal.cbuuidList.blefsTransfer:
+        case bleManager.cbuuidList.blefsTransfer:
             bleManager.blefsTransfer = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
-		case bleManagerVal.cbuuidList.notify:
-            bleManagerVal.notifyCharacteristic = characteristic
-			if bleManager.firstConnect && sendFirstConnectNotification {
-                BLEWriteManager.init().sendNotification(title: "", body: "\(UIDevice.current.name) Connected!")
-                bleManager.firstConnect = false
-			}
-		case bleManagerVal.cbuuidList.stepCount:
+		case bleManager.cbuuidList.notify:
+            bleManager.notifyCharacteristic = characteristic
+		case bleManager.cbuuidList.stepCount:
 			peripheral.readValue(for: characteristic)
 			peripheral.setNotifyValue(true, for: characteristic)
-		case bleManagerVal.cbuuidList.time:
+		case bleManager.cbuuidList.time:
             bleManager.currentTimeService = characteristic
-            BLEWriteManager.init().setTime(characteristic: characteristic)
-        case bleManagerVal.cbuuidList.weather:
-            bleManagerVal.weatherCharacteristic = characteristic
+            BLEWriteManager().setTime(characteristic: characteristic)
+        case bleManager.cbuuidList.weather:
+            bleManager.weatherCharacteristic = characteristic
 		default:
 			break
 		}

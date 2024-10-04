@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "PineTime.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "pinetime_pic3png.png",
       "idiom" : "universal",
       "scale" : "2x"
     },

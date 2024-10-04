@@ -2,200 +2,89 @@
 //  WelcomeView.swift
 //  InfiniLink
 //
-//  Created by John Stanley on 5/2/22.
+//  Created by Liam Willey on 10/3/24.
 //
 
 import SwiftUI
 
 struct WelcomeView: View {
-    @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var bleManagerVal = BLEManagerVal.shared
-    @ObservedObject var deviceInfo = BLEDeviceInfo.shared
-    @Environment(\.colorScheme) var colorScheme
+    @Environment(\.openURL) var openURL
+    
+    @State private var showPairingSheet = false
+    
+    var greeting: String {
+        let date = Date()
+        let calendar = Calendar.current
+        let currentHour = calendar.component(.hour, from: date)
+        
+        switch currentHour {
+        case 0..<12:
+            return NSLocalizedString("Good morning", comment: "")
+        case 12..<18:
+            return NSLocalizedString("Good afternoon", comment: "")
+        case 18..<24:
+            return NSLocalizedString("Good evening", comment: "")
+        default:
+            return NSLocalizedString("Hello", comment: "")
+        }
+    }
+    var infoURL: URL? {
+        guard let url = URL(string: "https://wiki.pine64.org/wiki/PineTime") else { return nil }
+        
+        // Check if the user's device has browser capabilties
+        if UIApplication.shared.canOpenURL(url) {
+            return url
+        } else {
+            return nil
+        }
+    }
     
     var body: some View {
-        VStack {
-            if !bleManager.isConnectedToPinetime || deviceInfo.firmware == "" || bleManagerVal.watchFace == -1 {
-                if bleManager.isConnectedToPinetime {
-                    ZStack {
-                        DeviceView()
-                            .disabled(true)
-                            .blur(radius: 70)
-                        Group {
-                            if deviceInfo.firmware != "" && (bleManagerVal.watchFace == -1 && bleManager.blefsTransfer == nil) {
-                                VStack(spacing: 18) {
-                                    Group {
-                                        Text(NSLocalizedString("recovery_mode", comment: "It looks like your device is in recovery mode."))
-                                            .font(.title.weight(.bold))
-                                        Text(NSLocalizedString("exit_recovery_mode", comment: "To exit Recovery Mode, you need to install a software update."))
-                                    }
-                                    .multilineTextAlignment(.center)
-                                    VStack(spacing: 12) {
-                                        NavigationLink {
-                                            DFUView()
-                                        } label: {
-                                            HStack(spacing: 6) {
-                                                Text(NSLocalizedString("software_update", comment: "Software Update"))
-                                                Image(systemName: "chevron.right")
-                                            }
-                                            .padding()
-                                            .background(Material.thin)
-                                            .foregroundColor(.primary)
-                                            .clipShape(Capsule())
-                                        }
-                                        Button {
-                                            bleManager.disconnect()
-                                        } label: {
-                                            Text(NSLocalizedString("disconnect", comment: "Disconnect"))
-                                                .padding()
-                                                .background(Color.red)
-                                                .foregroundColor(.white)
-                                                .clipShape(Capsule())
-                                        }
-                                    }
-                                }
-                            } else {
-                                VStack(spacing: 16) {
-                                    Text(NSLocalizedString("connecting", comment: "Connecting..."))
-                                        .font(.title.weight(.bold))
-                                    Button {
-                                        bleManager.disconnect()
-                                    } label: {
-                                        Text(NSLocalizedString("stop_connecting", comment: "Stop Connecting"))
-                                            .padding()
-                                            .background(Color.red)
-                                            .foregroundColor(.white)
-                                            .clipShape(Capsule())
-                                    }
-                                }
-                            }
+        GeometryReader { geo in
+            VStack(alignment: .leading) {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text("\(greeting)!")
+                        .font(.largeTitle.weight(.bold))
+                    Text("If you have an InfiniTime device, you can pair it here.")
+                        .foregroundStyle(.gray)
+                    if let url = infoURL {
+                        Button {
+                            openURL(url)
+                        } label: {
+                            Text("Learn more")
+                                .font(.body.weight(.bold))
                         }
-                        .padding()
                     }
-                } else {
-                    VStack() {
-                        VStack(spacing: 5) {
-                            Text("Welcome to \nInfiniLink")
-                                .font(.system(size: 33).weight(.bold))
-                                .padding(9)
-                                .multilineTextAlignment(.center)
-                                .frame(maxWidth: .infinity, alignment: .center)
-                            Spacer()
-                            VStack(spacing: 12) {
-                                Button {
-                                    SheetManager.shared.sheetSelection = .connect
-                                    SheetManager.shared.showSheet = true
-                                } label: {
-                                    Text(NSLocalizedString("start_pairing", comment: ""))
-                                        .modifier(NeumorphicButtonModifer(bgColor: colorScheme == .dark ? Color.darkGray : Color.lightGray))
-                                }
-                                .frame(maxWidth: .infinity, alignment: .center)
-                                .padding(.bottom, 5)
-                                .padding(.horizontal)
-                                .onAppear {
-                                    if bleManager.isSwitchedOn {
-                                        bleManager.startScanning()
-                                    }
-                                }
-                                VStack(spacing: 7) {
-                                    Text("Don't have a Watch?")
-                                        .frame(maxWidth: .infinity, alignment: .center)
-                                        .padding(.horizontal)
-                                        .foregroundColor(.gray)
-                                    Link(destination: URL(string: "https://wiki.pine64.org/wiki/PineTime")!) {
-                                        Text("Learn more about the PineTime")
-                                            .frame(maxWidth: .infinity, alignment: .center)
-                                            .foregroundColor(.blue)
-                                            .padding(.bottom, 5)
-                                            .padding(.horizontal)
-                                            .font(.body.weight(.semibold))
-                                    }
-                                }
-                            }
-                            .clipped()
-                            .shadow(color: colorScheme == .dark ? Color.darkGray : Color.white, radius: 30, x: 0, y: 0)
-                        }
-                        .padding()
-                    }
-                    .fullBackground(imageName: "LaunchScreen")
                 }
-            } else {
-                DeviceView()
+                .frame(width: geo.size.width / 1.4, alignment: .leading)
+                Spacer()
+                Button {
+                    showPairingSheet = true
+                } label: {
+                    Text("Start Pairing")
+                        .padding()
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                .sheet(isPresented: $showPairingSheet) {
+                    BLEConnectView()
+                }
+            }
+            .padding(20)
+            .background {
+                Image(.launchScreen)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .ignoresSafeArea()
             }
         }
-        .onDisappear {
-            if bleManager.isScanning {
-                bleManager.stopScanning()
-            }
-        }
-    }
-}
-
-struct NeumorphicButtonModifer: ViewModifier {
-    var bgColor: Color
-    
-    func body(content: Content) -> some View {
-        content
-            .padding()
-            .frame(maxWidth: .infinity, alignment: .center)
-            .font(.body.weight(.semibold))
-            .foregroundColor(Color.white)
-            .background(Color.blue)
-            .clipShape(Capsule())
-            .foregroundColor(.primary)
-    }
-}
-
-public extension View {
-    func fullBackground(imageName: String) -> some View {
-        return background(
-            Image(imageName)
-                .resizable()
-                .scaledToFill()
-                .edgesIgnoringSafeArea(.all)
-                .offset(y: -23)
-        )
+        .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
-    NavigationView {
-        ZStack {
-            DeviceView()
-                .disabled(true)
-                .blur(radius: 70)
-            VStack(spacing: 18) {
-                Group {
-                    Text(NSLocalizedString("recovery_mode", comment: "It looks like your device is in recovery mode."))
-                        .font(.title.weight(.bold))
-                    Text("To exit Recovery Mode, you need to install a software update.")
-                }
-                .multilineTextAlignment(.center)
-                VStack(spacing: 12) {
-                    NavigationLink {
-                        DFUView()
-                    } label: {
-                        HStack(spacing: 6) {
-                            Text(NSLocalizedString("software_update", comment: "Software Update"))
-                            Image(systemName: "chevron.right")
-                        }
-                        .padding()
-                        .background(Material.thin)
-                        .foregroundColor(.primary)
-                        .clipShape(Capsule())
-                    }
-                    Button {
-                        BLEManager.shared.disconnect()
-                    } label: {
-                        Text(NSLocalizedString("disconnect", comment: "Disconnect"))
-                            .padding()
-                            .background(Color.red)
-                            .foregroundColor(.white)
-                            .clipShape(Capsule())
-                    }
-                }
-            }
-            .padding()
-        }
-    }
+    WelcomeView()
 }

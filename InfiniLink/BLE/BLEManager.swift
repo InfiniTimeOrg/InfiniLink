@@ -2,25 +2,23 @@
 //  BLEManager.swift
 //  InfiniLink
 //
-//  Created by Alex Emry on 8/3/21.
+//  Created by Liam Willey on 10/3/2024.
 //
 
 import Foundation
 import CoreBluetooth
-import SwiftUICharts
 import SwiftUI
 
-
-class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
-    @AppStorage("autoconnectUUID") var autoconnectUUID: String = ""
-    
+class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     static let shared = BLEManager()
     
     var myCentral: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
     var currentTimeService: CBCharacteristic!
+    var notifyCharacteristic: CBCharacteristic!
+    var weatherCharacteristic: CBCharacteristic!
     
-    struct musicCharacteristics {
+    struct MusicCharacteristics {
         var control: CBCharacteristic!
         var track: CBCharacteristic!
         var artist: CBCharacteristic!
@@ -28,17 +26,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         var position: CBCharacteristic!
         var length: CBCharacteristic!
     }
-    
-    struct Peripheral: Identifiable {
-        let id: Int
-        let name: String
-        let rssi: Int
-        let peripheralHash: Int
-        let deviceUUID: CBUUID
-        let stringUUID: String
-    }
-    
-    struct cbuuidList {
+    struct CBUUIDList {
         let hrm = CBUUID(string: "2A37")
         let bat = CBUUID(string: "2A19")
         let time = CBUUID(string: "2A2B")
@@ -60,147 +48,148 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate {
         let lengthTrack = CBUUID(string: "00000007-78FC-48FE-8E23-433B3A1942D0")
     }
     
+    let cbuuidList = CBUUIDList()
+    var musicChars = MusicCharacteristics()
+    
     @Published var isSwitchedOn = false
     @Published var isScanning = false
     @Published var isConnectedToPinetime = false
-    @Published var rssi: Int = 0
-    @Published var batteryLevel: Double = 0
     @Published var setTimeError = false
-    @Published var blePermissions: Bool!
     
-    // Selecting and connecting variables
-    @Published var peripherals = [Peripheral]()
-    @Published var newPeripherals: [CBPeripheral] = []                    // used to print human-readable device names to UI in selection process
-    @Published var peripheralDictionary: [Int: CBPeripheral] = [:]         // this is the dictionary that relates human-readable peripheral names to the CBPeripheral class that CoreBluetooth actually interacts with
-    @Published var infiniTime: CBPeripheral!                            // variable to save the CBPeripheral that you're connecting to
-    //    @Published var autoconnectPeripheral: CBPeripheral!
-    @Published var setAutoconnectUUID: String = ""                            // placeholder for now while I figure out how to save the whole device in UserDefaults to save "favorite" devices
+    @Published var newPeripherals: [CBPeripheral] = []
+    @Published var infiniTime: CBPeripheral!
     
-    @Published var bleLogger = DebugLogManager.shared
+    @Published var watchFace: Int = -1
+    @Published var pineTimeStyleData: PineTimeStyleData?
+    @Published var infineatWatchFace: WatchFaceInfineat?
+    @Published var timeFormat: ClockType?
     
-    var firstConnect: Bool = true // makes iOS connected message only show up on first connect, not if device drops connection and reconnects
-    var disconnected: Bool = false
-    var heartChartReconnect: Bool = true
+    @Published var weatherInformation = WeatherInformation()
+    @Published var weatherForecastDays = [WeatherForecastDay]()
+    @Published var loadingWeather = true
     
-    // declare some CBUUIDs for easier reference
-    @Published var autoconnectToDevice: Bool = false
+    @Published var heartRate: Double = 0
+    @Published var batteryLevel: Double = 0
+    @Published var stepCount: Int = 0
+    @Published var firmwareVersion: String = ""
     
+    @Published var lastWeatherUpdateNWS: Int = 0
+    @Published var lastWeatherUpdateWAPI: Int = 0
+    @Published var latitude: Double = 0.0
+    @Published var longitude: Double = 0.0
+    
+    @AppStorage("pairedDeviceID") var pairedDeviceID: String?
+    @AppStorage("weatherMode") var weatherMode: String = "imperial"
+    
+    var hasLoadedCharacteristics: Bool {
+        return !DeviceInfoManager.shared.firmware.isEmpty
+    }
     
     override init() {
         super.init()
-        
         myCentral = CBCentralManager(delegate: self, queue: nil)
-        myCentral.delegate = self
-        if myCentral.state == .unauthorized {
-            blePermissions = false
-        } else {
-            blePermissions = true
-        }
     }
     
     func startScanning() {
+        guard myCentral.state == .poweredOn else { return }
+        
         myCentral.scanForPeripherals(withServices: nil, options: nil)
         isScanning = true
-        peripherals = [Peripheral]()
-        peripheralDictionary = [:]
         newPeripherals = []
     }
     
     func stopScanning() {
+        guard isScanning else { return }
+        
         myCentral.stopScan()
         isScanning = false
     }
     
-    func disconnect(){
-        if infiniTime != nil {
-            disconnected = true
-            myCentral.cancelPeripheralConnection(infiniTime)
-            firstConnect = true
-            isConnectedToPinetime = false
-            heartChartReconnect = false
-            infiniTime = nil
+    func connect(peripheral: CBPeripheral) {
+        guard isSwitchedOn else { return }
+        
+        if peripheral.name == "InfiniTime" {
+            if isConnectedToPinetime {
+                disconnect()
+            }
+            myCentral.stopScan()
+            isScanning = false
+            
+            infiniTime = peripheral
+            infiniTime?.delegate = self
+            myCentral.connect(peripheral, options: nil)
         }
     }
     
-    func connect(peripheral: CBPeripheral) {
-        // Still blocking connections to anything not named "InfiniTime" until I can set up a proper way to test other devices
-        
-        if peripheral.name == "InfiniTime" || peripheral.name == "Pinetime-JF" {
-            if isConnectedToPinetime == true {
-                self.myCentral.cancelPeripheralConnection(self.infiniTime)
-            }
-            disconnected = false
-            self.myCentral.stopScan()
-            isScanning = false
-            
-            self.infiniTime = peripheral
-            infiniTime.delegate = self
-            self.myCentral.connect(peripheral, options: nil)
-            
-            setAutoconnectUUID = peripheral.identifier.uuidString
-            isConnectedToPinetime = true
-            autoconnectToDevice = (autoconnectUUID == setAutoconnectUUID)
-        } else {
-            DebugLogManager.shared.debug(error: "Could not connect to device not named 'InfiniTime'. Device name: \(peripheral.name!)", log: .ble, date: Date())
+    func disconnect() {
+        if let infiniTime = infiniTime {
+            myCentral.cancelPeripheralConnection(infiniTime)
+            isConnectedToPinetime = false
+            self.infiniTime = nil
         }
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if let _ = advertisementData[CBAdvertisementDataLocalNameKey] as? String {
-            if isConnectedToPinetime == false {
-                guard BLEAutoconnectManager.shared.connect(peripheral: peripheral) else {
-                    if !newPeripherals.contains(where: {$0.identifier.uuidString == peripheral.identifier.uuidString}) {
-                        newPeripherals.append(peripheral)
-                    }
-                    return
-                }
-            } else {
-                if !newPeripherals.contains(where: {$0.identifier.uuidString == peripheral.identifier.uuidString}) {
-                    newPeripherals.append(peripheral)
-                }
-                return
-            }
+        if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString {
+            connect(peripheral: peripheral)
+        }
+        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) {
+            newPeripherals.append(peripheral)
         }
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
-        if error != nil {
-            bleLogger.debug(error: "Failed to connect: \(error!)", log: .ble, date: Date()) // MARK: logging
+        if let error = error {
+            print("Failed to connect to peripheral: \(error.localizedDescription)")
         }
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.infiniTime.discoverServices(nil)
-        DeviceInfoManager().setDeviceName(uuid: peripheral.identifier.uuidString)
-        UptimeManager.shared.connectTime = Date()
-        bleLogger.debug(error: "Successfully connected to \(peripheral.name!)", log: .ble, date: Date())
-        if SheetManager.shared.sheetSelection == .connect {
-            SheetManager.shared.showSheet = false
-        }
-        ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 1, chart: ChartsAsInts.connected.rawValue))
+        self.pairedDeviceID = peripheral.identifier.uuidString
+        DeviceInfoManager.shared.setDeviceName(uuid: peripheral.identifier.uuidString)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         if error != nil {
-            heartChartReconnect = true
             central.connect(peripheral)
-            bleLogger.debug(error: "Peripheral disconnected. Reason: \(error!)", log: .ble, date: Date())
-        } else {
-            DeviceInfoManager.init().clearDeviceInfo()
-            bleLogger.debug(error: "User initiated disconnect", log: .ble, date: Date())
         }
-        UptimeManager.shared.lastDisconnect = Date()
-        UptimeManager.shared.connectTime = nil
-        
-        ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: 0, chart: ChartsAsInts.connected.rawValue))
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        if central.state == .poweredOn {
-            isSwitchedOn = true
+        isSwitchedOn = (central.state == .poweredOn)
+        if isSwitchedOn && !isConnectedToPinetime {
+            startScanning()
         }
-        else {
-            isSwitchedOn = false
+    }
+    
+    // MARK: CBPeripheralDelegate
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
+        guard let services = peripheral.services else {
+            if let error {
+                print(error.localizedDescription)
+            }
+            return
         }
+        
+        for service in services {
+            peripheral.discoverCharacteristics(nil, for:service)
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+        guard let characteristics = service.characteristics else {
+            return
+        }
+        
+        for characteristic in characteristics {
+            DeviceInfoManager.shared.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
+            BLEDiscoveredCharacteristics().handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
+        }
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        DeviceInfoManager.shared.updateInfo(characteristic: characteristic)
+        BLEUpdatedCharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }
 }

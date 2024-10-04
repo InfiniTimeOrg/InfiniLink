@@ -10,9 +10,6 @@
 import Foundation
 
 class SetTime {
-	
-	var logManager = DebugLogManager.shared
-	
 	enum SetTimeError: Error {
 		case nilValue
 	}
@@ -56,9 +53,6 @@ class SetTime {
 		for part in dateString.components(separatedBy: " ") {
 			debugString.append(String("\(part), "))
 			guard let intPart = Int(part) else {
-				logManager.debug(error: "Failed to set date!", log: .app, date: Date())
-				logManager.debug(error: "Full date string: \(dateString)", log: .app)
-				logManager.debug(error: "'\(part)' was unable to be converted to an Integer", log: .app)
 				throw SetTimeError.nilValue
 			}
 			let hex = String(format: "%02X", intPart)

@@ -1,0 +1,815 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 54;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */; };
+		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
+		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
+		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
+		264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */; };
+		264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */; };
+		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
+		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
+		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
+		E0A7C0782CB193BC0042A12D /* WeatherSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0772CB193BC0042A12D /* WeatherSettingsView.swift */; };
+		E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */; };
+		E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C07C2CB1AD370042A12D /* MusicController.swift */; };
+		E0A7C07F2CB1B3300042A12D /* BLE_FS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C07E2CB1B3300042A12D /* BLE_FS.swift */; };
+		E0A7C0822CB1B4990042A12D /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E0A7C0812CB1B4990042A12D /* Zip */; };
+		E0A7C0842CB1B7A60042A12D /* WatchFace.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0832CB1B7A60042A12D /* WatchFace.swift */; };
+		E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */; };
+		E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */; };
+		E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */; };
+		E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */; };
+		E0C7C83F2CAEF91C0043DA2D /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */; };
+		E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8462CAF01950043DA2D /* DeviceView.swift */; };
+		E0C7C8532CAF14870043DA2D /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8512CAF14870043DA2D /* SetTime.swift */; };
+		E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */; };
+		E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */; };
+		E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */; };
+		E0C7C85B2CAF14870043DA2D /* DeviceInfoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8502CAF14870043DA2D /* DeviceInfoManager.swift */; };
+		E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84C2CAF14870043DA2D /* BLEManager.swift */; };
+		E0C7C85E2CAF14F40043DA2D /* DeviceNameManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C85D2CAF14F30043DA2D /* DeviceNameManager.swift */; };
+		E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		264BFE5526BC51CF0050A223 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 264BFE3626BC51CE0050A223 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 264BFE3D26BC51CE0050A223;
+			remoteInfo = "Infini-iOS";
+		};
+		264BFE6026BC51CF0050A223 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 264BFE3626BC51CE0050A223 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 264BFE3D26BC51CE0050A223;
+			remoteInfo = "Infini-iOS";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		264BFE3E26BC51CE0050A223 /* InfiniLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkApp.swift; sourceTree = "<group>"; };
+		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		264BFE4526BC51CF0050A223 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkTests.swift; sourceTree = "<group>"; };
+		264BFE5A26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkUITests.swift; sourceTree = "<group>"; };
+		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
+		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
+		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
+		E0A7C0772CB193BC0042A12D /* WeatherSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSettingsView.swift; sourceTree = "<group>"; };
+		E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySettingsView.swift; sourceTree = "<group>"; };
+		E0A7C07C2CB1AD370042A12D /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
+		E0A7C07E2CB1B3300042A12D /* BLE_FS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLE_FS.swift; sourceTree = "<group>"; };
+		E0A7C0832CB1B7A60042A12D /* WatchFace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchFace.swift; sourceTree = "<group>"; };
+		E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
+		E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdateView.swift; sourceTree = "<group>"; };
+		E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
+		E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
+		E0C7C8462CAF01950043DA2D /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
+		E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
+		E0C7C84C2CAF14870043DA2D /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
+		E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
+		E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
+		E0C7C8502CAF14870043DA2D /* DeviceInfoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceInfoManager.swift; sourceTree = "<group>"; };
+		E0C7C8512CAF14870043DA2D /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
+		E0C7C85D2CAF14F30043DA2D /* DeviceNameManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceNameManager.swift; sourceTree = "<group>"; };
+		E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		264BFE3B26BC51CE0050A223 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5126BC51CF0050A223 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5C26BC51CF0050A223 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		264BFE3526BC51CE0050A223 = {
+			isa = PBXGroup;
+			children = (
+				264BFE4026BC51CE0050A223 /* InfiniLink */,
+				264BFE5726BC51CF0050A223 /* InfiniLinkTests */,
+				264BFE6226BC51CF0050A223 /* InfiniLinkUITests */,
+				264BFE3F26BC51CE0050A223 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		264BFE3F26BC51CE0050A223 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE3E26BC51CE0050A223 /* InfiniLink.app */,
+				264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */,
+				264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C07B2CB1AD2E0042A12D /* Utils */,
+				E0A7C0692CB0DE450042A12D /* Model */,
+				E0C7C8522CAF14870043DA2D /* BLE */,
+				E0C7C8362CAEF6BF0043DA2D /* Core */,
+				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
+				264BFE4326BC51CE0050A223 /* ContentView.swift */,
+				E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */,
+				E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */,
+				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
+				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
+				264BFE4F26BC51CF0050A223 /* Info.plist */,
+				264BFE4726BC51CF0050A223 /* Preview Content */,
+			);
+			path = InfiniLink;
+			sourceTree = "<group>";
+		};
+		264BFE4726BC51CF0050A223 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		264BFE5726BC51CF0050A223 /* InfiniLinkTests */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */,
+				264BFE5A26BC51CF0050A223 /* Info.plist */,
+			);
+			path = InfiniLinkTests;
+			sourceTree = "<group>";
+		};
+		264BFE6226BC51CF0050A223 /* InfiniLinkUITests */ = {
+			isa = PBXGroup;
+			children = (
+				264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */,
+				264BFE6526BC51CF0050A223 /* Info.plist */,
+			);
+			path = InfiniLinkUITests;
+			sourceTree = "<group>";
+		};
+		E0A7C0692CB0DE450042A12D /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C06A2CB0DE4C0042A12D /* Weather.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		E0A7C0742CB0ECD10042A12D /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C0892CB1E4BF0042A12D /* General */,
+				E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */,
+				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
+				E0A7C0772CB193BC0042A12D /* WeatherSettingsView.swift */,
+				E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		E0A7C07B2CB1AD2E0042A12D /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C07C2CB1AD370042A12D /* MusicController.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		E0A7C0892CB1E4BF0042A12D /* General */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C08C2CB1E86A0042A12D /* Software Update */,
+				E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */,
+			);
+			path = General;
+			sourceTree = "<group>";
+		};
+		E0A7C08C2CB1E86A0042A12D /* Software Update */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */,
+			);
+			path = "Software Update";
+			sourceTree = "<group>";
+		};
+		E0C7C8362CAEF6BF0043DA2D /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				E0C7C8452CAF018B0043DA2D /* Device */,
+				E0C7C83D2CAEF9120043DA2D /* Connect */,
+				E0C7C8372CAEF70B0043DA2D /* Welcome */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
+		E0C7C8372CAEF70B0043DA2D /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		E0C7C83D2CAEF9120043DA2D /* Connect */ = {
+			isa = PBXGroup;
+			children = (
+				E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */,
+			);
+			path = Connect;
+			sourceTree = "<group>";
+		};
+		E0C7C8452CAF018B0043DA2D /* Device */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C0832CB1B7A60042A12D /* WatchFace.swift */,
+				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
+				E0A7C0742CB0ECD10042A12D /* Settings */,
+			);
+			path = Device;
+			sourceTree = "<group>";
+		};
+		E0C7C8522CAF14870043DA2D /* BLE */ = {
+			isa = PBXGroup;
+			children = (
+				E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */,
+				E0C7C84C2CAF14870043DA2D /* BLEManager.swift */,
+				E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */,
+				E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */,
+				E0A7C07E2CB1B3300042A12D /* BLE_FS.swift */,
+				E0C7C8502CAF14870043DA2D /* DeviceInfoManager.swift */,
+				E0C7C85D2CAF14F30043DA2D /* DeviceNameManager.swift */,
+				E0C7C8512CAF14870043DA2D /* SetTime.swift */,
+			);
+			path = BLE;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		264BFE3D26BC51CE0050A223 /* InfiniLink */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 264BFE6826BC51CF0050A223 /* Build configuration list for PBXNativeTarget "InfiniLink" */;
+			buildPhases = (
+				264BFE3A26BC51CE0050A223 /* Sources */,
+				264BFE3B26BC51CE0050A223 /* Frameworks */,
+				264BFE3C26BC51CE0050A223 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InfiniLink;
+			packageProductDependencies = (
+				E0A7C0812CB1B4990042A12D /* Zip */,
+			);
+			productName = "Infini-iOS";
+			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
+			productType = "com.apple.product-type.application";
+		};
+		264BFE5326BC51CF0050A223 /* InfiniLinkTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 264BFE6B26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "InfiniLinkTests" */;
+			buildPhases = (
+				264BFE5026BC51CF0050A223 /* Sources */,
+				264BFE5126BC51CF0050A223 /* Frameworks */,
+				264BFE5226BC51CF0050A223 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				264BFE5626BC51CF0050A223 /* PBXTargetDependency */,
+			);
+			name = InfiniLinkTests;
+			productName = "Infini-iOSTests";
+			productReference = 264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		264BFE5E26BC51CF0050A223 /* InfiniLinkUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 264BFE6E26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "InfiniLinkUITests" */;
+			buildPhases = (
+				264BFE5B26BC51CF0050A223 /* Sources */,
+				264BFE5C26BC51CF0050A223 /* Frameworks */,
+				264BFE5D26BC51CF0050A223 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				264BFE6126BC51CF0050A223 /* PBXTargetDependency */,
+			);
+			name = InfiniLinkUITests;
+			productName = "Infini-iOSUITests";
+			productReference = 264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		264BFE3626BC51CE0050A223 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					264BFE3D26BC51CE0050A223 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					264BFE5326BC51CF0050A223 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 264BFE3D26BC51CE0050A223;
+					};
+					264BFE5E26BC51CF0050A223 = {
+						CreatedOnToolsVersion = 12.5.1;
+						TestTargetID = 264BFE3D26BC51CE0050A223;
+					};
+				};
+			};
+			buildConfigurationList = 264BFE3926BC51CE0050A223 /* Build configuration list for PBXProject "InfiniLink" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				ru,
+				fr,
+				Base,
+				ko,
+				"zh-Hant",
+			);
+			mainGroup = 264BFE3526BC51CE0050A223;
+			packageReferences = (
+				E0A7C0802CB1B4990042A12D /* XCRemoteSwiftPackageReference "Zip" */,
+			);
+			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				264BFE3D26BC51CE0050A223 /* InfiniLink */,
+				264BFE5326BC51CF0050A223 /* InfiniLinkTests */,
+				264BFE5E26BC51CF0050A223 /* InfiniLinkUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		264BFE3C26BC51CE0050A223 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */,
+				264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */,
+				E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5226BC51CF0050A223 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5D26BC51CF0050A223 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		264BFE3A26BC51CE0050A223 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				E0A7C0782CB193BC0042A12D /* WeatherSettingsView.swift in Sources */,
+				E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */,
+				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				E0A7C07F2CB1B3300042A12D /* BLE_FS.swift in Sources */,
+				E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */,
+				E0C7C83F2CAEF91C0043DA2D /* BLEConnectView.swift in Sources */,
+				E0A7C0842CB1B7A60042A12D /* WatchFace.swift in Sources */,
+				E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */,
+				E0C7C8532CAF14870043DA2D /* SetTime.swift in Sources */,
+				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
+				E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */,
+				E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */,
+				E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */,
+				E0C7C85B2CAF14870043DA2D /* DeviceInfoManager.swift in Sources */,
+				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
+				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
+				E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */,
+				E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */,
+				E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */,
+				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
+				E0C7C85E2CAF14F40043DA2D /* DeviceNameManager.swift in Sources */,
+				E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */,
+				E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5026BC51CF0050A223 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		264BFE5B26BC51CF0050A223 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		264BFE5626BC51CF0050A223 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 264BFE3D26BC51CE0050A223 /* InfiniLink */;
+			targetProxy = 264BFE5526BC51CF0050A223 /* PBXContainerItemProxy */;
+		};
+		264BFE6126BC51CF0050A223 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 264BFE3D26BC51CE0050A223 /* InfiniLink */;
+			targetProxy = 264BFE6026BC51CF0050A223 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		264BFE6626BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		264BFE6726BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		264BFE6926BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = InfiniLink/InfiniLink.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
+				DEVELOPMENT_TEAM = UXA3H4X42S;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = InfiniLink/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		264BFE6A26BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = YES;
+				CODE_SIGN_ENTITLEMENTS = InfiniLink/InfiniLink.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"InfiniLink/Preview Content\"";
+				DEVELOPMENT_TEAM = UXA3H4X42S;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = InfiniLink/Info.plist;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.1;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.alexemry.Infini-iOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = YES;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		264BFE6C26BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
+				INFOPLIST_FILE = InfiniLinkTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLinkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InfiniLink.app/InfiniLink";
+			};
+			name = Debug;
+		};
+		264BFE6D26BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
+				INFOPLIST_FILE = InfiniLinkTests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLinkTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/InfiniLink.app/InfiniLink";
+			};
+			name = Release;
+		};
+		264BFE6F26BC51CF0050A223 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
+				INFOPLIST_FILE = InfiniLinkUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLinkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = InfiniLink;
+			};
+			name = Debug;
+		};
+		264BFE7026BC51CF0050A223 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Y22PRZL3N4;
+				INFOPLIST_FILE = InfiniLinkUITests/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.infinitimeorg.InfiniLinkUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = InfiniLink;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		264BFE3926BC51CE0050A223 /* Build configuration list for PBXProject "InfiniLink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6626BC51CF0050A223 /* Debug */,
+				264BFE6726BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		264BFE6826BC51CF0050A223 /* Build configuration list for PBXNativeTarget "InfiniLink" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6926BC51CF0050A223 /* Debug */,
+				264BFE6A26BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		264BFE6B26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "InfiniLinkTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6C26BC51CF0050A223 /* Debug */,
+				264BFE6D26BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		264BFE6E26BC51CF0050A223 /* Build configuration list for PBXNativeTarget "InfiniLinkUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				264BFE6F26BC51CF0050A223 /* Debug */,
+				264BFE7026BC51CF0050A223 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E0A7C0802CB1B4990042A12D /* XCRemoteSwiftPackageReference "Zip" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Zip";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.2;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E0A7C0812CB1B4990042A12D /* Zip */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0A7C0802CB1B4990042A12D /* XCRemoteSwiftPackageReference "Zip" */;
+			productName = Zip;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 264BFE3626BC51CE0050A223 /* Project object */;
+}

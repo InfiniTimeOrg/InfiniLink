@@ -1,11 +1,11 @@
 {
   "images" : [
     {
+      "filename" : "InfiniTime.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "InfiniTime.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
