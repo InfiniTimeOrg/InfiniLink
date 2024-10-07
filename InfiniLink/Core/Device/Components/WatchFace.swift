@@ -867,7 +867,7 @@ enum InfineatItem {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(3))
+            WatchFaceView(watchface: .constant(4))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

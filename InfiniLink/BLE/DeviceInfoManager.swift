@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreBluetooth
+import SwiftUI
 
 class DeviceInfoManager: ObservableObject {
 	struct cbuuid {
@@ -22,14 +23,14 @@ class DeviceInfoManager: ObservableObject {
     
     static let shared = DeviceInfoManager()
     
-    @Published var deviceName = ""
-    @Published var modelNumber = ""
-    @Published var serial = ""
-    @Published var firmware = ""
-    @Published var hardwareRevision = ""
-    @Published var softwareRevision = ""
-    @Published var manufacturer = ""
-    @Published var blefsVersion = ""
+    @AppStorage("deviceName") var deviceName = ""
+    @AppStorage("modelNumber") var modelNumber = ""
+    @AppStorage("serial") var serial = ""
+    @AppStorage("firmware") var firmware = ""
+    @AppStorage("hardwareRevision") var hardwareRevision = ""
+    @AppStorage("softwareRevision") var softwareRevision = ""
+    @AppStorage("manufacturer") var manufacturer = ""
+    @AppStorage("blefsVersion") var blefsVersion = ""
 	
 	func updateInfo(characteristic: CBCharacteristic) {
 		guard let value = characteristic.value else { return }

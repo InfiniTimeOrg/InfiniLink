@@ -45,6 +45,18 @@
 		<key>UIApplicationSupportsMultipleScenes</key>
 		<true/>
 	</dict>
+    <key>UIAppFonts</key>
+    <array>
+        <string>JetBrainsMono-Bold.ttf</string>
+        <string>JetBrainsMono-ExtraBold.ttf</string>
+        <string>JetBrainsMono-Light.ttf</string>
+        <string>JetBrainsMono-Regular.ttf</string>
+        <string>open_sans_light.ttf</string>
+        <string>BebasNeue-Regular.ttf</string>
+        <string>repetitionscrolling.ttf</string>
+        <string>7-Segment.ttf</string>
+        <string>Teko-Light.ttf</string>
+    </array>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchScreen</key>

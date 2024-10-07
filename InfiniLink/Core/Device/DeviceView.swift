@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DeviceView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var downloadManager = DownloadManager.shared
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     @AppStorage("sleepGoal") var sleepGoal = 28800
@@ -42,64 +43,93 @@ struct DeviceView: View {
                                 .frame(width: geo.size.width / 2.5, height: geo.size.width / 2.5, alignment: .center)
                                 .clipped(antialiased: true)
                         }
-                        VStack {
+                        VStack(spacing: 5) {
+                            Group {
+                                Text(connectionState()) + Text(bleManager.hasLoadedCharacteristics ? " • " : "") + Text(bleManager.hasLoadedCharacteristics ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
+                                    .foregroundColor({
+                                        if bleManager.batteryLevel > 20 {
+                                            return Color.gray
+                                        } else if bleManager.batteryLevel > 10 {
+                                            return Color.orange
+                                        } else {
+                                            return Color.red
+                                        }
+                                    }())
+                            }
+                            .foregroundStyle(Color.gray)
                             Text(deviceName())
                                 .font(.title.weight(.bold))
-                            Text(connectionState() + (bleManager.hasLoadedCharacteristics ? " • \(String(format: "%.0f", bleManager.batteryLevel))%" : ""))
-                                .foregroundStyle({
-                                    if bleManager.batteryLevel > 20 {
-                                        return Color.gray
-                                    } else if bleManager.batteryLevel > 10 {
-                                        return Color.orange
-                                    } else {
-                                        return Color.red
-                                    }
-                                }())
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
-                    Section {
-                        HStack {
-                            TrendRowView(icon: "figure.walk", accent: .blue, value: bleManager.stepCount, maxValue: stepCountGoal)
-                            Spacer()
-                            // TODO: do something a little different for heart rate
-                            TrendRowView(icon: "heart.fill", accent: .red, value: Int(bleManager.heartRate), maxValue: 1)
-                            Spacer()
-                            TrendRowView(icon: "bed.double.fill",
-                                         accent: .purple,
-                                         value: bleManager.stepCount, // TODO: replace with real value
-                                         maxValue: sleepGoal)
+                    // TODO: add complete setup section
+                    if downloadManager.updateAvailable  && !DFUUpdater.shared.local {
+                        Section {
+                            NavigationLink {
+                                SoftwareUpdateView()
+                            } label: {
+                                VStack(alignment: .leading, spacing: 10) {
+                                    HStack {
+                                        Image(.infiniTime)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 50, height: 50)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Update Available")
+                                                .font(.title2.weight(.bold))
+                                            Group {
+                                                Text("InfiniTime ") + Text(downloadManager.updateVersion)
+                                                    .font(.body.weight(.semibold))
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                        }
+                                    }
+                                    Text(downloadManager.updateBody)
+                                        .lineLimit(3)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .padding(.vertical, 10)
+                            }
                         }
                     }
-                    .listRowBackground(Color.clear)
                     Section {
                         NavigationLink {
-                            
+                            ExerciseView()
                         } label: {
-                            ListRowView(title: "Exercise", icon: "figure.run", iconColor: Color(.systemOrange))
+                            ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
+                        }
+                        NavigationLink {
+                            HeartView()
+                        } label: {
+                            ListRowView(title: "Heart Rate", icon: "heart.fill", iconColor: .red)
                         }
                         NavigationLink {
                             
                         } label: {
-                            ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
+                            ListRowView(title: "Stress", icon: "face.smiling")
                         }
                         NavigationLink {
-                            
+                            StepsView()
                         } label: {
                             ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
                         }
                         NavigationLink {
-                            
+                            SleepView()
                         } label: {
-                            ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: .purple)
+                            ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
                         }
                     }
                     Section {
                         NavigationLink {
                             GeneralSettingsView()
                         } label: {
-                            ListRowView(title: "General", icon: "gear")
+                            ListRowView(title: "General", icon: "gear", iconColor: .gray)
+                        }
+                        NavigationLink {
+                            
+                        } label: {
+                            ListRowView(title: "Customization", icon: "paintbrush.fill", iconColor: .blue)
                         }
                         NavigationLink {
                             BatterySettingsView()
@@ -114,12 +144,24 @@ struct DeviceView: View {
                         NavigationLink {
                             WeatherSettingsView()
                         } label: {
-                            ListRowView(title: "Weather", icon: "cloud.sun.fill", iconColor: .blue, renderingMode: .multicolor)
+                            ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
                         }
                         NavigationLink {
                             MusicSettingsView()
                         } label: {
                             ListRowView(title: "Music", icon: "music.note", iconColor: .red)
+                        }
+                    }
+                    Section {
+                        NavigationLink {
+                            AlarmView()
+                        } label: {
+                            ListRowView(title: "Alarms", icon: "alarm.fill")
+                        }
+                        NavigationLink {
+                            RemindersView()
+                        } label: {
+                            ListRowView(title: "Reminders", icon: "checklist")
                         }
                     }
                 }
@@ -144,6 +186,7 @@ struct DeviceView: View {
                         }
                     }
                 }
+                DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: firmware)
             }
         }
     }
@@ -154,29 +197,28 @@ struct ListRowView: View {
     
     let title: String
     let icon: String
-    let iconColor: Color
-    let renderingMode: SymbolRenderingMode
+    let iconColor: Color?
     
-    init(title: String, icon: String, iconColor: Color? = nil, renderingMode: SymbolRenderingMode = .monochrome) {
+    init(title: String, icon: String, iconColor: Color? = nil) {
         self.title = title
         self.icon = icon
-        self.iconColor = iconColor ?? Color.gray
-        self.renderingMode = renderingMode
+        self.iconColor = iconColor
     }
     
     var body: some View {
-        HStack {
-            Image(systemName: icon)
-                .frame(width: 30, alignment: .leading)
-                .symbolRenderingMode(renderingMode)
-                .foregroundStyle(iconColor)
+        Label {
             Text(NSLocalizedString(title, comment: ""))
                 .foregroundStyle(colorScheme == .dark ? .white : .black)
+        } icon: {
+            Image(systemName: icon)
+            .foregroundStyle(iconColor ?? (colorScheme == .dark ? .white : .black))
         }
     }
 }
 
 struct TrendRowView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     let icon: String
     let accent: Color
     let value: Int
@@ -188,7 +230,7 @@ struct TrendRowView: View {
     
     var body: some View {
         Circle()
-            .stroke(Material.thick, lineWidth: 4)
+            .stroke(colorScheme == .dark ? Color(.darkGray).opacity(0.7) : Color.white, lineWidth: 4)
             .frame(width: 85, height: 85)
             .overlay {
                 VStack(spacing: 2.5) {
@@ -210,4 +252,12 @@ struct TrendRowView: View {
 
 #Preview {
     DeviceView()
+        .onAppear {
+            BLEManager.shared.watchFace = 4
+            DeviceInfoManager.shared.firmware = "1.14.0"
+            DownloadManager.shared.updateVersion = "1.14.1"
+            DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
+            DownloadManager.shared.updateAvailable = true
+            DFUUpdater.shared.local = false
+        }
 }

@@ -94,54 +94,51 @@ class BLEFSHandler : ObservableObject {
         case dirNotEmptyError = 0x0A
     }
     
-    @Published var progress : Int = 0
-    @Published var externalResourcesSize : Int = 0
+    @Published var progress: Int = 0
+    @Published var externalResourcesSize: Int = 0
     
-    @AppStorage("lockNavigation") var lockNavigation = false
-    
-//    func downloadTransfer() {
-//        DispatchQueue.global(qos: .default).async { [self] in
-//            do {
-//                let unzipDirectory = try Zip.quickUnzipFile(DFU_Updater.shared.firmwareURL)
-//                let jsonFilePath = unzipDirectory.appendingPathComponent("resources.json")
-//                let jsonData = try Data(contentsOf: jsonFilePath)
-//                
-//                let decoder = JSONDecoder()
-//                let resources = try decoder.decode(ResourcesJSON.self, from: jsonData)
-//                
-//                var newExternalResourcesSize = 0
-//                
-//                // Loop over resources and calculate the size of each file
-//                for resource in resources.resources {
-//                    let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
-//                    let fileData = try Data(contentsOf: fileDataPath)
-//                    
-//                    newExternalResourcesSize += fileData.count
-//                }
-//                
-//                DispatchQueue.main.async {
-//                    self.externalResourcesSize = newExternalResourcesSize
-//                }
-//                
-//                // Process each resource: create directory and write file
-//                for resource in resources.resources {
-//                    createDir(path: resource.path)
-//                    let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
-//                    let fileData = try Data(contentsOf: fileDataPath)
-//                    let _ = writeFile(data: fileData, path: resource.path, offset: 0)
-//                }
-//                
-//                DispatchQueue.main.async {
-//                    DFU_Updater.shared.transferCompleted = true
-//                    DFU_Updater.shared.firmwareSelected = false
-//                    DFU_Updater.shared.resourceFilename = ""
-//                    self.lockNavigation = false
-//                }
-//            } catch {
-//                print("Something went wrong: \(error)")
-//            }
-//        }
-//    }
+    func downloadTransfer() {
+        DispatchQueue.global(qos: .default).async { [self] in
+            do {
+                let unzipDirectory = try Zip.quickUnzipFile(DFUUpdater.shared.firmwareURL)
+                let jsonFilePath = unzipDirectory.appendingPathComponent("resources.json")
+                let jsonData = try Data(contentsOf: jsonFilePath)
+                
+                let decoder = JSONDecoder()
+                let resources = try decoder.decode(ResourcesJSON.self, from: jsonData)
+                
+                var newExternalResourcesSize = 0
+                
+                // Loop over resources and calculate the size of each file
+                for resource in resources.resources {
+                    let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
+                    let fileData = try Data(contentsOf: fileDataPath)
+                    
+                    newExternalResourcesSize += fileData.count
+                }
+                
+                DispatchQueue.main.async {
+                    self.externalResourcesSize = newExternalResourcesSize
+                }
+                
+                // Process each resource: create directory and write file
+                for resource in resources.resources {
+                    createDir(path: resource.path)
+                    let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
+                    let fileData = try Data(contentsOf: fileDataPath)
+                    let _ = writeFile(data: fileData, path: resource.path, offset: 0)
+                }
+                
+                DispatchQueue.main.async {
+                    DFUUpdater.shared.transferCompleted = true
+                    DFUUpdater.shared.firmwareSelected = false
+                    DFUUpdater.shared.resourceFilename = ""
+                }
+            } catch {
+                print("Something went wrong: \(error)")
+            }
+        }
+    }
     
     private func createDir(path: String) {
         let dir = path.components(separatedBy: "/").filter { $0 != "" }

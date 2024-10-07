@@ -11,7 +11,7 @@ import MediaPlayer
 struct MusicSettingsView: View {
     @AppStorage("allowMusicControl") var allowMusicControl = true
     
-    let authorizationStatus = MPMediaLibrary.authorizationStatus()
+    @State private var authorizationStatus = MPMediaLibrary.authorizationStatus()
     
     var body: some View {
         Group {
@@ -37,20 +37,20 @@ struct MusicSettingsView: View {
                 .frame(width: 150, height: 150)
                 .foregroundStyle(.red)
                 .blur(radius: 50)
-            VStack(spacing: 18) {
+            VStack(spacing: 20) {
                 Image(systemName: "music.note")
-                    .font(.system(size: 45))
+                    .font(.system(size: 55).weight(.bold))
                     .foregroundStyle(.primary.opacity(0.6))
-                VStack(spacing: 10) {
+                VStack(spacing: 12) {
                     Text("We need access to your Music Library.")
                         .font(.largeTitle.weight(.bold))
                     Text("To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music.")
                         .foregroundStyle(.gray)
                 }
                 Button {
-                    MPMediaLibrary.requestAuthorization { _ in }
+                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                 } label: {
-                    Text("Allow Access...")
+                    Text("Open Settings...")
                         .padding(12)
                         .padding(.horizontal, 4)
                         .background(Color.accentColor)
@@ -58,6 +58,7 @@ struct MusicSettingsView: View {
                         .clipShape(Capsule())
                 }
             }
+            .frame(maxHeight: .infinity)
             .multilineTextAlignment(.center)
             .padding()
         }

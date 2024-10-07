@@ -13,6 +13,10 @@ struct NotificationsSettingsView: View {
     @AppStorage("standUpReminder") var standUpReminder = true
     @AppStorage("notifyOnReconnect") var notifyOnReconnect = true // Update to have same string as "first connect" setting in old app?
     
+    @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
+    @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
+    @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
+    
     var body: some View {
         List {
             Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.")) {
@@ -27,6 +31,11 @@ struct NotificationsSettingsView: View {
             }
             Section(footer: Text("Have your watch remind you when to stand up if you've been sedentary for too long.")) {
                 Toggle("Stand-up Reminder", isOn: $standUpReminder)
+            }
+            Section(header: Text("Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
+                Toggle("Steps", isOn: $remindOnStepGoalCompletion)
+                Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
+                Toggle("Exercise Time", isOn: $remindOnExerciseTimeGoalCompletion)
             }
             Section("Other") {
                 Toggle("Notify on Reconnect", isOn: $notifyOnReconnect)

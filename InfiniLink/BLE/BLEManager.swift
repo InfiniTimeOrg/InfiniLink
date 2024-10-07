@@ -112,13 +112,17 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             if isConnectedToPinetime {
                 disconnect()
             }
-            myCentral.stopScan()
-            isScanning = false
+            stopScanning()
             
             infiniTime = peripheral
             infiniTime?.delegate = self
             myCentral.connect(peripheral, options: nil)
         }
+    }
+    
+    func unpair() {
+        disconnect()
+        pairedDeviceID = ""
     }
     
     func disconnect() {

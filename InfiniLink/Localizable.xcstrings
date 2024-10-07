@@ -1,6 +1,12 @@
 {
   "sourceLanguage" : "en",
   "strings" : {
+    "" : {
+
+    },
+    " • " : {
+
+    },
     "[BATT]" : {
 
     },
@@ -45,6 +51,12 @@
     "%@!" : {
 
     },
+    "%@%%" : {
+
+    },
+    "%lld" : {
+
+    },
     "%lld more device%@ found" : {
       "localizations" : {
         "en" : {
@@ -77,7 +89,7 @@
     "About" : {
 
     },
-    "Allow Access..." : {
+    "All Exercises" : {
 
     },
     "Allow Music Control" : {
@@ -86,13 +98,28 @@
     "Allow your watch to control the currently playing music from Apple Music." : {
 
     },
+    "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Background Measurements" : {
+
+    },
     "Battery" : {
 
     },
     "Bluetooth needs to be enabled to pair a watch." : {
 
     },
+    "Calories" : {
+
+    },
     "Cancel" : {
+
+    },
+    "Cancel Update" : {
+
+    },
+    "Checking for updates..." : {
 
     },
     "Connect" : {
@@ -104,7 +131,16 @@
     "Connecting..." : {
 
     },
+    "Daily Goals" : {
+
+    },
+    "Data Sync" : {
+
+    },
     "Device not appearing?" : {
+
+    },
+    "Disconnect" : {
 
     },
     "Disconnected" : {
@@ -113,7 +149,31 @@
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
 
     },
+    "Exercise" : {
+
+    },
+    "Exercise Time" : {
+
+    },
+    "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
+
+    },
+    "External resources are fonts and images that are required for some apps and watch faces." : {
+
+    },
+    "Filter Data" : {
+
+    },
+    "Filter inconsistent data from your heart rate measurements." : {
+
+    },
     "General" : {
+
+    },
+    "Get notified when you reach your daily fitness goals." : {
+
+    },
+    "Goals" : {
 
     },
     "Good afternoon" : {
@@ -131,6 +191,9 @@
     "Health" : {
 
     },
+    "Heart Rate" : {
+
+    },
     "Hello" : {
 
     },
@@ -138,6 +201,18 @@
 
     },
     "If you have an InfiniTime device, you can pair it here." : {
+
+    },
+    "InfiniTime" : {
+
+    },
+    "InfiniTime " : {
+
+    },
+    "InfiniTime is up-to-date." : {
+
+    },
+    "Intelligently monitor your heart rate 24 hours a day. This feature will shorten your watch's battery life." : {
 
     },
     "Interval" : {
@@ -152,31 +227,52 @@
     "Music" : {
 
     },
+    "My Exercises" : {
+
+    },
+    "No Exercises" : {
+
+    },
     "not_playing" : {
 
     },
     "Notifications" : {
 
     },
-    "Notify on Low Battery" : {
+    "Notify on Reconnect" : {
 
     },
-    "Notify on Reconnect" : {
+    "Open Settings..." : {
 
     },
     "Other" : {
 
     },
+    "Other Versions" : {
+
+    },
     "Receive a reminder to drink water for the set amount of times a day." : {
 
     },
-    "Send a notification to your devices when your watch is on low battery." : {
+    "Refresh" : {
 
     },
-    "Send to iPhone" : {
+    "Releases" : {
 
     },
-    "Send to Watch" : {
+    "Rename" : {
+
+    },
+    "Scanning" : {
+
+    },
+    "Set the daily goals for your fitness goals." : {
+
+    },
+    "Settings" : {
+
+    },
+    "Sleep" : {
 
     },
     "Software Update" : {
@@ -185,10 +281,31 @@
     "Stand-up Reminder" : {
 
     },
+    "Start Exercise" : {
+
+    },
     "Start Pairing" : {
 
     },
+    "Steps" : {
+
+    },
     "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music." : {
+
+    },
+    "Unpair" : {
+
+    },
+    "Update Available" : {
+
+    },
+    "Update External Resources" : {
+
+    },
+    "Update Now" : {
+
+    },
+    "Use Local File" : {
 
     },
     "user@watch:~ $" : {

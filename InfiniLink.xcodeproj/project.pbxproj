@@ -13,6 +13,22 @@
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
 		264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */; };
 		264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */; };
+		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
+		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
+		E059999E2CB2E56A00D64E0B /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999D2CB2E56A00D64E0B /* RemindersView.swift */; };
+		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
+		E05999AD2CB2ED7100D64E0B /* open_sans_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */; };
+		E05999AE2CB2ED7100D64E0B /* JetBrainsMono-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A42CB2ED7100D64E0B /* JetBrainsMono-Light.ttf */; };
+		E05999AF2CB2ED7100D64E0B /* BebasNeue-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */; };
+		E05999B02CB2ED7100D64E0B /* Teko-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999AA2CB2ED7100D64E0B /* Teko-Light.ttf */; };
+		E05999B12CB2ED7100D64E0B /* MaterialIcons-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A62CB2ED7100D64E0B /* MaterialIcons-Regular.ttf */; };
+		E05999B22CB2ED7100D64E0B /* 7-Segment.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */; };
+		E05999B32CB2ED7100D64E0B /* JetBrainsMono-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A52CB2ED7100D64E0B /* JetBrainsMono-Regular.ttf */; };
+		E05999B42CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A22CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf */; };
+		E05999B52CB2ED7100D64E0B /* JetBrainsMono-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A32CB2ED7100D64E0B /* JetBrainsMono-ExtraBold.ttf */; };
+		E05999B82CB2FC7900D64E0B /* RenameView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999B72CB2FC7900D64E0B /* RenameView.swift */; };
+		E05999BA2CB335DC00D64E0B /* DataSyncView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999B92CB335DC00D64E0B /* DataSyncView.swift */; };
+		E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999BB2CB336AE00D64E0B /* HealthKitManager.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -25,6 +41,16 @@
 		E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */; };
 		E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */; };
 		E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */; };
+		E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */; };
+		E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */; };
+		E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */ = {isa = PBXBuildFile; productRef = E0A7C0952CB1EEB50042A12D /* NordicDFU */; };
+		E0A7C0982CB227060042A12D /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0972CB227060042A12D /* HeartView.swift */; };
+		E0A7C09A2CB2270D0042A12D /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0992CB2270D0042A12D /* StepsView.swift */; };
+		E0A7C09C2CB234450042A12D /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C09B2CB234450042A12D /* AboutSettingsView.swift */; };
+		E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C09D2CB2454A0042A12D /* ExerciseView.swift */; };
+		E0A7C0A32CB246D10042A12D /* DetailHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0A22CB246D10042A12D /* DetailHeaderView.swift */; };
+		E0A7C0A52CB2527F0042A12D /* HeartSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */; };
+		E0A7C0A72CB257F50042A12D /* GoalsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0A62CB257F50042A12D /* GoalsSettingsView.swift */; };
 		E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */; };
 		E0C7C83F2CAEF91C0043DA2D /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */; };
 		E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8462CAF01950043DA2D /* DeviceView.swift */; };
@@ -68,6 +94,22 @@
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkUITests.swift; sourceTree = "<group>"; };
 		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
+		E059999B2CB2E56300D64E0B /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
+		E059999D2CB2E56A00D64E0B /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersView.swift; sourceTree = "<group>"; };
+		E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
+		E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
+		E05999A22CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Bold.ttf"; sourceTree = "<group>"; };
+		E05999A32CB2ED7100D64E0B /* JetBrainsMono-ExtraBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-ExtraBold.ttf"; sourceTree = "<group>"; };
+		E05999A42CB2ED7100D64E0B /* JetBrainsMono-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Light.ttf"; sourceTree = "<group>"; };
+		E05999A52CB2ED7100D64E0B /* JetBrainsMono-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Regular.ttf"; sourceTree = "<group>"; };
+		E05999A62CB2ED7100D64E0B /* MaterialIcons-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "MaterialIcons-Regular.ttf"; sourceTree = "<group>"; };
+		E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = open_sans_light.ttf; sourceTree = "<group>"; };
+		E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = repetitionscrolling.ttf; sourceTree = "<group>"; };
+		E05999AA2CB2ED7100D64E0B /* Teko-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Teko-Light.ttf"; sourceTree = "<group>"; };
+		E05999B72CB2FC7900D64E0B /* RenameView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RenameView.swift; sourceTree = "<group>"; };
+		E05999B92CB335DC00D64E0B /* DataSyncView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataSyncView.swift; sourceTree = "<group>"; };
+		E05999BB2CB336AE00D64E0B /* HealthKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitManager.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
@@ -80,6 +122,15 @@
 		E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
 		E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdateView.swift; sourceTree = "<group>"; };
+		E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUUpdater.swift; sourceTree = "<group>"; };
+		E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		E0A7C0972CB227060042A12D /* HeartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartView.swift; sourceTree = "<group>"; };
+		E0A7C0992CB2270D0042A12D /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
+		E0A7C09B2CB234450042A12D /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
+		E0A7C09D2CB2454A0042A12D /* ExerciseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseView.swift; sourceTree = "<group>"; };
+		E0A7C0A22CB246D10042A12D /* DetailHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailHeaderView.swift; sourceTree = "<group>"; };
+		E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartSettingsView.swift; sourceTree = "<group>"; };
+		E0A7C0A62CB257F50042A12D /* GoalsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsSettingsView.swift; sourceTree = "<group>"; };
 		E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
 		E0C7C8462CAF01950043DA2D /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
@@ -99,6 +150,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
+				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -142,6 +194,7 @@
 		264BFE4026BC51CE0050A223 /* InfiniLink */ = {
 			isa = PBXGroup;
 			children = (
+				E059999F2CB2ED5D00D64E0B /* Fonts */,
 				E0A7C07B2CB1AD2E0042A12D /* Utils */,
 				E0A7C0692CB0DE450042A12D /* Model */,
 				E0C7C8522CAF14870043DA2D /* BLE */,
@@ -184,6 +237,41 @@
 			path = InfiniLinkUITests;
 			sourceTree = "<group>";
 		};
+		E059999A2CB2E55500D64E0B /* Apps */ = {
+			isa = PBXGroup;
+			children = (
+				E059999B2CB2E56300D64E0B /* AlarmView.swift */,
+				E059999D2CB2E56A00D64E0B /* RemindersView.swift */,
+			);
+			path = Apps;
+			sourceTree = "<group>";
+		};
+		E059999F2CB2ED5D00D64E0B /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */,
+				E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */,
+				E05999A22CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf */,
+				E05999A32CB2ED7100D64E0B /* JetBrainsMono-ExtraBold.ttf */,
+				E05999A42CB2ED7100D64E0B /* JetBrainsMono-Light.ttf */,
+				E05999A52CB2ED7100D64E0B /* JetBrainsMono-Regular.ttf */,
+				E05999A62CB2ED7100D64E0B /* MaterialIcons-Regular.ttf */,
+				E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */,
+				E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */,
+				E05999AA2CB2ED7100D64E0B /* Teko-Light.ttf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
+		E05999B62CB2FC6400D64E0B /* About */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C09B2CB234450042A12D /* AboutSettingsView.swift */,
+				E05999B72CB2FC7900D64E0B /* RenameView.swift */,
+			);
+			path = About;
+			sourceTree = "<group>";
+		};
 		E0A7C0692CB0DE450042A12D /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -199,6 +287,7 @@
 				E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */,
 				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
 				E0A7C0772CB193BC0042A12D /* WeatherSettingsView.swift */,
+				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
 				E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */,
 			);
 			path = Settings;
@@ -208,6 +297,7 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C07C2CB1AD370042A12D /* MusicController.swift */,
+				E05999BB2CB336AE00D64E0B /* HealthKitManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -215,23 +305,45 @@
 		E0A7C0892CB1E4BF0042A12D /* General */ = {
 			isa = PBXGroup;
 			children = (
-				E0A7C08C2CB1E86A0042A12D /* Software Update */,
+				E05999B62CB2FC6400D64E0B /* About */,
+				E0A7C08C2CB1E86A0042A12D /* Update */,
 				E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */,
+				E0A7C0A62CB257F50042A12D /* GoalsSettingsView.swift */,
+				E05999B92CB335DC00D64E0B /* DataSyncView.swift */,
 			);
 			path = General;
 			sourceTree = "<group>";
 		};
-		E0A7C08C2CB1E86A0042A12D /* Software Update */ = {
+		E0A7C08C2CB1E86A0042A12D /* Update */ = {
 			isa = PBXGroup;
 			children = (
 				E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */,
 			);
-			path = "Software Update";
+			path = Update;
+			sourceTree = "<group>";
+		};
+		E0A7C0912CB1EE8F0042A12D /* DFU */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */,
+				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
+			);
+			path = DFU;
+			sourceTree = "<group>";
+		};
+		E0A7C09F2CB245F70042A12D /* Components */ = {
+			isa = PBXGroup;
+			children = (
+				E0A7C0A22CB246D10042A12D /* DetailHeaderView.swift */,
+				E0A7C0832CB1B7A60042A12D /* WatchFace.swift */,
+			);
+			path = Components;
 			sourceTree = "<group>";
 		};
 		E0C7C8362CAEF6BF0043DA2D /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E0A7C0912CB1EE8F0042A12D /* DFU */,
 				E0C7C8452CAF018B0043DA2D /* Device */,
 				E0C7C83D2CAEF9120043DA2D /* Connect */,
 				E0C7C8372CAEF70B0043DA2D /* Welcome */,
@@ -258,9 +370,14 @@
 		E0C7C8452CAF018B0043DA2D /* Device */ = {
 			isa = PBXGroup;
 			children = (
-				E0A7C0832CB1B7A60042A12D /* WatchFace.swift */,
-				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
 				E0A7C0742CB0ECD10042A12D /* Settings */,
+				E059999A2CB2E55500D64E0B /* Apps */,
+				E0A7C09F2CB245F70042A12D /* Components */,
+				E0A7C0972CB227060042A12D /* HeartView.swift */,
+				E05999982CB25C5600D64E0B /* SleepView.swift */,
+				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
+				E0A7C09D2CB2454A0042A12D /* ExerciseView.swift */,
+				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -298,6 +415,7 @@
 			name = InfiniLink;
 			packageProductDependencies = (
 				E0A7C0812CB1B4990042A12D /* Zip */,
+				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -377,6 +495,7 @@
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
 				E0A7C0802CB1B4990042A12D /* XCRemoteSwiftPackageReference "Zip" */,
+				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -395,6 +514,16 @@
 			buildActionMask = 2147483647;
 			files = (
 				264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */,
+				E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */,
+				E05999AD2CB2ED7100D64E0B /* open_sans_light.ttf in Resources */,
+				E05999AE2CB2ED7100D64E0B /* JetBrainsMono-Light.ttf in Resources */,
+				E05999AF2CB2ED7100D64E0B /* BebasNeue-Regular.ttf in Resources */,
+				E05999B02CB2ED7100D64E0B /* Teko-Light.ttf in Resources */,
+				E05999B12CB2ED7100D64E0B /* MaterialIcons-Regular.ttf in Resources */,
+				E05999B22CB2ED7100D64E0B /* 7-Segment.ttf in Resources */,
+				E05999B32CB2ED7100D64E0B /* JetBrainsMono-Regular.ttf in Resources */,
+				E05999B42CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf in Resources */,
+				E05999B52CB2ED7100D64E0B /* JetBrainsMono-ExtraBold.ttf in Resources */,
 				264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */,
 				E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */,
 			);
@@ -425,23 +554,38 @@
 				E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				E0A7C07F2CB1B3300042A12D /* BLE_FS.swift in Sources */,
+				E05999BA2CB335DC00D64E0B /* DataSyncView.swift in Sources */,
 				E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */,
 				E0C7C83F2CAEF91C0043DA2D /* BLEConnectView.swift in Sources */,
 				E0A7C0842CB1B7A60042A12D /* WatchFace.swift in Sources */,
 				E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */,
+				E0A7C09A2CB2270D0042A12D /* StepsView.swift in Sources */,
 				E0C7C8532CAF14870043DA2D /* SetTime.swift in Sources */,
+				E0A7C0A52CB2527F0042A12D /* HeartSettingsView.swift in Sources */,
+				E05999992CB25C5600D64E0B /* SleepView.swift in Sources */,
 				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
 				E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */,
+				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,
 				E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */,
+				E0A7C0A32CB246D10042A12D /* DetailHeaderView.swift in Sources */,
 				E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */,
 				E0C7C85B2CAF14870043DA2D /* DeviceInfoManager.swift in Sources */,
+				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
+				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
+				E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */,
+				E0A7C0A72CB257F50042A12D /* GoalsSettingsView.swift in Sources */,
+				E059999E2CB2E56A00D64E0B /* RemindersView.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
+				E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */,
 				E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */,
 				E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */,
+				E0A7C09C2CB234450042A12D /* AboutSettingsView.swift in Sources */,
 				E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */,
+				E05999B82CB2FC7900D64E0B /* RenameView.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				E0C7C85E2CAF14F40043DA2D /* DeviceNameManager.swift in Sources */,
+				E0A7C0982CB227060042A12D /* HeartView.swift in Sources */,
 				E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */,
 				E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */,
 			);
@@ -801,6 +945,14 @@
 				minimumVersion = 2.1.2;
 			};
 		};
+		E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.15.3;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -808,6 +960,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E0A7C0802CB1B4990042A12D /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
+		};
+		E0A7C0952CB1EEB50042A12D /* NordicDFU */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
+			productName = NordicDFU;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

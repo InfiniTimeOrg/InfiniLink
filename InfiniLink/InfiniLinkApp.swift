@@ -12,6 +12,9 @@ struct InfiniLink: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .onAppear {
+                    HealthKitManager.shared.requestAuthorization()
+                }
         }
     }
 }
