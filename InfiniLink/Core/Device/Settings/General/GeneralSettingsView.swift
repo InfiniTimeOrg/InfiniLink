@@ -27,11 +27,13 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Software Update")
                 }
+                .disabled(!bleManager.hasLoadedCharacteristics)
                 NavigationLink {
                     FileSystemView()
                 } label: {
                     Text("File System")
                 }
+                .disabled(bleManager.blefsTransfer == nil)
             }
             Section {
                 NavigationLink {
@@ -49,14 +51,17 @@ struct GeneralSettingsView: View {
             }
             Section {
                 Button {
-                    bleManager.disconnect()
-                    dismiss()
+                    if bleManager.isConnectedToPinetime {
+                        bleManager.disconnect()
+                    } else {
+                        bleManager.startScanning()
+                    }
                 } label: {
                     Text({
                         if bleManager.isScanning {
-                            return "Scanning"
+                            return "Scanning..."
                         }
-                        if bleManager.hasLoadedCharacteristics {
+                        if bleManager.isConnectedToPinetime {
                             return "Disconnect"
                         } else {
                             return "Connect"
@@ -69,7 +74,7 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Unpair")
                 }
-                .confirmationDialog("Are you sure you want to unpair from \(DeviceNameManager().getName(for: bleManager.pairedDeviceID ?? "InfiniTime"))?", isPresented: $showUnpairConfirmation) {
+                .confirmationDialog("Are you sure you want to unpair from \(DeviceInfoManager.shared.deviceName)?", isPresented: $showUnpairConfirmation) {
                     Button(role: .destructive) {
                         bleManager.unpair()
                         dismiss()

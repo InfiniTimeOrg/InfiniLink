@@ -53,7 +53,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     @Published var isSwitchedOn = false
     @Published var isScanning = false
-    @Published var isConnectedToPinetime = false
     @Published var setTimeError = false
     
     @Published var newPeripherals: [CBPeripheral] = []
@@ -81,10 +80,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @AppStorage("weatherMode") var weatherMode: String = "imperial"
     
     var hasLoadedCharacteristics: Bool {
-        return batteryLevel != 0
+        // Use currentTimeService because it's present in all firmware versions
+        return currentTimeService != nil
     }
     var isHeartRateBeingRead: Bool {
         return heartRate != 0
+    }
+    var isConnectedToPinetime: Bool {
+        return infiniTime != nil
     }
     
     override init() {
@@ -129,9 +132,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func disconnect() {
         if let infiniTime = infiniTime {
-            myCentral.cancelPeripheralConnection(infiniTime)
-            isConnectedToPinetime = false
+            self.myCentral.cancelPeripheralConnection(infiniTime)
             self.infiniTime = nil
+            self.blefsTransfer = nil
         }
     }
     
@@ -179,7 +182,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         
         for service in services {
-            peripheral.discoverCharacteristics(nil, for:service)
+            peripheral.discoverCharacteristics(nil, for: service)
         }
     }
     

@@ -198,6 +198,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             
             if DownloadManager.shared.startTransfer {
                 DownloadManager.shared.startTransfer = false
+                DFUUpdater.shared.isUpdating = true
                 if self.externalResources {
                     BLEFSHandler.shared.downloadTransfer()
                 } else {

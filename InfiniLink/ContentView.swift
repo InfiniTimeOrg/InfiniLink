@@ -13,13 +13,11 @@ import SwiftUI
 struct ContentView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
-    @AppStorage("showSetupSheet") var showSetupSheet = true
-    
     var body: some View {
         Group {
             if bleManager.pairedDeviceID != nil || bleManager.isConnectedToPinetime {
                 DeviceView()
-                    .sheet(isPresented: $showSetupSheet) {
+                    .sheet(isPresented: PersonalizationController.shared.$showSetupSheet) {
                         UserDataCollectionView()
                     }
             } else {

@@ -28,6 +28,9 @@
     "%@" : {
 
     },
+    "%@ needs to be connected to update its software." : {
+
+    },
     "%@:%@:%@" : {
       "localizations" : {
         "en" : {
@@ -113,10 +116,19 @@
     "Are you sure you want to unpair from %@?" : {
 
     },
+    "Back" : {
+
+    },
     "Background Measurements" : {
 
     },
     "Battery" : {
+
+    },
+    "battery_low" : {
+
+    },
+    "battery_low_message" : {
 
     },
     "Bluetooth needs to be enabled to pair a watch." : {
@@ -135,9 +147,6 @@
 
     },
     "Checking for updates..." : {
-
-    },
-    "Complete Setup" : {
 
     },
     "Connect" : {
@@ -204,6 +213,9 @@
 
     },
     "Filter inconsistent data from your heart rate measurements." : {
+
+    },
+    "Finish Setup" : {
 
     },
     "General" : {
@@ -326,7 +338,7 @@
     "Rename" : {
 
     },
-    "Scanning" : {
+    "Scanning..." : {
 
     },
     "Send a notification to your devices when your watch is on low battery." : {

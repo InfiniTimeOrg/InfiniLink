@@ -11,7 +11,7 @@ struct NotificationsSettingsView: View {
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("standUpReminder") var standUpReminder = true
-    @AppStorage("notifyOnReconnect") var notifyOnReconnect = true // Update to have same string as "first connect" setting in old app?
+    @AppStorage("notifyOnReconnect") var notifyOnReconnect = false // Update to have same string as "first connect" setting in old app?
     
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true

@@ -7,14 +7,9 @@
 
 import SwiftUI
 
-struct File: Identifiable {
-    let id = UUID()
-    var url: URL?
-    var filename: String
-}
-
 struct FileSystemToolbar: ViewModifier {
     @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
+    @ObservedObject var bleFSHandler = BLEFSHandler.shared
     
     func body(content: Content) -> some View {
         content
@@ -35,6 +30,24 @@ struct FileSystemToolbar: ViewModifier {
                         Image(systemName: "plus")
                     }
                     .disabled(!BLEManager.shared.hasLoadedCharacteristics || fileSystemViewModel.loadingFs || fileSystemViewModel.fileUploading)
+                    .fileImporter(isPresented: $fileSystemViewModel.showUploadSheet, allowedContentTypes: [.data], allowsMultipleSelection: true) { result in
+                        do {
+                            let fileURLs = try result.get()
+                            
+                            self.fileSystemViewModel.files.removeAll()
+                            for fileURL in fileURLs {
+                                guard fileURL.startAccessingSecurityScopedResource() else { continue }
+                                
+                                self.fileSystemViewModel.fileSelected = true
+                                self.fileSystemViewModel.files.append(FSFile(url: fileURL, filename: fileURL.lastPathComponent))
+                                
+                                // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
+                                // fileURL.stopAccessingSecurityScopedResource()
+                            }
+                        } catch {
+                            print(error.localizedDescription)
+                        }
+                    }
                 }
                 ToolbarItemGroup(placement: .bottomBar) {
                     if fileSystemViewModel.fileSelected {
@@ -54,7 +67,59 @@ struct FileSystemToolbar: ViewModifier {
                             }())
                         } else {
                             Button {
-                                fileSystemViewModel.uploadFiles()
+                                DispatchQueue.global(qos: .default).async {
+                                    for file in fileSystemViewModel.files {
+                                        let lowercaseFilename = file.filename.lowercased()
+                                        
+                                        guard let fileDataPath = file.url else {
+                                            continue
+                                        }
+                                        
+                                        do {
+                                            if lowercaseFilename.hasSuffix(".png") ||
+                                                lowercaseFilename.hasSuffix(".jpg") ||
+                                                lowercaseFilename.hasSuffix(".jpeg") ||
+                                                lowercaseFilename.hasSuffix(".gif") || lowercaseFilename.hasSuffix(".bmp") ||
+                                                lowercaseFilename.hasSuffix(".tiff") ||
+                                                lowercaseFilename.hasSuffix(".webp") ||
+                                                lowercaseFilename.hasSuffix(".heif") ||
+                                                lowercaseFilename.hasSuffix(".heic") {
+                                                
+                                                guard let img = UIImage(contentsOfFile: fileDataPath.path),
+                                                      let cgImage = img.cgImage else {
+                                                    continue
+                                                }
+                                                
+                                                self.fileSystemViewModel.fileSize = 0
+                                                
+                                                let convertedImage = lvImageConvert(img: cgImage)
+                                                
+                                                let fileNameWithoutExtension = (file.filename as NSString).deletingPathExtension
+                                                if let convertedImage = convertedImage {
+                                                    self.fileSystemViewModel.fileSize = convertedImage.count
+                                                    self.fileSystemViewModel.fileUploading = true
+                                                    var _ = bleFSHandler.writeFile(data: convertedImage, path: fileSystemViewModel.directory + "/" + String(fileNameWithoutExtension.prefix(30).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
+                                                }
+                                            } else {
+                                                self.fileSystemViewModel.fileSize = 0
+                                                let fileData = try Data(contentsOf: fileDataPath)
+                                                self.fileSystemViewModel.fileSize = fileData.count
+                                                
+                                                self.fileSystemViewModel.fileUploading = true
+                                                var _ = bleFSHandler.writeFile(data: fileData, path: fileSystemViewModel.directory + "/" + file.filename, offset: 0)
+                                            }
+                                        } catch {
+                                            print("Error: \(error.localizedDescription)")
+                                        }
+                                    }
+                                    
+                                    self.fileSystemViewModel.fileUploading = false
+                                    
+                                    self.fileSystemViewModel.fileSelected = false
+                                    self.fileSystemViewModel.files = []
+                                    
+                                    fileSystemViewModel.lsDir(dir: fileSystemViewModel.directory)
+                                }
                             } label: {
                                 let count = fileSystemViewModel.files.count
                                 
@@ -73,23 +138,65 @@ struct FileSystemToolbar: ViewModifier {
     }
 }
 
-struct FileSystemFolderDetailView: View {
+struct FileSystemView: View {
+    @Environment(\.presentationMode) var presMode
+    @Environment(\.colorScheme) var colorScheme
+    
+    @ObservedObject var bleFSHandler = BLEFSHandler.shared
     @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
+    
+    @State var showUploadSheet = false
+    @State var showFileDetailView = false
+    @State var fileSelected = false
+    @State var showNewFolderView = false
+    
+    @State var fileSize = 0
+    
+    @State var newFolderName = ""
+    
+    @FocusState var isNewFolderFocused: Bool
     
     var body: some View {
         List {
-            ForEach(fileSystemViewModel.commandHistory, id: \.self) { listItem in
-                let isFile = listItem.contains(".")
-                
-                if listItem != "." && listItem != ".." {
-                    if isFile && listItem == "settings.dat" {
+            if fileSystemViewModel.loadingFs {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+            } else {
+                if fileSystemViewModel.directory != "/" {
+                    Section {
                         Button {
-                            fileSystemViewModel.showSettingsView = true
+                            let currentDir = fileSystemViewModel.directory
+                            
+                            fileSystemViewModel.directory = fileSystemViewModel.removeLastPathComponent(currentDir)
+                            fileSystemViewModel.lsDir(dir: fileSystemViewModel.directory)
                         } label: {
-                            Text(listItem)
+                            HStack(spacing: 4) {
+                                Image(systemName: "chevron.left")
+                                Text("Back")
+                            }
+                            .font(.body.weight(.medium))
+                            .foregroundStyle(colorScheme == .dark ? .white : .black)
                         }
-                        .sheet(isPresented: $fileSystemViewModel.showSettingsView) {
-//                             WatchSettingsView()
+                        .disabled(fileSystemViewModel.loadingFs || fileSystemViewModel.fileUploading)
+                    }
+                }
+                Section {
+                    ForEach(fileSystemViewModel.commandHistory.filter({ $0 != "" }), id: \.self) { listItem in
+                        let isFile = listItem.contains(".")
+                        
+                        Group {
+                            if listItem != "." && listItem != ".." {
+                                Button {
+                                    if isFile {
+                                        showFileDetailView = true
+                                    } else {
+                                        fileSystemViewModel.loadingFs = true
+                                        fileSystemViewModel.cdAndLs(dir: listItem)
+                                    }
+                                } label: {
+                                    Text(listItem)
+                                }
+                            }
                         }
                         .contextMenu {
                             Button(role: .destructive) {
@@ -98,109 +205,50 @@ struct FileSystemFolderDetailView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }
-                        .disabled(fileSystemViewModel.fileUploading)
-                    } else {
-                        NavigationLink {
-                            FileSystemFolderDetailView()
-                                .navigationTitle(listItem)
-                                .navigationBarBackButtonHidden(fileSystemViewModel.fileUploading)
-                                .modifier(FileSystemToolbar())
-                                .onAppear {
-                                    fileSystemViewModel.loadingFs = true
-                                    fileSystemViewModel.cdAndLs(dir: listItem)
-                                }
-                        } label: {
-                            Text(listItem)
-                        }
-                        .disabled(fileSystemViewModel.fileUploading)
                     }
                 }
             }
         }
-    }
-}
-
-struct FileSystemView: View {
-    @Environment(\.presentationMode) var presMode
-    @Environment(\.colorScheme) var colorScheme
-    
-    @ObservedObject var bleFSHandler = BLEFSHandler.shared
-    @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
-    
-    @State var newFolderName = ""
-    
-    @FocusState var isNewFolderFocused: Bool
-    
-    var body: some View {
-            Group {
-                if fileSystemViewModel.loadingFs || !BLEManager.shared.hasLoadedCharacteristics {
-                    List {
-                        ProgressView()
-                            .frame(maxWidth: .infinity)
-                    }
-                } else {
-                    FileSystemFolderDetailView()
-                }
-            }
-            .navigationTitle("File System")
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationBarBackButtonHidden(fileSystemViewModel.fileUploading)
-            .sheet(isPresented: $fileSystemViewModel.showNewFolderView) {
-                newFolder
-            }
-            .modifier(FileSystemToolbar())
-            .fileImporter(isPresented: $fileSystemViewModel.showUploadSheet, allowedContentTypes: [.data], allowsMultipleSelection: true) { result in
-                do {
-                    let fileURLs = try result.get()
-                    
-                    self.fileSystemViewModel.files.removeAll()
-                    for fileURL in fileURLs {
-                        guard fileURL.startAccessingSecurityScopedResource() else { continue }
-                        
-                        self.fileSystemViewModel.fileSelected = true
-                        self.fileSystemViewModel.files.append(File(url: fileURL, filename: fileURL.lastPathComponent))
-                        
-                        // Don't call .stopAccessingSecurityScopedResource() as the upload button won't work due to lack of necessary permissions
-                    }
-                } catch {
-                    print(error.localizedDescription)
-                }
-            }
-            .onAppear {
-//                 fileSystemViewModel.lsDir(dir: "/")
-            }
+        .sheet(isPresented: $fileSystemViewModel.showNewFolderView) {
+            newFolder
+        }
+        .sheet(isPresented: $showFileDetailView) {
+            FileSystemDetailView()
+        }
+        .onAppear {
+            fileSystemViewModel.loadingFs = true
+            fileSystemViewModel.lsDir(dir: "/")
+        }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("File System")
     }
     
     var newFolder: some View {
         NavigationView {
             Form {
                 TextField("Title", text: $newFolderName)
+                    .focused($isNewFolderFocused)
             }
             .navigationTitle("New Folder")
-            .navigationBarTitleDisplayMode(.inline)
+            .onAppear {
+                isNewFolderFocused = true
+            }
             .toolbar {
-                ToolbarItemGroup(placement: .topBarLeading) {
-                    Button {
-                        fileSystemViewModel.showNewFolderView = false
-                    } label: {
-                        Text("Cancel")
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
+                        showNewFolderView = false
                     }
                 }
-                ToolbarItemGroup(placement: .topBarTrailing) {
-                    Button {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Create") {
                         fileSystemViewModel.createDir(name: newFolderName)
                         fileSystemViewModel.showNewFolderView = false
-                    } label: {
-                        Text("Create")
                     }
                     .disabled(newFolderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
-            .onAppear {
-                isNewFolderFocused = true
-            }
         }
-        .navigationViewStyle(.stack)
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

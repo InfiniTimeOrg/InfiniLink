@@ -15,79 +15,20 @@ class FileSystemViewModel: ObservableObject {
     @Published var commandHistory: [String] = []
     
     @Published var loadingFs = false
+    @Published var showUploadSheet = false
     @Published var fileUploading = false
     @Published var fileConverting = false
-    @Published var fileSelected = false
-    @Published var showSettingsView = false
-    @Published var showUploadSheet = false
     @Published var showNewFolderView = false
-    
-    @Published var files = [File]()
+    @Published var fileSelected = false
     
     @Published var fileSize = 0
     
-    func uploadFiles() {
-        let bleFSHandler = BLEFSHandler.shared
-        
-        DispatchQueue.global(qos: .default).async {
-            for file in self.files {
-                let lowercaseFilename = file.filename.lowercased()
-                
-                guard let fileDataPath = file.url else {
-                    continue
-                }
-                
-                do {
-                    if lowercaseFilename.hasSuffix(".png") ||
-                        lowercaseFilename.hasSuffix(".jpg") ||
-                        lowercaseFilename.hasSuffix(".jpeg") ||
-                        lowercaseFilename.hasSuffix(".gif") || lowercaseFilename.hasSuffix(".bmp") ||
-                        lowercaseFilename.hasSuffix(".tiff") ||
-                        lowercaseFilename.hasSuffix(".webp") ||
-                        lowercaseFilename.hasSuffix(".heif") ||
-                        lowercaseFilename.hasSuffix(".heic") {
-                        
-                        guard let img = UIImage(contentsOfFile: fileDataPath.path),
-                              let cgImage = img.cgImage else {
-                            continue
-                        }
-                        
-                        self.fileSize = 0
-                        
-                        self.fileConverting = true
-                        let convertedImage = lvImageConvert(img: cgImage)
-                        self.fileConverting = false
-                        
-                        let fileNameWithoutExtension = (file.filename as NSString).deletingPathExtension
-                        if let convertedImage = convertedImage {
-                            self.fileSize = convertedImage.count
-                            self.fileUploading = true
-                            var _ = bleFSHandler.writeFile(data: convertedImage, path: self.directory + "/" + String(fileNameWithoutExtension.prefix(30).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
-                        }
-                    } else {
-                        self.fileSize = 0
-                        let fileData = try Data(contentsOf: fileDataPath)
-                        self.fileSize = fileData.count
-                        
-                        self.fileUploading = true
-                        var _ = bleFSHandler.writeFile(data: fileData, path: self.directory + "/" + file.filename, offset: 0)
-                    }
-                } catch {
-                    print("Error: \(error.localizedDescription)")
-                }
-            }
-            
-            self.fileUploading = false
-            
-            self.fileSelected = false
-            self.files = []
-            
-            self.lsDir(dir: self.directory)
-        }
-    }
+    @Published var files = [FSFile]()
     
     func clearList() {
-        commandHistory = []
+        DispatchQueue.main.async {
+            self.commandHistory = []
+        }
     }
     
     func getDir(input: String) -> String {
@@ -103,36 +44,36 @@ class FileSystemViewModel: ObservableObject {
     func cdAndLs(dir: String) {
         loadingFs = true
         
-        let newDir = getDir(input: dir)
-        DispatchQueue.global(qos: .default).async {
-            let dirLS = BLEFSHandler.shared.listDir(path: newDir)
-            if dirLS.valid {
-                self.clearList()
-                
-                self.directory = newDir
-                self.lsDir(dir: dir)
-            } else {
-                print("ERROR: dir '\(newDir)' is not valid.")
-            }
+        DispatchQueue.main.async {
+            let newDir = self.getDir(input: dir)
+            
+            self.clearList()
+            self.directory = newDir
+            self.lsDir(dir: dir)
             self.loadingFs = false
         }
     }
     
     func lsDir(dir: String) {
-        loadingFs = true
+        DispatchQueue.main.async {
+            self.loadingFs = true
+        }
         
         DispatchQueue.global(qos: .default).async {
             let dirLS = BLEFSHandler.shared.listDir(path: self.directory)
             if dirLS.valid {
                 self.clearList()
                 
-                for dir in dirLS.ls {
-                    self.commandHistory.append("\(dir.pathNames)")
+                DispatchQueue.main.async {
+                    self.commandHistory.append(contentsOf: dirLS.ls.compactMap({ $0.pathNames }))
                 }
             } else {
                 print("ERROR: dir '\(self.directory)' is not valid.")
             }
-            self.loadingFs = false
+            
+            DispatchQueue.main.async {
+                self.loadingFs = false
+            }
         }
     }
     
@@ -150,21 +91,19 @@ class FileSystemViewModel: ObservableObject {
     }
     
     func deleteFile(fileName: String) {
-        let path: String = {
-            if self.directory.isEmpty {
-                return fileName
-            } else {
-                return self.directory + "/" + fileName
-            }
-        }()
-        
         loadingFs = true
+        
         DispatchQueue.global(qos: .default).async {
+            let path = self.getDir(input: fileName)
             let rmDir = BLEFSHandler.shared.deleteFile(path: path)
+            
             if !rmDir {
                 print("ERROR: failed to remove file with path '\(path)'.")
             }
-            self.loadingFs = false
+            
+            DispatchQueue.main.async {
+                self.loadingFs = false
+            }
             self.lsDir(dir: self.removeLastPathComponent(path))
         }
     }

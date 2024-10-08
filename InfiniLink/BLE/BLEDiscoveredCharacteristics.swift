@@ -15,9 +15,7 @@ struct BLEDiscoveredCharacteristics {
 	let bleManager = BLEManager.shared
     
 	func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
-        bleManager.isConnectedToPinetime = true
-        
-		switch characteristic.uuid {
+        switch characteristic.uuid {
 		case bleManager.cbuuidList.musicControl:
 			peripheral.setNotifyValue(true, for: characteristic)
             bleManager.musicChars.control = characteristic

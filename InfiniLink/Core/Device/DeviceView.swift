@@ -10,22 +10,25 @@ import SwiftUI
 struct DeviceView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var downloadManager = DownloadManager.shared
+    @ObservedObject var personalizationController = PersonalizationController.shared
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     @AppStorage("sleepGoal") var sleepGoal = 28800
     
-    @AppStorage("weight") var weight: Int?
-    @AppStorage("age") var age: Int?
-    @AppStorage("height") var height: Int?
-    
-    @AppStorage("deviceName") var deviceName = ""
-    
-    @AppStorage("showSetupSheet") var showSetupSheet = true
-    
     @Environment(\.colorScheme) var colorScheme
     
     func connectionState() -> String {
-        bleManager.hasLoadedCharacteristics ? NSLocalizedString("Connected", comment: "") : (bleManager.isSwitchedOn ? NSLocalizedString("Connecting...", comment: "") : NSLocalizedString("Disconnected", comment: ""))
+        if bleManager.isScanning {
+            return NSLocalizedString("Connecting...", comment: "")
+        }
+        switch (bleManager.isConnectedToPinetime, bleManager.hasLoadedCharacteristics) {
+        case (true, true):
+            return NSLocalizedString("Connected", comment: "")
+        case (true, false):
+            return NSLocalizedString("Connecting...", comment: "")
+        default:
+            return NSLocalizedString("Disconnected", comment: "")
+        }
     }
     
     var body: some View {
@@ -52,14 +55,13 @@ struct DeviceView: View {
                                     }())
                             }
                             .foregroundStyle(Color.gray)
-                            Text(deviceName)
+                            Text(DeviceInfoManager.shared.deviceName)
                                 .font(.title.weight(.bold))
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
-                    // TODO: add complete setup section if user skips onboarding setup
-                    if downloadManager.updateAvailable  && !DFUUpdater.shared.local {
+                    if downloadManager.updateAvailable  && !DFUUpdater.shared.local && bleManager.blefsTransfer != nil {
                         Section {
                             NavigationLink {
                                 SoftwareUpdateView()
@@ -71,10 +73,9 @@ struct DeviceView: View {
                                         .frame(width: 50, height: 50)
                                     VStack(alignment: .leading, spacing: 3) {
                                         Text("Update Available")
-                                            .font(.title2.weight(.bold))
+                                            .font(.body.weight(.bold))
                                         Group {
-                                            Text("InfiniTime ") + Text(downloadManager.updateVersion)
-                                                .font(.body.weight(.semibold))
+                                            Text("InfiniTime ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
                                         }
                                         .foregroundStyle(Color.gray)
                                     }
@@ -82,13 +83,12 @@ struct DeviceView: View {
                             }
                         }
                     }
-                    // User has dismissed the sheet, but didn't add one of the properties
-                    if !showSetupSheet && (weight == nil || height == nil || age == nil) {
+                    if !personalizationController.isPersonalizationAvailable {
                         Section {
                             Button {
-                                showSetupSheet = true
+                                personalizationController.showSetupSheet = true
                             } label: {
-                                Text("Complete Setup")
+                                Text("Finish Setup")
                                     .frame(maxWidth: .infinity, alignment: .leading)
                             }
                         }
@@ -222,13 +222,12 @@ struct ListRowView: View {
                 .foregroundStyle(colorScheme == .dark ? .white : .black)
         } icon: {
             Image(systemName: icon)
-                .font(.system(size: 14).weight(.medium))
-                .frame(width: 36, height: 36)
+                .font(.system(size: 13).weight(.medium))
+                .frame(width: 34, height: 34)
                 .background(iconColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .foregroundStyle(.white)
         }
-        .padding(.vertical, 0.1)
     }
 }
 

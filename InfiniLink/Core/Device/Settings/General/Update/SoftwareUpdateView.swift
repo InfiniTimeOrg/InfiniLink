@@ -52,7 +52,7 @@ struct SoftwareUpdateView: View {
                     }
                 }
             }
-            .navigationBarBackButtonHidden(downloadManager.updateStarted)
+            .navigationBarBackButtonHidden(dfuUpdater.isUpdating)
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("Software Update")
         }
@@ -193,18 +193,14 @@ struct SoftwareUpdateView: View {
                             .font(.subheadline)
                             .foregroundColor(.gray)
                     }
-                    if downloadManager.updateStarted {
-                        Group {
-                            if downloadManager.externalResources {
-                                ProgressView(value: Double(BLEFSHandler.shared.progress), total: Double(BLEFSHandler.shared.externalResourcesSize))
-                            } else {
-                                ProgressView(dfuUpdater.dfuState, value: dfuUpdater.percentComplete, total: Double(100))
-                            }
-                        }
-                        .frame(maxHeight: 4)
+                }
+            }
+            if downloadManager.updateStarted {
+                Group {
+                    if downloadManager.externalResources {
+                        ProgressView(value: Double(BLEFSHandler.shared.progress), total: Double(BLEFSHandler.shared.externalResourcesSize))
                     } else {
-                        Color.clear
-                            .frame(height: 4)
+                        ProgressView(dfuUpdater.dfuState, value: dfuUpdater.percentComplete, total: Double(100))
                     }
                 }
             }
@@ -212,7 +208,7 @@ struct SoftwareUpdateView: View {
                 Text(downloadManager.updateBody)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(height: 100)
+            .frame(height: 120)
             if BLEManager.shared.isConnectedToPinetime {
                 Button {
                     if downloadManager.updateStarted {
@@ -246,7 +242,12 @@ struct SoftwareUpdateView: View {
                         .clipShape(Capsule())
                 }
             } else {
-                Text("\(DeviceInfoManager.shared.deviceName)")
+                Text("\(DeviceInfoManager.shared.deviceName) needs to be connected to update its software.")
+                    .foregroundStyle(.gray)
+                    .font(.system(size: 14).weight(.semibold))
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                    .padding(12)
             }
         }
     }

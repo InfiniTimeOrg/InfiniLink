@@ -18,7 +18,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	var dfuController: DFUServiceController!
 	
 	@Published var dfuState: String = ""
-	@Published var transferCompleted = false
+    @Published var transferCompleted = false
+	@Published var isUpdating = false
 	@Published var percentComplete: Double = 0
 	
 	@Published var firmwareFilename = ""
@@ -55,6 +56,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             print("Error loading firmware")
 			return
 		}
+        
+        self.isUpdating = true
 	
 		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
 
@@ -82,8 +85,13 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	
 	func dfuStateDidChange(to state: DFUState) {
 		dfuState = state.description
+        // TODO: handle more cases
 		if state.rawValue == 6 {
 			transferCompleted = true
+            firmwareFilename = ""
+            resourceFilename = ""
+            firmwareSelected = false
+            isUpdating = true
 			dfuController = nil
 			percentComplete = 0
 		}
