@@ -223,11 +223,12 @@ struct ListRowView: View {
         } icon: {
             Image(systemName: icon)
                 .font(.system(size: 14).weight(.medium))
-                .frame(width: 38, height: 38)
+                .frame(width: 36, height: 36)
                 .background(iconColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .foregroundStyle(.white)
         }
+        .padding(.vertical, 0.1)
     }
 }
 

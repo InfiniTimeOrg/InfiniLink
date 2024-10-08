@@ -53,6 +53,7 @@ struct SoftwareUpdateView: View {
                 }
             }
             .navigationBarBackButtonHidden(downloadManager.updateStarted)
+            .navigationBarTitleDisplayMode(.inline)
             .navigationTitle("Software Update")
         }
         .onAppear {
@@ -212,38 +213,41 @@ struct SoftwareUpdateView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
             .frame(height: 100)
-            Button {
-                if downloadManager.updateStarted {
-                    dfuUpdater.stopTransfer()
-                    downloadManager.updateStarted = false
-                } else {
-                    dfuUpdater.percentComplete = 0
-                    if downloadManager.externalResources {
-                        downloadManager.startTransfer = true
-                        downloadManager.startDownload(url: downloadManager.browser_download_resources_url)
-                        downloadManager.updateStarted = true
+            if BLEManager.shared.isConnectedToPinetime {
+                Button {
+                    if downloadManager.updateStarted {
+                        dfuUpdater.stopTransfer()
+                        downloadManager.updateStarted = false
                     } else {
-                        if dfuUpdater.local {
-                            dfuUpdater.transfer()
+                        dfuUpdater.percentComplete = 0
+                        if downloadManager.externalResources {
+                            downloadManager.startTransfer = true
+                            downloadManager.startDownload(url: downloadManager.browser_download_resources_url)
                             downloadManager.updateStarted = true
                         } else {
-                            downloadManager.startTransfer = true
-                            downloadManager.startDownload(url: downloadManager.browser_download_url)
-                            
-                            downloadManager.updateStarted = true
+                            if dfuUpdater.local {
+                                dfuUpdater.transfer()
+                                downloadManager.updateStarted = true
+                            } else {
+                                downloadManager.startTransfer = true
+                                downloadManager.startDownload(url: downloadManager.browser_download_url)
+                                
+                                downloadManager.updateStarted = true
+                            }
                         }
                     }
+                } label: {
+                    Text(downloadManager.updateStarted ? "Cancel Update" : "Update Now")
+                        .padding(10)
+                        .frame(maxWidth: .infinity)
+                        .background(downloadManager.updateStarted ? Color(.darkGray).opacity(0.5) : Color.blue)
+                        .foregroundStyle(downloadManager.updateStarted ? .red : .white)
+                        .font(.body.weight(.semibold))
+                        .clipShape(Capsule())
                 }
-            } label: {
-                Text(downloadManager.updateStarted ? "Cancel Update" : "Update Now")
-                    .padding(10)
-                    .frame(maxWidth: .infinity)
-                    .background(downloadManager.updateStarted ? Color(.darkGray).opacity(0.5) : Color.blue)
-                    .foregroundStyle(downloadManager.updateStarted ? .red : .white)
-                    .font(.body.weight(.semibold))
-                    .clipShape(Capsule())
+            } else {
+                Text("\(DeviceInfoManager.shared.deviceName)")
             }
-            // TODO: add "Update Tonight" button
         }
     }
     
