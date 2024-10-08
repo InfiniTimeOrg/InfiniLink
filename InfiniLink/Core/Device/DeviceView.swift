@@ -13,7 +13,14 @@ struct DeviceView: View {
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     @AppStorage("sleepGoal") var sleepGoal = 28800
+    
+    @AppStorage("weight") var weight: Int?
+    @AppStorage("age") var age: Int?
+    @AppStorage("height") var height: Int?
+    
     @AppStorage("deviceName") var deviceName = ""
+    
+    @AppStorage("showSetupSheet") var showSetupSheet = true
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -57,28 +64,42 @@ struct DeviceView: View {
                             NavigationLink {
                                 SoftwareUpdateView()
                             } label: {
-                                VStack(alignment: .leading, spacing: 12) {
-                                    HStack(spacing: 10) {
-                                        Image(.infiniTime)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 50, height: 50)
-                                        VStack(alignment: .leading, spacing: 3) {
-                                            Text("Update Available")
-                                                .font(.title2.weight(.bold))
-                                            Group {
-                                                Text("InfiniTime ") + Text(downloadManager.updateVersion)
-                                                    .font(.body.weight(.semibold))
-                                            }
-                                            .foregroundStyle(Color.gray)
+                                HStack(spacing: 10) {
+                                    Image(.infiniTime)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text("Update Available")
+                                            .font(.title2.weight(.bold))
+                                        Group {
+                                            Text("InfiniTime ") + Text(downloadManager.updateVersion)
+                                                .font(.body.weight(.semibold))
                                         }
+                                        .foregroundStyle(Color.gray)
                                     }
-                                    Text(downloadManager.updateBody)
-                                        .lineLimit(3)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
                                 }
-                                .padding(.vertical, 10)
                             }
+                        }
+                    }
+                    // User has dismissed the sheet, but didn't add one of the properties
+                    if !showSetupSheet && (weight == nil || height == nil || age == nil) {
+                        Section {
+                            Button {
+                                showSetupSheet = true
+                            } label: {
+                                Text("Complete Setup")
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                        }
+                        .overlay {
+                            Text("1")
+                                .padding(10)
+                                .foregroundStyle(.white)
+                                .background(Color.red)
+                                .clipShape(Circle())
+                                .padding(12)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                         }
                     }
                     Section {
@@ -105,14 +126,14 @@ struct DeviceView: View {
                         NavigationLink {
                             
                         } label: {
-                            ListRowView(title: "Stress", icon: "face.smiling")
+                            ListRowView(title: "Stress", icon: "face.smiling", iconColor: .black)
                         }
                     }
                     Section {
                         NavigationLink {
                             GeneralSettingsView()
                         } label: {
-                            ListRowView(title: "General", icon: "gear", iconColor: .gray)
+                            ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                         }
                         NavigationLink {
                             
@@ -187,12 +208,12 @@ struct ListRowView: View {
     
     let title: String
     let icon: String
-    let iconColor: Color?
+    let iconColor: Color
     
     init(title: String, icon: String, iconColor: Color? = nil) {
         self.title = title
         self.icon = icon
-        self.iconColor = iconColor
+        self.iconColor = iconColor ?? .blue
     }
     
     var body: some View {
@@ -201,7 +222,11 @@ struct ListRowView: View {
                 .foregroundStyle(colorScheme == .dark ? .white : .black)
         } icon: {
             Image(systemName: icon)
-            .foregroundStyle(iconColor ?? (colorScheme == .dark ? .white : .black))
+                .font(.system(size: 14).weight(.medium))
+                .frame(width: 38, height: 38)
+                .background(iconColor)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .foregroundStyle(.white)
         }
     }
 }

@@ -37,6 +37,7 @@
 		E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A032CB4C58800D64E0B /* LV_IMG_Convert.swift */; };
 		E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A082CB4C77300D64E0B /* FileSystemViewModel.swift */; };
 		E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */; };
+		E0599A0F2CB4E62800D64E0B /* UserDataCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0E2CB4E62800D64E0B /* UserDataCollectionView.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -126,6 +127,7 @@
 		E0599A032CB4C58800D64E0B /* LV_IMG_Convert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LV_IMG_Convert.swift; sourceTree = "<group>"; };
 		E0599A082CB4C77300D64E0B /* FileSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewModel.swift; sourceTree = "<group>"; };
 		E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemDetailView.swift; sourceTree = "<group>"; };
+		E0599A0E2CB4E62800D64E0B /* UserDataCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataCollectionView.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
@@ -403,6 +405,7 @@
 			isa = PBXGroup;
 			children = (
 				E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */,
+				E0599A0E2CB4E62800D64E0B /* UserDataCollectionView.swift */,
 			);
 			path = Welcome;
 			sourceTree = "<group>";
@@ -619,6 +622,7 @@
 				E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */,
 				E0A7C0A32CB246D10042A12D /* DetailHeaderView.swift in Sources */,
 				E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */,
+				E0599A0F2CB4E62800D64E0B /* UserDataCollectionView.swift in Sources */,
 				E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */,
 				E0C7C85B2CAF14870043DA2D /* DeviceInfoManager.swift in Sources */,
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,

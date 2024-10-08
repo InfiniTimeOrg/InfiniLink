@@ -119,6 +119,9 @@
     "Bluetooth needs to be enabled to pair a watch." : {
 
     },
+    "Brightness Level" : {
+
+    },
     "Calories" : {
 
     },
@@ -129,6 +132,9 @@
 
     },
     "Checking for updates..." : {
+
+    },
+    "Complete Setup" : {
 
     },
     "Connect" : {
@@ -165,6 +171,12 @@
 
     },
     "Disconnected" : {
+
+    },
+    "Display Timeout" : {
+
+    },
+    "Done" : {
 
     },
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
@@ -227,6 +239,9 @@
     "Hello, World!" : {
 
     },
+    "Hourly Chimes" : {
+
+    },
     "If you have an InfiniTime device, you can pair it here." : {
 
     },
@@ -246,6 +261,9 @@
 
     },
     "Learn more" : {
+
+    },
+    "Let's get you set up." : {
 
     },
     "Looking for your watch..." : {
@@ -276,6 +294,9 @@
 
     },
     "Notify on Reconnect" : {
+
+    },
+    "Only settings files are currently supported." : {
 
     },
     "Open Settings..." : {
@@ -320,6 +341,9 @@
     "Settings" : {
 
     },
+    "Skip" : {
+
+    },
     "Sleep" : {
 
     },
@@ -338,13 +362,22 @@
     "Steps" : {
 
     },
+    "Steps Goal" : {
+
+    },
     "Sync step and heart rate data to Apple Health." : {
 
     },
     "T" : {
 
     },
+    "Time Format" : {
+
+    },
     "Title" : {
+
+    },
+    "To accurately measure calories and steps, we'll need to know your height and weight." : {
 
     },
     "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music." : {
@@ -397,6 +430,9 @@
 
     },
     "We need access to your Music Library." : {
+
+    },
+    "Weather Format" : {
 
     },
     "Y" : {
