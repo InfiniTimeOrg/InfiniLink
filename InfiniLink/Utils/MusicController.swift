@@ -40,9 +40,7 @@ class MusicController {
     @AppStorage("allowMusicControl") var allowMusicControl = true
     
 	private init() {
-        if allowMusicControl {
-            initialize()
-        }
+        initialize()
 	}
 	
 	@objc func onNotificationReceipt(_ notification: NSNotification) {
@@ -57,37 +55,39 @@ class MusicController {
     }
 	
 	func controlMusic(controlNumber: Int) {
-		// When CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are relatively up to date
-        
-        let session = AVAudioSession.sharedInstance()
-        
-        do {
-            try session.setCategory(.playback, options: .mixWithOthers)
-            try session.setActive(false)
-        } catch let error as NSError {
-            print("Unable to activate audio session:  \(error.localizedDescription)")
+		if allowMusicControl {
+            // When CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are up-to-date
+            
+            let session = AVAudioSession.sharedInstance()
+            
+            do {
+                try session.setCategory(.playback, options: .mixWithOthers)
+                try session.setActive(false)
+            } catch let error as NSError {
+                print("Unable to activate audio session:  \(error.localizedDescription)")
+            }
+            musicPlaying = musicPlayer.playbackState.rawValue
+            
+            switch controlNumber {
+            case 0:
+                musicPlayer.play(); musicPlaying = 1
+            case 1:
+                musicPlayer.pause(); musicPlaying = 2
+            case 3:
+                musicPlayer.skipToNextItem()
+            case 4:
+                musicPlayer.skipToPreviousItem()
+            case 5:
+                if session.outputVolume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(session.outputVolume + (1 / volumeSlots))}
+            case 6:
+                if session.outputVolume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(session.outputVolume - (1 / volumeSlots))}
+            case 224:
+                updateMusicInformation(songInfo: getCurrentSongInfo())
+            default:
+                break
+            }
+            updateMusicInformation(songInfo: getCurrentSongInfo())
         }
-        musicPlaying = musicPlayer.playbackState.rawValue
-        
-		switch controlNumber {
-		case 0:
-            musicPlayer.play(); musicPlaying = 1
-        case 1:
-            musicPlayer.pause(); musicPlaying = 2
-		case 3:
-            musicPlayer.skipToNextItem()
-		case 4:
-			musicPlayer.skipToPreviousItem()
-		case 5:
-            if session.outputVolume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(session.outputVolume + (1 / volumeSlots))}
-        case 6:
-            if session.outputVolume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(session.outputVolume - (1 / volumeSlots))}
-		case 224:
-			updateMusicInformation(songInfo: getCurrentSongInfo())
-		default:
-			break
-		}
-        updateMusicInformation(songInfo: getCurrentSongInfo())
 	}
 	
 	
