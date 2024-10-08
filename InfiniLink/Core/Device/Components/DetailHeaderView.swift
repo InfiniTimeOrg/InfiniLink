@@ -30,12 +30,13 @@ struct DetailHeaderSubItemView: View {
             Text(NSLocalizedString(title, comment: "").uppercased())
                 .font(.caption)
                 .foregroundStyle(.gray)
-            HStack(spacing: 3) {
+            HStack(alignment: .firstTextBaseline, spacing: 2) {
                 Text(value)
+                    .font(.system(size: 22).weight(.semibold))
                 if let unit {
                     Text(unit)
-                        .font(.caption)
-                        .foregroundColor(.gray)
+                        .font(.system(size: 18).weight(.medium))
+                        .foregroundColor(.primary.opacity(0.75))
                 }
             }
         }
@@ -47,55 +48,77 @@ struct DetailHeaderSubItemView: View {
 }
 
 struct DetailHeaderView<V: View>: View {
+    enum DetailHeaderAnimation {
+        case heart
+        case sleep
+        case steps
+    }
+    
     let header: Header
     let width: CGFloat
+    let animation: DetailHeaderAnimation?
     let headerItems: V
+    
+    @State private var isHeartAnimating = false
     
     init(_ header: Header,
          width: CGFloat,
+         animation: DetailHeaderAnimation? = nil,
          @ViewBuilder headerItems: () -> V) {
         self.header = header
         self.width = width
+        self.animation = animation
         self.headerItems = headerItems()
     }
     
-    private var iconSize: CGFloat {
-        width / 3
-    }
-    
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 4) {
-                Image(systemName: header.icon)
-                    .foregroundStyle(header.accent)
-                    .font(.system(size: iconSize))
-                    .frame(width: iconSize / 1.5, alignment: .trailing)
-                    .clipped()
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .lastTextBaseline, spacing: 4) {
+        ZStack(alignment: .top) {
+            VStack(spacing: 18) {
+                VStack {
+                    Image(systemName: header.icon)
+                        .foregroundStyle(header.accent)
+                        .font(.system(size: width / 3.85))
+                        .shadow(color: header.accent.opacity(0.7), radius: isHeartAnimating ? 20 : 0, x: 0, y: 0)
+                        .scaleEffect(isHeartAnimating ? 0.85 : 1.0)
+                        .animation(
+                            .snappy(duration: 1)
+                            .repeatForever(autoreverses: true),
+                            value: isHeartAnimating
+                        )
+                    HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text(header.title)
                             .font(.system(size: 50).bold())
-                        
-                        if let titleUnits = header.titleUnits {
-                            Text(titleUnits.uppercased())
-                                .font(.system(size: 19).weight(.medium))
-                                .foregroundColor(.gray)
+                        if let units = header.titleUnits {
+                            Text(units.uppercased())
+                                .foregroundStyle(Color.gray)
+                                .font(.system(size: 20).weight(.bold))
                         }
                     }
-                    
-                    headerItems
+                }
+                headerItems
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .onAppear {
+            if let animation {
+                // TODO: implement other cases
+                switch animation {
+                case .heart:
+                    isHeartAnimating = true
+                case .sleep:
+                    break
+                case .steps:
+                    break
                 }
             }
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .padding(.vertical, 10)
     }
 }
 
 #Preview {
-    DetailHeaderView(Header(title: "100", titleUnits: "%", icon: "battery.100percent", accent: .green), width: UIScreen.main.bounds.width) {
+    DetailHeaderView(Header(title: "89", titleUnits: "BPM", icon: "heart.fill", accent: .red), width: UIScreen.main.bounds.width, animation: .heart) {
         HStack {
-            DetailHeaderSubItemView(title: "Distance", value: "1.5mi")
+            DetailHeaderSubItemView(title: "Distance", value: "1.5", unit: "mi")
             DetailHeaderSubItemView(title: "Kcal", value: "424")
         }
     }

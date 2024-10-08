@@ -123,7 +123,7 @@ class DownloadManager: NSObject, ObservableObject {
                             }
                         }
                         
-                        self.updateAvailable = self.checkForUpdates(currentVersion: BLEManager.shared.firmwareVersion)
+                        self.updateAvailable = self.checkForUpdates(currentVersion: DeviceInfoManager.shared.firmware)
                         self.loadingReleases = false
                     }
                 } catch {

@@ -33,9 +33,9 @@ struct MusicSettingsView: View {
     
     var unauthorized: some View {
         ZStack {
-            Circle() // Remove?
+            Circle()
                 .frame(width: 150, height: 150)
-                .foregroundStyle(.red)
+                .foregroundStyle(.blue)
                 .blur(radius: 50)
             VStack(spacing: 20) {
                 Image(systemName: "music.note")
@@ -48,9 +48,15 @@ struct MusicSettingsView: View {
                         .foregroundStyle(.gray)
                 }
                 Button {
-                    UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    if authorizationStatus == .denied {
+                        UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                    } else {
+                        MPMediaLibrary.requestAuthorization { status in
+                            authorizationStatus = status
+                        }
+                    }
                 } label: {
-                    Text("Open Settings...")
+                    Text(authorizationStatus == .denied ? "Open Settings..." : "Allow Access...")
                         .padding(12)
                         .padding(.horizontal, 4)
                         .background(Color.accentColor)

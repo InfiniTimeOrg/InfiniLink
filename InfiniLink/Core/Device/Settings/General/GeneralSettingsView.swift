@@ -12,6 +12,8 @@ struct GeneralSettingsView: View {
     
     @ObservedObject var bleManager = BLEManager.shared
     
+    @Environment(\.dismiss) var dismiss
+    
     var body: some View {
         List {
             Section {
@@ -25,6 +27,11 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Software Update")
                 }
+                NavigationLink {
+                    FileSystemView()
+                } label: {
+                    Text("File System")
+                }
             }
             Section {
                 NavigationLink {
@@ -35,8 +42,7 @@ struct GeneralSettingsView: View {
             }
             Section {
                 NavigationLink {
-                    // Strava?
-                    // Apple Health
+                    DataSyncView()
                 } label: {
                     Text("Data Sync")
                 }
@@ -44,6 +50,7 @@ struct GeneralSettingsView: View {
             Section {
                 Button {
                     bleManager.disconnect()
+                    dismiss()
                 } label: {
                     Text({
                         if bleManager.isScanning {
@@ -62,9 +69,10 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Unpair")
                 }
-                .confirmationDialog("Are you sure you want to unpair from \(DeviceNameManager().getName(deviceUUID: bleManager.pairedDeviceID ?? "InfiniTime"))?", isPresented: $showUnpairConfirmation) {
+                .confirmationDialog("Are you sure you want to unpair from \(DeviceNameManager().getName(for: bleManager.pairedDeviceID ?? "InfiniTime"))?", isPresented: $showUnpairConfirmation) {
                     Button(role: .destructive) {
                         bleManager.unpair()
+                        dismiss()
                     } label: {
                         Text("Unpair")
                     }

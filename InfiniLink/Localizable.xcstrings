@@ -86,16 +86,25 @@
     "1 device discovered" : {
 
     },
+    "6M" : {
+
+    },
     "About" : {
 
     },
     "All Exercises" : {
 
     },
+    "Allow Access..." : {
+
+    },
     "Allow Music Control" : {
 
     },
     "Allow your watch to control the currently playing music from Apple Music." : {
+
+    },
+    "Apple Health" : {
 
     },
     "Are you sure you want to unpair from %@?" : {
@@ -131,10 +140,22 @@
     "Connecting..." : {
 
     },
+    "Converting..." : {
+
+    },
+    "Create" : {
+
+    },
+    "D" : {
+
+    },
     "Daily Goals" : {
 
     },
     "Data Sync" : {
+
+    },
+    "Delete" : {
 
     },
     "Device not appearing?" : {
@@ -161,6 +182,9 @@
     "External resources are fonts and images that are required for some apps and watch faces." : {
 
     },
+    "File System" : {
+
+    },
     "Filter Data" : {
 
     },
@@ -183,6 +207,9 @@
 
     },
     "Good morning" : {
+
+    },
+    "H" : {
 
     },
     "Have your watch remind you when to stand up if you've been sedentary for too long." : {
@@ -224,10 +251,16 @@
     "Looking for your watch..." : {
 
     },
+    "M" : {
+
+    },
     "Music" : {
 
     },
     "My Exercises" : {
+
+    },
+    "New Folder" : {
 
     },
     "No Exercises" : {
@@ -237,6 +270,9 @@
 
     },
     "Notifications" : {
+
+    },
+    "Notify on Low Battery" : {
 
     },
     "Notify on Reconnect" : {
@@ -249,6 +285,9 @@
 
     },
     "Other Versions" : {
+
+    },
+    "Range" : {
 
     },
     "Receive a reminder to drink water for the set amount of times a day." : {
@@ -264,6 +303,15 @@
 
     },
     "Scanning" : {
+
+    },
+    "Send a notification to your devices when your watch is on low battery." : {
+
+    },
+    "Send to iPhone" : {
+
+    },
+    "Send to Watch" : {
 
     },
     "Set the daily goals for your fitness goals." : {
@@ -290,6 +338,15 @@
     "Steps" : {
 
     },
+    "Sync step and heart rate data to Apple Health." : {
+
+    },
+    "T" : {
+
+    },
+    "Title" : {
+
+    },
     "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music." : {
 
     },
@@ -305,6 +362,25 @@
     "Update Now" : {
 
     },
+    "Upload %lld File%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Upload %1$lld File%2$@"
+          }
+        }
+      }
+    },
+    "Upload Files" : {
+
+    },
+    "Uploading..." : {
+
+    },
+    "Uploading...%lld%%" : {
+
+    },
     "Use Local File" : {
 
     },
@@ -314,10 +390,16 @@
     "user@watch:~ $ now" : {
 
     },
+    "W" : {
+
+    },
     "Water Reminder" : {
 
     },
     "We need access to your Music Library." : {
+
+    },
+    "Y" : {
 
     }
   },

@@ -4,23 +4,31 @@
 //
 //  Created by Liam Willey on 10/6/24.
 //
+// NOTE: we're not using Core Data yet because we are getting errors: Failed to get or decode unavailable reasons and Can't find or decode reasons
+//
 
 import SwiftUI
 
 struct RenameView: View {
-    @State var name: String = ""
+    @Environment(\.dismiss) var dismiss
+    
+//    @State var name: String = DeviceInfoManager.shared.deviceName
+    
+    @FocusState var isFocused: Bool
     
     var body: some View {
         List {
-            TextField("InfiniTime", text: $name)
+            TextField("InfiniTime", text: DeviceInfoManager.shared.$deviceName)
                 .submitLabel(.done)
+                .focused($isFocused)
+                .onSubmit {
+                    dismiss()
+//                    DeviceNameManager().setName(deviceUUID: BLEManager.shared.pairedDeviceID!, name: name)
+                }
         }
         .navigationTitle("Rename")
         .onAppear {
-            name = DeviceInfoManager.shared.deviceName
-        }
-        .onDisappear {
-            DeviceNameManager().setName(deviceUUID: BLEManager.shared.pairedDeviceID!, name: name)
+            isFocused = true
         }
     }
 }

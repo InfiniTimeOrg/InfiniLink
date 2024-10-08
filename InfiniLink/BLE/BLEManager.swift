@@ -71,7 +71,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var heartRate: Double = 0
     @Published var batteryLevel: Double = 0
     @Published var stepCount: Int = 0
-    @Published var firmwareVersion: String = ""
     
     @Published var lastWeatherUpdateNWS: Int = 0
     @Published var lastWeatherUpdateWAPI: Int = 0
@@ -82,7 +81,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @AppStorage("weatherMode") var weatherMode: String = "imperial"
     
     var hasLoadedCharacteristics: Bool {
-        return !DeviceInfoManager.shared.firmware.isEmpty
+        return batteryLevel != 0
+    }
+    var isHeartRateBeingRead: Bool {
+        return heartRate != 0
     }
     
     override init() {
@@ -122,7 +124,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func unpair() {
         disconnect()
-        pairedDeviceID = ""
+        pairedDeviceID = nil
     }
     
     func disconnect() {

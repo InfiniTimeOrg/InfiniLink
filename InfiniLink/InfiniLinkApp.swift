@@ -2,19 +2,24 @@
 //  InfiniLinkApp.swift
 //  InfiniLink
 //
-//  Created by Alex Emry on 8/5/21.
+//  Created by Liam Willey on 10/2/24.
 //
 
 import SwiftUI
+import CoreData
 
 @main
 struct InfiniLink: App {
+    let persistenceController = PersistenceController.shared
+    
+    init() {
+        HealthKitManager.shared.requestAuthorization()
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .onAppear {
-                    HealthKitManager.shared.requestAuthorization()
-                }
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
         }
     }
 }

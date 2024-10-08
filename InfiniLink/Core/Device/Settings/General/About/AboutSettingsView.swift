@@ -19,15 +19,14 @@ struct AboutSettingsView: View {
                     } label: {
                         AboutRowView(title: "Name", value: deviceInfoManager.deviceName)
                     }
+                    .disabled(!BLEManager.shared.hasLoadedCharacteristics)
                     AboutRowView(title: "Software Version", value: deviceInfoManager.firmware)
-                    AboutRowView(title: "Model Name", value: deviceInfoManager.manufacturer)
+                    AboutRowView(title: "Manufacturer", value: deviceInfoManager.manufacturer)
                     AboutRowView(title: "Model Number", value: deviceInfoManager.modelNumber)
-                    AboutRowView(title: "Serial Number", value: deviceInfoManager.serial)
                 }
                 Section {
                     AboutRowView(title: "File System", value: deviceInfoManager.blefsVersion)
                     AboutRowView(title: "Hardware Revision", value: deviceInfoManager.hardwareRevision)
-                    AboutRowView(title: "Software Revision", value: deviceInfoManager.softwareRevision)
                 }
             }
         }

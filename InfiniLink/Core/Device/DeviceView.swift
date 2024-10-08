@@ -13,24 +13,12 @@ struct DeviceView: View {
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     @AppStorage("sleepGoal") var sleepGoal = 28800
+    @AppStorage("deviceName") var deviceName = ""
     
     @Environment(\.colorScheme) var colorScheme
     
     func connectionState() -> String {
         bleManager.hasLoadedCharacteristics ? NSLocalizedString("Connected", comment: "") : (bleManager.isSwitchedOn ? NSLocalizedString("Connecting...", comment: "") : NSLocalizedString("Disconnected", comment: ""))
-    }
-    func deviceName() -> String {
-        if let name = bleManager.infiniTime?.name, !name.isEmpty {
-            return name
-        } else {
-            let name = DeviceNameManager().getName(deviceUUID: bleManager.pairedDeviceID ?? "")
-            
-            if name.isEmpty {
-                return "InfiniTime"
-            } else {
-                return name
-            }
-        }
     }
     
     var body: some View {
@@ -57,25 +45,25 @@ struct DeviceView: View {
                                     }())
                             }
                             .foregroundStyle(Color.gray)
-                            Text(deviceName())
+                            Text(deviceName)
                                 .font(.title.weight(.bold))
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
-                    // TODO: add complete setup section
+                    // TODO: add complete setup section if user skips onboarding setup
                     if downloadManager.updateAvailable  && !DFUUpdater.shared.local {
                         Section {
                             NavigationLink {
                                 SoftwareUpdateView()
                             } label: {
-                                VStack(alignment: .leading, spacing: 10) {
-                                    HStack {
+                                VStack(alignment: .leading, spacing: 12) {
+                                    HStack(spacing: 10) {
                                         Image(.infiniTime)
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: 50, height: 50)
-                                        VStack(alignment: .leading, spacing: 4) {
+                                        VStack(alignment: .leading, spacing: 3) {
                                             Text("Update Available")
                                                 .font(.title2.weight(.bold))
                                             Group {
@@ -105,11 +93,6 @@ struct DeviceView: View {
                             ListRowView(title: "Heart Rate", icon: "heart.fill", iconColor: .red)
                         }
                         NavigationLink {
-                            
-                        } label: {
-                            ListRowView(title: "Stress", icon: "face.smiling")
-                        }
-                        NavigationLink {
                             StepsView()
                         } label: {
                             ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
@@ -118,6 +101,11 @@ struct DeviceView: View {
                             SleepView()
                         } label: {
                             ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
+                        }
+                        NavigationLink {
+                            
+                        } label: {
+                            ListRowView(title: "Stress", icon: "face.smiling")
                         }
                     }
                     Section {
@@ -167,10 +155,10 @@ struct DeviceView: View {
                 }
             }
             .onChange(of: DeviceInfoManager.shared.firmware) { firmware in
-                if firmware != "" {
+                if !firmware.isEmpty {
                     if bleManager.blefsTransfer != nil {
                         BLEFSHandler.shared.readSettings { settings in
-                            DispatchQueue.main.async {
+//                            DispatchQueue.main.async {
                                 self.stepCountGoal = Int(settings.stepsGoal)
                                 self.bleManager.watchFace = Int(settings.watchFace)
                                 self.bleManager.pineTimeStyleData = settings.pineTimeStyle
@@ -182,11 +170,13 @@ struct DeviceView: View {
                                 case .Imperial:
                                     self.bleManager.weatherMode = "imperial"
                                 }
-                            }
+//                            }
                         }
                     }
                 }
-                DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: firmware)
+            }
+            .onAppear {
+                DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: DeviceInfoManager.shared.firmware)
             }
         }
     }

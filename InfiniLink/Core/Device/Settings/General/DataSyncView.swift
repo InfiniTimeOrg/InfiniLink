@@ -9,7 +9,12 @@ import SwiftUI
 
 struct DataSyncView: View {
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        List {
+            Section(footer: Text("Sync step and heart rate data to Apple Health.")) {
+                Toggle("Apple Health", isOn: HealthKitManager.shared.$syncToAppleHealth)
+            }
+        }
+        .navigationTitle("Data Sync")
     }
 }
 

@@ -9,13 +9,19 @@ import SwiftUI
 
 struct SleepView: View {
     var body: some View {
-        ScrollView {
-            DetailHeaderView(Header(title: "8", titleUnits: "Hours", icon: "bed.double.fill", accent: .purple), width: UIScreen.main.bounds.width) {
-                HStack {
-                    DetailHeaderSubItemView(title: "Deep", value: "2.5hrs")
-                    DetailHeaderSubItemView(title: "Core", value: "5hrs")
-                    DetailHeaderSubItemView(title: "REM", value: "2hrs")
+        GeometryReader { geo in
+            List {
+                Section {
+                    DetailHeaderView(Header(title: "8", titleUnits: "Hours", icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
+                        HStack {
+                            DetailHeaderSubItemView(title: "Deep", value: "2.5hrs")
+                            DetailHeaderSubItemView(title: "Core", value: "5hrs")
+                            DetailHeaderSubItemView(title: "REM", value: "2hrs")
+                        }
+                    }
                 }
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("Sleep")

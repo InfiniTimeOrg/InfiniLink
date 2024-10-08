@@ -42,7 +42,6 @@ class DeviceInfoManager: ObservableObject {
 			self.serial = String(data: value, encoding: .utf8) ?? ""
 		case cbuuids.firmware:
 			self.firmware = String(data: value, encoding: .utf8) ?? ""
-//            DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: self.firmware)
 		case cbuuids.hardwareRevision:
 			self.hardwareRevision = String(data: value, encoding: .utf8) ?? ""
 		case cbuuids.softwareRevision:
@@ -66,14 +65,11 @@ class DeviceInfoManager: ObservableObject {
 	}
 	
 	func setDeviceName(uuid: String) {
-		let deviceNamer = DeviceNameManager()
-		let deviceName = deviceNamer.getName(deviceUUID: uuid)
-		
-		if deviceName == "" {
-			self.deviceName = "InfiniTime"
-		} else {
-			self.deviceName = deviceName
-		}
+        // View note in RenameView
+//		let deviceNamer = DeviceNameManager()
+//        let deviceName = deviceNamer.getName(for: uuid)
+//		
+//        self.deviceName = deviceName
 	}
 	
 	func clearDeviceInfo() {

@@ -14,6 +14,9 @@ struct BLEUpdatedCharacteristicHandler {
     let ble_fs = BLEFSHandler.shared
     let bleManager = BLEManager.shared
     let healthKitManager = HealthKitManager.shared
+    let chartManager = ChartManager.shared
+    
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
@@ -40,57 +43,59 @@ struct BLEUpdatedCharacteristicHandler {
             MusicController.shared.controlMusic(controlNumber: Int(musicControl[0]))
         case bleManager.cbuuidList.hrm:
             let bpm = heartRate(from: characteristic)
-//            let dataPoints = ChartManager.shared.convert(results: chartPoints)
-//            let lastDataPoint = dataPoints.last
             
             bleManager.heartRate = Double(bpm)
             
-            if bpm != 0 {
+            if bpm > 0 {
                 let currentTime = Date().timeIntervalSince1970
-//                let timeDifference = currentTime - lastHeartRateUpdateTimestamp
+                let timeDifference = currentTime - lastHeartRateUpdateTimestamp
                 
-                // TODO: update filter logic
-//                if let referenceValue = lastDataPoint?.value, filterHeartRateData && (bpm > 40 && bpm < 210) {
-//                    let isWithinRange = abs(referenceValue - bleManager.heartRate) <= 25
-//                    
-//                    if isWithinRange {
-//                        updateHeartRate(bpm: bpm)
-//                    } else {
-//                        if timeDifference <= 10 {
-//                            updateHeartRate(bpm: bpm)
-//                        } else {
-//                            print("Abnormal value, should be filtered")
-//                        }
-//                    }
-//                } else {
-//                    updateHeartRate(bpm: bpm)
-//                }
-                updateHeartRate(bpm: bpm)
+                // Check if the last data point is available and if filtering is enabled
+                if let referenceValue = heartPoints.last?.value, filterHeartRateData {
+                    let isWithinRange = abs(referenceValue - bleManager.heartRate) <= 25
+                    
+                    // Update heart rate if within the valid range or recent enough
+                    if isWithinRange || timeDifference <= 10 {
+                        updateHeartRate(bpm: bpm)
+                    } else {
+                        print("Abnormal value, should be filtered")
+                    }
+                } else {
+                    // If no last data point or filtering is not applied, update heart rate
+                    updateHeartRate(bpm: bpm)
+                }
             }
         case bleManager.cbuuidList.bat:
             guard let value = characteristic.value else { break }
             let batData = [UInt8](value)
             
             bleManager.batteryLevel = Double(batData[0])
+            chartManager.addBatteryDataPoint(batteryLevel: Double(batData[0]), time: Date())
         case bleManager.cbuuidList.stepCount:
             guard let value = characteristic.value else { break }
             let stepData = [UInt8](value)
             
             bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
-            healthKitManager.readCurrentSteps { value, error in
-                if let error = error {
-                    print(error.localizedDescription)
-                    return
+            
+            if bleManager.stepCount != 0 {
+                healthKitManager.readCurrentSteps { value, error in
+                    if let error = error {
+                        print(error.localizedDescription)
+                        return
+                    }
+                    
+                    let currentSteps = value
+                    let newSteps = Double(bleManager.stepCount)
+                    
+                    let stepsToAdd = newSteps - currentSteps!
+                    healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
                 }
                 
-                let currentSteps = value
-                let newSteps = Double(bleManager.stepCount)
-                
-                let stepsToAdd = newSteps - currentSteps!
-                healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
+                StepCountManager.shared.setStepCount(steps: Int32(bleManager.stepCount), isArbitrary: false, for: Date())
             }
         case bleManager.cbuuidList.blefsTransfer:
             guard let value = characteristic.value else { break }
+            
             ble_fs.handleResponse(responseData: [UInt8](value))
         default:
             break
@@ -100,7 +105,9 @@ struct BLEUpdatedCharacteristicHandler {
     private func updateHeartRate(bpm: Int) {
         let currentTime = Date().timeIntervalSince1970
         lastHeartRateUpdateTimestamp = currentTime
+        
         healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManager.heartRate)
-//        ChartManager.shared.addItem(dataPoint: DataPoint(date: Date(), value: Double(bpm), chart: ChartsAsInts.heart.rawValue))
+        
+        chartManager.addHeartRateDataPoint(heartRate: Double(bpm), time: Date())
     }
 }

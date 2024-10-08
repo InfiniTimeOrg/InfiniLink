@@ -39,7 +39,7 @@ class MusicController {
     
     @AppStorage("allowMusicControl") var allowMusicControl = true
     
-	init() {
+	private init() {
         if allowMusicControl {
             initialize()
         }
