@@ -39,6 +39,7 @@ struct BLEDiscoveredCharacteristics {
             peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.notify:
             bleManager.notifyCharacteristic = characteristic
+            bleManager.firstConnect = false
 		case bleManager.cbuuidList.stepCount:
 			peripheral.readValue(for: characteristic)
 			peripheral.setNotifyValue(true, for: characteristic)

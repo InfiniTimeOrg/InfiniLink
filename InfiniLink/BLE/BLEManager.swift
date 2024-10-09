@@ -54,13 +54,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var isSwitchedOn = false
     @Published var isScanning = false
     @Published var setTimeError = false
+    @Published var firstConnect = true
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
     
     @Published var watchFace: Int = -1
-    @Published var pineTimeStyleData: PineTimeStyleData?
-    @Published var infineatWatchFace: WatchFaceInfineat?
+    @Published var pineTimeStyleData = PineTimeStyleData()
+    @Published var infineatWatchFace = WatchFaceInfineat()
     @Published var timeFormat: ClockType?
     
     @Published var weatherInformation = WeatherInformation()

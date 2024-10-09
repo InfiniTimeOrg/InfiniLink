@@ -9,7 +9,6 @@ import Foundation
 import SwiftUI
 import Combine
 
-
 struct WatchFaceView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @Environment(\.colorScheme) var colorScheme
@@ -81,7 +80,7 @@ struct PineTimeStyleWF: View {
     func getColor(for pts: PineTimeStyleColor) -> Color {
         switch pts {
         case .time:
-            switch bleManager.pineTimeStyleData?.ColorTime {
+            switch bleManager.pineTimeStyleData.ColorTime {
             case .White:
                 return .white
             case .Silver:
@@ -118,11 +117,9 @@ struct PineTimeStyleWF: View {
                 return .orange
             case .Pink:
                 return .pink
-            default:
-                return .teal
             }
         case .background:
-            switch bleManager.pineTimeStyleData?.ColorBG {
+            switch bleManager.pineTimeStyleData.ColorBG {
             case .White:
                 return .white
             case .Silver:
@@ -159,11 +156,9 @@ struct PineTimeStyleWF: View {
                 return .orange
             case .Pink:
                 return .pink
-            default:
-                return .teal
             }
         case .sidebar:
-            switch bleManager.pineTimeStyleData?.ColorBar {
+            switch bleManager.pineTimeStyleData.ColorBar {
             case .White:
                 return .white
             case .Silver:
@@ -200,8 +195,6 @@ struct PineTimeStyleWF: View {
                 return .orange
             case .Pink:
                 return .pink
-            default:
-                return .teal
             }
         }
     }
@@ -746,7 +739,7 @@ struct CasioWF: View {
     
     var body: some View {
         ZStack {
-            Image("casio")
+            Image(.casio)
                 .scaleEffect(0.81)
             CustomTextView(
                 text: {
@@ -805,9 +798,9 @@ struct CasioWF: View {
                 let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
                 
                 return "\(hourString):\(minuteString)"
-            }(), font: .custom("7-Segment", size: geometry.size.width * 0.48), lineSpacing: 0)
+            }(), font: .custom("7-Segment", size: geometry.size.width * 0.44), lineSpacing: 0)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.165)
+            .position(x: geometry.size.width / 2.1, y: geometry.size.height / 1.28)
             if !hour24 {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
@@ -867,7 +860,7 @@ enum InfineatItem {
 #Preview {
     NavigationView {
         GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(1))
+            WatchFaceView(watchface: .constant(5))
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)

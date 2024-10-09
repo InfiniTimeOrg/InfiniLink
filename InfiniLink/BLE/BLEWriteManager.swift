@@ -33,12 +33,15 @@ struct BLEWriteManager {
         }
     }
     
-    func sendNotification(title: String, body: String) {
-        guard let titleData = ("   " + title + "\0").data(using: .ascii) else { return }
-        guard let bodyData = (body + "\0").data(using: .ascii) else { return }
-        var notification = titleData
-        notification.append(bodyData)
+    func sendNotification(_ notif: AppNotification) {
+        guard let titleData = ("   " + notif.title + "\0").data(using: .ascii) else { return }
+        guard let bodyData = (notif.subtitle + "\0").data(using: .ascii) else { return }
+        
         let doSend = UserDefaults.standard.object(forKey: "watchNotifications")
+        var notification = titleData
+        
+        notification.append(bodyData)
+        
         if !notification.isEmpty {
             if (doSend == nil || doSend as! Bool) && bleManager.infiniTime != nil {
                 bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)

@@ -17,6 +17,9 @@ struct ContentView: View {
         Group {
             if bleManager.pairedDeviceID != nil || bleManager.isConnectedToPinetime {
                 DeviceView()
+                    .onChange(of: bleManager.batteryLevel) { bat in
+                        NotificationManager.shared.checkToSendLowBatteryNotification()
+                    }
                     .sheet(isPresented: PersonalizationController.shared.$showSetupSheet) {
                         UserDataCollectionView()
                     }
