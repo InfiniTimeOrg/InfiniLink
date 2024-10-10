@@ -23,7 +23,7 @@ class DeviceInfoManager: ObservableObject {
     
     static let shared = DeviceInfoManager()
     
-    @AppStorage("deviceName") var deviceName = ""
+    @AppStorage("deviceName") var deviceName = "InfiniTime"
     @AppStorage("modelNumber") var modelNumber = ""
     @AppStorage("serial") var serial = ""
     @AppStorage("firmware") var firmware = ""

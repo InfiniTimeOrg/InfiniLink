@@ -39,6 +39,9 @@ struct BLEDiscoveredCharacteristics {
             peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.notify:
             bleManager.notifyCharacteristic = characteristic
+            if !bleManager.firstConnect {
+                BLEWriteManager().sendNotification(AppNotification(title: "\(UIDevice.current.name) connected", subtitle: "New device connected to \(DeviceInfoManager.shared.deviceName)."))
+            }
             bleManager.firstConnect = false
 		case bleManager.cbuuidList.stepCount:
 			peripheral.readValue(for: characteristic)

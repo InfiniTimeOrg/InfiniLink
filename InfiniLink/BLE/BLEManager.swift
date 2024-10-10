@@ -55,6 +55,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var isScanning = false
     @Published var setTimeError = false
     @Published var firstConnect = true
+    @Published var isConnectedToPinetime = false
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
@@ -62,7 +63,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var watchFace: Int = -1
     @Published var pineTimeStyleData = PineTimeStyleData()
     @Published var infineatWatchFace = WatchFaceInfineat()
-    @Published var timeFormat: ClockType?
+    @Published var timeFormat: ClockType = .H24
     
     @Published var weatherInformation = WeatherInformation()
     @Published var weatherForecastDays = [WeatherForecastDay]()
@@ -79,16 +80,21 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     @AppStorage("weatherMode") var weatherMode: String = "imperial"
+    @AppStorage("stepCountGoal") var stepCountGoal = 10000
     
     var hasLoadedCharacteristics: Bool {
         // Use currentTimeService because it's present in all firmware versions
-        return currentTimeService != nil
+        return currentTimeService != nil && isConnectedToPinetime
+    }
+    var hasLoadedBatteryLevel: Bool {
+        // Check for battery level because values similar are loaded seconds after characteristics
+        return batteryLevel != 0
     }
     var isHeartRateBeingRead: Bool {
         return heartRate != 0
     }
-    var isConnectedToPinetime: Bool {
-        return infiniTime != nil
+    var hour24: Bool {
+        timeFormat == .H24
     }
     
     override init() {
@@ -136,6 +142,26 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.myCentral.cancelPeripheralConnection(infiniTime)
             self.infiniTime = nil
             self.blefsTransfer = nil
+            self.currentTimeService = nil
+            
+            self.isConnectedToPinetime = false
+            self.firstConnect = true
+        }
+    }
+    
+    func setSettings(from settings: Settings) {
+        DispatchQueue.main.async {
+            self.stepCountGoal = Int(settings.stepsGoal)
+            self.watchFace = Int(settings.watchFace)
+            self.pineTimeStyleData = settings.pineTimeStyle
+            self.timeFormat = settings.clockType
+            self.infineatWatchFace = settings.watchFaceInfineat
+            switch settings.weatherFormat {
+            case .Metric:
+                self.weatherMode = "metric"
+            case .Imperial:
+                self.weatherMode = "imperial"
+            }
         }
     }
     
@@ -156,11 +182,15 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
         self.infiniTime.discoverServices(nil)
+        self.isConnectedToPinetime = true
         self.pairedDeviceID = peripheral.identifier.uuidString
         DeviceInfoManager.shared.setDeviceName(uuid: peripheral.identifier.uuidString)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
+        isConnectedToPinetime = false
+        notifyCharacteristic = nil
+        firstConnect = false
         if error != nil {
             central.connect(peripheral)
         }

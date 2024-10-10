@@ -7,6 +7,9 @@
     " • " : {
 
     },
+    "?" : {
+
+    },
     "[BATT]" : {
 
     },
@@ -125,10 +128,10 @@
     "Battery" : {
 
     },
-    "battery_low" : {
+    "Battery Low" : {
 
     },
-    "battery_low_message" : {
+    "battery remaining" : {
 
     },
     "Bluetooth needs to be enabled to pair a watch." : {
@@ -189,6 +192,9 @@
 
     },
     "Done" : {
+
+    },
+    "Enable Watch Notifications" : {
 
     },
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
@@ -299,7 +305,7 @@
     "No Exercises" : {
 
     },
-    "not_playing" : {
+    "Not Playing" : {
 
     },
     "Notifications" : {
@@ -309,6 +315,9 @@
 
     },
     "Notify on Reconnect" : {
+
+    },
+    "Now" : {
 
     },
     "Only settings files are currently supported." : {
@@ -356,6 +365,9 @@
     "Settings" : {
 
     },
+    "Several days ago" : {
+
+    },
     "Skip" : {
 
     },
@@ -383,7 +395,7 @@
     "Sync step and heart rate data to Apple Health." : {
 
     },
-    "T" : {
+    "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
 
     },
     "Time Format" : {

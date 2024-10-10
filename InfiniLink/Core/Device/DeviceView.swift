@@ -21,7 +21,7 @@ struct DeviceView: View {
         if bleManager.isScanning {
             return NSLocalizedString("Connecting...", comment: "")
         }
-        switch (bleManager.isConnectedToPinetime, bleManager.hasLoadedCharacteristics) {
+        switch (bleManager.isConnectedToPinetime, bleManager.hasLoadedBatteryLevel) {
         case (true, true):
             return NSLocalizedString("Connected", comment: "")
         case (true, false):
@@ -36,14 +36,12 @@ struct DeviceView: View {
             GeometryReader { geo in
                 List {
                     VStack(spacing: 4) {
-                        ZStack {
-                            WatchFaceView(watchface: $bleManager.watchFace)
-                                .frame(width: geo.size.width / 2.5, height: geo.size.width / 2.5, alignment: .center)
-                                .clipped(antialiased: true)
-                        }
+                        WatchFaceView(watchface: $bleManager.watchFace)
+                            .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
+                            .clipped(antialiased: true)
                         VStack(spacing: 5) {
                             Group {
-                                Text(connectionState()) + Text(bleManager.hasLoadedCharacteristics ? " • " : "") + Text(bleManager.hasLoadedCharacteristics ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
+                                Text(connectionState()) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
                                     .foregroundColor({
                                         if bleManager.batteryLevel > 20 {
                                             return Color.gray
@@ -175,31 +173,16 @@ struct DeviceView: View {
                     }
                 }
             }
-            .onChange(of: DeviceInfoManager.shared.firmware) { firmware in
-                if !firmware.isEmpty {
-                    if bleManager.blefsTransfer != nil {
-                        BLEFSHandler.shared.readSettings { settings in
-//                            DispatchQueue.main.async {
-                                self.stepCountGoal = Int(settings.stepsGoal)
-                                self.bleManager.watchFace = Int(settings.watchFace)
-                                self.bleManager.pineTimeStyleData = settings.pineTimeStyle
-                                self.bleManager.timeFormat = settings.clockType
-                                self.bleManager.infineatWatchFace = settings.watchFaceInfineat
-                                switch settings.weatherFormat {
-                                case .Metric:
-                                    self.bleManager.weatherMode = "metric"
-                                case .Imperial:
-                                    self.bleManager.weatherMode = "imperial"
-                                }
-//                            }
-                        }
-                    }
+            .onChange(of: bleManager.blefsTransfer) { _ in
+                BLEFSHandler.shared.readSettings { settings in
+                    bleManager.setSettings(from: settings)
                 }
             }
             .onAppear {
                 DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: DeviceInfoManager.shared.firmware)
             }
         }
+        .navigationViewStyle(.stack)
     }
 }
 
@@ -228,40 +211,6 @@ struct ListRowView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .foregroundStyle(.white)
         }
-    }
-}
-
-struct TrendRowView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
-    let icon: String
-    let accent: Color
-    let value: Int
-    let maxValue: Int
-    
-    var progress: Double {
-        return Double(value) / Double(maxValue)
-    }
-    
-    var body: some View {
-        Circle()
-            .stroke(colorScheme == .dark ? Color(.darkGray).opacity(0.7) : Color.white, lineWidth: 4)
-            .frame(width: 85, height: 85)
-            .overlay {
-                VStack(spacing: 2.5) {
-                    Image(systemName: icon)
-                        .imageScale(.large)
-                    Text(String(value))
-                }
-                .foregroundStyle(accent)
-            }
-            .overlay {
-                Circle()
-                    .trim(from: 0, to: progress)
-                    .stroke(accent, lineWidth: 4)
-                    .rotationEffect(.degrees(-90))
-                    .frame(width: 85, height: 85)
-            }
     }
 }
 

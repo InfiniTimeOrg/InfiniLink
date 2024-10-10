@@ -5,7 +5,6 @@
 //  Created by Liam Emry on 10/2/24.
 //
 // TODO: add user settings view to get weight, height, and age to get distance and kcal
-// TODO: implement Core Data
 //
 
 import SwiftUI

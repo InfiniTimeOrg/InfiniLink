@@ -556,7 +556,7 @@ class BLEFSHandler : ObservableObject {
         return [byte1, byte2, byte3, byte4]
     }
     
-    func readSettings(completion: @escaping(Settings) -> Void){
+    func readSettings(completion: @escaping(Settings) -> Void) {
         DispatchQueue.global(qos: .default).async {
             let readFile = self.readFile(path: "/settings.dat", offset: 0)
             

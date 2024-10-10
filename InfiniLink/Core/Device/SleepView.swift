@@ -12,7 +12,7 @@ struct SleepView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: "8", titleUnits: "Hours", icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
+                    DetailHeaderView(Header(title: "8", units: "Hours", icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
                         HStack {
                             DetailHeaderSubItemView(title: "Deep", value: "2.5hrs")
                             DetailHeaderSubItemView(title: "Core", value: "5hrs")

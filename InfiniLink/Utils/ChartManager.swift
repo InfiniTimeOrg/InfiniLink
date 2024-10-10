@@ -8,11 +8,14 @@
 import Foundation
 import SwiftUI
 import CoreData
+import SwiftUICharts
 
 class ChartManager: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
-	
-	static let shared = ChartManager()
+    
+    @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
+    
+    static let shared = ChartManager()
     
     func addHeartRateDataPoint(heartRate: Double, time: Date) {
         let heartRateDataPoint = HeartDataPoint(context: viewContext)
@@ -69,11 +72,53 @@ class ChartManager: ObservableObject {
             fatalError("Failed to fetch battery data points: \(error)")
         }
     }
-}
-
-extension Date {
-    func posHour() -> Date {
-        return Date(timeIntervalSinceReferenceDate:
-                        (timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) + ((timeIntervalSinceReferenceDate / (3600.0)).rounded(.down) * (3600.0) - (timeIntervalSinceReferenceDate / (3600.0 * 3.0)).rounded(.down) * (3600.0 * 3.0)))
+    
+    func convertHeartPointsToChartPoints(points: FetchedResults<HeartDataPoint>) -> [LineChartDataPoint] {
+        var dataPoints: [LineChartDataPoint] = []
+        let dateFormat = DateFormatter()
+        
+        dateFormat.dateFormat = "MMM d\nH:mm:ss"
+        
+        let timeInterval: TimeInterval = {
+            switch dataSelection {
+            case 1:  // Day (24 hours)
+                return 86400
+            case 2:  // Week
+                return 86400 * 7
+            case 3:  // Month
+                return 2628003
+            case 4:  // 6 mo
+                return 157680117
+            case 5:  // Year
+                return 31536000
+            default:  // Hour
+                return 3600
+            }
+        }()
+        
+        for dataPoint in points {
+            guard let timestamp = dataPoint.timestamp else { continue }
+            
+            let timeSinceNow = abs(timestamp.timeIntervalSinceNow)
+            
+            if timeSinceNow <= timeInterval {
+                let formattedDate = dateFormat.string(from: timestamp)
+                dataPoints.append(LineChartDataPoint(
+                    value: dataPoint.value,
+                    xAxisLabel: "Time",
+                    description: formattedDate,
+                    date: timestamp
+                ))
+            }
+        }
+        
+        if let first = dataPoints.first, dataPoints.count == 1 {
+            let point = LineChartDataPoint(value: first.value, xAxisLabel: "Time", description: dateFormat.string(from: first.date!), date: first.date!)
+            return [point, point]
+        } else if dataPoints.count < 1 {
+            return [LineChartDataPoint(value: 0), LineChartDataPoint(value: 0)]
+        }
+        
+        return dataPoints
     }
 }

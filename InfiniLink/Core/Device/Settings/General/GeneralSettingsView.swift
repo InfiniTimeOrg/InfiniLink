@@ -27,7 +27,6 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Software Update")
                 }
-                .disabled(!bleManager.hasLoadedCharacteristics)
                 NavigationLink {
                     FileSystemView()
                 } label: {

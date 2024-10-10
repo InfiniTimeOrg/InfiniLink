@@ -9,9 +9,18 @@ import SwiftUI
 
 struct Header {
     let title: String
-    let titleUnits: String?
+    let subtitle: String?
+    let units: String?
     let icon: String
     let accent: Color
+    
+    init(title: String, subtitle: String? = nil, units: String? = nil, icon: String, accent: Color) {
+        self.title = title
+        self.subtitle = subtitle
+        self.units = units
+        self.icon = icon
+        self.accent = accent
+    }
 }
 
 struct DetailHeaderSubItemView: View {
@@ -35,7 +44,7 @@ struct DetailHeaderSubItemView: View {
                     .font(.system(size: 22).weight(.semibold))
                 if let unit {
                     Text(unit)
-                        .font(.system(size: 18).weight(.medium))
+                        .font(.system(size: 17.5))
                         .foregroundColor(.primary.opacity(0.75))
                 }
             }
@@ -48,6 +57,8 @@ struct DetailHeaderSubItemView: View {
 }
 
 struct DetailHeaderView<V: View>: View {
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
+    
     enum DetailHeaderAnimation {
         case heart
         case sleep
@@ -56,18 +67,18 @@ struct DetailHeaderView<V: View>: View {
     
     let header: Header
     let width: CGFloat
-    let animation: DetailHeaderAnimation?
+    let animate: Bool
     let headerItems: V
     
     @State private var isHeartAnimating = false
     
     init(_ header: Header,
          width: CGFloat,
-         animation: DetailHeaderAnimation? = nil,
+         animate: Bool = false,
          @ViewBuilder headerItems: () -> V) {
         self.header = header
         self.width = width
-        self.animation = animation
+        self.animate = animate
         self.headerItems = headerItems()
     }
     
@@ -77,7 +88,7 @@ struct DetailHeaderView<V: View>: View {
                 VStack {
                     Image(systemName: header.icon)
                         .foregroundStyle(header.accent)
-                        .font(.system(size: width / 3.85))
+                        .font(.system(size: min(width / 3.85, 145)))
                         .shadow(color: header.accent.opacity(0.7), radius: isHeartAnimating ? 20 : 0, x: 0, y: 0)
                         .scaleEffect(isHeartAnimating ? 0.85 : 1.0)
                         .animation(
@@ -88,11 +99,16 @@ struct DetailHeaderView<V: View>: View {
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text(header.title)
                             .font(.system(size: 50).bold())
-                        if let units = header.titleUnits {
+                        if let units = header.units {
                             Text(units.uppercased())
-                                .foregroundStyle(Color.gray)
+                                .foregroundStyle(.primary.opacity(0.8))
                                 .font(.system(size: 20).weight(.bold))
                         }
+                    }
+                    if let subtitle = header.subtitle {
+                        Text(subtitle)
+                            .foregroundStyle(.gray)
+                            .font(.system(size: 17.5).weight(.medium))
                     }
                 }
                 headerItems
@@ -100,23 +116,15 @@ struct DetailHeaderView<V: View>: View {
         }
         .frame(maxWidth: .infinity)
         .onAppear {
-            if let animation {
-                // TODO: implement other cases
-                switch animation {
-                case .heart:
-                    isHeartAnimating = true
-                case .sleep:
-                    break
-                case .steps:
-                    break
-                }
+            if let last = heartPoints.last?.timestamp, abs(last.timeIntervalSinceNow) <= 10 && animate {
+                isHeartAnimating = true
             }
         }
     }
 }
 
 #Preview {
-    DetailHeaderView(Header(title: "89", titleUnits: "BPM", icon: "heart.fill", accent: .red), width: UIScreen.main.bounds.width, animation: .heart) {
+    DetailHeaderView(Header(title: "89", subtitle: "4 minutes ago", units: "BPM", icon: "heart.fill", accent: .red), width: UIScreen.main.bounds.width, animate: true) {
         HStack {
             DetailHeaderSubItemView(title: "Distance", value: "1.5", unit: "mi")
             DetailHeaderSubItemView(title: "Kcal", value: "424")

@@ -18,7 +18,7 @@ struct BatterySettingsView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), titleUnits: "%", icon: {
+                    DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), units: "%", icon: {
                         if bleManager.batteryLevel > 20 {
                             return "battery.100percent"
                         } else if bleManager.batteryLevel > 10 {
@@ -34,7 +34,11 @@ struct BatterySettingsView: View {
                         } else {
                             return Color.red
                         }
-                    }()), width: UIScreen.main.bounds.width) {}
+                    }()), width: geo.size.width) {
+                        Color.clear
+                            .frame(height: 1)
+                            .frame(maxWidth: .infinity)
+                    }
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))

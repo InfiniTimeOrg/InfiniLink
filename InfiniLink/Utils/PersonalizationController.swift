@@ -16,6 +16,9 @@ class PersonalizationController: ObservableObject {
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
     
+    // TODO: persist
+    let pace: FitnessCalculator.Pace? = .average
+    
     var isPersonalizationAvailable: Bool {
         !showSetupSheet && (weight == nil || height == nil || age == nil)
     }

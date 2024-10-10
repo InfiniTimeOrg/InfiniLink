@@ -86,6 +86,9 @@ struct FileSystemDetailView: View {
             .onAppear {
                 BLEFSHandler.shared.readSettings { settings in
                     self.settings = settings
+                    
+                    // While we're already loading the settings, make sure we keep the vars updated
+                    BLEManager.shared.setSettings(from: settings)
                 }
             }
             .navigationTitle("Settings")

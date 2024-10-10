@@ -17,23 +17,12 @@ struct SoftwareUpdateView: View {
     
     @Environment(\.dismiss) var dismiss
     
-    func fileSize(from fileUrl: URL) -> Int {
-        do {
-            let resource = try fileUrl.resourceValues(forKeys:[.fileSizeKey])
-            return resource.fileSize!
-        } catch {
-            print("Error: \(error)")
-        }
-        
-        return 0
-    }
-    
     var body: some View {
         GeometryReader { geo in
             List {
                 Section {
                     NavigationLink {
-                        other
+                        OtherUpdateVersions()
                     } label: {
                         Text("Other Versions")
                     }
@@ -59,108 +48,6 @@ struct SoftwareUpdateView: View {
         .onAppear {
             if downloadManager.releases.isEmpty {
                 downloadManager.getReleases()
-            }
-        }
-    }
-    
-    var other: some View {
-        List {
-            Section(footer: Text("External resources are fonts and images that are required for some apps and watch faces.")) {
-                Button {
-                    showLocalFileSheet = true
-                } label: {
-                    Text("Use Local File")
-                }
-                .fileImporter(isPresented: $showLocalFileSheet, allowedContentTypes: [.zip]) { result in
-                    do {
-                        let fileUrl = try result.get()
-                        
-                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                        
-                        switch result {
-                        case .success(_):
-                            dfuUpdater.firmwareSelected = true
-                            dfuUpdater.local = true
-                            
-                            if downloadManager.externalResources {
-                                dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                            } else {
-                                dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
-                            }
-                            downloadManager.updateSize = fileSize(from: fileUrl)
-                            
-                        case .failure(let error):
-                            print(error.localizedDescription)
-                        }
-                        
-                        fileUrl.stopAccessingSecurityScopedResource()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-                Button {
-                    showResourcePickerSheet = true
-                } label: {
-                    Text("Update External Resources")
-                }
-                .fileImporter(isPresented: $showResourcePickerSheet, allowedContentTypes: [.zip]) { result in
-                    do {
-                        let fileUrl = try result.get()
-                        
-                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                        
-                        dfuUpdater.firmwareSelected = true
-                        dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                        dfuUpdater.firmwareURL = fileUrl.absoluteURL
-                        downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
-                        downloadManager.updateSize = fileSize(from: fileUrl)
-                        
-                        downloadManager.externalResources = true
-                        
-                        fileUrl.stopAccessingSecurityScopedResource()
-                        
-                        dismiss()
-                    } catch {
-                        print(error.localizedDescription)
-                    }
-                }
-            }
-            Section {
-                ForEach(downloadManager.releases, id: \.tag_name) { release in
-                    Button {
-                        let asset = downloadManager.chooseAsset(response: release)
-                        
-                        dfuUpdater.firmwareFilename = asset.name
-                        dfuUpdater.firmwareSelected = true
-                        dfuUpdater.local = false
-                        downloadManager.updateAvailable = true
-                        downloadManager.updateVersion = release.tag_name
-                        downloadManager.updateBody = release.body
-                        downloadManager.updateSize = asset.size
-                        downloadManager.browser_download_url = asset.browser_download_url
-                        
-                        downloadManager.externalResources = false
-                        
-                        dismiss()
-                    } label: {
-                        Text(release.tag_name)
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("Releases")
-                    if downloadManager.loadingReleases {
-                        ProgressView()
-                    }
-                }
-            }
-        }
-        .navigationTitle("Other Versions")
-        .toolbar {
-            Button {
-                downloadManager.getReleases()
-            } label: {
-                Label("Refresh", systemImage: "arrow.clockwise")
             }
         }
     }
@@ -266,6 +153,124 @@ struct SoftwareUpdateView: View {
             }
         }
         .frame(maxWidth: .infinity)
+    }
+}
+
+struct OtherUpdateVersions: View {
+    @Environment(\.dismiss) var dismiss
+    
+    @State private var showLocalFileSheet = false
+    @State private var showResourcePickerSheet = false
+    
+    @ObservedObject var dfuUpdater = DFUUpdater.shared
+    @ObservedObject var downloadManager = DownloadManager.shared
+    
+    func fileSize(from fileUrl: URL) -> Int {
+        do {
+            let resource = try fileUrl.resourceValues(forKeys:[.fileSizeKey])
+            return resource.fileSize!
+        } catch {
+            print("Error: \(error)")
+        }
+        
+        return 0
+    }
+    
+    var body: some View {
+        List {
+            Section(footer: Text("External resources are fonts and images that are required for some apps and watch faces.")) {
+                Button {
+                    showLocalFileSheet = true
+                } label: {
+                    Text("Use Local File")
+                }
+                .fileImporter(isPresented: $showLocalFileSheet, allowedContentTypes: [.zip]) { result in
+                    do {
+                        let fileUrl = try result.get()
+                        
+                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                        
+                        dfuUpdater.firmwareSelected = true
+                        dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                        dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                        downloadManager.updateBody = NSLocalizedString("This is a local firmware file and cannot be verified. Proceed at your own risk.", comment: "")
+                        downloadManager.updateSize = fileSize(from: fileUrl)
+                        
+                        downloadManager.externalResources = false
+                        downloadManager.updateAvailable = true
+                        
+                        fileUrl.stopAccessingSecurityScopedResource()
+                        
+                        dismiss()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+                Button {
+                    showResourcePickerSheet = true
+                } label: {
+                    Text("Update External Resources")
+                }
+                .fileImporter(isPresented: $showResourcePickerSheet, allowedContentTypes: [.zip]) { result in
+                    do {
+                        let fileUrl = try result.get()
+                        
+                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                        
+                        dfuUpdater.firmwareSelected = true
+                        dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                        dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                        downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
+                        downloadManager.updateSize = fileSize(from: fileUrl)
+                        
+                        downloadManager.externalResources = true
+                        
+                        fileUrl.stopAccessingSecurityScopedResource()
+                        
+                        dismiss()
+                    } catch {
+                        print(error.localizedDescription)
+                    }
+                }
+            }
+            Section {
+                ForEach(downloadManager.releases, id: \.tag_name) { release in
+                    Button {
+                        let asset = downloadManager.chooseAsset(response: release)
+                        
+                        dfuUpdater.firmwareFilename = asset.name
+                        dfuUpdater.firmwareSelected = true
+                        dfuUpdater.local = false
+                        downloadManager.updateAvailable = true
+                        downloadManager.updateVersion = release.tag_name
+                        downloadManager.updateBody = release.body
+                        downloadManager.updateSize = asset.size
+                        downloadManager.browser_download_url = asset.browser_download_url
+                        
+                        downloadManager.externalResources = false
+                        
+                        dismiss()
+                    } label: {
+                        Text(release.tag_name)
+                    }
+                }
+            } header: {
+                HStack {
+                    Text("Releases")
+                    if downloadManager.loadingReleases {
+                        ProgressView()
+                    }
+                }
+            }
+        }
+        .navigationTitle("Other Versions")
+        .toolbar {
+            Button {
+                downloadManager.getReleases()
+            } label: {
+                Label("Refresh", systemImage: "arrow.clockwise")
+            }
+        }
     }
 }
 
