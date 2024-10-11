@@ -12,6 +12,8 @@ import SwiftUI
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     static let shared = BLEManager()
     
+    let deviceInfoManager = DeviceInfoManager.shared
+    
     var myCentral: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
     var currentTimeService: CBCharacteristic!
@@ -184,13 +186,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.infiniTime.discoverServices(nil)
         self.isConnectedToPinetime = true
         self.pairedDeviceID = peripheral.identifier.uuidString
-        DeviceInfoManager.shared.setDeviceName(uuid: peripheral.identifier.uuidString)
+        
+        deviceInfoManager.lastDisconnect = Date.timeIntervalBetween1970AndReferenceDate
+        deviceInfoManager.setDeviceName(uuid: peripheral.identifier.uuidString)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         firstConnect = false
+        
+        deviceInfoManager.lastDisconnect = Date.timeIntervalBetween1970AndReferenceDate
+        
         if error != nil {
             central.connect(peripheral)
         }
@@ -223,13 +230,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         
         for characteristic in characteristics {
-            DeviceInfoManager.shared.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
+            deviceInfoManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
             BLEDiscoveredCharacteristics().handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        DeviceInfoManager.shared.updateInfo(characteristic: characteristic)
+        deviceInfoManager.updateInfo(characteristic: characteristic)
         BLEUpdatedCharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }
 }

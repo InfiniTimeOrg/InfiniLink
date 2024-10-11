@@ -31,6 +31,8 @@ class DeviceInfoManager: ObservableObject {
     @AppStorage("softwareRevision") var softwareRevision = ""
     @AppStorage("manufacturer") var manufacturer = ""
     @AppStorage("blefsVersion") var blefsVersion = ""
+    @AppStorage("lastDisconnect") var lastDisconnect: TimeInterval = 0
+    @AppStorage("lastConnect") var lastConnect: TimeInterval = 0
 	
 	func updateInfo(characteristic: CBCharacteristic) {
 		guard let value = characteristic.value else { return }

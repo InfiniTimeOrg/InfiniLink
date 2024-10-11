@@ -84,10 +84,10 @@ struct BLEUpdatedCharacteristicHandler {
                         return
                     }
                     
-                    let currentSteps = value
+                    let currentSteps = value ?? 0.0
                     let newSteps = Double(bleManager.stepCount)
                     
-                    let stepsToAdd = newSteps - currentSteps!
+                    let stepsToAdd = max(newSteps - currentSteps, 0) // Prevent negative steps
                     healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
                 }
                 

@@ -25,6 +25,10 @@ struct AboutSettingsView: View {
                     AboutRowView(title: "Model Number", value: deviceInfoManager.modelNumber)
                 }
                 Section {
+                    AboutRowView(title: "Last Connect", value: Date(timeIntervalSince1970: deviceInfoManager.lastConnect).formatted())
+                    AboutRowView(title: "Last Disconnect", value: Date(timeIntervalSince1970: deviceInfoManager.lastDisconnect).formatted())
+                }
+                Section {
                     AboutRowView(title: "File System", value: deviceInfoManager.blefsVersion)
                     AboutRowView(title: "Hardware Revision", value: deviceInfoManager.hardwareRevision)
                 }

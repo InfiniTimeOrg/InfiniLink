@@ -85,7 +85,7 @@ struct HeartView: View {
                                     case 3: return "M"
                                     case 4: return "6M"
                                     case 5: return "Y"
-                                    default: return "?"
+                                    default: return "-"
                                     }
                                 }())
                                 .tag(index)
@@ -93,13 +93,7 @@ struct HeartView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    Section {
-                        HeartChart()
-                            .padding()
-                            .background(Material.regular)
-                            .cornerRadius(10)
-                    }
-                    .frame(maxHeight: 320)
+                    
                 }
                 .padding()
             }

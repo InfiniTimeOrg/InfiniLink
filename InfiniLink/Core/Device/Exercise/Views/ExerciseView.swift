@@ -12,7 +12,9 @@ struct ExerciseView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @State var exerciseToStart: Exercise?
     
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.endDate)]) var userExercises: FetchedResults<UserExercise>
+    @Environment(\.managedObjectContext) var viewContext
+    
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \UserExercise.startDate, ascending: false)]) var userExercises: FetchedResults<UserExercise>
     
     var body: some View {
         VStack {
@@ -26,7 +28,7 @@ struct ExerciseView: View {
                         } else {
                             ForEach(userExercises) { userExercise in
                                 let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
-                                
+
                                 NavigationLink {
                                     ExerciseDetailView()
                                 } label: {
@@ -36,15 +38,17 @@ struct ExerciseView: View {
                                         VStack(alignment: .leading, spacing: 4) {
                                             Text(exercise.name)
                                                 .font(.body.weight(.medium))
-//                                            Text(userExercise.startDate.formatted() + " — " + userExercise.endDate.formatted())
-//                                                .foregroundStyle(Color.gray)
+                                            Text(userExercise.startDate!.formatted())
+                                                .foregroundStyle(Color.gray)
                                         }
                                     }
                                 }
                             }
+                            .onDelete(perform: delete)
                         }
                     }
                     Section("All Exercises") {
+                        // TODO: add more exercises
                         ForEach(exerciseViewModel.exercises) { exercise in
                             Button {
                                 exerciseToStart = exercise
@@ -56,14 +60,19 @@ struct ExerciseView: View {
                 }
                 .navigationTitle("Exercise")
                 .toolbar {
-                    Button {
-                        exerciseToStart = exerciseViewModel.exercises.first!
-                    } label: {
-                        Label("Start Exercise", systemImage: "plus")
-                    }
+                    EditButton()
                 }
             }
         }
+    }
+    
+    func delete(at offsets: IndexSet) {
+        for index in offsets {
+            let userExercise = userExercises[index]
+            viewContext.delete(userExercise)
+        }
+        
+        exerciseViewModel.saveContext(viewContext)
     }
 }
 

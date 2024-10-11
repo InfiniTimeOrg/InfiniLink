@@ -7,8 +7,14 @@
 
 import Foundation
 
+enum ExerciseComponents {
+    case heart
+    case steps
+}
+
 struct Exercise: Identifiable {
     let id: String
     var name: String
     var icon: String
+    let components: [ExerciseComponents]
 }

@@ -9,12 +9,27 @@ import SwiftUI
 
 struct ActiveExerciseView: View {
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
+    private var stepCounts: FetchedResults<StepCounts>
+    
+    @Environment(\.managedObjectContext) var viewContext
+    
+    @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     
     @Binding var exercise: Exercise?
     
-    @State var timer: Timer?
+    @State private var timer: Timer?
+    @State private var isPaused = false
+    @State private var showEndConfirmation = false
     
-    @State var time = 0
+    @State private var previousHeartPoints: [HeartDataPoint] = []
+    @State private var newHeartPoints: [HeartDataPoint] = []
+    @State private var previousStepCounts: [StepCounts] = []
+    @State private var newStepCounts: [StepCounts] = []
+    
+    @State private var elapsedTime: TimeInterval = 0
+    
+    let startDate = Date()
     
     var body: some View {
         if let exercise {
@@ -23,28 +38,50 @@ struct ActiveExerciseView: View {
                     Image(systemName: exercise.icon)
                     Text(exercise.name)
                 }
-                .padding(12)
-                .padding(.horizontal, 6)
-                .font(.body.weight(.medium))
-                .background(Material.regular)
-                .clipShape(Capsule())
                 Spacer()
-                // TODO: create timer based text
-                Text("00" + ":" + "04" + ":" + "43")
+                Text(exerciseViewModel.timeString(from: elapsedTime))
                     .font(.system(size: 60).weight(.bold))
-                if let last = heartPoints.compactMap({ $0.value }).last {
-                    HStack(spacing: 6) {
-                        Image(systemName: "heart.fill")
-                            .foregroundStyle(.red)
-                        Text(String(format: "%.0f", last))
+                HStack {
+                    if exercise.components.contains(.heart) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "heart.fill")
+                                .foregroundStyle(.red)
+                            Text(String(format: "%.0f", heartPoints.compactMap({ $0.value }).last ?? 0))
+                        }
+                    }
+                    Spacer()
+                        .frame(maxWidth: 30)
+                    if exercise.components.contains(.steps) {
+                        HStack(spacing: 6) {
+                            Image(systemName: "shoeprints.fill")
+                                .foregroundStyle(.blue)
+                            Text(String(format: "%.0f", newStepCounts.compactMap({ $0.steps }).last ?? 0))
+                        }
                     }
                 }
                 Spacer()
-                HStack {
-                    // TODO: add pause
+                HStack(spacing: 14) {
                     Spacer()
                     Button {
-                        self.exercise = nil
+                        if isPaused {
+                            startTimer()
+                        } else {
+                            timer?.invalidate()
+                        }
+                        isPaused.toggle()
+                    } label: {
+                        Image(systemName: isPaused ? "play.fill" : "pause.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(15)
+                            .padding(.leading, isPaused ? 2 : 0) // Offset play icon a little to the right because it doesn't look centered to the eye
+                            .frame(width: 45, height: 45)
+                            .background(Material.regular)
+                            .foregroundStyle(isPaused ? Color.white : Color.primary)
+                            .clipShape(Circle())
+                    }
+                    Button {
+                        showEndConfirmation = true
                     } label: {
                         Image(systemName: "stop.fill")
                             .font(.system(size: 25))
@@ -53,20 +90,57 @@ struct ActiveExerciseView: View {
                             .foregroundStyle(Color.white)
                             .clipShape(Circle())
                     }
+                    .opacity(isPaused ? 0.6 : 1)
+                    Color.clear
+                        .frame(width: 45, height: 45)
                     Spacer()
                 }
             }
             .padding()
-            .onAppear {
-                timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { timer in
-                    time += 1
+            .confirmationDialog("Are you sure you want to end the exercise? \(elapsedTime >= 30 ? "" : "The duration of the exercise is to short to save.")", isPresented: $showEndConfirmation) {
+                Button(role: .destructive) {
+                    self.exercise = nil
+                    timer?.invalidate()
+                    
+                    if elapsedTime >= 30 {
+                        exerciseViewModel.saveExercise(exercise.id, startDate: startDate, heartPoints: Array(heartPoints), viewContext: viewContext)
+                    }
+                } label: {
+                    Text("End Exercise")
                 }
+                Button("Cancel", role: .cancel) { }
+            }
+            .onAppear {
+                previousHeartPoints = Array(heartPoints)
+                newHeartPoints = Array(heartPoints)
+                
+                previousStepCounts = Array(stepCounts)
+                newStepCounts = []
+                startTimer()
+            }
+            .onChange(of: Array(heartPoints)) { newPoints in
+                let currentHeartPoints = Array(newPoints)
+                
+                newHeartPoints = currentHeartPoints.filter { !previousHeartPoints.contains($0) }
+                previousHeartPoints = currentHeartPoints
+            }
+            .onChange(of: Array(stepCounts)) { newPoints in
+                let currentStepCounts = Array(newPoints)
+                
+                newStepCounts = currentStepCounts.filter { !previousStepCounts.contains($0) }
+                previousStepCounts = currentStepCounts
             }
             .navigationBarHidden(true)
+        }
+    }
+    
+    func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            elapsedTime += 1
         }
     }
 }
 
 #Preview {
-    ActiveExerciseView(exercise: .constant(Exercise(id: "volleyball", name: "Volleyball", icon: "figure.volleyball")))
+    ActiveExerciseView(exercise: .constant(Exercise(id: "volleyball", name: "Volleyball", icon: "figure.volleyball", components: [.steps, .heart])))
 }
