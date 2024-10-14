@@ -5,7 +5,7 @@
 //  Created by Liam Willey on 10/8/24.
 //
 
-import Foundation
+import SwiftUI
 import UserNotifications
 
 struct AppNotification {
@@ -29,6 +29,8 @@ class NotificationManager: ObservableObject {
     }
     
     @Published var canSendNotifications = false
+    
+    @AppStorage("watchNotifications") var watchNotifications = true
     
     func requestNotificationAuthorization() {
         let center = UNUserNotificationCenter.current()
@@ -62,9 +64,9 @@ class NotificationManager: ObservableObject {
 extension NotificationManager {
     func checkToSendLowBatteryNotification() {
         let bat = bleManager.batteryLevel
-        let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(bat)% " + NSLocalizedString("battery remaining", comment: ""))
+        let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
         
-        if UserDefaults.standard.object(forKey: "batteryNotification") as! Bool? == true && !bleManager.firstConnect {
+        if watchNotifications && !bleManager.firstConnect {
             if bat > 20 {
                 batteryIsUnderTwenty = false
                 batteryIsUnderTen = false

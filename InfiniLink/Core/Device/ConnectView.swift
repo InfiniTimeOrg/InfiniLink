@@ -1,5 +1,5 @@
 //
-//  BLEConnectView.swift
+//  ConnectView.swift
 //  InfiniLink
 //
 //  Created by Liam Willey on 10/3/24.
@@ -8,7 +8,7 @@
 import SwiftUI
 import CoreBluetooth
 
-struct BLEConnectView: View {
+struct ConnectView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
     @Environment(\.colorScheme) var colorScheme
@@ -171,5 +171,5 @@ struct BLEConnectView: View {
 }
 
 #Preview {
-    BLEConnectView()
+    ConnectView()
 }

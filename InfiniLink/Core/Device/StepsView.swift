@@ -177,7 +177,7 @@ struct StepsView: View {
                                 GeometryReader { geoProxy in
                                     Rectangle()
                                         .foregroundStyle(Material.regular)
-                                        .frame(width: 3, height: geoProxy.size.height * 0.91)
+                                        .frame(width: 3, height: geoProxy.size.height * 0.95)
                                         .offset(x: offset)
                                         .opacity(showSelectionBar ? 1 : 0)
                                     Rectangle().fill(.clear).contentShape(Rectangle())

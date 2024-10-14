@@ -68,7 +68,7 @@
 		E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B85D5F2CB6D41700D85122 /* FitnessCalculator.swift */; };
 		E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B85D6E2CB8CDC700D85122 /* Date+Extension.swift */; };
 		E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */; };
-		E0C7C83F2CAEF91C0043DA2D /* BLEConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */; };
+		E0C7C83F2CAEF91C0043DA2D /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */; };
 		E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8462CAF01950043DA2D /* DeviceView.swift */; };
 		E0C7C8532CAF14870043DA2D /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8512CAF14870043DA2D /* SetTime.swift */; };
 		E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */; };
@@ -167,7 +167,7 @@
 		E0B85D6E2CB8CDC700D85122 /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
 		E0B85D712CB9905500D85122 /* Charts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Charts.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX15.1.sdk/System/iOSSupport/System/Library/Frameworks/Charts.framework; sourceTree = DEVELOPER_DIR; };
 		E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
-		E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEConnectView.swift; sourceTree = "<group>"; };
+		E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
 		E0C7C8462CAF01950043DA2D /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
 		E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
 		E0C7C84C2CAF14870043DA2D /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
@@ -456,7 +456,6 @@
 			isa = PBXGroup;
 			children = (
 				E0C7C8452CAF018B0043DA2D /* Device */,
-				E0C7C83D2CAEF9120043DA2D /* Connect */,
 				E0C7C8372CAEF70B0043DA2D /* Welcome */,
 			);
 			path = Core;
@@ -471,14 +470,6 @@
 			path = Welcome;
 			sourceTree = "<group>";
 		};
-		E0C7C83D2CAEF9120043DA2D /* Connect */ = {
-			isa = PBXGroup;
-			children = (
-				E0C7C83E2CAEF91C0043DA2D /* BLEConnectView.swift */,
-			);
-			path = Connect;
-			sourceTree = "<group>";
-		};
 		E0C7C8452CAF018B0043DA2D /* Device */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +481,7 @@
 				E05999982CB25C5600D64E0B /* SleepView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
+				E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -669,7 +661,7 @@
 				E0A7C07F2CB1B3300042A12D /* BLEFS.swift in Sources */,
 				E05999BA2CB335DC00D64E0B /* DataSyncView.swift in Sources */,
 				E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */,
-				E0C7C83F2CAEF91C0043DA2D /* BLEConnectView.swift in Sources */,
+				E0C7C83F2CAEF91C0043DA2D /* ConnectView.swift in Sources */,
 				E0A7C0842CB1B7A60042A12D /* WatchFaceView.swift in Sources */,
 				E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */,
 				E0B85D1F2CB6248000D85122 /* ActiveExerciseView.swift in Sources */,

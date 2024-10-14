@@ -70,7 +70,7 @@ struct WelcomeView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
                 .sheet(isPresented: $showPairingSheet) {
-                    BLEConnectView()
+                    ConnectView()
                 }
             }
             .padding(20)

@@ -8,7 +8,6 @@
 import SwiftUI
 import Accelerate
 import CoreData
-import SwiftUICharts
 import Charts
 
 struct HeartView: View {
@@ -18,6 +17,7 @@ struct HeartView: View {
     
     @State private var offset = 0.0
     @State private var selectedDay = ""
+    @State private var selectedType = ""
     @State private var selectedHeartRate = 0.0
     @State private var showSelectionBar = false
     
@@ -29,8 +29,10 @@ struct HeartView: View {
     
     func setChartSelectionToAvg() {
         offset = 0
-        selectedHeartRate = 45.0 // TODO: calculate based on selection
-        selectedDay = "Oct 6-13" // TODO: add dynamic date
+        let averageHeartRate = heartPointValues.isEmpty ? 0 : vDSP.mean(heartPointValues)
+        selectedHeartRate = averageHeartRate
+        selectedType = "Average"
+        selectedDay = "Oct 6-13" // TODO: add dynamic date calculation
     }
     func heartRate(for val: Double) -> String {
         return val > 0 ? String(format: "%.0f", val) : "--"
@@ -193,11 +195,11 @@ struct HeartView: View {
                     }
                     VStack(spacing: 10) {
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Range".uppercased())
+                            Text(selectedType.uppercased())
                                 .foregroundColor(Color(.darkGray))
                                 .font(.caption.weight(.semibold))
                             VStack(alignment: .leading, spacing: 1) {
-                                Text("\(String(format: "%.0f", selectedHeartRate)) steps")
+                                Text("\(String(format: "%.0f", selectedHeartRate)) BPM")
                                     .font(.title3.weight(.bold))
                                 Text(selectedDay)
                                     .foregroundColor(.gray)
@@ -222,7 +224,7 @@ struct HeartView: View {
                             GeometryReader { geoProxy in
                                 Rectangle()
                                     .foregroundStyle(Material.regular)
-                                    .frame(width: 3, height: geoProxy.size.height * 0.91)
+                                    .frame(width: 3, height: geoProxy.size.height * 0.95)
                                     .offset(x: offset)
                                     .opacity(showSelectionBar ? 1 : 0)
                                 Rectangle().fill(.clear).contentShape(Rectangle())
@@ -240,6 +242,7 @@ struct HeartView: View {
                                             offset = min(max(location.x, minX), maxX)
                                             
                                             if let (ay, heartVal) = overlayProxy.value(at: location, as: (String, Double).self) {
+                                                selectedType = "Range"
                                                 selectedDay = "Mon"
                                                 selectedHeartRate = heartVal
                                             }
