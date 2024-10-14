@@ -9,11 +9,17 @@ import SwiftUI
 import Accelerate
 import CoreData
 import SwiftUICharts
+import Charts
 
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
     @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
+    
+    @State private var offset = 0.0
+    @State private var selectedDay = ""
+    @State private var selectedHeartRate = 0.0
+    @State private var showSelectionBar = false
     
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
     
@@ -21,6 +27,11 @@ struct HeartView: View {
         return heartPoints.compactMap({ $0.value })
     }
     
+    func setChartSelectionToAvg() {
+        offset = 0
+        selectedHeartRate = 45.0 // TODO: calculate based on selection
+        selectedDay = "Oct 6-13" // TODO: add dynamic date
+    }
     func heartRate(for val: Double) -> String {
         return val > 0 ? String(format: "%.0f", val) : "--"
     }
@@ -47,6 +58,93 @@ struct HeartView: View {
         } else {
             return units(for: Int(abs(timeInterval)))
         }
+    }
+    func heartRateValuesForSelection() -> [(String, Double)] {
+//        let calendar = Calendar.current
+//        var data: [(String, Double)] = []
+//        let dateFormatter = DateFormatter()
+        
+#if DEBUG
+        return [
+            ("6 AM", 112.0),
+            ("6 AM", 111.0),
+            ("6 AM", 110.0),
+            ("6 AM", 109.0),
+            ("6 AM", 108.0),
+            ("6 AM", 70.0),
+            ("6 AM", 67.0),
+            ("12 PM", 76.0),
+            ("6 PM", 52.0),
+            ("12 AM", 47.0)
+        ]
+#endif
+        switch dataSelection {
+        case 0: // Weekly (last 7 days with day names)
+//            dateFormatter.dateFormat = "EEE"
+//            for dayOffset in 0..<7 {
+//                if let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) {
+//                    let dayName = dateFormatter.string(from: date)
+//                    let stepCount = Int(steps(for: date)) ?? 0
+//                    data.insert((dayName, stepCount), at: 0) // Insert to maintain order
+//                }
+//            }
+            break
+        case 1: // Monthly (showing each day of the month, label every 7th day)
+//            if let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date())) {
+//                let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
+//                
+//                for dayOffset in range {
+//                    if let dayDate = calendar.date(byAdding: .day, value: dayOffset - 1, to: startOfMonth) {
+//                        let dayNumber = calendar.component(.day, from: dayDate)
+//                        let stepCount = Int(steps(for: dayDate)) ?? 0
+//                        
+//                        let label = (dayOffset % 7 == 0) ? "\(dayNumber)" : "1"
+//                        data.append((label, stepCount))
+//                    }
+//                }
+//            }
+            break
+        case 2: // Last 6 months
+//            for monthOffset in 0..<6 {
+//                if let startOfMonth = calendar.date(byAdding: .month, value: -monthOffset, to: Date()) {
+//                    let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
+//                    var totalSteps = 0
+//                    
+//                    // Sum steps for the entire month
+//                    for day in range {
+//                        if let dayDate = calendar.date(byAdding: .day, value: day - 1, to: startOfMonth) {
+//                            totalSteps += Int(steps(for: dayDate)) ?? 0
+//                        }
+//                    }
+//                    
+//                    let monthName = Date.monthAbbreviationFromInt(calendar.component(.month, from: startOfMonth) - 1)
+//                    data.insert((monthName, totalSteps), at: 0)
+//                }
+//            }
+            break
+        case 3: // Year (past 12 months)
+//            for monthOffset in 0..<12 {
+//                if let startOfMonth = calendar.date(byAdding: .month, value: -monthOffset, to: Date()) {
+//                    let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
+//                    var totalSteps = 0
+//                    
+//                    // Sum steps for the entire month
+//                    for day in range {
+//                        if let dayDate = calendar.date(byAdding: .day, value: day - 1, to: startOfMonth) {
+//                            totalSteps += Int(steps(for: dayDate)) ?? 0
+//                        }
+//                    }
+//                    
+//                    let monthName = Date.monthAbbreviationFromInt(calendar.component(.month, from: startOfMonth) - 1)
+//                    data.insert((monthName, totalSteps), at: 0)
+//                }
+//            }
+            break
+        default:
+            break
+        }
+        
+//        return data
     }
     
     var body: some View {
@@ -93,7 +191,68 @@ struct HeartView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    
+                    VStack(spacing: 10) {
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Range".uppercased())
+                                .foregroundColor(Color(.darkGray))
+                                .font(.caption.weight(.semibold))
+                            VStack(alignment: .leading, spacing: 1) {
+                                Text("\(String(format: "%.0f", selectedHeartRate)) steps")
+                                    .font(.title3.weight(.bold))
+                                Text(selectedDay)
+                                    .foregroundColor(.gray)
+                            }
+                        }
+                        .padding(.leading, 10)
+                        .frame(width: 150, height: 76, alignment: .leading)
+                        .background(Material.regular)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                        .offset(x: offset)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        Chart {
+                            ForEach(heartRateValuesForSelection(), id: \.0) { (label, rate) in
+                                PointMark(
+                                    x: .value("Label", label),
+                                    y: .value("Range", rate)
+                                )
+                                .foregroundStyle(Color.red)
+                            }
+                        }
+                        .chartOverlay { overlayProxy in
+                            GeometryReader { geoProxy in
+                                Rectangle()
+                                    .foregroundStyle(Material.regular)
+                                    .frame(width: 3, height: geoProxy.size.height * 0.91)
+                                    .offset(x: offset)
+                                    .opacity(showSelectionBar ? 1 : 0)
+                                Rectangle().fill(.clear).contentShape(Rectangle())
+                                    .gesture(DragGesture()
+                                        .onChanged { value in
+                                            if !showSelectionBar {
+                                                showSelectionBar = true
+                                            }
+                                            
+                                            let minX = geoProxy[overlayProxy.plotAreaFrame].minX
+                                            let maxX = geoProxy[overlayProxy.plotAreaFrame].maxX
+                                            let origin = geoProxy[overlayProxy.plotAreaFrame].origin
+                                            let location = CGPoint(x: value.location.x - origin.x, y: 0)
+                                            
+                                            offset = min(max(location.x, minX), maxX)
+                                            
+                                            if let (ay, heartVal) = overlayProxy.value(at: location, as: (String, Double).self) {
+                                                selectedDay = "Mon"
+                                                selectedHeartRate = heartVal
+                                            }
+                                        }
+                                        .onEnded { _ in
+                                            showSelectionBar = false
+                                            setChartSelectionToAvg()
+                                        }
+                                    )
+                            }
+                        }
+                        .frame(height: geo.size.width / 1.8)
+                    }
                 }
                 .padding()
             }
@@ -106,8 +265,8 @@ struct HeartView: View {
                 Label("Settings", systemImage: "gear")
             }
         }
-        .onChange(of: heartPointValues) { vals in
-            print(heartPointValues)
+        .onAppear {
+            setChartSelectionToAvg()
         }
     }
 }

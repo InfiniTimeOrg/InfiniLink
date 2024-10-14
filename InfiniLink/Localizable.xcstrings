@@ -34,6 +34,9 @@
     "%@ needs to be connected to update its software." : {
 
     },
+    "%@ steps" : {
+
+    },
     "%@:%@:%@" : {
       "localizations" : {
         "en" : {

@@ -364,7 +364,9 @@
 		E0A7C07B2CB1AD2E0042A12D /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */,
 				E05999FD2CB462BF00D64E0B /* ChartManager.swift */,
+				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
 				E05999FF2CB46EB100D64E0B /* StepCountManager.swift */,
 				E0A7C07C2CB1AD370042A12D /* MusicController.swift */,
 				E05999BB2CB336AE00D64E0B /* HealthKitManager.swift */,
@@ -396,15 +398,6 @@
 				E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */,
 			);
 			path = Update;
-			sourceTree = "<group>";
-		};
-		E0A7C0912CB1EE8F0042A12D /* DFU */ = {
-			isa = PBXGroup;
-			children = (
-				E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */,
-				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
-			);
-			path = DFU;
 			sourceTree = "<group>";
 		};
 		E0A7C09F2CB245F70042A12D /* Components */ = {
@@ -462,7 +455,6 @@
 		E0C7C8362CAEF6BF0043DA2D /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				E0A7C0912CB1EE8F0042A12D /* DFU */,
 				E0C7C8452CAF018B0043DA2D /* Device */,
 				E0C7C83D2CAEF9120043DA2D /* Connect */,
 				E0C7C8372CAEF70B0043DA2D /* Welcome */,
