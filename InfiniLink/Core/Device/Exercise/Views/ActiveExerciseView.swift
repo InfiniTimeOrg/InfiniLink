@@ -29,6 +29,8 @@ struct ActiveExerciseView: View {
     
     @State private var elapsedTime: TimeInterval = 0
     
+    @AppStorage("exerciseTimeGoal") var exerciseTime: ExerciseTimeGoal = .hour
+    
     let startDate = Date()
     
     var body: some View {
@@ -137,6 +139,10 @@ struct ActiveExerciseView: View {
     func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             elapsedTime += 1
+            
+            if Int(elapsedTime) == exerciseTime.rawValue {
+                NotificationManager.shared.sendExerciseTimeGoalReachedNotification()
+            }
         }
     }
 }

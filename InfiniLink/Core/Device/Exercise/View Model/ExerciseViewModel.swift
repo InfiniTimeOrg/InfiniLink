@@ -12,6 +12,8 @@ import CoreData
 class ExerciseViewModel: ObservableObject {
     static let shared = ExerciseViewModel()
     
+    let healthKitManager = HealthKitManager.shared
+    
     let exercises = [
         Exercise(id: "outdoor-run", name: "Outdoor Run", icon: "figure.run", components: [.heart, .steps]),
         Exercise(id: "outdoor-cycle", name: "Outdoor Cycle", icon: "figure.outdoor.cycle", components: [.heart]),
@@ -44,6 +46,7 @@ class ExerciseViewModel: ObservableObject {
         }
         
         saveContext(viewContext)
+        healthKitManager.writeExerciseTime(startDate: startDate, endDate: Date()) { _, _ in }
     }
     
     func saveContext(_ context: NSManagedObjectContext) {

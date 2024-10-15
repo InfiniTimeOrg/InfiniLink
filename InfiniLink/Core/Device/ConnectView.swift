@@ -141,7 +141,6 @@ struct ConnectView: View {
                                                 .clipShape(RoundedRectangle(cornerRadius: 20))
                                             }
                                         }
-                                        .disabled(deviceWithPendingConnectionID != nil)
                                     }
                                 }
                             }

@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import CoreData
-import SwiftUICharts
 
 class ChartManager: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext

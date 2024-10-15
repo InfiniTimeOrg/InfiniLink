@@ -40,6 +40,8 @@
 	<string>This app needs your location to receive local weather information when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs your location to receive local weather information.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>This app needs access to your reminders to receive them on your watch.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>JetBrainsMono-Bold.ttf</string>

@@ -30,7 +30,7 @@ struct ExerciseView: View {
                                 let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
 
                                 NavigationLink {
-                                    ExerciseDetailView()
+                                    ExerciseDetailView(userExercise: userExercise)
                                 } label: {
                                     HStack {
                                         Image(systemName: exercise.icon)

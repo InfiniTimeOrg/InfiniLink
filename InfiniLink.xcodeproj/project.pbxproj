@@ -39,6 +39,9 @@
 		E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */; };
 		E0599A0F2CB4E62800D64E0B /* UserDataCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0E2CB4E62800D64E0B /* UserDataCollectionView.swift */; };
 		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
+		E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F132CBD688A005C1325 /* CustomizationView.swift */; };
+		E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */; };
+		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -139,6 +142,9 @@
 		E0599A0E2CB4E62800D64E0B /* UserDataCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDataCollectionView.swift; sourceTree = "<group>"; };
 		E0599A102CB5553B00D64E0B /* FSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSFile.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E07D8F132CBD688A005C1325 /* CustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizationView.swift; sourceTree = "<group>"; };
+		E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersManager.swift; sourceTree = "<group>"; };
+		E07D8F172CBE2071005C1325 /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
@@ -375,6 +381,7 @@
 				E0599A032CB4C58800D64E0B /* LV_IMG_Convert.swift */,
 				E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */,
 				E0B85D5F2CB6D41700D85122 /* FitnessCalculator.swift */,
+				E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -406,6 +413,7 @@
 				E0B85D662CB868BC00D85122 /* Charts */,
 				E0A7C0A22CB246D10042A12D /* DetailHeaderView.swift */,
 				E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */,
+				E07D8F172CBE2071005C1325 /* ActionView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -481,6 +489,7 @@
 				E05999982CB25C5600D64E0B /* SleepView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
+				E07D8F132CBD688A005C1325 /* CustomizationView.swift */,
 				E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */,
 			);
 			path = Device;
@@ -691,6 +700,8 @@
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
+				E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */,
+				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
 				E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */,
@@ -707,6 +718,7 @@
 				E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */,
 				E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */,
 				E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */,
+				E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */,
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,
 				E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */,

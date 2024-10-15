@@ -62,11 +62,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
     
-    @Published var watchFace: Int = -1
-    @Published var pineTimeStyleData = PineTimeStyleData()
-    @Published var infineatWatchFace = WatchFaceInfineat()
-    @Published var timeFormat: ClockType = .H24
-    
     @Published var weatherInformation = WeatherInformation()
     @Published var weatherForecastDays = [WeatherForecastDay]()
     @Published var loadingWeather = true
@@ -82,7 +77,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     @AppStorage("weatherMode") var weatherMode: String = "imperial"
-    @AppStorage("stepCountGoal") var stepCountGoal = 10000
     
     var hasLoadedCharacteristics: Bool {
         // Use currentTimeService because it's present in all firmware versions
@@ -94,9 +88,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     var isHeartRateBeingRead: Bool {
         return heartRate != 0
-    }
-    var hour24: Bool {
-        timeFormat == .H24
     }
     
     override init() {
@@ -153,11 +144,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func setSettings(from settings: Settings) {
         DispatchQueue.main.async {
-            self.stepCountGoal = Int(settings.stepsGoal)
-            self.watchFace = Int(settings.watchFace)
-            self.pineTimeStyleData = settings.pineTimeStyle
-            self.timeFormat = settings.clockType
-            self.infineatWatchFace = settings.watchFaceInfineat
+            self.deviceInfoManager.settings = settings
+            
             switch settings.weatherFormat {
             case .Metric:
                 self.weatherMode = "metric"

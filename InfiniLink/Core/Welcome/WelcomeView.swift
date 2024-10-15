@@ -72,6 +72,7 @@ struct WelcomeView: View {
                 .sheet(isPresented: $showPairingSheet) {
                     ConnectView()
                 }
+                .padding(.bottom)
             }
             .padding(20)
             .background {

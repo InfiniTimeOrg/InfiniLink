@@ -12,6 +12,7 @@ struct NotificationsSettingsView: View {
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("standUpReminder") var standUpReminder = true
     @AppStorage("watchNotifications") var watchNotifications = true
+    @AppStorage("enableReminders") var enableReminders = true
     @AppStorage("notifyOnReconnect") var notifyOnReconnect = false // Update to have same string as "first connect" setting in old app?
     
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
@@ -42,7 +43,10 @@ struct NotificationsSettingsView: View {
                     Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
                     Toggle("Exercise Time", isOn: $remindOnExerciseTimeGoalCompletion)
                 }
-                Section("Other") {
+                Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders are due.")) {
+                    Toggle("Reminder Notifications", isOn: $enableReminders)
+                }
+                Section {
                     Toggle("Notify on Reconnect", isOn: $notifyOnReconnect)
                 }
             }

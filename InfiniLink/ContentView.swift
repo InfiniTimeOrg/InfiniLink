@@ -4,13 +4,13 @@
 //
 //  Created by Liam Emry on 10/2/24.
 //
-// TODO: add user settings view to get weight, height, and age to get distance and kcal
-//
 
 import SwiftUI
+import EventKit
 
 struct ContentView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var remindersManager = RemindersManager.shared
     
     var body: some View {
         Group {
@@ -28,6 +28,11 @@ struct ContentView: View {
         }
         .onAppear {
             bleManager.startScanning()
+            remindersManager.requestReminderAccess()
+            
+            NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: nil, queue: .main) { _ in
+                remindersManager.fetchAllReminders()
+            }
         }
     }
 }

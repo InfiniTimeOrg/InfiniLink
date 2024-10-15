@@ -9,6 +9,7 @@ import SwiftUI
 
 struct AboutSettingsView: View {
     @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     var body: some View {
         Group {
@@ -19,7 +20,7 @@ struct AboutSettingsView: View {
                     } label: {
                         AboutRowView(title: "Name", value: deviceInfoManager.deviceName)
                     }
-                    .disabled(!BLEManager.shared.hasLoadedCharacteristics)
+                    .disabled(!bleManager.hasLoadedCharacteristics)
                     AboutRowView(title: "Software Version", value: deviceInfoManager.firmware)
                     AboutRowView(title: "Manufacturer", value: deviceInfoManager.manufacturer)
                     AboutRowView(title: "Model Number", value: deviceInfoManager.modelNumber)
@@ -31,6 +32,7 @@ struct AboutSettingsView: View {
                 Section {
                     AboutRowView(title: "File System", value: deviceInfoManager.blefsVersion)
                     AboutRowView(title: "Hardware Revision", value: deviceInfoManager.hardwareRevision)
+                    AboutRowView(title: "Settings Version", value: String(deviceInfoManager.settingsVersion))
                 }
             }
         }

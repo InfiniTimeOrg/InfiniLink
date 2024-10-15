@@ -29,10 +29,20 @@ class DeviceInfoManager: ObservableObject {
     @AppStorage("firmware") var firmware = ""
     @AppStorage("hardwareRevision") var hardwareRevision = ""
     @AppStorage("softwareRevision") var softwareRevision = ""
+    @AppStorage("settingsVersion") var settingsVersion = 0
+    @AppStorage("screenTimeout") var screenTimeout = 0
     @AppStorage("manufacturer") var manufacturer = ""
     @AppStorage("blefsVersion") var blefsVersion = ""
     @AppStorage("lastDisconnect") var lastDisconnect: TimeInterval = 0
     @AppStorage("lastConnect") var lastConnect: TimeInterval = 0
+    @AppStorage("stepCountGoal") var stepCountGoal = 10000
+    
+    @Published var settings = Settings()
+    @Published var showRestartAlert = false
+    
+    var hour24: Bool {
+        settings.clockType == .H24
+    }
 	
 	func updateInfo(characteristic: CBCharacteristic) {
 		guard let value = characteristic.value else { return }

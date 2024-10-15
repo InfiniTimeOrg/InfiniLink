@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DeviceView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     
@@ -36,7 +37,7 @@ struct DeviceView: View {
             GeometryReader { geo in
                 List {
                     VStack(spacing: 4) {
-                        WatchFaceView(watchface: $bleManager.watchFace)
+                        WatchFaceView(watchface: .constant(nil))
                             .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
                             .clipped(antialiased: true)
                         VStack(spacing: 5) {
@@ -121,11 +122,13 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
                         }
+                        /*
                         NavigationLink {
                             
                         } label: {
                             ListRowView(title: "Stress", icon: "face.smiling", iconColor: .black)
                         }
+                         */
                     }
                     Section {
                         NavigationLink {
@@ -134,7 +137,7 @@ struct DeviceView: View {
                             ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                         }
                         NavigationLink {
-                            
+                            CustomizationView()
                         } label: {
                             ListRowView(title: "Customization", icon: "paintbrush.fill", iconColor: .blue)
                         }
@@ -217,7 +220,7 @@ struct ListRowView: View {
 #Preview {
     DeviceView()
         .onAppear {
-            BLEManager.shared.watchFace = 4
+            DeviceInfoManager.shared.settings.watchFace = 4
             DeviceInfoManager.shared.firmware = "1.14.0"
             DownloadManager.shared.updateVersion = "1.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."

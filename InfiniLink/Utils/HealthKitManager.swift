@@ -90,6 +90,26 @@ class HealthKitManager: ObservableObject {
         }
     }
     
+    func writeExerciseTime(startDate: Date, endDate: Date, completion: @escaping (Bool, Error?) -> Void) {
+        guard endDate > startDate else {
+            completion(false, NSError(domain: "Invalid dates", code: 1, userInfo: [NSLocalizedDescriptionKey: "End date must be later than start date."]))
+            return
+        }
+        
+        let exerciseType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime)!
+        
+        let duration = endDate.timeIntervalSince(startDate) / 60.0
+        let exerciseQuantity = HKQuantity(unit: .minute(), doubleValue: duration)
+        
+        let exerciseSample = HKQuantitySample(type: exerciseType, quantity: exerciseQuantity, start: startDate, end: endDate)
+        
+        if healthStore?.authorizationStatus(for: exerciseType) == .sharingAuthorized && syncToAppleHealth {
+            healthStore?.save(exerciseSample) { success, error in
+                completion(success, error)
+            }
+        }
+    }
+    
     func requestAuthorization() {
         let stepType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
         let heartRate = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!

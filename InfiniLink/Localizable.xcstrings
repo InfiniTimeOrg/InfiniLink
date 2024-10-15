@@ -176,6 +176,9 @@
     "Create" : {
 
     },
+    "Customization" : {
+
+    },
     "D" : {
 
     },
@@ -353,10 +356,19 @@
     "Receive a reminder to drink water for the set amount of times a day." : {
 
     },
+    "Receive notifications on your watch when reminders are due." : {
+
+    },
     "Refresh" : {
 
     },
     "Releases" : {
+
+    },
+    "Reminder Notifications" : {
+
+    },
+    "Reminders" : {
 
     },
     "Rename" : {

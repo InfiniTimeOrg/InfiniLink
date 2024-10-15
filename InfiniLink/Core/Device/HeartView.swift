@@ -80,8 +80,8 @@ struct HeartView: View {
             ("12 AM", 47.0)
         ]
 #endif
-        switch dataSelection {
-        case 0: // Weekly (last 7 days with day names)
+//        switch dataSelection {
+//        case 0: // Weekly (last 7 days with day names)
 //            dateFormatter.dateFormat = "EEE"
 //            for dayOffset in 0..<7 {
 //                if let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) {
@@ -90,8 +90,7 @@ struct HeartView: View {
 //                    data.insert((dayName, stepCount), at: 0) // Insert to maintain order
 //                }
 //            }
-            break
-        case 1: // Monthly (showing each day of the month, label every 7th day)
+//        case 1: // Monthly (showing each day of the month, label every 7th day)
 //            if let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: Date())) {
 //                let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
 //                
@@ -105,8 +104,7 @@ struct HeartView: View {
 //                    }
 //                }
 //            }
-            break
-        case 2: // Last 6 months
+//        case 2: // Last 6 months
 //            for monthOffset in 0..<6 {
 //                if let startOfMonth = calendar.date(byAdding: .month, value: -monthOffset, to: Date()) {
 //                    let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
@@ -123,8 +121,7 @@ struct HeartView: View {
 //                    data.insert((monthName, totalSteps), at: 0)
 //                }
 //            }
-            break
-        case 3: // Year (past 12 months)
+//        case 3: // Year (past 12 months)
 //            for monthOffset in 0..<12 {
 //                if let startOfMonth = calendar.date(byAdding: .month, value: -monthOffset, to: Date()) {
 //                    let range = calendar.range(of: .day, in: .month, for: startOfMonth)!
@@ -141,10 +138,9 @@ struct HeartView: View {
 //                    data.insert((monthName, totalSteps), at: 0)
 //                }
 //            }
-            break
-        default:
-            break
-        }
+//        default:
+//            break
+//        }
         
 //        return data
     }
@@ -241,9 +237,9 @@ struct HeartView: View {
                                             
                                             offset = min(max(location.x, minX), maxX)
                                             
-                                            if let (ay, heartVal) = overlayProxy.value(at: location, as: (String, Double).self) {
+                                            if let (day, heartVal) = overlayProxy.value(at: location, as: (String, Double).self) {
                                                 selectedType = "Range"
-                                                selectedDay = "Mon"
+                                                selectedDay = day
                                                 selectedHeartRate = heartVal
                                             }
                                         }
