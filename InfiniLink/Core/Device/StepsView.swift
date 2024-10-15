@@ -23,7 +23,7 @@ struct StepsView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
     private var existingStepCounts: FetchedResults<StepCounts>
     
-    let exerciseCalculator = FitnessCalculator()
+    let exerciseCalculator = FitnessCalculator.shared
     
     func steps(for date: Date) -> String {
         for stepCount in existingStepCounts {

@@ -8,6 +8,8 @@
 import Foundation
 
 class FitnessCalculator {
+    static let shared = FitnessCalculator()
+    
     let personalization = PersonalizationController.shared
     let bleManager = BLEManager.shared
     

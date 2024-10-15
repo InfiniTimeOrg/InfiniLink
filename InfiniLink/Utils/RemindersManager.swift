@@ -16,7 +16,29 @@ class RemindersManager: ObservableObject {
     
     var eventStore = EKEventStore()
     
+    var timer: Timer?
+    
     @AppStorage("enableReminders") var enableReminders = true
+    
+    init() {
+        startCheckingForDueReminders()
+    }
+    
+    func startCheckingForDueReminders() {
+        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
+            self.checkForDueReminders()
+        }
+    }
+    
+    func checkForDueReminders() {
+        let currentTime = Date()
+        
+        for reminder in reminders {
+            if let dueDate = reminder.dueDateComponents?.date, dueDate == currentTime, !reminder.isCompleted {
+                NotificationManager.shared.sendReminderDueNotification(reminder)
+            }
+        }
+    }
     
     func fetchAllReminders() {
         if enableReminders {

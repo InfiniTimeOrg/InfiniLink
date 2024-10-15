@@ -32,22 +32,32 @@ struct RemindersView: View {
     }
     
     var authorized: some View {
-        List {
-            ForEach(remindersManager.reminders.filter({ $0.isCompleted == false }), id: \.hashValue) { reminder in
-                Button {
-                    remindersManager.completeReminder(reminder)
-                } label: {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(reminder.title)
-                            if let dueDate = reminder.dueDateComponents, let date = Calendar.current.date(from: dueDate) {
-                                Text("Notifying on " + date.formatted())
+        Group {
+            if remindersManager.reminders.filter({ $0.isCompleted == false }).isEmpty {
+                Text("You don't have any upcoming reminders. You can set them in the Reminders app.")
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .foregroundStyle(Color.gray)
+                    .multilineTextAlignment(.center)
+                    .padding()
+            } else {
+                List {
+                    ForEach(remindersManager.reminders.filter({ $0.isCompleted == false }), id: \.hashValue) { reminder in
+                        Button {
+                            remindersManager.completeReminder(reminder)
+                        } label: {
+                            HStack {
+                                VStack(alignment: .leading, spacing: 2) {
+                                    Text(reminder.title)
+                                    if let dueDate = reminder.dueDateComponents, let date = Calendar.current.date(from: dueDate) {
+                                        Text("\(date <= Date() ? "Notifying" : "Notified") on " + date.formatted())
+                                            .foregroundStyle(.gray)
+                                    }
+                                }
+                                Spacer()
+                                Image(systemName: "circle")
                                     .foregroundStyle(.gray)
                             }
                         }
-                        Spacer()
-                        Image(systemName: "circle")
-                            .foregroundStyle(.gray)
                     }
                 }
             }

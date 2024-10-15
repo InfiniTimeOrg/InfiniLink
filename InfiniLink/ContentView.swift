@@ -11,13 +11,21 @@ import EventKit
 struct ContentView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var remindersManager = RemindersManager.shared
+    @ObservedObject var notificationManager = NotificationManager.shared
+    
+    @AppStorage("caloriesGoal") var caloriesGoal = 400
     
     var body: some View {
         Group {
             if bleManager.pairedDeviceID != nil || bleManager.isConnectedToPinetime {
                 DeviceView()
                     .onChange(of: bleManager.batteryLevel) { bat in
-                        NotificationManager.shared.checkToSendLowBatteryNotification()
+                        notificationManager.checkToSendLowBatteryNotification()
+                    }
+                    .onChange(of: FitnessCalculator.shared.calculateCaloriesBurned(steps: bleManager.stepCount)) { calories in
+                        if Int(calories) == caloriesGoal {
+                            notificationManager.sendCaloriesGoalReachedNotification()
+                        }
                     }
                     .sheet(isPresented: PersonalizationController.shared.$showSetupSheet) {
                         UserDataCollectionView()

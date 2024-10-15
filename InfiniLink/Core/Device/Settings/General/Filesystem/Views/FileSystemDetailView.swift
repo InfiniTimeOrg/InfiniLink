@@ -4,8 +4,6 @@
 //
 //  Created by Liam Willey on 10/7/24.
 //
-// TODO: implement file read for other than just settings.dat
-//
 
 import SwiftUI
 
@@ -84,6 +82,7 @@ struct FileSystemDetailView: View {
                 }
             }
             .onAppear {
+                // TODO: read other files
                 BLEFSHandler.shared.readSettings { settings in
                     self.settings = settings
                     

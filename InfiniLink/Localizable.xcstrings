@@ -7,6 +7,9 @@
     " • " : {
 
     },
+    " is due." : {
+
+    },
     "-" : {
 
     },
@@ -245,6 +248,9 @@
     "Get notified when you reach your daily fitness goals." : {
 
     },
+    "Goal Reached" : {
+
+    },
     "Goals" : {
 
     },
@@ -363,6 +369,9 @@
 
     },
     "Releases" : {
+
+    },
+    "Reminder Due" : {
 
     },
     "Reminder Notifications" : {
@@ -487,6 +496,15 @@
 
     },
     "Y" : {
+
+    },
+    "You don't have any upcoming reminders. You can set them in the Reminders app." : {
+
+    },
+    "You've reached your calorie goal!" : {
+
+    },
+    "You've reached your exercise time goal!" : {
 
     }
   },

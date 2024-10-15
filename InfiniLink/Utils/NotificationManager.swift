@@ -7,6 +7,7 @@
 
 import SwiftUI
 import UserNotifications
+import EventKit
 
 struct AppNotification {
     let title: String
@@ -89,6 +90,21 @@ extension NotificationManager {
 extension NotificationManager {
     func sendExerciseTimeGoalReachedNotification() {
         let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your exercise time goal!", comment: ""))
+        
+        self.bleWriteManager.sendNotification(notif)
+    }
+    
+    func sendCaloriesGoalReachedNotification() {
+        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your calorie goal!", comment: ""))
+        
+        self.bleWriteManager.sendNotification(notif)
+    }
+}
+
+// MARK: Reminders
+extension NotificationManager {
+    func sendReminderDueNotification(_ reminder: EKReminder) {
+        let notif = AppNotification(title: NSLocalizedString("Reminder Due", comment: ""), subtitle: reminder.title + NSLocalizedString(" is due.", comment: ""))
         
         self.bleWriteManager.sendNotification(notif)
     }

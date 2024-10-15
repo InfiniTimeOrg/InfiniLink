@@ -17,7 +17,7 @@ struct CustomizationView: View {
                 Section {
                     ScrollViewReader { proxy in
                         ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 6) {
+                            HStack(spacing: 0) {
                                 ForEach(0...5, id: \.self) { index in
                                     let isSelected = (deviceInfoManager.settings.watchFace == UInt8(index))
                                     

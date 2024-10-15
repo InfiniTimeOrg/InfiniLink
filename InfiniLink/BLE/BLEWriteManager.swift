@@ -7,9 +7,12 @@
 
 import Foundation
 import CoreBluetooth
+import SwiftUI
 
 struct BLEWriteManager {
     let bleManager = BLEManager.shared
+    
+    @AppStorage("watchNotifications") var watchNotifications = true
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
         guard let writeData = message.data(using: .ascii) else {
@@ -37,30 +40,23 @@ struct BLEWriteManager {
         guard let titleData = ("   " + notif.title + "\0").data(using: .ascii) else { return }
         guard let bodyData = (notif.subtitle + "\0").data(using: .ascii) else { return }
         
-        let doSend = UserDefaults.standard.object(forKey: "watchNotifications")
         var notification = titleData
         
         notification.append(bodyData)
         
-        if !notification.isEmpty {
-            if (doSend == nil || doSend as! Bool) && bleManager.infiniTime != nil {
-                bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
-            }
+        if !notification.isEmpty && watchNotifications && bleManager.infiniTime != nil {
+            bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
         }
     }
     
     func sendLostNotification() {
         let hexPrefix = Data([0x03, 0x01, 0x00]) // Hexadecimal representation of "\x03\x01\x00"
         let nameData = "InfiniLink".data(using: .ascii) ?? Data()
-
-        let notification = hexPrefix + nameData
-
-        let doSend = UserDefaults.standard.object(forKey: "watchNotifications")
         
-        if notification.count > 0 {
-            if (doSend == nil || doSend as! Bool) && bleManager.infiniTime != nil {
-                bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
-            }
+        let notification = hexPrefix + nameData
+        
+        if notification.count > 0 && watchNotifications && bleManager.infiniTime != nil {
+            bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
         }
     }
     
