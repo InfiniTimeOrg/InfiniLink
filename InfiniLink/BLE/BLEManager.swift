@@ -70,11 +70,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var batteryLevel: Double = 0
     @Published var stepCount: Int = 0
     
-    @Published var lastWeatherUpdateNWS: Int = 0
-    @Published var lastWeatherUpdateWAPI: Int = 0
-    @Published var latitude: Double = 0.0
-    @Published var longitude: Double = 0.0
-    
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     @AppStorage("weatherMode") var weatherMode: String = "imperial"
     
@@ -118,6 +113,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                 disconnect()
             }
             stopScanning()
+            
+            DownloadManager.shared.updateAvailable = false
             
             infiniTime = peripheral
             infiniTime?.delegate = self

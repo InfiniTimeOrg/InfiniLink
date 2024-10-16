@@ -177,8 +177,10 @@ struct DeviceView: View {
                 }
             }
             .onChange(of: bleManager.blefsTransfer) { _ in
-                BLEFSHandler.shared.readSettings { settings in
-                    bleManager.setSettings(from: settings)
+                if bleManager.blefsTransfer != nil {
+                    BLEFSHandler.shared.readSettings { settings in
+                        bleManager.setSettings(from: settings)
+                    }
                 }
             }
             .onAppear {

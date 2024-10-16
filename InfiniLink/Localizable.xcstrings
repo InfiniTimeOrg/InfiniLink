@@ -69,6 +69,9 @@
     "%@%%" : {
 
     },
+    "%lf" : {
+
+    },
     "%lld" : {
 
     },
@@ -311,6 +314,9 @@
     "Let's get you set up." : {
 
     },
+    "Loading weather..." : {
+
+    },
     "Looking for your watch..." : {
 
     },
@@ -342,9 +348,6 @@
 
     },
     "Now" : {
-
-    },
-    "Only settings files are currently supported." : {
 
     },
     "Open Settings..." : {
@@ -428,6 +431,9 @@
     "Sync step and heart rate data to Apple Health." : {
 
     },
+    "The folder name cannot contain a period." : {
+
+    },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
 
     },
@@ -471,9 +477,6 @@
     "Uploading..." : {
 
     },
-    "Uploading...%lld%%" : {
-
-    },
     "Use Local File" : {
 
     },
@@ -490,6 +493,9 @@
 
     },
     "We need access to your Music Library." : {
+
+    },
+    "Weather" : {
 
     },
     "Weather Format" : {

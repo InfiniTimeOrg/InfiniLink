@@ -36,10 +36,12 @@ class NotificationManager: ObservableObject {
     func requestNotificationAuthorization() {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            if granted {
-                self.canSendNotifications = true
-            } else if error != nil {
-                self.canSendNotifications = false
+            DispatchQueue.main.async {
+                if granted {
+                    self.canSendNotifications = true
+                } else if error != nil {
+                    self.canSendNotifications = false
+                }
             }
         }
     }

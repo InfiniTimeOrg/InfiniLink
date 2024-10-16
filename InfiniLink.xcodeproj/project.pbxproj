@@ -42,6 +42,8 @@
 		E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F132CBD688A005C1325 /* CustomizationView.swift */; };
 		E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */; };
 		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
+		E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */; };
+		E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1F2CBF051A005C1325 /* LocationManager.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -145,6 +147,8 @@
 		E07D8F132CBD688A005C1325 /* CustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizationView.swift; sourceTree = "<group>"; };
 		E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersManager.swift; sourceTree = "<group>"; };
 		E07D8F172CBE2071005C1325 /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
+		E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
+		E07D8F1F2CBF051A005C1325 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
@@ -382,6 +386,8 @@
 				E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */,
 				E0B85D5F2CB6D41700D85122 /* FitnessCalculator.swift */,
 				E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */,
+				E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */,
+				E07D8F1F2CBF051A005C1325 /* LocationManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -677,6 +683,7 @@
 				E0A7C09A2CB2270D0042A12D /* StepsView.swift in Sources */,
 				E0C7C8532CAF14870043DA2D /* SetTime.swift in Sources */,
 				E0A7C0A52CB2527F0042A12D /* HeartSettingsView.swift in Sources */,
+				E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */,
 				E05999992CB25C5600D64E0B /* SleepView.swift in Sources */,
 				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
 				E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */,
@@ -710,6 +717,7 @@
 				E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */,
 				E0A7C09C2CB234450042A12D /* AboutSettingsView.swift in Sources */,
 				E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */,
+				E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */,
 				E05999B82CB2FC7900D64E0B /* RenameView.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				E0B85D212CB625FE00D85122 /* Exercise.swift in Sources */,

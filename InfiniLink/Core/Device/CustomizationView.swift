@@ -27,9 +27,9 @@ struct CustomizationView: View {
                                             proxy.scrollTo(index, anchor: .center)
                                         }
                                     } label: {
-                                        VStack(spacing: 0) {
+                                        VStack(spacing: 4) {
                                             WatchFaceView(watchface: .constant(UInt8(index)))
-                                                .frame(width: 210, height: 210)
+                                                .frame(width: 180, height: 180)
                                                 .padding(.bottom, -12)
                                             Image(systemName: "checkmark")
                                                 .padding(10)
@@ -39,7 +39,6 @@ struct CustomizationView: View {
                                                 .clipShape(Circle())
                                                 .opacity(isSelected ? 1 : 0)
                                         }
-                                        .frame(height: 235)
                                     }
                                     .opacity(isSelected ? 1 : 0.5)
                                     .id(index)

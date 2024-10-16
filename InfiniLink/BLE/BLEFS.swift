@@ -10,7 +10,7 @@ import CoreBluetooth
 import Zip
 import SwiftUI
 
-class BLEFSHandler : ObservableObject {
+class BLEFSHandler: ObservableObject {
     static var shared = BLEFSHandler()
     let bleManager = BLEManager.shared
     
@@ -556,6 +556,14 @@ class BLEFSHandler : ObservableObject {
         return [byte1, byte2, byte3, byte4]
     }
     
+    func readMiscFile(_ filePath: String, completion: @escaping(Data) -> Void) {
+        DispatchQueue.global(qos: .default).async {
+            let readFile = self.readFile(path: filePath, offset: 0)
+            
+            completion(readFile.data)
+        }
+    }
+    
     // MARK: Settings
     func readSettings(completion: @escaping(Settings) -> Void) {
         DispatchQueue.global(qos: .default).async {
@@ -567,6 +575,41 @@ class BLEFSHandler : ObservableObject {
             
             completion(settings)
         }
+    }
+    
+    func convertDataToReadableFile(data: Data, fileExtension: String) throws -> Any {
+        switch fileExtension.lowercased() {
+        case "txt":
+            if let text = String(data: data, encoding: .utf8) {
+                return text
+            } else {
+                throw FileConversionError.dataConversionFailed
+            }
+        case "bin":
+            if let image = UIImage(data: data) {
+                return image
+            } else {
+                throw FileConversionError.dataConversionFailed
+            }
+        case "json":
+            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) {
+                return jsonObject
+            } else {
+                throw FileConversionError.dataConversionFailed
+            }
+        case "csv":
+            if let csvString = String(data: data, encoding: .utf8) {
+                let rows = csvString.components(separatedBy: "\n").filter { !$0.isEmpty }
+                let csvData = rows.map { $0.components(separatedBy: ",") }
+                
+                return csvData
+            } else {
+                throw FileConversionError.dataConversionFailed
+            }
+        default:
+            throw FileConversionError.unsupportedFileType
+        }
+        return ""
     }
     
     @discardableResult func writeSettings(_ settings: Settings) -> WriteFileFS {
@@ -816,4 +859,9 @@ struct Settings {
     var wakeUpMode: WakeUpMode = .RaiseWrist
     var shakeWakeThreshold: UInt16 = 150
     var brightLevel: BrightLevel = .Mid
+}
+
+enum FileConversionError: Error {
+    case unsupportedFileType
+    case dataConversionFailed
 }

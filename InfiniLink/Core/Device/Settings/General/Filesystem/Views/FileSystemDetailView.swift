@@ -10,7 +10,19 @@ import SwiftUI
 struct FileSystemDetailView: View {
     @Environment(\.dismiss) var dismiss
     
+    @ObservedObject var bleFs = BLEFSHandler.shared
+    @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
+    
     @State var settings: Settings? = nil
+    @State var textData: String? = nil
+    @State var imageData: UIImage? = nil
+    @State var csvData: [[String]]? = nil
+    
+    let fileName: String
+    
+    var isSettings: Bool {
+        return fileName == "settings.dat"
+    }
     
     func row(key: String, value: String) -> some View {
         HStack {
@@ -66,11 +78,30 @@ struct FileSystemDetailView: View {
                         }())
                     }
                 } else {
-                    Text("Only settings files are currently supported.")
-                        .font(.title2.weight(.semibold))
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.gray)
-                        .frame(maxHeight: .infinity)
+                    ScrollView {
+                        VStack {
+                            if let textData {
+                                Text(textData)
+                            } else if let csvData {
+                                VStack(spacing: 0) {
+                                    ForEach(csvData, id: \.self) { rows in
+                                        HStack(spacing: 0) {
+                                            ForEach(rows, id: \.self) { field in
+                                                Text(field)
+                                                    .padding(6)
+                                                Divider()
+                                            }
+                                        }
+                                        .padding(6)
+                                        Divider()
+                                    }
+                                }
+                            } else if let imageData {
+                                Image(uiImage: imageData)
+                            }
+                        }
+                        .padding()
+                    }
                 }
             }
             .toolbar {
@@ -82,20 +113,37 @@ struct FileSystemDetailView: View {
                 }
             }
             .onAppear {
-                // TODO: read other files
-                BLEFSHandler.shared.readSettings { settings in
-                    self.settings = settings
-                    
-                    // While we're already loading the settings, make sure we keep the vars updated
-                    BLEManager.shared.setSettings(from: settings)
+                if isSettings {
+                    bleFs.readSettings { settings in
+                        self.settings = settings
+                        
+                        // While we're already loading the settings, make sure we keep the vars updated
+                        BLEManager.shared.setSettings(from: settings)
+                    }
+                } else {
+                    bleFs.readMiscFile(fileSystemViewModel.getDir(input: fileName)) { data in
+                        let `extension` = fileName.components(separatedBy: ".").last!
+                        
+                        guard let info = try? bleFs.convertDataToReadableFile(data: data, fileExtension: `extension`) else { return }
+                        
+                        // Add components to UI
+                        switch `extension` {
+                        case "txt":
+                            self.textData = info as? String
+                        case "bin":
+                            break
+                        case "json":
+                            break
+                        case "csv":
+                            self.csvData = info as? [[String]]
+                        default:
+                            break
+                        }
+                    }
                 }
             }
-            .navigationTitle("Settings")
+            .navigationTitle(isSettings ? "Settings" : fileName)
         }
         .navigationViewStyle(.stack)
     }
-}
-
-#Preview {
-    FileSystemDetailView()
 }

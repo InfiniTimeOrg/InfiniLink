@@ -11,6 +11,68 @@ struct FileSystemToolbar: ViewModifier {
     @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
     @ObservedObject var bleFSHandler = BLEFSHandler.shared
     
+    func upload() {
+        DispatchQueue.global(qos: .default).async {
+            for file in fileSystemViewModel.files {
+                let lowercaseFilename = file.filename.lowercased()
+                
+                guard let fileDataPath = file.url else {
+                    continue
+                }
+                
+                do {
+                    if lowercaseFilename.hasSuffix(".png") ||
+                        lowercaseFilename.hasSuffix(".jpg") ||
+                        lowercaseFilename.hasSuffix(".jpeg") ||
+                        lowercaseFilename.hasSuffix(".gif") || lowercaseFilename.hasSuffix(".bmp") ||
+                        lowercaseFilename.hasSuffix(".tiff") ||
+                        lowercaseFilename.hasSuffix(".webp") ||
+                        lowercaseFilename.hasSuffix(".heif") ||
+                        lowercaseFilename.hasSuffix(".heic") {
+                        
+                        guard let img = UIImage(contentsOfFile: fileDataPath.path),
+                              let cgImage = img.cgImage else {
+                            continue
+                        }
+                        
+                        self.fileSystemViewModel.fileSize = 0
+                        
+                        let convertedImage = lvImageConvert(img: cgImage)
+                        
+                        let fileNameWithoutExtension = (file.filename as NSString).deletingPathExtension
+                        if let convertedImage = convertedImage {
+                            self.fileSystemViewModel.fileSize = convertedImage.count
+                            self.fileSystemViewModel.fileUploading = true
+                            var _ = bleFSHandler.writeFile(data: convertedImage, path: fileSystemViewModel.directory + "/" + String(fileNameWithoutExtension.prefix(30).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
+                        }
+                    } else {
+                        let fileData = try Data(contentsOf: fileDataPath)
+                        
+                        DispatchQueue.main.async {
+                            self.fileSystemViewModel.fileSize = 0
+                            self.fileSystemViewModel.fileSize = fileData.count
+                            
+                            self.fileSystemViewModel.fileUploading = true
+                        }
+                        
+                        var _ = bleFSHandler.writeFile(data: fileData, path: fileSystemViewModel.directory + "/" + file.filename, offset: 0)
+                    }
+                } catch {
+                    print("Error: \(error.localizedDescription)")
+                }
+            }
+            
+            DispatchQueue.main.async {
+                self.fileSystemViewModel.fileUploading = false
+                
+                self.fileSystemViewModel.fileSelected = false
+                self.fileSystemViewModel.files = []
+            }
+            
+            self.fileSystemViewModel.lsDir(dir: fileSystemViewModel.directory)
+        }
+    }
+    
     func body(content: Content) -> some View {
         content
             .toolbar {
@@ -30,24 +92,6 @@ struct FileSystemToolbar: ViewModifier {
                         Image(systemName: "plus")
                     }
                     .disabled(!BLEManager.shared.hasLoadedCharacteristics || fileSystemViewModel.loadingFs || fileSystemViewModel.fileUploading)
-                    .fileImporter(isPresented: $fileSystemViewModel.showUploadSheet, allowedContentTypes: [.data], allowsMultipleSelection: true) { result in
-                        do {
-                            let fileURLs = try result.get()
-                            
-                            self.fileSystemViewModel.files.removeAll()
-                            for fileURL in fileURLs {
-                                guard fileURL.startAccessingSecurityScopedResource() else { continue }
-                                
-                                self.fileSystemViewModel.fileSelected = true
-                                self.fileSystemViewModel.files.append(FSFile(url: fileURL, filename: fileURL.lastPathComponent))
-                                
-                                // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
-                                // fileURL.stopAccessingSecurityScopedResource()
-                            }
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
                 }
                 ToolbarItemGroup(placement: .bottomBar) {
                     if fileSystemViewModel.fileSelected {
@@ -67,59 +111,7 @@ struct FileSystemToolbar: ViewModifier {
                             }())
                         } else {
                             Button {
-                                DispatchQueue.global(qos: .default).async {
-                                    for file in fileSystemViewModel.files {
-                                        let lowercaseFilename = file.filename.lowercased()
-                                        
-                                        guard let fileDataPath = file.url else {
-                                            continue
-                                        }
-                                        
-                                        do {
-                                            if lowercaseFilename.hasSuffix(".png") ||
-                                                lowercaseFilename.hasSuffix(".jpg") ||
-                                                lowercaseFilename.hasSuffix(".jpeg") ||
-                                                lowercaseFilename.hasSuffix(".gif") || lowercaseFilename.hasSuffix(".bmp") ||
-                                                lowercaseFilename.hasSuffix(".tiff") ||
-                                                lowercaseFilename.hasSuffix(".webp") ||
-                                                lowercaseFilename.hasSuffix(".heif") ||
-                                                lowercaseFilename.hasSuffix(".heic") {
-                                                
-                                                guard let img = UIImage(contentsOfFile: fileDataPath.path),
-                                                      let cgImage = img.cgImage else {
-                                                    continue
-                                                }
-                                                
-                                                self.fileSystemViewModel.fileSize = 0
-                                                
-                                                let convertedImage = lvImageConvert(img: cgImage)
-                                                
-                                                let fileNameWithoutExtension = (file.filename as NSString).deletingPathExtension
-                                                if let convertedImage = convertedImage {
-                                                    self.fileSystemViewModel.fileSize = convertedImage.count
-                                                    self.fileSystemViewModel.fileUploading = true
-                                                    var _ = bleFSHandler.writeFile(data: convertedImage, path: fileSystemViewModel.directory + "/" + String(fileNameWithoutExtension.prefix(30).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
-                                                }
-                                            } else {
-                                                self.fileSystemViewModel.fileSize = 0
-                                                let fileData = try Data(contentsOf: fileDataPath)
-                                                self.fileSystemViewModel.fileSize = fileData.count
-                                                
-                                                self.fileSystemViewModel.fileUploading = true
-                                                var _ = bleFSHandler.writeFile(data: fileData, path: fileSystemViewModel.directory + "/" + file.filename, offset: 0)
-                                            }
-                                        } catch {
-                                            print("Error: \(error.localizedDescription)")
-                                        }
-                                    }
-                                    
-                                    self.fileSystemViewModel.fileUploading = false
-                                    
-                                    self.fileSystemViewModel.fileSelected = false
-                                    self.fileSystemViewModel.files = []
-                                    
-                                    fileSystemViewModel.lsDir(dir: fileSystemViewModel.directory)
-                                }
+                                upload()
                             } label: {
                                 let count = fileSystemViewModel.files.count
                                 
@@ -148,11 +140,12 @@ struct FileSystemView: View {
     @State var showUploadSheet = false
     @State var showFileDetailView = false
     @State var fileSelected = false
-    @State var showNewFolderView = false
     
     @State var fileSize = 0
     
     @State var newFolderName = ""
+    
+    @State var selectedFile: String?
     
     @FocusState var isNewFolderFocused: Bool
     
@@ -181,22 +174,19 @@ struct FileSystemView: View {
                     }
                 }
                 Section {
-                    ForEach(fileSystemViewModel.commandHistory.filter({ $0 != "" }), id: \.self) { listItem in
+                    ForEach(fileSystemViewModel.commandHistory.filter({ $0 != "" &&  $0 != "." && $0 != ".." }), id: \.self) { listItem in
                         let isFile = listItem.contains(".")
-                        
-                        Group {
-                            if listItem != "." && listItem != ".." {
-                                Button {
-                                    if isFile {
-                                        showFileDetailView = true
-                                    } else {
-                                        fileSystemViewModel.loadingFs = true
-                                        fileSystemViewModel.cdAndLs(dir: listItem)
-                                    }
-                                } label: {
-                                    Text(listItem)
-                                }
+
+                        Button {
+                            if isFile {
+                                selectedFile = listItem
+                                showFileDetailView = true
+                            } else {
+                                fileSystemViewModel.loadingFs = true
+                                fileSystemViewModel.cdAndLs(dir: listItem)
                             }
+                        } label: {
+                            Text(listItem)
                         }
                         .contextMenu {
                             Button(role: .destructive) {
@@ -213,12 +203,34 @@ struct FileSystemView: View {
             newFolder
         }
         .sheet(isPresented: $showFileDetailView) {
-            FileSystemDetailView()
+            if let selectedFile = selectedFile {
+                FileSystemDetailView(fileName: selectedFile)
+            }
+        }
+        .fileImporter(isPresented: $fileSystemViewModel.showUploadSheet, allowedContentTypes: [.data], allowsMultipleSelection: true) { result in
+            do {
+                let fileURLs = try result.get()
+                
+                self.fileSystemViewModel.files.removeAll()
+                self.fileSystemViewModel.fileSelected = true
+                
+                for fileURL in fileURLs {
+                    guard fileURL.startAccessingSecurityScopedResource() else { continue }
+                    
+                    self.fileSystemViewModel.files.append(FSFile(url: fileURL, filename: fileURL.lastPathComponent))
+                    
+                    // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
+                    // fileURL.stopAccessingSecurityScopedResource()
+                }
+            } catch {
+                print(error.localizedDescription)
+            }
         }
         .onAppear {
             fileSystemViewModel.loadingFs = true
             fileSystemViewModel.lsDir(dir: "/")
         }
+        .modifier(FileSystemToolbar())
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("File System")
     }
@@ -226,8 +238,12 @@ struct FileSystemView: View {
     var newFolder: some View {
         NavigationView {
             Form {
-                TextField("Title", text: $newFolderName)
-                    .focused($isNewFolderFocused)
+                Section(footer: Text(newFolderName.contains(".") ? "The folder name cannot contain a period." : "")) {
+                    TextField("Title", text: $newFolderName)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .focused($isNewFolderFocused)
+                }
             }
             .navigationTitle("New Folder")
             .onAppear {
@@ -236,7 +252,7 @@ struct FileSystemView: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") {
-                        showNewFolderView = false
+                        fileSystemViewModel.showNewFolderView = false
                     }
                 }
                 ToolbarItem(placement: .confirmationAction) {
@@ -244,11 +260,11 @@ struct FileSystemView: View {
                         fileSystemViewModel.createDir(name: newFolderName)
                         fileSystemViewModel.showNewFolderView = false
                     }
-                    .disabled(newFolderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(newFolderName.contains(".") || newFolderName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                 }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .navigationViewStyle(.stack)
     }
 }
 

@@ -37,8 +37,6 @@ func classifyPixel(value: Double, bits: Int) -> Int {
 
 // only implemented the bare minimum, everything else is not implemented
 func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPHA, binaryFormat: BinaryFormat = .ARGB8565_RBSWAP, fade: Bool = false) -> Data? {
-    print("Beginning conversion of image.")
-
     var fileImg = img
     let imgHeight = img.height
     let imgWidth = img.width

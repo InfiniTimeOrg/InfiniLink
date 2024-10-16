@@ -8,8 +8,36 @@
 import SwiftUI
 
 struct WeatherSettingsView: View {
+    @ObservedObject var weatherController = WeatherController.shared
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        GeometryReader { geo in
+            VStack {
+                if let weather = weatherController.weather {
+                    ScrollView {
+                        Section {
+                            DetailHeaderView(
+                                Header(title: String(format: "%.0f", weatherController.temperature) + weatherController.unit,
+                                       subtitle: weather.currentWeather.condition.description,
+                                       icon: weather.currentWeather.symbolName,
+                                       accent: Color.yellow),
+                                width: geo.size.width) {
+                                    HStack {
+                                        DetailHeaderSubItemView(title: "Min",
+                                                                value: String(format: "%.0f", weather.currentWeather.temperature.value) + weatherController.unit)
+                                        DetailHeaderSubItemView(title: "Max", value: String(format: "%.0f", weather.currentWeather.temperature.value) + weatherController.unit)
+                                    }
+                                }
+                        }
+                    }
+                } else {
+                    ProgressView("Loading weather...")
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                }
+            }
+            .padding()
+        }
+        .navigationTitle("Weather")
     }
 }
 
