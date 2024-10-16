@@ -129,7 +129,7 @@ struct SoftwareUpdateView: View {
                         .clipShape(Capsule())
                 }
             } else {
-                Text("\(DeviceInfoManager.shared.deviceName) needs to be connected to update its software.")
+                Text("\(BLEManager.shared.pairedDevice.name ?? "InfiniTime") needs to be connected to update its software.")
                     .foregroundStyle(.gray)
                     .font(.system(size: 14).weight(.semibold))
                     .multilineTextAlignment(.center)
@@ -145,7 +145,7 @@ struct SoftwareUpdateView: View {
                 ProgressView("Checking for updates...")
             } else {
                 VStack(spacing: 3) {
-                    Text(DeviceInfoManager.shared.firmware)
+                    Text(DeviceManager.shared.firmware)
                         .font(.title.weight(.bold))
                     Text("InfiniTime is up-to-date.")
                         .foregroundStyle(.gray)
@@ -279,7 +279,6 @@ struct OtherUpdateVersions: View {
         SoftwareUpdateView()
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
-                DeviceInfoManager.shared.firmware = "1.14.1"
                 DownloadManager.shared.updateAvailable = true
                 DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
                 DownloadManager.shared.updateVersion = "1.14.2"

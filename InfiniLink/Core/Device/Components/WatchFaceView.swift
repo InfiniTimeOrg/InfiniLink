@@ -10,7 +10,7 @@ import SwiftUI
 import Combine
 
 struct WatchFaceView: View {
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -26,7 +26,7 @@ struct WatchFaceView: View {
                     .aspectRatio(contentMode: .fit)
                 ZStack {
                     ZStack {
-                        switch watchface == nil ? deviceInfoManager.settings.watchFace : watchface {
+                        switch watchface == nil ? deviceManager.settings.watchFace : watchface {
                         case 0:
                             DigitalWF(geometry: .constant(geometry))
                         case 1:
@@ -63,7 +63,7 @@ struct WatchFaceView: View {
 }
 
 struct PineTimeStyleWF: View {
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry: GeometryProxy
@@ -71,7 +71,7 @@ struct PineTimeStyleWF: View {
     func getColor(for pts: PineTimeStyleColor) -> Color {
         switch pts {
         case .time:
-            switch deviceInfoManager.settings.pineTimeStyle.ColorTime {
+            switch deviceManager.settings.pineTimeStyle.ColorTime {
             case .White:
                 return .white
             case .Silver:
@@ -110,7 +110,7 @@ struct PineTimeStyleWF: View {
                 return .pink
             }
         case .background:
-            switch deviceInfoManager.settings.pineTimeStyle.ColorBG {
+            switch deviceManager.settings.pineTimeStyle.ColorBG {
             case .White:
                 return .white
             case .Silver:
@@ -149,7 +149,7 @@ struct PineTimeStyleWF: View {
                 return .pink
             }
         case .sidebar:
-            switch deviceInfoManager.settings.pineTimeStyle.ColorBar {
+            switch deviceManager.settings.pineTimeStyle.ColorBar {
             case .White:
                 return .white
             case .Silver:
@@ -199,12 +199,12 @@ struct PineTimeStyleWF: View {
     var body: some View {
         ZStack {
             getColor(for: .background)
-            if !deviceInfoManager.hour24 {
+            if !deviceManager.hour24 {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
                     .foregroundColor(getColor(for: .time))
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !deviceInfoManager.hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !deviceManager.hour24 {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 let hour24 = currentHour > 12 ? currentHour - 12 : (currentHour == 0 ? 12 : currentHour)
                 let hourString = String(format: "%02d", hour24)
@@ -233,7 +233,7 @@ struct PineTimeStyleWF: View {
 }
 
 struct AnalogWF: View {
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry: GeometryProxy
@@ -261,7 +261,7 @@ struct AnalogWF: View {
 }
 
 struct DigitalWF: View {
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -269,12 +269,12 @@ struct DigitalWF: View {
     
     var body: some View {
         ZStack {
-            if !deviceInfoManager.hour24 {
+            if !deviceManager.hour24 {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !deviceInfoManager.hour24 {
+            if Calendar.current.component(.hour, from: Date()) > 12 && !deviceManager.hour24 {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
@@ -302,7 +302,7 @@ struct DigitalWF: View {
 
 struct InfineatWF: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -372,7 +372,7 @@ struct InfineatWF: View {
     ]
     
     func infineatColor(for item: InfineatItem) -> Color {
-        let colorIndex = deviceInfoManager.settings.watchFaceInfineat.colorIndex
+        let colorIndex = deviceManager.settings.watchFaceInfineat.colorIndex
         
         switch item {
         case .base:
@@ -494,12 +494,12 @@ struct InfineatWF: View {
     
     var body: some View {
         ZStack {
-            if !deviceInfoManager.hour24 {
+            if !deviceManager.hour24 {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !deviceInfoManager.hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !deviceManager.hour24 {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 let hour24 = currentHour % 12 == 0 ? 12 : currentHour % 12
                 let hourString = String(format: "%02d", hour24)
@@ -611,7 +611,7 @@ struct InfineatWF: View {
 
 struct TerminalWF: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -628,7 +628,7 @@ struct TerminalWF: View {
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.5)
-            if !deviceInfoManager.hour24 {
+            if !deviceManager.hour24 {
                 Group {
                     Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour % 12 == 0 ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
                 }
@@ -686,7 +686,7 @@ struct TerminalWF: View {
 
 struct CasioWF: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -747,7 +747,7 @@ struct CasioWF: View {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 var hourString = ""
                 
-                if deviceInfoManager.hour24 {
+                if deviceManager.hour24 {
                     hourString = String(format: "%d", currentHour)
                 } else {
                     let hour24 = currentHour % 12 == 0 ? 12 : currentHour
@@ -759,7 +759,7 @@ struct CasioWF: View {
             }(), font: .custom("7-Segment", size: geometry.size.width * 0.44), lineSpacing: 0)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
             .position(x: geometry.size.width / 2.1, y: geometry.size.height / 1.4)
-            if !deviceInfoManager.hour24 {
+            if !deviceManager.hour24 {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
                     .padding(.leading, 6)
@@ -822,9 +822,6 @@ enum InfineatItem {
                 .padding(22)
                 .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
                 .clipped(antialiased: true)
-                .onAppear {
-                    DeviceInfoManager.shared.settings.clockType = .H12
-                }
         }
     }
 }

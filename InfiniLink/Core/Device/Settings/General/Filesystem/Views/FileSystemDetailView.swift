@@ -130,7 +130,7 @@ struct FileSystemDetailView: View {
                         self.isLoadingFile = false
                         
                         // While we're already loading the settings, make sure we keep the vars updated
-                        BLEManager.shared.setSettings(from: settings)
+                        DeviceManager.shared.settings = settings
                     }
                 } else {
                     bleFs.readMiscFile(fileSystemViewModel.getDir(input: fileName)) { data in

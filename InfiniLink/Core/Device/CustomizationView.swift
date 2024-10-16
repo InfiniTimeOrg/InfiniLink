@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CustomizationView: View {
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var bleFs = BLEFSHandler.shared
     
     var body: some View {
@@ -19,10 +19,10 @@ struct CustomizationView: View {
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 0) {
                                 ForEach(0...5, id: \.self) { index in
-                                    let isSelected = (deviceInfoManager.settings.watchFace == UInt8(index))
+                                    let isSelected = (deviceManager.settings.watchFace == UInt8(index))
                                     
                                     Button {
-                                        bleFs.setWatchFace(&deviceInfoManager.settings, face: UInt8(index))
+                                        bleFs.setWatchFace(&deviceManager.settings, face: UInt8(index))
                                         withAnimation {
                                             proxy.scrollTo(index, anchor: .center)
                                         }
@@ -46,7 +46,7 @@ struct CustomizationView: View {
                             }
                             .padding(.horizontal)
                             .onAppear {
-                                proxy.scrollTo(Int(deviceInfoManager.settings.watchFace), anchor: .center)
+                                proxy.scrollTo(Int(deviceManager.settings.watchFace), anchor: .center)
                             }
                         }
                         .padding(.horizontal, -16)

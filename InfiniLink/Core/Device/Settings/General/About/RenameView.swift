@@ -4,7 +4,6 @@
 //
 //  Created by Liam Willey on 10/6/24.
 //
-// NOTE: we're not using Core Data yet because we are getting errors: Failed to get or decode unavailable reasons and Can't find or decode reasons
 //
 
 import SwiftUI
@@ -12,18 +11,26 @@ import SwiftUI
 struct RenameView: View {
     @Environment(\.dismiss) var dismiss
     
-//    @State var name: String = DeviceInfoManager.shared.deviceName
+    @ObservedObject var deviceManager = DeviceManager.shared
+    
+    @State var name: String = DeviceManager.shared.name
     
     @FocusState var isFocused: Bool
     
     var body: some View {
         List {
-            TextField("InfiniTime", text: DeviceInfoManager.shared.$deviceName)
+            TextField("InfiniTime", text: $name)
                 .submitLabel(.done)
                 .focused($isFocused)
                 .onSubmit {
                     dismiss()
-//                    DeviceNameManager().setName(deviceUUID: BLEManager.shared.pairedDeviceID!, name: name)
+                    
+                    var name = self.name
+                    if name.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                        name = "InfiniTime"
+                    }
+                    
+                    deviceManager.updateName(name: name, for: BLEManager.shared.pairedDevice)
                 }
         }
         .navigationTitle("Rename")

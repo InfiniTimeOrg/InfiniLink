@@ -40,7 +40,7 @@ struct BLEDiscoveredCharacteristics {
 		case bleManager.cbuuidList.notify:
             bleManager.notifyCharacteristic = characteristic
             if !bleManager.firstConnect {
-                BLEWriteManager().sendNotification(AppNotification(title: "\(UIDevice.current.name) connected", subtitle: "New device connected to \(DeviceInfoManager.shared.deviceName)."))
+                BLEWriteManager().sendNotification(AppNotification(title: "\(bleManager.pairedDevice.name ?? "InfiniTime") connected", subtitle: "Connected to \(UIDevice.current.name)."))
             }
             bleManager.firstConnect = false
 		case bleManager.cbuuidList.stepCount:

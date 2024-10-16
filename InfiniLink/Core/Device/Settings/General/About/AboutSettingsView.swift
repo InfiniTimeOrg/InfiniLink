@@ -8,8 +8,11 @@
 import SwiftUI
 
 struct AboutSettingsView: View {
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var bleManager = BLEManager.shared
+    
+    // Add state property because name won't update automatically
+    @State var name = ""
     
     var body: some View {
         Group {
@@ -18,26 +21,25 @@ struct AboutSettingsView: View {
                     NavigationLink {
                         RenameView()
                     } label: {
-                        AboutRowView(title: "Name", value: deviceInfoManager.deviceName)
+                        AboutRowView(title: "Name", value: name)
                     }
                     .disabled(!bleManager.hasLoadedCharacteristics)
-                    AboutRowView(title: "Software Version", value: deviceInfoManager.firmware)
-                    AboutRowView(title: "Manufacturer", value: deviceInfoManager.manufacturer)
-                    AboutRowView(title: "Model Number", value: deviceInfoManager.modelNumber)
-                    AboutRowView(title: "Bluetooth UUID", value: deviceInfoManager.bleUUID)
+                    AboutRowView(title: "Software Version", value: deviceManager.firmware)
+                    AboutRowView(title: "Manufacturer", value: deviceManager.manufacturer)
+                    AboutRowView(title: "Model Number", value: deviceManager.modelNumber)
+                    AboutRowView(title: "UUID", value: deviceManager.bleUUID)
                 }
                 Section {
-                    AboutRowView(title: "Last Connect", value: Date(timeIntervalSince1970: deviceInfoManager.lastConnect).formatted())
-                    AboutRowView(title: "Last Disconnect", value: Date(timeIntervalSince1970: deviceInfoManager.lastDisconnect).formatted())
-                }
-                Section {
-                    AboutRowView(title: "File System", value: deviceInfoManager.blefsVersion)
-                    AboutRowView(title: "Hardware Revision", value: deviceInfoManager.hardwareRevision)
-                    AboutRowView(title: "Settings Version", value: String(deviceInfoManager.settingsVersion))
+                    AboutRowView(title: "File System", value: deviceManager.blefsVersion)
+                    AboutRowView(title: "Hardware Revision", value: deviceManager.hardwareRevision)
+                    AboutRowView(title: "Settings Version", value: String(deviceManager.settings.version))
                 }
             }
         }
         .navigationTitle("About")
+        .onAppear {
+            name = deviceManager.name
+        }
     }
 }
 
@@ -59,15 +61,5 @@ struct AboutRowView: View {
     NavigationView {
         AboutSettingsView()
             .navigationBarTitleDisplayMode(.inline)
-            .onAppear {
-                DeviceInfoManager.shared.firmware = "1.14.1"
-                DeviceInfoManager.shared.deviceName = "InfiniTime"
-                DeviceInfoManager.shared.manufacturer = "PineTime"
-                DeviceInfoManager.shared.modelNumber = "1H7GJ8033"
-                DeviceInfoManager.shared.serial = "1AG48J6QQ3"
-                DeviceInfoManager.shared.blefsVersion = "1.2"
-                DeviceInfoManager.shared.hardwareRevision = "2.0"
-                DeviceInfoManager.shared.softwareRevision = "InfiniTime"
-            }
     }
 }

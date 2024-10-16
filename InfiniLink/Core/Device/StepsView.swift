@@ -10,7 +10,7 @@ import Charts
 
 struct StepsView: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @AppStorage("stepsChartDataSelection") private var dataSelection = 0
     
@@ -118,7 +118,7 @@ struct StepsView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     Section {
-                        DetailHeaderView(Header(title: steps(for: Date()), subtitle: String(deviceInfoManager.stepCountGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
+                        DetailHeaderView(Header(title: steps(for: Date()), subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
                             HStack {
                                 DetailHeaderSubItemView(title: "Dis",
                                                         value: String(format: "%.2f",

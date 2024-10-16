@@ -9,7 +9,7 @@ import SwiftUI
 
 struct DeviceView: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceInfoManager = DeviceInfoManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     
@@ -54,7 +54,7 @@ struct DeviceView: View {
                                     }())
                             }
                             .foregroundStyle(Color.gray)
-                            Text(DeviceInfoManager.shared.deviceName)
+                            Text(DeviceManager.shared.name)
                                 .font(.title.weight(.bold))
                         }
                     }
@@ -122,13 +122,6 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
                         }
-                        /*
-                        NavigationLink {
-                            
-                        } label: {
-                            ListRowView(title: "Stress", icon: "face.smiling", iconColor: .black)
-                        }
-                         */
                     }
                     Section {
                         NavigationLink {
@@ -163,11 +156,13 @@ struct DeviceView: View {
                         }
                     }
                     Section {
+                        /*
                         NavigationLink {
                             AlarmView()
                         } label: {
                             ListRowView(title: "Alarms", icon: "alarm.fill")
                         }
+                         */
                         NavigationLink {
                             RemindersView()
                         } label: {
@@ -179,12 +174,18 @@ struct DeviceView: View {
             .onChange(of: bleManager.blefsTransfer) { _ in
                 if bleManager.blefsTransfer != nil {
                     BLEFSHandler.shared.readSettings { settings in
-                        bleManager.setSettings(from: settings)
+                        DispatchQueue.main.async {
+                            deviceManager.settings = settings
+                        }
                     }
                 }
             }
             .onAppear {
-                DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: DeviceInfoManager.shared.firmware)
+                if let pairedDeviceID = bleManager.pairedDeviceID {
+                    bleManager.pairedDevice = deviceManager.fetchDevice(with: pairedDeviceID)
+                }
+                
+                DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: deviceManager.firmware)
             }
         }
         .navigationViewStyle(.stack)
@@ -222,8 +223,6 @@ struct ListRowView: View {
 #Preview {
     DeviceView()
         .onAppear {
-            DeviceInfoManager.shared.settings.watchFace = 4
-            DeviceInfoManager.shared.firmware = "1.14.0"
             DownloadManager.shared.updateVersion = "1.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
             DownloadManager.shared.updateAvailable = true

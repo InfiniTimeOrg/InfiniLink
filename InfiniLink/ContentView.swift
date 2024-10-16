@@ -17,7 +17,7 @@ struct ContentView: View {
     
     var body: some View {
         Group {
-            if bleManager.pairedDeviceID != nil || bleManager.isConnectedToPinetime {
+            if bleManager.pairedDeviceID != nil {
                 DeviceView()
                     .onChange(of: bleManager.batteryLevel) { bat in
                         notificationManager.checkToSendLowBatteryNotification()

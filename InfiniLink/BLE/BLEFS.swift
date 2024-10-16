@@ -622,9 +622,9 @@ class BLEFSHandler: ObservableObject {
             result += "\(indent)\(key): "
             
             if let nestedDict = value as? [String: Any] {
-                result += "\n" + formatDictionaryAsMultilineString(nestedDict, indent: indent + "  ")
+                result += "\n" + formatDictionaryAsMultilineString(nestedDict, indent: indent + "    ")
             } else if let array = value as? [[String: Any]] {
-                result += "\n" + formatArrayAsMultilineString(array, indent: indent + "  ")
+                result += "\n" + formatArrayAsMultilineString(array, indent: indent + "    ")
             } else {
                 result += "\(value)\n"
             }
@@ -636,11 +636,7 @@ class BLEFSHandler: ObservableObject {
         var result = ""
         for item in array {
             result += "\(indent)- "
-            if let nestedDict = item as? [String: Any] {
-                result += "\n" + formatDictionaryAsMultilineString(nestedDict, indent: indent + "  ")
-            } else {
-                result += "\(item)\n"
-            }
+            result += "\n" + formatDictionaryAsMultilineString(item, indent: indent + "  ")
         }
         return result
     }

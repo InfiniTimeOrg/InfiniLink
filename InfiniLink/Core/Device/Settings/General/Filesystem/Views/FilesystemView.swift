@@ -116,11 +116,6 @@ struct FileSystemToolbar: ViewModifier {
                                 let count = fileSystemViewModel.files.count
                                 
                                 Text("Upload \(count) File\(count == 1 ? "" : "s")")
-                                    .padding(10)
-                                    .padding(.horizontal, 4)
-                                    .foregroundStyle(.white)
-                                    .background(Color.accentColor)
-                                    .clipShape(Capsule())
                             }
                             .padding(.top, 12)
                         }
@@ -187,6 +182,7 @@ struct FileSystemView: View {
                             }
                         } label: {
                             Text(listItem)
+                                .foregroundStyle(Color.primary)
                         }
                         .contextMenu {
                             Button(role: .destructive) {

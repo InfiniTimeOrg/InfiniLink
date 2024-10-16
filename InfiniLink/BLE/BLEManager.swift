@@ -12,7 +12,7 @@ import SwiftUI
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     static let shared = BLEManager()
     
-    let deviceInfoManager = DeviceInfoManager.shared
+    lazy var deviceManager = DeviceManager.shared
     
     var myCentral: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
@@ -40,8 +40,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let softwareRevision = CBUUID(string: "2A28")
         let manufacturer = CBUUID(string: "2A29")
         let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
-        let weather =       CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
-        let musicControl =  CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+        let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
+        let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
         let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
         let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
         let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
@@ -70,8 +70,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var batteryLevel: Double = 0
     @Published var stepCount: Int = 0
     
+    @Published var pairedDevice: Device!
+    
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
-    @AppStorage("weatherMode") var weatherMode: String = "imperial"
     
     var hasLoadedCharacteristics: Bool {
         // Use currentTimeService because it's present in all firmware versions
@@ -115,6 +116,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             stopScanning()
             
             DownloadManager.shared.updateAvailable = false
+            pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
             
             infiniTime = peripheral
             infiniTime?.delegate = self
@@ -124,7 +126,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func unpair() {
         disconnect()
-        pairedDeviceID = nil
     }
     
     func disconnect() {
@@ -136,19 +137,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             
             self.isConnectedToPinetime = false
             self.firstConnect = true
-        }
-    }
-    
-    func setSettings(from settings: Settings) {
-        DispatchQueue.main.async {
-            self.deviceInfoManager.settings = settings
-            
-            switch settings.weatherFormat {
-            case .Metric:
-                self.weatherMode = "metric"
-            case .Imperial:
-                self.weatherMode = "imperial"
-            }
         }
     }
     
@@ -171,17 +159,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.infiniTime.discoverServices(nil)
         self.isConnectedToPinetime = true
         self.pairedDeviceID = peripheral.identifier.uuidString
-        
-        deviceInfoManager.lastDisconnect = Date.timeIntervalBetween1970AndReferenceDate
-        deviceInfoManager.setDeviceName(uuid: peripheral.identifier.uuidString)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         firstConnect = false
-        
-        deviceInfoManager.lastDisconnect = Date.timeIntervalBetween1970AndReferenceDate
         
         if error != nil {
             central.connect(peripheral)
@@ -215,13 +198,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         
         for characteristic in characteristics {
-            deviceInfoManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
+            deviceManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
             BLEDiscoveredCharacteristics().handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
-        deviceInfoManager.updateInfo(characteristic: characteristic)
+        deviceManager.updateInfo(characteristic: characteristic)
         BLEUpdatedCharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }
 }
