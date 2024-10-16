@@ -560,7 +560,9 @@ class BLEFSHandler: ObservableObject {
         DispatchQueue.global(qos: .default).async {
             let readFile = self.readFile(path: filePath, offset: 0)
             
-            completion(readFile.data)
+            readFile.group.notify(queue: .main) {
+                completion(readFile.data)
+            }
         }
     }
     
@@ -585,18 +587,6 @@ class BLEFSHandler: ObservableObject {
             } else {
                 throw FileConversionError.dataConversionFailed
             }
-        case "bin":
-            if let image = UIImage(data: data) {
-                return image
-            } else {
-                throw FileConversionError.dataConversionFailed
-            }
-        case "json":
-            if let jsonObject = try? JSONSerialization.jsonObject(with: data, options: []) {
-                return jsonObject
-            } else {
-                throw FileConversionError.dataConversionFailed
-            }
         case "csv":
             if let csvString = String(data: data, encoding: .utf8) {
                 let rows = csvString.components(separatedBy: "\n").filter { !$0.isEmpty }
@@ -607,9 +597,52 @@ class BLEFSHandler: ObservableObject {
                 throw FileConversionError.dataConversionFailed
             }
         default:
-            throw FileConversionError.unsupportedFileType
+            return data
         }
-        return ""
+    }
+    
+    func jsonToMultilineString(_ data: Data) -> String? {
+        do {
+            if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                return formatDictionaryAsMultilineString(jsonObject)
+            } else if let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any] ] {
+                return formatArrayAsMultilineString(jsonArray)
+            } else {
+                return "Invalid JSON format."
+            }
+        } catch {
+            print("Error deserializing JSON: \(error)")
+            return nil
+        }
+    }
+    
+    func formatDictionaryAsMultilineString(_ dict: [String: Any], indent: String = "") -> String {
+        var result = ""
+        for (key, value) in dict {
+            result += "\(indent)\(key): "
+            
+            if let nestedDict = value as? [String: Any] {
+                result += "\n" + formatDictionaryAsMultilineString(nestedDict, indent: indent + "  ")
+            } else if let array = value as? [[String: Any]] {
+                result += "\n" + formatArrayAsMultilineString(array, indent: indent + "  ")
+            } else {
+                result += "\(value)\n"
+            }
+        }
+        return result
+    }
+    
+    func formatArrayAsMultilineString(_ array: [[String: Any]], indent: String = "") -> String {
+        var result = ""
+        for item in array {
+            result += "\(indent)- "
+            if let nestedDict = item as? [String: Any] {
+                result += "\n" + formatDictionaryAsMultilineString(nestedDict, indent: indent + "  ")
+            } else {
+                result += "\(item)\n"
+            }
+        }
+        return result
     }
     
     @discardableResult func writeSettings(_ settings: Settings) -> WriteFileFS {

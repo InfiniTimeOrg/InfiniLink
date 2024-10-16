@@ -24,6 +24,7 @@ struct AboutSettingsView: View {
                     AboutRowView(title: "Software Version", value: deviceInfoManager.firmware)
                     AboutRowView(title: "Manufacturer", value: deviceInfoManager.manufacturer)
                     AboutRowView(title: "Model Number", value: deviceInfoManager.modelNumber)
+                    AboutRowView(title: "Bluetooth UUID", value: deviceInfoManager.bleUUID)
                 }
                 Section {
                     AboutRowView(title: "Last Connect", value: Date(timeIntervalSince1970: deviceInfoManager.lastConnect).formatted())

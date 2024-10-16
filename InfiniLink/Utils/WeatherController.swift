@@ -13,7 +13,17 @@ import Combine
 enum TemperatureUnit: String {
     case celsius = "Celsius"
     case fahrenheit = "Fahrenheit"
-    case kelvin = "Kelvin"
+    
+    static var current: TemperatureUnit {
+        switch UnitTemperature.current {
+        case .celsius:
+            return .celsius
+        case .fahrenheit:
+            return .fahrenheit
+        default:
+            return .celsius
+        }
+    }
 }
 
 @MainActor
@@ -38,13 +48,13 @@ class WeatherController: ObservableObject {
             return .celsius
         case .fahrenheit:
             return .fahrenheit
-        case .kelvin:
-            return .kelvin
         }
     }
     
     init() {
         setupLocationObserver()
+        // TODO: update for watch setting
+        temperatureUnit = TemperatureUnit.current
     }
     
     private func setupLocationObserver() {
@@ -66,13 +76,11 @@ class WeatherController: ObservableObject {
                 let weather = try await service.weather(for: currentLocation)
                 self.weather = weather
                 
-                switch weather.currentWeather.temperature.unit {
+                switch unitTemperature {
                 case .celsius:
                     self.unit = "°C"
                 case .fahrenheit:
                     self.unit = "°F"
-                case .kelvin:
-                    self.unit = "°K"
                 default:
                     self.unit = "°C"
                 }

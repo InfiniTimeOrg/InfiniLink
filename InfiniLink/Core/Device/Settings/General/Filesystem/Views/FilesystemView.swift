@@ -116,13 +116,13 @@ struct FileSystemToolbar: ViewModifier {
                                 let count = fileSystemViewModel.files.count
                                 
                                 Text("Upload \(count) File\(count == 1 ? "" : "s")")
-                                    .padding(12)
+                                    .padding(10)
                                     .padding(.horizontal, 4)
                                     .foregroundStyle(.white)
                                     .background(Color.accentColor)
                                     .clipShape(Capsule())
                             }
-                            .padding(.top)
+                            .padding(.top, 12)
                         }
                     }
                 }
@@ -202,10 +202,8 @@ struct FileSystemView: View {
         .sheet(isPresented: $fileSystemViewModel.showNewFolderView) {
             newFolder
         }
-        .sheet(isPresented: $showFileDetailView) {
-            if let selectedFile = selectedFile {
-                FileSystemDetailView(fileName: selectedFile)
-            }
+        .sheet(item: $selectedFile) { selectedFile in
+            FileSystemDetailView(fileName: selectedFile)
         }
         .fileImporter(isPresented: $fileSystemViewModel.showUploadSheet, allowedContentTypes: [.data], allowsMultipleSelection: true) { result in
             do {
@@ -266,6 +264,10 @@ struct FileSystemView: View {
         }
         .navigationViewStyle(.stack)
     }
+}
+
+extension String: @retroactive Identifiable {
+    public var id: String { self }
 }
 
 #Preview {

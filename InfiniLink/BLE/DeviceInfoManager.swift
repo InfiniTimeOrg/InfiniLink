@@ -33,6 +33,7 @@ class DeviceInfoManager: ObservableObject {
     @AppStorage("screenTimeout") var screenTimeout = 0
     @AppStorage("manufacturer") var manufacturer = ""
     @AppStorage("blefsVersion") var blefsVersion = ""
+    @AppStorage("bleUUID") var bleUUID = ""
     @AppStorage("lastDisconnect") var lastDisconnect: TimeInterval = 0
     @AppStorage("lastConnect") var lastConnect: TimeInterval = 0
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
@@ -47,6 +48,8 @@ class DeviceInfoManager: ObservableObject {
 	func updateInfo(characteristic: CBCharacteristic) {
 		guard let value = characteristic.value else { return }
 		
+        self.bleUUID = characteristic.uuid.uuidString
+        
 		switch characteristic.uuid {
 		case cbuuids.modelNumber:
 			self.modelNumber = String(data: value, encoding: .utf8) ?? ""

@@ -7,6 +7,7 @@
 
 import Foundation
 import CoreGraphics
+import UIKit
 
 enum ColorFormat {
     case CF_INDEXED_1_BIT, CF_TRUE_COLOR_ALPHA
