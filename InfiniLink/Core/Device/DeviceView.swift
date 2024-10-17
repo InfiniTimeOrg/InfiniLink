@@ -196,13 +196,15 @@ struct DeviceView: View {
                                 
                                 Button {
                                     if !isConnected {
-                                        bleManager.unpair()
+                                        bleManager.disconnect()
                                         bleManager.pairedDeviceID = watch.uuid
+                                        bleManager.pairedDevice = deviceManager.fetchDevice()
                                         bleManager.startScanning()
                                     }
                                 } label: {
                                     Text(watch.name ?? "InfiniTime")
                                 }
+                                .disabled(isConnected)
                             }
                         } label: {
                             Text("All Watches")

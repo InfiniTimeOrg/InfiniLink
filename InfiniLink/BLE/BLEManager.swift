@@ -132,10 +132,16 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func unpair() {
         disconnect()
+        
+        if let pairedDevice {
+            deviceManager.removeDevice(pairedDevice)
+        }
+        
         deviceManager.fetchAllDevices()
         
         if let first = deviceManager.watches.first, deviceManager.watches.count > 1 {
             pairedDeviceID = first.uuid
+            pairedDevice = deviceManager.fetchDevice()
             startScanning()
         } else {
             pairedDeviceID = nil
@@ -148,6 +154,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.infiniTime = nil
             self.blefsTransfer = nil
             self.currentTimeService = nil
+            self.batteryLevel = 0
             
             self.isConnectedToPinetime = false
             self.firstConnect = true

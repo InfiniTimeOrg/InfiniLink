@@ -23,7 +23,6 @@ struct AboutSettingsView: View {
                     } label: {
                         AboutRowView(title: "Name", value: name)
                     }
-                    .disabled(!bleManager.hasLoadedCharacteristics)
                     AboutRowView(title: "Software Version", value: deviceManager.firmware)
                     AboutRowView(title: "Manufacturer", value: deviceManager.manufacturer)
                     AboutRowView(title: "Model Number", value: deviceManager.modelNumber)

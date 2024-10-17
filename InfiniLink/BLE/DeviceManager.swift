@@ -107,7 +107,7 @@ class DeviceManager: ObservableObject {
                 newDevice.modelNumber = ""
                 newDevice.serial = ""
                 
-                try context.save()
+                save()
                 return newDevice
             }
         } catch {
@@ -144,11 +144,7 @@ class DeviceManager: ObservableObject {
         infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
         device.watchFaceInfineat = infineatWatchFace
         
-        do {
-            try context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
+        save()
         
         self.getSettings()
     }
@@ -159,15 +155,13 @@ class DeviceManager: ObservableObject {
         let device = fetchDevice(with: uuid)
         device.name = name
         
-        do {
-            try context.save()
-        } catch {
-            print(error.localizedDescription)
-        }
+        save()
     }
     
     func removeDevice(_ device: Device) {
-        // TODO: remove device
+        context.delete(device)
+        
+        save()
     }
     
     func fetchAllDevices() {
@@ -177,6 +171,14 @@ class DeviceManager: ObservableObject {
             self.watches = try context.fetch(fetchRequest)
         } catch {
             print("Error fetching devices: \(error)")
+        }
+    }
+    
+    private func save() {
+        do {
+            try context.save()
+        } catch {
+            print(error.localizedDescription)
         }
     }
 }
