@@ -7,7 +7,30 @@
 
 import SwiftUI
 
+struct TableView: View {
+    let data: [[String]]
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            ForEach(0..<data.count, id: \.self) { rowIndex in
+                HStack {
+                    ForEach(0..<data[rowIndex].count, id: \.self) { colIndex in
+                        Text(data[rowIndex][colIndex])
+                            .frame(minWidth: 100, alignment: .leading)
+                            .padding(5)
+                            .border(Color.gray)
+                    }
+                }
+            }
+        }
+        .padding()
+    }
+}
+
 struct SleepView: View {
+    @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var sleepController = SleepController.shared
+    
     var body: some View {
         GeometryReader { geo in
             List {
@@ -22,9 +45,17 @@ struct SleepView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
+                Section {
+                    TableView(data: sleepController.sleepData)
+                }
             }
         }
         .navigationTitle("Sleep")
+        .onAppear {
+            if bleManager.blefsTransfer != nil {
+                sleepController.getSleepCSV()
+            }
+        }
     }
 }
 

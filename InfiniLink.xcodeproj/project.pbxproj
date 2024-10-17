@@ -46,6 +46,7 @@
 		E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1F2CBF051A005C1325 /* LocationManager.swift */; };
 		E07D8F222CC00AB0005C1325 /* UnitTemperature+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F212CC00AB0005C1325 /* UnitTemperature+Extension.swift */; };
 		E07D8F242CC012FC005C1325 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F232CC012FC005C1325 /* DeviceManager.swift */; };
+		E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F252CC0C0D2005C1325 /* SleepController.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -151,6 +152,7 @@
 		E07D8F1F2CBF051A005C1325 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		E07D8F212CC00AB0005C1325 /* UnitTemperature+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitTemperature+Extension.swift"; sourceTree = "<group>"; };
 		E07D8F232CC012FC005C1325 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
+		E07D8F252CC0C0D2005C1325 /* SleepController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepController.swift; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
@@ -389,6 +391,7 @@
 				E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */,
 				E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */,
 				E07D8F1F2CBF051A005C1325 /* LocationManager.swift */,
+				E07D8F252CC0C0D2005C1325 /* SleepController.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -716,6 +719,7 @@
 				E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */,
 				E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */,
 				E0A7C09C2CB234450042A12D /* AboutSettingsView.swift in Sources */,
+				E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */,
 				E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */,
 				E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */,
 				E05999B82CB2FC7900D64E0B /* RenameView.swift in Sources */,
