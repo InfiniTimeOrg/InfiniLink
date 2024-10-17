@@ -26,9 +26,6 @@ class DeviceManager: ObservableObject {
     
     static let shared = DeviceManager()
     
-    // TODO: persist settings
-    @Published var settings = Settings()
-    
     var name: String {
         return bleManager.pairedDevice?.name ?? "InfiniTime"
     }
@@ -61,8 +58,35 @@ class DeviceManager: ObservableObject {
         return settings.clockType == .H24
     }
     
+    @Published var settings = Settings()
+    @Published var watches = [Device]()
+    
+    // Get persisted settings, before settings.dat has loaded
+    func getSettings() {
+        guard let uuid = bleManager.pairedDeviceID else { return }
+        let device = self.fetchDevice(with: uuid)
+        
+        DispatchQueue.main.async {
+            self.settings = Settings(
+                version: UInt32(device.settingsVersion),
+                stepsGoal: UInt32(device.stepsGoal),
+                screenTimeOut: UInt32(device.screenTimeout),
+                clockType: ClockType(rawValue: UInt8(device.clockType)) ?? .H24,
+                weatherFormat: WeatherFormat(rawValue: UInt8(device.weatherFormat)) ?? .Metric,
+                notificationStatus: Notification(rawValue: UInt8(device.notificationStatus)) ?? .On,
+                watchFace: UInt8(device.watchface),
+                chimesOption: ChimesOption(rawValue: UInt8(device.chimesOption)) ?? .None,
+                pineTimeStyle: PineTimeStyleData(),
+                watchFaceInfineat: WatchFaceInfineat(),
+                wakeUpMode: .RaiseWrist,
+                shakeWakeThreshold: UInt16(device.shakeWakeThreshold),
+                brightLevel: BrightLevel(rawValue: UInt8(device.brightLevel)) ?? .Mid
+            )
+        }
+    }
+    
     func fetchDevice(with uuid: String? = nil) -> Device {
-        let id: String = uuid ?? (bleManager.pairedDeviceID ?? "")
+        let id: String = uuid ?? bleManager.pairedDeviceID!
         
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", id)
@@ -82,7 +106,6 @@ class DeviceManager: ObservableObject {
                 newDevice.manufacturer = ""
                 newDevice.modelNumber = ""
                 newDevice.serial = ""
-                newDevice.uuid = uuid
                 
                 try context.save()
                 return newDevice
@@ -90,6 +113,44 @@ class DeviceManager: ObservableObject {
         } catch {
             fatalError("Error fetching or saving device: \(error)")
         }
+    }
+    
+    // Get settings from settings file from watch and save it to keep device object up-to-date
+    func updateSettings(settings: Settings) {
+        guard let uuid = bleManager.pairedDevice?.uuid else { return }
+        
+        let device = fetchDevice(with: uuid)
+        print(device)
+        device.brightLevel = Int16(settings.brightLevel.rawValue)
+        device.chimesOption = Int16(settings.chimesOption.rawValue)
+        device.clockType = Int16(settings.clockType.rawValue)
+        device.notificationStatus = Int16(settings.notificationStatus.rawValue)
+        device.shakeWakeThreshold = Int16(settings.watchFace)
+        device.watchface = Int16(settings.watchFace)
+        device.weatherFormat = Int16(settings.weatherFormat.rawValue)
+        device.stepsGoal = Int32(settings.stepsGoal)
+        device.screenTimeout = Int32(settings.screenTimeOut)
+        
+        let pineTimeStyle = PineTimeStyleWatchface(context: context)
+        pineTimeStyle.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
+        pineTimeStyle.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
+        pineTimeStyle.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
+        pineTimeStyle.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
+        pineTimeStyle.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
+        device.pineTimeStyle = pineTimeStyle
+        
+        let infineatWatchFace = InfineatWatchface(context: context)
+        infineatWatchFace.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
+        infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
+        device.watchFaceInfineat = infineatWatchFace
+        
+        do {
+            try context.save()
+        } catch {
+            print(error.localizedDescription)
+        }
+        
+        self.getSettings()
     }
     
     func updateName(name: String, for device: Device) {
@@ -105,15 +166,17 @@ class DeviceManager: ObservableObject {
         }
     }
     
-    func fetchAllDevices() -> [Device]? {
+    func removeDevice(_ device: Device) {
+        // TODO: remove device
+    }
+    
+    func fetchAllDevices() {
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         
         do {
-            let devices = try context.fetch(fetchRequest)
-            return devices
+            self.watches = try context.fetch(fetchRequest)
         } catch {
             print("Error fetching devices: \(error)")
-            return nil
         }
     }
 }

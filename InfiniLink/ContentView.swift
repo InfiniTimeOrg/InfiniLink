@@ -14,10 +14,11 @@ struct ContentView: View {
     @ObservedObject var notificationManager = NotificationManager.shared
     
     @AppStorage("caloriesGoal") var caloriesGoal = 400
+    @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     
     var body: some View {
         Group {
-            if bleManager.pairedDeviceID != nil {
+            if pairedDeviceID != nil {
                 DeviceView()
                     .onChange(of: bleManager.batteryLevel) { bat in
                         notificationManager.checkToSendLowBatteryNotification()

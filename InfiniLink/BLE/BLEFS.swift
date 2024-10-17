@@ -644,6 +644,8 @@ class BLEFSHandler: ObservableObject {
     @discardableResult func writeSettings(_ settings: Settings) -> WriteFileFS {
         let settingsData = serializeSettings(settings)
         
+        DeviceManager.shared.updateSettings(settings: settings)
+        
         return writeFile(data: settingsData, path: "/settings.dat", offset: 0)
     }
     

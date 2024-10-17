@@ -174,18 +174,41 @@ struct DeviceView: View {
             .onChange(of: bleManager.blefsTransfer) { _ in
                 if bleManager.blefsTransfer != nil {
                     BLEFSHandler.shared.readSettings { settings in
-                        DispatchQueue.main.async {
-                            deviceManager.settings = settings
-                        }
+                        deviceManager.updateSettings(settings: settings)
                     }
                 }
             }
             .onAppear {
                 if let pairedDeviceID = bleManager.pairedDeviceID {
                     bleManager.pairedDevice = deviceManager.fetchDevice(with: pairedDeviceID)
+                    deviceManager.getSettings()
+                    deviceManager.fetchAllDevices()
                 }
                 
                 DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: deviceManager.firmware)
+            }
+            .toolbar {
+                if deviceManager.watches.count > 1 {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Menu {
+                            ForEach(deviceManager.watches, id: \.uuid) { watch in
+                                let isConnected = (watch.uuid == bleManager.pairedDeviceID)
+                                
+                                Button {
+                                    if !isConnected {
+                                        bleManager.unpair()
+                                        bleManager.pairedDeviceID = watch.uuid
+                                        bleManager.startScanning()
+                                    }
+                                } label: {
+                                    Text(watch.name ?? "InfiniTime")
+                                }
+                            }
+                        } label: {
+                            Text("All Watches")
+                        }
+                    }
+                }
             }
         }
         .navigationViewStyle(.stack)

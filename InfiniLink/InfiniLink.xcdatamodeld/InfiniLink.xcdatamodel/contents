@@ -8,22 +8,46 @@
     <entity name="Device" representedClassName="Device" syncable="YES" codeGenerationType="class">
         <attribute name="blefsVersion" attributeType="String"/>
         <attribute name="bleUUID" attributeType="String"/>
+        <attribute name="brightLevel" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <attribute name="chimesOption" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="clockType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="firmware" attributeType="String"/>
         <attribute name="hardwareRevision" attributeType="String"/>
         <attribute name="manufacturer" attributeType="String"/>
         <attribute name="modelNumber" attributeType="String"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="notificationStatus" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="screenTimeout" attributeType="Integer 32" defaultValueString="15000" usesScalarValueType="YES"/>
         <attribute name="serial" attributeType="String"/>
+        <attribute name="settingsVersion" attributeType="Integer 32" defaultValueString="4" usesScalarValueType="YES"/>
+        <attribute name="shakeWakeThreshold" attributeType="Integer 16" defaultValueString="150" usesScalarValueType="YES"/>
         <attribute name="softwareRevision" optional="YES" attributeType="String"/>
         <attribute name="stepCountGoal" attributeType="Integer 32" defaultValueString="10000" usesScalarValueType="YES"/>
+        <attribute name="stepsGoal" attributeType="Integer 32" defaultValueString="10000" usesScalarValueType="YES"/>
         <attribute name="uuid" attributeType="String"/>
         <attribute name="watchface" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weatherFormat" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="pineTimeStyle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PineTimeStyleWatchface" inverseName="relationship" inverseEntity="PineTimeStyleWatchface"/>
+        <relationship name="watchFaceInfineat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InfineatWatchface" inverseName="relationship" inverseEntity="InfineatWatchface"/>
     </entity>
     <entity name="HeartDataPoint" representedClassName="HeartDataPoint" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="relationship" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="heartPoints" inverseEntity="UserExercise"/>
+    </entity>
+    <entity name="InfineatWatchface" representedClassName="InfineatWatchface" syncable="YES" codeGenerationType="class">
+        <attribute name="colorIndex" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="showSideCover" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
+        <relationship name="relationship" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="watchFaceInfineat" inverseEntity="Device"/>
+    </entity>
+    <entity name="PineTimeStyleWatchface" representedClassName="PineTimeStyleWatchface" syncable="YES" codeGenerationType="class">
+        <attribute name="colorBar" attributeType="Integer 16" defaultValueString="11" usesScalarValueType="YES"/>
+        <attribute name="colorBG" attributeType="Integer 16" defaultValueString="3" usesScalarValueType="YES"/>
+        <attribute name="colorTime" attributeType="Integer 16" defaultValueString="11" usesScalarValueType="YES"/>
+        <attribute name="guageStyle" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="weatherEnable" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
+        <relationship name="relationship" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="pineTimeStyle" inverseEntity="Device"/>
     </entity>
     <entity name="StepCounts" representedClassName="StepCounts" syncable="YES" codeGenerationType="class">
         <attribute name="steps" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>

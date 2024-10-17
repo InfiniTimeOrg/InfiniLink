@@ -124,8 +124,22 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
     }
     
+    func removeDevice() {
+        deviceManager.removeDevice(pairedDevice)
+        
+        unpair()
+    }
+    
     func unpair() {
         disconnect()
+        deviceManager.fetchAllDevices()
+        
+        if let first = deviceManager.watches.first, deviceManager.watches.count > 1 {
+            pairedDeviceID = first.uuid
+            startScanning()
+        } else {
+            pairedDeviceID = nil
+        }
     }
     
     func disconnect() {
