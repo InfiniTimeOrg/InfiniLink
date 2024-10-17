@@ -181,8 +181,15 @@ struct FileSystemView: View {
                                 fileSystemViewModel.cdAndLs(dir: listItem)
                             }
                         } label: {
-                            Text(listItem)
-                                .foregroundStyle(Color.primary)
+                            HStack {
+                                Text(listItem)
+                                    .foregroundStyle(isFile ? Color.accentColor: Color.primary)
+                                if !isFile {
+                                    Spacer()
+                                    Image(systemName: "chevron.right")
+                                        .foregroundStyle(.gray)
+                                }
+                            }
                         }
                         .contextMenu {
                             Button(role: .destructive) {

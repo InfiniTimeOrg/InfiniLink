@@ -34,7 +34,6 @@ class WeatherController: ObservableObject {
     
     @AppStorage("latitude") var latitude: Double = 0.0
     @AppStorage("longitude") var longitude: Double = 0.0
-    @AppStorage("temperatureUnit") var temperatureUnit: TemperatureUnit = .celsius
     
     @Published var temperature = 0.0
     @Published var unit = ""
@@ -43,18 +42,16 @@ class WeatherController: ObservableObject {
     private var locationManager = LocationManager()
     
     var unitTemperature: UnitTemperature {
-        switch temperatureUnit {
-        case .celsius:
+        switch DeviceManager.shared.settings.weatherFormat {
+        case .Metric:
             return .celsius
-        case .fahrenheit:
+        case .Imperial:
             return .fahrenheit
         }
     }
     
     init() {
         setupLocationObserver()
-        // TODO: update for watch setting
-        temperatureUnit = TemperatureUnit.current
     }
     
     private func setupLocationObserver() {
