@@ -18,6 +18,8 @@ struct DeviceView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
+    @State private var showMyDevicesSheet = false
+    
     func connectionState() -> String {
         if bleManager.isScanning {
             return NSLocalizedString("Connecting...", comment: "")
@@ -190,27 +192,16 @@ struct DeviceView: View {
             .toolbar {
                 if deviceManager.watches.count > 1 {
                     ToolbarItem(placement: .topBarLeading) {
-                        Menu {
-                            ForEach(deviceManager.watches, id: \.uuid) { watch in
-                                let isConnected = (watch.uuid == bleManager.pairedDeviceID)
-                                
-                                Button {
-                                    if !isConnected {
-                                        bleManager.disconnect()
-                                        bleManager.pairedDeviceID = watch.uuid
-                                        bleManager.pairedDevice = deviceManager.fetchDevice()
-                                        bleManager.startScanning()
-                                    }
-                                } label: {
-                                    Text(watch.name ?? "InfiniTime")
-                                }
-                                .disabled(isConnected)
-                            }
+                        Button {
+                            showMyDevicesSheet = true
                         } label: {
-                            Text("All Watches")
+                            Text("My Watches")
                         }
                     }
                 }
+            }
+            .sheet(isPresented: $showMyDevicesSheet) {
+                MyDevicesView()
             }
         }
         .navigationViewStyle(.stack)

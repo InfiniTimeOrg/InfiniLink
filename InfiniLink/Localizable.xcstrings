@@ -116,9 +116,6 @@
     "All Exercises" : {
 
     },
-    "All Watches" : {
-
-    },
     "Allow Access..." : {
 
     },
@@ -299,6 +296,9 @@
     "InfiniTime " : {
 
     },
+    "InfiniTime %@" : {
+
+    },
     "InfiniTime is up-to-date." : {
 
     },
@@ -332,6 +332,9 @@
     "My Exercises" : {
 
     },
+    "My Watches" : {
+
+    },
     "New Folder" : {
 
     },
@@ -360,6 +363,9 @@
 
     },
     "Other Versions" : {
+
+    },
+    "Pair New Device" : {
 
     },
     "Range" : {

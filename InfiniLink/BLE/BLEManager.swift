@@ -58,6 +58,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var setTimeError = false
     @Published var firstConnect = true
     @Published var isConnectedToPinetime = false
+    @Published var isPairingNewDevice = false
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
@@ -161,12 +162,26 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
     }
     
+    func switchDevice(device: Device) {
+        self.disconnect()
+        self.pairedDeviceID = device.uuid
+        self.pairedDevice = deviceManager.fetchDevice()
+        self.startScanning()
+    }
+    
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString {
+        if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
             connect(peripheral: peripheral)
         }
         if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) {
-            newPeripherals.append(peripheral)
+            
+            if isPairingNewDevice {
+                if !deviceManager.watches.compactMap({ $0.uuid }).contains(peripheral.identifier.uuidString) {
+                    newPeripherals.append(peripheral)
+                }
+            } else {
+                newPeripherals.append(peripheral)
+            }
         }
     }
     

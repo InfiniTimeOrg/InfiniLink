@@ -114,11 +114,8 @@ struct FileSystemDetailView: View {
                 }
             }
             .toolbar {
-                Button {
+                Button("Done", role: .cancel) {
                     dismiss()
-                } label: {
-                    Text("Done")
-                        .fontWeight(.semibold)
                 }
             }
             .onAppear {

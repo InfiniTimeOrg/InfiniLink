@@ -158,6 +158,23 @@ class DeviceManager: ObservableObject {
         save()
     }
     
+    func getName(for uuid: String) -> String {
+        let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "uuid == %@", uuid)
+        
+        do {
+            let existingDevices = try context.fetch(fetchRequest)
+            
+            if let existingDevice = existingDevices.first {
+                return existingDevice.name ?? "InfiniTime"
+            }
+            
+            return "InfiniTime"
+        } catch {
+            return "InfiniTime"
+        }
+    }
+    
     func removeDevice(_ device: Device) {
         context.delete(device)
         

@@ -10,6 +10,7 @@ import CoreBluetooth
 
 struct ConnectView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
@@ -25,6 +26,10 @@ struct ConnectView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
+    
+    var devices: [CBPeripheral] {
+        return bleManager.newPeripherals.filter({ !deviceManager.watches.compactMap({ $0.uuid ?? "" }).contains($0.identifier.uuidString) })
+    }
     
     func connect(_ device: CBPeripheral) {
         deviceWithPendingConnectionID = device.identifier
@@ -57,11 +62,11 @@ struct ConnectView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 if bleManager.isSwitchedOn {
-                    if bleManager.isScanning && bleManager.newPeripherals.isEmpty {
+                    if bleManager.isScanning && devices.isEmpty {
                         ProgressView("Looking for your watch...")
                             .frame(maxHeight: .infinity)
                     } else {
-                        if let infiniTime = bleManager.newPeripherals.first, !showAllDevices {
+                        if let infiniTime = devices.first, !showAllDevices {
                             VStack {
                                 Spacer()
                                 VStack(spacing: 16) {
@@ -71,7 +76,7 @@ struct ConnectView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(height: 150)
-                                    Text(infiniTime.name ?? "InfiniTime")
+                                    Text(deviceManager.getName(for: infiniTime.identifier.uuidString))
                                         .font(.title.weight(.bold))
                                 }
                                 Spacer()
@@ -95,7 +100,7 @@ struct ConnectView: View {
                                 .disabled(deviceWithPendingConnectionID != nil)
                                 
                                 let count = (bleManager.newPeripherals.count) - 1
-                                Button("\(count) more device\(count == 1 ? "s" : "") found") {
+                                Button("\(count) more device\(count == 1 ? "" : "s") found") {
                                     showAllDevices = true
                                 }
                                 .opacity(count < 1 ? 0 : 1)
@@ -115,7 +120,7 @@ struct ConnectView: View {
                         } else {
                             ScrollView {
                                 LazyVGrid(columns: columns, spacing: 10) {
-                                    ForEach(bleManager.newPeripherals, id: \.identifier) { device in
+                                    ForEach(devices, id: \.identifier) { device in
                                         Button {
                                             connect(device)
                                         } label: {
@@ -128,7 +133,7 @@ struct ConnectView: View {
                                                             .resizable()
                                                             .aspectRatio(contentMode: .fit)
                                                             .frame(height: 70)
-                                                        Text(device.name ?? "Unknown")
+                                                        Text(deviceManager.getName(for: device.identifier.uuidString))
                                                             .font(.system(size: 19).weight(.semibold))
                                                         // Can't use .primary because button the primary is blue
                                                             .foregroundStyle(colorScheme == .dark ? .white : .black)
