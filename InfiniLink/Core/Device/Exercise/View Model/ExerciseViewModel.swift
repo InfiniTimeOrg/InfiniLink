@@ -52,7 +52,6 @@ class ExerciseViewModel: ObservableObject {
         }
         
         saveContext(viewContext)
-        healthKitManager.writeExerciseTime(startDate: startDate, endDate: Date()) { _, _ in }
     }
     
     func saveContext(_ context: NSManagedObjectContext) {
