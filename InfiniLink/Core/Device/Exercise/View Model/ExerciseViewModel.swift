@@ -19,12 +19,17 @@ class ExerciseViewModel: ObservableObject {
         Exercise(id: "outdoor-cycle", name: "Outdoor Cycle", icon: "figure.outdoor.cycle", components: [.heart]),
         Exercise(id: "indoor-run", name: "Indoor Run", icon: "figure.run.treadmill", components: [.heart, .steps]),
         Exercise(id: "indoor-cycle", name: "Indoor Cycle", icon: "figure.indoor.cycle", components: [.heart]),
+        Exercise(id: "strength-training", name: "Strength Training", icon: "figure.strengthtraining.traditional", components: [.heart]),
         Exercise(id: "table-tennis", name: "Table Tennis", icon: "figure.table.tennis", components: [.heart]),
         Exercise(id: "tennis", name: "Tennis", icon: "figure.tennis", components: [.heart]),
         Exercise(id: "soccer", name: "Soccer", icon: "figure.indoor.soccer", components: [.heart, .steps]),
         Exercise(id: "basketball", name: "Basketball", icon: "figure.basketball", components: [.heart]),
         Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart]),
-        Exercise(id: "strength-training", name: "Strength Training", icon: "figure.strengthtraining.traditional", components: [.heart])
+        Exercise(id: "boxing", name: "Boxing", icon: "figure.boxing", components: [.heart]),
+        Exercise(id: "skiing", name: "Skiing", icon: "figure.skiing.downhill", components: [.heart]),
+        Exercise(id: "bowling", name: "Bowling", icon: "figure.bowling", components: [.heart]),
+        Exercise(id: "figure.golf", name: "Golf", icon: "figure.golf", components: [.heart]),
+        Exercise(id: "hockey", name: "Hockey", icon: "figure.hockey", components: [.heart])
     ]
     
     func timeString(from time: TimeInterval) -> String {
