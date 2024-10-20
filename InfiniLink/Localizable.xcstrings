@@ -179,6 +179,9 @@
     "Connecting..." : {
 
     },
+    "Continue" : {
+
+    },
     "Converting..." : {
 
     },
@@ -245,19 +248,19 @@
     "Filter inconsistent data from your heart rate measurements." : {
 
     },
-    "Finish Setup" : {
+    "First Name" : {
 
     },
     "General" : {
+
+    },
+    "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
 
     },
     "Get notified when you reach your daily fitness goals." : {
 
     },
     "Goal Reached" : {
-
-    },
-    "Goals" : {
 
     },
     "Good afternoon" : {
@@ -273,6 +276,9 @@
 
     },
     "Health" : {
+
+    },
+    "Health Details" : {
 
     },
     "Heart Rate" : {
@@ -338,7 +344,10 @@
     "New Folder" : {
 
     },
-    "No Exercises. Start a new one by clicking on one below." : {
+    "Next" : {
+
+    },
+    "No exercises" : {
 
     },
     "Not Playing" : {
@@ -354,6 +363,9 @@
 
     },
     "Open Settings..." : {
+
+    },
+    "Optional" : {
 
     },
     "Other" : {
@@ -419,9 +431,6 @@
     "Several days ago" : {
 
     },
-    "Skip" : {
-
-    },
     "Sleep" : {
 
     },
@@ -455,7 +464,7 @@
     "Title" : {
 
     },
-    "To accurately measure calories and steps, we'll need to know your height and weight." : {
+    "To accurately measure calories and distance, you'll need to enter some basic details." : {
 
     },
     "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music." : {
@@ -514,6 +523,9 @@
 
     },
     "Y" : {
+
+    },
+    "You can start one by choosing one from the list below." : {
 
     },
     "You don't have any upcoming reminders. You can set them in the Reminders app." : {

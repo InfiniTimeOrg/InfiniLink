@@ -39,7 +39,7 @@ struct NotificationsSettingsView: View {
                     Toggle("Stand-up Reminder", isOn: $standUpReminder)
                 }
                 */
-                Section(header: Text("Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
+                Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                     Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
                     Toggle("Exercise Time", isOn: $remindOnExerciseTimeGoalCompletion)

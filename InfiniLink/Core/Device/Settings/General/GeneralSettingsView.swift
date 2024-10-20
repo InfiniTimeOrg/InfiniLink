@@ -36,6 +36,11 @@ struct GeneralSettingsView: View {
             }
             Section {
                 NavigationLink {
+                    SetUpDetailsView(listOnly: true)
+                } label: {
+                    Text("Health Details")
+                }
+                NavigationLink {
                     GoalsSettingsView()
                 } label: {
                     Text("Daily Goals")

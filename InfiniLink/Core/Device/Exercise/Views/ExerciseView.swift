@@ -22,9 +22,9 @@ struct ExerciseView: View {
                 ActiveExerciseView(exercise: $exerciseToStart)
             } else {
                 List {
-                    Section("My Exercises") {
+                    Section(header: Text("My Exercises"), footer: Text(userExercises.isEmpty ? "You can start one by choosing one from the list below." : "")) {
                         if userExercises.isEmpty {
-                            Text("No Exercises. Start a new one by clicking on one below.")
+                            Text("No Exercises")
                         } else {
                             ForEach(userExercises) { userExercise in
                                 let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!

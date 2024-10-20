@@ -20,6 +20,6 @@ class PersonalizationController: ObservableObject {
     let pace: FitnessCalculator.Pace? = .average
     
     var isPersonalizationAvailable: Bool {
-        !showSetupSheet && (weight == nil || height == nil || age == nil)
+        !showSetupSheet && (weight != nil || height != nil || age != nil)
     }
 }

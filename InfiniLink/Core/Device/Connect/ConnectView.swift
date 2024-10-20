@@ -90,8 +90,8 @@ struct ConnectView: View {
                                         .font(.body.weight(.semibold))
                                         .frame(maxWidth: .infinity)
                                         .background(Color.blue)
-                                        .foregroundStyle(deviceWithPendingConnectionID == nil ? .white : .clear)
                                         .clipShape(RoundedRectangle(cornerRadius: 20))
+                                        .foregroundStyle(deviceWithPendingConnectionID == nil ? .white : .clear)
                                         .overlay {
                                             if deviceWithPendingConnectionID != nil {
                                                 ProgressView()

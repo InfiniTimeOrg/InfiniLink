@@ -93,25 +93,6 @@ struct DeviceView: View {
                             }
                         }
                     }
-                    if !personalizationController.isPersonalizationAvailable {
-                        Section {
-                            Button {
-                                personalizationController.showSetupSheet = true
-                            } label: {
-                                Text("Finish Setup")
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                            }
-                        }
-                        .overlay {
-                            Text("1")
-                                .padding(10)
-                                .foregroundStyle(.white)
-                                .background(Color.red)
-                                .clipShape(Circle())
-                                .padding(12)
-                                .frame(maxWidth: .infinity, alignment: .trailing)
-                        }
-                    }
                     Section {
                         NavigationLink {
                             ExerciseView()
