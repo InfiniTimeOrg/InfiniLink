@@ -20,21 +20,9 @@ class RemindersManager: ObservableObject {
     
     @AppStorage("enableReminders") var enableReminders = true
     
-    init() {
-        startCheckingForDueReminders()
-    }
-    
-    func startCheckingForDueReminders() {
-        timer = Timer.scheduledTimer(withTimeInterval: 30, repeats: true) { _ in
-            self.checkForDueReminders()
-        }
-    }
-    
-    func checkForDueReminders() {
-        let currentTime = Date()
-        
+    func checkForDueReminders(date: Date) {
         for reminder in reminders {
-            if let dueDate = reminder.dueDateComponents?.date, dueDate == currentTime, !reminder.isCompleted {
+            if let dueDate = reminder.dueDateComponents?.date, dueDate == date, !reminder.isCompleted {
                 NotificationManager.shared.sendReminderDueNotification(reminder)
             }
         }

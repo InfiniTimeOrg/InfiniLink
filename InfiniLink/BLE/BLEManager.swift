@@ -56,7 +56,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var isSwitchedOn = false
     @Published var isScanning = false
     @Published var setTimeError = false
-    @Published var firstConnect = true
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
     
@@ -107,7 +106,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isScanning = false
     }
     
-    func connect(peripheral: CBPeripheral) {
+    func connect(peripheral: CBPeripheral, completion: @escaping() -> Void) {
         guard isSwitchedOn else { return }
         
         if peripheral.name == "InfiniTime" {
@@ -122,6 +121,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             infiniTime = peripheral
             infiniTime?.delegate = self
             myCentral.connect(peripheral, options: nil)
+            
+            completion()
         }
     }
     
@@ -143,10 +144,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let first = deviceManager.watches.first, deviceManager.watches.count > 1 {
             pairedDeviceID = first.uuid
             pairedDevice = deviceManager.fetchDevice()
-            startScanning()
         } else {
             pairedDeviceID = nil
         }
+        
+        startScanning()
     }
     
     func disconnect() {
@@ -156,9 +158,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.blefsTransfer = nil
             self.currentTimeService = nil
             self.batteryLevel = 0
-            
             self.isConnectedToPinetime = false
-            self.firstConnect = true
         }
     }
     
@@ -171,7 +171,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
-            connect(peripheral: peripheral)
+            connect(peripheral: peripheral) {}
         }
         if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) {
             
@@ -200,7 +200,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         isConnectedToPinetime = false
         notifyCharacteristic = nil
-        firstConnect = false
         
         if error != nil {
             central.connect(peripheral)

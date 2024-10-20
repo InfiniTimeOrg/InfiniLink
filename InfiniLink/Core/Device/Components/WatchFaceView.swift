@@ -18,6 +18,13 @@ struct WatchFaceView: View {
     
     @Binding var watchface: UInt8?
     
+    let device: Device?
+    
+    init(watchface: Binding<UInt8?>, device: Device? = nil) {
+        self._watchface = watchface
+        self.device = device
+    }
+    
     var body: some View {
         GeometryReader { geometry in
             ZStack {
@@ -28,17 +35,17 @@ struct WatchFaceView: View {
                     ZStack {
                         switch watchface == nil ? deviceManager.settings.watchFace : watchface {
                         case 0:
-                            DigitalWF(geometry: .constant(geometry))
+                            DigitalWF(geometry: .constant(geometry), device: device)
                         case 1:
                             AnalogWF(geometry: .constant(geometry))
                         case 2:
-                            PineTimeStyleWF(geometry: .constant(geometry))
+                            PineTimeStyleWF(geometry: .constant(geometry), device: device)
                         case 3:
-                            TerminalWF(geometry: .constant(geometry))
+                            TerminalWF(geometry: .constant(geometry), device: device)
                         case 4:
-                            InfineatWF(geometry: .constant(geometry))
+                            InfineatWF(geometry: .constant(geometry), device: device)
                         case 5:
-                            CasioWF(geometry: .constant(geometry))
+                            CasioWF(geometry: .constant(geometry), device: device)
                         default:
                             ProgressView()
                                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
@@ -68,6 +75,15 @@ struct PineTimeStyleWF: View {
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry: GeometryProxy
     
+    let device: Device?
+    
+    func hour24() -> Bool {
+        if let device {
+            return device.clockType == 0
+        } else {
+            return deviceManager.hour24
+        }
+    }
     func getColor(for pts: PineTimeStyleColor) -> Color {
         switch pts {
         case .time:
@@ -199,12 +215,12 @@ struct PineTimeStyleWF: View {
     var body: some View {
         ZStack {
             getColor(for: .background)
-            if !deviceManager.hour24 {
+            if !hour24() {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
                     .foregroundColor(getColor(for: .time))
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !deviceManager.hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24() {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 let hour24 = currentHour > 12 ? currentHour - 12 : (currentHour == 0 ? 12 : currentHour)
                 let hourString = String(format: "%02d", hour24)
@@ -267,14 +283,24 @@ struct DigitalWF: View {
     
     @Binding var geometry: GeometryProxy
     
+    let device: Device?
+    
+    func hour24() -> Bool {
+        if let device {
+            return device.clockType == 0
+        } else {
+            return deviceManager.hour24
+        }
+    }
+    
     var body: some View {
         ZStack {
-            if !deviceManager.hour24 {
+            if !hour24() {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !deviceManager.hour24 {
+            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24() {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
@@ -307,6 +333,8 @@ struct InfineatWF: View {
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var geometry: GeometryProxy
+    
+    let device: Device?
     
     let orangeColors: [Color] = [
         Color(red: 0xfd / 255.0, green: 0x87 / 255.0, blue: 0x2b / 255.0),
@@ -371,6 +399,13 @@ struct InfineatWF: View {
         Color(red: 0x11 / 255.0, green: 0x70 / 255.0, blue: 0x5a / 255.0)
     ]
     
+    func hour24() -> Bool {
+        if let device {
+            return device.clockType == 0
+        } else {
+            return deviceManager.hour24
+        }
+    }
     func infineatColor(for item: InfineatItem) -> Color {
         let colorIndex = deviceManager.settings.watchFaceInfineat.colorIndex
         
@@ -494,14 +529,14 @@ struct InfineatWF: View {
     
     var body: some View {
         ZStack {
-            if !deviceManager.hour24 {
+            if !hour24() {
                 CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !deviceManager.hour24 {
+            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24() {
                 let currentHour = Calendar.current.component(.hour, from: Date())
-                let hour24 = currentHour % 12 == 0 ? 12 : currentHour % 12
+                let hour24 = currentHour % 12 == 0 ? 12 : currentHour
                 let hourString = String(format: "%02d", hour24)
                 let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
                 
@@ -617,6 +652,16 @@ struct TerminalWF: View {
     
     @Binding var geometry: GeometryProxy
     
+    let device: Device?
+    
+    func hour24() -> Bool {
+        if let device {
+            return device.clockType == 0
+        } else {
+            return deviceManager.hour24
+        }
+    }
+    
     let currentHour = Calendar.current.component(.hour, from: Date())
     let currentMinute = Calendar.current.component(.minute, from: Date())
     let currentSecond = Calendar.current.component(.second, from: Date())
@@ -628,7 +673,7 @@ struct TerminalWF: View {
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.5)
-            if !deviceManager.hour24 {
+            if !hour24() {
                 Group {
                     Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour % 12 == 0 ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
                 }
@@ -692,6 +737,16 @@ struct CasioWF: View {
     
     @Binding var geometry: GeometryProxy
     
+    let device: Device?
+    
+    func hour24() -> Bool {
+        if let device {
+            return device.clockType == 0
+        } else {
+            return deviceManager.hour24
+        }
+    }
+    
     let colorText: Color = Color(red: 152 / 255.0, green: 182 / 255.0, blue: 154 / 255.0)
     
     var body: some View {
@@ -747,7 +802,7 @@ struct CasioWF: View {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 var hourString = ""
                 
-                if deviceManager.hour24 {
+                if hour24() {
                     hourString = String(format: "%d", currentHour)
                 } else {
                     let hour24 = currentHour % 12 == 0 ? 12 : currentHour
@@ -759,7 +814,7 @@ struct CasioWF: View {
             }(), font: .custom("7-Segment", size: geometry.size.width * 0.44), lineSpacing: 0)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
             .position(x: geometry.size.width / 2.1, y: geometry.size.height / 1.4)
-            if !deviceManager.hour24 {
+            if !hour24() {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
                     .padding(.leading, 6)
@@ -813,15 +868,4 @@ enum InfineatItem {
     case topBottom
     case midBottom
     case midTop
-}
-
-#Preview {
-    NavigationView {
-        GeometryReader { geometry in
-            WatchFaceView(watchface: .constant(5))
-                .padding(22)
-                .frame(width: geometry.size.width / 1.65, height: geometry.size.width / 1.65, alignment: .center)
-                .clipped(antialiased: true)
-        }
-    }
 }

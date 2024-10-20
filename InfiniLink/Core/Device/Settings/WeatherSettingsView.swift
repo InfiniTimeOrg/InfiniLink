@@ -14,7 +14,7 @@ struct WeatherSettingsView: View {
         GeometryReader { geo in
             VStack {
                 if let weather = weatherController.weather {
-                    ScrollView {
+                    List {
                         Section {
                             DetailHeaderView(
                                 Header(title: String(format: "%.0f", weatherController.temperature) + weatherController.unit,
@@ -24,10 +24,26 @@ struct WeatherSettingsView: View {
                                 width: geo.size.width) {
                                     HStack {
                                         DetailHeaderSubItemView(title: "Min",
-                                                                value: String(format: "%.0f", weather.currentWeather.temperature.value) + weatherController.unit)
-                                        DetailHeaderSubItemView(title: "Max", value: String(format: "%.0f", weather.currentWeather.temperature.value) + weatherController.unit)
+                                                                value: String(format: "%.0f", weatherController.getTemperature(celsius: weather.dailyForecast.first?.lowTemperature)) + weatherController.unit)
+                                        DetailHeaderSubItemView(title: "Max", value: String(format: "%.0f", weatherController.getTemperature(celsius: weather.dailyForecast.first?.highTemperature)) + weatherController.unit)
                                     }
                                 }
+                        }
+                        .listRowBackground(Color.clear)
+                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                        Section {
+                            ForEach(weather.dailyForecast.forecast, id: \.date) { day in
+                                HStack {
+                                    Image(systemName: day.symbolName)
+                                    Text({
+                                        let dateFormatter = DateFormatter()
+                                        dateFormatter.dateFormat = "EEE"
+                                        let dayInWeek = dateFormatter.string(from: day.date)
+                                        
+                                        return dayInWeek
+                                    }())
+                                }
+                            }
                         }
                     }
                 } else {
@@ -35,7 +51,6 @@ struct WeatherSettingsView: View {
                         .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
-            .padding()
         }
         .navigationTitle("Weather")
     }

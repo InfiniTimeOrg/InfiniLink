@@ -10,7 +10,9 @@ import SwiftUI
 struct SoftwareUpdateView: View {
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
-    @ObservedObject var bleFS = BLEFSHandler.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var bleFs = BLEFSHandler.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     @State private var showLocalFileSheet = false
     @State private var showResourcePickerSheet = false
@@ -85,7 +87,7 @@ struct SoftwareUpdateView: View {
             if downloadManager.updateStarted {
                 Group {
                     if downloadManager.externalResources {
-                        ProgressView(value: Double(BLEFSHandler.shared.progress), total: Double(BLEFSHandler.shared.externalResourcesSize))
+                        ProgressView(value: Double(bleFs.progress), total: Double(bleFs.externalResourcesSize))
                     } else {
                         ProgressView(dfuUpdater.dfuState, value: dfuUpdater.percentComplete, total: Double(100))
                     }
@@ -95,11 +97,12 @@ struct SoftwareUpdateView: View {
                 Text(downloadManager.updateBody)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(height: 120)
-            if BLEManager.shared.isConnectedToPinetime {
+            .frame(height: 300)
+            if bleManager.hasLoadedCharacteristics {
                 Button {
                     if downloadManager.updateStarted {
                         dfuUpdater.stopTransfer()
+                        dfuUpdater.isUpdating = false
                         downloadManager.updateStarted = false
                     } else {
                         dfuUpdater.percentComplete = 0
@@ -129,7 +132,7 @@ struct SoftwareUpdateView: View {
                         .clipShape(Capsule())
                 }
             } else {
-                Text("\(BLEManager.shared.pairedDevice.name ?? "InfiniTime") needs to be connected to update its software.")
+                Text("\(deviceManager.name) needs to be connected to update its software.")
                     .foregroundStyle(.gray)
                     .font(.system(size: 14).weight(.semibold))
                     .multilineTextAlignment(.center)
@@ -145,7 +148,7 @@ struct SoftwareUpdateView: View {
                 ProgressView("Checking for updates...")
             } else {
                 VStack(spacing: 3) {
-                    Text(DeviceManager.shared.firmware)
+                    Text(deviceManager.firmware)
                         .font(.title.weight(.bold))
                     Text("InfiniTime is up-to-date.")
                         .foregroundStyle(.gray)

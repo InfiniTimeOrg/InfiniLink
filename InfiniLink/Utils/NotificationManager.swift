@@ -32,6 +32,8 @@ class NotificationManager: ObservableObject {
     @Published var canSendNotifications = false
     
     @AppStorage("watchNotifications") var watchNotifications = true
+    @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
+    @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
     
     func requestNotificationAuthorization() {
         let center = UNUserNotificationCenter.current()
@@ -66,24 +68,31 @@ class NotificationManager: ObservableObject {
 // MARK: Battery
 extension NotificationManager {
     func checkToSendLowBatteryNotification() {
-        let bat = bleManager.batteryLevel
-        let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
-        
-        if watchNotifications && !bleManager.firstConnect {
+        if watchNotifications {
+            let bat = bleManager.batteryLevel
+            
             if bat > 20 {
                 batteryIsUnderTwenty = false
                 batteryIsUnderTen = false
             } else if (bat <= 20 && bat > 10) && !batteryIsUnderTwenty {
-                self.bleWriteManager.sendNotification(notif)
-                self.sendNotificationToHost(notif)
-                
+                self.sendLowBatteryNotification()
                 self.batteryIsUnderTwenty = true
             } else if (bat <= 10 && bat > 5) && !batteryIsUnderTen {
-                self.bleWriteManager.sendNotification(notif)
-                self.sendNotificationToHost(notif)
-                
+                self.sendLowBatteryNotification()
                 self.batteryIsUnderTen = true
             }
+        }
+    }
+    
+    private func sendLowBatteryNotification() {
+        let bat = bleManager.batteryLevel
+        let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
+        
+        if sendLowBatteryNotificationToWatch {
+            self.bleWriteManager.sendNotification(notif)
+        }
+        if sendLowBatteryNotificationToiPhone {
+            self.sendNotificationToHost(notif)
         }
     }
 }
@@ -98,6 +107,12 @@ extension NotificationManager {
     
     func sendCaloriesGoalReachedNotification() {
         let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your calorie goal!", comment: ""))
+        
+        self.bleWriteManager.sendNotification(notif)
+    }
+    
+    func sendStepGoalReachedNotification() {
+        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your steps goal!", comment: ""))
         
         self.bleWriteManager.sendNotification(notif)
     }

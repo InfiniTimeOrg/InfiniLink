@@ -125,6 +125,9 @@
     "Allow your watch to control the currently playing music from Apple Music." : {
 
     },
+    "Always On" : {
+
+    },
     "Apple Health" : {
 
     },
@@ -135,9 +138,6 @@
 
     },
     "Back" : {
-
-    },
-    "Background Measurements" : {
 
     },
     "Battery" : {
@@ -165,6 +165,9 @@
 
     },
     "Checking for updates..." : {
+
+    },
+    "Clock Type" : {
 
     },
     "Connect" : {
@@ -269,9 +272,6 @@
     "H" : {
 
     },
-    "Have your watch remind you when to stand up if you've been sedentary for too long." : {
-
-    },
     "Health" : {
 
     },
@@ -290,19 +290,16 @@
     "If you have an InfiniTime device, you can pair it here." : {
 
     },
+    "Imperial" : {
+
+    },
     "InfiniTime" : {
 
     },
     "InfiniTime " : {
 
     },
-    "InfiniTime %@" : {
-
-    },
     "InfiniTime is up-to-date." : {
-
-    },
-    "Intelligently monitor your heart rate 24 hours a day. This feature will shorten your watch's battery life." : {
 
     },
     "Interval" : {
@@ -326,6 +323,9 @@
     "M" : {
 
     },
+    "Metric" : {
+
+    },
     "Music" : {
 
     },
@@ -338,7 +338,7 @@
     "New Folder" : {
 
     },
-    "No Exercises" : {
+    "No Exercises. Start a new one by clicking on one below." : {
 
     },
     "Not Playing" : {
@@ -348,9 +348,6 @@
 
     },
     "Notify on Low Battery" : {
-
-    },
-    "Notify on Reconnect" : {
 
     },
     "Now" : {
@@ -398,6 +395,12 @@
     "Scanning..." : {
 
     },
+    "Screen Timeout" : {
+
+    },
+    "Seconds" : {
+
+    },
     "Send a notification to your devices when your watch is on low battery." : {
 
     },
@@ -425,9 +428,6 @@
     "Software Update" : {
 
     },
-    "Stand-up Reminder" : {
-
-    },
     "Start Pairing" : {
 
     },
@@ -441,6 +441,9 @@
 
     },
     "The folder name cannot contain a period." : {
+
+    },
+    "There isn't any available sleep data." : {
 
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
@@ -520,6 +523,9 @@
 
     },
     "You've reached your exercise time goal!" : {
+
+    },
+    "You've reached your steps goal!" : {
 
     }
   },

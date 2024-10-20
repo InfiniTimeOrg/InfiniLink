@@ -48,6 +48,12 @@ struct MyDevicesView: View {
             .sheet(isPresented: $showConnectSheet, onDismiss: { bleManager.isPairingNewDevice = false }) {
                 ConnectView()
             }
+            .onChange(of: bleManager.pairedDevice) { _ in
+                deviceManager.fetchAllDevices()
+            }
+            .onAppear {
+                deviceManager.fetchAllDevices()
+            }
         }
         .navigationViewStyle(.stack)
     }
@@ -60,13 +66,15 @@ struct DeviceRowView: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            WatchFaceView(watchface: .constant(UInt8(watch.watchface)))
+            WatchFaceView(watchface: .constant(UInt8(watch.watchface)), device: watch)
                 .frame(width: 90, height: 90)
             VStack(alignment: .leading, spacing: 4) {
                 Text(watch.name ?? "InfiniTime")
                     .font(.title2.weight(.semibold))
-                Text("InfiniTime \(watch.firmware ?? "")")
-                    .foregroundStyle(.gray)
+                Group {
+                    Text("InfiniTime ") + Text(watch.firmware ?? "").font(.body.weight(.semibold))
+                }
+                .foregroundStyle(.gray)
             }
             Spacer()
             if bleManager.pairedDeviceID  == watch.uuid {

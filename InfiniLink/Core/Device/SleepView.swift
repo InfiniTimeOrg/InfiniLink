@@ -35,24 +35,30 @@ struct SleepView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: "8", units: "Hours", icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
+                    DetailHeaderView(Header(title: String(sleepController.sleep.hours), units: "Hours", icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
                         HStack {
-                            DetailHeaderSubItemView(title: "Deep", value: "2.5hrs")
-                            DetailHeaderSubItemView(title: "Core", value: "5hrs")
-                            DetailHeaderSubItemView(title: "REM", value: "2hrs")
+                            DetailHeaderSubItemView(title: "Deep", value: String(sleepController.sleep.deep), unit: "hrs")
+                            DetailHeaderSubItemView(title: "Core", value: String(sleepController.sleep.core), unit: "hrs")
+                            DetailHeaderSubItemView(title: "REM", value: String(sleepController.sleep.rem), unit: "hrs")
                         }
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
-                Section {
-                    TableView(data: sleepController.sleepData)
+                if !sleepController.sleepData.isEmpty {
+                    Section {
+                        TableView(data: sleepController.sleepData)
+                    }
+                } else {
+                    Section {
+                        Text("There isn't any available sleep data.")
+                    }
                 }
             }
         }
         .navigationTitle("Sleep")
         .onAppear {
-            if bleManager.blefsTransfer != nil {
+            if bleManager.blefsTransfer != nil && bleManager.hasLoadedCharacteristics {
                 sleepController.getSleepCSV()
             }
         }

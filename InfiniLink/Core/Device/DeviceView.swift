@@ -19,6 +19,7 @@ struct DeviceView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State private var showMyDevicesSheet = false
+    @State private var showNavigationTitle = false
     
     func connectionState() -> String {
         if bleManager.isScanning {
@@ -38,26 +39,34 @@ struct DeviceView: View {
         NavigationView {
             GeometryReader { geo in
                 List {
-                    VStack(spacing: 4) {
-                        WatchFaceView(watchface: .constant(nil))
-                            .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
-                            .clipped(antialiased: true)
-                        VStack(spacing: 5) {
-                            Group {
-                                Text(connectionState()) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
-                                    .foregroundColor({
-                                        if bleManager.batteryLevel > 20 {
-                                            return Color.gray
-                                        } else if bleManager.batteryLevel > 10 {
-                                            return Color.orange
-                                        } else {
-                                            return Color.red
-                                        }
-                                    }())
+                    VStack(spacing: 0) {
+                        GeometryReader { geo in
+                            Color.clear
+                                .preference(key: ScrollOffsetPreferenceKey.self, value: [geo.frame(in: .global).minY])
+                        }
+                        .frame(height: 0)
+                        VStack(spacing: 4) {
+                            WatchFaceView(watchface: .constant(nil), device: bleManager.pairedDevice)
+                                .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
+                                .clipped(antialiased: true)
+                            VStack(spacing: 5) {
+                                Group {
+                                    Text(connectionState()) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
+                                        .foregroundColor({
+                                            if bleManager.batteryLevel > 20 {
+                                                return Color.gray
+                                            } else if bleManager.batteryLevel > 10 {
+                                                return Color.orange
+                                            } else {
+                                                return Color.red
+                                            }
+                                        }())
+                                }
+                                .foregroundStyle(Color.gray)
+                                Text(deviceManager.name)
+                                    .font(.title.weight(.bold))
                             }
-                            .foregroundStyle(Color.gray)
-                            Text(DeviceManager.shared.name)
-                                .font(.title.weight(.bold))
+                            .opacity(showNavigationTitle ? 0 : 1)
                         }
                     }
                     .frame(maxWidth: .infinity)
@@ -159,11 +168,11 @@ struct DeviceView: View {
                     }
                     Section {
                         /*
-                        NavigationLink {
-                            AlarmView()
-                        } label: {
-                            ListRowView(title: "Alarms", icon: "alarm.fill")
-                        }
+                         NavigationLink {
+                         AlarmView()
+                         } label: {
+                         ListRowView(title: "Alarms", icon: "alarm.fill")
+                         }
                          */
                         NavigationLink {
                             RemindersView()
@@ -171,6 +180,15 @@ struct DeviceView: View {
                             ListRowView(title: "Reminders", icon: "checklist")
                         }
                     }
+                }
+            }
+            .navigationTitle(showNavigationTitle ? deviceManager.name : "")
+            .navigationBarTitleDisplayMode(.inline)
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { values in
+                let value = values.first ?? 0
+                
+                withAnimation(.easeIn(duration: 0.2)) {
+                    self.showNavigationTitle = (value <= -115)
                 }
             }
             .onChange(of: bleManager.blefsTransfer) { _ in
@@ -184,19 +202,16 @@ struct DeviceView: View {
                 if let pairedDeviceID = bleManager.pairedDeviceID {
                     bleManager.pairedDevice = deviceManager.fetchDevice(with: pairedDeviceID)
                     deviceManager.getSettings()
-                    deviceManager.fetchAllDevices()
                 }
                 
-                DownloadManager.shared.updateAvailable = DownloadManager.shared.checkForUpdates(currentVersion: deviceManager.firmware)
+                downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
             }
             .toolbar {
-                if deviceManager.watches.count > 1 {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button {
-                            showMyDevicesSheet = true
-                        } label: {
-                            Text("My Watches")
-                        }
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        showMyDevicesSheet = true
+                    } label: {
+                        Text("My Watches")
                     }
                 }
             }
@@ -233,6 +248,14 @@ struct ListRowView: View {
                 .clipShape(RoundedRectangle(cornerRadius: 8))
                 .foregroundStyle(.white)
         }
+    }
+}
+
+struct ScrollOffsetPreferenceKey: PreferenceKey {
+    static var defaultValue = [CGFloat]()
+    
+    static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
+        value.append(contentsOf: nextValue())
     }
 }
 

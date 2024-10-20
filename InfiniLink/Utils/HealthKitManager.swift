@@ -111,12 +111,13 @@ class HealthKitManager: ObservableObject {
     }
     
     func requestAuthorization() {
-        let stepType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
+        let steps = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
         let heartRate = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        let exerciseTime = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
         
         guard let healthStore = self.healthStore else { return }
         
-        healthStore.requestAuthorization(toShare: [stepType, heartRate], read: [stepType, heartRate]) { success, error in
+        healthStore.requestAuthorization(toShare: [steps, heartRate, exerciseTime], read: []) { success, error in
             if let error = error {
                 print(error)
             }

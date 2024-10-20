@@ -13,7 +13,6 @@ struct NotificationsSettingsView: View {
     @AppStorage("standUpReminder") var standUpReminder = true
     @AppStorage("watchNotifications") var watchNotifications = true
     @AppStorage("enableReminders") var enableReminders = true
-    @AppStorage("notifyOnReconnect") var notifyOnReconnect = false // Update to have same string as "first connect" setting in old app?
     
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
@@ -24,7 +23,7 @@ struct NotificationsSettingsView: View {
             Section {
                 Toggle("Enable Watch Notifications", isOn: $watchNotifications)
             }
-            Group {
+            if watchNotifications {
                 Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.")) {
                     Toggle("Water Reminder", isOn: $waterReminder)
                     if waterReminder {
@@ -35,9 +34,11 @@ struct NotificationsSettingsView: View {
                         }
                     }
                 }
+                /*
                 Section(footer: Text("Have your watch remind you when to stand up if you've been sedentary for too long.")) {
                     Toggle("Stand-up Reminder", isOn: $standUpReminder)
                 }
+                */
                 Section(header: Text("Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                     Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
@@ -46,11 +47,7 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders are due.")) {
                     Toggle("Reminder Notifications", isOn: $enableReminders)
                 }
-                Section {
-                    Toggle("Notify on Reconnect", isOn: $notifyOnReconnect)
-                }
             }
-            .disabled(!watchNotifications)
         }
         .navigationTitle("Notifications")
     }

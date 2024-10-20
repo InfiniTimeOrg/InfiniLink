@@ -39,10 +39,6 @@ struct BLEDiscoveredCharacteristics {
             peripheral.setNotifyValue(true, for: characteristic)
 		case bleManager.cbuuidList.notify:
             bleManager.notifyCharacteristic = characteristic
-            if !bleManager.firstConnect {
-                BLEWriteManager().sendNotification(AppNotification(title: "\(bleManager.pairedDevice.name ?? "InfiniTime") connected", subtitle: "Connected to \(UIDevice.current.name)."))
-            }
-            bleManager.firstConnect = false
 		case bleManager.cbuuidList.stepCount:
 			peripheral.readValue(for: characteristic)
 			peripheral.setNotifyValue(true, for: characteristic)

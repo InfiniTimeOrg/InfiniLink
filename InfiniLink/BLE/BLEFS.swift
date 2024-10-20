@@ -692,6 +692,13 @@ class BLEFSHandler: ObservableObject {
         writeSettings(settings)
     }
     
+    func setStepsGoal(_ settings: inout Settings, stepsGoal: UInt32) {
+        if stepsGoal != settings.stepsGoal {
+            settings.stepsGoal = stepsGoal
+        }
+        writeSettings(settings)
+    }
+    
     func setChimeOption(_ settings: inout Settings, option: ChimesOption) {
         if option != settings.chimesOption {
             settings.chimesOption = option
@@ -762,27 +769,19 @@ class BLEFSHandler: ObservableObject {
         writeSettings(settings)
     }
     
-//    func setAlwaysOnDisplaySetting(_ settings: inout Settings, state: Bool) {
-//        if state != settings.alwaysOnDisplay {
-//            settings.alwaysOnDisplay = state
-//        }
-//    }
+    /*
+    func setAlwaysOnDisplaySetting(_ settings: inout Settings, state: Bool) {
+        if state != settings.alwaysOnDisplay {
+            settings.alwaysOnDisplay = state
+        }
+    }
+     */
     
     func setShakeThreshold(_ settings: inout Settings, threshold: UInt16) {
         if threshold != settings.shakeWakeThreshold {
             settings.shakeWakeThreshold = threshold
         }
         writeSettings(settings)
-    }
-    
-    func setWakeUpMode(_ settings: inout Settings, mode: WakeUpMode, enabled: Bool) {
-//        if enabled != settings.wakeUpMode.contains(mode) {
-//            if enabled {
-//                settings.wakeUpMode.insert(mode)
-//            } else {
-//                settings.wakeUpMode.remove(mode)
-//            }
-//        }
     }
 }
 

@@ -23,7 +23,8 @@ class ExerciseViewModel: ObservableObject {
         Exercise(id: "tennis", name: "Tennis", icon: "figure.tennis", components: [.heart]),
         Exercise(id: "soccer", name: "Soccer", icon: "figure.indoor.soccer", components: [.heart, .steps]),
         Exercise(id: "basketball", name: "Basketball", icon: "figure.basketball", components: [.heart]),
-        Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart])
+        Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart]),
+        Exercise(id: "strength-training", name: "Strength Training", icon: "figure.strengthtraining.traditional", components: [.heart])
     ]
     
     func timeString(from time: TimeInterval) -> String {

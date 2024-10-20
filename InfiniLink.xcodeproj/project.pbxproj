@@ -48,6 +48,7 @@
 		E07D8F242CC012FC005C1325 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F232CC012FC005C1325 /* DeviceManager.swift */; };
 		E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F252CC0C0D2005C1325 /* SleepController.swift */; };
 		E08C4A2F2CC1551300013D15 /* MyDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */; };
+		E08C4A492CC4048900013D15 /* SleepData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A482CC4048900013D15 /* SleepData.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -155,6 +156,7 @@
 		E07D8F232CC012FC005C1325 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
 		E07D8F252CC0C0D2005C1325 /* SleepController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepController.swift; sourceTree = "<group>"; };
 		E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDevicesView.swift; sourceTree = "<group>"; };
+		E08C4A482CC4048900013D15 /* SleepData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepData.swift; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
@@ -359,6 +361,7 @@
 				E0A7C06A2CB0DE4C0042A12D /* Weather.swift */,
 				E0599A102CB5553B00D64E0B /* FSFile.swift */,
 				E0B85D202CB625FE00D85122 /* Exercise.swift */,
+				E08C4A482CC4048900013D15 /* SleepData.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -403,20 +406,12 @@
 			children = (
 				E0599A052CB4C75500D64E0B /* Filesystem */,
 				E05999B62CB2FC6400D64E0B /* About */,
-				E0A7C08C2CB1E86A0042A12D /* Update */,
 				E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */,
+				E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */,
 				E0A7C0A62CB257F50042A12D /* GoalsSettingsView.swift */,
 				E05999B92CB335DC00D64E0B /* DataSyncView.swift */,
 			);
 			path = General;
-			sourceTree = "<group>";
-		};
-		E0A7C08C2CB1E86A0042A12D /* Update */ = {
-			isa = PBXGroup;
-			children = (
-				E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */,
-			);
-			path = Update;
 			sourceTree = "<group>";
 		};
 		E0A7C09F2CB245F70042A12D /* Components */ = {
@@ -493,6 +488,7 @@
 		E0C7C8452CAF018B0043DA2D /* Device */ = {
 			isa = PBXGroup;
 			children = (
+				E0CD94CD2CC4A20F00DA53A2 /* Connect */,
 				E0B85D172CB6241000D85122 /* Exercise */,
 				E0A7C0742CB0ECD10042A12D /* Settings */,
 				E059999A2CB2E55500D64E0B /* Apps */,
@@ -501,9 +497,7 @@
 				E05999982CB25C5600D64E0B /* SleepView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
-				E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */,
 				E07D8F132CBD688A005C1325 /* CustomizationView.swift */,
-				E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */,
 			);
 			path = Device;
 			sourceTree = "<group>";
@@ -520,6 +514,15 @@
 				E07D8F232CC012FC005C1325 /* DeviceManager.swift */,
 			);
 			path = BLE;
+			sourceTree = "<group>";
+		};
+		E0CD94CD2CC4A20F00DA53A2 /* Connect */ = {
+			isa = PBXGroup;
+			children = (
+				E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */,
+				E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */,
+			);
+			path = Connect;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -704,6 +707,7 @@
 				E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */,
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
+				E08C4A492CC4048900013D15 /* SleepData.swift in Sources */,
 				E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */,
 				E0599A022CB4C38700D64E0B /* FilesystemView.swift in Sources */,
 				E0A7C0A72CB257F50042A12D /* GoalsSettingsView.swift in Sources */,

@@ -30,6 +30,7 @@ struct ActiveExerciseView: View {
     @State private var elapsedTime: TimeInterval = 0
     
     @AppStorage("exerciseTimeGoal") var exerciseTime: ExerciseTimeGoal = .hour
+    @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
     
     let startDate = Date()
     
@@ -92,7 +93,6 @@ struct ActiveExerciseView: View {
                             .foregroundStyle(Color.white)
                             .clipShape(Circle())
                     }
-                    .opacity(isPaused ? 0.6 : 1)
                     Color.clear
                         .frame(width: 45, height: 45)
                     Spacer()
@@ -137,10 +137,11 @@ struct ActiveExerciseView: View {
     }
     
     func startTimer() {
+        // TODO: won't work in the background, create ba background tasks
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             elapsedTime += 1
             
-            if Int(elapsedTime) == exerciseTime.rawValue {
+            if Int(elapsedTime) == exerciseTime.rawValue && remindOnExerciseTimeGoalCompletion {
                 NotificationManager.shared.sendExerciseTimeGoalReachedNotification()
             }
         }

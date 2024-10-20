@@ -19,9 +19,11 @@ struct BatterySettingsView: View {
             List {
                 Section {
                     DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), units: "%", icon: {
-                        if bleManager.batteryLevel > 20 {
+                        if bleManager.batteryLevel >= 75 {
                             return "battery.100percent"
-                        } else if bleManager.batteryLevel > 10 {
+                        } else if bleManager.batteryLevel >= 50 {
+                            return "battery.75percent"
+                        } else if bleManager.batteryLevel >= 25 {
                             return "battery.25percent"
                         } else {
                             return "battery.0percent"
@@ -31,6 +33,8 @@ struct BatterySettingsView: View {
                             return Color.green
                         } else if bleManager.batteryLevel > 10 {
                             return Color.orange
+                        } else if bleManager.batteryLevel == 0 {
+                            return Color.gray
                         } else {
                             return Color.red
                         }
@@ -47,8 +51,8 @@ struct BatterySettingsView: View {
                 }
                 if sendLowBatteryNotification {
                     Section {
-                        Toggle("Send to iPhone", isOn: $sendLowBatteryNotification)
-                        Toggle("Send to Watch", isOn: $sendLowBatteryNotification)
+                        Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
+                        Toggle("Send to Watch", isOn: $sendLowBatteryNotificationToWatch)
                     }
                 }
             }

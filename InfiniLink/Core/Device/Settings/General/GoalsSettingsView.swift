@@ -8,10 +8,17 @@
 import SwiftUI
 
 enum StepsGoal: Int, CaseIterable, Identifiable {
-    case fivehundred = 500
     case thousand = 1000
+    case twoThousand = 2000
+    case threeThousand = 3000
+    case fourThousand = 4000
     case fiveThousand = 5000
+    case sixThousand = 6000
+    case sevenThousand = 7000
+    case eightThousand = 8000
+    case nineThousand = 9000
     case tenThousand = 10000
+    case fifteenThousand = 15000
     case twentyThousand = 20000
     
     var id: Int { rawValue }
@@ -33,14 +40,17 @@ enum ExerciseTimeGoal: Int, CaseIterable, Identifiable {
 }
 
 struct GoalsSettingsView: View {
-    @AppStorage("stepCountGoal") var stepCountGoal = 10000
+    @ObservedObject var deviceManager = DeviceManager.shared
+    
+    @State private var stepsGoal = Int(DeviceManager.shared.settings.stepsGoal)
+    
     @AppStorage("caloriesGoal") var caloriesGoal = 400
     @AppStorage("exerciseTimeGoal") var exerciseTime: ExerciseTimeGoal = .hour
     
     var body: some View {
         List {
             Section(footer: Text("Set the daily goals for your fitness goals.")) {
-                Picker("Steps", selection: $stepCountGoal) {
+                Picker("Steps", selection: $stepsGoal) {
                     ForEach(StepsGoal.allCases, id: \.self) { goal in
                         Text("\(goal.rawValue)").tag(goal.rawValue)
                     }
@@ -58,6 +68,9 @@ struct GoalsSettingsView: View {
             }
         }
         .navigationTitle("Daily Goals")
+        .onChange(of: stepsGoal) { stepsGoal in
+            BLEFSHandler.shared.setStepsGoal(&deviceManager.settings, stepsGoal: UInt32(stepsGoal))
+        }
     }
 }
 

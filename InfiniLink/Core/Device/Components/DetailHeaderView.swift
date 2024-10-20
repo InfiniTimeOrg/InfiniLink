@@ -36,7 +36,7 @@ struct DetailHeaderSubItemView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 3) {
-            Text(NSLocalizedString(title, comment: "").uppercased())
+            Text(title.uppercased())
                 .font(.caption)
                 .foregroundStyle(.gray)
             HStack(alignment: .firstTextBaseline, spacing: 2) {

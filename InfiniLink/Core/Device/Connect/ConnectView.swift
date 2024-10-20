@@ -33,7 +33,9 @@ struct ConnectView: View {
     
     func connect(_ device: CBPeripheral) {
         deviceWithPendingConnectionID = device.identifier
-        bleManager.connect(peripheral: device)
+        bleManager.connect(peripheral: device) {
+            dismiss()
+        }
     }
     
     func startCircleAnimation(geo: CGSize) {
@@ -62,7 +64,7 @@ struct ConnectView: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
                 if bleManager.isSwitchedOn {
-                    if bleManager.isScanning && devices.isEmpty {
+                    if devices.isEmpty {
                         ProgressView("Looking for your watch...")
                             .frame(maxHeight: .infinity)
                     } else {
@@ -99,7 +101,7 @@ struct ConnectView: View {
                                 }
                                 .disabled(deviceWithPendingConnectionID != nil)
                                 
-                                let count = (bleManager.newPeripherals.count) - 1
+                                let count = (devices.count) - 1
                                 Button("\(count) more device\(count == 1 ? "" : "s") found") {
                                     showAllDevices = true
                                 }
@@ -124,34 +126,32 @@ struct ConnectView: View {
                                         Button {
                                             connect(device)
                                         } label: {
-                                            GeometryReader { geo in
-                                                VStack {
-                                                    if deviceWithPendingConnectionID != nil {
-                                                        ProgressView()
-                                                    } else {
-                                                        Image("PineTime")
-                                                            .resizable()
-                                                            .aspectRatio(contentMode: .fit)
-                                                            .frame(height: 70)
-                                                        Text(deviceManager.getName(for: device.identifier.uuidString))
-                                                            .font(.system(size: 19).weight(.semibold))
-                                                        // Can't use .primary because button the primary is blue
-                                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
-                                                    }
+                                            VStack {
+                                                if deviceWithPendingConnectionID != nil {
+                                                    ProgressView()
+                                                } else {
+                                                    Image("PineTime")
+                                                        .resizable()
+                                                        .aspectRatio(contentMode: .fit)
+                                                        .frame(height: 70)
+                                                    Text(deviceManager.getName(for: device.identifier.uuidString))
+                                                        .font(.system(size: 19).weight(.semibold))
+                                                    // Can't use .primary because button the primary is blue
+                                                        .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                 }
-                                                .padding()
-                                                .frame(maxWidth: .infinity)
-                                                .frame(height: geo.size.width)
-                                                .background(Material.regular)
-                                                .clipShape(RoundedRectangle(cornerRadius: 20))
                                             }
+                                            .padding()
+                                            .frame(maxWidth: .infinity)
+                                            .frame(height: geo.size.width / 2.1)
+                                            .background(Material.regular)
+                                            .clipShape(RoundedRectangle(cornerRadius: 20))
                                         }
                                     }
                                 }
                             }
                         }
                     }
-                    if bleManager.newPeripherals.isEmpty {
+                    if devices.isEmpty {
                         Button {
                             showHelpAlert = true
                         } label: {
@@ -170,6 +170,9 @@ struct ConnectView: View {
                 }
             }
             .padding()
+            .onAppear {
+                bleManager.startScanning()
+            }
         }
     }
 }

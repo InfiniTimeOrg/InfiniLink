@@ -8,8 +8,6 @@
 import SwiftUI
 
 struct UserDataCollectionView: View {
-    @Environment(\.dismiss) var dismiss
-    
     var body: some View {
         GeometryReader { geo in
             VStack(alignment: .leading) {
@@ -22,7 +20,7 @@ struct UserDataCollectionView: View {
                     }
                     .frame(width: geo.size.width / 1.4, alignment: .leading)
                     Button("Skip") {
-                        dismiss()
+                        PersonalizationController.shared.showSetupSheet = false
                     }
                     .frame(maxWidth: .infinity, alignment: .trailing)
                 }

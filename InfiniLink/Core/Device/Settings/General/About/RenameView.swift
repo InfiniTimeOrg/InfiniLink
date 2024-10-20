@@ -26,11 +26,11 @@ struct RenameView: View {
                     dismiss()
                     
                     var name = self.name
-                    if name.trimmingCharacters(in: .whitespacesAndNewlines) == "" {
+                    if name.trimmingCharacters(in: .whitespaces) == "" {
                         name = "InfiniTime"
                     }
                     
-                    deviceManager.updateName(name: name, for: BLEManager.shared.pairedDevice)
+                    deviceManager.updateName(name: name.trimmingCharacters(in: .whitespaces), for: BLEManager.shared.pairedDevice)
                 }
         }
         .navigationTitle("Rename")

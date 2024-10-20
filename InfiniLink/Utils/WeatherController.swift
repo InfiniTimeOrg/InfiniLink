@@ -10,22 +10,6 @@ import WeatherKit
 import CoreLocation
 import Combine
 
-enum TemperatureUnit: String {
-    case celsius = "Celsius"
-    case fahrenheit = "Fahrenheit"
-    
-    static var current: TemperatureUnit {
-        switch UnitTemperature.current {
-        case .celsius:
-            return .celsius
-        case .fahrenheit:
-            return .fahrenheit
-        default:
-            return .celsius
-        }
-    }
-}
-
 @MainActor
 class WeatherController: ObservableObject {
     static let shared = WeatherController()
@@ -36,10 +20,12 @@ class WeatherController: ObservableObject {
     @AppStorage("longitude") var longitude: Double = 0.0
     
     @Published var temperature = 0.0
+    @Published var forecastDays = [DayWeather]()
     @Published var unit = ""
     
     private let service = WeatherService()
     private var locationManager = LocationManager()
+    private var bleWriteManager = BLEWriteManager()
     
     var unitTemperature: UnitTemperature {
         switch DeviceManager.shared.settings.weatherFormat {
@@ -83,14 +69,30 @@ class WeatherController: ObservableObject {
                 }
                 
                 self.temperature = weather.currentWeather.temperature.converted(to: unitTemperature).value
+                self.forecastDays = Array(weather.dailyForecast.prefix(5))
+                
+                self.writeForecastToDevice()
             } catch {
                 print("Failed to fetch weather: \(error)")
             }
         }
     }
     
-    func refreshWeather() {
-        fetchWeatherData()
+    func writeForecastToDevice() {
+        if let weather = weather {
+            guard let firstDay = weather.dailyForecast.first else { return }
+            
+            self.bleWriteManager.writeCurrentWeatherData(currentTemperature: weather.currentWeather.temperature.value, minimumTemperature: firstDay.lowTemperature.value, maximumTemperature: firstDay.highTemperature.value, location: locationManager.locationName, icon: getIcon())
+            self.bleWriteManager.writeForecastWeatherData(minimumTemperature: forecastDays.compactMap({ $0.lowTemperature.value }), maximumTemperature: forecastDays.compactMap({ $0.highTemperature.value }), icon: forecastDays.compactMap({ UInt8($0.symbolName.id) }))
+        }
+    }
+    
+    func getTemperature(celsius: Measurement<UnitTemperature>?) -> Double {
+        return celsius?.converted(to: unitTemperature).value ?? 0
+    }
+    
+    func getIcon() -> UInt8 {
+        return 1
     }
     
     private var cancellables = Set<AnyCancellable>()

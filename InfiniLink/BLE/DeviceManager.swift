@@ -102,6 +102,7 @@ class DeviceManager: ObservableObject {
                 newDevice.bleUUID = uuid
                 newDevice.blefsVersion = ""
                 newDevice.firmware = ""
+                newDevice.softwareRevision = ""
                 newDevice.hardwareRevision = ""
                 newDevice.manufacturer = ""
                 newDevice.modelNumber = ""

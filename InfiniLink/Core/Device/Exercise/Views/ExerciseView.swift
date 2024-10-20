@@ -24,7 +24,7 @@ struct ExerciseView: View {
                 List {
                     Section("My Exercises") {
                         if userExercises.isEmpty {
-                            Text("No Exercises")
+                            Text("No Exercises. Start a new one by clicking on one below.")
                         } else {
                             ForEach(userExercises) { userExercise in
                                 let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
@@ -48,7 +48,6 @@ struct ExerciseView: View {
                         }
                     }
                     Section("All Exercises") {
-                        // TODO: add more exercises
                         ForEach(exerciseViewModel.exercises) { exercise in
                             Button {
                                 exerciseToStart = exercise
@@ -61,6 +60,7 @@ struct ExerciseView: View {
                 .navigationTitle("Exercise")
                 .toolbar {
                     EditButton()
+                        .disabled(userExercises.isEmpty)
                 }
             }
         }
