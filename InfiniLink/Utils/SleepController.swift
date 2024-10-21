@@ -20,6 +20,7 @@ class SleepController: ObservableObject {
         bleFs.readMiscFile("/SleepTracker_Data.csv") { data in
             do {
                 self.sleepData = try self.bleFs.convertDataToReadableFile(data: data, fileExtension: "csv") as! [[String]]
+                // TODO: process sleep data
             } catch {
                 print(error.localizedDescription)
             }

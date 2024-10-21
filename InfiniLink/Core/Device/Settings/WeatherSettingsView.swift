@@ -32,7 +32,7 @@ struct WeatherSettingsView: View {
                         .listRowBackground(Color.clear)
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         Section {
-                            ForEach(weather.dailyForecast.forecast, id: \.date) { day in
+                            ForEach(weather.dailyForecast.forecast.dropFirst().prefix(5), id: \.date) { day in
                                 HStack(spacing: 7) {
                                     Image(systemName: day.symbolName)
                                         .font(.body.weight(.medium))
@@ -45,8 +45,8 @@ struct WeatherSettingsView: View {
                                     }())
                                     Spacer()
                                     HStack(spacing: 6) {
-                                        Text(String(format: "%.0f", weatherController.getTemperature(for: day.highTemperature)))
-                                            .foregroundStyle(Color(.lightGray))
+                                        Text(String(format: "%.0f", weatherController.getTemperature(for: day.lowTemperature)) + weatherController.unit)
+                                            .foregroundStyle(.gray)
                                         Rectangle()
                                             .frame(width: {
                                                 let temperatureRange = day.highTemperature.value - day.lowTemperature.value
@@ -55,8 +55,8 @@ struct WeatherSettingsView: View {
                                             }(), height: 3)
                                             .cornerRadius(30)
                                             .background(Material.thin)
-                                        Text(String(format: "%.0f", weatherController.getTemperature(for: day.lowTemperature)))
-                                            .foregroundStyle(Color(.lightGray))
+                                        Text(String(format: "%.0f", weatherController.getTemperature(for: day.highTemperature)) + weatherController.unit)
+                                            .foregroundStyle(Color.gray)
                                     }
                                 }
                             }

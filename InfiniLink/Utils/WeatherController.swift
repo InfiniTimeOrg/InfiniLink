@@ -14,6 +14,8 @@ import Combine
 class WeatherController: ObservableObject {
     static let shared = WeatherController()
     
+    @ObservedObject var deviceManager = DeviceManager.shared
+    
     @Published var weather: Weather?
     
     @AppStorage("latitude") var latitude: Double = 0.0
@@ -28,7 +30,7 @@ class WeatherController: ObservableObject {
     private var bleWriteManager = BLEWriteManager()
     
     var unitTemperature: UnitTemperature {
-        switch DeviceManager.shared.settings.weatherFormat {
+        switch deviceManager.settings.weatherFormat {
         case .Metric:
             return .celsius
         case .Imperial:
@@ -69,7 +71,7 @@ class WeatherController: ObservableObject {
                 }
                 
                 self.temperature = weather.currentWeather.temperature.converted(to: unitTemperature).value
-                self.forecastDays = Array(weather.dailyForecast.prefix(5))
+                self.forecastDays = Array(weather.dailyForecast.dropFirst().prefix(5))
                 
                 self.writeForecastToDevice()
             } catch {
@@ -83,7 +85,10 @@ class WeatherController: ObservableObject {
             guard let firstDay = weather.dailyForecast.first else { return }
             
             self.bleWriteManager.writeCurrentWeatherData(currentTemperature: weather.currentWeather.temperature.value, minimumTemperature: firstDay.lowTemperature.value, maximumTemperature: firstDay.highTemperature.value, location: locationManager.locationName, icon: getIcon())
-            self.bleWriteManager.writeForecastWeatherData(minimumTemperature: forecastDays.compactMap({ $0.lowTemperature.value }), maximumTemperature: forecastDays.compactMap({ $0.highTemperature.value }), icon: forecastDays.compactMap({ UInt8($0.symbolName.id) }))
+            self.bleWriteManager.writeForecastWeatherData(minimumTemperature: forecastDays.compactMap({ $0.lowTemperature.value }), maximumTemperature: forecastDays.compactMap({ $0.highTemperature.value }), icon: forecastDays.compactMap({
+                // TODO: replace with real symbols
+                UInt8($0.symbolName.id)
+            }))
         }
     }
     
