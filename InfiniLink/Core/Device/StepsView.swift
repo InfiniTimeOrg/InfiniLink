@@ -47,7 +47,7 @@ struct StepsView: View {
                 if let date = calendar.date(byAdding: .day, value: -dayOffset, to: Date()) {
                     let dayName = dateFormatter.string(from: date)
                     let stepCount = Int(steps(for: date)) ?? 0
-                    data.insert((dayName, stepCount), at: 0) // Insert to maintain order
+                    data.insert((dayName, stepCount), at: 0) // Use insert to maintain order
                 }
             }
         case 1: // Monthly (showing each day of the month, label every 7th day)
@@ -59,8 +59,7 @@ struct StepsView: View {
                         let dayNumber = calendar.component(.day, from: dayDate)
                         let stepCount = Int(steps(for: dayDate)) ?? 0
                         
-                        let label = (dayOffset % 7 == 0) ? "\(dayNumber)" : "1"
-                        data.append((label, stepCount))
+                        data.append(("\(dayNumber)", stepCount))
                     }
                 }
             }

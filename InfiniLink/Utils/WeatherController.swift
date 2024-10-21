@@ -87,8 +87,8 @@ class WeatherController: ObservableObject {
         }
     }
     
-    func getTemperature(celsius: Measurement<UnitTemperature>?) -> Double {
-        return celsius?.converted(to: unitTemperature).value ?? 0
+    func getTemperature(for value: Measurement<UnitTemperature>?) -> Double {
+        return value?.converted(to: unitTemperature).value ?? 0
     }
     
     func getIcon() -> UInt8 {

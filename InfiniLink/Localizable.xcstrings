@@ -101,9 +101,6 @@
     "%lld%%" : {
 
     },
-    "1" : {
-
-    },
     "1 device discovered" : {
 
     },
@@ -114,9 +111,6 @@
 
     },
     "All Exercises" : {
-
-    },
-    "Allow Access..." : {
 
     },
     "Allow Music Control" : {
@@ -147,6 +141,9 @@
 
     },
     "battery remaining" : {
+
+    },
+    "Birthdate" : {
 
     },
     "Bluetooth needs to be enabled to pair a watch." : {
@@ -248,9 +245,6 @@
     "Filter inconsistent data from your heart rate measurements." : {
 
     },
-    "First Name" : {
-
-    },
     "General" : {
 
     },
@@ -282,6 +276,9 @@
 
     },
     "Heart Rate" : {
+
+    },
+    "Height" : {
 
     },
     "Hello" : {
@@ -520,6 +517,9 @@
 
     },
     "Weather Format" : {
+
+    },
+    "Weight" : {
 
     },
     "Y" : {

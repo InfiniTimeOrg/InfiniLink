@@ -37,6 +37,7 @@ struct GeneralSettingsView: View {
             Section {
                 NavigationLink {
                     SetUpDetailsView(listOnly: true)
+                        .navigationBarTitle("Health Details")
                 } label: {
                     Text("Health Details")
                 }

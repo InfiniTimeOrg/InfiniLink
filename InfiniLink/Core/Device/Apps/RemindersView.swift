@@ -24,10 +24,11 @@ struct RemindersView: View {
                 unauthorized
             }
         }
-        .onChange(of: remindersManager.isAuthorized) { allowed in
-            if allowed {
-                remindersManager.requestReminderAccess()
-            }
+        .onChange(of: remindersManager.isAuthorized) { _ in
+            remindersManager.requestReminderAccess()
+        }
+        .onAppear {
+            remindersManager.requestReminderAccess()
         }
     }
     
@@ -74,13 +75,7 @@ struct RemindersView: View {
     }
     
     var unauthorized: some View {
-        ActionView(action: Action(title: "We need access to your Reminders.", subtitle: "To receive reminders on your watch, you'll need to give InfiniLink full access to them.", icon: "checklist", action: {
-            if authorizationStatus == .notDetermined {
-                remindersManager.requestReminderAccess()
-            } else {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-            }
-        }, actionLabel: authorizationStatus == .notDetermined ? "Allow Access..." : "Open Settings...", accent: .blue))
+        ActionView(action: Action(title: "We need access to your Reminders.", subtitle: "To receive reminders on your watch, you'll need to give InfiniLink full access to them.", icon: "checklist", action: { UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }, actionLabel: "Open Settings...", accent: .blue))
     }
 }
 

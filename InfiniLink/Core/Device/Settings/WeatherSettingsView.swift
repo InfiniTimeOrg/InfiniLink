@@ -24,8 +24,8 @@ struct WeatherSettingsView: View {
                                 width: geo.size.width) {
                                     HStack {
                                         DetailHeaderSubItemView(title: "Min",
-                                                                value: String(format: "%.0f", weatherController.getTemperature(celsius: weather.dailyForecast.first?.lowTemperature)) + weatherController.unit)
-                                        DetailHeaderSubItemView(title: "Max", value: String(format: "%.0f", weatherController.getTemperature(celsius: weather.dailyForecast.first?.highTemperature)) + weatherController.unit)
+                                                                value: String(format: "%.0f", weatherController.getTemperature(for: weather.dailyForecast.first?.lowTemperature)) + weatherController.unit)
+                                        DetailHeaderSubItemView(title: "Max", value: String(format: "%.0f", weatherController.getTemperature(for: weather.dailyForecast.first?.highTemperature)) + weatherController.unit)
                                     }
                                 }
                         }
@@ -33,8 +33,9 @@ struct WeatherSettingsView: View {
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         Section {
                             ForEach(weather.dailyForecast.forecast, id: \.date) { day in
-                                HStack {
+                                HStack(spacing: 7) {
                                     Image(systemName: day.symbolName)
+                                        .font(.body.weight(.medium))
                                     Text({
                                         let dateFormatter = DateFormatter()
                                         dateFormatter.dateFormat = "EEE"
@@ -42,6 +43,21 @@ struct WeatherSettingsView: View {
                                         
                                         return dayInWeek
                                     }())
+                                    Spacer()
+                                    HStack(spacing: 6) {
+                                        Text(String(format: "%.0f", weatherController.getTemperature(for: day.highTemperature)))
+                                            .foregroundStyle(Color(.lightGray))
+                                        Rectangle()
+                                            .frame(width: {
+                                                let temperatureRange = day.highTemperature.value - day.lowTemperature.value
+                                                let relativeWidth = CGFloat(temperatureRange) / 40.0 * 60
+                                                return relativeWidth
+                                            }(), height: 3)
+                                            .cornerRadius(30)
+                                            .background(Material.thin)
+                                        Text(String(format: "%.0f", weatherController.getTemperature(for: day.lowTemperature)))
+                                            .foregroundStyle(Color(.lightGray))
+                                    }
                                 }
                             }
                         }

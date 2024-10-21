@@ -114,10 +114,8 @@ struct ActiveExerciseView: View {
             }
             .onAppear {
                 previousHeartPoints = Array(heartPoints)
-                newHeartPoints = Array(heartPoints)
-                
                 previousStepCounts = Array(stepCounts)
-                newStepCounts = []
+                
                 startTimer()
             }
             .onChange(of: Array(heartPoints)) { newPoints in
@@ -137,7 +135,7 @@ struct ActiveExerciseView: View {
     }
     
     func startTimer() {
-        // TODO: won't work in the background, create ba background tasks
+        // TODO: requires implementation of background tasks
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             elapsedTime += 1
             

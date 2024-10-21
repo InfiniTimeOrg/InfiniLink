@@ -29,18 +29,13 @@ struct MusicSettingsView: View {
                 MusicController.shared.initialize()
             }
         }
+        .onAppear {
+            MPMediaLibrary.requestAuthorization { self.authorizationStatus = $0 }
+        }
     }
     
     var unauthorized: some View {
-        ActionView(action: Action(title: "We need access to your Music Library.", subtitle: "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music.", icon: "music.note", action: {
-            if authorizationStatus == .denied {
-                UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-            } else {
-                MPMediaLibrary.requestAuthorization { status in
-                    authorizationStatus = status
-                }
-            }
-        }, actionLabel: authorizationStatus == .denied ? "Open Settings..." : "Allow Access...", accent: .blue))
+        ActionView(action: Action(title: "We need access to your Music Library.", subtitle: "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music.", icon: "music.note", action: { UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }, actionLabel: "Open Settings...", accent: .blue))
     }
     
     var authorized: some View {

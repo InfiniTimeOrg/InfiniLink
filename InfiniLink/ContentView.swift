@@ -23,7 +23,7 @@ struct ContentView: View {
     var body: some View {
         Group {
             if pairedDeviceID != nil {
-                // TODO: onChange only works in foreground, so we need to create background tasks
+                // TODO: requires implementation of background tasks
                 DeviceView()
                     .onChange(of: bleManager.weatherCharacteristic) { _ in
                         WeatherController.shared.fetchWeatherData()

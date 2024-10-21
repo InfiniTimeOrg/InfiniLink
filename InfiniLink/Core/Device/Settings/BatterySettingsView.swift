@@ -19,12 +19,12 @@ struct BatterySettingsView: View {
             List {
                 Section {
                     DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), units: "%", icon: {
-                        if bleManager.batteryLevel >= 75 {
+                        if bleManager.batteryLevel > 75 {
                             return "battery.100percent"
-                        } else if bleManager.batteryLevel >= 50 {
+                        } else if bleManager.batteryLevel > 50 {
                             return "battery.75percent"
-                        } else if bleManager.batteryLevel >= 25 {
-                            return "battery.25percent"
+                        } else if bleManager.batteryLevel > 25 {
+                            return "battery.50percent"
                         } else {
                             return "battery.0percent"
                         }

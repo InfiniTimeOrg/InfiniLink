@@ -10,10 +10,11 @@ import SwiftUI
 struct SetUpDetailsView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
     
-    @State private var firstName: String = ""
     @State private var isNavActive: Bool = false
     
-    @FocusState var isFirstNameFocused: Bool
+    @FocusState var isBirthdateFocused: Bool
+    @FocusState var isWeightFocused: Bool
+    @FocusState var isHeightFocused: Bool
     
     let listOnly: Bool
     
@@ -22,86 +23,67 @@ struct SetUpDetailsView: View {
     }
     
     var body: some View {
-        NavigationView {
-            Form {
-                if !listOnly {
-                    VStack(alignment: .center, spacing: 10) {
-                        // We can't use the nav link as the button because a chevron appears when inside a List/Form
-                        NavigationLink("", isActive: $isNavActive, destination: { NotificationsSetupView() })
-                            .hidden()
-                        Image(systemName: "figure.arms.open")
-                            .font(.system(size: 65).weight(.medium))
-                            .foregroundStyle(.blue)
-                        Text("Let's get you set up.")
-                            .font(.largeTitle.weight(.bold))
-                        Text("To accurately measure calories and distance, you'll need to enter some basic details.")
-                            .foregroundStyle(.gray)
-                    }
-                    .multilineTextAlignment(.center)
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .listRowBackground(Color.clear)
+        Form {
+            if !listOnly {
+                VStack(alignment: .center, spacing: 10) {
+                    // We can't use the nav link as the button because a chevron appears when inside a List/Form
+                    NavigationLink("", isActive: $isNavActive, destination: { NotificationsSetupView() })
+                        .hidden()
+                    Image(systemName: "figure.arms.open")
+                        .font(.system(size: 65).weight(.medium))
+                        .foregroundStyle(.blue)
+                    Text("Let's get you set up.")
+                        .font(.largeTitle.weight(.bold))
+                    Text("To accurately measure calories and distance, you'll need to enter some basic details.")
+                        .foregroundStyle(.gray)
                 }
-                Section {
-                    HStack(spacing: 12) {
-                        Text("First Name")
-                        TextField("Optional", text: $firstName)
-                            .focused($isFirstNameFocused)
-                    }
-                    .onTapGesture {
-                        isFirstNameFocused = true
-                    }
-                    HStack(spacing: 12) {
-                        Text("First Name")
-                        TextField("Optional", text: $firstName)
-                            .focused($isFirstNameFocused)
-                    }
-                    .onTapGesture {
-                        isFirstNameFocused = true
-                    }
-                    HStack(spacing: 12) {
-                        Text("First Name")
-                        TextField("Optional", text: $firstName)
-                            .focused($isFirstNameFocused)
-                    }
-                    .onTapGesture {
-                        isFirstNameFocused = true
-                    }
-                    HStack(spacing: 12) {
-                        Text("First Name")
-                        TextField("Optional", text: $firstName)
-                            .focused($isFirstNameFocused)
-                    }
-                    .onTapGesture {
-                        isFirstNameFocused = true
-                    }
-                    HStack(spacing: 12) {
-                        Text("First Name")
-                        TextField("Optional", text: $firstName)
-                            .focused($isFirstNameFocused)
-                    }
-                    .onTapGesture {
-                        isFirstNameFocused = true
-                    }
+                .multilineTextAlignment(.center)
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowBackground(Color.clear)
+            }
+            Section {
+                HStack(spacing: 12) {
+                    Text("Birthdate")
+                    TextField("Optional", text: .constant(""))
+                        .focused($isBirthdateFocused)
                 }
-                if !listOnly {
-                    Button {
-                        isNavActive = true
-                    } label: {
-                        Text("Next")
-                            .padding()
-                            .font(.body.weight(.semibold))
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .foregroundStyle(.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 20))
-                    }
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .listRowBackground(Color.clear)
+                .onTapGesture {
+                    isBirthdateFocused = true
+                }
+                HStack(spacing: 12) {
+                    Text("Weight")
+                    TextField("Optional", text: .constant(""))
+                        .focused($isWeightFocused)
+                }
+                .onTapGesture {
+                    isWeightFocused = true
+                }
+                HStack(spacing: 12) {
+                    Text("Height")
+                    TextField("Optional", text: .constant(""))
+                        .focused($isHeightFocused)
+                }
+                .onTapGesture {
+                    isHeightFocused = true
                 }
             }
-            .interactiveDismissDisabled()
+            if !listOnly {
+                Button {
+                    isNavActive = true
+                } label: {
+                    Text("Next")
+                        .padding()
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .foregroundStyle(.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowBackground(Color.clear)
+            }
         }
-        .navigationViewStyle(.stack)
+        .interactiveDismissDisabled()
     }
 }
 

@@ -11,7 +11,7 @@ class PersonalizationController: ObservableObject {
     static let shared = PersonalizationController()
     
     @AppStorage("weight") var weight: Int?
-    @AppStorage("age") var age: Int?
+    @AppStorage("birthdate") var birthdate: Int?
     @AppStorage("height") var height: Int?
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
@@ -20,6 +20,6 @@ class PersonalizationController: ObservableObject {
     let pace: FitnessCalculator.Pace? = .average
     
     var isPersonalizationAvailable: Bool {
-        !showSetupSheet && (weight != nil || height != nil || age != nil)
+        !showSetupSheet && (weight != nil || height != nil || birthdate != nil)
     }
 }

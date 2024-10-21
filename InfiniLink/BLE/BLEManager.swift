@@ -166,6 +166,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.disconnect()
         self.pairedDeviceID = device.uuid
         self.pairedDevice = deviceManager.fetchDevice()
+        self.deviceManager.getSettings()
         self.startScanning()
     }
     
