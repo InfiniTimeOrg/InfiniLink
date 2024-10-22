@@ -13,7 +13,7 @@
 
 <br>
 
-<img src="InfiniLink/Assets.xcassets/AppIcon-3.appiconset/icon_1024.png" width="115" height="115">
+<img src="InfiniLink/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="115" height="115">
 
 # InfiniLink - The official iOS companion app for InfiniTime
 
