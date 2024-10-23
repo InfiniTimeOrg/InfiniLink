@@ -79,7 +79,7 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Unpair")
                 }
-                .confirmationDialog("Are you sure you want to unpair from \("InfiniTime")?", isPresented: $showUnpairConfirmation) {
+                .alert("Are you sure you want to unpair from \("InfiniTime")?", isPresented: $showUnpairConfirmation) {
                     Button(role: .destructive) {
                         bleManager.unpair()
                         dismiss()

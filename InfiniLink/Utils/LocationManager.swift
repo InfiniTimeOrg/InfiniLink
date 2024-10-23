@@ -10,16 +10,17 @@ import CoreLocation
 import SwiftUI
 
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
-    @AppStorage("useCurrentLocation") var useCurrentLocation: Bool = true
-    @AppStorage("setLocation") var setLocation: String = "Cupertino"
+    static let shared = LocationManager()
+    
+    @AppStorage("useCurrentLocation") var useCurrentLocation = true
+    @AppStorage("setLocation") var setLocation = "Cupertino"
     
     @Published var location: CLLocation?
     @Published var locationName: String = ""
-    
-    private let locationManager = CLLocationManager()
+    @Published var locationManager = CLLocationManager()
     
     func canGetUserLocation() -> Bool {
-        return locationManager.authorizationStatus == .restricted || locationManager.authorizationStatus == .denied
+        return locationManager.authorizationStatus != .restricted && locationManager.authorizationStatus != .denied && locationManager.authorizationStatus != .notDetermined
     }
     
     override init() {
@@ -30,7 +31,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func getLocation() {
-        if useCurrentLocation && canGetUserLocation() {
+        if useCurrentLocation && !canGetUserLocation() {
             self.locationManager.requestLocation()
         } else {
             self.getCoordinateFrom(address: setLocation) { coordinate, error in
@@ -45,7 +46,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     func setLocation(_ location: String) {
         self.setLocation = location
-        requestLocation()
+        self.getLocation()
     }
     
     func getCoordinateFrom(address: String, completion: @escaping (_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> ()) {
@@ -55,19 +56,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func requestLocation() {
-        if useCurrentLocation {
-            switch locationManager.authorizationStatus {
-            case .authorizedWhenInUse, .authorizedAlways:
-                locationManager.requestLocation()
-            case .restricted, .denied:
-                print("Location access denied. Unable to get current location.")
-            case .notDetermined:
-                locationManager.requestWhenInUseAuthorization()
-            default:
-                break
-            }
-        } else {
-            self.getLocation()
+        switch locationManager.authorizationStatus {
+        case .authorizedWhenInUse, .authorizedAlways:
+            locationManager.requestLocation()
+        case .restricted, .denied:
+            print("Location access denied. Unable to get current location.")
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        default:
+            break
         }
     }
     

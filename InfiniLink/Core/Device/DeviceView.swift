@@ -137,7 +137,7 @@ struct DeviceView: View {
                             ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
                         }
                         NavigationLink {
-                            WeatherSettingsView()
+                            WeatherView()
                         } label: {
                             ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
                         }
@@ -166,11 +166,9 @@ struct DeviceView: View {
             .navigationTitle(showNavigationTitle ? deviceManager.name : "")
             .navigationBarTitleDisplayMode(.inline)
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { values in
-                let value = values.first ?? 0
+                guard let value = values.first else { return }
                 
-                withAnimation(.easeIn(duration: 0.2)) {
-                    self.showNavigationTitle = (value <= -115)
-                }
+                self.showNavigationTitle = (value <= -135)
             }
             .onChange(of: bleManager.blefsTransfer) { _ in
                 if bleManager.blefsTransfer != nil {
@@ -236,7 +234,9 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
     static var defaultValue = [CGFloat]()
     
     static func reduce(value: inout [CGFloat], nextValue: () -> [CGFloat]) {
-        value.append(contentsOf: nextValue())
+        if let newValue = nextValue().first {
+            value = [newValue]
+        }
     }
 }
 

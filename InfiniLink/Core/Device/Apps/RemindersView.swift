@@ -39,7 +39,7 @@ struct RemindersView: View {
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .foregroundStyle(Color.gray)
                     .multilineTextAlignment(.center)
-                    .padding()
+                    .padding(20)
             } else {
                 List {
                     ForEach(remindersManager.reminders.filter({ $0.isCompleted == false }), id: \.hashValue) { reminder in

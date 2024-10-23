@@ -12,14 +12,16 @@ struct CustomizationView: View {
     @ObservedObject var bleFs = BLEFSHandler.shared
     @ObservedObject var bleManager = BLEManager.shared
     
-    func row(_ title: String, value: String) -> some View {
-        return HStack {
-            Text(title)
-            Spacer()
-            Text(value)
-                .foregroundStyle(.gray)
-        }
+    @State private var clockType = 0
+    @State private var screenTimeout = 15000
+    @State private var weatherFormat = 0
+    
+    func setSettings() {
+        self.clockType = Int(deviceManager.settings.clockType.rawValue)
+        self.screenTimeout = Int(deviceManager.settings.screenTimeOut)
+        self.weatherFormat = Int(deviceManager.settings.weatherFormat.rawValue)
     }
+    
     var body: some View {
         GeometryReader { geo in
             List {
@@ -30,7 +32,7 @@ struct CustomizationView: View {
                                 HStack(spacing: 0) {
                                     ForEach(0...5, id: \.self) { index in
                                         let isSelected = (deviceManager.settings.watchFace == UInt8(index))
-                                        
+
                                         Button {
                                             bleFs.setWatchFace(&deviceManager.settings, face: UInt8(index))
                                             withAnimation {
@@ -64,51 +66,46 @@ struct CustomizationView: View {
                     }
                     .listRowBackground(Color.clear)
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    if bleManager.pairedDevice.settingsVersion > 7 {
-                        Section {
-                            NavigationLink {
-                                
-                            } label: {
-                                row(NSLocalizedString("Always On", comment: ""), value: bleManager.pairedDevice.alwaysOnDisplay ? "On" : "Off")
-                            }
-                        }
-                    }
                     Section {
                         NavigationLink {
-                            
+
                         } label: {
-                            row(NSLocalizedString("Screen Timeout", comment: ""), value: String(bleManager.pairedDevice.screenTimeout / 1000) + " " + NSLocalizedString("Seconds", comment: ""))
+                            HStack {
+                                Text("Screen Timeout")
+                                Spacer()
+                                Text(String(bleManager.pairedDevice.screenTimeout / 1000) + " " + NSLocalizedString("Seconds", comment: ""))
+                                    .foregroundStyle(.gray)
+                            }
                         }
-                        NavigationLink {
-                            
+                        Picker(selection: $clockType) {
+                            ForEach(0...1, id: \.self) { type in
+                                Text(type == 1 ? "12 Hour" : "24 Hour")
+                                    .tag(type)
+                            }
                         } label: {
-                            row(NSLocalizedString("Clock Type", comment: ""), value: {
-                                switch bleManager.pairedDevice.clockType {
-                                case 1:
-                                    return "12 Hour"
-                                default:
-                                    return "24 Hour"
-                                }
-                            }())
+                            Text("Clock Type")
                         }
-                        NavigationLink {
-                            
+                        Picker(selection: $weatherFormat) {
+                            ForEach(0...1, id: \.self) { type in
+                                Text(type == 1 ? "Imperial" : "Metric")
+                                    .tag(type)
+                            }
                         } label: {
-                            row(NSLocalizedString("Weather Format", comment: ""), value: {
-                                switch bleManager.pairedDevice.weatherFormat {
-                                case 1:
-                                    return NSLocalizedString("Imperial", comment: "")
-                                default:
-                                    return NSLocalizedString("Metric", comment: "")
-                                }
-                            }())
+                            Text("Weather Format")
                         }
                     }
+                    .pickerStyle(NavigationLinkPickerStyle())
                 }
                 .disabled(bleManager.blefsTransfer == nil)
             }
         }
         .navigationBarTitle("Customization")
+        .onAppear {
+            setSettings()
+        }
+        .onChange(of: bleManager.blefsTransfer) { _ in
+            setSettings()
+        }
     }
 }
 

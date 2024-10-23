@@ -26,7 +26,7 @@ class HealthKitManager: ObservableObject {
         
         let stepsSample = HKQuantitySample(type: stepType, quantity: HKQuantity.init(unit: HKUnit.count(), doubleValue: stepsToAdd), start: date, end: date)
         
-        if healthStore?.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth {
+        if healthStore?.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth && stepsToAdd != 0 {
             if let healthStore = healthStore {
                 healthStore.save(stepsSample, withCompletion: { success, error in
                     

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct NotificationsSettingsView: View {
+    @ObservedObject var bleManager = BLEManager.shared
+    
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("standUpReminder") var standUpReminder = true
@@ -17,6 +19,10 @@ struct NotificationsSettingsView: View {
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
     @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
+    
+    @State private var showSendNotificationSheet = false
+    
+    let bleWriteManager = BLEWriteManager()
     
     var body: some View {
         List {
@@ -47,6 +53,18 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders are due.")) {
                     Toggle("Reminder Notifications", isOn: $enableReminders)
                 }
+                Section {
+                    Button("Send Notification") {
+                        showSendNotificationSheet = true
+                    }
+                    .sheet(isPresented: $showSendNotificationSheet) {
+                        ArbitraryNotificationView()
+                    }
+                    Button("Find Lost Device") {
+                        bleWriteManager.sendLostNotification()
+                    }
+                }
+                .disabled(bleManager.notifyCharacteristic == nil)
             }
         }
         .navigationTitle("Notifications")

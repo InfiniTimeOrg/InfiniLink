@@ -107,6 +107,12 @@
     "6M" : {
 
     },
+    "12 Hour" : {
+
+    },
+    "24 Hour" : {
+
+    },
     "About" : {
 
     },
@@ -119,7 +125,10 @@
     "Allow your watch to control the currently playing music from Apple Music." : {
 
     },
-    "Always On" : {
+    "Always Allow Access" : {
+
+    },
+    "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
     "Apple Health" : {
@@ -185,6 +194,9 @@
     "Create" : {
 
     },
+    "Custom Location" : {
+
+    },
     "Customization" : {
 
     },
@@ -243,6 +255,9 @@
 
     },
     "Filter inconsistent data from your heart rate measurements." : {
+
+    },
+    "Find Lost Device" : {
 
     },
     "General" : {
@@ -320,6 +335,9 @@
     "Loading weather..." : {
 
     },
+    "Loading..." : {
+
+    },
     "Looking for your watch..." : {
 
     },
@@ -389,9 +407,6 @@
     "Releases" : {
 
     },
-    "Reminder Due" : {
-
-    },
     "Reminder Notifications" : {
 
     },
@@ -407,16 +422,28 @@
     "Screen Timeout" : {
 
     },
+    "Search for an address..." : {
+
+    },
     "Seconds" : {
 
     },
+    "Send" : {
+
+    },
     "Send a notification to your devices when your watch is on low battery." : {
+
+    },
+    "Send Notification" : {
 
     },
     "Send to iPhone" : {
 
     },
     "Send to Watch" : {
+
+    },
+    "Set a fixed location to use to fetch weather." : {
 
     },
     "Set the daily goals for your fitness goals." : {
@@ -495,7 +522,16 @@
     "Uploading..." : {
 
     },
+    "Use Current Location" : {
+
+    },
     "Use Local File" : {
+
+    },
+    "Use the search bar to find a location." : {
+
+    },
+    "Use your current location to fetch local weather data. Location accuracy can be managed in Settings." : {
 
     },
     "user@watch:~ $" : {
@@ -531,13 +567,13 @@
     "You don't have any upcoming reminders. You can set them in the Reminders app." : {
 
     },
-    "You've reached your calorie goal!" : {
+    "You've reached your calorie goal" : {
 
     },
-    "You've reached your exercise time goal!" : {
+    "You've reached your exercise time goal" : {
 
     },
-    "You've reached your steps goal!" : {
+    "You've reached your steps goal" : {
 
     }
   },

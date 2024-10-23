@@ -65,6 +65,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var weatherInformation = WeatherInformation()
     @Published var weatherForecastDays = [WeatherForecastDay]()
     @Published var loadingWeather = true
+    @Published var hasLoadedBatteryLevel = false
     
     @Published var heartRate: Double = 0
     @Published var batteryLevel: Double = 0
@@ -77,10 +78,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var hasLoadedCharacteristics: Bool {
         // Use currentTimeService because it's present in all firmware versions
         return currentTimeService != nil && isConnectedToPinetime
-    }
-    var hasLoadedBatteryLevel: Bool {
-        // Check for battery level because values similar are loaded seconds after characteristics
-        return batteryLevel != 0
     }
     var isHeartRateBeingRead: Bool {
         return heartRate != 0
@@ -138,7 +135,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let pairedDevice {
             deviceManager.removeDevice(pairedDevice)
         }
-        
         deviceManager.fetchAllDevices()
         
         if let first = deviceManager.watches.first, deviceManager.watches.count > 1 {
@@ -157,6 +153,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.infiniTime = nil
             self.blefsTransfer = nil
             self.currentTimeService = nil
+            self.notifyCharacteristic = nil
             self.batteryLevel = 0
             self.isConnectedToPinetime = false
         }

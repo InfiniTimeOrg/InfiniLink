@@ -99,7 +99,7 @@ struct ActiveExerciseView: View {
                 }
             }
             .padding()
-            .confirmationDialog("Are you sure you want to end the exercise? \(elapsedTime >= 30 ? "" : "The duration of the exercise is to short to save.")", isPresented: $showEndConfirmation) {
+            .alert("Are you sure you want to end the exercise? \(elapsedTime >= 30 ? "" : "The duration of the exercise is to short to save.")", isPresented: $showEndConfirmation) {
                 Button(role: .destructive) {
                     self.exercise = nil
                     timer?.invalidate()

@@ -70,6 +70,8 @@ struct BLEUpdatedCharacteristicHandler {
             let batData = [UInt8](value)
             
             bleManager.batteryLevel = Double(batData[0])
+            bleManager.hasLoadedBatteryLevel = true
+            
             chartManager.addBatteryDataPoint(batteryLevel: Double(batData[0]), time: Date())
         case bleManager.cbuuidList.stepCount:
             guard let value = characteristic.value else { break }

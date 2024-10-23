@@ -1,13 +1,13 @@
 //
-//  WeatherSettingsView.swift
+//  WeatherView.swift
 //  InfiniLink
 //
-//  Created by Liam Willey on 10/5/24.
+//  Created by Liam Willey on 10/21/24.
 //
 
 import SwiftUI
 
-struct WeatherSettingsView: View {
+struct WeatherView: View {
     @ObservedObject var weatherController = WeatherController.shared
     
     var body: some View {
@@ -17,7 +17,7 @@ struct WeatherSettingsView: View {
                     List {
                         Section {
                             DetailHeaderView(
-                                Header(title: String(format: "%.0f", weatherController.temperature) + weatherController.unit,
+                                Header(title: String(format: "%.0f", weatherController.getTemperature(for: weather.currentWeather.temperature)) + weatherController.unit,
                                        subtitle: weather.currentWeather.condition.description,
                                        icon: weather.currentWeather.symbolName,
                                        accent: Color.yellow),
@@ -54,7 +54,7 @@ struct WeatherSettingsView: View {
                                                 return relativeWidth
                                             }(), height: 3)
                                             .cornerRadius(30)
-                                            .background(Material.thin)
+                                            .background(Color.gray)
                                         Text(String(format: "%.0f", weatherController.getTemperature(for: day.highTemperature)) + weatherController.unit)
                                             .foregroundStyle(Color.gray)
                                     }
@@ -68,10 +68,17 @@ struct WeatherSettingsView: View {
                 }
             }
         }
+        .toolbar {
+            NavigationLink {
+                WeatherSettingsView()
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+        }
         .navigationTitle("Weather")
     }
 }
 
 #Preview {
-    WeatherSettingsView()
+    WeatherView()
 }

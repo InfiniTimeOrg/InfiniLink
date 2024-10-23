@@ -121,7 +121,7 @@ class DeviceManager: ObservableObject {
         guard let uuid = bleManager.pairedDevice?.uuid else { return }
         
         let device = fetchDevice(with: uuid)
-        print(device)
+        
         device.brightLevel = Int16(settings.brightLevel.rawValue)
         device.chimesOption = Int16(settings.chimesOption.rawValue)
         device.clockType = Int16(settings.clockType.rawValue)
@@ -147,7 +147,7 @@ class DeviceManager: ObservableObject {
         
         save()
         
-        self.getSettings()
+        getSettings()
     }
     
     func updateName(name: String, for device: Device) {
