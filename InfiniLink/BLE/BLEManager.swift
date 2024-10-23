@@ -31,6 +31,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     struct CBUUIDList {
         let hrm = CBUUID(string: "2A37")
         let bat = CBUUID(string: "2A19")
+        let isBatCharging = CBUUID(string: "2A1B")
         let time = CBUUID(string: "2A2B")
         let notify = CBUUID(string: "2A46")
         let modelNumber = CBUUID(string: "2A24")

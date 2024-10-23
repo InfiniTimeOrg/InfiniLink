@@ -34,6 +34,9 @@ struct BLEDiscoveredCharacteristics {
 		case bleManager.cbuuidList.bat:
 			peripheral.readValue(for: characteristic)
 			peripheral.setNotifyValue(true, for: characteristic)
+        case bleManager.cbuuidList.isBatCharging:
+            peripheral.readValue(for: characteristic)
+            peripheral.setNotifyValue(true, for: characteristic)
         case bleManager.cbuuidList.blefsTransfer:
             bleManager.blefsTransfer = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
