@@ -20,6 +20,7 @@ struct BLEUpdatedCharacteristicHandler {
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
+    @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
@@ -99,17 +100,26 @@ struct BLEUpdatedCharacteristicHandler {
             guard let value = characteristic.value else { break }
             
             ble_fs.handleResponse(responseData: [UInt8](value))
+        case bleManager.cbuuidList.motion:
+            // As of now, we don't need the motion data, but it constantly updates, so to work around iOS timer restrictions, we use this to fetch data in the background
+            let currentTime = Date().timeIntervalSince1970
+            let timeDifference = currentTime - lastTimeCheckCompleted
+            
+            // Only update every five seconds
+            // TODO: adjust update interval if needed
+            if timeDifference > 5 {
+                RemindersManager.shared.checkForDueReminders(date: Date())
+                
+                lastTimeCheckCompleted = Date().timeIntervalSince1970
+            }
         default:
             break
         }
     }
     
     private func updateHeartRate(bpm: Int) {
-        let currentTime = Date().timeIntervalSince1970
-        lastHeartRateUpdateTimestamp = currentTime
-        
+        lastHeartRateUpdateTimestamp = Date().timeIntervalSince1970
         healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManager.heartRate)
-        
         chartManager.addHeartRateDataPoint(heartRate: Double(bpm), time: Date())
     }
 }

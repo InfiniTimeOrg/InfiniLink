@@ -18,7 +18,7 @@ class WeatherController: ObservableObject {
     
     @Published var weather: Weather?
     
-    @Published var errorWhileFetching = false
+    @Published var errorWhileFetching: Error?
     
     @AppStorage("latitude") var latitude: Double = 0.0
     @AppStorage("longitude") var longitude: Double = 0.0
@@ -81,9 +81,7 @@ class WeatherController: ObservableObject {
                 
                 self.writeForecastToDevice()
             } catch {
-                self.errorWhileFetching = true
-                
-                print("Failed to fetch weather: \(error)")
+                self.errorWhileFetching = error
             }
         }
     }

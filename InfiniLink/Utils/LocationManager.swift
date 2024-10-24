@@ -75,7 +75,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        print("Failed to get location: \(error.localizedDescription)")
+        DispatchQueue.main.async {
+            WeatherController.shared.errorWhileFetching = error
+        }
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {

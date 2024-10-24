@@ -58,7 +58,7 @@ struct RemindersView: View {
                                     .foregroundStyle(.gray)
                             }
                         }
-                        .frame(maxWidth: .infinity)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
                 }
             }

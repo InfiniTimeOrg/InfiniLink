@@ -63,8 +63,20 @@ struct WeatherView: View {
                         }
                     }
                 } else {
-                    ProgressView("Loading weather...")
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Group {
+                        if let error = weatherController.errorWhileFetching {
+                            VStack(spacing: 4) {
+                                Text("Error fetching weather")
+                                    .font(.title3.weight(.semibold))
+                                Text(error.localizedDescription)
+                                    .foregroundStyle(.gray)
+                            }
+                            .multilineTextAlignment(.center)
+                        } else {
+                            ProgressView("Loading weather...")
+                        }
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
         }

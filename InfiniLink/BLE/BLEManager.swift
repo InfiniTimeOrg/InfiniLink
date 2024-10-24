@@ -40,6 +40,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let softwareRevision = CBUUID(string: "2A28")
         let manufacturer = CBUUID(string: "2A29")
         let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
+        let motion = CBUUID(string: "00030002-78fc-48fe-8e23-433b3a1942d0")
         let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
         let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
         let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
