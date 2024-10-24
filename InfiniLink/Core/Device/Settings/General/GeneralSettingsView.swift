@@ -9,8 +9,10 @@ import SwiftUI
 
 struct GeneralSettingsView: View {
     @State private var showUnpairConfirmation = false
+    @State private var showResetConfirmation = false
     
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.dismiss) var dismiss
     
@@ -74,12 +76,25 @@ struct GeneralSettingsView: View {
                     }())
                 }
                 .disabled(bleManager.isScanning)
+                Button {
+                    showResetConfirmation = true
+                } label: {
+                    Text("Reset")
+                }
+                .alert("Are you sure you want to reset all content and settings from \(deviceManager.name)?", isPresented: $showResetConfirmation) {
+                    Button(role: .destructive) {
+                        bleManager.resetDevice()
+                        dismiss()
+                    } label: {
+                        Text("Reset")
+                    }
+                }
                 Button(role: .destructive) {
                     showUnpairConfirmation = true
                 } label: {
                     Text("Unpair")
                 }
-                .alert("Are you sure you want to unpair from \("InfiniTime")?", isPresented: $showUnpairConfirmation) {
+                .alert("Are you sure you want to unpair from \(deviceManager.name)?", isPresented: $showUnpairConfirmation) {
                     Button(role: .destructive) {
                         bleManager.unpair()
                         dismiss()

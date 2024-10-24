@@ -125,25 +125,26 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func removeDevice() {
         deviceManager.removeDevice(pairedDevice)
-        
         unpair()
+    }
+    
+    func resetDevice() {
+        BLEFSHandler.shared.writeSettings(Settings())
+        deviceManager.settings = Settings()
     }
     
     func unpair() {
         disconnect()
-        
         if let pairedDevice {
             deviceManager.removeDevice(pairedDevice)
         }
         deviceManager.fetchAllDevices()
-        
         if let first = deviceManager.watches.first, deviceManager.watches.count > 1 {
             pairedDeviceID = first.uuid
             pairedDevice = deviceManager.fetchDevice()
         } else {
             pairedDeviceID = nil
         }
-        
         startScanning()
     }
     
@@ -154,7 +155,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.blefsTransfer = nil
             self.currentTimeService = nil
             self.notifyCharacteristic = nil
-            self.batteryLevel = 0
+            self.hasLoadedBatteryLevel = false
             self.isConnectedToPinetime = false
         }
     }

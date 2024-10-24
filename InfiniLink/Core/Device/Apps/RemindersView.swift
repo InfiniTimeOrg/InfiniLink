@@ -43,30 +43,22 @@ struct RemindersView: View {
             } else {
                 List {
                     ForEach(remindersManager.reminders.filter({ $0.isCompleted == false }), id: \.hashValue) { reminder in
-                        Button {
-                            remindersManager.completeReminder(reminder)
-                        } label: {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(reminder.title)
-                                        .foregroundStyle({
-                                            if let dueDate = reminder.dueDateComponents, let date = Calendar.current.date(from: dueDate) {
-                                                if date <= Date() {
-                                                    return Color.red
-                                                }
-                                            }
-                                            return Color.blue
-                                        }())
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(reminder.title)
+                                .foregroundStyle({
                                     if let dueDate = reminder.dueDateComponents, let date = Calendar.current.date(from: dueDate) {
-                                        Text("\(date >= Date() ? "Notifying" : "Notified") on " + date.formatted())
-                                            .foregroundStyle(.gray)
+                                        if date <= Date() {
+                                            return Color.red
+                                        }
                                     }
-                                }
-                                Spacer()
-                                Image(systemName: "circle")
+                                    return Color.blue
+                                }())
+                            if let dueDate = reminder.dueDateComponents, let date = Calendar.current.date(from: dueDate) {
+                                Text("\(date >= Date() ? "Notifying" : "Notified") on " + date.formatted())
                                     .foregroundStyle(.gray)
                             }
                         }
+                        .frame(maxWidth: .infinity)
                     }
                 }
             }

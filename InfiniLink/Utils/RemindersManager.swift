@@ -40,16 +40,6 @@ class RemindersManager: ObservableObject {
         }
     }
     
-    func completeReminder(_ reminder: EKReminder) {
-        reminder.isCompleted = true
-        
-        do {
-            try eventStore.save(reminder, commit: true)
-        } catch {
-            print(error.localizedDescription)
-        }
-    }
-    
     func requestReminderAccess() {
         eventStore.requestAccess(to: .reminder) { granted, error in
             if let error = error {

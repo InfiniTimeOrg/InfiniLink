@@ -25,8 +25,10 @@ struct BatterySettingsView: View {
                             return "battery.75percent"
                         } else if bleManager.batteryLevel > 25 {
                             return "battery.50percent"
-                        } else {
+                        } else if bleManager.batteryLevel == 0 {
                             return "battery.0percent"
+                        } else {
+                            return "battery.25percent"
                         }
                     }(), accent: {
                         if bleManager.batteryLevel > 20 {

@@ -35,7 +35,7 @@ struct NotificationsSettingsView: View {
                     if waterReminder {
                         Picker("Interval", selection: $waterReminderAmount) {
                             ForEach(0..<9) { amount in
-                                Text("\(amount + 1) time\(amount == 1 ? "" : "s")")
+                                Text("\(amount + 1) time\(amount == 0 ? "" : "s")")
                             }
                         }
                     }

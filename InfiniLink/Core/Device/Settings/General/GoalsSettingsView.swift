@@ -41,6 +41,7 @@ enum ExerciseTimeGoal: Int, CaseIterable, Identifiable {
 
 struct GoalsSettingsView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     @State private var stepsGoal = Int(DeviceManager.shared.settings.stepsGoal)
     
@@ -55,6 +56,7 @@ struct GoalsSettingsView: View {
                         Text("\(goal.rawValue)").tag(goal.rawValue)
                     }
                 }
+                .disabled(bleManager.blefsTransfer == nil) // Explain to user why disabled?
                 Picker("Calories", selection: $caloriesGoal) {
                     ForEach(1...30, id: \.self) { index in
                         Text("\(index * 100)").tag(index * 100)

@@ -137,6 +137,9 @@
     "Are you sure you want to end the exercise? %@" : {
 
     },
+    "Are you sure you want to reset all content and settings from %@?" : {
+
+    },
     "Are you sure you want to unpair from %@?" : {
 
     },
@@ -414,6 +417,9 @@
 
     },
     "Rename" : {
+
+    },
+    "Reset" : {
 
     },
     "Scanning..." : {
