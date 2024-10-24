@@ -12,6 +12,7 @@ class RemindersManager: ObservableObject {
     static let shared = RemindersManager()
     
     @Published var reminders = [EKReminder]()
+    @Published var notifiedReminders = [String: Date]()
     @Published var isAuthorized = false
     
     var eventStore = EKEventStore()
@@ -20,10 +21,31 @@ class RemindersManager: ObservableObject {
     
     @AppStorage("enableReminders") var enableReminders = true
     
-    func checkForDueReminders(date: Date) {
+    func checkForDueReminders() {
         for reminder in reminders {
-            if let dueDate = reminder.dueDateComponents?.date, dueDate == date, !reminder.isCompleted {
-                NotificationManager.shared.sendReminderDueNotification(reminder)
+            let reminderId = reminder.calendarItemIdentifier
+            guard let dueDate = reminder.dueDateComponents?.date, !reminder.isCompleted else {
+                continue
+            }
+            
+            if let lastNotifiedDate = notifiedReminders[reminderId] {
+                if lastNotifiedDate != dueDate {
+                    // The user has changed the due date, so notify again
+                    notifiedReminders.removeValue(forKey: reminderId)
+                }
+            }
+            
+            if !notifiedReminders.keys.contains(reminderId) {
+                let calendar = Calendar.current
+                
+                let dueDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: dueDate)
+                let currentDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
+                
+                if dueDateComponents == currentDateComponents {
+                    NotificationManager.shared.sendReminderDueNotification(reminder)
+                    
+                    notifiedReminders[reminderId] = dueDate
+                }
             }
         }
     }

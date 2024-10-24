@@ -54,7 +54,13 @@ struct RemindersView: View {
                                     return Color.blue
                                 }())
                             if let dueDate = reminder.dueDateComponents, let date = Calendar.current.date(from: dueDate) {
-                                Text("\(date >= Date() ? "Notifying" : "Notified") on " + date.formatted())
+                                Text({
+                                    if remindersManager.notifiedReminders[reminder.calendarItemIdentifier] == nil {
+                                        return "\(date >= Date() ? "Notifying" : "Due") on " + date.formatted()
+                                    } else {
+                                        return "Notified on " + date.formatted()
+                                    }
+                                }())
                                     .foregroundStyle(.gray)
                             }
                         }
@@ -64,6 +70,10 @@ struct RemindersView: View {
             }
         }
         .navigationTitle("Reminders")
+        .onAppear {
+            // List doesn't update on appear
+            remindersManager.fetchAllReminders()
+        }
     }
     
     var unauthorized: some View {

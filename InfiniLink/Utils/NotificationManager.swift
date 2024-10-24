@@ -121,7 +121,7 @@ extension NotificationManager {
 // MARK: Reminders
 extension NotificationManager {
     func sendReminderDueNotification(_ reminder: EKReminder) {
-        let notif = AppNotification(title: NSLocalizedString("Reminders", comment: ""), subtitle: reminder.title + NSLocalizedString(" is due.", comment: ""))
+        let notif = AppNotification(title: NSLocalizedString("Reminders", comment: ""), subtitle: reminder.title + NSLocalizedString(" is due", comment: ""))
         
         self.bleWriteManager.sendNotification(notif)
     }

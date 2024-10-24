@@ -108,7 +108,9 @@ struct BLEUpdatedCharacteristicHandler {
             // Only update every five seconds
             // TODO: adjust update interval if needed
             if timeDifference > 5 {
-                RemindersManager.shared.checkForDueReminders(date: Date())
+                RemindersManager.shared.checkForDueReminders()
+                
+                // Other processing here...
                 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }

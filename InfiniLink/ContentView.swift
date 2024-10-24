@@ -51,10 +51,6 @@ struct ContentView: View {
         .onAppear {
             bleManager.startScanning()
             remindersManager.requestReminderAccess()
-            
-            NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: nil, queue: .main) { _ in
-                remindersManager.fetchAllReminders()
-            }
         }
     }
 }
