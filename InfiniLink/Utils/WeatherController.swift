@@ -72,6 +72,8 @@ class WeatherController: ObservableObject {
     func fetchWeatherData() {
         let currentLocation = CLLocation(latitude: latitude, longitude: longitude)
         
+        weather = nil
+        
         Task {
             do {
                 let weather = try await service.weather(for: currentLocation)

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct NotificationsSettingsView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var notificationManager = NotificationManager.shared
     
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
@@ -68,6 +69,9 @@ struct NotificationsSettingsView: View {
             }
         }
         .navigationTitle("Notifications")
+        .onChange(of: waterReminderAmount) { _ in
+            notificationManager.setWaterRemindersPerDay()
+        }
     }
 }
 

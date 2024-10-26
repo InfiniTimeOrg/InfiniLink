@@ -35,6 +35,13 @@ class NotificationManager: ObservableObject {
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
     @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
     
+    @AppStorage("waterReminderAmount") var waterReminderAmount = 7
+    
+    private var nextReminderCheckDate: Date?
+    private var waterReminderStartHour: Int = 8
+    private var waterReminderEndHour: Int = 20
+    private var waterReminderInterval: TimeInterval = 0
+    
     func requestNotificationAuthorization() {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
@@ -94,6 +101,49 @@ extension NotificationManager {
         if sendLowBatteryNotificationToiPhone {
             self.sendNotificationToHost(notif)
         }
+    }
+}
+
+extension NotificationManager {
+    func setWaterRemindersPerDay() {
+        waterReminderAmount = waterReminderAmount
+        
+        calculateReminderInterval()
+        
+        nextReminderCheckDate = getNextReminderDate()
+    }
+    
+    private func calculateReminderInterval() {
+        let calendar = Calendar.current
+        var startComponents = DateComponents()
+        startComponents.hour = waterReminderStartHour
+        var endComponents = DateComponents()
+        endComponents.hour = waterReminderEndHour
+        
+        guard let startDate = calendar.date(from: startComponents),
+              let endDate = calendar.date(from: endComponents) else {
+            return
+        }
+        
+        let totalTimeInterval = endDate.timeIntervalSince(startDate)
+        
+        waterReminderInterval = totalTimeInterval / Double(waterReminderAmount)
+    }
+    
+    func checkAndNotifyForWaterReminders() {
+        let currentTime = Date()
+        
+        if let nextReminderCheckDate = nextReminderCheckDate, currentTime >= nextReminderCheckDate {
+            bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Water Reminder", comment: ""), subtitle: NSLocalizedString("It's time to drink water", comment: "")))
+            
+            self.nextReminderCheckDate = getNextReminderDate()
+        }
+    }
+    
+    private func getNextReminderDate() -> Date {
+        let currentDate = Date()
+        
+        return currentDate.addingTimeInterval(waterReminderInterval)
     }
 }
 

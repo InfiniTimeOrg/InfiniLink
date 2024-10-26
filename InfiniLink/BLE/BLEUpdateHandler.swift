@@ -109,9 +109,8 @@ struct BLEUpdatedCharacteristicHandler {
             // TODO: adjust update interval if needed
             if timeDifference > 5 {
                 RemindersManager.shared.checkForDueReminders()
-                
-                // Other processing here...
-                
+                NotificationManager.shared.checkAndNotifyForWaterReminders()
+
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
         default:

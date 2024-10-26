@@ -12,6 +12,8 @@ struct DeviceView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
+    @ObservedObject var remindersManager = RemindersManager.shared
+    @ObservedObject var notificationManager = NotificationManager.shared
     
     @AppStorage("stepCountGoal") var stepCountGoal = 10000
     @AppStorage("sleepGoal") var sleepGoal = 28800
@@ -183,6 +185,8 @@ struct DeviceView: View {
                     deviceManager.getSettings()
                 }
                 
+                notificationManager.setWaterRemindersPerDay()
+                remindersManager.requestReminderAccess()
                 downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
             }
             .toolbar {

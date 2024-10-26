@@ -23,7 +23,6 @@ struct ContentView: View {
     var body: some View {
         Group {
             if pairedDeviceID != nil {
-                // TODO: requires implementation of background tasks
                 DeviceView()
                     .onChange(of: bleManager.weatherCharacteristic) { _ in
                         WeatherController.shared.fetchWeatherData()
@@ -31,6 +30,7 @@ struct ContentView: View {
                     .onChange(of: bleManager.batteryLevel) { bat in
                         notificationManager.checkToSendLowBatteryNotification()
                     }
+                /*
                     .onChange(of: bleManager.stepCount) { stepCount in
                         if stepCount == Int(deviceManager.settings.stepsGoal) && remindOnStepGoalCompletion {
                             notificationManager.sendStepGoalReachedNotification()
@@ -41,6 +41,7 @@ struct ContentView: View {
                             notificationManager.sendCaloriesGoalReachedNotification()
                         }
                     }
+                 */
                     .sheet(isPresented: $personalizationController.showSetupSheet) {
                         SetUpDetailsView()
                     }
@@ -50,7 +51,6 @@ struct ContentView: View {
         }
         .onAppear {
             bleManager.startScanning()
-            remindersManager.requestReminderAccess()
         }
     }
 }

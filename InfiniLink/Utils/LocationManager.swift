@@ -31,8 +31,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func getLocation() {
-        if useCurrentLocation && !canGetUserLocation() {
-            self.locationManager.requestLocation()
+        if useCurrentLocation {
+            self.requestLocation()
         } else {
             self.getCoordinateFrom(address: setLocation) { coordinate, error in
                 if let coordinate = coordinate {
@@ -62,7 +62,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .restricted, .denied:
             print("Location access denied. Unable to get current location.")
         case .notDetermined:
-            locationManager.requestWhenInUseAuthorization()
+            locationManager.requestAlwaysAuthorization()
         default:
             break
         }

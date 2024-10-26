@@ -43,7 +43,7 @@ struct SetWeatherLocationView: View {
                             Text(location.title)
                                 .foregroundStyle(Color.primary)
                             Text(location.subtitle)
-                                .font(.system(size: 13))
+                                .font(.system(size: 14))
                                 .foregroundStyle(.gray)
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
