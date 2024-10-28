@@ -28,6 +28,13 @@ struct AboutSettingsView: View {
                     AboutRowView(title: "Model Number", value: deviceManager.modelNumber)
                     AboutRowView(title: "UUID", value: deviceManager.bleUUID)
                 }
+                if let timeService = bleManager.currentTimeService{
+                    Section {
+                        Button("Update Device Time") {
+                            BLEWriteManager().setTime(characteristic: timeService)
+                        }
+                    }
+                }
                 Section {
                     AboutRowView(title: "File System", value: deviceManager.blefsVersion)
                     AboutRowView(title: "Hardware Revision", value: deviceManager.hardwareRevision)
