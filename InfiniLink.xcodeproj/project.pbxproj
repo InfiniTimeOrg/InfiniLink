@@ -90,6 +90,7 @@
 		E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */; };
 		E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84C2CAF14870043DA2D /* BLEManager.swift */; };
 		E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */; };
+		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
 /* End PBXBuildFile section */
@@ -201,6 +202,7 @@
 		E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
 		E0C7C8512CAF14870043DA2D /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersOnly.swift; sourceTree = "<group>"; };
 		E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizationController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -423,6 +425,7 @@
 				E07D8F1F2CBF051A005C1325 /* LocationManager.swift */,
 				E07D8F252CC0C0D2005C1325 /* SleepController.swift */,
 				E08F2F342CC89A530094217A /* MapSearch.swift */,
+				E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -764,6 +767,7 @@
 				E05999B82CB2FC7900D64E0B /* RenameView.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				E0B85D212CB625FE00D85122 /* Exercise.swift in Sources */,
+				E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */,
 				E0A7C0982CB227060042A12D /* HeartView.swift in Sources */,
 				E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */,
 				E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */,

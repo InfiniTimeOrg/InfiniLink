@@ -15,7 +15,6 @@ struct DeviceView: View {
     @ObservedObject var remindersManager = RemindersManager.shared
     @ObservedObject var notificationManager = NotificationManager.shared
     
-    @AppStorage("stepCountGoal") var stepCountGoal = 10000
     @AppStorage("sleepGoal") var sleepGoal = 28800
     
     @Environment(\.colorScheme) var colorScheme

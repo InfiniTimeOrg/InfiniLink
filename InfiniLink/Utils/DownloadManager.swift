@@ -39,16 +39,18 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var autoUpgrade: Result!
     @Published var lastCheck: Date!
     
-    @Published var updateStarted: Bool = false
-    
     @AppStorage("results") var releases: [Result] = []
-    @Published var updateAvailable: Bool = false
+    
     @Published var updateVersion: String = "0.0.0"
     @Published var updateBody: String = ""
+    
     @Published var updateSize: Int = 0
+    
     @Published var browser_download_url: URL = URL(fileURLWithPath: "")
     @Published var browser_download_resources_url: URL = URL(fileURLWithPath: "")
     
+    @Published var updateStarted: Bool = false
+    @Published var updateAvailable: Bool = false
     @Published var startTransfer: Bool = false
     @Published var loadingReleases: Bool = false
     @Published var externalResources: Bool = false
@@ -199,6 +201,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             if DownloadManager.shared.startTransfer {
                 DownloadManager.shared.startTransfer = false
                 DFUUpdater.shared.isUpdating = true
+                
                 if self.externalResources {
                     BLEFSHandler.shared.downloadTransfer()
                 } else {

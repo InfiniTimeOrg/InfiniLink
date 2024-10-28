@@ -97,7 +97,7 @@ struct SoftwareUpdateView: View {
                 Text(downloadManager.updateBody)
                     .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .frame(height: 300)
+            .frame(height: dfuUpdater.local ? 50 : 300)
             if bleManager.hasLoadedCharacteristics {
                 Button {
                     if downloadManager.updateStarted {
@@ -195,6 +195,7 @@ struct OtherUpdateVersions: View {
                         
                         dfuUpdater.firmwareSelected = true
                         dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                        dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
                         dfuUpdater.firmwareURL = fileUrl.absoluteURL
                         downloadManager.updateBody = NSLocalizedString("This is a local firmware file and cannot be verified. Proceed at your own risk.", comment: "")
                         downloadManager.updateSize = fileSize(from: fileUrl)

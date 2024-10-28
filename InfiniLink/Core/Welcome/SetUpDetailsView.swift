@@ -15,6 +15,8 @@ struct SetUpDetailsView: View {
     @FocusState var isBirthdateFocused: Bool
     @FocusState var isWeightFocused: Bool
     @FocusState var isHeightFocused: Bool
+
+    @ObservedObject var weight = NumbersOnly()
     
     let listOnly: Bool
     
@@ -52,7 +54,7 @@ struct SetUpDetailsView: View {
                 }
                 HStack(spacing: 12) {
                     Text("Weight")
-                    TextField("Optional", text: .constant(""))
+                    TextField("Optional", text: $weight.value)
                         .focused($isWeightFocused)
                 }
                 .onTapGesture {
@@ -67,6 +69,7 @@ struct SetUpDetailsView: View {
                     isHeightFocused = true
                 }
             }
+            .keyboardType(.decimalPad)
             if !listOnly {
                 Button {
                     isNavActive = true

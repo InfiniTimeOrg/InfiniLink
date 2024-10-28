@@ -27,8 +27,6 @@ struct ActiveExerciseView: View {
     @State private var previousStepCounts: [StepCounts] = []
     @State private var newStepCounts: [StepCounts] = []
     
-    @State private var elapsedTime: TimeInterval = 0
-    
     @AppStorage("exerciseTimeGoal") var exerciseTime: ExerciseTimeGoal = .hour
     @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
     
@@ -42,7 +40,7 @@ struct ActiveExerciseView: View {
                     Text(exercise.name)
                 }
                 Spacer()
-                Text(exerciseViewModel.timeString(from: elapsedTime))
+                Text(exerciseViewModel.timeString())
                     .font(.system(size: 60).weight(.bold))
                 HStack {
                     if exercise.components.contains(.heart) {
@@ -99,12 +97,12 @@ struct ActiveExerciseView: View {
                 }
             }
             .padding()
-            .alert("Are you sure you want to end the exercise? \(elapsedTime >= 30 ? "" : "The duration of the exercise is to short to save.")", isPresented: $showEndConfirmation) {
+            .alert("Are you sure you want to end the exercise? \(exerciseViewModel.exerciseTime >= 30 ? "" : "The duration of the exercise is to short to save.")", isPresented: $showEndConfirmation) {
                 Button(role: .destructive) {
                     self.exercise = nil
                     timer?.invalidate()
                     
-                    if elapsedTime >= 30 {
+                    if exerciseViewModel.exerciseTime >= 30 {
                         exerciseViewModel.saveExercise(exercise.id, startDate: startDate, heartPoints: Array(heartPoints), viewContext: viewContext)
                     }
                 } label: {
@@ -135,11 +133,10 @@ struct ActiveExerciseView: View {
     }
     
     func startTimer() {
-        // TODO: requires implementation of background tasks
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            elapsedTime += 1
+            exerciseViewModel.exerciseTime += 1
             
-            if Int(elapsedTime) == exerciseTime.rawValue && remindOnExerciseTimeGoalCompletion {
+            if Int(exerciseViewModel.exerciseTime) == exerciseTime.rawValue && remindOnExerciseTimeGoalCompletion {
                 NotificationManager.shared.sendExerciseTimeGoalReachedNotification()
             }
         }

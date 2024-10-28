@@ -14,6 +14,11 @@ class ExerciseViewModel: ObservableObject {
     
     let healthKitManager = HealthKitManager.shared
     
+    @Published var exerciseTime: TimeInterval = 0
+    @Published var currentExercise: Exercise?
+    
+    var appDidEnterBackgroundDate: Date?
+    
     let exercises = [
         Exercise(id: "outdoor-run", name: "Outdoor Run", icon: "figure.run", components: [.heart, .steps]),
         Exercise(id: "outdoor-cycle", name: "Outdoor Cycle", icon: "figure.outdoor.cycle", components: [.heart]),
@@ -32,10 +37,30 @@ class ExerciseViewModel: ObservableObject {
         Exercise(id: "hockey", name: "Hockey", icon: "figure.hockey", components: [.heart])
     ]
     
-    func timeString(from time: TimeInterval) -> String {
-        let hours = Int(time) / 3600
-        let minutes = (Int(time) % 3600) / 60
-        let seconds = Int(time) % 60
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+    }
+    
+    @objc func applicationDidEnterBackground(_ notification: NotificationCenter) {
+        appDidEnterBackgroundDate = Date()
+    }
+    
+    @objc func applicationWillEnterForeground(_ notification: NotificationCenter) {
+        guard let previousDate = appDidEnterBackgroundDate else { return }
+        
+        if currentExercise != nil {
+            let calendar = Calendar.current
+            let difference = calendar.dateComponents([.second], from: previousDate, to: Date())
+            let seconds = difference.second!
+            exerciseTime += Double(seconds)
+        }
+    }
+    
+    func timeString() -> String {
+        let hours = Int(exerciseTime) / 3600
+        let minutes = (Int(exerciseTime) % 3600) / 60
+        let seconds = Int(exerciseTime) % 60
         return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
     

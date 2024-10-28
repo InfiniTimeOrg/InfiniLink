@@ -15,12 +15,22 @@ struct BLEUpdatedCharacteristicHandler {
     let bleManager = BLEManager.shared
     let healthKitManager = HealthKitManager.shared
     let chartManager = ChartManager.shared
+    let notificationManager = NotificationManager.shared
+    let remindersManager = RemindersManager.shared
+    let deviceManager = DeviceManager.shared
+    let fitnessCalculator = FitnessCalculator.shared
     
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
+    @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
+    @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
+    
+    @AppStorage("caloriesGoal") var caloriesGoal = 400
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
+    @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 86400
+    @AppStorage("lastTimeCaloriesGoalNotified") var lastTimeCaloriesGoalNotified: Double = 86400
     
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
@@ -77,10 +87,11 @@ struct BLEUpdatedCharacteristicHandler {
         case bleManager.cbuuidList.stepCount:
             guard let value = characteristic.value else { break }
             let stepData = [UInt8](value)
+            let stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
             
-            bleManager.stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
+            bleManager.stepCount = stepCount
             
-            if bleManager.stepCount != 0 {
+            if stepCount != 0 {
                 healthKitManager.readCurrentSteps { value, error in
                     if let error = error {
                         print(error.localizedDescription)
@@ -88,13 +99,13 @@ struct BLEUpdatedCharacteristicHandler {
                     }
                     
                     let currentSteps = value ?? 0.0
-                    let newSteps = Double(bleManager.stepCount)
+                    let newSteps = Double(stepCount)
                     
-                    let stepsToAdd = max(newSteps - currentSteps, 0) // Prevent negative steps
+                    let stepsToAdd = max(newSteps - currentSteps, 0)
                     healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
                 }
                 
-                StepCountManager.shared.setStepCount(steps: Int32(bleManager.stepCount), isArbitrary: false, for: Date())
+                StepCountManager.shared.setStepCount(steps: Int32(stepCount), isArbitrary: false, for: Date())
             }
         case bleManager.cbuuidList.blefsTransfer:
             guard let value = characteristic.value else { break }
@@ -106,11 +117,15 @@ struct BLEUpdatedCharacteristicHandler {
             let timeDifference = currentTime - lastTimeCheckCompleted
             
             // Only update every five seconds
-            // TODO: adjust update interval if needed
             if timeDifference > 5 {
-                RemindersManager.shared.checkForDueReminders()
-                NotificationManager.shared.checkAndNotifyForWaterReminders()
+                remindersManager.checkForDueReminders()
+                notificationManager.checkAndNotifyForWaterReminders()
 
+                // TODO: check to see if better than using onChange in ContentView
+                
+                checkForCompletedStepGoal()
+                checkForCompletedCaloriesGoal()
+                
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
         default:
@@ -118,6 +133,28 @@ struct BLEUpdatedCharacteristicHandler {
         }
     }
     
+    private func checkForCompletedCaloriesGoal() {
+        if Int(fitnessCalculator.calculateCaloriesBurned(steps: bleManager.stepCount)) >= caloriesGoal && remindOnCaloriesGoalCompletion {
+            let currentTime = Date().timeIntervalSince1970
+            let twentyFourHours: TimeInterval = 86400
+            
+            if (currentTime - lastTimeCaloriesGoalNotified) >= twentyFourHours {
+                notificationManager.sendCaloriesGoalReachedNotification()
+                lastTimeCaloriesGoalNotified = currentTime
+            }
+        }
+    }
+    private func checkForCompletedStepGoal() {
+        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && remindOnStepGoalCompletion {
+            let currentTime = Date().timeIntervalSince1970
+            let twentyFourHours: TimeInterval = 86400
+            
+            if (currentTime - lastTimeStepGoalNotified) >= twentyFourHours {
+                notificationManager.sendStepGoalReachedNotification()
+                lastTimeStepGoalNotified = currentTime
+            }
+        }
+    }
     private func updateHeartRate(bpm: Int) {
         lastHeartRateUpdateTimestamp = Date().timeIntervalSince1970
         healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManager.heartRate)

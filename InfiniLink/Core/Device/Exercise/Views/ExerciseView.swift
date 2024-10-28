@@ -10,7 +10,6 @@ import CoreData
 
 struct ExerciseView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
-    @State var exerciseToStart: Exercise?
     
     @Environment(\.managedObjectContext) var viewContext
     
@@ -18,8 +17,8 @@ struct ExerciseView: View {
     
     var body: some View {
         VStack {
-            if exerciseToStart != nil {
-                ActiveExerciseView(exercise: $exerciseToStart)
+            if exerciseViewModel.currentExercise != nil {
+                ActiveExerciseView(exercise: $exerciseViewModel.currentExercise)
             } else {
                 List {
                     Section(header: Text("My Exercises"), footer: Text(userExercises.isEmpty ? "You can start one by choosing one from the list below." : "")) {
@@ -50,7 +49,7 @@ struct ExerciseView: View {
                     Section("All Exercises") {
                         ForEach(exerciseViewModel.exercises) { exercise in
                             Button {
-                                exerciseToStart = exercise
+                                exerciseViewModel.currentExercise = exercise
                             } label: {
                                 Label(exercise.name, systemImage: exercise.icon)
                             }
