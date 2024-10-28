@@ -37,6 +37,16 @@ struct DeviceView: View {
     }
     
     var body: some View {
+        Group {
+            if let first = deviceManager.firmware.components(separatedBy: ".").first, first == "0" {
+                RecoveryModeView()
+            } else {
+                content
+            }
+        }
+    }
+    
+    var content: some View {
         NavigationView {
             GeometryReader { geo in
                 List {
@@ -246,7 +256,7 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 #Preview {
     DeviceView()
         .onAppear {
-            DownloadManager.shared.updateVersion = "1.14.1"
+            BLEManager.shared.pairedDevice.firmware = "0.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
             DownloadManager.shared.updateAvailable = true
             DFUUpdater.shared.local = false

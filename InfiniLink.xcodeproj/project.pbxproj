@@ -13,6 +13,7 @@
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
 		264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */; };
 		264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */; };
+		E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */; };
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
@@ -125,6 +126,7 @@
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkUITests.swift; sourceTree = "<group>"; };
 		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModeView.swift; sourceTree = "<group>"; };
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				E0A7C0A22CB246D10042A12D /* DetailHeaderView.swift */,
 				E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */,
 				E07D8F172CBE2071005C1325 /* ActionView.swift */,
+				E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -775,6 +778,7 @@
 				E08F2F352CC89A530094217A /* MapSearch.swift in Sources */,
 				E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */,
 				E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */,
+				E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */,
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,
 				E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */,

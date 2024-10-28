@@ -10,6 +10,9 @@
     " is due" : {
 
     },
+    " Recovery" : {
+
+    },
     "-" : {
 
     },
@@ -73,12 +76,6 @@
 
     },
     "%lld" : {
-
-    },
-    "%lld ft" : {
-
-    },
-    "%lld in" : {
 
     },
     "%lld more device%@ found" : {
@@ -161,7 +158,7 @@
     "battery remaining" : {
 
     },
-    "Birth Year" : {
+    "Birthdate" : {
 
     },
     "Bluetooth needs to be enabled to pair a watch." : {
@@ -177,9 +174,6 @@
 
     },
     "Cancel Update" : {
-
-    },
-    "Centimeters" : {
 
     },
     "Checking for updates..." : {
@@ -263,12 +257,6 @@
     "External resources are fonts and images that are required for some apps and watch faces." : {
 
     },
-    "Feet" : {
-
-    },
-    "Feet & Inches" : {
-
-    },
     "File System" : {
 
     },
@@ -317,9 +305,6 @@
     "Height" : {
 
     },
-    "Height: %lld cm" : {
-
-    },
     "Hello" : {
 
     },
@@ -335,9 +320,6 @@
     "Imperial" : {
 
     },
-    "Inches" : {
-
-    },
     "InfiniTime" : {
 
     },
@@ -348,6 +330,9 @@
 
     },
     "Interval" : {
+
+    },
+    "It looks like your watch is in recovery mode. You'll need to update it to continue." : {
 
     },
     "It's time to drink water" : {
@@ -531,6 +516,9 @@
 
     },
     "Update Available" : {
+
+    },
+    "Update Current Time" : {
 
     },
     "Update External Resources" : {

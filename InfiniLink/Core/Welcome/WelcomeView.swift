@@ -67,7 +67,7 @@ struct WelcomeView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .clipShape(Capsule())
                 }
                 .sheet(isPresented: $showPairingSheet) {
                     ConnectView()
