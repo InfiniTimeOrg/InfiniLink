@@ -38,10 +38,14 @@ struct DeviceView: View {
     
     var body: some View {
         Group {
-            if let first = deviceManager.firmware.components(separatedBy: ".").first, first == "0" {
-                RecoveryModeView()
+            if downloadManager.updateStarted {
+                CurrentUpdateView()
             } else {
-                content
+                if let first = deviceManager.firmware.components(separatedBy: ".").first, first == "0" {
+                    RecoveryModeView()
+                } else {
+                    content
+                }
             }
         }
     }

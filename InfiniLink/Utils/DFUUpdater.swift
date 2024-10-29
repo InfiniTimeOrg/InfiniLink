@@ -10,7 +10,6 @@ import NordicDFU
 import SwiftUI
 
 class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
-	
 	static let shared = DFUUpdater()
 	
 	var bleManager: BLEManager = BLEManager.shared
@@ -78,27 +77,27 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 		}
 		dfuState = ""
 		transferCompleted = false
+        isUpdating = false
 		percentComplete = 0
 	}
 	
 	func dfuStateDidChange(to state: DFUState) {
 		dfuState = state.description
-        // TODO: handle more cases
-		if state.rawValue == 6 {
+        
+        if state == .completed {
 			transferCompleted = true
             firmwareFilename = ""
             resourceFilename = ""
             firmwareSelected = false
-            isUpdating = true
-			dfuController = nil
-			percentComplete = 0
 		}
+        
+        isUpdating = false
+        dfuController = nil
+        percentComplete = 0
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-		dfuController = nil
-		transferCompleted = false
-		percentComplete = 0
+        self.stopTransfer()
 	}
 	
 	func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
