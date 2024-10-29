@@ -170,7 +170,7 @@ struct FileSystemView: View {
                 }
                 Section {
                     ForEach(fileSystemViewModel.commandHistory.filter({ $0 != "" &&  $0 != "." && $0 != ".." }), id: \.self) { listItem in
-                        let isFile = listItem.contains(".")
+                        let isFile = listItem.contains(".") && (listItem.prefix(1)) != "."
 
                         Button {
                             if isFile {
