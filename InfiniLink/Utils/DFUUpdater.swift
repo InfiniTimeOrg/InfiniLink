@@ -17,7 +17,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	
 	@Published var dfuState: String = ""
     @Published var transferCompleted = false
-	@Published var isUpdating = false
+    @Published var isUpdating = false
+	@Published var isUpdatingResources = false
 	@Published var percentComplete: Double = 0
 	
 	@Published var firmwareFilename = ""
@@ -25,6 +26,9 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	@Published var firmwareSelected: Bool = false
     @Published var local = true
     @Published var firmwareURL: URL!
+    @Published var resourceURL: URL!
+    
+    @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
 	
     func transfer() {
         guard let url = firmwareURL else {return}
@@ -49,25 +53,39 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     }
 	
 	func downloadTransfer() {
-		guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
-            print("Error loading firmware")
-			return
-		}
+        func updateFirmware() {
+            guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
+                print("Error loading firmware")
+                return
+            }
+            
+            self.isUpdating = true
+            
+            let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
+            
+            // Optional:
+            // initiator.forceDfu = true/false // default false
+            // initiator.packetReceiptNotificationParameter = N // default is 12
+            initiator.logger = self // - to get log info
+            initiator.delegate = self // - to be informed about current state and errors
+            initiator.progressDelegate = self // - to show progress bar
+            // initiator.peripheralSelector = ... // the default selector is used
+            if bleManager.infiniTime != nil {
+                dfuController = initiator.start(target: bleManager.infiniTime)
+            }
+        }
         
-        self.isUpdating = true
-	
-		let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
-
-        // Optional:
-		// initiator.forceDfu = true/false // default false
-		// initiator.packetReceiptNotificationParameter = N // default is 12
-		initiator.logger = self // - to get log info
-		initiator.delegate = self // - to be informed about current state and errors
-		initiator.progressDelegate = self // - to show progress bar
-		// initiator.peripheralSelector = ... // the default selector is used
-		if bleManager.infiniTime != nil {
-			dfuController = initiator.start(target: bleManager.infiniTime)
-		}
+        if resourceURL != nil {
+            isUpdatingResources = true
+            dfuState = "Updating resources"
+            
+            BLEFSHandler.shared.downloadTransfer { [self] in
+                isUpdatingResources = false
+                updateFirmware()
+            }
+        } else {
+            updateFirmware()
+        }
 	}
 	
 	func stopTransfer() {
@@ -85,13 +103,13 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 		dfuState = state.description
         
         if state == .completed {
-			transferCompleted = true
+            transferCompleted = true
+            isUpdating = false
             firmwareFilename = ""
             resourceFilename = ""
             firmwareSelected = false
 		}
         
-        isUpdating = false
         dfuController = nil
         percentComplete = 0
 	}

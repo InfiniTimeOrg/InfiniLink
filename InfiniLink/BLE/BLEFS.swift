@@ -13,6 +13,7 @@ import SwiftUI
 class BLEFSHandler: ObservableObject {
     static var shared = BLEFSHandler()
     let bleManager = BLEManager.shared
+    let dfuUpdater = DFUUpdater.shared
     
     var informationTransfer : [InformationFS] = []
     var readFileFS : ReadFileFS = ReadFileFS()
@@ -97,10 +98,10 @@ class BLEFSHandler: ObservableObject {
     @Published var progress: Int = 0
     @Published var externalResourcesSize: Int = 0
     
-    func downloadTransfer() {
+    func downloadTransfer(completion: @escaping() -> Void) {
         DispatchQueue.global(qos: .default).async { [self] in
             do {
-                let unzipDirectory = try Zip.quickUnzipFile(DFUUpdater.shared.firmwareURL)
+                let unzipDirectory = try Zip.quickUnzipFile(dfuUpdater.resourceURL)
                 let jsonFilePath = unzipDirectory.appendingPathComponent("resources.json")
                 let jsonData = try Data(contentsOf: jsonFilePath)
                 
@@ -108,6 +109,7 @@ class BLEFSHandler: ObservableObject {
                 let resources = try decoder.decode(ResourcesJSON.self, from: jsonData)
                 
                 var newExternalResourcesSize = 0
+                var fileIndex = 0
                 
                 // Loop over resources and calculate the size of each file
                 for resource in resources.resources {
@@ -126,13 +128,30 @@ class BLEFSHandler: ObservableObject {
                     createDir(path: resource.path)
                     let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
                     let fileData = try Data(contentsOf: fileDataPath)
-                    let _ = writeFile(data: fileData, path: resource.path, offset: 0)
+                    
+                    DispatchQueue.main.async {
+                        fileIndex += 1
+                        self.dfuUpdater.dfuState = "Uploading file \(fileIndex)"
+                    }
+                    
+                    let writeFileFS = writeFile(data: fileData, path: resource.path, offset: 0)
+                    writeFileFS.group.notify(queue: .main) {
+                        if resources.resources.count < fileIndex {
+                            self.dfuUpdater.dfuState = "Starting file \(fileIndex + 1)"
+                        } else {
+                            self.dfuUpdater.dfuState = "Completing uploads"
+                        }
+                    }
                 }
                 
                 DispatchQueue.main.async {
-                    DFUUpdater.shared.transferCompleted = true
-                    DFUUpdater.shared.firmwareSelected = false
-                    DFUUpdater.shared.resourceFilename = ""
+                    if DownloadManager.shared.externalResources {
+                        self.dfuUpdater.transferCompleted = true
+                        self.dfuUpdater.firmwareSelected = false
+                        self.dfuUpdater.resourceFilename = ""
+                    }
+                    
+                    completion()
                 }
             } catch {
                 print("Something went wrong: \(error)")
@@ -225,6 +244,7 @@ class BLEFSHandler: ObservableObject {
         
         var dataQueue = data
         var newOffset = 0
+        // FIXME: this line needs to be removed if we're uploading multiple files and want to show the overall progress percentage
         self.progress = 0
         
         while !writeFileFS.completed {

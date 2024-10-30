@@ -34,6 +34,8 @@ extension Array: @retroactive RawRepresentable where Element: Codable {
 class DownloadManager: NSObject, ObservableObject {
     static var shared = DownloadManager()
     
+    let dfuUpdater = DFUUpdater.shared
+    
     @Published var tasks: [URLSessionTask] = []
     @Published var downloading = false
     @Published var autoUpgrade: Result!
@@ -61,6 +63,8 @@ class DownloadManager: NSObject, ObservableObject {
     
     private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
     private var downloadTask: URLSessionDownloadTask!
+    private var isDownloadingResources = false
+    private var hasDownloadedResources = false
     
     struct Asset: Codable {
         let id: Int
@@ -133,9 +137,9 @@ class DownloadManager: NSObject, ObservableObject {
             if i.tag_name.first != "v" {
                 let comparison = currentVersion.compare(i.tag_name, options: .numeric)
                 if comparison == .orderedAscending && comparison != .orderedSame {
-                    DFUUpdater.shared.firmwareFilename = chooseAsset(response: i).name
-                    DFUUpdater.shared.firmwareSelected = true
-                    DFUUpdater.shared.local = false
+                    dfuUpdater.firmwareFilename = chooseAsset(response: i).name
+                    dfuUpdater.firmwareSelected = true
+                    dfuUpdater.local = false
                     
                     updateVersion = i.tag_name
                     updateBody = i.body
@@ -286,7 +290,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             
             let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             let savedURL = documentsURL.appendingPathComponent(
-                "firmware.zip")
+                isDownloadingResources ? "resources.zip" : "firmware.zip")
             
             // check for existing file and delete it if there is anything.
             if FileManager.default.fileExists(atPath: savedURL.path) {
@@ -296,23 +300,33 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             // move downloaded file out of ephemeral storage and tell DFU where to look
             try FileManager.default.moveItem(at: location, to: savedURL)
             
-            DFUUpdater.shared.firmwareURL = savedURL
-            
+            DispatchQueue.main.async {
+                if self.isDownloadingResources && self.dfuUpdater.resourceURL == nil {
+                    self.dfuUpdater.resourceURL = savedURL
+                    self.hasDownloadedResources = true
+                } else {
+                    self.dfuUpdater.firmwareURL = savedURL
+                }
+            }
         } catch let fmerror {
             print(fmerror.localizedDescription)
         }
         
         DispatchQueue.main.async {
-            self.downloading = false
-            
-            if DownloadManager.shared.startTransfer {
-                DownloadManager.shared.startTransfer = false
-                DFUUpdater.shared.isUpdating = true
-                
-                if self.externalResources {
-                    BLEFSHandler.shared.downloadTransfer()
-                } else {
-                    DFUUpdater.shared.downloadTransfer()
+            if !self.hasDownloadedResources && self.dfuUpdater.updateResourcesWithFirmware {
+                self.isDownloadingResources = true
+                self.startDownload(url: self.browser_download_resources_url)
+            } else {
+                if self.startTransfer {
+                    self.startTransfer = false
+                    self.dfuUpdater.isUpdating = true
+                    self.downloading = false
+                    
+                    if self.externalResources {
+                        BLEFSHandler.shared.downloadTransfer {}
+                    } else {
+                        DFUUpdater.shared.downloadTransfer()
+                    }
                 }
             }
         }

@@ -24,7 +24,7 @@ struct CurrentUpdateView: View {
                 .scaleEffect(backgroundScaled ? 1.4 : 1)
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing to update" : dfuUpdater.dfuState)...\(dfuUpdater.percentComplete == 0 ? "" : String(format: "%.0f", dfuUpdater.percentComplete) + "%")")
+                    Text("\(dfuUpdater.dfuState.isEmpty ? "Downloading update" : dfuUpdater.dfuState)...\(dfuUpdater.percentComplete == 0 ? "" : String(format: "%.0f", dfuUpdater.percentComplete) + "%")")
                         .font(.system(size: 22))
                         .foregroundStyle(.secondary)
                     Text(deviceManager.getName(for: bleManager.pairedDeviceID ?? ""))
@@ -42,6 +42,8 @@ struct CurrentUpdateView: View {
                         .foregroundStyle(.white)
                         .clipShape(Capsule())
                 }
+                .disabled(dfuUpdater.isUpdatingResources)
+                .opacity(dfuUpdater.isUpdatingResources ? 0.5 : 1)
             }
             .frame(maxHeight: .infinity)
             .multilineTextAlignment(.center)

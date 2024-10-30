@@ -29,17 +29,15 @@ struct SoftwareUpdateView: View {
                         Text("Other Versions")
                     }
                 }
-                Section {
-                    if downloadManager.externalResources {
+                if downloadManager.externalResources {
+                    newUpdate
+                } else {
+                    if downloadManager.updateAvailable {
                         newUpdate
                     } else {
-                        if downloadManager.updateAvailable {
-                            newUpdate
-                        } else {
-                            noUpdate
-                                .frame(height: geo.size.height / 1.5)
-                                .listRowBackground(Color.clear)
-                        }
+                        noUpdate
+                            .frame(height: geo.size.height / 1.5)
+                            .listRowBackground(Color.clear)
                     }
                 }
             }
@@ -53,80 +51,84 @@ struct SoftwareUpdateView: View {
     }
     
     var newUpdate: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            HStack(spacing: 8) {
-                Image("InfiniTime")
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 70, height: 70)
-                VStack(alignment: .leading, spacing: 0) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Group {
-                            if !dfuUpdater.local {
-                                Text("InfiniTime " + DownloadManager.shared.updateVersion)
-                            } else {
-                                Text(downloadManager.externalResources ? "External Resources" : dfuUpdater.firmwareFilename)
+        Group {
+            Section {
+                VStack(alignment: .leading, spacing: 12) {
+                    HStack(spacing: 8) {
+                        Image("InfiniTime")
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: 70, height: 70)
+                        VStack(alignment: .leading, spacing: 0) {
+                            VStack(alignment: .leading, spacing: 3) {
+                                Group {
+                                    if !dfuUpdater.local {
+                                        Text("InfiniTime " + DownloadManager.shared.updateVersion)
+                                    } else {
+                                        Text(downloadManager.externalResources ? "External Resources" : dfuUpdater.firmwareFilename)
+                                    }
+                                }
+                                .font(.headline)
+                                Text({
+                                    if downloadManager.externalResources {
+                                        return dfuUpdater.resourceFilename
+                                    } else {
+                                        return "\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB"
+                                    }
+                                }())
+                                .lineLimit(1)
+                                .font(.subheadline)
+                                .foregroundColor(.gray)
                             }
                         }
-                        .font(.headline)
-                        Text({
-                            if downloadManager.externalResources {
-                                return dfuUpdater.resourceFilename
-                            } else {
-                                return "\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB"
-                            }
-                        }())
-                            .lineLimit(1)
-                            .font(.subheadline)
-                            .foregroundColor(.gray)
+                    }
+                    ScrollView {
+                        Text(downloadManager.updateBody)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                    }
+                    .frame(height: dfuUpdater.local ? 50 : 300)
+                    if !bleManager.hasLoadedCharacteristics {
+                        Text("\(deviceManager.name) needs to be connected to update its software.")
+                            .foregroundStyle(.gray)
+                            .font(.system(size: 14).weight(.semibold))
+                            .multilineTextAlignment(.center)
+                            .frame(maxWidth: .infinity)
+                            .padding(12)
                     }
                 }
             }
-            ScrollView {
-                Text(downloadManager.updateBody)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-            }
-            .frame(height: dfuUpdater.local ? 50 : 300)
             if bleManager.hasLoadedCharacteristics {
-                Button {
-                    dfuUpdater.percentComplete = 0
-                    if downloadManager.externalResources {
-                        downloadManager.startTransfer = true
-                        downloadManager.startDownload(url: downloadManager.browser_download_resources_url)
-                        downloadManager.updateStarted = true
-                    } else {
-                        if dfuUpdater.local {
-                            dfuUpdater.transfer()
+                Section {
+                    if !dfuUpdater.local {
+                        Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
+                    }
+                    Button {
+                        dfuUpdater.percentComplete = 0
+                        if downloadManager.externalResources {
+                            downloadManager.startTransfer = true
+                            downloadManager.startDownload(url: downloadManager.browser_download_resources_url)
                             downloadManager.updateStarted = true
                         } else {
-                            downloadManager.startTransfer = true
-                            downloadManager.startDownload(url: downloadManager.browser_download_url)
-                            
-                            downloadManager.updateStarted = true
+                            if dfuUpdater.local {
+                                dfuUpdater.transfer()
+                                downloadManager.updateStarted = true
+                            } else {
+                                downloadManager.startTransfer = true
+                                downloadManager.startDownload(url: downloadManager.browser_download_url)
+                                
+                                downloadManager.updateStarted = true
+                            }
                         }
+                    } label: {
+                        Text("Update Now")
                     }
-                } label: {
-                    Text("Update Now")
-                        .padding(10)
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .foregroundStyle(.white)
-                        .font(.body.weight(.semibold))
-                        .clipShape(Capsule())
                 }
-            } else {
-                Text("\(deviceManager.name) needs to be connected to update its software.")
-                    .foregroundStyle(.gray)
-                    .font(.system(size: 14).weight(.semibold))
-                    .multilineTextAlignment(.center)
-                    .frame(maxWidth: .infinity)
-                    .padding(12)
             }
         }
     }
     
     var noUpdate: some View {
-        Group {
+        Section {
             if downloadManager.loadingReleases {
                 ProgressView("Checking for updates...")
             } else {
@@ -207,7 +209,7 @@ struct OtherUpdateVersions: View {
                         
                         dfuUpdater.firmwareSelected = true
                         dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                        dfuUpdater.firmwareURL = fileUrl.absoluteURL
+                        dfuUpdater.resourceURL = fileUrl.absoluteURL
                         downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
                         downloadManager.updateSize = fileSize(from: fileUrl)
                         

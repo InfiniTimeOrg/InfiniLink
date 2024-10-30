@@ -24,7 +24,8 @@ struct FileSystemToolbar: ViewModifier {
                     if lowercaseFilename.hasSuffix(".png") ||
                         lowercaseFilename.hasSuffix(".jpg") ||
                         lowercaseFilename.hasSuffix(".jpeg") ||
-                        lowercaseFilename.hasSuffix(".gif") || lowercaseFilename.hasSuffix(".bmp") ||
+                        lowercaseFilename.hasSuffix(".gif") ||
+                        lowercaseFilename.hasSuffix(".bmp") ||
                         lowercaseFilename.hasSuffix(".tiff") ||
                         lowercaseFilename.hasSuffix(".webp") ||
                         lowercaseFilename.hasSuffix(".heif") ||
@@ -43,7 +44,7 @@ struct FileSystemToolbar: ViewModifier {
                         if let convertedImage = convertedImage {
                             self.fileSystemViewModel.fileSize = convertedImage.count
                             self.fileSystemViewModel.fileUploading = true
-                            var _ = bleFSHandler.writeFile(data: convertedImage, path: fileSystemViewModel.directory + "/" + String(fileNameWithoutExtension.prefix(30).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
+                            var _ = bleFSHandler.writeFile(data: convertedImage, path: fileSystemViewModel.directory + "/" + String(fileNameWithoutExtension.prefix(26).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
                         }
                     } else {
                         let fileData = try Data(contentsOf: fileDataPath)

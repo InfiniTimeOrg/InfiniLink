@@ -13,12 +13,10 @@ struct CustomizationView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
     @State private var clockType = 0
-    @State private var screenTimeout = 15000
     @State private var weatherFormat = 0
     
     func setSettings() {
         self.clockType = Int(deviceManager.settings.clockType.rawValue)
-        self.screenTimeout = Int(deviceManager.settings.screenTimeOut)
         self.weatherFormat = Int(deviceManager.settings.weatherFormat.rawValue)
     }
     
