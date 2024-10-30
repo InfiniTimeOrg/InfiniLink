@@ -47,7 +47,7 @@ struct SoftwareUpdateView: View {
         }
         .onAppear {
             if downloadManager.releases.isEmpty {
-                downloadManager.getReleases()
+                downloadManager.getUpdateResources()
             }
         }
     }
@@ -147,6 +147,7 @@ struct OtherUpdateVersions: View {
     
     @State private var showLocalFileSheet = false
     @State private var showResourcePickerSheet = false
+    @State private var showGithubAuthView = false
     
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
@@ -250,11 +251,39 @@ struct OtherUpdateVersions: View {
                     }
                 }
             }
+            Section {
+                if downloadManager.buildArtifacts.isEmpty && !downloadManager.loadingArtifacts {
+                    Text("There aren't any available cloud builds")
+                } else {
+                    ForEach(downloadManager.buildArtifacts, id: \.id) { artifact in
+                        Button {
+                            if downloadManager.githubAuthToken == nil {
+                                showGithubAuthView = true
+                            } else {
+                                // TODO: download and install firmware
+                            }
+                        } label: {
+                            Text(artifact.name)
+                                .foregroundStyle(Color.primary)
+                        }
+                    }
+                }
+            } header: {
+                HStack {
+                    Text("GitHub Actions")
+                    if downloadManager.loadingArtifacts {
+                        ProgressView()
+                    }
+                }
+            }
         }
         .navigationTitle("Other Versions")
+        .sheet(isPresented: $showGithubAuthView) {
+            GithubAuthView()
+        }
         .toolbar {
             Button {
-                downloadManager.getReleases()
+                downloadManager.getUpdateResources()
             } label: {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }

@@ -20,7 +20,7 @@ struct RecoveryModeView: View {
                 Image("InfiniTime")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 60, height: 60)
+                    .frame(width: 75, height: 75)
                 Group {
                     Text(deviceManager.getName(for: bleManager.pairedDeviceID ?? "")) + Text(" Recovery")
                         .foregroundColor(.red)
@@ -33,7 +33,7 @@ struct RecoveryModeView: View {
             Button {
                 showUpdateView = true
             } label: {
-                Text("Software Update")
+                Text("Continue to Update")
                     .padding(14)
                     .font(.body.weight(.semibold))
                     .background(Color.blue)

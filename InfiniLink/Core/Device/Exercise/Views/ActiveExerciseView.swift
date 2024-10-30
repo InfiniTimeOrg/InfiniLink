@@ -14,12 +14,11 @@ struct ActiveExerciseView: View {
     
     @Environment(\.managedObjectContext) var viewContext
     
-    @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
+    @ObservedObject var exerciseViewModel = ExerciseViewModel() // Intialize a new instance to reset all UI state variables
     
     @Binding var exercise: Exercise?
     
     @State private var timer: Timer?
-    @State private var isPaused = false
     @State private var showEndConfirmation = false
     
     @State private var previousHeartPoints: [HeartDataPoint] = []
@@ -64,21 +63,21 @@ struct ActiveExerciseView: View {
                 HStack(spacing: 14) {
                     Spacer()
                     Button {
-                        if isPaused {
+                        if exerciseViewModel.exercisePaused {
                             startTimer()
                         } else {
                             timer?.invalidate()
                         }
-                        isPaused.toggle()
+                        exerciseViewModel.exercisePaused.toggle()
                     } label: {
-                        Image(systemName: isPaused ? "play.fill" : "pause.fill")
+                        Image(systemName: exerciseViewModel.exercisePaused ? "play.fill" : "pause.fill")
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .padding(15)
-                            .padding(.leading, isPaused ? 2 : 0) // Offset play icon a little to the right because it doesn't look centered to the eye
+                            .padding(.leading, exerciseViewModel.exercisePaused ? 2 : 0) // Offset play icon a little to the right because it doesn't look centered to the eye
                             .frame(width: 45, height: 45)
                             .background(Material.regular)
-                            .foregroundStyle(isPaused ? Color.white : Color.primary)
+                            .foregroundStyle(exerciseViewModel.exercisePaused ? Color.white : Color.primary)
                             .clipShape(Circle())
                     }
                     Button {

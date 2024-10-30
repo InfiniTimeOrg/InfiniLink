@@ -39,7 +39,10 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var autoUpgrade: Result!
     @Published var lastCheck: Date!
     
-    @AppStorage("results") var releases: [Result] = []
+    @AppStorage("releases") var releases: [Result] = []
+    @AppStorage("buildArtifacts") var buildArtifacts: [Artifact] = []
+    
+    @AppStorage("githubAuthToken") var githubAuthToken: String?
     
     @Published var updateVersion: String = "0.0.0"
     @Published var updateBody: String = ""
@@ -53,6 +56,7 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var updateAvailable: Bool = false
     @Published var startTransfer: Bool = false
     @Published var loadingReleases: Bool = false
+    @Published var loadingArtifacts: Bool = false
     @Published var externalResources: Bool = false
     
     private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
@@ -74,6 +78,48 @@ class DownloadManager: NSObject, ObservableObject {
         private enum CodingKeys: String, CodingKey {
             case tag_name, body, assets
         }
+    }
+    
+    struct WorkflowRunResponse: Codable {
+        let total_count: Int
+        let workflow_runs: [WorkflowRun]
+    }
+    
+    struct WorkflowRun: Codable {
+        let id: Int
+        let name: String
+        let head_branch: String
+        let head_sha: String
+        let display_title: String
+        let run_number: Int
+        let event: String
+        let status: String
+        let conclusion: String
+        let workflow_id: Int
+        let url: String
+        let created_at: String
+        let updated_at: String
+        let run_attempt: Int
+        let run_started_at: String
+        let artifacts_url: String
+        let workflow_url: String
+    }
+    
+    struct ArtifactResponse: Codable {
+        let total_count: Int
+        let artifacts: [Artifact]
+    }
+    
+    struct Artifact: Codable {
+        let id: Int
+        let name: String
+        let size_in_bytes: String
+        let url: String
+        let archive_download_url: String
+        let expired: Bool
+        let created_at: String
+        let updated_at: String
+        let expires_at: String
     }
     
     func setupTest(forFile: String) {
@@ -105,6 +151,11 @@ class DownloadManager: NSObject, ObservableObject {
         return false
     }
     
+    func getUpdateResources() {
+        getReleases()
+        getWorkflowRuns()
+    }
+    
     func getReleases() {
         self.loadingReleases = true
         self.releases = []
@@ -127,6 +178,62 @@ class DownloadManager: NSObject, ObservableObject {
                         
                         self.updateAvailable = self.checkForUpdates(currentVersion: DeviceManager.shared.firmware)
                         self.loadingReleases = false
+                    }
+                } catch {
+                    print("Error decoding JSON")
+                }
+            }
+        }.resume()
+    }
+    
+    func getWorkflowRuns() {
+        self.loadingArtifacts = true
+        self.buildArtifacts = []
+        
+        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs") else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        let filteredRuns = result.workflow_runs.filter { $0.name == "CI" }
+                        let dispatchGroup = DispatchGroup()
+                        
+                        for run in filteredRuns {
+                            dispatchGroup.enter()
+                            self.getBuildArtifacts(for: run) { artifacts in
+                                self.buildArtifacts.append(contentsOf: artifacts)
+                                dispatchGroup.leave()
+                            }
+                        }
+                        
+                        dispatchGroup.notify(queue: .main) {
+                            self.loadingArtifacts = false
+                        }
+                    }
+                } catch {
+                    print("Error decoding JSON")
+                }
+            }
+        }.resume()
+    }
+    
+    func getBuildArtifacts(for run: WorkflowRun, completion: @escaping([Artifact]) -> Void) {
+        guard let url = URL(string: run.artifacts_url) else {
+            return
+        }
+        
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode(ArtifactResponse.self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        completion(result.artifacts)
                     }
                 } catch {
                     print("Error decoding JSON")

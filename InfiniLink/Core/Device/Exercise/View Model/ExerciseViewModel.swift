@@ -16,6 +16,7 @@ class ExerciseViewModel: ObservableObject {
     
     @Published var exerciseTime: TimeInterval = 0
     @Published var currentExercise: Exercise?
+    @Published var exercisePaused = false
     
     var appDidEnterBackgroundDate: Date?
     
@@ -49,7 +50,7 @@ class ExerciseViewModel: ObservableObject {
     @objc func applicationWillEnterForeground(_ notification: NotificationCenter) {
         guard let previousDate = appDidEnterBackgroundDate else { return }
         
-        if currentExercise != nil {
+        if currentExercise != nil && !exercisePaused {
             let calendar = Calendar.current
             let difference = calendar.dateComponents([.second], from: previousDate, to: Date())
             let seconds = difference.second!

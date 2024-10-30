@@ -25,7 +25,7 @@ struct AboutSettingsView: View {
                     }
                     AboutRowView(title: "Software Version", value: deviceManager.firmware)
                     AboutRowView(title: "Manufacturer", value: deviceManager.manufacturer)
-                    AboutRowView(title: "Model Number", value: deviceManager.modelNumber)
+                    AboutRowView(title: "Model Name", value: deviceManager.modelNumber)
                     AboutRowView(title: "UUID", value: deviceManager.bleUUID)
                 }
                 if let timeService = bleManager.currentTimeService{

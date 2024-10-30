@@ -37,12 +37,15 @@ struct GeneralSettingsView: View {
                 .disabled(bleManager.blefsTransfer == nil)
             }
             Section {
+                // TODO: implement non-dummy input form in SetUpDetailsView
+                /*
                 NavigationLink {
                     SetUpDetailsView(listOnly: true)
                         .navigationBarTitle("Health Details")
                 } label: {
                     Text("Health Details")
                 }
+                 */
                 NavigationLink {
                     GoalsSettingsView()
                 } label: {
@@ -64,16 +67,7 @@ struct GeneralSettingsView: View {
                         bleManager.startScanning()
                     }
                 } label: {
-                    Text({
-                        if bleManager.isScanning {
-                            return "Scanning..."
-                        }
-                        if bleManager.isConnectedToPinetime {
-                            return "Disconnect"
-                        } else {
-                            return "Connect"
-                        }
-                    }())
+                    Text(bleManager.isConnectedToPinetime ? "Disconnect": "Connect")
                 }
                 .disabled(bleManager.isScanning)
                 Button {
@@ -81,6 +75,7 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text("Reset")
                 }
+                .disabled(bleManager.blefsTransfer == nil)
                 .alert("Are you sure you want to reset all content and settings from \(deviceManager.name)?", isPresented: $showResetConfirmation) {
                     Button(role: .destructive) {
                         bleManager.resetDevice()

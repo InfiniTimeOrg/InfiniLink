@@ -204,6 +204,9 @@
     "Continue" : {
 
     },
+    "Continue to Update" : {
+
+    },
     "Converting..." : {
 
     },
@@ -288,6 +291,9 @@
     "Get notified when you reach your daily fitness goals." : {
 
     },
+    "GitHub Actions" : {
+
+    },
     "Goal Reached" : {
 
     },
@@ -304,9 +310,6 @@
 
     },
     "Health" : {
-
-    },
-    "Health Details" : {
 
     },
     "Heart Rate" : {
@@ -444,9 +447,6 @@
     "Reset" : {
 
     },
-    "Scanning..." : {
-
-    },
     "Screen Timeout" : {
 
     },
@@ -502,6 +502,9 @@
 
     },
     "The folder name cannot contain a period." : {
+
+    },
+    "There aren't any available cloud builds" : {
 
     },
     "There isn't any available sleep data." : {
