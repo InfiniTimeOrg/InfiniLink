@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct FileSystemToolbar: ViewModifier {
-    @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
-    @ObservedObject var bleFSHandler = BLEFSHandler.shared
+    @StateObject var fileSystemViewModel = FileSystemViewModel.shared
+    @StateObject var bleFSHandler = BLEFSHandler.shared
     
     func upload() {
         DispatchQueue.global(qos: .default).async {
@@ -97,19 +97,23 @@ struct FileSystemToolbar: ViewModifier {
                 ToolbarItemGroup(placement: .bottomBar) {
                     if fileSystemViewModel.fileSelected {
                         if fileSystemViewModel.fileUploading {
-                            ProgressView({
-                                if fileSystemViewModel.fileConverting {
-                                    return NSLocalizedString("Converting...", comment: "")
-                                } else {
-                                    if fileSystemViewModel.fileSize != 0 {
-                                        let progressPercentage = Int(Double(BLEFSHandler.shared.progress) / Double(fileSystemViewModel.fileSize) * 100)
-                                        
-                                        return NSLocalizedString("Uploading...\(progressPercentage)%", comment: "")
+                            HStack(spacing: 6) {
+                                ProgressView()
+                                Text({
+                                    if fileSystemViewModel.fileConverting {
+                                        return NSLocalizedString("Converting...", comment: "")
                                     } else {
-                                        return NSLocalizedString("Uploading...", comment: "")
+                                        if fileSystemViewModel.fileSize != 0 {
+                                            let progressPercentage = Int(Double(BLEFSHandler.shared.progress) / Double(fileSystemViewModel.fileSize) * 100)
+                                            
+                                            return NSLocalizedString("Uploading...\(progressPercentage)%", comment: "")
+                                        } else {
+                                            return NSLocalizedString("Uploading...", comment: "")
+                                        }
                                     }
-                                }
-                            }())
+                                }())
+                                .foregroundStyle(.gray)
+                            }
                         } else {
                             Button {
                                 upload()
@@ -118,7 +122,6 @@ struct FileSystemToolbar: ViewModifier {
                                 
                                 Text("Upload \(count) File\(count == 1 ? "" : "s")")
                             }
-                            .padding(.top, 12)
                         }
                     }
                 }

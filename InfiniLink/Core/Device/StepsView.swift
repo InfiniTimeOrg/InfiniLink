@@ -131,20 +131,13 @@ struct StepsView: View {
                     }
                     Section {
                         Picker("Range", selection: $dataSelection) {
-                            ForEach(0...3, id: \.self) { index in
-                                Text({
-                                    switch index {
-                                    case 0: return "W"  // Weekly
-                                    case 1: return "M"  // Monthly
-                                    case 2: return "6M" // 6 Months
-                                    case 3: return "Y"  // Yearly
-                                    default: return "-"
-                                    }
-                                }())
-                                .tag(index)
-                            }
+                            Text("W").tag(0)  // Weekly
+                            Text("M").tag(1)  // Monthly
+                            Text("6M").tag(2) // 6 Months
+                            Text("Y").tag(3)  // Yearly
                         }
                         .pickerStyle(.segmented)
+                        .onChange(of: dataSelection) { _ in setChartSelectionToAvg() }
                     }
                     Section {
                         VStack(spacing: 10) {

@@ -22,7 +22,7 @@ struct RecoveryModeView: View {
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 75, height: 75)
                 Group {
-                    Text(deviceManager.getName(for: bleManager.pairedDeviceID ?? "")) + Text(" Recovery")
+                    Text("InfiniTime") + Text(" Recovery")
                         .foregroundColor(.red)
                 }
                 .font(.system(size: 25).weight(.bold))

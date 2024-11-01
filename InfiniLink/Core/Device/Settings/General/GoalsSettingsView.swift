@@ -51,12 +51,15 @@ struct GoalsSettingsView: View {
     var body: some View {
         List {
             Section(footer: Text("Set the daily goals for your fitness goals.")) {
+                /*
+                 TODO: properly implement settings writing
                 Picker("Steps", selection: $stepsGoal) {
                     ForEach(StepsGoal.allCases, id: \.self) { goal in
                         Text("\(goal.rawValue)").tag(goal.rawValue)
                     }
                 }
                 .disabled(bleManager.blefsTransfer == nil) // Explain to user why disabled?
+                 */
                 Picker("Calories", selection: $caloriesGoal) {
                     ForEach(1...30, id: \.self) { index in
                         Text("\(index * 100)").tag(index * 100)

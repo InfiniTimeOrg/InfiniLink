@@ -34,7 +34,7 @@ extension Array: @retroactive RawRepresentable where Element: Codable {
 class DownloadManager: NSObject, ObservableObject {
     static var shared = DownloadManager()
     
-    let dfuUpdater = DFUUpdater.shared
+    lazy var dfuUpdater = DFUUpdater.shared
     
     @Published var tasks: [URLSessionTask] = []
     @Published var downloading = false
@@ -227,7 +227,7 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getBuildArtifacts(for run: WorkflowRun, completion: @escaping([Artifact]) -> Void) {
-        guard let url = URL(string: run.artifacts_url) else {
+        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs/\(run.id)/artifacts") else {
             return
         }
         

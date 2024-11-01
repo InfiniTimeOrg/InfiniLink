@@ -87,8 +87,14 @@ struct SoftwareUpdateView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(height: dfuUpdater.local ? 50 : 300)
-                    if !bleManager.hasLoadedCharacteristics {
-                        Text("\(deviceManager.name) needs to be connected to update its software.")
+                    if !bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 15 {
+                        Text({
+                            if !bleManager.hasLoadedCharacteristics {
+                                return "\(deviceManager.name) needs to be connected to update its software."
+                            } else {
+                                return "\(deviceManager.name)'s battery must be charged to at least 15% to update its software."
+                            }
+                        }())
                             .foregroundStyle(.gray)
                             .font(.system(size: 14).weight(.semibold))
                             .multilineTextAlignment(.center)
@@ -179,6 +185,7 @@ struct OtherUpdateVersions: View {
                         
                         guard fileUrl.startAccessingSecurityScopedResource() else { return }
                         
+                        dfuUpdater.local = true
                         dfuUpdater.firmwareSelected = true
                         dfuUpdater.resourceFilename = fileUrl.lastPathComponent
                         dfuUpdater.firmwareFilename = fileUrl.lastPathComponent

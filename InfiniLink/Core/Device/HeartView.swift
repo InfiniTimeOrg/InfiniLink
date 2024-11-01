@@ -8,7 +8,6 @@
 import SwiftUI
 import Accelerate
 import CoreData
-import Charts
 
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -207,50 +206,50 @@ struct HeartView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .offset(x: offset)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        Chart {
-                            ForEach(heartRateValuesForSelection(), id: \.0) { (label, rate) in
-                                PointMark(
-                                    x: .value("Label", label),
-                                    y: .value("Range", rate)
-                                )
-                                .foregroundStyle(Color.red)
-                            }
-                        }
-                        .chartOverlay { overlayProxy in
-                            GeometryReader { geoProxy in
-                                Rectangle()
-                                    .foregroundStyle(Material.regular)
-                                    .frame(width: 3, height: geoProxy.size.height * 0.95)
-                                    .offset(x: offset)
-                                    .opacity(showSelectionBar ? 1 : 0)
-                                Rectangle().fill(.clear).contentShape(Rectangle())
-                                    .gesture(DragGesture()
-                                        .onChanged { value in
-                                            if !showSelectionBar {
-                                                showSelectionBar = true
-                                            }
-                                            
-                                            let minX = geoProxy[overlayProxy.plotAreaFrame].minX
-                                            let maxX = geoProxy[overlayProxy.plotAreaFrame].maxX
-                                            let origin = geoProxy[overlayProxy.plotAreaFrame].origin
-                                            let location = CGPoint(x: value.location.x - origin.x, y: 0)
-                                            
-                                            offset = min(max(location.x, minX), maxX)
-                                            
-                                            if let (day, heartVal) = overlayProxy.value(at: location, as: (String, Double).self) {
-                                                selectedType = "Range"
-                                                selectedDay = day
-                                                selectedHeartRate = heartVal
-                                            }
-                                        }
-                                        .onEnded { _ in
-                                            showSelectionBar = false
-                                            setChartSelectionToAvg()
-                                        }
-                                    )
-                            }
-                        }
-                        .frame(height: geo.size.width / 1.8)
+//                        Chart {
+//                            ForEach(heartRateValuesForSelection(), id: \.0) { (label, rate) in
+//                                PointMark(
+//                                    x: .value("Label", label),
+//                                    y: .value("Range", rate)
+//                                )
+//                                .foregroundStyle(Color.red)
+//                            }
+//                        }
+//                        .chartOverlay { overlayProxy in
+//                            GeometryReader { geoProxy in
+//                                Rectangle()
+//                                    .foregroundStyle(Material.regular)
+//                                    .frame(width: 3, height: geoProxy.size.height * 0.95)
+//                                    .offset(x: offset)
+//                                    .opacity(showSelectionBar ? 1 : 0)
+//                                Rectangle().fill(.clear).contentShape(Rectangle())
+//                                    .gesture(DragGesture()
+//                                        .onChanged { value in
+//                                            if !showSelectionBar {
+//                                                showSelectionBar = true
+//                                            }
+//                                            
+//                                            let minX = geoProxy[overlayProxy.plotAreaFrame].minX
+//                                            let maxX = geoProxy[overlayProxy.plotAreaFrame].maxX
+//                                            let origin = geoProxy[overlayProxy.plotAreaFrame].origin
+//                                            let location = CGPoint(x: value.location.x - origin.x, y: 0)
+//                                            
+//                                            offset = min(max(location.x, minX), maxX)
+//                                            
+//                                            if let (day, heartVal) = overlayProxy.value(at: location, as: (String, Double).self) {
+//                                                selectedType = "Range"
+//                                                selectedDay = day
+//                                                selectedHeartRate = heartVal
+//                                            }
+//                                        }
+//                                        .onEnded { _ in
+//                                            showSelectionBar = false
+//                                            setChartSelectionToAvg()
+//                                        }
+//                                    )
+//                            }
+//                        }
+//                        .frame(height: geo.size.width / 1.8)
                     }
                 }
                 .padding()

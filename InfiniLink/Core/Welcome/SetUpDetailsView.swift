@@ -25,6 +25,17 @@ struct SetUpDetailsView: View {
     }
     
     var body: some View {
+        if listOnly {
+            content
+        } else {
+            NavigationView {
+                content
+            }
+            .navigationViewStyle(.stack)
+        }
+    }
+    
+    var content: some View {
         Form {
             if !listOnly {
                 VStack(alignment: .center, spacing: 10) {
@@ -87,6 +98,11 @@ struct SetUpDetailsView: View {
             }
         }
         .interactiveDismissDisabled()
+        .toolbar {
+            Button("Skip") {
+                isNavActive = true
+            }
+        }
     }
 }
 

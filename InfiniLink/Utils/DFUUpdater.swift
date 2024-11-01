@@ -12,7 +12,8 @@ import SwiftUI
 class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
 	static let shared = DFUUpdater()
 	
-	var bleManager: BLEManager = BLEManager.shared
+    var bleManager = BLEManager.shared
+	var downloadManager = DownloadManager.shared
 	var dfuController: DFUServiceController!
 	
 	@Published var dfuState: String = ""
@@ -75,7 +76,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             }
         }
         
-        if resourceURL != nil {
+        if resourceURL != nil && !local {
             isUpdatingResources = true
             dfuState = "Updating resources"
             
@@ -108,6 +109,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             firmwareFilename = ""
             resourceFilename = ""
             firmwareSelected = false
+            
+            downloadManager.updateStarted = false
 		}
         
         dfuController = nil

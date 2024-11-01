@@ -43,9 +43,6 @@
     "%@ needs to be connected to update its software." : {
 
     },
-    "%@ steps" : {
-
-    },
     "%@:%@:%@" : {
       "localizations" : {
         "en" : {
@@ -79,10 +76,10 @@
         }
       }
     },
-    "%@%%" : {
+    "%@'s battery must be charged to at least 15%% to update its software." : {
 
     },
-    "%lf" : {
+    "%@%%" : {
 
     },
     "%lld" : {
@@ -393,9 +390,6 @@
     "No Exercises" : {
 
     },
-    "Not Playing" : {
-
-    },
     "Notifications" : {
 
     },
@@ -403,9 +397,6 @@
 
     },
     "Now" : {
-
-    },
-    "Open Settings..." : {
 
     },
     "Optional" : {
@@ -522,9 +513,6 @@
     "To accurately measure calories and distance, you'll need to enter some basic details." : {
 
     },
-    "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music." : {
-
-    },
     "Unpair" : {
 
     },
@@ -578,9 +566,6 @@
 
     },
     "Water Reminder" : {
-
-    },
-    "We need access to your Music Library." : {
 
     },
     "Weather" : {
