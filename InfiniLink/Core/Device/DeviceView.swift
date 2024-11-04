@@ -41,7 +41,7 @@ struct DeviceView: View {
             if downloadManager.updateStarted {
                 CurrentUpdateView()
             } else {
-                if let first = deviceManager.firmware.components(separatedBy: ".").first, first == "0" {
+                if bleManager.isDeviceInRecoveryMode {
                     RecoveryModeView()
                 } else {
                     content

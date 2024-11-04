@@ -83,6 +83,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var isHeartRateBeingRead: Bool {
         return heartRate != 0
     }
+    var isDeviceInRecoveryMode: Bool {
+        let first = deviceManager.firmware.components(separatedBy: ".").first
+        
+        return first == "0"
+    }
     
     override init() {
         super.init()

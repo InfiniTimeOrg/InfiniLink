@@ -159,6 +159,7 @@ struct OtherUpdateVersions: View {
     
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     func fileSize(from fileUrl: URL) -> Int {
         do {
@@ -203,30 +204,32 @@ struct OtherUpdateVersions: View {
                         print(error.localizedDescription)
                     }
                 }
-                Button {
-                    showResourcePickerSheet = true
-                } label: {
-                    Text("Update External Resources")
-                }
-                .fileImporter(isPresented: $showResourcePickerSheet, allowedContentTypes: [.zip]) { result in
-                    do {
-                        let fileUrl = try result.get()
-                        
-                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                        
-                        dfuUpdater.firmwareSelected = true
-                        dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                        dfuUpdater.resourceURL = fileUrl.absoluteURL
-                        downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
-                        downloadManager.updateSize = fileSize(from: fileUrl)
-                        
-                        downloadManager.externalResources = true
-                        
-                        fileUrl.stopAccessingSecurityScopedResource()
-                        
-                        dismiss()
-                    } catch {
-                        print(error.localizedDescription)
+                if !bleManager.isDeviceInRecoveryMode {
+                    Button {
+                        showResourcePickerSheet = true
+                    } label: {
+                        Text("Update External Resources")
+                    }
+                    .fileImporter(isPresented: $showResourcePickerSheet, allowedContentTypes: [.zip]) { result in
+                        do {
+                            let fileUrl = try result.get()
+                            
+                            guard fileUrl.startAccessingSecurityScopedResource() else { return }
+                            
+                            dfuUpdater.firmwareSelected = true
+                            dfuUpdater.resourceFilename = fileUrl.lastPathComponent
+                            dfuUpdater.resourceURL = fileUrl.absoluteURL
+                            downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
+                            downloadManager.updateSize = fileSize(from: fileUrl)
+                            
+                            downloadManager.externalResources = true
+                            
+                            fileUrl.stopAccessingSecurityScopedResource()
+                            
+                            dismiss()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     }
                 }
             }
