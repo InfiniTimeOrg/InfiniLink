@@ -36,7 +36,6 @@ struct WeatherSettingsView: View {
                     Button("Always Allow Access") {
                         UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
                     }
-                    .foregroundStyle(Color.accentColor)
                 }
             }
         }

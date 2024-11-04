@@ -170,11 +170,6 @@ struct DeviceView: View {
                          ListRowView(title: "Alarms", icon: "alarm.fill")
                          }
                          */
-                        NavigationLink {
-                            RemindersView()
-                        } label: {
-                            ListRowView(title: "Reminders", icon: "checklist")
-                        }
                     }
                 }
             }
@@ -199,7 +194,8 @@ struct DeviceView: View {
                 }
                 
                 notificationManager.setWaterRemindersPerDay()
-                remindersManager.requestReminderAccess()
+                remindersManager.requestAccess()
+                remindersManager.fetchAllItems()
                 downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
             }
             .toolbar {

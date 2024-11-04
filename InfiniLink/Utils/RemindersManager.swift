@@ -12,53 +12,81 @@ class RemindersManager: ObservableObject {
     static let shared = RemindersManager()
     
     @Published var reminders = [EKReminder]()
-    @Published var notifiedReminders = [String: Date]()
-    @Published var isAuthorized = false
+    @Published var events = [EKEvent]()
+    @Published var notifiedItems = [String: Date]()
+    @Published var areEventsAuthorized = false
+    @Published var areRemindersAuthorized = false
     
     var eventStore = EKEventStore()
-    
     var timer: Timer?
     
     @AppStorage("enableReminders") var enableReminders = true
+    @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     
-    func checkForDueReminders() {
+    func checkForDueItems() {
+        let currentDate = Date()
+        
         for reminder in reminders {
-            let reminderId = reminder.calendarItemIdentifier
-            guard let dueDate = reminder.dueDateComponents?.date, !reminder.isCompleted else {
-                continue
-            }
-            
-            if let lastNotifiedDate = notifiedReminders[reminderId] {
-                if lastNotifiedDate != dueDate {
-                    // The user has changed the due date, so notify again
-                    notifiedReminders.removeValue(forKey: reminderId)
-                }
-            }
-            
-            if !notifiedReminders.keys.contains(reminderId) {
-                let calendar = Calendar.current
-                
-                let dueDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: dueDate)
-                let currentDateComponents = calendar.dateComponents([.year, .month, .day, .hour, .minute], from: Date())
-                
-                if dueDateComponents == currentDateComponents {
-                    NotificationManager.shared.sendReminderDueNotification(reminder)
-                    
-                    notifiedReminders[reminderId] = dueDate
-                }
+            checkDueReminder(reminder, currentDate: currentDate)
+        }
+        for event in events {
+            checkDueEvent(event, currentDate: currentDate)
+        }
+    }
+    
+    private func checkDueReminder(_ reminder: EKReminder, currentDate: Date) {
+        let reminderId = reminder.calendarItemIdentifier
+        guard let dueDate = reminder.dueDateComponents?.date, !reminder.isCompleted else { return }
+        
+        if let lastNotifiedDate = notifiedItems[reminderId], lastNotifiedDate != dueDate {
+            notifiedItems.removeValue(forKey: reminderId)
+        }
+        
+        if !notifiedItems.keys.contains(reminderId), Calendar.current.isDate(dueDate, equalTo: currentDate, toGranularity: .minute) {
+            NotificationManager.shared.sendReminderDueNotification(reminder)
+            notifiedItems[reminderId] = dueDate
+        }
+    }
+    
+    private func checkDueEvent(_ event: EKEvent, currentDate: Date) {
+        let eventId = event.calendarItemIdentifier
+        guard !event.isAllDay, let eventStartDate = event.startDate, eventStartDate >= currentDate else { return }
+        
+        if let lastNotifiedDate = notifiedItems[eventId], lastNotifiedDate != eventStartDate {
+            notifiedItems.removeValue(forKey: eventId)
+        }
+        
+        if !notifiedItems.keys.contains(eventId), Calendar.current.isDate(eventStartDate, equalTo: currentDate, toGranularity: .minute) {
+            NotificationManager.shared.sendEventDueNotification(event)
+            notifiedItems[eventId] = eventStartDate
+        }
+    }
+    
+    func fetchAllItems() {
+        if enableReminders {
+            fetchReminders()
+        }
+        if enableCalendarNotifications {
+            fetchEvents()
+        }
+    }
+    
+    private func fetchReminders() {
+        eventStore.fetchReminders(matching: eventStore.predicateForReminders(in: nil)) { reminders in
+            guard let reminders = reminders else { return }
+            DispatchQueue.main.async {
+                self.reminders = reminders
             }
         }
     }
     
-    func fetchAllReminders() {
-        if enableReminders {
-            eventStore.fetchReminders(matching: eventStore.predicateForReminders(in: nil)) { reminders in
-                guard let reminders = reminders else { return }
-                
-                DispatchQueue.main.async {
-                    self.reminders = reminders
-                }
-            }
+    private func fetchEvents() {
+        let startDate = Date()
+        let endDate = Calendar.current.date(byAdding: .day, value: 7, to: startDate) ?? startDate
+        let predicate = eventStore.predicateForEvents(withStart: startDate, end: endDate, calendars: nil)
+        
+        DispatchQueue.main.async {
+            self.events = self.eventStore.events(matching: predicate)
         }
     }
     
@@ -68,10 +96,28 @@ class RemindersManager: ObservableObject {
                 print(error.localizedDescription)
             } else if granted {
                 DispatchQueue.main.async {
-                    self.isAuthorized = true
-                    self.fetchAllReminders()
+                    self.areRemindersAuthorized = true
+                    self.fetchAllItems()
                 }
             }
         }
+    }
+    
+    func requestCalendarAccess() {
+        eventStore.requestAccess(to: .event) { granted, error in
+            if let error = error {
+                print(error.localizedDescription)
+            } else if granted {
+                DispatchQueue.main.async {
+                    self.areEventsAuthorized = true
+                    self.fetchAllItems()
+                }
+            }
+        }
+    }
+    
+    func requestAccess() {
+        requestReminderAccess()
+        requestCalendarAccess()
     }
 }

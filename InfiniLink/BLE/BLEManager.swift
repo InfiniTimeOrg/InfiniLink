@@ -14,7 +14,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     lazy var deviceManager = DeviceManager.shared
     
-    var myCentral: CBCentralManager!
+    var central: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
     var currentTimeService: CBCharacteristic!
     var notifyCharacteristic: CBCharacteristic!
@@ -86,13 +86,15 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     override init() {
         super.init()
-        myCentral = CBCentralManager(delegate: self, queue: nil)
+        self.central = CBCentralManager(delegate: self, queue: nil)
+        
+        self.startScanning()
     }
     
     func startScanning() {
-        guard myCentral.state == .poweredOn else { return }
+        guard central.state == .poweredOn else { return }
         
-        myCentral.scanForPeripherals(withServices: nil, options: nil)
+        central.scanForPeripherals(withServices: nil, options: nil)
         isScanning = true
         newPeripherals = []
     }
@@ -100,7 +102,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func stopScanning() {
         guard isScanning else { return }
         
-        myCentral.stopScan()
+        central.stopScan()
         isScanning = false
     }
     
@@ -118,7 +120,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             
             infiniTime = peripheral
             infiniTime?.delegate = self
-            myCentral.connect(peripheral, options: nil)
+            central.connect(peripheral, options: nil)
             
             completion()
         }
@@ -151,7 +153,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func disconnect() {
         if let infiniTime = infiniTime {
-            self.myCentral.cancelPeripheralConnection(infiniTime)
+            self.central.cancelPeripheralConnection(infiniTime)
             self.infiniTime = nil
             self.blefsTransfer = nil
             self.currentTimeService = nil

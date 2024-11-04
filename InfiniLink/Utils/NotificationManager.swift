@@ -175,4 +175,10 @@ extension NotificationManager {
         
         self.bleWriteManager.sendNotification(notif)
     }
+    
+    func sendEventDueNotification(_ event: EKEvent) {
+        let notif = AppNotification(title: NSLocalizedString("Calender", comment: ""), subtitle: event.title + NSLocalizedString(" is due", comment: ""))
+        
+        self.bleWriteManager.sendNotification(notif)
+    }
 }

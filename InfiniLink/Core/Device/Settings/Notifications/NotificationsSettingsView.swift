@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import EventKit
 
 struct NotificationsSettingsView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -16,14 +17,29 @@ struct NotificationsSettingsView: View {
     @AppStorage("standUpReminder") var standUpReminder = true
     @AppStorage("watchNotifications") var watchNotifications = true
     @AppStorage("enableReminders") var enableReminders = true
+    @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
     @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
     
+    @State private var reminderAuthStatus = EKEventStore.authorizationStatus(for: .reminder)
+    @State private var eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
+    
     @State private var showSendNotificationSheet = false
     
     let bleWriteManager = BLEWriteManager()
+    
+    func authDenied(_ status: EKAuthorizationStatus) -> Bool {
+        switch status {
+        case .authorized, .fullAccess:
+            return true
+        case .denied, .notDetermined, .restricted, .writeOnly:
+            return false
+        @unknown default:
+            return false
+        }
+    }
     
     var body: some View {
         List {
@@ -42,17 +58,25 @@ struct NotificationsSettingsView: View {
                     }
                 }
                 /*
-                Section(footer: Text("Have your watch remind you when to stand up if you've been sedentary for too long.")) {
-                    Toggle("Stand-up Reminder", isOn: $standUpReminder)
-                }
-                */
+                 Section(footer: Text("Have your watch remind you when to stand up if you've been sedentary for too long.")) {
+                 Toggle("Stand-up Reminder", isOn: $standUpReminder)
+                 }
+                 */
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                     Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
                     Toggle("Exercise Time", isOn: $remindOnExerciseTimeGoalCompletion)
                 }
-                Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders are due.")) {
+                Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
                     Toggle("Reminder Notifications", isOn: $enableReminders)
+                    Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
+                }
+                if authDenied(reminderAuthStatus) || authDenied(eventAuthStatus) {
+                    Section(footer: Text("To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events.")) {
+                        Button("Allow Event Access") {
+                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
+                        }
+                    }
                 }
                 Section {
                     Button("Send Notification") {
@@ -71,6 +95,10 @@ struct NotificationsSettingsView: View {
         .navigationTitle("Notifications")
         .onChange(of: waterReminderAmount) { _ in
             notificationManager.setWaterRemindersPerDay()
+            
+            // For when view foregrounds
+            reminderAuthStatus = EKEventStore.authorizationStatus(for: .reminder)
+            eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
         }
     }
 }

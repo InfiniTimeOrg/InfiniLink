@@ -89,7 +89,7 @@ struct BLEWriteManager {
         bytes.append(icon)
         
         let writeData = Data(bytes: bytes as [UInt8], count: 49)
-        if bleManager.weatherCharacteristic != nil {
+        if bleManager.weatherCharacteristic != nil && bleManager.infiniTime != nil {
             bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
         }
     }
@@ -118,7 +118,7 @@ struct BLEWriteManager {
         
         let writeData = Data(bytes: bytes as [UInt8], count: 36)
         
-        if bleManager.weatherCharacteristic != nil {
+        if bleManager.weatherCharacteristic != nil && bleManager.infiniTime != nil {
             bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
         }
     }

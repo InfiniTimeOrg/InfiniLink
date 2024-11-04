@@ -17,7 +17,7 @@ struct InfiniLink: App {
         HealthKitManager.shared.requestAuthorization()
         
         NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: nil, queue: .main) { _ in
-            RemindersManager.shared.fetchAllReminders()
+            RemindersManager.shared.fetchAllItems()
         }
     }
     

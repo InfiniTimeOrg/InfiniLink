@@ -118,7 +118,7 @@ struct BLEUpdatedCharacteristicHandler {
             
             // Only update every five seconds
             if timeDifference > 5 {
-                remindersManager.checkForDueReminders()
+                remindersManager.checkForDueItems()
                 notificationManager.checkAndNotifyForWaterReminders()
 
                 // TODO: check to see if better than using onChange in ContentView

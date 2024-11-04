@@ -129,6 +129,9 @@
     "All Exercises" : {
 
     },
+    "Allow Event Access" : {
+
+    },
     "Allow Music Control" : {
 
     },
@@ -172,6 +175,12 @@
 
     },
     "Brightness Level" : {
+
+    },
+    "Calendar Notifications" : {
+
+    },
+    "Calender" : {
 
     },
     "Calories" : {
@@ -417,7 +426,7 @@
     "Receive a reminder to drink water for the set amount of times a day." : {
 
     },
-    "Receive notifications on your watch when reminders are due." : {
+    "Receive notifications on your watch when reminders and calendar events are due." : {
 
     },
     "Refresh" : {
@@ -474,6 +483,9 @@
     "Several days ago" : {
 
     },
+    "Skip" : {
+
+    },
     "Sleep" : {
 
     },
@@ -511,6 +523,9 @@
 
     },
     "To accurately measure calories and distance, you'll need to enter some basic details." : {
+
+    },
+    "To receive reminder notifications, you'll need to give InfiniLink read access to events." : {
 
     },
     "Unpair" : {
@@ -581,9 +596,6 @@
 
     },
     "You can start one by choosing one from the list below." : {
-
-    },
-    "You don't have any upcoming reminders. You can set them in the Reminders app." : {
 
     },
     "You've reached your calorie goal" : {

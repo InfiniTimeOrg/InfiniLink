@@ -20,7 +20,6 @@
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
-		E059999E2CB2E56A00D64E0B /* RemindersView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999D2CB2E56A00D64E0B /* RemindersView.swift */; };
 		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
 		E05999AD2CB2ED7100D64E0B /* open_sans_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */; };
 		E05999AE2CB2ED7100D64E0B /* JetBrainsMono-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A42CB2ED7100D64E0B /* JetBrainsMono-Light.ttf */; };
@@ -135,7 +134,6 @@
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		E059999B2CB2E56300D64E0B /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
-		E059999D2CB2E56A00D64E0B /* RemindersView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersView.swift; sourceTree = "<group>"; };
 		E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
 		E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
 		E05999A22CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Bold.ttf"; sourceTree = "<group>"; };
@@ -333,7 +331,6 @@
 			isa = PBXGroup;
 			children = (
 				E059999B2CB2E56300D64E0B /* AlarmView.swift */,
-				E059999D2CB2E56A00D64E0B /* RemindersView.swift */,
 			);
 			path = Apps;
 			sourceTree = "<group>";
@@ -414,6 +411,7 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C0892CB1E4BF0042A12D /* General */,
+				E03C30B32CC7030A00DD8363 /* Notifications */,
 				E08F2F312CC899D00094217A /* Weather */,
 				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
 				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
@@ -450,7 +448,6 @@
 			isa = PBXGroup;
 			children = (
 				E02C62102CD05D8E00C4D19B /* Software Update */,
-				E03C30B32CC7030A00DD8363 /* Notifications */,
 				E0599A052CB4C75500D64E0B /* Filesystem */,
 				E05999B62CB2FC6400D64E0B /* About */,
 				E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */,
@@ -764,7 +761,6 @@
 				E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */,
 				E0A7C0A72CB257F50042A12D /* GoalsSettingsView.swift in Sources */,
 				E0B85D1B2CB6243800D85122 /* ExerciseViewModel.swift in Sources */,
-				E059999E2CB2E56A00D64E0B /* RemindersView.swift in Sources */,
 				E0599A002CB46EB200D64E0B /* StepCountManager.swift in Sources */,
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
@@ -984,8 +980,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1016,8 +1012,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
-				SUPPORTS_MACCATALYST = YES;
-				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
