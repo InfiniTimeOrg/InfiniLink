@@ -138,8 +138,6 @@ class BLEFSHandler: ObservableObject {
                     writeFileFS.group.notify(queue: .main) {
                         if resources.resources.count < fileIndex {
                             self.dfuUpdater.dfuState = "Starting file \(fileIndex + 1)"
-                        } else {
-                            self.dfuUpdater.dfuState = "Completing uploads"
                         }
                     }
                 }
@@ -150,6 +148,8 @@ class BLEFSHandler: ObservableObject {
                         self.dfuUpdater.firmwareSelected = false
                         self.dfuUpdater.resourceFilename = ""
                     }
+                    
+                    self.dfuUpdater.dfuState = "Completing uploads"
                     
                     completion()
                 }

@@ -155,7 +155,6 @@ struct OtherUpdateVersions: View {
     
     @State private var showLocalFileSheet = false
     @State private var showResourcePickerSheet = false
-    @State private var showGithubAuthView = false
     
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
@@ -269,11 +268,7 @@ struct OtherUpdateVersions: View {
                 } else {
                     ForEach(downloadManager.buildArtifacts, id: \.id) { artifact in
                         Button {
-                            if downloadManager.githubAuthToken == nil {
-                                showGithubAuthView = true
-                            } else {
-                                // TODO: download and install firmware
-                            }
+                            // TODO: download and install firmware
                         } label: {
                             Text(artifact.name)
                                 .foregroundStyle(Color.primary)
@@ -290,9 +285,6 @@ struct OtherUpdateVersions: View {
             }
         }
         .navigationTitle("Other Versions")
-        .sheet(isPresented: $showGithubAuthView) {
-            GithubAuthView()
-        }
         .toolbar {
             Button {
                 downloadManager.getUpdateResources()

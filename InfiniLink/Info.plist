@@ -32,6 +32,8 @@
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>This app needs access to your calendars to receive event reminders on your watch.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string></string>
 	<key>NSHealthUpdateUsageDescription</key>
