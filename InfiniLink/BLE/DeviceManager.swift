@@ -36,7 +36,7 @@ class DeviceManager: ObservableObject {
         return bleManager.pairedDevice?.serial ?? ""
     }
     var firmware: String {
-        return bleManager.pairedDevice?.firmware ?? ""
+        return bleManager.pairedDevice?.firmware ?? "0.0.0"
     }
     var hardwareRevision: String {
         return bleManager.pairedDevice?.hardwareRevision ?? ""
