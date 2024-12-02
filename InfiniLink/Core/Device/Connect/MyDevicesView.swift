@@ -29,6 +29,13 @@ struct MyDevicesView: View {
                         }
                         .disabled(bleManager.pairedDeviceID ?? "" == watch.uuid ?? "")
                     }
+                    .onDelete(perform: { indexSet in
+                        let watches = indexSet.map { deviceManager.watches[$0] }
+                        
+                        for watch in watches {
+                            bleManager.unpair(device: watch)
+                        }
+                    })
                 }
                 Section {
                     Button {

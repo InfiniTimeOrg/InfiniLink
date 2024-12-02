@@ -131,9 +131,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
     }
     
-    func removeDevice() {
-        deviceManager.removeDevice(pairedDevice)
-        unpair()
+    func removeDevice(device: Device? = nil) {
+        deviceManager.removeDevice(device ?? pairedDevice)
+        unpair(device: device)
     }
     
     func resetDevice() {
@@ -141,19 +141,23 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         deviceManager.settings = Settings()
     }
     
-    func unpair() {
-        disconnect()
+    func unpair(device: Device? = nil) {
         if let pairedDevice {
-            deviceManager.removeDevice(pairedDevice)
+            deviceManager.removeDevice(device ?? pairedDevice)
         }
         deviceManager.fetchAllDevices()
-        if let first = deviceManager.watches.first, deviceManager.watches.count > 1 {
+        
+        if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
             pairedDeviceID = first.uuid
             pairedDevice = deviceManager.fetchDevice()
         } else {
             pairedDeviceID = nil
         }
-        startScanning()
+        
+        if device == nil {
+            disconnect()
+            startScanning()
+        }
     }
     
     func disconnect() {
