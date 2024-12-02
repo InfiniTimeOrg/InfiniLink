@@ -146,7 +146,7 @@ struct StepsView: View {
                                     .foregroundColor(Color(.darkGray))
                                     .font(.caption.weight(.semibold))
                                 VStack(alignment: .leading, spacing: 1) {
-                                    Text("\(selectedSteps) steps")
+                                    Text("\(selectedSteps) step\(selectedSteps == 1 ? "" : "s")")
                                         .font(.title3.weight(.bold))
                                     Text(selectedDay)
                                         .foregroundColor(.gray)

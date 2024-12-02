@@ -52,30 +52,30 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         }
         url.stopAccessingSecurityScopedResource()
     }
-	
-	func downloadTransfer() {
-        func updateFirmware() {
-            guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
-                print("Error loading firmware")
-                return
-            }
-            
-            self.isUpdating = true
-            
-            let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
-            
-            // Optional:
-            // initiator.forceDfu = true/false // default false
-            // initiator.packetReceiptNotificationParameter = N // default is 12
-            initiator.logger = self // - to get log info
-            initiator.delegate = self // - to be informed about current state and errors
-            initiator.progressDelegate = self // - to show progress bar
-            // initiator.peripheralSelector = ... // the default selector is used
-            if bleManager.infiniTime != nil {
-                dfuController = initiator.start(target: bleManager.infiniTime)
-            }
+    
+    func updateFirmware() {
+        guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
+            print("Error loading firmware")
+            return
         }
         
+        self.isUpdating = true
+        
+        let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
+        
+        // Optional:
+        // initiator.forceDfu = true/false // default false
+        initiator.packetReceiptNotificationParameter = 20
+        initiator.logger = self // - to get log info
+        initiator.delegate = self // - to be informed about current state and errors
+        initiator.progressDelegate = self // - to show progress bar
+        // initiator.peripheralSelector = ... // the default selector is used
+        if bleManager.infiniTime != nil {
+            dfuController = initiator.start(target: bleManager.infiniTime)
+        }
+    }
+	
+	func downloadTransfer() {
         if resourceURL != nil && !local {
             isUpdatingResources = true
             dfuState = "Updating resources"
@@ -126,8 +126,6 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
-		let level = level.name()
-		
-        print("DFU log level: ", level)
+        print("DFU log level: \(level.name()), message: \(message)")
 	}
 }

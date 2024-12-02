@@ -24,13 +24,10 @@ struct BLEUpdatedCharacteristicHandler {
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
-    @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
     
-    @AppStorage("caloriesGoal") var caloriesGoal = 400
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 86400
-    @AppStorage("lastTimeCaloriesGoalNotified") var lastTimeCaloriesGoalNotified: Double = 86400
     
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
@@ -124,7 +121,6 @@ struct BLEUpdatedCharacteristicHandler {
                 // TODO: check to see if better than using onChange in ContentView
                 
                 checkForCompletedStepGoal()
-                checkForCompletedCaloriesGoal()
                 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
@@ -133,17 +129,6 @@ struct BLEUpdatedCharacteristicHandler {
         }
     }
     
-    private func checkForCompletedCaloriesGoal() {
-        if Int(fitnessCalculator.calculateCaloriesBurned(steps: bleManager.stepCount)) >= caloriesGoal && remindOnCaloriesGoalCompletion {
-            let currentTime = Date().timeIntervalSince1970
-            let twentyFourHours: TimeInterval = 86400
-            
-            if (currentTime - lastTimeCaloriesGoalNotified) >= twentyFourHours {
-                notificationManager.sendCaloriesGoalReachedNotification()
-                lastTimeCaloriesGoalNotified = currentTime
-            }
-        }
-    }
     private func checkForCompletedStepGoal() {
         if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && remindOnStepGoalCompletion {
             let currentTime = Date().timeIntervalSince1970

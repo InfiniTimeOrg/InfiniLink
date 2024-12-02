@@ -29,13 +29,13 @@ class ExerciseViewModel: ObservableObject {
         Exercise(id: "table-tennis", name: "Table Tennis", icon: "figure.table.tennis", components: [.heart]),
         Exercise(id: "tennis", name: "Tennis", icon: "figure.tennis", components: [.heart]),
         Exercise(id: "soccer", name: "Soccer", icon: "figure.indoor.soccer", components: [.heart, .steps]),
-        Exercise(id: "basketball", name: "Basketball", icon: "figure.basketball", components: [.heart]),
-        Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart]),
+        Exercise(id: "basketball", name: "Basketball", icon: "figure.basketball", components: [.heart, .steps]),
+        Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart, .steps]),
         Exercise(id: "boxing", name: "Boxing", icon: "figure.boxing", components: [.heart]),
         Exercise(id: "skiing", name: "Skiing", icon: "figure.skiing.downhill", components: [.heart]),
-        Exercise(id: "bowling", name: "Bowling", icon: "figure.bowling", components: [.heart]),
-        Exercise(id: "figure.golf", name: "Golf", icon: "figure.golf", components: [.heart]),
-        Exercise(id: "hockey", name: "Hockey", icon: "figure.hockey", components: [.heart])
+        Exercise(id: "bowling", name: "Bowling", icon: "figure.bowling", components: [.heart, .steps]),
+        Exercise(id: "figure.golf", name: "Golf", icon: "figure.golf", components: [.heart, .steps]),
+        Exercise(id: "hockey", name: "Hockey", icon: "figure.hockey", components: [.heart, .steps])
     ]
     
     init() {
@@ -58,11 +58,21 @@ class ExerciseViewModel: ObservableObject {
         }
     }
     
+    func reset() {
+        exerciseTime = 0
+        exercisePaused = false
+    }
+    
     func timeString() -> String {
         let hours = Int(exerciseTime) / 3600
         let minutes = (Int(exerciseTime) % 3600) / 60
         let seconds = Int(exerciseTime) % 60
         return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
+    }
+    
+    func startExercise(_ exercise: Exercise) {
+        reset()
+        currentExercise = exercise
     }
     
     func saveExercise(_ exercise: String, startDate: Date, heartPoints: [HeartDataPoint], viewContext: NSManagedObjectContext) {
@@ -76,6 +86,7 @@ class ExerciseViewModel: ObservableObject {
         for heartPoint in heartPoints {
             newExercise.addToHeartPoints(heartPoint)
         }
+        // TODO: add step values
         
         saveContext(viewContext)
     }

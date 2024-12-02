@@ -87,12 +87,12 @@ struct SoftwareUpdateView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(height: dfuUpdater.local ? 50 : 300)
-                    if !bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 15 {
+                    if !bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10 {
                         Text({
                             if !bleManager.hasLoadedCharacteristics {
                                 return "\(deviceManager.name) needs to be connected to update its software."
                             } else {
-                                return "\(deviceManager.name)'s battery must be charged to at least 15% to update its software."
+                                return "\(deviceManager.name)'s battery must be charged to at least 10% to update its software."
                             }
                         }())
                             .foregroundStyle(.gray)
@@ -103,7 +103,7 @@ struct SoftwareUpdateView: View {
                     }
                 }
             }
-            if bleManager.hasLoadedCharacteristics {
+            if bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10 {
                 Section {
                     if !dfuUpdater.local {
                         Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)

@@ -49,7 +49,7 @@ struct ExerciseView: View {
                     Section("All Exercises") {
                         ForEach(exerciseViewModel.exercises) { exercise in
                             Button {
-                                exerciseViewModel.currentExercise = exercise
+                                exerciseViewModel.startExercise(exercise)
                             } label: {
                                 Label(exercise.name, systemImage: exercise.icon)
                             }

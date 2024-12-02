@@ -124,11 +124,13 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
                         }
+                        /*
                         NavigationLink {
                             SleepView()
                         } label: {
                             ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
                         }
+                         */
                     }
                     Section {
                         NavigationLink {
@@ -136,11 +138,13 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                         }
+                        /*
                         NavigationLink {
                             CustomizationView()
                         } label: {
                             ListRowView(title: "Customization", icon: "paintbrush.fill", iconColor: .blue)
                         }
+                        */
                         NavigationLink {
                             BatterySettingsView()
                         } label: {

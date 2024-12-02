@@ -14,7 +14,7 @@ struct ActiveExerciseView: View {
     
     @Environment(\.managedObjectContext) var viewContext
     
-    @ObservedObject var exerciseViewModel = ExerciseViewModel() // Intialize a new instance to reset all UI state variables
+    @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     
     @Binding var exercise: Exercise?
     
@@ -25,11 +25,6 @@ struct ActiveExerciseView: View {
     @State private var newHeartPoints: [HeartDataPoint] = []
     @State private var previousStepCounts: [StepCounts] = []
     @State private var newStepCounts: [StepCounts] = []
-    
-    @AppStorage("exerciseTimeGoal") var exerciseTime: ExerciseTimeGoal = .hour
-    @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
-    
-    let startDate = Date()
     
     var body: some View {
         if let exercise {
@@ -46,7 +41,7 @@ struct ActiveExerciseView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "heart.fill")
                                 .foregroundStyle(.red)
-                            Text(String(format: "%.0f", heartPoints.compactMap({ $0.value }).last ?? 0))
+                            Text(String(format: "%.0f", previousHeartPoints.compactMap({ $0.value }).last ?? 0))
                         }
                     }
                     Spacer()
@@ -102,7 +97,7 @@ struct ActiveExerciseView: View {
                     timer?.invalidate()
                     
                     if exerciseViewModel.exerciseTime >= 30 {
-                        exerciseViewModel.saveExercise(exercise.id, startDate: startDate, heartPoints: Array(heartPoints), viewContext: viewContext)
+                        exerciseViewModel.saveExercise(exercise.id, startDate: Date().addingTimeInterval(-exerciseViewModel.exerciseTime), heartPoints: Array(heartPoints), viewContext: viewContext)
                     }
                 } label: {
                     Text("End Exercise")
@@ -110,9 +105,6 @@ struct ActiveExerciseView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .onAppear {
-                previousHeartPoints = Array(heartPoints)
-                previousStepCounts = Array(stepCounts)
-                
                 startTimer()
             }
             .onChange(of: Array(heartPoints)) { newPoints in
@@ -134,10 +126,6 @@ struct ActiveExerciseView: View {
     func startTimer() {
         timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             exerciseViewModel.exerciseTime += 1
-            
-            if Int(exerciseViewModel.exerciseTime) == exerciseTime.rawValue && remindOnExerciseTimeGoalCompletion {
-                NotificationManager.shared.sendExerciseTimeGoalReachedNotification()
-            }
         }
     }
 }

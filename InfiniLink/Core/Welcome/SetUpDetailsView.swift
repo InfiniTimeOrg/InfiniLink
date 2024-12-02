@@ -112,8 +112,6 @@ struct NotificationsSetupView: View {
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("enableReminders") var enableReminders = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
-    @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
-    @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
     
     var body: some View {
         Form {
@@ -134,8 +132,6 @@ struct NotificationsSetupView: View {
             }
             Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                 Toggle("Steps", isOn: $remindOnStepGoalCompletion)
-                Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
-                Toggle("Exercise Time", isOn: $remindOnExerciseTimeGoalCompletion)
             }
             Section("Other") {
                 Toggle("Reminder Notifications", isOn: $enableReminders)

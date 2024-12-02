@@ -76,13 +76,10 @@
         }
       }
     },
-    "%@'s battery must be charged to at least 15%% to update its software." : {
+    "%@'s battery must be charged to at least 10%% to update its software." : {
 
     },
     "%@%%" : {
-
-    },
-    "%lld" : {
 
     },
     "%lld more device%@ found" : {
@@ -91,6 +88,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld more device%2$@ found"
+          }
+        }
+      }
+    },
+    "%lld step%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld step%2$@"
           }
         }
       }
@@ -183,9 +190,6 @@
     "Calender" : {
 
     },
-    "Calories" : {
-
-    },
     "Cancel" : {
 
     },
@@ -267,7 +271,10 @@
     "Exercise" : {
 
     },
-    "Exercise Time" : {
+    "Export All Data" : {
+
+    },
+    "Export your heart rate data to a CSV file." : {
 
     },
     "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
@@ -279,10 +286,10 @@
     "File System" : {
 
     },
-    "Filter Data" : {
+    "Filter inconsistent data from your heart rate measurements." : {
 
     },
-    "Filter inconsistent data from your heart rate measurements." : {
+    "Filter Values" : {
 
     },
     "Find Lost Device" : {
@@ -333,6 +340,9 @@
     "Hourly Chimes" : {
 
     },
+    "Hours of Sunshine" : {
+
+    },
     "If you have an InfiniTime device, you can pair it here." : {
 
     },
@@ -379,6 +389,9 @@
 
     },
     "Metric" : {
+
+    },
+    "Month" : {
 
     },
     "Music" : {
@@ -472,9 +485,6 @@
 
     },
     "Set a fixed location to use to fetch weather." : {
-
-    },
-    "Set the daily goals for your fitness goals." : {
 
     },
     "Settings" : {
@@ -596,12 +606,6 @@
 
     },
     "You can start one by choosing one from the list below." : {
-
-    },
-    "You've reached your calorie goal" : {
-
-    },
-    "You've reached your exercise time goal" : {
 
     },
     "You've reached your steps goal" : {

@@ -20,8 +20,6 @@ struct NotificationsSettingsView: View {
     @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
-    @AppStorage("remindOnCaloriesGoalCompletion") var remindOnCaloriesGoalCompletion = true
-    @AppStorage("remindOnExerciseTimeGoalCompletion") var remindOnExerciseTimeGoalCompletion = true
     
     @State private var reminderAuthStatus = EKEventStore.authorizationStatus(for: .reminder)
     @State private var eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
@@ -33,11 +31,11 @@ struct NotificationsSettingsView: View {
     func authDenied(_ status: EKAuthorizationStatus) -> Bool {
         switch status {
         case .authorized, .fullAccess:
-            return true
+            return false
         case .denied, .notDetermined, .restricted, .writeOnly:
-            return false
+            return true
         @unknown default:
-            return false
+            return true
         }
     }
     
@@ -64,8 +62,6 @@ struct NotificationsSettingsView: View {
                  */
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
-                    Toggle("Calories", isOn: $remindOnCaloriesGoalCompletion)
-                    Toggle("Exercise Time", isOn: $remindOnExerciseTimeGoalCompletion)
                 }
                 Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
                     Toggle("Reminder Notifications", isOn: $enableReminders)

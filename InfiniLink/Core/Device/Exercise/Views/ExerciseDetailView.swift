@@ -16,6 +16,24 @@ struct ExerciseDetailView: View {
         return exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId ?? "" })!
     }
     
+    func timeDifferenceFormatted(startDate: Date, endDate: Date) -> String {
+        let difference = endDate.timeIntervalSince(startDate)
+        let totalSeconds = Int(difference)
+        
+        let hours = totalSeconds / 3600
+        let minutes = (totalSeconds % 3600) / 60
+        let seconds = totalSeconds % 60
+        
+        print(difference)
+        if hours > 0 {
+            return "\(hours) hr \(minutes) min"
+        } else if minutes > 0 {
+            return "\(minutes) min \(seconds) sec"
+        } else {
+            return "\(seconds) sec"
+        }
+    }
+    
     var body: some View {
         List {
             Section {
@@ -25,8 +43,11 @@ struct ExerciseDetailView: View {
                     VStack(spacing: 4) {
                         Text(exercise().name)
                             .font(.largeTitle.weight(.bold))
-                        Text(userExercise.startDate!.formatted())
-                            .foregroundStyle(.gray)
+                        Group {
+                            Text(userExercise.startDate!.formatted())
+                            Text(timeDifferenceFormatted(startDate: userExercise.startDate!, endDate: userExercise.endDate!))
+                        }
+                        .foregroundStyle(.gray)
                     }
                 }
                 .frame(maxWidth: .infinity)

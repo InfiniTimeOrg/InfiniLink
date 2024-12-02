@@ -149,18 +149,6 @@ extension NotificationManager {
 
 // MARK: Goals
 extension NotificationManager {
-    func sendExerciseTimeGoalReachedNotification() {
-        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your exercise time goal", comment: ""))
-        
-        self.bleWriteManager.sendNotification(notif)
-    }
-    
-    func sendCaloriesGoalReachedNotification() {
-        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your calorie goal", comment: ""))
-        
-        self.bleWriteManager.sendNotification(notif)
-    }
-    
     func sendStepGoalReachedNotification() {
         let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your steps goal", comment: ""))
         

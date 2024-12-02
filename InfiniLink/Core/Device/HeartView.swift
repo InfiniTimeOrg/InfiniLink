@@ -8,6 +8,7 @@
 import SwiftUI
 import Accelerate
 import CoreData
+import Charts
 
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -144,6 +145,29 @@ struct HeartView: View {
 //        return data
     }
     
+    struct MonthlyHoursOfSunshine: Identifiable {
+        var id = UUID()
+        var date: Date
+        var hoursOfSunshine: Double
+        
+        
+        init(month: Int, hoursOfSunshine: Double) {
+            let calendar = Calendar.autoupdatingCurrent
+            self.date = calendar.date(from: DateComponents(year: calendar.dateComponents([.year], from: Date()).year ?? 0, month: month))!
+            self.hoursOfSunshine = hoursOfSunshine
+        }
+    }
+    
+    
+    var data: [MonthlyHoursOfSunshine] = [
+        MonthlyHoursOfSunshine(month: 1, hoursOfSunshine: 74),
+        MonthlyHoursOfSunshine(month: 2, hoursOfSunshine: 89),
+        MonthlyHoursOfSunshine(month: 3, hoursOfSunshine: 67),
+        MonthlyHoursOfSunshine(month: 4, hoursOfSunshine: 94),
+        MonthlyHoursOfSunshine(month: 8, hoursOfSunshine: 45),
+        MonthlyHoursOfSunshine(month: 12, hoursOfSunshine: 62)
+    ]
+    
     var body: some View {
         GeometryReader { geo in
             ScrollView {
@@ -206,6 +230,14 @@ struct HeartView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .offset(x: offset)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        Chart(data) {
+                            LineMark(
+                                x: .value("Month", $0.date),
+                                y: .value("Hours of Sunshine", $0.hoursOfSunshine)
+                            )
+                            .foregroundStyle(.red)
+                        }
+                        .frame(height: geo.size.width / 1.8)
 //                        Chart {
 //                            ForEach(heartRateValuesForSelection(), id: \.0) { (label, rate) in
 //                                PointMark(

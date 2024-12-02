@@ -46,11 +46,6 @@ struct GeneralSettingsView: View {
                     Text("Health Details")
                 }
                  */
-                NavigationLink {
-                    GoalsSettingsView()
-                } label: {
-                    Text("Daily Goals")
-                }
             }
             Section {
                 NavigationLink {

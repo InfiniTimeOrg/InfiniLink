@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23506" systemVersion="24C5057p" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23507" systemVersion="24C5073e" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="BatteryDataPoint" representedClassName="BatteryDataPoint" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -39,7 +39,7 @@
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="heartPoints" inverseEntity="Device"/>
-        <relationship name="exercise" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="heartPoints" inverseEntity="UserExercise"/>
+        <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="heartPoints" inverseEntity="UserExercise"/>
     </entity>
     <entity name="InfineatWatchface" representedClassName="InfineatWatchface" syncable="YES" codeGenerationType="class">
         <attribute name="colorIndex" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
