@@ -71,6 +71,7 @@ class DeviceManager: ObservableObject {
                 version: UInt32(device.settingsVersion),
                 stepsGoal: UInt32(device.stepsGoal),
                 screenTimeOut: UInt32(device.screenTimeout),
+                alwaysOnDisplay: device.alwaysOnDisplay,
                 clockType: ClockType(rawValue: UInt8(device.clockType)) ?? .H24,
                 weatherFormat: WeatherFormat(rawValue: UInt8(device.weatherFormat)) ?? .Metric,
                 notificationStatus: Notification(rawValue: UInt8(device.notificationStatus)) ?? .On,

@@ -10,6 +10,7 @@ import MediaPlayer
 
 struct MusicSettingsView: View {
     @AppStorage("allowMusicControl") var allowMusicControl = true
+    @AppStorage("allowVolumeControl") var allowVolumeControl = true
     
     @State private var authorizationStatus = MPMediaLibrary.authorizationStatus()
     
@@ -43,6 +44,7 @@ struct MusicSettingsView: View {
             Section(footer: Text("Allow your watch to control the currently playing music from Apple Music.")) {
                 Toggle("Allow Music Control", isOn: $allowMusicControl)
             }
+            Toggle("Allow Volume Control", isOn: $allowVolumeControl)
         }
         .navigationTitle("Music")
     }

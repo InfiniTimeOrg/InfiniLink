@@ -32,7 +32,6 @@ struct CustomizationView: View {
                                         let isSelected = (deviceManager.settings.watchFace == UInt8(index))
 
                                         Button {
-                                            bleFs.setWatchFace(&deviceManager.settings, face: UInt8(index))
                                             withAnimation {
                                                 proxy.scrollTo(index, anchor: .center)
                                             }

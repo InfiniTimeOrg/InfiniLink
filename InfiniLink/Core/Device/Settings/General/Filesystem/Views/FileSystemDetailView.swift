@@ -130,7 +130,7 @@ struct FileSystemDetailView: View {
                         DeviceManager.shared.updateSettings(settings: settings)
                     }
                 } else {
-                    bleFs.readMiscFile(fileSystemViewModel.getDir(input: fileName)) { data in
+                    bleFs.readFile(fileSystemViewModel.getDir(input: fileName)) { data in
                         let `extension` = fileName.components(separatedBy: ".").last!
                         
                         guard let info = try? bleFs.convertDataToReadableFile(data: data, fileExtension: `extension`) else { return }

@@ -17,7 +17,7 @@ class SleepController: ObservableObject {
     @Published var sleepData = [[String]]()
     
     func getSleepCSV() {
-        bleFs.readMiscFile("/SleepTracker_Data.csv") { data in
+        bleFs.readFile("/SleepTracker_Data.csv") { data in
             do {
                 self.sleepData = try self.bleFs.convertDataToReadableFile(data: data, fileExtension: "csv") as! [[String]]
                 // TODO: process sleep data

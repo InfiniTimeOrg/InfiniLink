@@ -576,7 +576,7 @@ class BLEFSHandler: ObservableObject {
         return [byte1, byte2, byte3, byte4]
     }
     
-    func readMiscFile(_ filePath: String, completion: @escaping(Data) -> Void) {
+    func readFile(_ filePath: String, completion: @escaping(Data) -> Void) {
         DispatchQueue.global(qos: .default).async {
             let readFile = self.readFile(path: filePath, offset: 0)
             
@@ -586,14 +586,42 @@ class BLEFSHandler: ObservableObject {
         }
     }
     
-    // MARK: Settings
     func readSettings(completion: @escaping(Settings) -> Void) {
         DispatchQueue.global(qos: .default).async {
             let readFile = self.readFile(path: "/settings.dat", offset: 0)
+            let firmwareVersion = DeviceManager.shared.firmware
             
             let settings = readFile.data.withUnsafeBytes { ptr -> Settings in
-                return ptr.load(as: Settings.self)
+                guard let baseAddress = ptr.baseAddress else {
+                    return Settings()
+                }
+                
+                switch firmwareVersion {
+                case "1.14.0":
+                    let settings = baseAddress.load(as: Settings14.self)
+                    
+                    return Settings(
+                        version: settings.version,
+                        stepsGoal: settings.stepsGoal,
+                        screenTimeOut: settings.screenTimeOut,
+                        alwaysOnDisplay: false,
+                        clockType: settings.clockType,
+                        weatherFormat: settings.weatherFormat,
+                        notificationStatus: settings.notificationStatus,
+                        watchFace: settings.watchFace,
+                        chimesOption: settings.chimesOption,
+                        pineTimeStyle: settings.pineTimeStyle,
+                        watchFaceInfineat: settings.watchFaceInfineat,
+                        wakeUpMode: settings.wakeUpMode,
+                        shakeWakeThreshold: settings.shakeWakeThreshold,
+                        brightLevel: settings.brightLevel
+                    )
+                default:
+                    return baseAddress.load(as: Settings.self)
+                }
             }
+            
+            print(settings)
             
             completion(settings)
         }
@@ -704,105 +732,6 @@ class BLEFSHandler: ObservableObject {
             UInt8(value & 0x00FF)
         ]
     }
-    
-    func setWatchFace(_ settings: inout Settings, face: UInt8) {
-        if face != settings.watchFace {
-            settings.watchFace = face
-        }
-        writeSettings(settings)
-    }
-    
-    func setStepsGoal(_ settings: inout Settings, stepsGoal: UInt32) {
-        if stepsGoal != settings.stepsGoal {
-            settings.stepsGoal = stepsGoal
-        }
-        writeSettings(settings)
-    }
-    
-    func setChimeOption(_ settings: inout Settings, option: ChimesOption) {
-        if option != settings.chimesOption {
-            settings.chimesOption = option
-        }
-        writeSettings(settings)
-    }
-    
-    func setPTSColorTime(_ settings: inout Settings, color: Colors) {
-        if color != settings.pineTimeStyle.ColorTime {
-            settings.pineTimeStyle.ColorTime = color
-        }
-        writeSettings(settings)
-    }
-    
-    func setPTSColorBar(_ settings: inout Settings, color: Colors) {
-        if color != settings.pineTimeStyle.ColorBar {
-            settings.pineTimeStyle.ColorBar = color
-        }
-        writeSettings(settings)
-    }
-    
-    func setPTSColorBG(_ settings: inout Settings, color: Colors) {
-        if color != settings.pineTimeStyle.ColorBG {
-            settings.pineTimeStyle.ColorBG = color
-        }
-        writeSettings(settings)
-    }
-    
-    func setInfineatShowSideCover(_ settings: inout Settings, show: Bool) {
-        if show != settings.watchFaceInfineat.showSideCover {
-            settings.watchFaceInfineat.showSideCover = show
-        }
-        writeSettings(settings)
-    }
-    
-    func setInfineatColorIndex(_ settings: inout Settings, index: Int) {
-        if index != settings.watchFaceInfineat.colorIndex {
-            settings.watchFaceInfineat.colorIndex = UInt8(index)
-        }
-        writeSettings(settings)
-    }
-    
-    func setClockType(_ settings: inout Settings, type: ClockType) {
-        if type != settings.clockType {
-            settings.clockType = type
-        }
-        writeSettings(settings)
-    }
-    
-    func setWeatherFormat(_ settings: inout Settings, format: WeatherFormat) {
-        if format != settings.weatherFormat {
-            settings.weatherFormat = format
-        }
-        writeSettings(settings)
-    }
-    
-    func setNotificationStatus(_ settings: inout Settings, status: Notification) {
-        if status != settings.notificationStatus {
-            settings.notificationStatus = status
-        }
-        writeSettings(settings)
-    }
-    
-    func setScreenTimeOut(_ settings: inout Settings, timeout: UInt32) {
-        if timeout != settings.screenTimeOut {
-            settings.screenTimeOut = timeout
-        }
-        writeSettings(settings)
-    }
-    
-    /*
-    func setAlwaysOnDisplaySetting(_ settings: inout Settings, state: Bool) {
-        if state != settings.alwaysOnDisplay {
-            settings.alwaysOnDisplay = state
-        }
-    }
-     */
-    
-    func setShakeThreshold(_ settings: inout Settings, threshold: UInt16) {
-        if threshold != settings.shakeWakeThreshold {
-            settings.shakeWakeThreshold = threshold
-        }
-        writeSettings(settings)
-    }
 }
 
 struct ResourceFile: Codable {
@@ -895,10 +824,27 @@ struct WatchFaceInfineat {
     var colorIndex: UInt8 = 0
 }
 
+struct Settings14 {
+    var version: UInt32 = 4
+    var stepsGoal: UInt32 = 10000
+    var screenTimeOut: UInt32 = 15000
+    var clockType: ClockType = .H24
+    var weatherFormat: WeatherFormat = .Metric
+    var notificationStatus: Notification = .On
+    var watchFace: UInt8 = 0
+    var chimesOption: ChimesOption = .None
+    var pineTimeStyle: PineTimeStyleData = PineTimeStyleData()
+    var watchFaceInfineat: WatchFaceInfineat = WatchFaceInfineat()
+    var wakeUpMode: WakeUpMode = .RaiseWrist
+    var shakeWakeThreshold: UInt16 = 150
+    var brightLevel: BrightLevel = .Mid
+}
+
 struct Settings {
     var version: UInt32 = 4
     var stepsGoal: UInt32 = 10000
     var screenTimeOut: UInt32 = 15000
+    var alwaysOnDisplay: Bool = false
     var clockType: ClockType = .H24
     var weatherFormat: WeatherFormat = .Metric
     var notificationStatus: Notification = .On

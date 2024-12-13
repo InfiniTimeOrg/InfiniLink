@@ -38,6 +38,7 @@ class MusicController {
 	}
     
     @AppStorage("allowMusicControl") var allowMusicControl = true
+    @AppStorage("allowVolumeControl") var allowVolumeControl = true
     
 	private init() {
         initialize()
@@ -78,9 +79,15 @@ class MusicController {
             case 4:
                 musicPlayer.skipToPreviousItem()
             case 5:
-                if session.outputVolume + (1 / volumeSlots) > 1.0 {MPVolumeView.setVolume(1.0)} else {MPVolumeView.setVolume(session.outputVolume + (1 / volumeSlots))}
+                if allowVolumeControl {
+                    let newVolume = min(session.outputVolume + (1 / volumeSlots), 1.0)
+                    MPVolumeView.setVolume(newVolume)
+                }
             case 6:
-                if session.outputVolume - (1 / volumeSlots) < 0.0 {MPVolumeView.setVolume(0.0)} else {MPVolumeView.setVolume(session.outputVolume - (1 / volumeSlots))}
+                if allowVolumeControl {
+                    let newVolume = max(session.outputVolume - (1 / volumeSlots), 0.0)
+                    MPVolumeView.setVolume(newVolume)
+                }
             case 224:
                 updateMusicInformation(songInfo: getCurrentSongInfo())
             default:
