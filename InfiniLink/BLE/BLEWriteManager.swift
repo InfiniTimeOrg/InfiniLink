@@ -95,7 +95,7 @@ struct BLEWriteManager {
     }
     
     func writeForecastWeatherData(minimumTemperature: [Double], maximumTemperature: [Double], icon: [UInt8])  {
-        if (minimumTemperature.count + maximumTemperature.count + icon.count) / 3 != minimumTemperature.count && minimumTemperature.count <= 5 && minimumTemperature.count > 1 {
+        if (minimumTemperature.count + maximumTemperature.count + icon.count) / 3 != minimumTemperature.count && minimumTemperature.count >= 5 && minimumTemperature.count < 1 {
             print("Forecast Data Arrays Do Not Match |or| Forecast Larger Then 5 Days |or| Forecast Data is Empty")
             return
         }

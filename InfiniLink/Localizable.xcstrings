@@ -130,6 +130,9 @@
     "24 Hour" : {
 
     },
+    "A new section will be added to your device overview." : {
+
+    },
     "About" : {
 
     },
@@ -244,6 +247,9 @@
     "Delete" : {
 
     },
+    "Developer Mode" : {
+
+    },
     "Device not appearing?" : {
 
     },
@@ -257,6 +263,9 @@
 
     },
     "Done" : {
+
+    },
+    "Enable Developer Mode" : {
 
     },
     "Enable Watch Notifications" : {
@@ -481,6 +490,9 @@
     "Send Notification" : {
 
     },
+    "Send random weather data to the watch." : {
+
+    },
     "Send to iPhone" : {
 
     },
@@ -515,6 +527,9 @@
 
     },
     "Sync step and heart rate data to Apple Health." : {
+
+    },
+    "Test Weather" : {
 
     },
     "The folder name cannot contain a period." : {

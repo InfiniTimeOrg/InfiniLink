@@ -16,6 +16,7 @@ struct DeviceView: View {
     @ObservedObject var notificationManager = NotificationManager.shared
     
     @AppStorage("sleepGoal") var sleepGoal = 28800
+    @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -174,6 +175,15 @@ struct DeviceView: View {
                          ListRowView(title: "Alarms", icon: "alarm.fill")
                          }
                          */
+                    }
+                    if enableDeveloperMode {
+                        Section {
+                            NavigationLink {
+                                DeveloperModeView()
+                            } label: {
+                                ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
+                            }
+                        }
                     }
                 }
             }

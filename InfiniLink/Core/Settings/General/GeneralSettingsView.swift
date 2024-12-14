@@ -49,6 +49,13 @@ struct GeneralSettingsView: View {
             }
             Section {
                 NavigationLink {
+                    DeveloperModeSettingsView()
+                } label: {
+                    Text("Developer Mode")
+                }
+            }
+            Section {
+                NavigationLink {
                     DataSyncView()
                 } label: {
                     Text("Data Sync")
