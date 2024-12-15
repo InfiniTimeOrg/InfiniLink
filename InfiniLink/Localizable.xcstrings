@@ -157,6 +157,12 @@
     "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
+    "App Icon" : {
+
+    },
+    "Appearance" : {
+
+    },
     "Apple Health" : {
 
     },
@@ -245,6 +251,9 @@
 
     },
     "Delete" : {
+
+    },
+    "Developer" : {
 
     },
     "Developer Mode" : {
