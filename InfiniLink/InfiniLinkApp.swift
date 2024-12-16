@@ -13,6 +13,8 @@ import BackgroundTasks
 struct InfiniLink: App {
     let persistenceController = PersistenceController.shared
     
+    @AppStorage("colorScheme") var colorScheme = "system"
+    
     init() {
         HealthKitManager.shared.requestAuthorization()
         
@@ -25,6 +27,16 @@ struct InfiniLink: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .preferredColorScheme({
+                    switch colorScheme {
+                    case "light":
+                        return .light
+                    case "dark":
+                        return .dark
+                    default:
+                        return .none
+                    }
+                }())
         }
     }
 }

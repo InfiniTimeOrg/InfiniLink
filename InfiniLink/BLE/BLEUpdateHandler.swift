@@ -124,6 +124,11 @@ struct BLEUpdatedCharacteristicHandler {
                 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
+        case bleManager.cbuuidList.sleep:
+            guard let value = characteristic.value else { break }
+            let sleepData = [UInt8](value)
+            
+            print(sleepData[0], ",", sleepData[1], ",", sleepData[2], ",", sleepData[3], ",", sleepData[4], ",", sleepData[5], ",", sleepData[6], ",", sleepData[7])
         default:
             break
         }

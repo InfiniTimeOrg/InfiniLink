@@ -621,8 +621,6 @@ class BLEFSHandler: ObservableObject {
                 }
             }
             
-            print(settings)
-            
             completion(settings)
         }
     }

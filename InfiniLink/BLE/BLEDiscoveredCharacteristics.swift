@@ -50,6 +50,8 @@ struct BLEDiscoveredCharacteristics {
             BLEWriteManager().setTime(characteristic: characteristic)
         case bleManager.cbuuidList.weather:
             bleManager.weatherCharacteristic = characteristic
+        case bleManager.cbuuidList.sleep:
+            peripheral.setNotifyValue(true, for: characteristic)
 		default:
 			break
 		}

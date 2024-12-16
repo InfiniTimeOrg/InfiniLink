@@ -37,13 +37,6 @@ struct GeneralSettingsView: View {
                 .disabled(bleManager.blefsTransfer == nil)
             }
             Section {
-                NavigationLink {
-                    AppearanceView()
-                } label: {
-                    Text("Appearance")
-                }
-            }
-            Section {
                 // TODO: implement non-dummy input form in SetUpDetailsView
                 /*
                 NavigationLink {
@@ -55,6 +48,11 @@ struct GeneralSettingsView: View {
                  */
             }
             Section {
+                NavigationLink {
+                    AppearanceView()
+                } label: {
+                    Text("Appearance")
+                }
                 NavigationLink {
                     DataSyncView()
                 } label: {

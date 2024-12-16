@@ -214,6 +214,9 @@
     "Clock Type" : {
 
     },
+    "Color Scheme" : {
+
+    },
     "Connect" : {
 
     },
@@ -245,6 +248,9 @@
 
     },
     "Daily Goals" : {
+
+    },
+    "Dark" : {
 
     },
     "Data Sync" : {
@@ -397,6 +403,9 @@
     "Let's get you set up." : {
 
     },
+    "Light" : {
+
+    },
     "Loading weather..." : {
 
     },
@@ -536,6 +545,9 @@
 
     },
     "Sync step and heart rate data to Apple Health." : {
+
+    },
+    "System" : {
 
     },
     "Test Weather" : {

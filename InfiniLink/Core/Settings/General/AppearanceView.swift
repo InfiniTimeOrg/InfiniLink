@@ -49,6 +49,8 @@ enum AppIcon: CaseIterable {
 struct AppearanceView: View {
     @State private var selectedIcon: AppIcon = .default
     
+    @AppStorage("colorScheme") var colorScheme = "system"
+    
     func getCurrentIcon() {
         if let iconName = UIApplication.shared.alternateIconName {
             selectedIcon = AppIcon(from: iconName)
@@ -72,6 +74,16 @@ struct AppearanceView: View {
     
     var body: some View {
         List {
+            Section("Appearance") {
+                Picker("Color Scheme", selection: $colorScheme) {
+                    Text("System")
+                        .tag("system")
+                    Text("Dark")
+                        .tag("dark")
+                    Text("Light")
+                        .tag("light")
+                }
+            }
             Section("App Icon") {
                 ForEach(AppIcon.allCases, id: \.self) { icon in
                     Button {
