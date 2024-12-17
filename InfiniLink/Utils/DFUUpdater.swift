@@ -42,7 +42,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         
         // Optional:
         // initiator.forceDfu = true/false // default false
-        // initiator.packetReceiptNotificationParameter = N // default is 12
+        initiator.packetReceiptNotificationParameter = 29
         initiator.logger = self // - to get log info
         initiator.delegate = self // - to be informed about current state and errors
         initiator.progressDelegate = self // - to show progress bar
