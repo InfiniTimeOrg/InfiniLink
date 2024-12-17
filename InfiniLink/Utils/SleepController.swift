@@ -12,18 +12,14 @@ class SleepController: ObservableObject {
     
     let bleFs = BLEFSHandler.shared
     
-    @Published var sleep = SleepData(hours: 0, core: 0, rem: 0, deep: 0, awake: 0)
+    @Published var sleep: SleepData?
     
-    @Published var sleepData = [[String]]()
-    
-    func getSleepCSV() {
-        bleFs.readFile("/SleepTracker_Data.csv") { data in
-            do {
-                self.sleepData = try self.bleFs.convertDataToReadableFile(data: data, fileExtension: "csv") as! [[String]]
-                // TODO: process sleep data
-            } catch {
-                print(error.localizedDescription)
-            }
+    var totalSleepSeconds: Int? {
+        if let sleep {
+            return Int(sleep.endDate.timeIntervalSince(sleep.startDate))
         }
+        return nil
     }
+    
+    // Right now this controller is mostly empty, but it will be used in the future if an algorithm is developed for tracking
 }

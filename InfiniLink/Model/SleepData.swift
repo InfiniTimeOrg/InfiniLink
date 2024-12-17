@@ -8,9 +8,6 @@
 import Foundation
 
 struct SleepData {
-    let hours: Double
-    let core: Double
-    let rem: Double
-    let deep: Double
-    let awake: Double
+    let startDate: Date
+    let endDate: Date
 }

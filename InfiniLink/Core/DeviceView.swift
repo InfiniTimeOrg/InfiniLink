@@ -125,13 +125,11 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
                         }
-                        /*
                         NavigationLink {
                             SleepView()
                         } label: {
                             ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
                         }
-                         */
                     }
                     Section {
                         NavigationLink {

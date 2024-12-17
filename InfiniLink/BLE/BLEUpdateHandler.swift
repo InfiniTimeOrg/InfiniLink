@@ -128,7 +128,19 @@ struct BLEUpdatedCharacteristicHandler {
             guard let value = characteristic.value else { break }
             let sleepData = [UInt8](value)
             
-            print(sleepData[0], ",", sleepData[1], ",", sleepData[2], ",", sleepData[3], ",", sleepData[4], ",", sleepData[5], ",", sleepData[6], ",", sleepData[7])
+            if !sleepData.contains(255) {
+                let calendar = Calendar.current
+                let startDateComponents = DateComponents(year: 2020 + Int(sleepData[3]), month: Int(sleepData[1]), day: Int(sleepData[2]), hour: Int(sleepData[4]), minute: Int(sleepData[5]))
+                let startDate = calendar.date(from: startDateComponents)!
+                let endDateComponents = DateComponents(year: 2020 + Int(sleepData[3]), month: Int(sleepData[1]), day: Int(sleepData[2]), hour: Int(sleepData[6]), minute: Int(sleepData[7]))
+                let endDate = calendar.date(from: endDateComponents)!
+                
+                SleepController.shared.sleep = SleepData(startDate: startDate, endDate: endDate)
+                
+                // 0: flags, 1: month, 2: day, 3: year since 2020, 4: start hour, 5: start minute, 6: end hour, 7: end minute
+                print(sleepData[0], ",", sleepData[1], ",", sleepData[2], ",", sleepData[3], ",", sleepData[4], ",", sleepData[5], ",", sleepData[6], ",", sleepData[7])
+                print(SleepController.shared.sleep!)
+            }
         default:
             break
         }

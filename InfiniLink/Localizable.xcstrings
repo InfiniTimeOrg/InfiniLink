@@ -544,6 +544,9 @@
     "Steps Goal" : {
 
     },
+    "Stop Tracking" : {
+
+    },
     "Sync step and heart rate data to Apple Health." : {
 
     },
@@ -557,9 +560,6 @@
 
     },
     "There aren't any available cloud builds" : {
-
-    },
-    "There isn't any available sleep data." : {
 
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {

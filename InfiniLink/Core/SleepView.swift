@@ -15,33 +15,41 @@ struct SleepView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(sleepController.sleep.hours), units: "Hours", icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
-                        HStack {
-                            DetailHeaderSubItemView(title: "Deep", value: String(sleepController.sleep.deep), unit: "hrs")
-                            DetailHeaderSubItemView(title: "Core", value: String(sleepController.sleep.core), unit: "hrs")
-                            DetailHeaderSubItemView(title: "REM", value: String(sleepController.sleep.rem), unit: "hrs")
+                    DetailHeaderView(Header(title: {
+                        if let seconds = sleepController.totalSleepSeconds {
+                            let minutes = seconds / 60
+                            
+                            if minutes < 60 {
+                                return "\(minutes)min\(minutes > 1 ? "s" : "")"
+                            } else {
+                                let hours = minutes / 60
+                                return "\(hours)hr\(hours > 1 ? "s" :"") \(minutes)min\(minutes > 1 ? "s" : "")"
+                            }
+                        }
+                        return "0hrs"
+                    }(), subtitle: {
+                        if let sleep = sleepController.sleep {
+                            return "\(sleep.startDate.formatted()) - \(sleep.endDate.formatted())"
+                        }
+                        return nil
+                    }(), icon: "bed.double.fill", accent: .purple), width: geo.size.width) {
+                        Button {
+                            // We can't current change the tracking state over BLE
+                        } label: {
+                            Text("Stop Tracking")
+                                .padding(14)
+                                .background(Color.red)
+                                .foregroundStyle(.white)
+                                .clipShape(Capsule())
                         }
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
-                if !sleepController.sleepData.isEmpty {
-                    Section {
-                        TableView(data: sleepController.sleepData)
-                    }
-                } else {
-                    Section {
-                        Text("There isn't any available sleep data.")
-                    }
-                }
+                
             }
         }
         .navigationTitle("Sleep")
-        .onAppear {
-            if bleManager.blefsTransfer != nil && bleManager.hasLoadedCharacteristics {
-                sleepController.getSleepCSV()
-            }
-        }
     }
 }
 
