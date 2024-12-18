@@ -33,7 +33,11 @@ struct DeviceView: View {
         case (true, false):
             return NSLocalizedString("Connecting...", comment: "")
         default:
-            return NSLocalizedString("Disconnected", comment: "")
+            if bleManager.hasDisconnectedForUpdate {
+                return NSLocalizedString("Installling update..", comment: "")
+            } else {
+                return NSLocalizedString("Disconnected", comment: "")
+            }
         }
     }
     
@@ -177,7 +181,7 @@ struct DeviceView: View {
                     if enableDeveloperMode {
                         Section {
                             NavigationLink {
-                                DeveloperModeView()
+                                DeveloperView()
                             } label: {
                                 ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
                             }

@@ -154,7 +154,8 @@ class BLEFSHandler: ObservableObject {
                     completion()
                 }
             } catch {
-                print("Something went wrong: \(error)")
+                log("Error parsing resources", caller: "BLEFSHandler", target: .ble)
+                print("Something went wrong parsing resources: \(error)")
             }
         }
     }
@@ -424,13 +425,13 @@ class BLEFSHandler: ObservableObject {
                         readFileFS.data.append(responseData[idx])
                     }
                 } else {
-                    print("ERROR: debug info - chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)")
+                    log("Error reading response--chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)", caller: "BLEFSHandler", target: .ble)
                     readFileFS.valid = false
                     readFileFS.completed = true
                     return
                 }
                 
-                print("chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)")
+                log("chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)", type: .info, caller: "BLEFSHandler", target: .ble)
                 
                 if chunkOffset + chunkLength == totalLength {
                     readFileFS.completed = true
@@ -438,21 +439,27 @@ class BLEFSHandler: ObservableObject {
                 }
             case Responses.error.rawValue:
                 readFileFS.completed = true
+                log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("error")
             case Responses.noFile.rawValue:
                 readFileFS.completed = true
+                log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("no file")
             case Responses.protocolError.rawValue:
                 readFileFS.completed = true
+                log("Protocol error response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("protocol error")
             case Responses.readOnly.rawValue:
                 readFileFS.completed = true
+                log("Read only response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("read only")
             case Responses.dirNotEmptyError.rawValue:
                 readFileFS.completed = true
+                log("Directory not empty response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("dir not empty")
             default:
                 readFileFS.completed = true
+                log("Unknown response from BLE FS with code: \(responseData[1])", caller: "BLEFSHandler", target: .ble)
                 print("unknown error, response code \(responseData[1])")
             }
             readFileFS.group.leave()
@@ -469,26 +476,32 @@ class BLEFSHandler: ObservableObject {
             case Responses.error.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
+                log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("error")
             case Responses.noFile.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
+                log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("no file")
             case Responses.protocolError.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
+                log("Protocol error response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("protocol error")
             case Responses.readOnly.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
+                log("Read only response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("read only")
             case Responses.dirNotEmptyError.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
+                log("Directory not empty response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("dir not empty")
             default:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
+                log("Unknown error response from BLE FS", caller: "BLEFSHandler", target: .ble)
                 print("unknown error, response code \(responseData[1])")
             }
             writeFileFS.group.leave()
@@ -532,22 +545,28 @@ class BLEFSHandler: ObservableObject {
                 
             case Responses.error.rawValue:
                 informationTransfer[0].group.leave()
+                log("Error response from BLE FS", caller: "BLEFSHandler")
                 print("error")
             case Responses.noFile.rawValue:
                 informationTransfer[0].group.leave()
+                log("No file response from BLE FS", caller: "BLEFSHandler")
                 print("no file")
             case Responses.protocolError.rawValue:
                 informationTransfer[0].group.leave()
+                log("Protocol error response from BLE FS", caller: "BLEFSHandler")
                 print("protocol error")
             case Responses.readOnly.rawValue:
                 informationTransfer[0].group.leave()
+                log("Read only response from BLE FS", caller: "BLEFSHandler")
                 print("read only")
             case Responses.dirNotEmptyError.rawValue:
                 informationTransfer[0].group.leave()
+                log("Directory not empty response from BLE FS", caller: "BLEFSHandler")
                 print("dir not empty")
             default:
                 informationTransfer[0].group.leave()
-                //print("unknown error, response code \(responseData[1])")
+                log("Unknown error response from BLE FS with response code: \(responseData[1])", caller: "BLEFSHandler")
+                print("unknown error, response code \(responseData[1])")
             }
         }
     }
@@ -657,6 +676,7 @@ class BLEFSHandler: ObservableObject {
                 return "Invalid JSON format."
             }
         } catch {
+            log("Error deserializing JSON", caller: "BLEFSHandler")
             print("Error deserializing JSON: \(error)")
             return nil
         }

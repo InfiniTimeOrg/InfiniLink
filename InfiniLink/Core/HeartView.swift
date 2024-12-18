@@ -66,7 +66,6 @@ struct HeartView: View {
 //        var data: [(String, Double)] = []
 //        let dateFormatter = DateFormatter()
         
-#if DEBUG
         return [
             ("6 AM", 112.0),
             ("6 AM", 111.0),
@@ -79,7 +78,6 @@ struct HeartView: View {
             ("6 PM", 52.0),
             ("12 AM", 47.0)
         ]
-#endif
 //        switch dataSelection {
 //        case 0: // Weekly (last 7 days with day names)
 //            dateFormatter.dateFormat = "EEE"

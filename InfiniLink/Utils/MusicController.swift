@@ -64,8 +64,9 @@ class MusicController {
             do {
                 try session.setCategory(.playback, options: .mixWithOthers)
                 try session.setActive(false)
-            } catch let error as NSError {
-                print("Unable to activate audio session:  \(error.localizedDescription)")
+            } catch {
+                log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
+                print("Unable to activate audio session: \(error.localizedDescription)")
             }
             musicPlaying = musicPlayer.playbackState.rawValue
             

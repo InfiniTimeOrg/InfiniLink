@@ -57,6 +57,7 @@ struct PersistenceController {
                  * The store could not be migrated to the current model version.
                  Check the error message to determine what the actual problem was.
                  */
+                log("Unresolved error loading stores: \(error.localizedDescription)", caller: "PersistenceController")
                 print("Unresolved error \(error), \(error.userInfo)")
             }
         })

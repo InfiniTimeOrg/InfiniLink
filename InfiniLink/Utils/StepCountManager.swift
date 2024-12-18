@@ -17,6 +17,7 @@ class StepCountManager: ObservableObject {
         do {
             return try viewContext.fetch(request)
         } catch {
+            log(error.localizedDescription, caller: "StepCountManager")
             print(error.localizedDescription)
             return []
         }
@@ -69,7 +70,7 @@ class StepCountManager: ObservableObject {
         do {
             try viewContext.save()
         } catch {
-            print(error.localizedDescription)
+            log(error.localizedDescription, caller: "StepCountManager")
         }
     }
 }

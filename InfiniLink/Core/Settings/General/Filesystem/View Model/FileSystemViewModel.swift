@@ -98,6 +98,7 @@ class FileSystemViewModel: ObservableObject {
             let rmDir = BLEFSHandler.shared.deleteFile(path: path)
             
             if !rmDir {
+                log("Failed to remove file with path: \(path)", caller: "FileSystemViewModel", target: .ble)
                 print("ERROR: failed to remove file with path '\(path)'.")
             }
             

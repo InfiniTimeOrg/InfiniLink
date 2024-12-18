@@ -16,9 +16,10 @@
 		E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */; };
 		E02C62122CD05DA900C4D19B /* CurrentUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C62112CD05DA900C4D19B /* CurrentUpdateView.swift */; };
 		E03A7DF62D0D4DDB007A9209 /* DeveloperModeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF52D0D4DDB007A9209 /* DeveloperModeSettingsView.swift */; };
-		E03A7DF82D0D4E95007A9209 /* DeveloperModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF72D0D4E95007A9209 /* DeveloperModeView.swift */; };
+		E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */; };
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
+		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
 		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
@@ -44,6 +45,7 @@
 		E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */; };
 		E0599A0F2CB4E62800D64E0B /* SetUpDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */; };
 		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
+		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F132CBD688A005C1325 /* CustomizationView.swift */; };
 		E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */; };
 		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
@@ -132,9 +134,10 @@
 		E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModeView.swift; sourceTree = "<group>"; };
 		E02C62112CD05DA900C4D19B /* CurrentUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUpdateView.swift; sourceTree = "<group>"; };
 		E03A7DF52D0D4DDB007A9209 /* DeveloperModeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperModeSettingsView.swift; sourceTree = "<group>"; };
-		E03A7DF72D0D4E95007A9209 /* DeveloperModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperModeView.swift; sourceTree = "<group>"; };
+		E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperView.swift; sourceTree = "<group>"; };
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		E059999B2CB2E56300D64E0B /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
@@ -160,6 +163,7 @@
 		E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemDetailView.swift; sourceTree = "<group>"; };
 		E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpDetailsView.swift; sourceTree = "<group>"; };
 		E0599A102CB5553B00D64E0B /* FSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSFile.swift; sourceTree = "<group>"; };
+		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
 		E07D8F132CBD688A005C1325 /* CustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizationView.swift; sourceTree = "<group>"; };
 		E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersManager.swift; sourceTree = "<group>"; };
@@ -330,6 +334,15 @@
 			path = Notifications;
 			sourceTree = "<group>";
 		};
+		E05046872D136F0600FE4BCD /* Developer */ = {
+			isa = PBXGroup;
+			children = (
+				E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */,
+				E05046882D136F1D00FE4BCD /* DebugLogsView.swift */,
+			);
+			path = Developer;
+			sourceTree = "<group>";
+		};
 		E059999A2CB2E55500D64E0B /* Apps */ = {
 			isa = PBXGroup;
 			children = (
@@ -443,6 +456,7 @@
 				E07D8F252CC0C0D2005C1325 /* SleepController.swift */,
 				E08F2F342CC89A530094217A /* MapSearch.swift */,
 				E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */,
+				E05DA4C02D13752C00A49203 /* DebugLogManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -511,6 +525,7 @@
 		E0C7C8362CAEF6BF0043DA2D /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				E05046872D136F0600FE4BCD /* Developer */,
 				E0A7C09F2CB245F70042A12D /* Components */,
 				E059999A2CB2E55500D64E0B /* Apps */,
 				E0A7C0742CB0ECD10042A12D /* Settings */,
@@ -523,7 +538,6 @@
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
 				E07D8F132CBD688A005C1325 /* CustomizationView.swift */,
-				E03A7DF72D0D4E95007A9209 /* DeveloperModeView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -719,6 +733,7 @@
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */,
 				E0A7C07F2CB1B3300042A12D /* BLEFS.swift in Sources */,
 				E05999BA2CB335DC00D64E0B /* DataSyncView.swift in Sources */,
 				E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */,
@@ -738,7 +753,7 @@
 				E05999BF2CB419D300D64E0B /* InfiniLink.xcdatamodeld in Sources */,
 				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,
 				E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */,
-				E03A7DF82D0D4E95007A9209 /* DeveloperModeView.swift in Sources */,
+				E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */,
 				E0A7C0A32CB246D10042A12D /* DetailHeaderView.swift in Sources */,
 				E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */,
 				E0599A0F2CB4E62800D64E0B /* SetUpDetailsView.swift in Sources */,
@@ -762,6 +777,7 @@
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,
 				E0F7D8AF2CFD5E3400AE5171 /* TableView.swift in Sources */,
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
+				E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */,
 				E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */,
 				E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */,
 				E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */,

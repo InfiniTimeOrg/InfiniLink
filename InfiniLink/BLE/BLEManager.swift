@@ -13,6 +13,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     static let shared = BLEManager()
     
     lazy var deviceManager = DeviceManager.shared
+    let downloadManager = DownloadManager.shared
     
     var central: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
@@ -60,6 +61,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var setTimeError = false
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
+    @Published var hasDisconnectedForUpdate = false
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
@@ -121,8 +123,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             }
             stopScanning()
             
-            DownloadManager.shared.updateAvailable = false
+            downloadManager.updateAvailable = false
             pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
+            hasDisconnectedForUpdate = false
             
             infiniTime = peripheral
             infiniTime?.delegate = self
@@ -199,6 +202,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         if let error = error {
+            log("Failed to connect to peripheral: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
             print("Failed to connect to peripheral: \(error.localizedDescription)")
         }
     }
@@ -229,6 +233,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else {
             if let error {
+                log("Error discovering services: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
                 print(error.localizedDescription)
             }
             return

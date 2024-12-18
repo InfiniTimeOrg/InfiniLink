@@ -37,6 +37,7 @@ struct HeartSettingsView: View {
                 rootVC.present(activityVC, animated: true, completion: nil)
             }
         } catch {
+            log("Error writing heart data CSV file: \(error.localizedDescription)", caller: "HeartSettingsView")
             print("Error writing CSV file: \(error)")
         }
     }

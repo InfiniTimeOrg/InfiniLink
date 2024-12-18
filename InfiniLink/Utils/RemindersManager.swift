@@ -93,6 +93,7 @@ class RemindersManager: ObservableObject {
     func requestReminderAccess() {
         eventStore.requestAccess(to: .reminder) { granted, error in
             if let error = error {
+                log("Unknown error while requesting reminder access: \(error.localizedDescription)", caller: "RemindersManager")
                 print(error.localizedDescription)
             } else if granted {
                 DispatchQueue.main.async {
@@ -106,6 +107,7 @@ class RemindersManager: ObservableObject {
     func requestCalendarAccess() {
         eventStore.requestAccess(to: .event) { granted, error in
             if let error = error {
+                log("Unknown error while requesting calendar access: \(error.localizedDescription)", caller: "RemindersManager")
                 print(error.localizedDescription)
             } else if granted {
                 DispatchQueue.main.async {

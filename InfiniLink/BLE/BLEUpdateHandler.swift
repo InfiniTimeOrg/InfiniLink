@@ -66,6 +66,7 @@ struct BLEUpdatedCharacteristicHandler {
                     if isWithinRange || timeDifference <= 10 {
                         updateHeartRate(bpm: bpm)
                     } else {
+                        log("Abnormal heart rate value detected: \(bpm)", caller: "BLEUpdatedCharacteristicHandler")
                         print("Abnormal value, should be filtered")
                     }
                 } else {
@@ -91,6 +92,7 @@ struct BLEUpdatedCharacteristicHandler {
             if stepCount != 0 {
                 healthKitManager.readCurrentSteps { value, error in
                     if let error = error {
+                        log("Error reading current steps: \(error.localizedDescription)", caller: "HealthKitManager")
                         print(error.localizedDescription)
                         return
                     }
@@ -125,11 +127,7 @@ struct BLEUpdatedCharacteristicHandler {
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
         case bleManager.cbuuidList.sleep:
-            print("Sleep update")
-            guard let data = characteristic.value else {
-                print("Sleep characteristic data unreadable")
-                break
-            }
+            guard let data = characteristic.value else { break }
             
             let timestampBytes = data[0...3]
             let minutesAsleepBytes = data[4...5]

@@ -1,5 +1,5 @@
 //
-//  DeveloperModeView.swift
+//  DeveloperView.swift
 //  InfiniLink
 //
 //  Created by Liam Willey on 12/14/24.
@@ -7,11 +7,16 @@
 
 import SwiftUI
 
-struct DeveloperModeView: View {
+struct DeveloperView: View {
     let bleWriteManager = BLEWriteManager()
     
     var body: some View {
         List {
+            Section {
+                NavigationLink("Debug Logs") {
+                    DebugLogsView()
+                }
+            }
             Section {
                 Button {
                     bleWriteManager.writeForecastWeatherData(minimumTemperature: {
@@ -49,9 +54,10 @@ struct DeveloperModeView: View {
                 Text("Send random weather data to the watch.")
             }
         }
+        .navigationTitle("Developer")
     }
 }
 
 #Preview {
-    DeveloperModeView()
+    DeveloperView()
 }

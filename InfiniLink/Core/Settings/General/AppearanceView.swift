@@ -67,8 +67,11 @@ struct AppearanceView: View {
                 }
                 try await UIApplication.shared.setAlternateIconName(iconName)
             } catch {
-                print("Could not update icon \(error.localizedDescription)")
+                log("Error updating app icon: \(error.localizedDescription)", caller: "AppearanceView")
+                print("Could not update icon: \(error.localizedDescription)")
             }
+            
+            getCurrentIcon()
         }
     }
     
@@ -88,7 +91,7 @@ struct AppearanceView: View {
                 ForEach(AppIcon.allCases, id: \.self) { icon in
                     Button {
                         if icon != selectedIcon {
-                            updateIcon(with: icon.name ?? "AppIcon")
+                            updateIcon(with: icon.name ?? nil)
                         }
                     } label: {
                         HStack(spacing: 10) {

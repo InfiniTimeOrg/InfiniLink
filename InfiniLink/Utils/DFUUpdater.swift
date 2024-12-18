@@ -35,7 +35,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         guard let url = firmwareURL else {return}
         guard url.startAccessingSecurityScopedResource() else { return }
         guard let selectedFirmware = try? DFUFirmware(urlToZipFile:url) else {
-            print("Error loading firmware file.")
+            log("Failed to load firmware.", caller: "DFUUpdater")
             return
         }
         let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
@@ -55,7 +55,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     
     func updateFirmware() {
         guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
-            print("Error loading firmware")
+            log("Failed to load firmware.", caller: "DFUUpdater")
             return
         }
         
@@ -111,6 +111,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             firmwareSelected = false
             
             downloadManager.updateStarted = false
+            
+            bleManager.hasDisconnectedForUpdate = true
 		}
         
         dfuController = nil
@@ -126,6 +128,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
+        log("DFU log: \(message)", caller: "DFUUpdater")
         print("DFU log level: \(level.name()), message: \(message)")
 	}
 }

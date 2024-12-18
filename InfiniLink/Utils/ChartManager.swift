@@ -24,7 +24,8 @@ class ChartManager: ObservableObject {
         do {
             try viewContext.save()
         } catch {
-            print("Failed to save heart rate data point: \(error)")
+            log("Failed to save heart rate data point: \(error.localizedDescription)", caller: "ChartManager")
+            print("Failed to save heart rate data point: \(error.localizedDescription)")
         }
     }
     
@@ -36,6 +37,7 @@ class ChartManager: ObservableObject {
         do {
             try viewContext.save()
         } catch {
+            log("Failed to save battery data point: \(error.localizedDescription)", caller: "ChartManager")
             print("Failed to save battery data point: \(error)")
         }
     }

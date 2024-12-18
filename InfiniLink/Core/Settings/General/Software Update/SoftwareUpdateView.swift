@@ -165,6 +165,7 @@ struct OtherUpdateVersions: View {
             let resource = try fileUrl.resourceValues(forKeys:[.fileSizeKey])
             return resource.fileSize!
         } catch {
+            log("Error getting file size: \(error.localizedDescription)", caller: "OtherUpdateVersions")
             print("Error: \(error)")
         }
         
@@ -200,6 +201,7 @@ struct OtherUpdateVersions: View {
                         
                         dismiss()
                     } catch {
+                        log("Error getting firmware file: \(error.localizedDescription)", caller: "OtherUpdateVersions")
                         print(error.localizedDescription)
                     }
                 }
@@ -227,6 +229,7 @@ struct OtherUpdateVersions: View {
                             
                             dismiss()
                         } catch {
+                            log("Error getting resource file: \(error.localizedDescription)", caller: "OtherUpdateVersions")
                             print(error.localizedDescription)
                         }
                     }

@@ -38,6 +38,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                 if let coordinate = coordinate {
                     self.location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
                 } else if let error = error {
+                    log("Error finding location for address \(self.setLocation): \(error.localizedDescription)", caller: "LocationManager")
                     print("Error finding location for address \(self.setLocation): \(error)")
                 }
             }
@@ -60,6 +61,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         case .authorizedWhenInUse, .authorizedAlways:
             locationManager.requestLocation()
         case .restricted, .denied:
+            log("Location access denied. Unable to get current location.", type: .info, caller: "LocationManager")
             print("Location access denied. Unable to get current location.")
         case .notDetermined:
             locationManager.requestAlwaysAuthorization()

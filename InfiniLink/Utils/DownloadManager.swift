@@ -184,7 +184,7 @@ class DownloadManager: NSObject, ObservableObject {
                         self.loadingReleases = false
                     }
                 } catch {
-                    print("Error decoding JSON")
+                    log("Error decoding releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
             }
         }.resume()
@@ -220,7 +220,7 @@ class DownloadManager: NSObject, ObservableObject {
                         }
                     }
                 } catch {
-                    print("Error decoding JSON")
+                    log("Error decoding workflow runs JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
             }
         }.resume()
@@ -240,7 +240,7 @@ class DownloadManager: NSObject, ObservableObject {
                         completion(result.artifacts)
                     }
                 } catch {
-                    print("Error decoding JSON")
+                    log("Error decoding artifacts JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
             }
         }.resume()
@@ -308,8 +308,9 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
                     self.dfuUpdater.firmwareURL = savedURL
                 }
             }
-        } catch let fmerror {
-            print(fmerror.localizedDescription)
+        } catch {
+            log("Error downloading resource or firmware: \(error.localizedDescription)", caller: "DownloadManager")
+            print(error.localizedDescription)
         }
         
         DispatchQueue.main.async {
@@ -334,6 +335,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
     
     func urlSession(_: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
+            log(error.localizedDescription, caller: "DownloadManager")
             print(error.localizedDescription)
         }
     }

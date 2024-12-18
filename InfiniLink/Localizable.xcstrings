@@ -40,6 +40,9 @@
     "%@ BPM" : {
 
     },
+    "%@ Logs" : {
+
+    },
     "%@ needs to be connected to update its software." : {
 
     },
@@ -157,6 +160,9 @@
     "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
+    "App" : {
+
+    },
     "App Icon" : {
 
     },
@@ -188,6 +194,9 @@
 
     },
     "Birthdate" : {
+
+    },
+    "BLE" : {
 
     },
     "Bluetooth needs to be enabled to pair a watch." : {
@@ -235,6 +244,9 @@
     "Converting..." : {
 
     },
+    "Copy" : {
+
+    },
     "Create" : {
 
     },
@@ -254,6 +266,9 @@
 
     },
     "Data Sync" : {
+
+    },
+    "Debug Logs" : {
 
     },
     "Delete" : {
@@ -382,6 +397,9 @@
     "InfiniTime is up-to-date." : {
 
     },
+    "Installling update.." : {
+
+    },
     "Interval" : {
 
     },
@@ -434,6 +452,9 @@
 
     },
     "No Exercises" : {
+
+    },
+    "No Logs" : {
 
     },
     "Notifications" : {

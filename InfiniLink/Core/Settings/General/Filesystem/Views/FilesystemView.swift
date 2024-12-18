@@ -59,6 +59,7 @@ struct FileSystemToolbar: ViewModifier {
                         var _ = bleFSHandler.writeFile(data: fileData, path: fileSystemViewModel.directory + "/" + file.filename, offset: 0)
                     }
                 } catch {
+                    log("Error sending files: \(error.localizedDescription)", caller: "FilesystemView",  target: .ble)
                     print("Error: \(error.localizedDescription)")
                 }
             }
@@ -228,6 +229,7 @@ struct FileSystemView: View {
                     // fileURL.stopAccessingSecurityScopedResource()
                 }
             } catch {
+                log("Error getting file: \(error.localizedDescription)", caller: "FilesystemView")
                 print(error.localizedDescription)
             }
         }
