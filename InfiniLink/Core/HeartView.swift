@@ -230,14 +230,14 @@ struct HeartView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10))
                         .offset(x: offset)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        Chart(data) {
-                            LineMark(
-                                x: .value("Month", $0.date),
-                                y: .value("Hours of Sunshine", $0.hoursOfSunshine)
-                            )
-                            .foregroundStyle(.red)
-                        }
-                        .frame(height: geo.size.width / 1.8)
+//                        Chart(data) {
+//                            LineMark(
+//                                x: .value("Month", $0.date),
+//                                y: .value("Hours of Sunshine", $0.hoursOfSunshine)
+//                            )
+//                            .foregroundStyle(.red)
+//                        }
+//                        .frame(height: geo.size.width / 1.8)
 //                        Chart {
 //                            ForEach(heartRateValuesForSelection(), id: \.0) { (label, rate) in
 //                                PointMark(
