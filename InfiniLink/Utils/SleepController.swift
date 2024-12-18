@@ -14,9 +14,9 @@ class SleepController: ObservableObject {
     
     @Published var sleep: SleepData?
     
-    var totalSleepSeconds: Int? {
+    var totalSleepMinutes: Int? {
         if let sleep {
-            return Int(sleep.endDate.timeIntervalSince(sleep.startDate))
+            return Int(sleep.endDate.timeIntervalSince(sleep.startDate)) / 60
         }
         return nil
     }

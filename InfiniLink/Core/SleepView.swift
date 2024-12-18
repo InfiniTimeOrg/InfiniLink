@@ -16,17 +16,16 @@ struct SleepView: View {
             List {
                 Section {
                     DetailHeaderView(Header(title: {
-                        if let seconds = sleepController.totalSleepSeconds {
-                            let minutes = seconds / 60
-                            
+                        if let minutes = sleepController.totalSleepMinutes {
                             if minutes < 60 {
-                                return "\(minutes)min\(minutes > 1 ? "s" : "")"
+                                return "\(minutes) min\(minutes > 1 ? "s" : "")"
                             } else {
                                 let hours = minutes / 60
-                                return "\(hours)hr\(hours > 1 ? "s" :"") \(minutes)min\(minutes > 1 ? "s" : "")"
+                                let remainingMinutes = minutes % 60
+                                return "\(hours) hr\(hours > 1 ? "s" : "") \(remainingMinutes) min\(remainingMinutes > 1 ? "s" : "")"
                             }
                         }
-                        return "0hrs"
+                        return "0 hrs"
                     }(), subtitle: {
                         if let sleep = sleepController.sleep {
                             return "\(sleep.startDate.formatted()) - \(sleep.endDate.formatted())"

@@ -118,29 +118,31 @@ struct BLEUpdatedCharacteristicHandler {
                 remindersManager.checkForDueItems()
                 notificationManager.checkAndNotifyForWaterReminders()
 
-                // TODO: check to see if better than using onChange in ContentView
+                // TODO: we need to make sure this is in fact better than using onChange in ContentView
                 
                 checkForCompletedStepGoal()
                 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
         case bleManager.cbuuidList.sleep:
-            guard let value = characteristic.value else { break }
-            let sleepData = [UInt8](value)
-            
-            if !sleepData.contains(255) {
-                let calendar = Calendar.current
-                let startDateComponents = DateComponents(year: 2020 + Int(sleepData[3]), month: Int(sleepData[1]), day: Int(sleepData[2]), hour: Int(sleepData[4]), minute: Int(sleepData[5]))
-                let startDate = calendar.date(from: startDateComponents)!
-                let endDateComponents = DateComponents(year: 2020 + Int(sleepData[3]), month: Int(sleepData[1]), day: Int(sleepData[2]), hour: Int(sleepData[6]), minute: Int(sleepData[7]))
-                let endDate = calendar.date(from: endDateComponents)!
-                
-                SleepController.shared.sleep = SleepData(startDate: startDate, endDate: endDate)
-                
-                // 0: flags, 1: month, 2: day, 3: year since 2020, 4: start hour, 5: start minute, 6: end hour, 7: end minute
-                print(sleepData[0], ",", sleepData[1], ",", sleepData[2], ",", sleepData[3], ",", sleepData[4], ",", sleepData[5], ",", sleepData[6], ",", sleepData[7])
-                print(SleepController.shared.sleep!)
+            print("Sleep update")
+            guard let data = characteristic.value else {
+                print("Sleep characteristic data unreadable")
+                break
             }
+            
+            let timestampBytes = data[0...3]
+            let minutesAsleepBytes = data[4...5]
+            let minutesAsleepByteArray = [UInt8](minutesAsleepBytes)
+            
+            let minutesAsleep = UInt16(minutesAsleepByteArray[0]) << 8 | UInt16(minutesAsleepByteArray[1])
+            let timestamp = Date(timeIntervalSince1970: TimeInterval(UInt32(timestampBytes[0]) << 24 |
+                                                     UInt32(timestampBytes[1]) << 16 |
+                                                     UInt32(timestampBytes[2]) << 8 |
+                                                     UInt32(timestampBytes[3])))
+            
+            print("\(timestamp), \(minutesAsleep)")
+            SleepController.shared.sleep = SleepData(startDate: timestamp, endDate: timestamp.addingTimeInterval(Double(minutesAsleep * 60)))
         default:
             break
         }
