@@ -131,6 +131,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             infiniTime?.delegate = self
             central.connect(peripheral, options: nil)
             
+            log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+            
             completion()
         }
     }
@@ -158,7 +160,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             pairedDeviceID = nil
         }
         
+        log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        
         if device == nil {
+            // This only disconnects and removes the watch from the recognized device list. If using secure pairing, the bond will still be kept
             disconnect()
             startScanning()
         }
@@ -173,6 +178,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.notifyCharacteristic = nil
             self.hasLoadedBatteryLevel = false
             self.isConnectedToPinetime = false
+            
+            log("Disconnected from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
         }
     }
     
@@ -182,6 +189,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.pairedDevice = deviceManager.fetchDevice()
         self.deviceManager.getSettings()
         self.startScanning()
+        
+        log("Device switched to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -189,7 +198,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             connect(peripheral: peripheral) {}
         }
         if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) {
-            
             if isPairingNewDevice {
                 if !deviceManager.watches.compactMap({ $0.uuid }).contains(peripheral.identifier.uuidString) {
                     newPeripherals.append(peripheral)
