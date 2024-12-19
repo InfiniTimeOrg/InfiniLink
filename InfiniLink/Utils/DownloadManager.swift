@@ -133,6 +133,8 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func checkForUpdates(currentVersion: String) -> Bool {
+        getUpdateResources()
+        
         for i in releases {
             if i.tag_name.first != "v" {
                 let comparison = currentVersion.compare(i.tag_name, options: .numeric)
