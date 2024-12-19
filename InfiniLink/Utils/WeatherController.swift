@@ -90,6 +90,8 @@ class WeatherController: ObservableObject {
     
     func writeForecastToDevice() {
         if let weather = weather {
+            log("Weather forecast icons: \(weather.dailyForecast.compactMap({ $0.symbolName }))", type: .info, caller: "WeatherController, writeForecastToDevice")
+            
             guard let firstDay = weather.dailyForecast.first else { return }
             
             self.bleWriteManager.writeCurrentWeatherData(currentTemperature: weather.currentWeather.temperature.value, minimumTemperature: firstDay.lowTemperature.value, maximumTemperature: firstDay.highTemperature.value, location: locationManager.locationName, icon: getIcon(from: firstDay.symbolName))
@@ -102,8 +104,23 @@ class WeatherController: ObservableObject {
     }
     
     func getIcon(from icon: String) -> UInt8 {
+        // WeatherKit icons don't contain .fill, but we're keeping this here as a safeguard just in case that changes
+        let icon = icon.replacingOccurrences(of: ".fill", with: "")
+        
         switch icon {
-        // TODO: add cases
+            // Don't include the "sunny" icons, because they'll be handled by `default`
+        case "cloud":
+            return 2
+        case "cloud.drizzle", "cloud.sun.rain":
+            return 4
+        case "cloud.rain", "cloud.heavyrain":
+            return 5
+        case "cloud.bolt", "cloud.bolt.rain":
+            return 6
+        case "cloud.hail", "cloud.snow", "cloud.sleet":
+            return 7
+        case "cloud.fog":
+            return 8
         default:
             return 0
         }
