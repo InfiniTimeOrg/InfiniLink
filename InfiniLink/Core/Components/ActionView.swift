@@ -7,13 +7,25 @@
 
 import SwiftUI
 
+struct ActionButton {
+    let action: () -> Void
+    let label: String
+}
+
 struct Action {
     let title: String
     let subtitle: String
     let icon: String
-    let action: () -> Void
-    let actionLabel: String
+    let button: ActionButton?
     let accent: Color
+    
+    init(title: String, subtitle: String, icon: String, button: ActionButton? = nil, accent: Color) {
+        self.title = title
+        self.subtitle = subtitle
+        self.icon = icon
+        self.button = button
+        self.accent = accent
+    }
 }
 
 struct ActionView: View {
@@ -22,37 +34,45 @@ struct ActionView: View {
     var body: some View {
         ZStack {
             Circle()
-                .frame(width: 150, height: 150)
+                .frame(width: 140, height: 140)
                 .foregroundStyle(action.accent)
                 .blur(radius: 50)
-            VStack(spacing: 16) {
+            VStack(spacing: 12) {
                 Image(systemName: action.icon)
-                    .font(.system(size: 45).weight(.bold))
-                    .foregroundStyle(.primary.opacity(0.6))
-                VStack(spacing: 10) {
-                    Text(NSLocalizedString(action.title, comment: ""))
-                        .font(.system(size: 25).weight(.bold))
-                    Text(NSLocalizedString(action.subtitle, comment: ""))
-                        .foregroundStyle(.primary.opacity(0.8))
-                }
-                Button {
-                    action.action()
-                } label: {
-                    Text(NSLocalizedString(action.actionLabel, comment: ""))
-                        .padding(14)
-                        .font(.body.weight(.semibold))
-                        .background(Color.blue)
-                        .foregroundStyle(.white)
-                        .clipShape(Capsule())
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 28, height: 28)
+                    .padding(10)
+                    .font(.body.weight(.semibold))
+                    .background(action.accent)
+                    .foregroundStyle(.white) // TODO: check this works for all accents
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                Text(NSLocalizedString(action.title, comment: ""))
+                    .font(.system(size: 28).weight(.bold))
+                Text(NSLocalizedString(action.subtitle, comment: ""))
+                    .foregroundStyle(.primary.opacity(0.8))
+                if let button = action.button {
+                    Button {
+                        button.action()
+                    } label: {
+                        Text(NSLocalizedString(button.label, comment: ""))
+                            .padding(12)
+                            .padding(.horizontal, 6)
+                            .font(.body.weight(.semibold))
+                            .background(Color.blue)
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                    }
+                    .padding()
                 }
             }
             .frame(maxHeight: .infinity)
             .multilineTextAlignment(.center)
-            .padding()
+            .padding(24)
         }
     }
 }
 
 #Preview {
-    ActionView(action: Action(title: "Reminders", subtitle: "We need access to your reminders to notify you about them on your watch.", icon: "list.bullet", action: {}, actionLabel: "Open Settings...", accent: .blue))
+    ActionView(action: Action(title: "Reminders", subtitle: "We need access to your reminders to notify you about them on your watch.", icon: "list.bullet", button: .init(action: {}, label: "Open Settings..."), accent: .blue))
 }

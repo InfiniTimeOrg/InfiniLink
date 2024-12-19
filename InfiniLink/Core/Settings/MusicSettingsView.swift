@@ -36,7 +36,7 @@ struct MusicSettingsView: View {
     }
     
     var unauthorized: some View {
-        ActionView(action: Action(title: "We need access to your Music Library.", subtitle: "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music.", icon: "music.note", action: { UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }, actionLabel: "Open Settings...", accent: .blue))
+        ActionView(action: Action(title: "We need access to your Music Library.", subtitle: "To control Apple Music from your watch, you'll need to give InfiniLink access to Apple Music.", icon: "music.note", button: .init(action: { UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!) }, label: "Open Settings..."), accent: .blue))
     }
     
     var authorized: some View {
