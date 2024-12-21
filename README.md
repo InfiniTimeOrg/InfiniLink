@@ -33,8 +33,8 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Check for and download InfiniTime firmware updates with the GitHub API, and send them to the watch (Manual updates can be completed with DFU zip files downloaded from [InfiniTime's GitHub Releases Page](https://github.com/InfiniTimeOrg/InfiniTime/releases))
   
 ### Currently non-functional features:
-- InfiniTime's navigation app. There is currently no API in Swift to access current directions unless the route is started from inside the app, which may not be practical for most users.
-- Phone notifications and system-wide music controls - Requires implementation of Apple Media Service (AMS) and Apple Notification Center Service (ANCS) in InfiniTime.
+- InfiniTime's navigation app——there is currently no API in Swift to access current directions unless the route is started from inside the app, which may not be practical for most users.
+- Phone notifications and system-wide music controls——requires implementation of Apple Media Service (AMS) and Apple Notification Center Service (ANCS) in InfiniTime.
 
 ### Installation:
 - **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
