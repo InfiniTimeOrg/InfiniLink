@@ -16,44 +16,45 @@ struct RecoveryModeView: View {
     var body: some View {
         VStack(spacing: 16) {
             Spacer()
-            VStack(spacing: 10) {
+            VStack(spacing: 12) {
                 Image("InfiniTime")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 75, height: 75)
                 Group {
-                    Text("InfiniTime") + Text(" Recovery")
-                        .foregroundColor(.red)
+                    Text("InfiniTime") + Text(" Recovery").foregroundColor(.red)
                 }
-                .font(.system(size: 25).weight(.bold))
-            }
-            Text("It looks like your watch is in recovery mode. You'll need to update it to continue.")
-                .multilineTextAlignment(.center)
-                .foregroundStyle(.gray)
-            Button {
-                showUpdateView = true
-            } label: {
-                Text("Continue to Update")
-                    .padding(14)
-                    .font(.body.weight(.semibold))
-                    .background(Color.blue)
-                    .foregroundStyle(.white)
-                    .clipShape(Capsule())
-            }
-            .fullScreenCover(isPresented: $showUpdateView) {
-                NavigationView {
-                    SoftwareUpdateView()
-                        .toolbar {
-                            Button("Cancel") {
-                                showUpdateView = false
+                .font(.system(size: 28).weight(.bold))
+                Text("It looks like your watch is in recovery mode. You'll need to update it to continue.")
+                    .multilineTextAlignment(.center)
+                    .foregroundStyle(.primary.opacity(0.8))
+                Button {
+                    showUpdateView = true
+                } label: {
+                    Text("Continue to Update")
+                        .padding(12)
+                        .padding(.horizontal, 6)
+                        .font(.body.weight(.semibold))
+                        .background(Color.blue)
+                        .foregroundStyle(.white)
+                        .clipShape(Capsule())
+                }
+                .padding()
+                .fullScreenCover(isPresented: $showUpdateView) {
+                    NavigationView {
+                        SoftwareUpdateView()
+                            .toolbar {
+                                Button("Cancel") {
+                                    showUpdateView = false
+                                }
                             }
-                        }
+                    }
+                    .navigationViewStyle(.stack)
                 }
-                .navigationViewStyle(.stack)
             }
             Spacer()
         }
-        .padding(20)
+        .padding(24)
         .preferredColorScheme(.dark)
     }
 }

@@ -67,7 +67,6 @@ class NotificationManager: ObservableObject {
         UNUserNotificationCenter.current().add(request) { error in
             if let error = error {
                 log("Error sending notification: \(error.localizedDescription)", caller: "NotificationManager")
-                print("Error sending notification: \(error.localizedDescription)")
             }
         }
     }

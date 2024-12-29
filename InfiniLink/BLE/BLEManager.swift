@@ -75,6 +75,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var batteryLevel: Double = 0
     @Published var stepCount: Int = 0
     
+    @Published var error: String = ""
+    @Published var showError: Bool = false
+    
     @Published var pairedDevice: Device!
     
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
@@ -211,7 +214,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         if let error = error {
             log("Failed to connect to peripheral: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
-            print("Failed to connect to peripheral: \(error.localizedDescription)")
+            
+            // We can't do anything like check an error code, so this is sufficient for a "bond removed" message
+            // Won't work when language is not English? (localizedDescription)
+            if error.localizedDescription.contains("removed pairing information") {
+                self.error = NSLocalizedString("InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect.", comment: "")
+                self.showError = true
+            }
         }
     }
     
@@ -242,7 +251,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         guard let services = peripheral.services else {
             if let error {
                 log("Error discovering services: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
-                print(error.localizedDescription)
             }
             return
         }

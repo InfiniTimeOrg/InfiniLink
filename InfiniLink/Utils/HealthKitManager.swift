@@ -32,16 +32,14 @@ class HealthKitManager: ObservableObject {
                     
                     if let error {
                         log(error.localizedDescription, caller: "HealthKitManager")
-                        print(error.localizedDescription)
                         return
                     }
                     
                     if success {
-                        log("Steps successfully saved.", type: .info, caller: "HealthKitManager")
+                        log("Steps successfully saved", type: .info, caller: "HealthKitManager")
                         return
                     } else {
-                        log("Unknown error while writing steps.", caller: "HealthKitManager")
-                        print("Unhandled case!")
+                        log("Unknown error while writing steps", caller: "HealthKitManager")
                     }
                 })
             }
@@ -78,16 +76,13 @@ class HealthKitManager: ObservableObject {
                 healthStore.save(heartRateSample, withCompletion: { success, error in
                     if let error = error {
                         log("Error saving heart rate: \(error.localizedDescription)", caller: "HealthKitManager")
-                        print(error.localizedDescription)
                         return
                     }
 
                     if success {
-                        log("Heart rate successfully saved.", type: .info, caller: "HealthKitManager")
-                        print("Heart rate successfully saved in HealthKit")
+                        log("Heart rate successfully saved", type: .info, caller: "HealthKitManager")
                     } else {
-                        log("Unknown error while writing heart rate.", caller: "HealthKitManager")
-                        print("Unhandled case!")
+                        log("Unknown error while writing heart rate", caller: "HealthKitManager")
                     }
                 })
             }

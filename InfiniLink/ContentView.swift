@@ -34,6 +34,9 @@ struct ContentView: View {
                 WelcomeView()
             }
         }
+        .alert(isPresented: $bleManager.showError) {
+            Alert(title: Text("Error"), message: Text(bleManager.error), dismissButton: .default(Text("OK")))
+        }
         .onAppear {
             bleManager.startScanning()
         }

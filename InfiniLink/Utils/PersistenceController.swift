@@ -58,7 +58,6 @@ struct PersistenceController {
                  Check the error message to determine what the actual problem was.
                  */
                 log("Unresolved error loading stores: \(error.localizedDescription)", caller: "PersistenceController")
-                print("Unresolved error \(error), \(error.userInfo)")
             }
         })
         container.viewContext.automaticallyMergesChangesFromParent = true

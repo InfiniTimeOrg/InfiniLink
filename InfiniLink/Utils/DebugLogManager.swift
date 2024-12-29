@@ -23,6 +23,7 @@ struct DebugLog: Identifiable {
     let body: String
     let type: DebugLogType
     let target: DebugLogTarget
+    let date: Date
 }
 
 class DebugLogManager: ObservableObject {
@@ -33,6 +34,15 @@ class DebugLogManager: ObservableObject {
 
 // Create a global function so we can log without calling LogManager
 func log(_ log: String, type: DebugLogType = .error, caller: String? = nil, target: DebugLogTarget = .app) {
-    let log = DebugLog(caller: caller, body: log, type: type, target: target)
-    DebugLogManager.shared.logs.append(log)
+    print("\(caller == nil ? "" : caller!): \(log)")
+    
+    let log = DebugLog(caller: caller,
+                       body: log,
+                       type: type,
+                       target: target,
+                       date: Date())
+    
+    DispatchQueue.main.async {
+        DebugLogManager.shared.logs.append(log)
+    }
 }

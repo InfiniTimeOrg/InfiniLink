@@ -217,7 +217,13 @@
     "Cancel Update" : {
 
     },
+    "Charts" : {
+
+    },
     "Checking for updates..." : {
+
+    },
+    "Clear Step Data" : {
 
     },
     "Clock Type" : {
@@ -307,6 +313,9 @@
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
 
     },
+    "Error" : {
+
+    },
     "Error fetching weather" : {
 
     },
@@ -388,6 +397,9 @@
     "Imperial" : {
 
     },
+    "InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect." : {
+
+    },
     "InfiniTime" : {
 
     },
@@ -397,7 +409,7 @@
     "InfiniTime is up-to-date." : {
 
     },
-    "Installling update.." : {
+    "Installing update..." : {
 
     },
     "Interval" : {
@@ -464,6 +476,9 @@
 
     },
     "Now" : {
+
+    },
+    "OK" : {
 
     },
     "Optional" : {

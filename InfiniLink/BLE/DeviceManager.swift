@@ -190,7 +190,6 @@ class DeviceManager: ObservableObject {
             self.watches = try context.fetch(fetchRequest)
         } catch {
             log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
-            print("Error fetching devices: \(error)")
         }
     }
     
@@ -199,7 +198,6 @@ class DeviceManager: ObservableObject {
             try context.save()
         } catch {
             log("Error saving context: \(error.localizedDescription)", caller: "DeviceManager")
-            print(error.localizedDescription)
         }
     }
 }

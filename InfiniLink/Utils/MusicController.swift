@@ -66,7 +66,6 @@ class MusicController {
                 try session.setActive(false)
             } catch {
                 log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
-                print("Unable to activate audio session: \(error.localizedDescription)")
             }
             musicPlaying = musicPlayer.playbackState.rawValue
             

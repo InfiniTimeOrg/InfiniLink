@@ -155,7 +155,6 @@ class BLEFSHandler: ObservableObject {
                 }
             } catch {
                 log("Error parsing resources", caller: "BLEFSHandler", target: .ble)
-                print("Something went wrong parsing resources: \(error)")
             }
         }
     }
@@ -440,27 +439,21 @@ class BLEFSHandler: ObservableObject {
             case Responses.error.rawValue:
                 readFileFS.completed = true
                 log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("error")
             case Responses.noFile.rawValue:
                 readFileFS.completed = true
                 log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("no file")
             case Responses.protocolError.rawValue:
                 readFileFS.completed = true
                 log("Protocol error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("protocol error")
             case Responses.readOnly.rawValue:
                 readFileFS.completed = true
                 log("Read only response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("read only")
             case Responses.dirNotEmptyError.rawValue:
                 readFileFS.completed = true
                 log("Directory not empty response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("dir not empty")
             default:
                 readFileFS.completed = true
                 log("Unknown response from BLE FS with code: \(responseData[1])", caller: "BLEFSHandler", target: .ble)
-                print("unknown error, response code \(responseData[1])")
             }
             readFileFS.group.leave()
         } else if responseData[0] == Commands.writeResponse.rawValue {
@@ -477,32 +470,26 @@ class BLEFSHandler: ObservableObject {
                 writeFileFS.completed = true
                 writeFileFS.valid = false
                 log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("error")
             case Responses.noFile.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
                 log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("no file")
             case Responses.protocolError.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
                 log("Protocol error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("protocol error")
             case Responses.readOnly.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
                 log("Read only response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("read only")
             case Responses.dirNotEmptyError.rawValue:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
                 log("Directory not empty response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("dir not empty")
             default:
                 writeFileFS.completed = true
                 writeFileFS.valid = false
                 log("Unknown error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-                print("unknown error, response code \(responseData[1])")
             }
             writeFileFS.group.leave()
         } else if responseData[0] == Commands.mvResponse.rawValue || responseData[0] == Commands.mkdirResponse.rawValue || responseData[0] == Commands.deleteResponse.rawValue {
@@ -546,27 +533,21 @@ class BLEFSHandler: ObservableObject {
             case Responses.error.rawValue:
                 informationTransfer[0].group.leave()
                 log("Error response from BLE FS", caller: "BLEFSHandler")
-                print("error")
             case Responses.noFile.rawValue:
                 informationTransfer[0].group.leave()
                 log("No file response from BLE FS", caller: "BLEFSHandler")
-                print("no file")
             case Responses.protocolError.rawValue:
                 informationTransfer[0].group.leave()
                 log("Protocol error response from BLE FS", caller: "BLEFSHandler")
-                print("protocol error")
             case Responses.readOnly.rawValue:
                 informationTransfer[0].group.leave()
                 log("Read only response from BLE FS", caller: "BLEFSHandler")
-                print("read only")
             case Responses.dirNotEmptyError.rawValue:
                 informationTransfer[0].group.leave()
                 log("Directory not empty response from BLE FS", caller: "BLEFSHandler")
-                print("dir not empty")
             default:
                 informationTransfer[0].group.leave()
                 log("Unknown error response from BLE FS with response code: \(responseData[1])", caller: "BLEFSHandler")
-                print("unknown error, response code \(responseData[1])")
             }
         }
     }

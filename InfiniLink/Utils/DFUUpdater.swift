@@ -103,7 +103,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	func dfuStateDidChange(to state: DFUState) {
 		dfuState = state.description
         
-        if state == .completed {
+        switch state {
+        case .completed:
             transferCompleted = true
             isUpdating = false
             firmwareFilename = ""
@@ -112,11 +113,16 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             
             downloadManager.updateStarted = false
             
+            dfuController = nil
+            percentComplete = 0
+        case .disconnecting:
             bleManager.hasDisconnectedForUpdate = true
-		}
-        
-        dfuController = nil
-        percentComplete = 0
+        case .aborted:
+            dfuController = nil
+            percentComplete = 0
+        default:
+            break
+        }
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
@@ -128,7 +134,6 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
-        log("DFU log: \(message)", caller: "DFUUpdater")
-        print("DFU log level: \(level.name()), message: \(message)")
+        log("DFU log: \(message)", type: .info, caller: "DFUUpdater")
 	}
 }

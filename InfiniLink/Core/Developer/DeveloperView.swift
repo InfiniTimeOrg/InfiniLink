@@ -53,6 +53,18 @@ struct DeveloperView: View {
             } footer: {
                 Text("Send random weather data to the watch.")
             }
+            Section("Charts") {
+//                Button {
+//                    bleWriteManager.writeSteps()
+//                } label: {
+//                    Text("Send Test Steps")
+//                }
+                Button(role: .destructive) {
+                    StepCountManager.shared.clearCurrentDaySteps()
+                } label: {
+                    Text("Clear Step Data")
+                }
+            }
         }
         .navigationTitle("Developer")
     }

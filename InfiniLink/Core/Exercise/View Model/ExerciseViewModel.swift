@@ -96,7 +96,6 @@ class ExerciseViewModel: ObservableObject {
             try context.save()
         } catch {
             log("Error saving context: \(error.localizedDescription)", caller: "ExerciseViewModel")
-            print(error.localizedDescription)
         }
     }
 }

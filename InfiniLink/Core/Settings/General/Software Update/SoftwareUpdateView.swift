@@ -166,7 +166,6 @@ struct OtherUpdateVersions: View {
             return resource.fileSize!
         } catch {
             log("Error getting file size: \(error.localizedDescription)", caller: "OtherUpdateVersions")
-            print("Error: \(error)")
         }
         
         return 0
@@ -174,7 +173,7 @@ struct OtherUpdateVersions: View {
     
     var body: some View {
         List {
-            Section(footer: Text("External resources are fonts and images that are required for some apps and watch faces.")) {
+            Section {
                 Button {
                     showLocalFileSheet = true
                 } label: {
@@ -202,7 +201,6 @@ struct OtherUpdateVersions: View {
                         dismiss()
                     } catch {
                         log("Error getting firmware file: \(error.localizedDescription)", caller: "OtherUpdateVersions")
-                        print(error.localizedDescription)
                     }
                 }
                 if !bleManager.isDeviceInRecoveryMode {
@@ -230,9 +228,12 @@ struct OtherUpdateVersions: View {
                             dismiss()
                         } catch {
                             log("Error getting resource file: \(error.localizedDescription)", caller: "OtherUpdateVersions")
-                            print(error.localizedDescription)
                         }
                     }
+                }
+            } footer: {
+                if !bleManager.isDeviceInRecoveryMode {
+                    Text("External resources are fonts and images that are required for some apps and watch faces.")
                 }
             }
             Section {

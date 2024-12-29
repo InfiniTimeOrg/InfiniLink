@@ -34,7 +34,7 @@ struct DeviceView: View {
             return NSLocalizedString("Connecting...", comment: "")
         default:
             if bleManager.hasDisconnectedForUpdate {
-                return NSLocalizedString("Installling update..", comment: "")
+                return NSLocalizedString("Installing update...", comment: "")
             } else {
                 return NSLocalizedString("Disconnected", comment: "")
             }

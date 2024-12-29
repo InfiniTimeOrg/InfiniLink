@@ -18,7 +18,6 @@ class StepCountManager: ObservableObject {
             return try viewContext.fetch(request)
         } catch {
             log(error.localizedDescription, caller: "StepCountManager")
-            print(error.localizedDescription)
             return []
         }
     }

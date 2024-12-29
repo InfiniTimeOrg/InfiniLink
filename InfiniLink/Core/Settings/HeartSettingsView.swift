@@ -38,7 +38,6 @@ struct HeartSettingsView: View {
             }
         } catch {
             log("Error writing heart data CSV file: \(error.localizedDescription)", caller: "HeartSettingsView")
-            print("Error writing CSV file: \(error)")
         }
     }
     

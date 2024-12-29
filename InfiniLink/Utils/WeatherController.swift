@@ -108,7 +108,7 @@ class WeatherController: ObservableObject {
         let icon = icon.replacingOccurrences(of: ".fill", with: "")
         
         switch icon {
-            // Don't include the "sunny" icons, because they'll be handled by `default`
+        // Don't include the "sunny" icons, because they'll be handled by `default`
         case "cloud":
             return 2
         case "cloud.drizzle", "cloud.sun.rain":
@@ -117,7 +117,7 @@ class WeatherController: ObservableObject {
             return 5
         case "cloud.bolt", "cloud.bolt.rain":
             return 6
-        case "cloud.hail", "cloud.snow", "cloud.sleet":
+        case "cloud.hail", "cloud.snow", "cloud.sleet", "snowflake":
             return 7
         case "cloud.fog":
             return 8

@@ -68,7 +68,6 @@ struct BLEWriteManager {
         bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature)))) // Maximum temperature
         
         guard var locationData = location.data(using: .ascii) else {
-            print("Weather location string failed")
             log("Error encoding location string", caller: "BLEWriteManager")
             
             for _ in 1...32 {bytes.append(0)}
@@ -99,7 +98,6 @@ struct BLEWriteManager {
     func writeForecastWeatherData(minimumTemperature: [Double], maximumTemperature: [Double], icon: [UInt8])  {
         if (minimumTemperature.count + maximumTemperature.count + icon.count) / 3 != minimumTemperature.count && minimumTemperature.count >= 5 && minimumTemperature.count < 1 {
             log("Forecast data arrays do not match, forecast larger than 5 days, or forecast data is empty", caller: "BLEWriteManager")
-            print("Forecast data arrays do not match, forecast larger than 5 days, or forecast data is empty")
             return
         }
         

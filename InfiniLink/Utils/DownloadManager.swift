@@ -143,6 +143,7 @@ class DownloadManager: NSObject, ObservableObject {
                     dfuUpdater.firmwareSelected = true
                     dfuUpdater.local = false
                     
+                    updateAvailable = true
                     updateVersion = i.tag_name
                     updateBody = i.body
                     updateSize = chooseAsset(response: i).size
@@ -182,7 +183,6 @@ class DownloadManager: NSObject, ObservableObject {
                             }
                         }
                         
-                        self.updateAvailable = self.checkForUpdates(currentVersion: DeviceManager.shared.firmware)
                         self.loadingReleases = false
                     }
                 } catch {
@@ -229,7 +229,7 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getBuildArtifacts(for run: WorkflowRun, completion: @escaping([Artifact]) -> Void) {
-        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs/\(run.id)/artifacts") else {
+        guard let url = URL(string: run.artifacts_url) else {
             return
         }
         
@@ -312,7 +312,6 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             }
         } catch {
             log("Error downloading resource or firmware: \(error.localizedDescription)", caller: "DownloadManager")
-            print(error.localizedDescription)
         }
         
         DispatchQueue.main.async {
@@ -338,7 +337,6 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
     func urlSession(_: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
         if let error = error {
             log(error.localizedDescription, caller: "DownloadManager")
-            print(error.localizedDescription)
         }
     }
 }

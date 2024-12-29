@@ -60,7 +60,6 @@ struct FileSystemToolbar: ViewModifier {
                     }
                 } catch {
                     log("Error sending files: \(error.localizedDescription)", caller: "FilesystemView",  target: .ble)
-                    print("Error: \(error.localizedDescription)")
                 }
             }
             
@@ -230,7 +229,6 @@ struct FileSystemView: View {
                 }
             } catch {
                 log("Error getting file: \(error.localizedDescription)", caller: "FilesystemView")
-                print(error.localizedDescription)
             }
         }
         .onAppear {

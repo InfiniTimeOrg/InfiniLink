@@ -68,7 +68,6 @@ struct AppearanceView: View {
                 try await UIApplication.shared.setAlternateIconName(iconName)
             } catch {
                 log("Error updating app icon: \(error.localizedDescription)", caller: "AppearanceView")
-                print("Could not update icon: \(error.localizedDescription)")
             }
             
             getCurrentIcon()

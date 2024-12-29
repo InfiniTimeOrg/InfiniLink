@@ -67,7 +67,6 @@ struct BLEUpdatedCharacteristicHandler {
                         updateHeartRate(bpm: bpm)
                     } else {
                         log("Abnormal heart rate value detected: \(bpm)", caller: "BLEUpdatedCharacteristicHandler")
-                        print("Abnormal value, should be filtered")
                     }
                 } else {
                     // If no last data point or filtering is not applied, update heart rate
@@ -93,7 +92,6 @@ struct BLEUpdatedCharacteristicHandler {
                 healthKitManager.readCurrentSteps { value, error in
                     if let error = error {
                         log("Error reading current steps: \(error.localizedDescription)", caller: "HealthKitManager")
-                        print(error.localizedDescription)
                         return
                     }
                     

@@ -40,11 +40,15 @@ struct DebugLogsView: View {
                 List {
                     ForEach(logs) { log in
                         VStack(alignment: .leading, spacing: 8) {
-                            if let caller = log.caller {
-                                Text(caller)
-                                    .font(.caption.weight(.semibold))
-                                    .foregroundStyle(.gray)
+                            Group {
+                                if let caller = log.caller {
+                                    Text(caller + " • " + log.date.formatted())
+                                } else {
+                                    Text(log.date.formatted())
+                                }
                             }
+                            .font(.caption.weight(.semibold))
+                            .foregroundStyle(.gray)
                             Text(log.body)
                             if log.type == .error {
                                 let color = (log.type == .error ? Color.red : Color.orange)
@@ -62,10 +66,12 @@ struct DebugLogsView: View {
                             }
                         }
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .padding(12)
+                        .padding()
                         .contextMenu {
                             Button {
-                                UIPasteboard.general.string = "\(log.type.rawValue.capitalized) from \(log.caller): \(log.body)"
+                                UIPasteboard.general.string = {
+                                    return "\(log.type.rawValue.capitalized) \(log.caller == nil ? "" : "from \(log.caller!)") at \(log.date.formatted()): \(log.body)"
+                                }()
                             } label: {
                                 Label("Copy", systemImage: "doc.on.clipboard")
                             }
@@ -82,7 +88,7 @@ struct DebugLogsView: View {
         DebugLogsView()
             .onAppear {
                 #if DEBUG
-                DebugLogManager.shared.logs.append(DebugLog(caller: "DebugLogsView", body: "This is a testing error, designed to be multiple lines long.", type: .error, target: .app))
+                DebugLogManager.shared.logs.append(DebugLog(caller: "DebugLogsView", body: "This is a testing error, designed to be multiple lines long.", type: .error, target: .app, date: Date()))
                 #endif
             }
     }

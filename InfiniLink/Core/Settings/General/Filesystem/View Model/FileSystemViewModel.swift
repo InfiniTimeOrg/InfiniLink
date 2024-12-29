@@ -99,7 +99,6 @@ class FileSystemViewModel: ObservableObject {
             
             if !rmDir {
                 log("Failed to remove file with path: \(path)", caller: "FileSystemViewModel", target: .ble)
-                print("ERROR: failed to remove file with path '\(path)'.")
             }
             
             DispatchQueue.main.async {
