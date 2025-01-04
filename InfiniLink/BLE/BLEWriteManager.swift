@@ -16,7 +16,7 @@ struct BLEWriteManager {
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
         guard let writeData = message.data(using: .ascii) else {
-            // TODO: for music app, this sends an empty string to not display anything if this is non-ascii. This string can be changed to a "cannot display song title" or whatever but that seems a lot more annoying than just displaying nothing.
+            // There's no title/artst, so update it with a blank string
             bleManager.infiniTime.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
             return
         }
@@ -124,9 +124,28 @@ struct BLEWriteManager {
         }
     }
     
+    func writeNavigationUpdate() {
+        guard bleManager.navigationFlagsCharacteristic != nil && bleManager.navigationNarrativeCharacteristic != nil && bleManager.navigationDistanceCharacteristic != nil && bleManager.navigationProgressCharacteristic != nil && bleManager.infiniTime != nil else { return }
+        
+        guard let icon = "fork".data(using: .ascii) else { return }
+        guard let narrative = "At the roundabout take the first exit".data(using: .ascii) else { return }
+        guard let distance = "20ft".data(using: .ascii) else { return }
+        
+        var progress = Data()
+        progress.append(UInt8(23))
+        
+        bleManager.infiniTime.writeValue(narrative, for: bleManager.navigationNarrativeCharacteristic, type: .withResponse)
+        bleManager.infiniTime.writeValue(distance, for: bleManager.navigationDistanceCharacteristic, type: .withResponse)
+        bleManager.infiniTime.writeValue(progress, for: bleManager.navigationProgressCharacteristic, type: .withResponse)
+        bleManager.infiniTime.writeValue(icon, for: bleManager.navigationFlagsCharacteristic, type: .withoutResponse)
+    }
+}
+
+// MARK: Helper functions
+extension BLEWriteManager {
     func timeSince1970() -> [UInt8] {
         let timeInterval : UInt64 = UInt64(Date().timeIntervalSince1970)
-
+        
         let byte1 = UInt8(timeInterval & 0x00000000000000FF)
         let byte2 = UInt8((timeInterval & 0x000000000000FF00) >> 8)
         let byte3 = UInt8((timeInterval & 0x0000000000FF0000) >> 16)
@@ -148,7 +167,6 @@ struct BLEWriteManager {
 }
 
 fileprivate func convertHex(_ s: String.UnicodeScalarView, i: String.UnicodeScalarIndex, appendTo d: [UInt8]) -> [UInt8] {
-    
     let skipChars = CharacterSet.whitespacesAndNewlines
     
     guard i != s.endIndex else { return d }
@@ -170,7 +188,6 @@ fileprivate func convertHex(_ s: String.UnicodeScalarView, i: String.UnicodeScal
 }
 
 extension String {
-    
     /// Convert Hexadecimal String to Array<UInt>
     ///     "0123".hex                // [1, 35]
     ///     "aabbccdd 00112233".hex   // 170, 187, 204, 221, 0, 17, 34, 51]

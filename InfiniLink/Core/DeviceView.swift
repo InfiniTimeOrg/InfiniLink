@@ -122,7 +122,7 @@ struct DeviceView: View {
                         NavigationLink {
                             HeartView()
                         } label: {
-                            ListRowView(title: "Heart Rate", icon: "heart.fill", iconColor: .red)
+                            ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
                         }
                         NavigationLink {
                             StepsView()
@@ -141,13 +141,6 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                         }
-                        /*
-                        NavigationLink {
-                            CustomizationView()
-                        } label: {
-                            ListRowView(title: "Customization", icon: "paintbrush.fill", iconColor: .blue)
-                        }
-                        */
                         NavigationLink {
                             BatterySettingsView()
                         } label: {
@@ -157,6 +150,11 @@ struct DeviceView: View {
                             NotificationsSettingsView()
                         } label: {
                             ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
+                        }
+                        NavigationLink {
+                            DirectionsView()
+                        } label: {
+                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
                         }
                         NavigationLink {
                             WeatherView()

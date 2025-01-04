@@ -20,6 +20,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var currentTimeService: CBCharacteristic!
     var notifyCharacteristic: CBCharacteristic!
     var weatherCharacteristic: CBCharacteristic!
+    var navigationFlagsCharacteristic: CBCharacteristic!
+    var navigationNarrativeCharacteristic: CBCharacteristic!
+    var navigationDistanceCharacteristic: CBCharacteristic!
+    var navigationProgressCharacteristic: CBCharacteristic!
     
     struct MusicCharacteristics {
         var control: CBCharacteristic!
@@ -44,6 +48,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
         let motion = CBUUID(string: "00030002-78fc-48fe-8e23-433b3a1942d0")
         let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
+        
+        // We don't need the navigation service UUID, just its characteristics
+        // let navigation = CBUUID(string: "00010000-78fc-48fe-8e23-433b3a1942d0")
+        let navigationFlags = CBUUID(string: "00010001-78fc-48fe-8e23-433b3a1942d0")
+        let navigationNarrative = CBUUID(string: "00010002-78fc-48fe-8e23-433b3a1942d0")
+        let navigationDistance = CBUUID(string: "00010003-78fc-48fe-8e23-433b3a1942d0")
+        let navigationProgress = CBUUID(string: "00010004-78fc-48fe-8e23-433b3a1942d0")
+        
         let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
         let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
         let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
@@ -98,6 +110,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     override init() {
         super.init()
         self.central = CBCentralManager(delegate: self, queue: nil)
+        
+        log("\(central.retrievePeripherals(withIdentifiers: [UUID(uuidString: pairedDeviceID!)!]))", type: .info, caller: "BLEManager: Init")
         
         self.startScanning()
     }
@@ -241,6 +255,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         isSwitchedOn = (central.state == .poweredOn)
+        
         if isSwitchedOn && !isConnectedToPinetime {
             startScanning()
         }

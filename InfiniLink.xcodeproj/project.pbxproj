@@ -19,6 +19,7 @@
 		E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */; };
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
+		E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396142D28E59400A13B90 /* DirectionsView.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
@@ -137,6 +138,7 @@
 		E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperView.swift; sourceTree = "<group>"; };
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
+		E04396142D28E59400A13B90 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		E059999B2CB2E56300D64E0B /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 				E03C30B62CC7417C00DD8363 /* WeatherView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
+				E04396142D28E59400A13B90 /* DirectionsView.swift */,
 				E07D8F132CBD688A005C1325 /* CustomizationView.swift */,
 			);
 			path = Core;
@@ -749,6 +752,7 @@
 				E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */,
 				E05999992CB25C5600D64E0B /* SleepView.swift in Sources */,
 				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
+				E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */,
 				E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */,
 				E05999BF2CB419D300D64E0B /* InfiniLink.xcdatamodeld in Sources */,
 				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,

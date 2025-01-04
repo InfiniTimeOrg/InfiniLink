@@ -1,11 +1,10 @@
 //
-//  BLESubscription Manager.swift
+//  BLEDiscoveredCharacteristics.swift
 //  InfiniLink
 //
-//  Created by Alex Emry on 10/1/21.
-//  
+//  Created by Liam Willey on 1/3/25.
 //
-    
+//
 
 import CoreBluetooth
 import UIKit
@@ -50,6 +49,16 @@ struct BLEDiscoveredCharacteristics {
             BLEWriteManager().setTime(characteristic: characteristic)
         case bleManager.cbuuidList.weather:
             bleManager.weatherCharacteristic = characteristic
+            
+        case bleManager.cbuuidList.navigationFlags:
+            bleManager.navigationFlagsCharacteristic = characteristic
+        case bleManager.cbuuidList.navigationNarrative:
+            bleManager.navigationNarrativeCharacteristic = characteristic
+        case bleManager.cbuuidList.navigationDistance:
+            bleManager.navigationDistanceCharacteristic = characteristic
+        case bleManager.cbuuidList.navigationProgress:
+            bleManager.navigationProgressCharacteristic = characteristic
+            
         case bleManager.cbuuidList.sleep:
             peripheral.setNotifyValue(true, for: characteristic)
 		default:

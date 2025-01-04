@@ -18,7 +18,7 @@ struct DeveloperView: View {
                 }
             }
             Section {
-                Button {
+                Button("Test Weather") {
                     bleWriteManager.writeForecastWeatherData(minimumTemperature: {
                         var mins = [Double]()
                         
@@ -45,20 +45,16 @@ struct DeveloperView: View {
                         return icons
                     }())
                     bleWriteManager.writeCurrentWeatherData(currentTemperature: Double.random(in: -2...50), minimumTemperature: Double.random(in: -2...50), maximumTemperature: Double.random(in: -2...50), location: "Location", icon: UInt8.random(in: 0...8))
-                } label: {
-                    Text("Test Weather")
+                }
+                Button("Test Navigation") {
+                    bleWriteManager.writeNavigationUpdate()
                 }
             } header: {
-                Text("Weather")
+                Text("Test Data")
             } footer: {
-                Text("Send random weather data to the watch.")
+                Text("Send randomly generated data to the various characteristics on the watch.")
             }
             Section("Charts") {
-//                Button {
-//                    bleWriteManager.writeSteps()
-//                } label: {
-//                    Text("Send Test Steps")
-//                }
                 Button(role: .destructive) {
                     StepCountManager.shared.clearCurrentDaySteps()
                 } label: {

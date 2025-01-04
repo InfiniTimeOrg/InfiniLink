@@ -457,6 +457,9 @@
     "My Watches" : {
 
     },
+    "Navigation" : {
+
+    },
     "New Folder" : {
 
     },
@@ -538,7 +541,7 @@
     "Send Notification" : {
 
     },
-    "Send random weather data to the watch." : {
+    "Send randomly generated data to the various characteristics on the watch." : {
 
     },
     "Send to iPhone" : {
@@ -578,6 +581,12 @@
 
     },
     "System" : {
+
+    },
+    "Test Data" : {
+
+    },
+    "Test Navigation" : {
 
     },
     "Test Weather" : {
