@@ -39,7 +39,7 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - InfiniTime's navigation app—there is currently no API in Swift to access current directions unless the route is started from inside the app, which may not be practical for most users.
 - System-wide music controls—requires implementation of Apple Media Service (AMS).
 
-### Installation:
+## Installation:
 - **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
 
 ## License
