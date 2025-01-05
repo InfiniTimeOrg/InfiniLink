@@ -76,7 +76,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let cbuuidList = CBUUIDList()
     var musicChars = MusicCharacteristics()
     
-    @Published var isSwitchedOn = false
+    @Published var isCentralOn = false
     @Published var isScanning = false
     @Published var setTimeError = false
     @Published var isConnectedToPinetime = false
@@ -118,18 +118,21 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     override init() {
         super.init()
         self.central = CBCentralManager(delegate: self, queue: nil)
-        
-        log("\(central.retrievePeripherals(withIdentifiers: [UUID(uuidString: pairedDeviceID!)!]))", type: .info, caller: "BLEManager: Init")
-        
-        self.startScanning()
     }
     
     func startScanning() {
         guard central.state == .poweredOn else { return }
         
-        central.scanForPeripherals(withServices: nil, options: nil)
-        isScanning = true
-        newPeripherals = []
+        let peripherals = central.retrievePeripherals(withIdentifiers: [UUID(uuidString: pairedDeviceID!)!])
+        log("\(peripherals)", type: .info, caller: "BLEManager: found peripherals")
+        
+        if let peripheral = peripherals.first, !isConnectedToPinetime {
+            connect(peripheral: peripheral) {}
+        } else {
+            central.scanForPeripherals(withServices: nil, options: nil)
+            isScanning = true
+            newPeripherals = []
+        }
     }
     
     func stopScanning() {
@@ -140,7 +143,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func connect(peripheral: CBPeripheral, completion: @escaping() -> Void) {
-        guard isSwitchedOn else { return }
+        guard isCentralOn else { return }
         
         if peripheral.name == "InfiniTime" {
             if isConnectedToPinetime {
@@ -262,14 +265,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        isSwitchedOn = (central.state == .poweredOn)
+        isCentralOn = (central.state == .poweredOn)
         
-        if isSwitchedOn && !isConnectedToPinetime {
+        if isCentralOn && !isConnectedToPinetime {
             startScanning()
         }
     }
     
-    // MARK: CBPeripheralDelegate
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else {
             if let error {
