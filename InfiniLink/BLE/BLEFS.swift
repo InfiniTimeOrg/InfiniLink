@@ -491,7 +491,7 @@ class BLEFSHandler: ObservableObject {
                 writeFileFS.valid = false
                 log("Unknown error response from BLE FS", caller: "BLEFSHandler", target: .ble)
             }
-            writeFileFS.group.leave()
+//            writeFileFS.group.leave()
         } else if responseData[0] == Commands.mvResponse.rawValue || responseData[0] == Commands.mkdirResponse.rawValue || responseData[0] == Commands.deleteResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:
@@ -568,7 +568,7 @@ class BLEFSHandler: ObservableObject {
         return [byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8]
     }
     
-    private func convertUInt32ToUInt8Array(value: UInt32) -> [UInt8] {
+    func convertUInt32ToUInt8Array(value: UInt32) -> [UInt8] {
         let byte1 = UInt8(value & 0x000000FF)
         let byte2 = UInt8((value & 0x0000FF00) >> 8)
         let byte3 = UInt8((value & 0x00FF0000) >> 16)

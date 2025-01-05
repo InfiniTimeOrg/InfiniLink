@@ -20,6 +20,7 @@
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
 		E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396142D28E59400A13B90 /* DirectionsView.swift */; };
+		E04396172D2A410100A13B90 /* DFUUpdaterCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
@@ -92,8 +93,7 @@
 		E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8462CAF01950043DA2D /* DeviceView.swift */; };
 		E0C7C8532CAF14870043DA2D /* SetTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8512CAF14870043DA2D /* SetTime.swift */; };
 		E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */; };
-		E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */; };
-		E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */; };
+		E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84E2CAF14870043DA2D /* BLECharacteristicHandler.swift */; };
 		E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84C2CAF14870043DA2D /* BLEManager.swift */; };
 		E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */; };
 		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
@@ -139,6 +139,7 @@
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		E04396142D28E59400A13B90 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
+		E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUUpdaterCustom.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		E059999B2CB2E56300D64E0B /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
@@ -209,9 +210,8 @@
 		E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
 		E0C7C8462CAF01950043DA2D /* DeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceView.swift; sourceTree = "<group>"; };
-		E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEDiscoveredCharacteristics.swift; sourceTree = "<group>"; };
 		E0C7C84C2CAF14870043DA2D /* BLEManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEManager.swift; sourceTree = "<group>"; };
-		E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEUpdateHandler.swift; sourceTree = "<group>"; };
+		E0C7C84E2CAF14870043DA2D /* BLECharacteristicHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLECharacteristicHandler.swift; sourceTree = "<group>"; };
 		E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
 		E0C7C8512CAF14870043DA2D /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
@@ -557,13 +557,13 @@
 		E0C7C8522CAF14870043DA2D /* BLE */ = {
 			isa = PBXGroup;
 			children = (
-				E0C7C84B2CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift */,
 				E0C7C84C2CAF14870043DA2D /* BLEManager.swift */,
-				E0C7C84E2CAF14870043DA2D /* BLEUpdateHandler.swift */,
+				E0C7C84E2CAF14870043DA2D /* BLECharacteristicHandler.swift */,
 				E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */,
 				E0A7C07E2CB1B3300042A12D /* BLEFS.swift */,
 				E0C7C8512CAF14870043DA2D /* SetTime.swift */,
 				E07D8F232CC012FC005C1325 /* DeviceManager.swift */,
+				E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -753,10 +753,9 @@
 				E05999992CB25C5600D64E0B /* SleepView.swift in Sources */,
 				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
 				E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */,
-				E0C7C8572CAF14870043DA2D /* BLEDiscoveredCharacteristics.swift in Sources */,
 				E05999BF2CB419D300D64E0B /* InfiniLink.xcdatamodeld in Sources */,
 				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,
-				E0C7C8592CAF14870043DA2D /* BLEUpdateHandler.swift in Sources */,
+				E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */,
 				E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */,
 				E0A7C0A32CB246D10042A12D /* DetailHeaderView.swift in Sources */,
 				E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */,
@@ -806,6 +805,7 @@
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,
 				E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */,
+				E04396172D2A410100A13B90 /* DFUUpdaterCustom.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

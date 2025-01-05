@@ -107,10 +107,9 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         case .completed:
             transferCompleted = true
             isUpdating = false
-            firmwareFilename = ""
-            resourceFilename = ""
             firmwareSelected = false
             
+            downloadManager.updateAvailable = false
             downloadManager.updateStarted = false
             
             dfuController = nil

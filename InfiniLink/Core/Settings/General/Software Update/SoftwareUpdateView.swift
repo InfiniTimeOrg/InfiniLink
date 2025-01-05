@@ -116,8 +116,10 @@ struct SoftwareUpdateView: View {
                             downloadManager.updateStarted = true
                         } else {
                             if dfuUpdater.local {
-                                dfuUpdater.transfer()
-                                downloadManager.updateStarted = true
+//                                dfuUpdater.transfer()
+//                                downloadManager.updateStarted = true
+                                
+                                DFUUpdaterCustom.shared.startDFU()
                             } else {
                                 downloadManager.startTransfer = true
                                 downloadManager.startDownload(url: downloadManager.browser_download_url)

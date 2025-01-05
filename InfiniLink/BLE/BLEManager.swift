@@ -12,6 +12,7 @@ import SwiftUI
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     static let shared = BLEManager()
     
+    lazy var characteristicHandler = BLECharacteristicHandler()
     lazy var deviceManager = DeviceManager.shared
     let downloadManager = DownloadManager.shared
     
@@ -20,6 +21,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var currentTimeService: CBCharacteristic!
     var notifyCharacteristic: CBCharacteristic!
     var weatherCharacteristic: CBCharacteristic!
+    
+    var dfuControlPointCharacteristic: CBCharacteristic!
+    var dfuPacketCharacteristic: CBCharacteristic!
+    
     var navigationFlagsCharacteristic: CBCharacteristic!
     var navigationNarrativeCharacteristic: CBCharacteristic!
     var navigationDistanceCharacteristic: CBCharacteristic!
@@ -48,6 +53,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
         let motion = CBUUID(string: "00030002-78fc-48fe-8e23-433b3a1942d0")
         let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
+        
+        let dfuControlPoint = CBUUID(string: "00001531-1212-efde-1523-785feabcd123")
+        let dfuPacket = CBUUID(string: "00001532-1212-efde-1523-785feabcd123")
         
         // We don't need the navigation service UUID, just its characteristics
         // let navigation = CBUUID(string: "00010000-78fc-48fe-8e23-433b3a1942d0")
@@ -282,12 +290,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         for characteristic in characteristics {
             deviceManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
-            BLEDiscoveredCharacteristics().handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
+            characteristicHandler.handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
         }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
         deviceManager.updateInfo(characteristic: characteristic)
-        BLEUpdatedCharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
+        characteristicHandler.handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }
 }
