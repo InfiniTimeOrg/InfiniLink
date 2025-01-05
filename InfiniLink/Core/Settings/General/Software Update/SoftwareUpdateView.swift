@@ -17,6 +17,8 @@ struct SoftwareUpdateView: View {
     @State private var showLocalFileSheet = false
     @State private var showResourcePickerSheet = false
     
+    @AppStorage("useExperimentalDFU") var useExperimentalDFU = false
+    
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
@@ -116,10 +118,12 @@ struct SoftwareUpdateView: View {
                             downloadManager.updateStarted = true
                         } else {
                             if dfuUpdater.local {
-//                                dfuUpdater.transfer()
-//                                downloadManager.updateStarted = true
-                                
-                                DFUUpdaterCustom.shared.startDFU()
+                                if useExperimentalDFU {
+                                    DFUUpdaterCustom.shared.startDFU()
+                                } else {
+                                    dfuUpdater.transfer()
+                                    downloadManager.updateStarted = true
+                                }
                             } else {
                                 downloadManager.startTransfer = true
                                 downloadManager.startDownload(url: downloadManager.browser_download_url)

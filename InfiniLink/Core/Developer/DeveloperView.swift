@@ -10,6 +10,8 @@ import SwiftUI
 struct DeveloperView: View {
     let bleWriteManager = BLEWriteManager()
     
+    @AppStorage("useExperimentalDFU") var useExperimentalDFU = false
+    
     var body: some View {
         List {
             Section {
@@ -53,6 +55,9 @@ struct DeveloperView: View {
                 Text("Test Data")
             } footer: {
                 Text("Send randomly generated data to the various characteristics on the watch.")
+            }
+            Section {
+                Toggle("Use Experimental DFU", isOn: $useExperimentalDFU)
             }
             Section("Charts") {
                 Button(role: .destructive) {
