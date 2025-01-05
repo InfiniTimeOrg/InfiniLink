@@ -44,15 +44,13 @@ class DownloadManager: NSObject, ObservableObject {
     @AppStorage("releases") var releases: [Result] = []
     @AppStorage("buildArtifacts") var buildArtifacts: [Artifact] = []
     
-    @AppStorage("githubAuthToken") var githubAuthToken: String?
-    
     @Published var updateVersion: String = "0.0.0"
     @Published var updateBody: String = ""
     
     @Published var updateSize: Int = 0
     
-    @Published var browser_download_url: URL = URL(fileURLWithPath: "")
-    @Published var browser_download_resources_url: URL = URL(fileURLWithPath: "")
+    @Published var browserDownloadUrl: URL = URL(fileURLWithPath: "")
+    @Published var browserDownloadResourcesUrl: URL = URL(fileURLWithPath: "")
     
     @Published var updateStarted: Bool = false
     @Published var updateAvailable: Bool = false
@@ -65,6 +63,9 @@ class DownloadManager: NSObject, ObservableObject {
     private var downloadTask: URLSessionDownloadTask!
     private var isDownloadingResources = false
     private var hasDownloadedResources = false
+    
+    // We need to use ProcessInfo to get this key
+    let githubPAT = ""
     
     struct Asset: Codable {
         let id: Int
@@ -109,21 +110,53 @@ class DownloadManager: NSObject, ObservableObject {
         let workflow_url: String
     }
     
-    struct ArtifactResponse: Codable {
+    struct ArtifactsResponse: Codable {
         let total_count: Int
         let artifacts: [Artifact]
     }
     
     struct Artifact: Codable {
         let id: Int
+        let nodeID: String
         let name: String
-        let size_in_bytes: String
+        let sizeInBytes: Int
         let url: String
-        let archive_download_url: String
+        let archiveDownloadURL: String
         let expired: Bool
-        let created_at: String
-        let updated_at: String
-        let expires_at: String
+        let createdAt: String
+        let updatedAt: String
+        let expiresAt: String
+        let workflowRun: ArtifactWorkflowRun
+        
+        enum CodingKeys: String, CodingKey {
+            case id
+            case nodeID = "node_id"
+            case name
+            case sizeInBytes = "size_in_bytes"
+            case url
+            case archiveDownloadURL = "archive_download_url"
+            case expired
+            case createdAt = "created_at"
+            case updatedAt = "updated_at"
+            case expiresAt = "expires_at"
+            case workflowRun = "workflow_run"
+        }
+    }
+    
+    struct ArtifactWorkflowRun: Codable {
+        let id: Int
+        let repositoryID: Int
+        let headRepositoryID: Int
+        let headBranch: String
+        let headSHA: String
+        
+        enum CodingKeys: String, CodingKey {
+            case id
+            case repositoryID = "repository_id"
+            case headRepositoryID = "head_repository_id"
+            case headBranch = "head_branch"
+            case headSHA = "head_sha"
+        }
     }
     
     func setupTest(forFile: String) {
@@ -148,8 +181,8 @@ class DownloadManager: NSObject, ObservableObject {
                     updateBody = i.body
                     updateSize = chooseAsset(response: i).size
                     autoUpgrade = i
-                    browser_download_url = chooseAsset(response: i).browser_download_url
-                    browser_download_resources_url = chooseResources(response: i).browser_download_url
+                    browserDownloadUrl = chooseAsset(response: i).browser_download_url
+                    browserDownloadResourcesUrl = chooseResources(response: i).browser_download_url
                     
                     return true
                 }
@@ -171,7 +204,10 @@ class DownloadManager: NSObject, ObservableObject {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        var request = URLRequest(url: url)
+        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
                     let result = try JSONDecoder().decode([Result].self, from: data)
@@ -200,9 +236,13 @@ class DownloadManager: NSObject, ObservableObject {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        var request = URLRequest(url: url)
+        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
+                    print(String(decoding: data, as: UTF8.self))
                     let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
                     
                     DispatchQueue.main.async {
@@ -233,13 +273,17 @@ class DownloadManager: NSObject, ObservableObject {
             return
         }
         
-        URLSession.shared.dataTask(with: url) { data, response, error in
+        var request = URLRequest(url: url)
+        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
-                    let result = try JSONDecoder().decode(ArtifactResponse.self, from: data)
+                    print(String(decoding: data, as: UTF8.self))
+                    let result = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
                     
                     DispatchQueue.main.async {
-                        completion(result.artifacts)
+                        completion(result.artifacts.filter({ $0.name.contains("DFU") }))
                     }
                 } catch {
                     log("Error decoding artifacts JSON: \(error.localizedDescription)", caller: "DownloadManager")
@@ -269,9 +313,11 @@ class DownloadManager: NSObject, ObservableObject {
     func startDownload(url: URL) {
         self.downloading = true
         
-        let downloadTask = urlSession.downloadTask(with: url)
-        downloadTask.resume()
-        self.downloadTask = downloadTask
+        var request = URLRequest(url: url)
+        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
+        
+        self.downloadTask = urlSession.downloadTask(with: request)
+        self.downloadTask.resume()
     }
     
     private func updateTasks() {
@@ -317,7 +363,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
         DispatchQueue.main.async {
             if !self.hasDownloadedResources && self.dfuUpdater.updateResourcesWithFirmware {
                 self.isDownloadingResources = true
-                self.startDownload(url: self.browser_download_resources_url)
+                self.startDownload(url: self.browserDownloadResourcesUrl)
             } else {
                 if self.startTransfer {
                     self.startTransfer = false

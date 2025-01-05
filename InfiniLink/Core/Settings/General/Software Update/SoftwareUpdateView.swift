@@ -65,7 +65,7 @@ struct SoftwareUpdateView: View {
                             VStack(alignment: .leading, spacing: 3) {
                                 Group {
                                     if !dfuUpdater.local {
-                                        Text("InfiniTime " + DownloadManager.shared.updateVersion)
+                                        Text("InfiniTime " + downloadManager.updateVersion)
                                     } else {
                                         Text(downloadManager.externalResources ? "External Resources" : dfuUpdater.firmwareFilename)
                                     }
@@ -75,7 +75,7 @@ struct SoftwareUpdateView: View {
                                     if downloadManager.externalResources {
                                         return dfuUpdater.resourceFilename
                                     } else {
-                                        return "\(Int(ceil(Double(DownloadManager.shared.updateSize) / 1000.0))) KB"
+                                        return "\(Int(ceil(Double(downloadManager.updateSize) / 1000.0))) KB"
                                     }
                                 }())
                                 .lineLimit(1)
@@ -114,7 +114,7 @@ struct SoftwareUpdateView: View {
                         dfuUpdater.percentComplete = 0
                         if downloadManager.externalResources {
                             downloadManager.startTransfer = true
-                            downloadManager.startDownload(url: downloadManager.browser_download_resources_url)
+                            downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
                             downloadManager.updateStarted = true
                         } else {
                             if dfuUpdater.local {
@@ -126,7 +126,7 @@ struct SoftwareUpdateView: View {
                                 }
                             } else {
                                 downloadManager.startTransfer = true
-                                downloadManager.startDownload(url: downloadManager.browser_download_url)
+                                downloadManager.startDownload(url: downloadManager.browserDownloadUrl)
                                 
                                 downloadManager.updateStarted = true
                             }
@@ -254,7 +254,7 @@ struct OtherUpdateVersions: View {
                         downloadManager.updateVersion = release.tag_name
                         downloadManager.updateBody = release.body
                         downloadManager.updateSize = asset.size
-                        downloadManager.browser_download_url = asset.browser_download_url
+                        downloadManager.browserDownloadUrl = asset.browser_download_url
                         
                         downloadManager.externalResources = false
                         
@@ -278,7 +278,18 @@ struct OtherUpdateVersions: View {
                 } else {
                     ForEach(downloadManager.buildArtifacts, id: \.id) { artifact in
                         Button {
-                            // TODO: download and install firmware
+                            dfuUpdater.firmwareFilename = artifact.name
+                            dfuUpdater.firmwareSelected = true
+                            dfuUpdater.local = false
+                            downloadManager.updateAvailable = true
+                            downloadManager.updateVersion = "GitHub Actions"
+                            downloadManager.updateBody = NSLocalizedString("GitHub Actions body here...", comment: "")
+                            downloadManager.updateSize = artifact.sizeInBytes
+                            downloadManager.browserDownloadUrl = URL(string: artifact.archiveDownloadURL)!
+                            
+                            downloadManager.externalResources = false
+                            
+                            dismiss()
                         } label: {
                             Text(artifact.name)
                                 .foregroundStyle(Color.primary)
