@@ -9,6 +9,7 @@
 !default.perspectivev3
 *.moved-aside
 DerivedData
+.DS_Store
 .idea/
 *.xccheckout
 *.moved-aside
