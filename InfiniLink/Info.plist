@@ -38,6 +38,8 @@
 	<string>This app needs access to your calendars to receive event reminders on your watch.</string>
 	<key>NSDownloadsFolderUsageDescription</key>
 	<string></string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
