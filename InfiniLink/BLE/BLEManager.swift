@@ -120,18 +120,28 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.central = CBCentralManager(delegate: self, queue: nil)
     }
     
+    func scanForNewDevices(updateState: Bool = false) {
+        central.scanForPeripherals(withServices: nil, options: nil)
+        newPeripherals = []
+        
+        if !isConnectedToPinetime {
+            isScanning = true
+        }
+    }
+    
     func startScanning() {
         guard central.state == .poweredOn else { return }
         
-        let peripherals = central.retrievePeripherals(withIdentifiers: [UUID(uuidString: pairedDeviceID!)!])
-        log("\(peripherals)", type: .info, caller: "BLEManager: found peripherals")
-        
-        if let peripheral = peripherals.first, !isConnectedToPinetime {
-            connect(peripheral: peripheral) {}
-        } else {
-            central.scanForPeripherals(withServices: nil, options: nil)
-            isScanning = true
-            newPeripherals = []
+        self.scanForNewDevices()
+        if let pairedDeviceID = pairedDeviceID,
+            let uuid = UUID(uuidString: pairedDeviceID) {
+            
+            let peripherals = central.retrievePeripherals(withIdentifiers: [uuid])
+            log("\(peripherals)", type: .info, caller: "BLEManager - startScanning")
+            
+            if let peripheral = peripherals.first, !isConnectedToPinetime {
+                self.connect(peripheral: peripheral) {}
+            }
         }
     }
     
@@ -146,23 +156,29 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         guard isCentralOn else { return }
         
         if peripheral.name == "InfiniTime" {
-            if isConnectedToPinetime {
-                disconnect()
-            }
-            stopScanning()
-            
-            downloadManager.updateAvailable = false
-            pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
-            hasDisconnectedForUpdate = false
-            
-            infiniTime = peripheral
-            infiniTime?.delegate = self
             central.connect(peripheral, options: nil)
-            
-            log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
-            
             completion()
         }
+    }
+    
+    func onConnect(peripheral: CBPeripheral) {
+        stopScanning()
+        
+        if isConnectedToPinetime {
+            disconnect()
+        }
+        
+        downloadManager.updateAvailable = false
+        pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
+        hasDisconnectedForUpdate = false
+        
+        infiniTime = peripheral
+        infiniTime?.delegate = self
+        infiniTime.discoverServices(nil)
+        isConnectedToPinetime = true
+        pairedDeviceID = peripheral.identifier.uuidString
+        
+        log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
     func removeDevice(device: Device? = nil) {
@@ -250,9 +266,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        self.infiniTime.discoverServices(nil)
-        self.isConnectedToPinetime = true
-        self.pairedDeviceID = peripheral.identifier.uuidString
+        self.onConnect(peripheral: peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {

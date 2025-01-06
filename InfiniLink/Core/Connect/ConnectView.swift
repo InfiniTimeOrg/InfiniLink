@@ -171,7 +171,7 @@ struct ConnectView: View {
             }
             .padding()
             .onAppear {
-                bleManager.startScanning()
+                bleManager.scanForNewDevices(updateState: true)
             }
             .onDisappear {
                 if bleManager.isConnectedToPinetime {
