@@ -104,13 +104,11 @@ class WeatherController: ObservableObject {
     }
     
     func getIcon(from icon: String) -> UInt8 {
-        // WeatherKit icons shouldn't contain .fill, but we're keeping this here as a safeguard just in case that changes
+        // WeatherKit icons don't contain .fill, but we're keeping this here as a safeguard just in case that changes
         let icon = icon.replacingOccurrences(of: ".fill", with: "")
         
         switch icon {
         // Don't include the "sunny" icons, because they'll be handled by `default`
-        case "cloud.sun":
-            return 2
         case "cloud":
             return 2
         case "cloud.drizzle", "cloud.sun.rain":
