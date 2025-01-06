@@ -38,7 +38,9 @@ struct DebugLogsView: View {
                     .frame(maxHeight: .infinity)
             } else {
                 List {
-                    ForEach(logs) { log in
+                    ForEach(logs.sorted(by: { log1, log2 in
+                        return log1.date > log2.date
+                    })) { log in
                         VStack(alignment: .leading, spacing: 8) {
                             Group {
                                 if let caller = log.caller {
