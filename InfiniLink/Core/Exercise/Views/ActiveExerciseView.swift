@@ -91,7 +91,7 @@ struct ActiveExerciseView: View {
                 }
             }
             .padding()
-            .alert("Are you sure you want to end the exercise? \(exerciseViewModel.exerciseTime >= 30 ? "" : "The duration of the exercise is to short to save.")", isPresented: $showEndConfirmation) {
+            .alert("Are you sure you want to end the exercise? \(exerciseViewModel.exerciseTime >= 30 ? "" : "The duration of the exercise is too short to save.")", isPresented: $showEndConfirmation) {
                 Button(role: .destructive) {
                     self.exercise = nil
                     timer?.invalidate()
