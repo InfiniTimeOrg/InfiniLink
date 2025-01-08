@@ -47,7 +47,7 @@ struct SoftwareUpdateView: View {
         }
         .onAppear {
             if downloadManager.releases.isEmpty {
-                downloadManager.getUpdateResources()
+                downloadManager.getUpdates()
             }
         }
     }
@@ -308,7 +308,7 @@ struct OtherUpdateVersions: View {
         .navigationTitle("Other Versions")
         .toolbar {
             Button {
-                downloadManager.getUpdateResources()
+                downloadManager.getUpdates()
             } label: {
                 Label("Refresh", systemImage: "arrow.clockwise")
             }

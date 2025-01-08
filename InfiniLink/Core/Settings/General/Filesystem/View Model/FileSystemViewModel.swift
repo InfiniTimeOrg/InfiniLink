@@ -66,13 +66,10 @@ class FileSystemViewModel: ObservableObject {
                 
                 DispatchQueue.main.async {
                     self.commandHistory.append(contentsOf: dirLS.ls.compactMap({ $0.pathNames }))
+                    self.loadingFs = false
                 }
             } else {
                 print("ERROR: dir '\(self.directory)' is not valid.")
-            }
-            
-            DispatchQueue.main.async {
-                self.loadingFs = false
             }
         }
     }

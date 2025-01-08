@@ -31,12 +31,7 @@ class MusicController: ObservableObject {
 	}
 	
 	@objc func onNotificationReceipt(_ notification: NSNotification) {
-        DispatchQueue.main.async { [self] in
-            let player = musicPlayer
-            
-            musicPlaying = player.playbackState.rawValue
-            updateMusicInformation()
-        }
+        updateMusicInformation()
 	}
     
     func initialize() {
@@ -109,18 +104,20 @@ class MusicController: ObservableObject {
         let bleWriteManager = BLEWriteManager()
 		
         DispatchQueue.main.async { [self] in
+            musicPlaying = musicPlayer.playbackState.rawValue
+            
             bleWriteManager.writeToMusicApp(message: musicPlayer.nowPlayingItem?.title ?? "Not Playing", characteristic: bleManager.musicChars.track)
             bleWriteManager.writeToMusicApp(message: musicPlayer.nowPlayingItem?.artist ?? "", characteristic: bleManager.musicChars.artist)
-        }
-        
-        var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
-        
-        if musicPlaying == 1 {
-            bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManager.musicChars.status)
-        } else {
-            bleWriteManager.writeHexToMusicApp(message: [0x00], characteristic: bleManager.musicChars.status)
+            
+            var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
+            bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
+            bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
+            
+            if musicPlaying == 1 {
+                bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManager.musicChars.status)
+            } else {
+                bleWriteManager.writeHexToMusicApp(message: [0x00], characteristic: bleManager.musicChars.status)
+            }
         }
 	}
     

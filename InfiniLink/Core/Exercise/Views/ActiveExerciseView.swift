@@ -145,7 +145,7 @@ struct ActiveExerciseView: View {
             .onAppear {
                 DispatchQueue.main.async {
                     startTimer()
-                    musicController.musicPlaying = musicController.musicPlayer.playbackState.rawValue
+                    musicController.updateMusicInformation()
                 }
             }
             .onChange(of: Array(heartPoints)) { newPoints in

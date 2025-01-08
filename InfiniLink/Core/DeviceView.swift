@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct DeviceView: View {
+    @Environment(\.openURL) var openURL
+    
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var downloadManager = DownloadManager.shared
@@ -91,28 +93,56 @@ struct DeviceView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
-                    if downloadManager.updateAvailable  && !DFUUpdater.shared.local && bleManager.blefsTransfer != nil {
-                        Section {
-                            NavigationLink {
-                                SoftwareUpdateView()
-                            } label: {
-                                HStack(spacing: 10) {
-                                    Image(.infiniTime)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 50, height: 50)
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        Text("Update Available")
-                                            .font(.body.weight(.bold))
-                                        Group {
-                                            Text("InfiniTime ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
+                        if downloadManager.updateAvailable {
+                            if !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil {
+                                Section {
+                                    NavigationLink {
+                                        SoftwareUpdateView()
+                                    } label: {
+                                        HStack(spacing: 10) {
+                                            Image(.infiniTime)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: 50, height: 50)
+                                            VStack(alignment: .leading, spacing: 3) {
+                                                Text("Update Available")
+                                                    .foregroundStyle(Color.primary)
+                                                    .font(.body.weight(.bold))
+                                                Group {
+                                                    Text("InfiniTime ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
+                                                }
+                                                .foregroundStyle(Color.gray)
+                                            }
                                         }
-                                        .foregroundStyle(Color.gray)
+                                    }
+                                }
+                            }
+                        } else if downloadManager.appUpdateAvailable {
+                            Section {
+                                Button {
+                                    guard let url = URL(string: "url here...") else { return }
+                                    
+                                    openURL(url)
+                                } label: {
+                                    HStack(spacing: 10) {
+                                        Image("appIcon")
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                                        VStack(alignment: .leading, spacing: 3) {
+                                            Text("App Update Available")
+                                                .foregroundStyle(Color.primary)
+                                                .font(.body.weight(.bold))
+                                            Group {
+                                                Text("InfiniLink ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
+                                            }
+                                            .foregroundStyle(Color.gray)
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
                     Section {
                         NavigationLink {
                             ExerciseView()
@@ -272,7 +302,7 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
         .onAppear {
             BLEManager.shared.pairedDevice.firmware = "0.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
-            DownloadManager.shared.updateAvailable = true
+            DownloadManager.shared.appUpdateAvailable = true
             DFUUpdater.shared.local = false
         }
 }

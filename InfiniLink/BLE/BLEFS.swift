@@ -430,8 +430,6 @@ class BLEFSHandler: ObservableObject {
                     return
                 }
                 
-                log("chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)", type: .info, caller: "BLEFSHandler", target: .ble)
-                
                 if chunkOffset + chunkLength == totalLength {
                     readFileFS.completed = true
                     readFileFS.valid = true

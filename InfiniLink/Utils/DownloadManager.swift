@@ -54,7 +54,9 @@ class DownloadManager: NSObject, ObservableObject {
     
     @Published var updateStarted: Bool = false
     @Published var updateAvailable: Bool = false
+    @Published var appUpdateAvailable: Bool = false
     @Published var startTransfer: Bool = false
+    @Published var loadingAppReleases: Bool = false
     @Published var loadingReleases: Bool = false
     @Published var loadingArtifacts: Bool = false
     @Published var externalResources: Bool = false
@@ -166,7 +168,7 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func checkForUpdates(currentVersion: String) -> Bool {
-        getUpdateResources()
+        getUpdates()
         
         for i in releases {
             if i.tag_name.first != "v" {
@@ -191,12 +193,43 @@ class DownloadManager: NSObject, ObservableObject {
         return false
     }
     
-    func getUpdateResources() {
-        getReleases()
+    func getUpdates() {
+        getInfiniLinkReleases()
+        getInfiniTimeReleases()
         getWorkflowRuns()
     }
     
-    func getReleases() {
+    func getInfiniLinkReleases() {
+        self.loadingAppReleases = true
+        self.releases = []
+        
+        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniLink/releases") else {
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let data = data {
+                do {
+                    let result = try JSONDecoder().decode([Result].self, from: data)
+                    
+                    DispatchQueue.main.async {
+                        for release in result {
+                            // Compare versions here
+                        }
+                        
+                        self.loadingAppReleases = false
+                    }
+                } catch {
+                    log("Error decoding InfiniLink releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
+                }
+            }
+        }.resume()
+    }
+    
+    func getInfiniTimeReleases() {
         self.loadingReleases = true
         self.releases = []
         
@@ -222,7 +255,7 @@ class DownloadManager: NSObject, ObservableObject {
                         self.loadingReleases = false
                     }
                 } catch {
-                    log("Error decoding releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
+                    log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
             }
         }.resume()
