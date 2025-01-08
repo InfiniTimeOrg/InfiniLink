@@ -40,6 +40,7 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 
 ## Installation:
 - **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
+- **Version 1.1-beta:** is accessible on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
