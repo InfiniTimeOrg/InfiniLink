@@ -85,6 +85,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
+    @Published var peripheralToConnect: CBPeripheral!
     
     @Published var weatherInformation = WeatherInformation()
     @Published var weatherForecastDays = [WeatherForecastDay]()
@@ -154,7 +155,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         guard isCentralOn else { return }
         
         if peripheral.name == "InfiniTime" {
-            central.connect(peripheral, options: nil)
+            peripheralToConnect = peripheral
+            central.connect(peripheralToConnect, options: nil)
             completion()
         }
     }

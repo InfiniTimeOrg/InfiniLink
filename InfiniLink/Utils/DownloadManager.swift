@@ -66,8 +66,12 @@ class DownloadManager: NSObject, ObservableObject {
     private var isDownloadingResources = false
     private var hasDownloadedResources = false
     
-    // We need to use ProcessInfo to get this key
-    let githubPAT = ""
+    var githubPAT: String {
+        if let key = ProcessInfo.processInfo.environment["INFINITIME_PAT"] {
+            return key
+        }
+        return ""
+    }
     
     struct Asset: Codable {
         let id: Int
