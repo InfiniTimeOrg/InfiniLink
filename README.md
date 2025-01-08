@@ -27,7 +27,7 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 - Retrieve battery level, heart rate, and step data
 - Control Apple Music with InfiniTime's music controls
 - Integration with Apple HealthKit
-- Weather fetch (using the WeatherKit) and push (using InfiniTime 1.14's [Simple Weather Service](https://github.com/InfiniTimeOrg/InfiniTime/blob/main/doc/SimpleWeatherService.md))
+- Weather fetch (using WeatherKit) and push (using InfiniTime 1.14's [Simple Weather Service](https://github.com/InfiniTimeOrg/InfiniTime/blob/main/doc/SimpleWeatherService.md))
 - Uploading of [external resource packages](https://github.com/InfiniTimeOrg/InfiniTime/blob/develop/doc/gettingStarted/updating-software.md#updating-resources)
 - Check for and download InfiniTime firmware updates with the GitHub API, and send them to the watch (Manual updates can be completed with DFU zip files downloaded from [InfiniTime's GitHub Releases Page](https://github.com/InfiniTimeOrg/InfiniTime/releases))
 
