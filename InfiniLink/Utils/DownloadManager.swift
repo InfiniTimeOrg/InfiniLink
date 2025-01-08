@@ -243,7 +243,7 @@ class DownloadManager: NSObject, ObservableObject {
                         }
                         
                         for release in result {
-                            if let update = newVersion(release.tag_name, than: appVersion), Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? true : !update.isBeta {
+                            if let update = newVersion(release.tag_name.replacingOccurrences(of: "v", with: ""), than: appVersion), Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? true : !update.isBeta {
                                 appUpdate = update
                                 return
                             }

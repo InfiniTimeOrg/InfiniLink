@@ -91,6 +91,12 @@ struct SetUpDetailsView: View {
                 } footer: {
                     Text("Your approximate height, in inches.")
                 }
+                Section {
+                    Picker("Units", selection: $personalizationController.units) {
+                        Text("Metric").tag(PersonalizationController.Unit.metric)
+                        Text("Imperial").tag(PersonalizationController.Unit.imperial)
+                    }
+                }
             }
             .keyboardType(.decimalPad)
             if !list {

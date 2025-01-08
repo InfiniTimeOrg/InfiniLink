@@ -11,6 +11,7 @@ import SwiftUICharts
 struct StepsView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var personalizationController = PersonalizationController.shared
     
     @AppStorage("stepsChartDataSelection") private var dataSelection = 0
     
@@ -90,7 +91,7 @@ struct StepsView: View {
                             HStack {
                                 DetailHeaderSubItemView(title: "Dis",
                                                         value: String(format: "%.2f", exerciseCalculator.calculateDistance(steps: bleManager.stepCount)),
-                                                        unit: "mi")
+                                                        unit: personalizationController.units == .imperial ? "mi" : "m")
                                 DetailHeaderSubItemView(title: "Kcal", value: String(format: "%.1f", exerciseCalculator.calculateCaloriesBurned(steps: bleManager.stepCount)))
                             }
                         }

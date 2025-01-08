@@ -10,15 +10,15 @@ import SwiftUI
 class PersonalizationController: ObservableObject {
     static let shared = PersonalizationController()
     
-    enum Unit: Int, Codable {
-        case metric
-        case imperial
+    enum Unit: Int {
+        case metric = 0
+        case imperial = 1
     }
     
     @AppStorage("weight") var weight: Int?
     @AppStorage("age") var age: Int?
     @AppStorage("height") var height: Int?
-    @AppStorage("units") var units: Unit?
+    @AppStorage("units") var units: Unit = .metric
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
     

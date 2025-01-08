@@ -27,7 +27,7 @@ class FitnessCalculator {
         let stride = height * 0.414 // Calculate stride length in meters
         let distance = stride * Double(steps)
         
-        if personalization.units == .metric {
+        if personalization.units == .imperial {
             return distance / 1609.34
         } else {
             return distance

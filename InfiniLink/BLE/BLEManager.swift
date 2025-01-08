@@ -274,7 +274,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         notifyCharacteristic = nil
         
         if error != nil {
-            central.connect(peripheral)
+            scanForNewDevices()
+            connect(peripheral: peripheral) {}
         }
     }
     

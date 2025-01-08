@@ -117,12 +117,13 @@ struct DeviceView: View {
                                     }
                                 }
                             }
-                        } else if let newVersion = downloadManager.appUpdate {
+                        } else if let update = downloadManager.appUpdate {
                             Section {
                                 Button {
-                                    guard let url = URL(string: "url here...") else { return }
+                                    guard let testFlight = URL(string: "https://testflight.apple.com/join/B3PY5HUV") else { return }
+                                    guard let appStore = URL(string: "https://apps.apple.com/us/app/infinilink/id1582318814") else { return }
                                     
-                                    openURL(url)
+                                    openURL(update.isBeta ? testFlight : appStore)
                                 } label: {
                                     HStack(spacing: 10) {
                                         Image("appIcon")
@@ -135,7 +136,7 @@ struct DeviceView: View {
                                                 .foregroundStyle(Color.primary)
                                                 .font(.body.weight(.bold))
                                             Group {
-                                                Text("InfiniLink ") + Text(newVersion.version).font(.body.weight(.medium))
+                                                Text("InfiniLink ") + Text(update.version).font(.body.weight(.medium))
                                             }
                                             .foregroundStyle(Color.gray)
                                         }

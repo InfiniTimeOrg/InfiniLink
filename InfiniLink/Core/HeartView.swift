@@ -98,7 +98,6 @@ struct HeartView: View {
                             .floatingInfoBox(chartData: data)
                             .touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
                             .yAxisLabels(chartData: data)
-                            // .infoBox(chartData: data, height: 100)
                             .animation(.none)
                             .frame(height: geo.size.width / 1.6)
                             .padding(.vertical)
