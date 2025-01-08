@@ -12,20 +12,20 @@ struct SetUpDetailsView: View {
     
     @State private var isNavActive: Bool = false
     
-    @FocusState var isBirthdateFocused: Bool
+    @FocusState var isBirthyearFocused: Bool
     @FocusState var isWeightFocused: Bool
     @FocusState var isHeightFocused: Bool
 
     @ObservedObject var weight = NumbersOnly()
     
-    let listOnly: Bool
+    let list: Bool
     
-    init(listOnly: Bool = false) {
-        self.listOnly = listOnly
+    init(list: Bool = false) {
+        self.list = list
     }
     
     var body: some View {
-        if listOnly {
+        if list {
             content
         } else {
             NavigationView {
@@ -37,13 +37,13 @@ struct SetUpDetailsView: View {
     
     var content: some View {
         Form {
-            if !listOnly {
-                VStack(alignment: .center, spacing: 10) {
+            if !list {
+                VStack(alignment: .center, spacing: 8) {
                     // We can't use the nav link as the button because a chevron appears when inside a List/Form
                     NavigationLink("", isActive: $isNavActive, destination: { NotificationsSetupView() })
                         .hidden()
                     Image(systemName: "figure.arms.open")
-                        .font(.system(size: 65).weight(.medium))
+                        .font(.system(size: 60).weight(.medium))
                         .foregroundStyle(.blue)
                     Text("Let's get you set up.")
                         .font(.largeTitle.weight(.bold))
@@ -54,34 +54,46 @@ struct SetUpDetailsView: View {
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
             }
-            Section {
-                HStack(spacing: 12) {
-                    Text("Birthdate")
-                    TextField("Optional", text: .constant(""))
-                        .focused($isBirthdateFocused)
+            Group {
+                Section {
+                    HStack(spacing: 12) {
+                        Text("Birth Year")
+                        TextField("Optional", text: .constant(""))
+                            .focused($isBirthyearFocused)
+                    }
+                    .onTapGesture {
+                        isBirthyearFocused = true
+                    }
                 }
-                .onTapGesture {
-                    isBirthdateFocused = true
+                Section {
+                    // We need a better way to get this data
+                    HStack(spacing: 12) {
+                        Text("Weight")
+                        TextField("Optional", text: $weight.value)
+                            .focused($isWeightFocused)
+                    }
+                    .onTapGesture {
+                        isWeightFocused = true
+                    }
+                } footer: {
+                    Text("Your approximate weight, in lbs.")
                 }
-                HStack(spacing: 12) {
-                    Text("Weight")
-                    TextField("Optional", text: $weight.value)
-                        .focused($isWeightFocused)
-                }
-                .onTapGesture {
-                    isWeightFocused = true
-                }
-                HStack(spacing: 12) {
-                    Text("Height")
-                    TextField("Optional", text: .constant(""))
-                        .focused($isHeightFocused)
-                }
-                .onTapGesture {
-                    isHeightFocused = true
+                Section {
+                    // We need a better way to get this data
+                    HStack(spacing: 12) {
+                        Text("Height")
+                        TextField("Optional", text: .constant(""))
+                            .focused($isHeightFocused)
+                    }
+                    .onTapGesture {
+                        isHeightFocused = true
+                    }
+                } footer: {
+                    Text("Your approximate height, in inches.")
                 }
             }
             .keyboardType(.decimalPad)
-            if !listOnly {
+            if !list {
                 Button {
                     isNavActive = true
                 } label: {
@@ -97,10 +109,13 @@ struct SetUpDetailsView: View {
                 .listRowBackground(Color.clear)
             }
         }
+        .navigationTitle(list ? "Health Details" : "")
         .interactiveDismissDisabled()
         .toolbar {
-            Button("Skip") {
-                isNavActive = true
+            if !list {
+                Button("Skip") {
+                    isNavActive = true
+                }
             }
         }
     }
@@ -108,16 +123,19 @@ struct SetUpDetailsView: View {
 
 struct NotificationsSetupView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
+    @ObservedObject var notificationManager = NotificationManager.shared
+    @ObservedObject var remindersManager = RemindersManager.shared
     
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("enableReminders") var enableReminders = true
+    @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     
     var body: some View {
         Form {
-            VStack(alignment: .center, spacing: 10) {
+            VStack(alignment: .center, spacing: 8) {
                 Image(systemName: "bell.badge.fill")
-                    .font(.system(size: 65).weight(.medium))
+                    .font(.system(size: 60).weight(.medium))
                     .foregroundStyle(.red)
                 Text("Notifications")
                     .font(.largeTitle.weight(.bold))
@@ -133,11 +151,13 @@ struct NotificationsSetupView: View {
             Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                 Toggle("Steps", isOn: $remindOnStepGoalCompletion)
             }
-            Section("Other") {
+            Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
                 Toggle("Reminder Notifications", isOn: $enableReminders)
+                Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
             }
             Button {
-                NotificationManager.shared.requestNotificationAuthorization()
+                notificationManager.requestNotificationAuthorization()
+                remindersManager.requestAccess()
                 
                 personalizationController.showSetupSheet = false
             } label: {

@@ -66,7 +66,6 @@ struct StepsView: View {
                                        markerType: .none,
                                        xAxisGridStyle: gridStyle,
                                        xAxisLabelPosition: .bottom,
-                                       xAxisLabelsFrom: .dataPoint(rotation: .degrees(-90)),
                                        yAxisGridStyle: gridStyle,
                                        yAxisLabelPosition: .leading,
                                        yAxisNumberOfLabels: 5,
@@ -90,8 +89,7 @@ struct StepsView: View {
                         DetailHeaderView(Header(title: steps(for: Date()), subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
                             HStack {
                                 DetailHeaderSubItemView(title: "Dis",
-                                                        value: String(format: "%.2f",
-                                                                      exerciseCalculator.metersToMiles(meters: exerciseCalculator.calculateDistance(steps: bleManager.stepCount))),
+                                                        value: String(format: "%.2f", exerciseCalculator.calculateDistance(steps: bleManager.stepCount)),
                                                         unit: "mi")
                                 DetailHeaderSubItemView(title: "Kcal", value: String(format: "%.1f", exerciseCalculator.calculateCaloriesBurned(steps: bleManager.stepCount)))
                             }

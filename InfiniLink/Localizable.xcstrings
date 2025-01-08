@@ -126,6 +126,9 @@
     "About" : {
 
     },
+    "About InfiniLink" : {
+
+    },
     "All Exercises" : {
 
     },
@@ -180,7 +183,7 @@
     "battery remaining" : {
 
     },
-    "Birthdate" : {
+    "Birth Year" : {
 
     },
     "BLE" : {
@@ -369,6 +372,9 @@
     "Health" : {
 
     },
+    "Health Details" : {
+
+    },
     "Heart Rate" : {
 
     },
@@ -393,6 +399,15 @@
     "InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect." : {
 
     },
+    "InfiniLink is the official iOS companion app for InfiniTime. To submit a bug report or request a feature, open an issue on InfiniLink's GitHub repository, or send feedback in TestFlight.\n\nReceiving notifications on your InfiniTime device requires the Apple Notification Center Service, implemented in pull request #2217, linked below.\n\nMusic control from InfiniTime is available when using the Apple Music app, but system-wide media control will require the Apple Media Service to be implemented InfiniTime.\n\nFor more information on InfiniLink or InfiniTime, visit their GitHub repositories." : {
+
+    },
+    "InfiniLink on GitHub" : {
+
+    },
+    "InfiniLink on TestFlight" : {
+
+    },
     "InfiniTime" : {
 
     },
@@ -400,6 +415,9 @@
 
     },
     "InfiniTime is up-to-date." : {
+
+    },
+    "InfiniTime on GitHub" : {
 
     },
     "Installing update..." : {
@@ -484,6 +502,9 @@
 
     },
     "Pair New Device" : {
+
+    },
+    "Pull Request #2217 on GitHub" : {
 
     },
     "Range" : {
@@ -677,6 +698,12 @@
 
     },
     "You've reached your steps goal" : {
+
+    },
+    "Your approximate height, in inches." : {
+
+    },
+    "Your approximate weight, in lbs." : {
 
     }
   },

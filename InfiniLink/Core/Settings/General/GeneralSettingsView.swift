@@ -54,6 +54,11 @@ struct GeneralSettingsView: View {
                     Text("Appearance")
                 }
                 NavigationLink {
+                    SetUpDetailsView(list: true)
+                } label: {
+                    Text("Health Details")
+                }
+                NavigationLink {
                     DataSyncView()
                 } label: {
                     Text("Data Sync")

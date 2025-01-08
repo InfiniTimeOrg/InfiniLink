@@ -11,8 +11,10 @@ struct AboutSettingsView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var bleManager = BLEManager.shared
     
-    // Add state property because name won't update automatically
+    // Add state property because using deviceManager.name directly on the label won't update
     @State var name = ""
+    
+    @State var showAppInfoView = false
     
     var body: some View {
         Group {
@@ -39,6 +41,14 @@ struct AboutSettingsView: View {
                     AboutRowView(title: "File System", value: deviceManager.blefsVersion)
                     AboutRowView(title: "Hardware Revision", value: deviceManager.hardwareRevision)
                     AboutRowView(title: "Settings Version", value: String(deviceManager.settings.version))
+                }
+                Section {
+                    Button("About InfiniLink") {
+                        showAppInfoView = true
+                    }
+                    .sheet(isPresented: $showAppInfoView) {
+                        AppDetailsView()
+                    }
                 }
             }
         }

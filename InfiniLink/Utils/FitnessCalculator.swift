@@ -23,40 +23,19 @@ class FitnessCalculator {
         return Double(personalization.height ?? avg) / 100.0 // Convert cm to meters
     }
     
-    // MET values for different paces
-    enum Pace {
-        case slow
-        case average
-        case fast
+    func calculateDistance(steps: Int) -> Double {
+        let stride = height * 0.414 // Calculate stride length in meters
+        let distance = stride * Double(steps)
         
-        var value: (speed: Double, met: Double) {
-            switch self {
-            case .slow:
-                return (0.9, 2.8)
-            case .average:
-                return (1.34, 3.5)
-            case .fast:
-                return (1.79, 5.0)
-            }
+        if personalization.units == .metric {
+            return distance / 1609.34
+        } else {
+            return distance
         }
     }
     
-    // Calculate distance based on steps taken
-    func calculateDistance(steps: Int) -> Double {
-        let stride = height * 0.414 // Calculate stride length in meters
-        let distance = stride * Double(steps) // Distance in meters
-        return distance // Return the distance in meters
-    }
-    
-    // Convert meters to miles
-    func metersToMiles(meters: Double) -> Double {
-        return meters / 1609.34 // Convert meters to miles
-    }
-    
-    // TODO: update logic
     func calculateCaloriesBurned(steps: Int) -> Double {
-        let weightInLbs = weight * 2.20462 // convert weight to lbs
-        let caloriesPerStep = (0.04 * weightInLbs) / 150.0
+        let caloriesPerStep = (0.04 * weight) / 150.0
         return Double(steps) * caloriesPerStep
     }
 }

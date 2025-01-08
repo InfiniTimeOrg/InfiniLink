@@ -61,6 +61,7 @@
 		E08C4A492CC4048900013D15 /* SleepData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A482CC4048900013D15 /* SleepData.swift */; };
 		E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */; };
 		E08F2F352CC89A530094217A /* MapSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F342CC89A530094217A /* MapSearch.swift */; };
+		E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -182,6 +183,7 @@
 		E08C4A482CC4048900013D15 /* SleepData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepData.swift; sourceTree = "<group>"; };
 		E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWeatherLocationView.swift; sourceTree = "<group>"; };
 		E08F2F342CC89A530094217A /* MapSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearch.swift; sourceTree = "<group>"; };
+		E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailsView.swift; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
@@ -379,6 +381,7 @@
 			children = (
 				E0A7C09B2CB234450042A12D /* AboutSettingsView.swift */,
 				E05999B72CB2FC7900D64E0B /* RenameView.swift */,
+				E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */,
 			);
 			path = About;
 			sourceTree = "<group>";
@@ -743,6 +746,7 @@
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */,
 				E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */,
 				E0A7C07F2CB1B3300042A12D /* BLEFS.swift in Sources */,
 				E05999BA2CB335DC00D64E0B /* DataSyncView.swift in Sources */,
