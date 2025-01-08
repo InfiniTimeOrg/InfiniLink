@@ -23,6 +23,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Build unsigned archive
+        env:
+          INFINITIME_PAT: ${{ secrets.INFINITIME_PAT }}
         run: |
           xcodebuild archive \
             -project InfiniLink.xcodeproj \
@@ -33,7 +35,7 @@ jobs:
             -destination generic/platform=iOS \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO     
+            CODE_SIGNING_ALLOWED=NO
 
       - name: Make IPA
         run: |
