@@ -117,7 +117,7 @@ struct DeviceView: View {
                                     }
                                 }
                             }
-                        } else if downloadManager.appUpdateAvailable {
+                        } else if let newVersion = downloadManager.appUpdate {
                             Section {
                                 Button {
                                     guard let url = URL(string: "url here...") else { return }
@@ -135,7 +135,7 @@ struct DeviceView: View {
                                                 .foregroundStyle(Color.primary)
                                                 .font(.body.weight(.bold))
                                             Group {
-                                                Text("InfiniLink ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
+                                                Text("InfiniLink ") + Text(newVersion.version).font(.body.weight(.medium))
                                             }
                                             .foregroundStyle(Color.gray)
                                         }
@@ -302,7 +302,6 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
         .onAppear {
             BLEManager.shared.pairedDevice.firmware = "0.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
-            DownloadManager.shared.appUpdateAvailable = true
             DFUUpdater.shared.local = false
         }
 }

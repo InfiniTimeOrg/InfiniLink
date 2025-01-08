@@ -54,12 +54,12 @@ class DownloadManager: NSObject, ObservableObject {
     
     @Published var updateStarted: Bool = false
     @Published var updateAvailable: Bool = false
-    @Published var appUpdateAvailable: Bool = false
     @Published var startTransfer: Bool = false
     @Published var loadingAppReleases: Bool = false
     @Published var loadingReleases: Bool = false
     @Published var loadingArtifacts: Bool = false
     @Published var externalResources: Bool = false
+    @Published var appUpdate: AppVersion?
     
     private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
     private var downloadTask: URLSessionDownloadTask!
@@ -74,6 +74,12 @@ class DownloadManager: NSObject, ObservableObject {
         let name: String
         let browser_download_url: URL
         let size: Int
+    }
+    
+    struct AppVersion {
+        var id = UUID()
+        let version: String
+        let isBeta: Bool
     }
     
     struct Result: Codable {
@@ -161,10 +167,21 @@ class DownloadManager: NSObject, ObservableObject {
         }
     }
     
-    func setupTest(forFile: String) {
-        DFUUpdater.shared.firmwareFilename = forFile
-        DFUUpdater.shared.firmwareSelected = true
-        DFUUpdater.shared.local = false
+    func newVersion(_ releaseVersion: String, than currentVersion: String) -> AppVersion? {
+        let isBeta = releaseVersion.contains("beta")
+        let releaseComponents = releaseVersion.versionComponents()
+        let currentComponents = currentVersion.versionComponents()
+        
+        let newVersion = AppVersion(version: releaseVersion, isBeta: isBeta)
+        
+        for (release, current) in zip(releaseComponents, currentComponents) {
+            if release > current {
+                return newVersion
+            }
+            if release < current { return nil }
+        }
+        
+        return releaseComponents.count > currentComponents.count ? newVersion : nil
     }
     
     func checkForUpdates(currentVersion: String) -> Bool {
@@ -215,9 +232,17 @@ class DownloadManager: NSObject, ObservableObject {
                 do {
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
-                    DispatchQueue.main.async {
+                    DispatchQueue.main.async { [self] in
+                        guard let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+                            log("Could not retrieve app version", caller: "DownloadManager")
+                            return
+                        }
+                        
                         for release in result {
-                            // Compare versions here
+                            if let update = newVersion(release.tag_name, than: appVersion), Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? true : !update.isBeta {
+                                appUpdate = update
+                                return
+                            }
                         }
                         
                         self.loadingAppReleases = false
