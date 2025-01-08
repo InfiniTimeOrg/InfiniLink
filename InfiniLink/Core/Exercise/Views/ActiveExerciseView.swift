@@ -15,6 +15,7 @@ struct ActiveExerciseView: View {
     @Environment(\.managedObjectContext) var viewContext
     
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
+    @ObservedObject var musicController = MusicController.shared
     
     @Binding var exercise: Exercise?
     
@@ -28,7 +29,7 @@ struct ActiveExerciseView: View {
     
     var body: some View {
         if let exercise {
-            VStack {
+            VStack(spacing: 16) {
                 HStack(spacing: 6) {
                     Image(systemName: exercise.icon)
                     Text(exercise.name)
@@ -55,6 +56,43 @@ struct ActiveExerciseView: View {
                     }
                 }
                 Spacer()
+                if musicController.musicPlaying != 0 {
+                    HStack(spacing: 12) {
+                        if let artwork = musicController.musicPlayer.nowPlayingItem?.artwork, let image = artwork.image(at: CGSize(width: 60, height: 60)) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60, height: 60)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(musicController.musicPlayer.nowPlayingItem?.title ?? "Not Playing")
+                                .fontWeight(.bold)
+                            if let artist = musicController.musicPlayer.nowPlayingItem?.artist {
+                                Text(artist)
+                            }
+                        }
+                        Spacer()
+                        HStack(spacing: 18) {
+                            Button {
+                                musicController.musicPlaying == 1 ? musicController.pause() : musicController.play()
+                            } label: {
+                                Image(systemName: musicController.musicPlaying == 1 ? "pause.fill" : "play.fill")
+                                    .font(.system(size: 24))
+                            }
+                            Button {
+                                musicController.skipForward()
+                            } label: {
+                                Image(systemName: "forward.fill")
+                                    .font(.system(size: 23))
+                            }
+                        }
+                    }
+                    .padding()
+                    .foregroundStyle(Color.primary)
+                    .background(Material.regular)
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                }
                 HStack(spacing: 14) {
                     Spacer()
                     Button {
@@ -105,7 +143,10 @@ struct ActiveExerciseView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .onAppear {
-                startTimer()
+                DispatchQueue.main.async {
+                    startTimer()
+                    musicController.musicPlaying = musicController.musicPlayer.playbackState.rawValue
+                }
             }
             .onChange(of: Array(heartPoints)) { newPoints in
                 let currentHeartPoints = Array(newPoints)

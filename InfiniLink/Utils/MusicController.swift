@@ -10,30 +10,16 @@ import MediaPlayer
 import NotificationCenter
 import SwiftUI
 
-class MusicController {
-	/*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-	For now, this is a rudimentary implementation of apple's MediaPlayer framework, which unfortunately only works with Apple Music. Apple does not allow control of system volume levels at from the app level, so the volume controls do not work currently. Control of the "Now Playing" media on the device is also not supported at the app level, so we have to specifically work with Apple Music through the existing framework.
-	
-	In the future, if Apple's proprietary AMS (Apple Media Service) is implemented in InfiniTime, these controls should work on their own, and the track/artist/elapsed time/total time should automatically populate. Not sure how much work that would be to implement, so this may be the best we can do for a while.
-	
-	TODO: figure out the formatting that PineTime expects for time elapsed/total time. Hex value of 0101 = 12:32, 0102 = 04:48. Writing decimal does nothing. ASCII also gives wacky results
-	*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
-    
+class MusicController: ObservableObject {
 	static let shared = MusicController()
+    
+    @Published var musicPlaying = 0
+    
 	let bleManager = BLEManager.shared
-    
+	let musicPlayer = MPMusicPlayerController.systemMusicPlayer
+    let volumeSlots: Float = 15.0
 	
-	var musicPlayer = MPMusicPlayerController.systemMusicPlayer
-    var musicPlaying = 0
-    
-    let volumeSlots : Float = 15.0
-	
-	struct songInfo {
-		var trackName: String!
-		var artistName: String!
-	}
-	
-	enum musicState {
+	enum MusicState {
 		case play, pause, nextTrack, prevTrack
 	}
     
@@ -45,8 +31,12 @@ class MusicController {
 	}
 	
 	@objc func onNotificationReceipt(_ notification: NSNotification) {
-		musicPlaying = musicPlayer.playbackState.rawValue
-		updateMusicInformation(songInfo: getCurrentSongInfo())
+        DispatchQueue.main.async { [self] in
+            let player = musicPlayer
+            
+            musicPlaying = player.playbackState.rawValue
+            updateMusicInformation()
+        }
 	}
     
     func initialize() {
@@ -55,6 +45,21 @@ class MusicController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
 	
+    func play() {
+        musicPlayer.play()
+        musicPlaying = 1
+    }
+    func pause() {
+        musicPlayer.pause()
+        musicPlaying = 2
+    }
+    func skipForward() {
+        musicPlayer.skipToNextItem()
+    }
+    func skipToPrevious() {
+        musicPlayer.skipToPreviousItem()
+    }
+    
 	func controlMusic(controlNumber: Int) {
 		if allowMusicControl {
             // When CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are up-to-date
@@ -67,50 +72,46 @@ class MusicController {
             } catch {
                 log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
             }
-            musicPlaying = musicPlayer.playbackState.rawValue
             
-            switch controlNumber {
-            case 0:
-                musicPlayer.play(); musicPlaying = 1
-            case 1:
-                musicPlayer.pause(); musicPlaying = 2
-            case 3:
-                musicPlayer.skipToNextItem()
-            case 4:
-                musicPlayer.skipToPreviousItem()
-            case 5:
-                if allowVolumeControl {
-                    let newVolume = min(session.outputVolume + (1 / volumeSlots), 1.0)
-                    MPVolumeView.setVolume(newVolume)
+            DispatchQueue.main.async {
+                self.musicPlaying = self.musicPlayer.playbackState.rawValue
+                
+                switch controlNumber {
+                case 0:
+                    self.play()
+                case 1:
+                    self.pause()
+                case 3:
+                    self.skipForward()
+                case 4:
+                    self.skipToPrevious()
+                case 5:
+                    if self.allowVolumeControl {
+                        let newVolume = min(session.outputVolume + (1 / self.volumeSlots), 1.0)
+                        MPVolumeView.setVolume(newVolume)
+                    }
+                case 6:
+                    if self.allowVolumeControl {
+                        let newVolume = max(session.outputVolume - (1 / self.volumeSlots), 0.0)
+                        MPVolumeView.setVolume(newVolume)
+                    }
+                case 224:
+                    self.updateMusicInformation()
+                default:
+                    break
                 }
-            case 6:
-                if allowVolumeControl {
-                    let newVolume = max(session.outputVolume - (1 / volumeSlots), 0.0)
-                    MPVolumeView.setVolume(newVolume)
-                }
-            case 224:
-                updateMusicInformation(songInfo: getCurrentSongInfo())
-            default:
-                break
+                self.updateMusicInformation()
             }
-            updateMusicInformation(songInfo: getCurrentSongInfo())
         }
 	}
 	
-	
-	func getCurrentSongInfo() -> songInfo {
-		let currentTrack = musicPlayer.nowPlayingItem
-		let currentSongInfo = songInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
-		return currentSongInfo
-	}
-	
-    func updateMusicInformation(songInfo: MusicController.songInfo) {
+    func updateMusicInformation() {
         let bleWriteManager = BLEWriteManager()
-        
-		let songInfo = getCurrentSongInfo()
 		
-		bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
-		bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
+        DispatchQueue.main.async { [self] in
+            bleWriteManager.writeToMusicApp(message: musicPlayer.nowPlayingItem?.title ?? "Not Playing", characteristic: bleManager.musicChars.track)
+            bleWriteManager.writeToMusicApp(message: musicPlayer.nowPlayingItem?.artist ?? "", characteristic: bleManager.musicChars.artist)
+        }
         
         var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
