@@ -8,11 +8,12 @@
 import Foundation
 import SwiftUI
 import CoreData
+import SwiftUICharts
 
 class ChartManager: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
     
-    @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
+    @AppStorage("heartRateChartDataSelection") private var heartRateChartDataSelection = 0
     
     static let shared = ChartManager()
     
@@ -70,5 +71,19 @@ class ChartManager: ObservableObject {
         } catch {
             fatalError("Failed to fetch battery data points: \(error)")
         }
+    }
+    
+    func convert(_ points: FetchedResults<HeartDataPoint>) -> [LineChartDataPoint] {
+        var dataPoints: [LineChartDataPoint] = []
+        
+        let dateFormat = DateFormatter()
+        dateFormat.dateFormat = "MMM d\nH:mm:ss"
+        
+        // TODO: add chart selection cases
+        for point in points {
+            dataPoints.append(LineChartDataPoint(value: point.value, xAxisLabel: NSLocalizedString("Date", comment: ""), description: dateFormat.string(from: point.timestamp!), date: point.timestamp!))
+        }
+        
+        return dataPoints
     }
 }

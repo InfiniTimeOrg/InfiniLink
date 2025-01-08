@@ -72,6 +72,12 @@ struct DetailHeaderView<V: View>: View {
     
     @State private var isHeartAnimating = false
     
+    func updateAnimState() {
+        if let last = heartPoints.last?.timestamp, abs(last.timeIntervalSinceNow) < 60 && animate {
+            isHeartAnimating = true
+        }
+    }
+    
     init(_ header: Header,
          width: CGFloat,
          animate: Bool = false,
@@ -92,7 +98,7 @@ struct DetailHeaderView<V: View>: View {
                         .shadow(color: header.accent.opacity(0.7), radius: isHeartAnimating ? 20 : 0, x: 0, y: 0)
                         .scaleEffect(isHeartAnimating ? 0.85 : 1.0)
                         .animation(
-                            .snappy(duration: 1)
+                            .snappy(duration: 0.9)
                             .repeatForever(autoreverses: true),
                             value: isHeartAnimating
                         )
@@ -116,9 +122,10 @@ struct DetailHeaderView<V: View>: View {
         }
         .frame(maxWidth: .infinity)
         .onAppear {
-            if let last = heartPoints.last?.timestamp, abs(last.timeIntervalSinceNow) <= 10 && animate {
-                isHeartAnimating = true
-            }
+            updateAnimState()
+        }
+        .onChange(of: Array(heartPoints)) { _ in
+            updateAnimState()
         }
     }
 }

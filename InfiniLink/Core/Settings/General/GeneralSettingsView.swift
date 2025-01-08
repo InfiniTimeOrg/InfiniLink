@@ -85,7 +85,9 @@ struct GeneralSettingsView: View {
                 .disabled(bleManager.blefsTransfer == nil)
                 .alert("Are you sure you want to reset all content and settings from \(deviceManager.name)?", isPresented: $showResetConfirmation) {
                     Button(role: .destructive) {
-                        bleManager.resetDevice()
+//                        bleManager.resetDevice()
+                        bleManager.infiniTime.writeValue(Data([0x04]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                        bleManager.infiniTime.writeValue(Data([0x05]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
                         dismiss()
                     } label: {
                         Text("Reset")

@@ -242,7 +242,6 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
-                    print(String(decoding: data, as: UTF8.self))
                     let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
                     
                     DispatchQueue.main.async {
@@ -279,7 +278,6 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
-                    print(String(decoding: data, as: UTF8.self))
                     let result = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
                     
                     DispatchQueue.main.async {

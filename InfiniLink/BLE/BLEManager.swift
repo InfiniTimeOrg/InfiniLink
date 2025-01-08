@@ -124,7 +124,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         central.scanForPeripherals(withServices: nil, options: nil)
         newPeripherals = []
         
-        if !isConnectedToPinetime {
+        if updateState {
             isScanning = true
         }
     }
@@ -146,8 +146,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func stopScanning() {
-        guard isScanning else { return }
-        
         central.stopScan()
         isScanning = false
     }

@@ -50,7 +50,7 @@ class DFUUpdaterCustom: ObservableObject {
             
             do {
                 let unzipDirectory = try Zip.quickUnzipFile(dfuUpdater.firmwareURL)
-                let manifest = unzipDirectory.appending(path: "manifest.json")
+                let manifest = unzipDirectory.appendingPathComponent("manifest.json")
                 let jsonData = try Data(contentsOf: manifest)
                 
                 let decoder = JSONDecoder()
@@ -58,18 +58,18 @@ class DFUUpdaterCustom: ObservableObject {
 
                 /*
                  MARK: Step Two
-                 In step two, send the total size in bytes of the firmware file to the packet characteristic. This value should be an unsigned 32-bit integer encoded as little-endian.
+                 In step two, send the total size in bytes of the firmware file to the packet characteristic. This value should be an unsigned 32-bit integer encoded as little-endian. In front of this integer should be 8 null bytes. This is because there are three items that can be updated and each 4 bytes is for one of those. The last four are for the InfiniTime application, so those are the ones that need to be set.
                  */
-                var fileSizePacket = Data()
-                let fileSize = try Data(contentsOf: unzipDirectory.appending(path: decodedManifest.manifest.application.bin_file)).count
+                let fileSize = try Data(contentsOf: unzipDirectory.appendingPathComponent(decodedManifest.manifest.application.bin_file)).count
+                print("Firmware size: \(fileSize) bytes")
                 
-                fileSizePacket.append(contentsOf: BLEFSHandler.shared.convertUInt32ToUInt8Array(value: UInt32(fileSize).littleEndian))
-                /*
-                 In front of this integer should be 8 null bytes. This is because there are three items that can be updated and each 4 bytes is for one of those. The last four are for the InfiniTime application, so those are the ones that need to be set.
-                 */
-                fileSizePacket.append(contentsOf: Data(repeating: UInt8(0), count: 8))
+                var data = Data(repeating: 0, count: 8)
+                let sizeBytes = withUnsafeBytes(of: UInt32(fileSize).littleEndian) { Data($0) }
+                data.append(sizeBytes)
                 
-                infiniTime.writeValue(fileSizePacket, for: bleManager.dfuPacketCharacteristic, type: .withResponse)
+                print("Data to send: \(data.map { String(format: "%02X", $0) }.joined(separator: " "))")
+                
+                infiniTime.writeValue(data, for: bleManager.dfuPacketCharacteristic, type: .withResponse)
                 
                 /*
                  MARK: Step Three
@@ -82,7 +82,7 @@ class DFUUpdaterCustom: ObservableObject {
                  MARK: Step Four
                  The previous step prepared InfiniTime for this one. In this step, send the contents of the .dat init packet file to the packet characteristic.
                  */
-                let datData = try Data(contentsOf: unzipDirectory.appending(path: decodedManifest.manifest.application.dat_file))
+                let datData = try Data(contentsOf: unzipDirectory.appendingPathComponent(decodedManifest.manifest.application.dat_file))
                 infiniTime.writeValue(datData, for: bleManager.dfuPacketCharacteristic, type: .withResponse)
                 /*
                  After this, send `0x02`, `0x01` indicating that the packet has been sent.
@@ -127,7 +127,7 @@ class DFUUpdaterCustom: ObservableObject {
                  Before running this step, wait to receive `0x10`, `0x04`, `0x01` which indicates that the image has been validated. In this step, send `0x05` to the control point as a command with no response. This signals InfiniTime to activate the new firmware and reboot.
                  */
                 // TODO: wait for response
-                infiniTime.writeValue(Data([0x05]), for: bleManager.dfuControlPointCharacteristic, type: .withoutResponse)
+                infiniTime.writeValue(Data([0x05]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
             } catch {
                 log("\(error.localizedDescription)", caller: "DFUUpdaterCustom")
             }

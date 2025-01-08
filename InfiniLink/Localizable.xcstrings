@@ -37,9 +37,6 @@
     "%@" : {
 
     },
-    "%@ BPM" : {
-
-    },
     "%@ Logs" : {
 
     },
@@ -91,16 +88,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld more device%2$@ found"
-          }
-        }
-      }
-    },
-    "%lld step%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld step%2$@"
           }
         }
       }
@@ -274,6 +261,9 @@
     "Data Sync" : {
 
     },
+    "Date" : {
+
+    },
     "Debug Logs" : {
 
     },
@@ -422,9 +412,6 @@
 
     },
     "It's time to drink water" : {
-
-    },
-    "Label" : {
 
     },
     "Learn more" : {
