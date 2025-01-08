@@ -36,6 +36,7 @@ class NotificationManager: ObservableObject {
     @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
     
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
+    @AppStorage("waterReminder") var waterReminder = true
     
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
@@ -134,8 +135,11 @@ extension NotificationManager {
         let currentTime = Date()
         
         if let nextReminderCheckDate = nextReminderCheckDate, currentTime >= nextReminderCheckDate {
-            bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Water Reminder", comment: ""), subtitle: NSLocalizedString("It's time to drink water", comment: "")))
+            if waterReminder {
+                bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Water Reminder", comment: ""), subtitle: NSLocalizedString("It's time to drink water", comment: "")))
+            }
             
+            // Don't include in conditional because we want to keep the reminders up-to-date in case the user reenables water reminders
             self.nextReminderCheckDate = getNextReminderDate()
         }
     }
