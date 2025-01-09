@@ -82,6 +82,19 @@
     "%@%%" : {
 
     },
+    "%lld" : {
+
+    },
+    "%lld - %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld - %2$lld"
+          }
+        }
+      }
+    },
     "%lld more device%@ found" : {
       "localizations" : {
         "en" : {
@@ -118,6 +131,9 @@
 
     },
     "24 Hour" : {
+
+    },
+    "800" : {
 
     },
     "A new section will be added to your device overview." : {
@@ -172,6 +188,9 @@
 
     },
     "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Artist Name" : {
 
     },
     "Back" : {
@@ -295,6 +314,9 @@
 
     },
     "Done" : {
+
+    },
+    "Elapsed Time" : {
 
     },
     "Enable Developer Mode" : {
@@ -510,6 +532,9 @@
     "Pair New Device" : {
 
     },
+    "Played Tracks" : {
+
+    },
     "Pull Request #2217 on GitHub" : {
 
     },
@@ -628,6 +653,15 @@
 
     },
     "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
+
+    },
+    "Total Steps" : {
+
+    },
+    "Total Tracks Played" : {
+
+    },
+    "Track %lld" : {
 
     },
     "Units" : {

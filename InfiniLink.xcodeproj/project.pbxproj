@@ -63,6 +63,7 @@
 		E08F2F352CC89A530094217A /* MapSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F342CC89A530094217A /* MapSearch.swift */; };
 		E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */; };
 		E09696DF2D2EC7EC00CCCBF8 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696DE2D2EC7EC00CCCBF8 /* String+Extension.swift */; };
+		E09696E32D2F807700CCCBF8 /* HeartChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696E22D2F807700CCCBF8 /* HeartChartView.swift */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -186,6 +187,7 @@
 		E08F2F342CC89A530094217A /* MapSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearch.swift; sourceTree = "<group>"; };
 		E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailsView.swift; sourceTree = "<group>"; };
 		E09696DE2D2EC7EC00CCCBF8 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		E09696E22D2F807700CCCBF8 /* HeartChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChartView.swift; sourceTree = "<group>"; };
 		E0A7C06A2CB0DE4C0042A12D /* Weather.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Weather.swift; sourceTree = "<group>"; };
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
@@ -424,6 +426,14 @@
 			path = Weather;
 			sourceTree = "<group>";
 		};
+		E09696E12D2F806A00CCCBF8 /* Charts */ = {
+			isa = PBXGroup;
+			children = (
+				E09696E22D2F807700CCCBF8 /* HeartChartView.swift */,
+			);
+			path = Charts;
+			sourceTree = "<group>";
+		};
 		E0A7C0692CB0DE450042A12D /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -490,6 +500,7 @@
 		E0A7C09F2CB245F70042A12D /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				E09696E12D2F806A00CCCBF8 /* Charts */,
 				E0A7C0A22CB246D10042A12D /* DetailHeaderView.swift */,
 				E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */,
 				E07D8F172CBE2071005C1325 /* ActionView.swift */,
@@ -791,6 +802,7 @@
 				E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */,
 				E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */,
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
+				E09696E32D2F807700CCCBF8 /* HeartChartView.swift in Sources */,
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,
 				E0F7D8AF2CFD5E3400AE5171 /* TableView.swift in Sources */,
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,

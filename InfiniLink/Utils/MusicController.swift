@@ -106,6 +106,10 @@ class MusicController: ObservableObject {
         DispatchQueue.main.async { [self] in
             musicPlaying = musicPlayer.playbackState.rawValue
             
+            if let title = musicPlayer.nowPlayingItem?.title, let artist = musicPlayer.nowPlayingItem?.artist {
+                ExerciseViewModel.shared.addTrackToExercise(title: title, artist: artist)
+            }
+            
             bleWriteManager.writeToMusicApp(message: musicPlayer.nowPlayingItem?.title ?? "Not Playing", characteristic: bleManager.musicChars.track)
             bleWriteManager.writeToMusicApp(message: musicPlayer.nowPlayingItem?.artist ?? "", characteristic: bleManager.musicChars.artist)
             

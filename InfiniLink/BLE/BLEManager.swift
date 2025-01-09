@@ -273,9 +273,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         
-        if error != nil {
-            scanForNewDevices()
-            connect(peripheral: peripheral) {}
+        if let error {
+            log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
+        } else {
+            peripheralToConnect = peripheral
+            connect(peripheral: peripheralToConnect) {}
         }
     }
     

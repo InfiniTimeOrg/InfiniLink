@@ -17,13 +17,6 @@ enum BinaryFormat {
     case ARGB8565_RBSWAP, ARGB8888
 }
 
-func testClassifyPixel() {
-    // test difference between round() and round_half_up()
-    print("First Classify Pixel Test \(classifyPixel(value: 18, bits: 5) == 16 ? "Passed!" : "Failed!")")
-    // school rounding 4.5 to 5, but banker's rounding 4.5 to 4
-    print("Second Classify Pixel Test \(classifyPixel(value: 18, bits: 6) == 20 ? "Passed!" : "Failed!")")
-}
-
 func classifyPixel(value: Double, bits: Int) -> Int {
     func roundHalfUp(v: Double) -> Int {
         return Int(round(v))

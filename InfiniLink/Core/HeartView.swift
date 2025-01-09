@@ -12,13 +12,31 @@ import SwiftUICharts
 
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var chartManager = ChartManager.shared
     
     @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
     
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartDataPoints: FetchedResults<HeartDataPoint>
     
     var heartPointValues: [Double] {
         return heartPoints.compactMap({ $0.value })
+    }
+    var heartPoints: [HeartDataPoint] {
+        return heartDataPoints.filter({
+            guard let timestamp = $0.timestamp?.timeIntervalSinceNow else { return false }
+            let secondsFromNow = abs(timestamp)
+            
+            switch dataSelection {
+            case 1:
+                return secondsFromNow <= (60 * 60 * 24) // Day
+            case 2:
+                return secondsFromNow <= (60 * 60 * 24 * 7) // Week
+            case 3:
+                return secondsFromNow <= (60 * 60 * 24 * 7 * 4) // TODO: dynamically calculate number of weeks
+            default:
+                return secondsFromNow <= (60 * 60) // Hour
+            }
+        })
     }
     
     func heartRate(for val: Double) -> String {
@@ -40,7 +58,7 @@ struct HeartView: View {
         return NSLocalizedString("Now", comment: "")
     }
     func timestamp(for heartPoint: HeartDataPoint?) -> String? {
-        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return nil }
+        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return "" }
         
         return units(for: Int(abs(timeInterval)))
     }
@@ -72,15 +90,13 @@ struct HeartView: View {
                     }
                     Section {
                         Picker("Range", selection: $dataSelection) {
-                            ForEach(0...5, id: \.self) { index in
+                            ForEach(0...3, id: \.self) { index in
                                 Text({
                                     switch index {
                                     case 0: return "H"
                                     case 1: return "D"
                                     case 2: return "W"
                                     case 3: return "M"
-                                    case 4: return "6M"
-                                    case 5: return "Y"
                                     default: return "-"
                                     }
                                 }())
@@ -90,15 +106,7 @@ struct HeartView: View {
                         .pickerStyle(.segmented)
                     }
                     Section {
-                        let chartStyle = LineChartStyle(infoBoxPlacement: .floating /* TODO: fork and set to infoBox */, infoBoxBackgroundColour: Color(.secondarySystemBackground), baseline: .minimumValue, topLine: .maximumValue)
-                        let lineStyle = LineStyle(lineColour: ColourStyle(colours: [Color.red.opacity(0.8), Color.red.opacity(0.5)], startPoint: .top, endPoint: .bottom), lineType: .curvedLine, ignoreZero: true)
-                        let data = LineChartData(dataSets: LineDataSet(dataPoints: ChartManager.shared.convert(heartPoints), style: lineStyle), chartStyle: chartStyle)
-                         
-                        FilledLineChart(chartData: data)
-                            .floatingInfoBox(chartData: data)
-                            .touchOverlay(chartData: data, unit: .suffix(of: "BPM"))
-                            .yAxisLabels(chartData: data)
-                            .animation(.none)
+                        HeartChartView(heartPoints: heartPoints)
                             .frame(height: geo.size.width / 1.6)
                             .padding(.vertical)
                     }

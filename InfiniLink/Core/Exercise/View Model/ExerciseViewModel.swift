@@ -14,6 +14,7 @@ class ExerciseViewModel: ObservableObject {
     
     let healthKitManager = HealthKitManager.shared
     
+    @Published var playedTracks = [PlayedTrack]()
     @Published var exerciseTime: TimeInterval = 0
     @Published var currentExercise: Exercise?
     @Published var exercisePaused = false
@@ -58,6 +59,18 @@ class ExerciseViewModel: ObservableObject {
         }
     }
     
+    func addTrackToExercise(title: String, artist: String) {
+        let track = PlayedTrack(context: PersistenceController.shared.container.viewContext)
+        track.id = UUID()
+        track.timestamp = Date()
+        track.title = title
+        track.artist = artist
+        
+        if !playedTracks.contains(where: { $0.title == track.title && $0.artist == track.artist }) {
+            playedTracks.append(track)
+        }
+    }
+    
     func reset() {
         exerciseTime = 0
         exercisePaused = false
@@ -82,10 +95,9 @@ class ExerciseViewModel: ObservableObject {
         newExercise.startDate = startDate
         newExercise.endDate = Date()
         newExercise.exerciseId = exercise
+        newExercise.playedTracks = NSSet(array: playedTracks)
+        newExercise.heartPoints = NSSet(array: heartPoints)
         
-        for heartPoint in heartPoints {
-            newExercise.addToHeartPoints(heartPoint)
-        }
         // TODO: add step values
         
         saveContext(viewContext)

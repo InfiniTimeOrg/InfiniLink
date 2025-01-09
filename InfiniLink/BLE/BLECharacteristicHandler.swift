@@ -20,7 +20,7 @@ struct BLECharacteristicHandler {
     let deviceManager = DeviceManager.shared
     let fitnessCalculator = FitnessCalculator.shared
     
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
+    let viewContext = PersistenceController.shared.container.viewContext
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
@@ -28,6 +28,18 @@ struct BLECharacteristicHandler {
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 86400
+    
+    func fetchHeartPoints() -> [HeartDataPoint] {
+        let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+        
+        do {
+            return try viewContext.fetch(fetchRequest)
+        } catch {
+            log("Error fetching heart points: \(error)", caller: "BLECharacteristicHandler")
+            return []
+        }
+    }
     
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
@@ -119,11 +131,11 @@ struct BLECharacteristicHandler {
                 let timeDifference = currentTime - lastHeartRateUpdateTimestamp
                 
                 // Check if the last data point is available and if filtering is enabled
-                if let referenceValue = heartPoints.last?.value, filterHeartRateData {
+                if let referenceValue = fetchHeartPoints().last?.value, filterHeartRateData {
                     let isWithinRange = abs(referenceValue - bleManager.heartRate) <= 25
                     
                     // Update heart rate if within the valid range or recent enough
-                    if isWithinRange || timeDifference <= 10 {
+                    if isWithinRange || timeDifference <= 15 {
                         updateHeartRate(bpm: bpm)
                     } else {
                         log("Abnormal heart rate value detected: \(bpm)", caller: "BLECharacteristicHandler")
@@ -197,7 +209,6 @@ struct BLECharacteristicHandler {
                                                      UInt32(timestampBytes[2]) << 8 |
                                                      UInt32(timestampBytes[3])))
             
-            print("\(timestamp), \(minutesAsleep)")
             SleepController.shared.sleep = SleepData(startDate: timestamp, endDate: timestamp.addingTimeInterval(Double(minutesAsleep * 60)))
         case bleManager.cbuuidList.dfuPacket:
             guard let data = characteristic.value else { break }

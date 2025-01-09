@@ -119,7 +119,7 @@ class WeatherController: ObservableObject {
             return 6
         case "cloud.hail", "cloud.snow", "cloud.sleet", "snowflake":
             return 7
-        case "cloud.fog":
+        case "cloud.fog", "sun.haze":
             return 8
         default:
             return 0

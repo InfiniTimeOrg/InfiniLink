@@ -137,7 +137,7 @@ struct BLEWriteManager {
         bleManager.infiniTime.writeValue(narrative, for: bleManager.navigationNarrativeCharacteristic, type: .withResponse)
         bleManager.infiniTime.writeValue(distance, for: bleManager.navigationDistanceCharacteristic, type: .withResponse)
         bleManager.infiniTime.writeValue(progress, for: bleManager.navigationProgressCharacteristic, type: .withResponse)
-        bleManager.infiniTime.writeValue(icon, for: bleManager.navigationFlagsCharacteristic, type: .withoutResponse)
+        bleManager.infiniTime.writeValue(icon, for: bleManager.navigationFlagsCharacteristic, type: .withResponse)
     }
 }
 

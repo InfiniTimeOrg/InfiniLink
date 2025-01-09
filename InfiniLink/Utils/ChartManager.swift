@@ -73,13 +73,12 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func convert(_ points: FetchedResults<HeartDataPoint>) -> [LineChartDataPoint] {
+    func convert(_ points: [HeartDataPoint]) -> [LineChartDataPoint] {
         var dataPoints: [LineChartDataPoint] = []
         
         let dateFormat = DateFormatter()
         dateFormat.dateFormat = "MMM d\nH:mm:ss"
         
-        // TODO: add chart selection cases
         for point in points {
             dataPoints.append(LineChartDataPoint(value: point.value, xAxisLabel: NSLocalizedString("Date", comment: ""), description: dateFormat.string(from: point.timestamp!), date: point.timestamp!))
         }
