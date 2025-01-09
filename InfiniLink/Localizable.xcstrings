@@ -190,9 +190,6 @@
     "Are you sure you want to unpair from %@?" : {
 
     },
-    "Artist Name" : {
-
-    },
     "Back" : {
 
     },
@@ -659,9 +656,6 @@
 
     },
     "Total Tracks Played" : {
-
-    },
-    "Track %lld" : {
 
     },
     "Units" : {

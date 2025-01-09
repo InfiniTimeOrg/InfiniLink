@@ -98,14 +98,17 @@ struct ExerciseDetailView: View {
                         .frame(height: geo.size.width / 1.6)
                 }
                 .listRowBackground(Color.clear)
-                if let tracks = userExercise.playedTracks, tracks.count > 0 {
-                    // TODO: add tracks to list
+                if let tracksSet = userExercise.playedTracks as? Set<PlayedTrack>, !tracksSet.isEmpty {
+                    let tracks = Array(tracksSet).sorted(by: { $0.timestamp ?? Date() < $1.timestamp ?? Date() })
+                    
                     Section("Played Tracks") {
-                        ForEach(1...7, id: \.self) { index in
-                            VStack(alignment: .leading, spacing: 5) {
-                                Text("Track \(index)")
-                                    .fontWeight(.bold)
-                                Text("Artist Name")
+                        ForEach(tracks) { track in
+                            if let title = track.title, let artist = track.artist {
+                                VStack(alignment: .leading, spacing: 5) {
+                                    Text(title)
+                                        .fontWeight(.bold)
+                                    Text(artist)
+                                }
                             }
                         }
                     }

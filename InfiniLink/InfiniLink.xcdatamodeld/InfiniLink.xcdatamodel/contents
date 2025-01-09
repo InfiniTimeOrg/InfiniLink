@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24C5089c" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="BatteryDataPoint" representedClassName="BatteryDataPoint" syncable="YES" codeGenerationType="class">
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="batteryPoints" inverseEntity="Device"/>
+        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device"/>
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES" codeGenerationType="class">
         <attribute name="alwaysOnDisplay" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -28,17 +29,15 @@
         <attribute name="uuid" attributeType="String"/>
         <attribute name="watchface" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weatherFormat" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="batteryPoints" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="BatteryDataPoint" inverseName="device" inverseEntity="BatteryDataPoint"/>
-        <relationship name="heartPoints" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="HeartDataPoint" inverseName="device" inverseEntity="HeartDataPoint"/>
         <relationship name="pineTimeStyle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PineTimeStyleWatchface" inverseName="device" inverseEntity="PineTimeStyleWatchface"/>
-        <relationship name="stepCounts" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="StepCounts" inverseName="device" inverseEntity="StepCounts"/>
         <relationship name="watchFaceInfineat" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="InfineatWatchface" inverseName="device" inverseEntity="InfineatWatchface"/>
     </entity>
     <entity name="HeartDataPoint" representedClassName="HeartDataPoint" syncable="YES" codeGenerationType="class">
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="heartPoints" inverseEntity="Device"/>
+        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device"/>
         <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="heartPoints" inverseEntity="UserExercise"/>
     </entity>
     <entity name="InfineatWatchface" representedClassName="InfineatWatchface" syncable="YES" codeGenerationType="class">
@@ -57,25 +56,21 @@
     <entity name="PlayedTrack" representedClassName="PlayedTrack" syncable="YES" codeGenerationType="class">
         <attribute name="artist" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String"/>
         <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="playedTracks" inverseEntity="UserExercise"/>
     </entity>
     <entity name="SleepDataPoint" representedClassName="SleepDataPoint" syncable="YES" codeGenerationType="class">
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="minutes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="StepCounts" representedClassName="StepCounts" syncable="YES" codeGenerationType="class">
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="steps" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="stepCounts" inverseEntity="Device"/>
-    </entity>
-    <entity name="User" representedClassName="User" syncable="YES" codeGenerationType="class">
-        <attribute name="age" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="units" optional="YES" attributeType="String"/>
-        <attribute name="weight" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
     </entity>
     <entity name="UserExercise" representedClassName="UserExercise" syncable="YES" codeGenerationType="class">
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
@@ -84,6 +79,6 @@
         <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="steps" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="heartPoints" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HeartDataPoint" inverseName="exercise" inverseEntity="HeartDataPoint"/>
-        <relationship name="playedTracks" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="PlayedTrack" inverseName="exercise" inverseEntity="PlayedTrack"/>
+        <relationship name="playedTracks" toMany="YES" deletionRule="Nullify" destinationEntity="PlayedTrack" inverseName="exercise" inverseEntity="PlayedTrack"/>
     </entity>
 </model>

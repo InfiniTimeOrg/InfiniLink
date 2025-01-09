@@ -64,7 +64,7 @@ class DeviceManager: ObservableObject {
     // Get persisted settings, before settings.dat has loaded
     func getSettings() {
         guard let uuid = bleManager.pairedDeviceID else { return }
-        let device = self.fetchDevice(with: uuid)
+        guard let device = fetchDevice(with: uuid) else { return }
         
         DispatchQueue.main.async {
             self.settings = Settings(
@@ -86,7 +86,7 @@ class DeviceManager: ObservableObject {
         }
     }
     
-    func fetchDevice(with uuid: String? = nil) -> Device {
+    func fetchDevice(with uuid: String? = nil) -> Device? {
         let id: String = uuid ?? bleManager.pairedDeviceID!
         
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
@@ -113,15 +113,15 @@ class DeviceManager: ObservableObject {
                 return newDevice
             }
         } catch {
-            fatalError("Error fetching or saving device: \(error)")
+            log("Error fetching or saving device: \(error)", caller: "DeviceManager")
+            return nil
         }
     }
     
     // Get settings from settings file from watch and save it to keep device object up-to-date
     func updateSettings(settings: Settings) {
         guard let uuid = bleManager.pairedDevice?.uuid else { return }
-        
-        let device = fetchDevice(with: uuid)
+        guard let device = fetchDevice(with: uuid) else { return }
         
         device.brightLevel = Int16(settings.brightLevel.rawValue)
         device.chimesOption = Int16(settings.chimesOption.rawValue)
@@ -153,8 +153,8 @@ class DeviceManager: ObservableObject {
     
     func updateName(name: String, for device: Device) {
         guard let uuid = device.uuid else { return }
+        guard let device = fetchDevice(with: uuid) else { return }
         
-        let device = fetchDevice(with: uuid)
         device.name = name
         
         save()

@@ -25,7 +25,7 @@ Music control from InfiniTime is available when using the Apple Music app, but s
 For more information on InfiniLink or InfiniTime, visit their GitHub repositories.
 """)
                     Text("""
-
+This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to a pull request!
 """)
                 }
                 Section {

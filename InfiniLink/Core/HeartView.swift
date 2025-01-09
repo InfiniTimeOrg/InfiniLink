@@ -19,24 +19,7 @@ struct HeartView: View {
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartDataPoints: FetchedResults<HeartDataPoint>
     
     var heartPointValues: [Double] {
-        return heartPoints.compactMap({ $0.value })
-    }
-    var heartPoints: [HeartDataPoint] {
-        return heartDataPoints.filter({
-            guard let timestamp = $0.timestamp?.timeIntervalSinceNow else { return false }
-            let secondsFromNow = abs(timestamp)
-            
-            switch dataSelection {
-            case 1:
-                return secondsFromNow <= (60 * 60 * 24) // Day
-            case 2:
-                return secondsFromNow <= (60 * 60 * 24 * 7) // Week
-            case 3:
-                return secondsFromNow <= (60 * 60 * 24 * 7 * 4) // TODO: dynamically calculate number of weeks
-            default:
-                return secondsFromNow <= (60 * 60) // Hour
-            }
-        })
+        return chartManager.heartPoints().compactMap({ $0.value })
     }
     
     func heartRate(for val: Double) -> String {
@@ -68,7 +51,7 @@ struct HeartView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     Section {
-                        DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: heartPoints.last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: true) {
+                        DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: true) {
                             HStack {
                                 DetailHeaderSubItemView(
                                     title: "Min",
@@ -106,7 +89,7 @@ struct HeartView: View {
                         .pickerStyle(.segmented)
                     }
                     Section {
-                        HeartChartView(heartPoints: heartPoints)
+                        HeartChartView(heartPoints: chartManager.heartPoints())
                             .frame(height: geo.size.width / 1.6)
                             .padding(.vertical)
                     }

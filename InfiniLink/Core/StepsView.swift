@@ -11,12 +11,10 @@ import SwiftUICharts
 struct StepsView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var chartManager = ChartManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     
     @AppStorage("stepsChartDataSelection") private var dataSelection = 0
-    
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
-    private var stepCounts: FetchedResults<StepCounts>
     
     let exerciseCalculator = FitnessCalculator.shared
     
@@ -39,7 +37,7 @@ struct StepsView: View {
                 let color = ColourStyle(colour: .blue)
                 dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: day, colour: color))
                 
-                for i in stepCounts {
+                for i in chartManager.stepPoints() {
                     if calendar.isDate(i.timestamp!, inSameDayAs: day) {
                         dataPoints[weekDay] = BarChartDataPoint(value: Double(i.steps), xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color)
                     }
@@ -50,7 +48,7 @@ struct StepsView: View {
         return dataPoints
     }
     func steps(for date: Date) -> String {
-        for stepCount in stepCounts {
+        for stepCount in chartManager.stepPoints() {
             if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
                 let formattedSteps = NumberFormatter.localizedString(from: NSNumber(value: stepCount.steps), number: .decimal)
                 return formattedSteps
