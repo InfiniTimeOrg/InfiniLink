@@ -7,6 +7,9 @@
 
 import Foundation
 
+let testFlightLink = "https://testflight.apple.com/join/B3PY5HUV"
+let appStoreLink = "https://apps.apple.com/us/app/infinilink/id1582318814"
+
 extension String {
     func versionComponents() -> [Int] {
         let cleanString = self

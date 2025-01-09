@@ -24,11 +24,13 @@ Music control from InfiniTime is available when using the Apple Music app, but s
 
 For more information on InfiniLink or InfiniTime, visit their GitHub repositories.
 """)
+                }
+                Section {
                     Text("""
 This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to a pull request!
 """)
                 }
-                Section {
+                Section("Links") {
                     Button("Pull Request #2217 on GitHub") {
                         guard let url = URL(string: "https://github.com/InfiniTimeOrg/InfiniTime/pull/2217") else { return }
                         
@@ -37,7 +39,7 @@ This new version of InfiniLink has not been localized yet, so if you can help tr
                 }
                 Section {
                     Button("InfiniLink on TestFlight") {
-                        guard let url = URL(string: "link here...") else { return }
+                        guard let url = URL(string: testFlightLink) else { return }
                         
                         openURL(url)
                     }

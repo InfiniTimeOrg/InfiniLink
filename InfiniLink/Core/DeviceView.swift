@@ -120,8 +120,8 @@ struct DeviceView: View {
                         } else if let update = downloadManager.appUpdate {
                             Section {
                                 Button {
-                                    guard let testFlight = URL(string: "https://testflight.apple.com/join/B3PY5HUV") else { return }
-                                    guard let appStore = URL(string: "https://apps.apple.com/us/app/infinilink/id1582318814") else { return }
+                                    guard let testFlight = URL(string: testFlightLink) else { return }
+                                    guard let appStore = URL(string: appStoreLink) else { return }
                                     
                                     openURL(update.isBeta ? testFlight : appStore)
                                 } label: {
