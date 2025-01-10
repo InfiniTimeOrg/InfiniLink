@@ -1,6 +1,8 @@
-<br>
-
 <div align="center">
+
+<img src="/assets/header.png" width="100%">
+
+<br>
   
 [![Build & Analyze](https://github.com/InfiniTimeOrg/InfiniLink/actions/workflows/objective-c-xcode.yml/badge.svg)](https://github.com/InfiniTimeOrg/InfiniLink/actions/workflows/objective-c-xcode.yml)
 [![Platforms](https://img.shields.io/badge/platforms-iOS-333333.svg)](https://github.com/InfiniTimeOrg/InfiniLink)
@@ -11,13 +13,9 @@
 [![Stars - InfiniLink](https://img.shields.io/github/stars/InfiniTimeOrg/InfiniLink?style=social)](https://github.com/InfiniTimeOrg/InfiniLink/stargazers)
 [![Forks - InfiniLink](https://img.shields.io/github/forks/InfiniTimeOrg/InfiniLink?style=social)](https://github.com/InfiniTimeOrg/InfiniLink/network/members)
 
-<br>
+# InfiniLink
 
-<img src="InfiniLink/Assets.xcassets/AppIcon.appiconset/icon_1024.png" width="115" height="115">
-
-# InfiniLink - The official iOS companion app for InfiniTime
-
-This iOS application allows you to interact with your PineTime smartwatch running [InfiniTime](https://github.com/InfiniTimeOrg/InfiniTime) (and perhaps other watches/OSes, pending testing).
+*The official iOS companion app for [InfiniTime](https://github.com/InfiniTimeOrg/InfiniTime).*
 
 </div>
 
@@ -38,6 +36,10 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 ### Currently non-functional features:
 - InfiniTime's navigation app—there is currently no API in Swift to access current directions unless the route is started from inside the app, which may not be practical for most users.
 - System-wide music controls—requires implementation of Apple Media Service (AMS).
+
+### Roadmap
+- InfiniTime navigation service using MapKit
+- Apple Charts
 
 ## Installation:
 - **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
