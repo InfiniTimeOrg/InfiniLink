@@ -27,7 +27,7 @@ For more information on InfiniLink or InfiniTime, visit their GitHub repositorie
                 }
                 Section {
                     Text("""
-This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to a pull request!
+This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!
 """)
                 }
                 Section("Links") {

@@ -175,7 +175,7 @@ struct FileSystemView: View {
                 Section {
                     ForEach(fileSystemViewModel.commandHistory.filter({ $0 != "" &&  $0 != "." && $0 != ".." }), id: \.self) { listItem in
                         let isFile = listItem.contains(".") && (listItem.prefix(1)) != "."
-
+                        
                         Button {
                             if isFile {
                                 selectedFile = listItem
@@ -271,10 +271,6 @@ struct FileSystemView: View {
         }
         .navigationViewStyle(.stack)
     }
-}
-
-extension String: @retroactive Identifiable {
-    public var id: String { self }
 }
 
 #Preview {

@@ -653,7 +653,7 @@
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
 
     },
-    "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to a pull request!" : {
+    "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
 
     },
     "Time Format" : {

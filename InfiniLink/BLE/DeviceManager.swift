@@ -63,8 +63,7 @@ class DeviceManager: ObservableObject {
     
     // Get persisted settings, before settings.dat has loaded
     func getSettings() {
-        guard let uuid = bleManager.pairedDeviceID else { return }
-        guard let device = fetchDevice(with: uuid) else { return }
+        guard let device = bleManager.pairedDevice else { return }
         
         DispatchQueue.main.async {
             self.settings = Settings(
@@ -87,31 +86,30 @@ class DeviceManager: ObservableObject {
     }
     
     func fetchDevice(with uuid: String? = nil) -> Device? {
-        let id: String = uuid ?? bleManager.pairedDeviceID!
+        guard let id = uuid ?? bleManager.pairedDeviceID else { return nil }
         
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", id)
         
         do {
             let existingDevices = try context.fetch(fetchRequest)
-            
             if let existingDevice = existingDevices.first {
                 return existingDevice
-            } else {
-                let newDevice = Device(context: context)
-                newDevice.uuid = uuid
-                newDevice.bleUUID = uuid
-                newDevice.blefsVersion = ""
-                newDevice.firmware = ""
-                newDevice.softwareRevision = ""
-                newDevice.hardwareRevision = ""
-                newDevice.manufacturer = ""
-                newDevice.modelNumber = ""
-                newDevice.serial = ""
-                
-                save()
-                return newDevice
             }
+            
+            let newDevice = Device(context: context)
+            newDevice.uuid = id
+            newDevice.bleUUID = id
+            newDevice.blefsVersion = ""
+            newDevice.firmware = ""
+            newDevice.softwareRevision = ""
+            newDevice.hardwareRevision = ""
+            newDevice.manufacturer = ""
+            newDevice.modelNumber = ""
+            newDevice.serial = ""
+            
+            try context.save()
+            return newDevice
         } catch {
             log("Error fetching or saving device: \(error)", caller: "DeviceManager")
             return nil
@@ -146,7 +144,11 @@ class DeviceManager: ObservableObject {
         infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
         device.watchFaceInfineat = infineatWatchFace
         
-        save()
+        do {
+            try context.save()
+        } catch {
+            log(error.localizedDescription, caller: "DeviceManager - updateSettings")
+        }
         
         getSettings()
     }
@@ -157,7 +159,11 @@ class DeviceManager: ObservableObject {
         
         device.name = name
         
-        save()
+        do {
+            try context.save()
+        } catch {
+            log(error.localizedDescription, caller: "DeviceManager - updateName")
+        }
     }
     
     func getName(for uuid: String) -> String {
@@ -178,9 +184,12 @@ class DeviceManager: ObservableObject {
     }
     
     func removeDevice(_ device: Device) {
-        context.delete(device)
-        
-        save()
+        do {
+            context.delete(device)
+            try context.save()
+        } catch {
+            log(error.localizedDescription, caller: "DeviceManager - removeDevice")
+        }
     }
     
     func fetchAllDevices() {
@@ -190,16 +199,6 @@ class DeviceManager: ObservableObject {
             self.watches = try context.fetch(fetchRequest)
         } catch {
             log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
-        }
-    }
-    
-    private func save() {
-        DispatchQueue.main.async {
-            do {
-                try self.context.save()
-            } catch {
-                log("Error saving context: \(error.localizedDescription)", caller: "DeviceManager")
-            }
         }
     }
 }

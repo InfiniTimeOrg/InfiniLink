@@ -159,30 +159,26 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if peripheral.name == "InfiniTime" {
             isConnecting = true
             peripheralToConnect = peripheral
-            
+            pairedDeviceID = peripheral.identifier.uuidString
             central.connect(peripheralToConnect, options: nil)
             
             completion()
         }
     }
     
-    func onConnect(peripheral: CBPeripheral) {
+    func onConnect() {
         stopScanning()
         
-        if isConnectedToPinetime {
-            disconnect()
-        }
-        
-        downloadManager.updateAvailable = false
-        pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
-        hasDisconnectedForUpdate = false
         isConnecting = false
+        downloadManager.updateAvailable = false
+        pairedDeviceID = peripheralToConnect.identifier.uuidString
+        pairedDevice = deviceManager.fetchDevice(with: peripheralToConnect.identifier.uuidString)
+        hasDisconnectedForUpdate = false
         
-        infiniTime = peripheral
+        infiniTime = peripheralToConnect
         infiniTime?.delegate = self
         infiniTime.discoverServices(nil)
         isConnectedToPinetime = true
-        pairedDeviceID = peripheral.identifier.uuidString
         
         log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
@@ -238,8 +234,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.pairedDevice = deviceManager.fetchDevice()
         self.deviceManager.getSettings()
         self.disconnect()
-        
-        log("Device switched to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        self.startScanning()
     }
     
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
@@ -268,29 +263,33 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             if error.localizedDescription.contains("removed pairing information") {
                 self.error = NSLocalizedString("InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect.", comment: "")
                 self.showError = true
+                
+                return
             }
         }
+        
+        connect(peripheral: peripheral) {}
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        self.onConnect(peripheral: peripheral)
+        onConnect()
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         
-        if pairedDeviceID != nil {
+        if pairedDeviceID != nil, pairedDeviceID == peripheral.identifier.uuidString {
             connect(peripheral: peripheral) {}
-        }
-        
-        if let error {
+        } else if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
         }
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
         isCentralOn = (central.state == .poweredOn)
+        isConnecting = false
+        isScanning = false
         
         if isCentralOn && !isConnectedToPinetime {
             startScanning()
