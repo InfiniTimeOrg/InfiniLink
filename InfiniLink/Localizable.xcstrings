@@ -133,9 +133,6 @@
     "24 Hour" : {
 
     },
-    "800" : {
-
-    },
     "A new section will be added to your device overview." : {
 
     },
@@ -184,8 +181,15 @@
     "Are you sure you want to end the exercise? %@" : {
 
     },
-    "Are you sure you want to reset all content and settings from %@?" : {
-
+    "Are you sure you want to reset all content and settings from %@? You'll need to restart %@ for the changes to take effect." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Are you sure you want to reset all content and settings from %1$@? You'll need to restart %2$@ for the changes to take effect."
+          }
+        }
+      }
     },
     "Are you sure you want to unpair from %@?" : {
 
@@ -313,13 +317,16 @@
     "Done" : {
 
     },
-    "Elapsed Time" : {
+    "Duration" : {
 
     },
     "Enable Developer Mode" : {
 
     },
     "Enable Watch Notifications" : {
+
+    },
+    "End Date" : {
 
     },
     "End Exercise" : {
@@ -608,6 +615,9 @@
 
     },
     "Software Update" : {
+
+    },
+    "Start Date" : {
 
     },
     "Start Pairing" : {

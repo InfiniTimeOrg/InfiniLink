@@ -33,9 +33,7 @@ struct ConnectView: View {
     
     func connect(_ device: CBPeripheral) {
         deviceWithPendingConnectionID = device.identifier
-        bleManager.connect(peripheral: device) {
-            dismiss()
-        }
+        bleManager.connect(peripheral: device) {}
     }
     
     func startCircleAnimation(geo: CGSize) {
@@ -171,7 +169,7 @@ struct ConnectView: View {
             }
             .padding()
             .onAppear {
-                bleManager.scanForNewDevices(updateState: true)
+                bleManager.scanForNewDevices()
             }
             .onDisappear {
                 if bleManager.isConnectedToPinetime {

@@ -78,6 +78,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     @Published var isCentralOn = false
     @Published var isScanning = false
+    @Published var isConnecting = false
     @Published var setTimeError = false
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
@@ -115,34 +116,35 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         return first == "0"
     }
+    var isBusy: Bool {
+        return isConnecting || isScanning
+    }
     
     override init() {
         super.init()
         self.central = CBCentralManager(delegate: self, queue: nil)
     }
     
-    func scanForNewDevices(updateState: Bool = false) {
+    func scanForNewDevices() {
         central.scanForPeripherals(withServices: nil, options: nil)
         newPeripherals = []
-        
-        if updateState {
-            isScanning = true
-        }
+        isScanning = true
     }
     
     func startScanning() {
         guard central.state == .poweredOn else { return }
         
-        self.scanForNewDevices()
         if let pairedDeviceID = pairedDeviceID,
-            let uuid = UUID(uuidString: pairedDeviceID) {
+            let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice {
             
             let peripherals = central.retrievePeripherals(withIdentifiers: [uuid])
             log("\(peripherals)", type: .info, caller: "BLEManager - startScanning")
             
             if let peripheral = peripherals.first, !isConnectedToPinetime {
-                self.connect(peripheral: peripheral) {}
+                connect(peripheral: peripheral) {}
             }
+        } else {
+            scanForNewDevices()
         }
     }
     
@@ -155,8 +157,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         guard isCentralOn else { return }
         
         if peripheral.name == "InfiniTime" {
+            isConnecting = true
             peripheralToConnect = peripheral
+            
             central.connect(peripheralToConnect, options: nil)
+            
             completion()
         }
     }
@@ -171,6 +176,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         downloadManager.updateAvailable = false
         pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
         hasDisconnectedForUpdate = false
+        isConnecting = false
         
         infiniTime = peripheral
         infiniTime?.delegate = self
@@ -228,11 +234,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func switchDevice(device: Device) {
-        self.disconnect()
         self.pairedDeviceID = device.uuid
         self.pairedDevice = deviceManager.fetchDevice()
         self.deviceManager.getSettings()
-        self.startScanning()
+        self.disconnect()
         
         log("Device switched to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
@@ -253,6 +258,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
+        self.isConnecting = false
+        
         if let error = error {
             log("Failed to connect to peripheral: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
             
@@ -273,11 +280,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         
+        if pairedDeviceID != nil {
+            connect(peripheral: peripheral) {}
+        }
+        
         if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
-        } else {
-            peripheralToConnect = peripheral
-            connect(peripheral: peripheralToConnect) {}
         }
     }
     

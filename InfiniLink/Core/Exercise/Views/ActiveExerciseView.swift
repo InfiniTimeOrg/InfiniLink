@@ -9,13 +9,13 @@ import SwiftUI
 
 struct ActiveExerciseView: View {
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)])
-    private var stepCounts: FetchedResults<StepCounts>
+    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var stepCounts: FetchedResults<StepCounts>
     
     @Environment(\.managedObjectContext) var viewContext
     
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject var musicController = MusicController.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     @Binding var exercise: Exercise?
     
@@ -24,8 +24,7 @@ struct ActiveExerciseView: View {
     
     @State private var previousHeartPoints: [HeartDataPoint] = []
     @State private var newHeartPoints: [HeartDataPoint] = []
-    @State private var previousStepCounts: [StepCounts] = []
-    @State private var newStepCounts: [StepCounts] = []
+    @State private var currentStepCount = 0
     
     var body: some View {
         if let exercise {
@@ -51,21 +50,21 @@ struct ActiveExerciseView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "shoeprints.fill")
                                 .foregroundStyle(.blue)
-                            Text(String(format: "%.0f", newStepCounts.compactMap({ $0.steps }).last ?? 0))
+                            Text(String(exerciseViewModel.stepsTaken))
                         }
                     }
                 }
                 Spacer()
                 if musicController.musicPlaying != 0 {
                     HStack(spacing: 12) {
-                        if let artwork = musicController.musicPlayer.nowPlayingItem?.artwork, let image = artwork.image(at: CGSize(width: 60, height: 60)) {
+                        if let artwork = musicController.musicPlayer.nowPlayingItem?.artwork, let image = artwork.image(at: CGSize(width: 52, height: 52)) {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: 60, height: 60)
+                                .frame(width: 52, height: 52)
                                 .clipShape(RoundedRectangle(cornerRadius: 10))
                         }
-                        VStack(alignment: .leading, spacing: 4) {
+                        VStack(alignment: .leading, spacing: 2) {
                             Text(musicController.musicPlayer.nowPlayingItem?.title ?? "Not Playing")
                                 .fontWeight(.bold)
                             if let artist = musicController.musicPlayer.nowPlayingItem?.artist {
@@ -73,25 +72,25 @@ struct ActiveExerciseView: View {
                             }
                         }
                         Spacer()
-                        HStack(spacing: 18) {
+                        HStack(spacing: 16) {
                             Button {
                                 musicController.musicPlaying == 1 ? musicController.pause() : musicController.play()
                             } label: {
                                 Image(systemName: musicController.musicPlaying == 1 ? "pause.fill" : "play.fill")
-                                    .font(.system(size: 24))
+                                    .font(.system(size: 21))
                             }
                             Button {
                                 musicController.skipForward()
                             } label: {
                                 Image(systemName: "forward.fill")
-                                    .font(.system(size: 23))
+                                    .font(.system(size: 22))
                             }
                         }
                     }
-                    .padding()
+                    .padding(14)
                     .foregroundStyle(Color.primary)
                     .background(Material.regular)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
                 }
                 HStack(spacing: 14) {
                     Spacer()
@@ -143,22 +142,23 @@ struct ActiveExerciseView: View {
                 Button("Cancel", role: .cancel) { }
             }
             .onAppear {
+                currentStepCount = bleManager.stepCount
                 DispatchQueue.main.async {
                     startTimer()
                     musicController.updateMusicInformation()
                 }
             }
+            // Should these onChanges go in BLECharacteristicHandler?
             .onChange(of: Array(heartPoints)) { newPoints in
                 let currentHeartPoints = Array(newPoints)
                 
                 newHeartPoints = currentHeartPoints.filter { !previousHeartPoints.contains($0) }
                 previousHeartPoints = currentHeartPoints
             }
-            .onChange(of: Array(stepCounts)) { newPoints in
-                let currentStepCounts = Array(newPoints)
+            .onChange(of: bleManager.stepCount) { allSteps in
+                let steps = max(0, allSteps - currentStepCount)
                 
-                newStepCounts = currentStepCounts.filter { !previousStepCounts.contains($0) }
-                previousStepCounts = currentStepCounts
+                exerciseViewModel.stepsTaken = steps
             }
             .navigationBarHidden(true)
         }

@@ -65,15 +65,23 @@ struct ExerciseDetailView: View {
                 .listRowBackground(Color.clear)
                 Section {
                     HStack {
-                        Text("Elapsed Time")
-                        Spacer()
+                        Text("Duration")
                         Text(timeDifferenceFormatted(startDate: userExercise.startDate!, endDate: userExercise.endDate!))
+                            .foregroundStyle(.gray)
+                    }
+                    HStack {
+                        Text("Start Date")
+                        Text(userExercise.startDate!.formatted())
+                            .foregroundStyle(.gray)
+                    }
+                    HStack {
+                        Text("End Date")
+                        Text(userExercise.endDate!.formatted())
                             .foregroundStyle(.gray)
                     }
                     if heartPoints.count > 1 {
                         HStack {
                             Text("Heart Rate")
-                            Spacer()
                             Text("\(Int(heartPoints.compactMap({ $0.value }).min() ?? 0)) - \(Int(heartPoints.compactMap({ $0.value }).max() ?? 0))")
                                 .foregroundStyle(.gray)
                         }
@@ -81,24 +89,26 @@ struct ExerciseDetailView: View {
                     if exercise().components.contains(.steps) {
                         HStack {
                             Text("Total Steps")
-                            Spacer()
-                            Text("800")
+                            Text(String(userExercise.steps))
                                 .foregroundStyle(.gray)
                         }
                     }
-                    HStack {
-                        Text("Total Tracks Played")
-                        Spacer()
-                        Text("\(userExercise.playedTracks?.count ?? 0)")
-                            .foregroundStyle(.gray)
+                    if let tracks = userExercise.playedTracks, tracks.count > 1 {
+                        HStack {
+                            Text("Total Tracks Played")
+                            Text("\(tracks.count)")
+                                .foregroundStyle(.gray)
+                        }
                     }
                 }
-                Section("Heart Rate") {
-                    HeartChartView(heartPoints: heartPoints)
-                        .frame(height: geo.size.width / 1.6)
+                if heartPoints.count > 1 {
+                    Section("Heart Rate") {
+                        HeartChartView(heartPoints: heartPoints)
+                            .frame(height: geo.size.width / 1.6)
+                    }
+                    .listRowBackground(Color.clear)
                 }
-                .listRowBackground(Color.clear)
-                if let tracksSet = userExercise.playedTracks as? Set<PlayedTrack>, !tracksSet.isEmpty {
+                if let tracksSet = userExercise.playedTracks as? Set<PlayedTrack>, tracksSet.count > 1 {
                     let tracks = Array(tracksSet).sorted(by: { $0.timestamp ?? Date() < $1.timestamp ?? Date() })
                     
                     Section("Played Tracks") {

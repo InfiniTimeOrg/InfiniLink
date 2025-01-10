@@ -194,10 +194,12 @@ class DeviceManager: ObservableObject {
     }
     
     private func save() {
-        do {
-            try context.save()
-        } catch {
-            log("Error saving context: \(error.localizedDescription)", caller: "DeviceManager")
+        DispatchQueue.main.async {
+            do {
+                try self.context.save()
+            } catch {
+                log("Error saving context: \(error.localizedDescription)", caller: "DeviceManager")
+            }
         }
     }
 }

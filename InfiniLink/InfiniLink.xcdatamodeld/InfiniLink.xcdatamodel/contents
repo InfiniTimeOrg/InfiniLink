@@ -5,7 +5,6 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device"/>
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES" codeGenerationType="class">
         <attribute name="alwaysOnDisplay" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
@@ -37,7 +36,6 @@
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
-        <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device"/>
         <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="heartPoints" inverseEntity="UserExercise"/>
     </entity>
     <entity name="InfineatWatchface" representedClassName="InfineatWatchface" syncable="YES" codeGenerationType="class">

@@ -112,7 +112,7 @@ struct StepsView: View {
                             .xAxisLabels(chartData: chartData())
                             .yAxisLabels(chartData: chartData())
                             .animation(.none)
-                            .frame(minHeight: geo.size.width / 1.6)
+                            .frame(minHeight: geo.size.width / 1.8)
                     }
                     .padding(.vertical)
                 }

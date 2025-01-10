@@ -81,18 +81,16 @@ struct GeneralSettingsView: View {
                 } label: {
                     Text(bleManager.isConnectedToPinetime ? "Disconnect": "Connect")
                 }
-                .disabled(bleManager.isScanning)
+                .disabled(bleManager.isBusy)
                 Button {
                     showResetConfirmation = true
                 } label: {
                     Text("Reset")
                 }
                 .disabled(bleManager.blefsTransfer == nil)
-                .alert("Are you sure you want to reset all content and settings from \(deviceManager.name)?", isPresented: $showResetConfirmation) {
+                .alert("Are you sure you want to reset all content and settings from \(deviceManager.name)? You'll need to restart \(deviceManager.name) for the changes to take effect.", isPresented: $showResetConfirmation) {
                     Button(role: .destructive) {
-//                        bleManager.resetDevice()
-                        bleManager.infiniTime.writeValue(Data([0x04]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
-                        bleManager.infiniTime.writeValue(Data([0x05]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                        bleManager.resetDevice()
                         dismiss()
                     } label: {
                         Text("Reset")

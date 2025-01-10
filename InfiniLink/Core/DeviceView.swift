@@ -26,7 +26,7 @@ struct DeviceView: View {
     @State private var showNavigationTitle = false
     
     func connectionState() -> String {
-        if bleManager.isScanning {
+        if bleManager.isBusy {
             return NSLocalizedString("Connecting...", comment: "")
         }
         switch (bleManager.isConnectedToPinetime, bleManager.hasLoadedBatteryLevel) {

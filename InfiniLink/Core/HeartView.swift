@@ -51,7 +51,7 @@ struct HeartView: View {
             ScrollView {
                 VStack(spacing: 20) {
                     Section {
-                        DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: true) {
+                        DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (heartDataPoints.last?.timestamp?.timeIntervalSinceNow ?? 60) < 60) {
                             HStack {
                                 DetailHeaderSubItemView(
                                     title: "Min",
@@ -90,7 +90,7 @@ struct HeartView: View {
                     }
                     Section {
                         HeartChartView(heartPoints: chartManager.heartPoints())
-                            .frame(height: geo.size.width / 1.6)
+                            .frame(height: geo.size.width / 1.8)
                             .padding(.vertical)
                     }
                 }

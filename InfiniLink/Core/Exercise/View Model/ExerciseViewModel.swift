@@ -16,6 +16,7 @@ class ExerciseViewModel: ObservableObject {
     
     @Published var playedTracks = [PlayedTrack]()
     @Published var exerciseTime: TimeInterval = 0
+    @Published var stepsTaken: Int = 0
     @Published var currentExercise: Exercise?
     @Published var exercisePaused = false
     
@@ -72,6 +73,7 @@ class ExerciseViewModel: ObservableObject {
     }
     
     func reset() {
+        stepsTaken = 0
         exerciseTime = 0
         exercisePaused = false
     }
@@ -97,8 +99,7 @@ class ExerciseViewModel: ObservableObject {
         newExercise.exerciseId = exercise
         newExercise.playedTracks = NSSet(array: playedTracks)
         newExercise.heartPoints = NSSet(array: heartPoints)
-        
-        // TODO: add step values
+        newExercise.steps = Int32(stepsTaken)
         
         saveContext(viewContext)
     }
