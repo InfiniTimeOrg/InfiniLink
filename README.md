@@ -13,10 +13,6 @@
 [![Stars - InfiniLink](https://img.shields.io/github/stars/InfiniTimeOrg/InfiniLink?style=social)](https://github.com/InfiniTimeOrg/InfiniLink/stargazers)
 [![Forks - InfiniLink](https://img.shields.io/github/forks/InfiniTimeOrg/InfiniLink?style=social)](https://github.com/InfiniTimeOrg/InfiniLink/network/members)
 
-# InfiniLink
-
-*The official iOS companion app for [InfiniTime](https://github.com/InfiniTimeOrg/InfiniTime).*
-
 </div>
 
 ### Features:
