@@ -10,6 +10,7 @@ import CoreData
 
 struct ExerciseView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
     @Environment(\.managedObjectContext) var viewContext
     
@@ -27,7 +28,7 @@ struct ExerciseView: View {
                         } else {
                             ForEach(userExercises) { userExercise in
                                 let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
-
+                                
                                 NavigationLink {
                                     ExerciseDetailView(userExercise: userExercise)
                                 } label: {
@@ -46,13 +47,23 @@ struct ExerciseView: View {
                             .onDelete(perform: delete)
                         }
                     }
-                    Section("All Exercises") {
+                    if !bleManager.hasLoadedCharacteristics {
+                        Section("All Exercises") {
+                            Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
+                        }
+                    }
+                    Section {
                         ForEach(exerciseViewModel.exercises) { exercise in
                             Button {
                                 exerciseViewModel.startExercise(exercise)
                             } label: {
                                 Label(exercise.name, systemImage: exercise.icon)
                             }
+                            .disabled(!bleManager.hasLoadedCharacteristics)
+                        }
+                    } header: {
+                        if bleManager.hasLoadedCharacteristics {
+                            Text("All Exercises")
                         }
                     }
                 }
