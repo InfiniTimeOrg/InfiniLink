@@ -22,9 +22,9 @@
 - Chart persistence, with filters for the last hour, day, and week
 - Control Apple Music with InfiniTime's music controls
 - Integration with Apple HealthKit
-- Weather fetch (using the [NWS API](https://www.weather.gov/documentation/services-web-api) and a secondary fallback on [WeatherAPI](https://www.weatherapi.com)) and push (using InfiniTime 1.14's [Simple Weather Service](https://github.com/InfiniTimeOrg/InfiniTime/blob/main/doc/SimpleWeatherService.md))
+- Weather fetch (using WeatherKit) and push (using InfiniTime 1.14's [Simple Weather Service](https://github.com/InfiniTimeOrg/InfiniTime/blob/main/doc/SimpleWeatherService.md))
 - Uploading of [external resource packages](https://github.com/InfiniTimeOrg/InfiniTime/blob/develop/doc/gettingStarted/updating-software.md#updating-resources)
-- Check for and download InfiniTime firmware updates with the GitHub API, and send them to the watch (Manual updates can be completed with DFU zip files downloaded from [InfiniTime's GitHub Releases Page](https://github.com/InfiniTimeOrg/InfiniTime/releases))
+- Download and install InfiniTime firmware updates from releases and GitHub Actions using the GitHub API (local file updates are supported)
 
 ### Partially implemented features:
 - System-wide notifications—implemented in [#2217](https://github.com/InfiniTimeOrg/InfiniTime/pull/2217), but not available in the main branch yet.
@@ -32,11 +32,12 @@
 ### Currently non-functional features:
 - System-wide music controls—requires implementation of Apple Media Service (AMS).
 
-### Roadmap
+### Planned features:
 - InfiniTime navigation service using MapKit
 
 ## Installation:
 - **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
+- **Version 1.1:** is accessible on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
