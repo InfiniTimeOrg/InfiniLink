@@ -39,7 +39,7 @@ struct HeartView: View {
         return NSLocalizedString("Now", comment: "")
     }
     func timestamp(for heartPoint: HeartDataPoint?) -> String? {
-        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return "No data" }
+        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return " " }
         
         return units(for: Int(abs(timeInterval)))
     }
@@ -57,7 +57,11 @@ struct HeartView: View {
                                 )
                                 DetailHeaderSubItemView(
                                     title: "Avg",
-                                    value: heartRate(for: Double(heartPointValues.compactMap({ Int($0) }).reduce(0, +) / heartPointValues.count)))
+                                    value: heartRate(for: {
+                                        guard heartPointValues.count > 0 else { return Double(0) }
+                                        
+                                        return Double(heartPointValues.compactMap({ Int($0) }).reduce(0, +) / heartPointValues.count)
+                                    }()))
                                 DetailHeaderSubItemView(
                                     title: "Max",
                                     value: heartRate(for: heartPointValues.max() ?? 0)

@@ -13,7 +13,7 @@ class ChartManager: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
     let bleManager = BLEManager.shared
     
-    @AppStorage("heartRateChartDataSelection") private var heartRateChartDataSelection = 0
+    @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
     
     static let shared = ChartManager()
     

@@ -41,10 +41,22 @@ struct HeartChartView: View {
     var latestDate: Date {
         data().compactMap({ $0.date }).max() ?? Date()
     }
+    var unit: Calendar.Component {
+        switch chartManager.heartRateChartDataSelection {
+        case 1:
+            return .day
+        case 2:
+            return .weekOfMonth
+        case 3:
+            return .month
+        default:
+            return .hour
+        }
+    }
     
     var header: some View {
         VStack(alignment: .leading) {
-            Text(data().count > 1 ? "Range" : " ")
+            Text(data().count > 1 ? "Range" : "No Data")
             Text({
                 let max = Int(data().compactMap({ $0.max }).max() ?? 0)
                 let min = Int(data().compactMap({ $0.min }).min() ?? 0)
@@ -58,7 +70,7 @@ struct HeartChartView: View {
             .font(.system(.title, design: .rounded))
             .foregroundColor(.primary)
             + Text("BPM")
-            Text("\(earliestDate.formatted())-\(latestDate.formatted())")
+            Text("\(earliestDate.formatted(.dateTime.month(.abbreviated).day()))-\(latestDate.formatted(.dateTime.day()))")
         }
         .fontWeight(.semibold)
     }
@@ -72,7 +84,7 @@ struct HeartChartView: View {
             Chart(data(), id: \.id) { point in
                 Plot {
                     BarMark(
-                        x: .value("Day", point.date, unit: .day),
+                        x: .value("Day", point.date, unit: unit),
                         yStart: .value("BPM Min", point.min),
                         yEnd: .value("BPM Max", point.max),
                         width: .fixed(8)
