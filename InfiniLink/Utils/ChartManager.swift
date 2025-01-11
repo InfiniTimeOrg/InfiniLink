@@ -8,7 +8,6 @@
 import Foundation
 import SwiftUI
 import CoreData
-import SwiftUICharts
 
 class ChartManager: ObservableObject {
     let viewContext = PersistenceController.shared.container.viewContext
@@ -119,18 +118,5 @@ class ChartManager: ObservableObject {
             log("Failed to fetch battery data points: \(error)", caller: "ChartManager")
             return []
         }
-    }
-    
-    func convert(_ points: [HeartDataPoint]) -> [LineChartDataPoint] {
-        var dataPoints: [LineChartDataPoint] = []
-        
-        let dateFormat = DateFormatter()
-        dateFormat.dateFormat = "MMM d\nH:mm:ss"
-        
-        for point in points {
-            dataPoints.append(LineChartDataPoint(value: point.value, xAxisLabel: NSLocalizedString("Date", comment: ""), description: dateFormat.string(from: point.timestamp!), date: point.timestamp!))
-        }
-        
-        return dataPoints
     }
 }

@@ -103,8 +103,7 @@ struct ExerciseDetailView: View {
                 }
                 if heartPoints.count > 1 {
                     Section("Heart Rate") {
-                        HeartChartView(heartPoints: heartPoints)
-                            .frame(height: geo.size.width / 1.6)
+                        HeartChartView(showHeader: false)
                     }
                     .listRowBackground(Color.clear)
                 }

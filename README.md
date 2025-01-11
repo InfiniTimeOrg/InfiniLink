@@ -30,12 +30,10 @@
 - System-wide notifications—implemented in [#2217](https://github.com/InfiniTimeOrg/InfiniTime/pull/2217), but not available in the main branch yet.
 
 ### Currently non-functional features:
-- InfiniTime's navigation app—there is currently no API in Swift to access current directions unless the route is started from inside the app, which may not be practical for most users.
 - System-wide music controls—requires implementation of Apple Media Service (AMS).
 
 ### Roadmap
 - InfiniTime navigation service using MapKit
-- Apple Charts
 
 ## Installation:
 - **Version 1.0.2:** is accessible on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).

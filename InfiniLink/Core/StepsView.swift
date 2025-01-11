@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SwiftUICharts
 
 struct StepsView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -18,35 +17,35 @@ struct StepsView: View {
     
     let exerciseCalculator = FitnessCalculator.shared
     
-    func getStepCounts(displayWeek: Date) -> [BarChartDataPoint] {
-        var dataPoints = [BarChartDataPoint]()
-        var calendar = Calendar.autoupdatingCurrent
-        var week = displayWeek
-        
-        calendar.firstWeekday = 1
-        week = calendar.date(byAdding: .day, value: -6, to: Date()) ?? Date()
-        
-        for weekDay in 0...6 {
-            if let day = calendar.date(byAdding: .day, value: weekDay, to: week) {
-                let shortFormatter = DateFormatter()
-                shortFormatter.dateFormat = "EEEEE"
-                
-                let longFormatter = DateFormatter()
-                longFormatter.dateFormat = "EEEE"
-                
-                let color = ColourStyle(colour: .blue)
-                dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: day, colour: color))
-                
-                for i in chartManager.stepPoints() {
-                    if calendar.isDate(i.timestamp!, inSameDayAs: day) {
-                        dataPoints[weekDay] = BarChartDataPoint(value: Double(i.steps), xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color)
-                    }
-                }
-            }
-        }
-        
-        return dataPoints
-    }
+//    func getStepCounts(displayWeek: Date) -> [BarChartDataPoint] {
+//        var dataPoints = [BarChartDataPoint]()
+//        var calendar = Calendar.autoupdatingCurrent
+//        var week = displayWeek
+//        
+//        calendar.firstWeekday = 1
+//        week = calendar.date(byAdding: .day, value: -6, to: Date()) ?? Date()
+//        
+//        for weekDay in 0...6 {
+//            if let day = calendar.date(byAdding: .day, value: weekDay, to: week) {
+//                let shortFormatter = DateFormatter()
+//                shortFormatter.dateFormat = "EEEEE"
+//                
+//                let longFormatter = DateFormatter()
+//                longFormatter.dateFormat = "EEEE"
+//                
+//                let color = ColourStyle(colour: .blue)
+//                dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: day, colour: color))
+//                
+//                for i in chartManager.stepPoints() {
+//                    if calendar.isDate(i.timestamp!, inSameDayAs: day) {
+//                        dataPoints[weekDay] = BarChartDataPoint(value: Double(i.steps), xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color)
+//                    }
+//                }
+//            }
+//        }
+//        
+//        return dataPoints
+//    }
     func steps(for date: Date) -> String {
         for stepCount in chartManager.stepPoints() {
             if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
@@ -56,34 +55,10 @@ struct StepsView: View {
         }
         return "0"
     }
-    func chartData() -> BarChartData {
-        let metadata   = ChartMetadata(title: "Steps This Week")
-        let gridStyle  = GridStyle(numberOfLines: 5,
-                                   lineColour: Color(.lightGray).opacity(0.25),
-                                   lineWidth: 1)
-        let chartStyle = BarChartStyle(infoBoxPlacement: .floating,
-                                       markerType: .none,
-                                       xAxisGridStyle: gridStyle,
-                                       xAxisLabelPosition: .bottom,
-                                       yAxisGridStyle: gridStyle,
-                                       yAxisLabelPosition: .leading,
-                                       yAxisNumberOfLabels: 5,
-                                       baseline: .zero,
-                                       topLine: .maximum(of: Double(deviceManager.settings.stepsGoal)))
-        
-        return BarChartData(dataSets: BarDataSet(dataPoints: getStepCounts(displayWeek: Date())),
-                            metadata: metadata,
-                            barStyle: BarStyle(barWidth: 0.6,
-                                                 cornerRadius: CornerRadius(top: 0, bottom: 0),
-                                                 colourFrom: .dataPoints,
-                                                 colour: ColourStyle(colour: .blue)),
-                            chartStyle: chartStyle)
-    }
     
     var body: some View {
         GeometryReader { geo in
-            ScrollView {
-                VStack(spacing: 20) {
+            List {
                     Section {
                         DetailHeaderView(Header(title: steps(for: Date()), subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
                             HStack {
@@ -98,25 +73,18 @@ struct StepsView: View {
                     }
                     Section {
                         Picker("Range", selection: $dataSelection) {
-                            Text("W").tag(0)
-                            Text("M").tag(1)
-                            Text("6M").tag(2)
-                            Text("Y").tag(3)
+                            Text("D").tag(0)
+                            Text("W").tag(1)
+                            Text("M").tag(2)
+                            Text("6M").tag(3)
+                            Text("Y").tag(4)
                         }
                         .pickerStyle(.segmented)
                     }
-                    Section {
-                        BarChart(chartData: chartData())
-                            .floatingInfoBox(chartData: chartData())
-                            .touchOverlay(chartData: chartData())
-                            .xAxisLabels(chartData: chartData())
-                            .yAxisLabels(chartData: chartData())
-                            .animation(.none)
-                            .frame(minHeight: geo.size.width / 1.8)
-                    }
-                    .padding(.vertical)
-                }
-                .padding()
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowBackground(Color.clear)
+                    StepChartView()
+                        .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("Steps")

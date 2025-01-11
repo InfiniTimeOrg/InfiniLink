@@ -4,6 +4,9 @@
     "" : {
 
     },
+    " " : {
+
+    },
     " • " : {
 
     },
@@ -42,6 +45,16 @@
     },
     "%@ needs to be connected to update its software." : {
 
+    },
+    "%@-%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@-%2$@"
+          }
+        }
+      }
     },
     "%@:%@:%@" : {
       "localizations" : {
@@ -118,7 +131,20 @@
         }
       }
     },
+    "%lld-%lld " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld-%2$lld "
+          }
+        }
+      }
+    },
     "%lld%%" : {
+
+    },
+    "0 " : {
 
     },
     "1 device discovered" : {
@@ -215,6 +241,15 @@
     "Bluetooth needs to be enabled to pair a watch." : {
 
     },
+    "BPM" : {
+
+    },
+    "BPM Max" : {
+
+    },
+    "BPM Min" : {
+
+    },
     "Brightness Level" : {
 
     },
@@ -288,6 +323,9 @@
 
     },
     "Date" : {
+
+    },
+    "Day" : {
 
     },
     "Debug Logs" : {

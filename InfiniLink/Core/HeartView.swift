@@ -6,9 +6,7 @@
 //
 
 import SwiftUI
-import Accelerate
 import CoreData
-import SwiftUICharts
 
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -41,15 +39,15 @@ struct HeartView: View {
         return NSLocalizedString("Now", comment: "")
     }
     func timestamp(for heartPoint: HeartDataPoint?) -> String? {
-        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return "" }
+        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return "No data" }
         
         return units(for: Int(abs(timeInterval)))
     }
     
     var body: some View {
         GeometryReader { geo in
-            ScrollView {
-                VStack(spacing: 20) {
+            List {
+                Group {
                     Section {
                         DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (heartDataPoints.last?.timestamp?.timeIntervalSinceNow ?? 60) < 60) {
                             HStack {
@@ -59,11 +57,7 @@ struct HeartView: View {
                                 )
                                 DetailHeaderSubItemView(
                                     title: "Avg",
-                                    value: {
-                                        let meanValue = heartPointValues.isEmpty ? 0 : vDSP.mean(heartPointValues)
-                                        return heartRate(for: Double(meanValue))
-                                    }()
-                                )
+                                    value: heartRate(for: Double(heartPointValues.compactMap({ Int($0) }).reduce(0, +) / heartPointValues.count)))
                                 DetailHeaderSubItemView(
                                     title: "Max",
                                     value: heartRate(for: heartPointValues.max() ?? 0)
@@ -71,6 +65,7 @@ struct HeartView: View {
                             }
                         }
                     }
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     Section {
                         Picker("Range", selection: $dataSelection) {
                             ForEach(0...3, id: \.self) { index in
@@ -88,13 +83,10 @@ struct HeartView: View {
                         }
                         .pickerStyle(.segmented)
                     }
-                    Section {
-                        HeartChartView(heartPoints: chartManager.heartPoints())
-                            .frame(height: geo.size.width / 1.8)
-                            .padding(.vertical)
-                    }
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    HeartChartView()
                 }
-                .padding()
+                .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("Heart Rate")

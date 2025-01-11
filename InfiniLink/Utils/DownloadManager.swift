@@ -343,7 +343,9 @@ class DownloadManager: NSObject, ObservableObject {
                     let result = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
                     
                     DispatchQueue.main.async {
-                        completion(result.artifacts.filter({ $0.name.contains("DFU") }))
+                        completion(result.artifacts.filter({
+                            $0.name.contains("DFU") && !result.artifacts.compactMap({ $0.name }).contains($0.name)
+                        }))
                     }
                 } catch {
                     log("Error decoding artifacts JSON: \(error.localizedDescription)", caller: "DownloadManager")
