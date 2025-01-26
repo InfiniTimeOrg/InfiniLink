@@ -38,6 +38,12 @@ class NotificationManager: ObservableObject {
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("waterReminder") var waterReminder = true
     
+    @AppStorage("minHeartRange") var minHeartRange = 40
+    @AppStorage("maxHeartRange") var maxHeartRange = 150
+    @AppStorage("heartRangeReminder") var heartRangeReminder = true
+    @AppStorage("lastTimeMinHeartRangeNotified") var lastTimeMinHeartRangeNotified: Double = 0
+    @AppStorage("lastTimeMaxHeartRangeNotified") var lastTimeMaxHeartRangeNotified: Double = 0
+    
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
     private var waterReminderEndHour: Int = 20
@@ -105,7 +111,30 @@ extension NotificationManager {
     }
 }
 
+// MARK: Health
 extension NotificationManager {
+    func sendHeartRangeNotification(_ bpm: Int) {
+        let date = Date().formatted(.dateTime.hour().minute())
+        let currentTime = Date().timeIntervalSince1970
+        
+        // FIXME: closures are being executed, but notifications are not being sent
+        
+        if bpm < minHeartRange, (currentTime - lastTimeMinHeartRangeNotified) >= (60 * 10) {
+            self.bleWriteManager.sendNotification(
+                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(minHeartRange) BPM at \(date)", comment: ""))
+            )
+            self.lastTimeMinHeartRangeNotified = currentTime
+            print("Triggered min check")
+        }
+        if bpm > maxHeartRange, (currentTime - lastTimeMaxHeartRangeNotified) >= (60 * 10) {
+            self.bleWriteManager.sendNotification(
+                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(maxHeartRange) BPM at \(date)", comment: ""))
+            )
+            self.lastTimeMaxHeartRangeNotified = currentTime
+            print("Triggered max check")
+        }
+    }
+    
     func setWaterRemindersPerDay() {
         waterReminderAmount = waterReminderAmount
         

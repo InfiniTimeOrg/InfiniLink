@@ -45,7 +45,7 @@ struct ActionView: View {
                     .padding(10)
                     .font(.body.weight(.semibold))
                     .background(action.accent)
-                    .foregroundStyle(.white) // TODO: check this works for all accents
+                    .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 Text(NSLocalizedString(action.title, comment: ""))
                     .font(.system(size: 28).weight(.bold))

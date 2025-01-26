@@ -14,7 +14,6 @@ struct ActiveExerciseView: View {
     @Environment(\.managedObjectContext) var viewContext
     
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
-    @ObservedObject var musicController = MusicController.shared
     @ObservedObject var bleManager = BLEManager.shared
     
     @Binding var exercise: Exercise?
@@ -55,43 +54,6 @@ struct ActiveExerciseView: View {
                     }
                 }
                 Spacer()
-                if musicController.musicPlaying != 0 {
-                    HStack(spacing: 12) {
-                        if let artwork = musicController.musicPlayer.nowPlayingItem?.artwork, let image = artwork.image(at: CGSize(width: 52, height: 52)) {
-                            Image(uiImage: image)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: 52, height: 52)
-                                .clipShape(RoundedRectangle(cornerRadius: 10))
-                        }
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(musicController.musicPlayer.nowPlayingItem?.title ?? "Not Playing")
-                                .fontWeight(.bold)
-                            if let artist = musicController.musicPlayer.nowPlayingItem?.artist {
-                                Text(artist)
-                            }
-                        }
-                        Spacer()
-                        HStack(spacing: 16) {
-                            Button {
-                                musicController.musicPlaying == 1 ? musicController.pause() : musicController.play()
-                            } label: {
-                                Image(systemName: musicController.musicPlaying == 1 ? "pause.fill" : "play.fill")
-                                    .font(.system(size: 21))
-                            }
-                            Button {
-                                musicController.skipForward()
-                            } label: {
-                                Image(systemName: "forward.fill")
-                                    .font(.system(size: 22))
-                            }
-                        }
-                    }
-                    .padding(14)
-                    .foregroundStyle(Color.primary)
-                    .background(Material.regular)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
-                }
                 HStack(spacing: 14) {
                     Spacer()
                     Button {
@@ -145,7 +107,6 @@ struct ActiveExerciseView: View {
                 currentStepCount = bleManager.stepCount
                 DispatchQueue.main.async {
                     startTimer()
-                    musicController.updateMusicInformation()
                 }
             }
             // Should these onChanges go in BLECharacteristicHandler?

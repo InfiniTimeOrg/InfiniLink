@@ -15,6 +15,9 @@ struct NotificationsSettingsView: View {
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("standUpReminder") var standUpReminder = true
+    @AppStorage("heartRangeReminder") var heartRangeReminder = true
+    @AppStorage("minHeartRange") var minHeartRange = 40
+    @AppStorage("maxHeartRange") var maxHeartRange = 150
     @AppStorage("watchNotifications") var watchNotifications = true
     @AppStorage("enableReminders") var enableReminders = true
     @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
@@ -49,7 +52,7 @@ struct NotificationsSettingsView: View {
                     Toggle("Water Reminder", isOn: $waterReminder)
                     if waterReminder {
                         Picker("Interval", selection: $waterReminderAmount) {
-                            ForEach(0..<9) { amount in
+                            ForEach(0..<9, id: \.self) { amount in
                                 Text("\(amount + 1) time\(amount == 0 ? "" : "s")")
                             }
                         }
@@ -60,6 +63,21 @@ struct NotificationsSettingsView: View {
                  Toggle("Stand-up Reminder", isOn: $standUpReminder)
                  }
                  */
+                Section(footer: Text("Get a notification whenn your heart rate goes above or below the specified range.")) {
+                    Toggle("Heart Range Notifications", isOn: $heartRangeReminder)
+                    if heartRangeReminder {
+                        HStack {
+                            Text("Minimum")
+                            Stepper("\(minHeartRange)", value: $minHeartRange, in: 40...(maxHeartRange - 1), step: 1)
+                                .fontWeight(.semibold)
+                        }
+                        HStack {
+                            Text("Maximum")
+                            Stepper("\(maxHeartRange)", value: $maxHeartRange, in: (minHeartRange + 1)...220, step: 1)
+                                .fontWeight(.semibold)
+                        }
+                    }
+                }
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                 }

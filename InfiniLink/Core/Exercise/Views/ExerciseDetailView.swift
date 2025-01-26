@@ -93,34 +93,12 @@ struct ExerciseDetailView: View {
                                 .foregroundStyle(.gray)
                         }
                     }
-                    if let tracks = userExercise.playedTracks, tracks.count > 1 {
-                        HStack {
-                            Text("Total Tracks Played")
-                            Text("\(tracks.count)")
-                                .foregroundStyle(.gray)
-                        }
-                    }
                 }
                 if heartPoints.count > 1 {
                     Section("Heart Rate") {
                         HeartChartView(showHeader: false)
                     }
                     .listRowBackground(Color.clear)
-                }
-                if let tracksSet = userExercise.playedTracks as? Set<PlayedTrack>, tracksSet.count > 1 {
-                    let tracks = Array(tracksSet).sorted(by: { $0.timestamp ?? Date() < $1.timestamp ?? Date() })
-                    
-                    Section("Played Tracks") {
-                        ForEach(tracks) { track in
-                            if let title = track.title, let artist = track.artist {
-                                VStack(alignment: .leading, spacing: 5) {
-                                    Text(title)
-                                        .fontWeight(.bold)
-                                    Text(artist)
-                                }
-                            }
-                        }
-                    }
                 }
             }
         }

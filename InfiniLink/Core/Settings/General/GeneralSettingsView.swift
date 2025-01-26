@@ -37,17 +37,6 @@ struct GeneralSettingsView: View {
                 .disabled(bleManager.blefsTransfer == nil)
             }
             Section {
-                // TODO: implement non-dummy input form in SetUpDetailsView
-                /*
-                NavigationLink {
-                    SetUpDetailsView(listOnly: true)
-                        .navigationBarTitle("Health Details")
-                } label: {
-                    Text("Health Details")
-                }
-                 */
-            }
-            Section {
                 NavigationLink {
                     AppearanceView()
                 } label: {

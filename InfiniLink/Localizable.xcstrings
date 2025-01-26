@@ -409,6 +409,9 @@
     "General" : {
 
     },
+    "Get a notification whenn your heart rate goes above or below the specified range." : {
+
+    },
     "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
 
     },
@@ -442,7 +445,16 @@
     "Health Details" : {
 
     },
+    "Heart Range Notifications" : {
+
+    },
     "Heart Rate" : {
+
+    },
+    "Heart Rate High" : {
+
+    },
+    "Heart Rate Low" : {
 
     },
     "Height" : {
@@ -526,7 +538,13 @@
     "M" : {
 
     },
+    "Maximum" : {
+
+    },
     "Metric" : {
+
+    },
+    "Minimum" : {
 
     },
     "Music" : {
@@ -578,9 +596,6 @@
 
     },
     "Pair New Device" : {
-
-    },
-    "Played Tracks" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -710,9 +725,6 @@
 
     },
     "Total Steps" : {
-
-    },
-    "Total Tracks Played" : {
 
     },
     "Units" : {

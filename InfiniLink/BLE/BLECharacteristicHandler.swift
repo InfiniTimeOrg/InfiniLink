@@ -27,7 +27,7 @@ struct BLECharacteristicHandler {
     
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
-    @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 86400
+    @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
     
     func fetchHeartPoints() -> [HeartDataPoint] {
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
@@ -234,7 +234,10 @@ struct BLECharacteristicHandler {
     }
     private func updateHeartRate(bpm: Int) {
         lastHeartRateUpdateTimestamp = Date().timeIntervalSince1970
+        
         healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManager.heartRate)
         chartManager.addHeartRateDataPoint(heartRate: Double(bpm), time: Date())
+        
+        notificationManager.sendHeartRangeNotification(bpm)
     }
 }
