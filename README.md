@@ -22,7 +22,7 @@ This iOS application allows you to interact with your PineTime smartwatch runnin
 </div>
 
 > [!NOTE]
-> This branch is not under active development. Please refer to the [rebuild](https://github.com/InfiniTimeOrg/InfiniTime/tree/rebuild) branch instead.
+> This branch is not under active development. Please refer to the [rebuild](https://github.com/InfiniTimeOrg/InfiniLink/tree/rebuild) branch instead.
 
 ### Features:
 - Discover and connect to nearby InfiniTime devices
