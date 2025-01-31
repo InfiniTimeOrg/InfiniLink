@@ -92,8 +92,13 @@ class MusicController {
     
     
     func getCurrentSongInfo() -> SongInfo {
-        let currentTrack = musicPlayer.nowPlayingItem
-        let currentSongInfo = SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
+        var currentSongInfo: SongInfo = SongInfo(trackName: "", artistName: "")
+        
+        DispatchQueue.main.async {
+            let currentTrack = self.musicPlayer.nowPlayingItem
+            currentSongInfo = SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
+        }
+        
         return currentSongInfo
     }
     

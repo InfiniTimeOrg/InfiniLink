@@ -14,6 +14,7 @@ class ChartManager: ObservableObject {
     let bleManager = BLEManager.shared
     
     @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
+    @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
     
     static let shared = ChartManager()
     
@@ -60,31 +61,9 @@ class ChartManager: ObservableObject {
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
         
         do {
-            let oneHour: TimeInterval = 60 * 60
-            let oneDay: TimeInterval = oneHour * 24
-            let oneWeek: TimeInterval = oneDay * 7
-            
-            let timeInterval: TimeInterval = {
-                switch heartRateChartDataSelection {
-                case 1: return oneDay // Day
-                case 2: return oneWeek // Week
-                case 3:
-                    let calendar = Calendar.current
-                    let range = calendar.range(of: .weekOfMonth, in: .month, for: Date())
-                    return oneWeek * TimeInterval(range?.count ?? 4) // Fallback to 4 weeks if range is nil
-                default: return oneHour // Hour
-                }
-            }()
-            
             return try viewContext.fetch(fetchRequest)
                 .filter { record in
-                    guard
-                        let timestamp = record.timestamp?.timeIntervalSinceNow,
-                        record.deviceId == bleManager.pairedDeviceID
-                    else { return false }
-                    
-                    let secondsFromNow = abs(timestamp)
-                    return secondsFromNow <= timeInterval
+                    return record.deviceId == bleManager.pairedDeviceID
                 }
         } catch {
             log("Error fetching heart points: \(error)", caller: "BLECharacteristicHandler")
@@ -96,9 +75,12 @@ class ChartManager: ObservableObject {
         let fetchRequest: NSFetchRequest<StepCounts> = StepCounts.fetchRequest()
         
         do {
-            return try viewContext.fetch(fetchRequest).filter({ $0.deviceId == bleManager.pairedDeviceID })
+            return try viewContext.fetch(fetchRequest)
+                .filter { record in
+                    return record.deviceId == bleManager.pairedDeviceID
+                }
         } catch {
-            log("Error fetching step points: \(error)", caller: "BLECharacteristicHandler")
+            log("Error fetching step points: \(error)", caller: "StepChartView")
             return []
         }
     }

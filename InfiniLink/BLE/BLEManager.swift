@@ -12,8 +12,10 @@ import SwiftUI
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     static let shared = BLEManager()
     
+    // BLECharacteristicHandler and DeviceManager both create an instance of BLEManager, so they need to lazy to avoid a crash
     lazy var characteristicHandler = BLECharacteristicHandler()
     lazy var deviceManager = DeviceManager.shared
+    
     let downloadManager = DownloadManager.shared
     
     var central: CBCentralManager!
@@ -135,13 +137,15 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         guard central.state == .poweredOn else { return }
         
         if let pairedDeviceID = pairedDeviceID,
-            let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice {
-            
+            let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice { // The user has a paired device and they're not trying to pair a new one
             let peripherals = central.retrievePeripherals(withIdentifiers: [uuid])
             log("\(peripherals)", type: .info, caller: "BLEManager - startScanning")
             
             if let peripheral = peripherals.first, !isConnectedToPinetime {
+                // FIXME: should we add a check to confirm the watch is already not connected to the system (state != .connected), or let it pair this way?
                 connect(peripheral: peripheral) {}
+            } else {
+                scanForNewDevices()
             }
         } else {
             scanForNewDevices()
@@ -159,7 +163,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if peripheral.name == "InfiniTime" {
             isConnecting = true
             peripheralToConnect = peripheral
-            pairedDeviceID = peripheral.identifier.uuidString
             central.connect(peripheralToConnect, options: nil)
             
             completion()
@@ -195,21 +198,25 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func unpair(device: Device? = nil) {
         if let pairedDevice {
+            // Delete the device object we have said for this watch
             deviceManager.removeDevice(device ?? pairedDevice)
         }
+        // Update the list of user watches
         deviceManager.fetchAllDevices()
         
         if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
+            // Switch to the user's next watch
             pairedDeviceID = first.uuid
             pairedDevice = deviceManager.fetchDevice()
         } else {
+            // The user doesn't have another watch, this will show the welcome view
             pairedDeviceID = nil
         }
         
         log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
         
         if device == nil {
-            // This only disconnects and removes the watch from the recognized device list. If using secure pairing, the bond will still be kept
+            // FIXME: this only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
             disconnect()
             startScanning()
         }
@@ -218,6 +225,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func disconnect() {
         if let infiniTime = infiniTime {
             self.central.cancelPeripheralConnection(infiniTime)
+            
+            // Update the rest of the app to reflect the disconnected state
             self.infiniTime = nil
             self.blefsTransfer = nil
             self.currentTimeService = nil
@@ -230,9 +239,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func switchDevice(device: Device) {
+        // We just switched devices, update the UI
         self.pairedDeviceID = device.uuid
         self.pairedDevice = deviceManager.fetchDevice()
         self.deviceManager.getSettings()
+        
         self.disconnect()
         self.startScanning()
     }
@@ -241,9 +252,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
             connect(peripheral: peripheral) {}
         }
-        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) {
-            if isPairingNewDevice {
-                if !deviceManager.watches.compactMap({ $0.uuid }).contains(peripheral.identifier.uuidString) {
+        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
+            if isPairingNewDevice { // Only check if we know the device when pairing a new watch, because we don't one to show up
+                if !deviceManager.watches.compactMap({ $0.uuid }).contains(peripheral.identifier.uuidString) { // The discovered watch is not already paired
                     newPeripherals.append(peripheral)
                 }
             } else {
@@ -268,10 +279,12 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             }
         }
         
+        // The connection was abruptly terminated, so we try connecting again
         connect(peripheral: peripheral) {}
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
+        // The connection was successfully, update state vars and start service discovery
         onConnect()
     }
     
@@ -279,9 +292,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         
-        if pairedDeviceID != nil, pairedDeviceID == peripheral.identifier.uuidString && error == nil {
+        if let error {
             connect(peripheral: peripheral) {}
-        } else if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
         }
     }

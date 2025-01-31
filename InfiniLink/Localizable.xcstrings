@@ -40,6 +40,16 @@
     "%@" : {
 
     },
+    "%@ - %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ - %2$@"
+          }
+        }
+      }
+    },
     "%@ Logs" : {
 
     },
@@ -98,6 +108,9 @@
     "%lld" : {
 
     },
+    "%lld " : {
+
+    },
     "%lld - %lld" : {
       "localizations" : {
         "en" : {
@@ -148,9 +161,6 @@
 
     },
     "1 device discovered" : {
-
-    },
-    "6M" : {
 
     },
     "12 Hour" : {
@@ -220,6 +230,9 @@
     "Are you sure you want to unpair from %@?" : {
 
     },
+    "Average" : {
+
+    },
     "Back" : {
 
     },
@@ -242,9 +255,6 @@
 
     },
     "BPM" : {
-
-    },
-    "BPM Max" : {
 
     },
     "BPM Min" : {
@@ -311,6 +321,9 @@
 
     },
     "D" : {
+
+    },
+    "Daily Goal" : {
 
     },
     "Daily Goals" : {
@@ -679,6 +692,9 @@
     "Start Pairing" : {
 
     },
+    "steps" : {
+
+    },
     "Steps" : {
 
     },
@@ -722,6 +738,9 @@
 
     },
     "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
+
+    },
+    "Total" : {
 
     },
     "Total Steps" : {
@@ -795,9 +814,6 @@
 
     },
     "Weight" : {
-
-    },
-    "Y" : {
 
     },
     "You can start one by choosing one from the list below." : {

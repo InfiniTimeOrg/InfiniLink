@@ -80,7 +80,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             isUpdatingResources = true
             dfuState = "Updating resources"
             
-            BLEFSHandler.shared.downloadTransfer { [self] in
+            BLEFSHandler.shared.uploadExternalResources { [self] in
                 isUpdatingResources = false
                 updateFirmware()
             }

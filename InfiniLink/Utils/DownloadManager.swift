@@ -433,7 +433,7 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
                     self.downloading = false
                     
                     if self.externalResources {
-                        BLEFSHandler.shared.downloadTransfer {}
+                        BLEFSHandler.shared.uploadExternalResources {}
                     } else {
                         DFUUpdater.shared.downloadTransfer()
                     }

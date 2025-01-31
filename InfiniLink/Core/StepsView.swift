@@ -13,39 +13,10 @@ struct StepsView: View {
     @ObservedObject var chartManager = ChartManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     
-    @AppStorage("stepsChartDataSelection") private var dataSelection = 0
+    @AppStorage("stepChartDataSelection") private var dataSelection = 0
     
-    let exerciseCalculator = FitnessCalculator.shared
+    let exerciseCalculator = FitnessCalculator()
     
-//    func getStepCounts(displayWeek: Date) -> [BarChartDataPoint] {
-//        var dataPoints = [BarChartDataPoint]()
-//        var calendar = Calendar.autoupdatingCurrent
-//        var week = displayWeek
-//        
-//        calendar.firstWeekday = 1
-//        week = calendar.date(byAdding: .day, value: -6, to: Date()) ?? Date()
-//        
-//        for weekDay in 0...6 {
-//            if let day = calendar.date(byAdding: .day, value: weekDay, to: week) {
-//                let shortFormatter = DateFormatter()
-//                shortFormatter.dateFormat = "EEEEE"
-//                
-//                let longFormatter = DateFormatter()
-//                longFormatter.dateFormat = "EEEE"
-//                
-//                let color = ColourStyle(colour: .blue)
-//                dataPoints.append(BarChartDataPoint(value: 0, xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: day, colour: color))
-//                
-//                for i in chartManager.stepPoints() {
-//                    if calendar.isDate(i.timestamp!, inSameDayAs: day) {
-//                        dataPoints[weekDay] = BarChartDataPoint(value: Double(i.steps), xAxisLabel: shortFormatter.string(from: day), description: longFormatter.string(from: day), date: i.timestamp!, colour: color)
-//                    }
-//                }
-//            }
-//        }
-//        
-//        return dataPoints
-//    }
     func steps(for date: Date) -> String {
         for stepCount in chartManager.stepPoints() {
             if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
@@ -71,20 +42,7 @@ struct StepsView: View {
                         .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                         .listRowBackground(Color.clear)
                     }
-                    Section {
-                        Picker("Range", selection: $dataSelection) {
-                            Text("D").tag(0)
-                            Text("W").tag(1)
-                            Text("M").tag(2)
-                            Text("6M").tag(3)
-                            Text("Y").tag(4)
-                        }
-                        .pickerStyle(.segmented)
-                    }
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    .listRowBackground(Color.clear)
                     StepChartView()
-                        .listRowBackground(Color.clear)
             }
         }
         .navigationTitle("Steps")

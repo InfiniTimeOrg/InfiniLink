@@ -12,8 +12,6 @@ struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var chartManager = ChartManager.shared
     
-    @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
-    
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartDataPoints: FetchedResults<HeartDataPoint>
     
     var heartPointValues: [Double] {
@@ -68,24 +66,6 @@ struct HeartView: View {
                                 )
                             }
                         }
-                    }
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    Section {
-                        Picker("Range", selection: $dataSelection) {
-                            ForEach(0...3, id: \.self) { index in
-                                Text({
-                                    switch index {
-                                    case 0: return "H"
-                                    case 1: return "D"
-                                    case 2: return "W"
-                                    case 3: return "M"
-                                    default: return "-"
-                                    }
-                                }())
-                                .tag(index)
-                            }
-                        }
-                        .pickerStyle(.segmented)
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     HeartChartView()

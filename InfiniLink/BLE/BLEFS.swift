@@ -12,27 +12,28 @@ import SwiftUI
 
 class BLEFSHandler: ObservableObject {
     static var shared = BLEFSHandler()
+    
     let bleManager = BLEManager.shared
     let dfuUpdater = DFUUpdater.shared
     
-    var informationTransfer : [InformationFS] = []
-    var readFileFS : ReadFileFS = ReadFileFS()
-    var writeFileFS : WriteFileFS = WriteFileFS()
+    var informationTransfer: [InformationFS] = []
+    var readFileFS: ReadFileFS = ReadFileFS()
+    var writeFileFS: WriteFileFS = WriteFileFS()
     
     struct WriteFileFS {
         var group = DispatchGroup()
-        var offset : Int = 0
-        var freeSpace : UInt32  = 0
+        var offset: Int = 0
+        var freeSpace: UInt32  = 0
         var data = Data()
-        var completed : Bool = false
-        var valid : Bool = false
+        var completed: Bool = false
+        var valid: Bool = false
     }
     
     struct ReadFileFS {
         var group = DispatchGroup()
-        var chunkOffset : UInt32 = 0
-        var totalLength : UInt32  = 0
-        var chunkLength : UInt32  = 0
+        var chunkOffset: UInt32 = 0
+        var totalLength: UInt32  = 0
+        var chunkLength: UInt32  = 0
         var data = Data()
         var completed : Bool = false
         var valid : Bool = false
@@ -40,21 +41,21 @@ class BLEFSHandler: ObservableObject {
     
     struct InformationFS {
         var group = DispatchGroup()
-        var dirList : DirList = DirList()
-        var valid : Bool = false
+        var dirList: DirList = DirList()
+        var valid: Bool = false
     }
     
     struct DirList {
         var parentPath = ""
-        var ls : [Dir] = []
-        var valid : Bool = false
+        var ls: [Dir] = []
+        var valid: Bool = false
     }
     
     struct Dir {
-        var modificationTime : Int = 0
-        var fileSize : Int = 0
-        var flags : Int = 0
-        var pathNames : String = ""
+        var modificationTime: Int = 0
+        var fileSize: Int = 0
+        var flags: Int = 0
+        var pathNames: String = ""
     }
     
     enum Commands : UInt8 {
@@ -98,7 +99,7 @@ class BLEFSHandler: ObservableObject {
     @Published var progress: Int = 0
     @Published var externalResourcesSize: Int = 0
     
-    func downloadTransfer(completion: @escaping() -> Void) {
+    func uploadExternalResources(completion: @escaping() -> Void) {
         DispatchQueue.global(qos: .default).async { [self] in
             do {
                 let unzipDirectory = try Zip.quickUnzipFile(dfuUpdater.resourceURL)
@@ -177,10 +178,11 @@ class BLEFSHandler: ObservableObject {
     }
 
     func readFile(path: String, offset: UInt32) -> ReadFileFS {
-        var read = ReadFileFS()
-        read.group = DispatchGroup()
-        read.group.enter()
         var writeData = Data()
+        
+        readFileFS = ReadFileFS()
+        readFileFS.group = DispatchGroup()
+        readFileFS.group.enter()
 
         writeData.append(Commands.readInit.rawValue)
         writeData.append(Commands.padding.rawValue)
@@ -194,7 +196,6 @@ class BLEFSHandler: ObservableObject {
         let pathData = path.data(using: .utf8)!
         writeData.append(pathData)
 
-        readFileFS = read
         bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         readFileFS.group.wait()
         
@@ -494,7 +495,8 @@ class BLEFSHandler: ObservableObject {
             switch responseData[1] {
             case Responses.ok.rawValue:
                 informationTransfer[0].valid = true
-            default: break
+            default:
+                break
                 //print("error response code \(responseData[1])")
             }
             informationTransfer[0].group.leave()

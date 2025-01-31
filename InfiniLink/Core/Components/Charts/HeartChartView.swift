@@ -8,32 +8,23 @@
 import SwiftUI
 import Charts
 
-struct HeartChartDataPoint {
+struct HeartChartDataPoint: Identifiable {
     var id = UUID()
     let date: Date
-    let min: Double
-    let max: Double
+    let value: Double
 }
 
 struct HeartChartView: View {
     @ObservedObject var chartManager = ChartManager.shared
     
+    @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
+    
     let showHeader: Bool
     
     func data() -> [HeartChartDataPoint] {
-        let points = [
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 1), min: 200, max: 239),
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 2), min: 101, max: 184),
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 3), min: 96, max: 193),
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 4), min: 104, max: 202),
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 5), min: 90, max: 95),
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 6), min: 96, max: 203),
-            HeartChartDataPoint(date: date(year: 2025, month: 7, day: 7), min: 98, max: 200)
-        ]
-        
-        // TODO: return data in proper format
-        
-        return points
+        return chartManager.heartPoints().compactMap { point in
+            return HeartChartDataPoint(date: point.timestamp!, value: point.value)
+        }
     }
     var earliestDate: Date {
         data().compactMap({ $0.date }).min() ?? Date()
@@ -41,25 +32,12 @@ struct HeartChartView: View {
     var latestDate: Date {
         data().compactMap({ $0.date }).max() ?? Date()
     }
-    var unit: Calendar.Component {
-        switch chartManager.heartRateChartDataSelection {
-        case 1:
-            return .day
-        case 2:
-            return .weekOfMonth
-        case 3:
-            return .month
-        default:
-            return .hour
-        }
-    }
-    
     var header: some View {
         VStack(alignment: .leading) {
             Text(data().count > 1 ? "Range" : "No Data")
             Text({
-                let max = Int(data().compactMap({ $0.max }).max() ?? 0)
-                let min = Int(data().compactMap({ $0.min }).min() ?? 0)
+                let max = Int(data().compactMap({ $0.value }).max() ?? 0)
+                let min = Int(data().compactMap({ $0.value }).min() ?? 0)
                 
                 if max == 0 || min == 0 {
                     return "0 "
@@ -80,27 +58,48 @@ struct HeartChartView: View {
     }
     
     var body: some View {
-        Section(header: showHeader ? AnyView(header) : AnyView(Text("Heart Rate"))) {
-            Chart(data(), id: \.id) { point in
-                Plot {
-                    BarMark(
-                        x: .value("Day", point.date, unit: unit),
-                        yStart: .value("BPM Min", point.min),
-                        yEnd: .value("BPM Max", point.max),
-                        width: .fixed(8)
-                    )
-                    .clipShape(Capsule())
-                    .foregroundStyle(Color.red)
+        Group {
+            Section {
+                Picker("Range", selection: $dataSelection) {
+                    ForEach(0...3, id: \.self) { index in
+                        Text({
+                            switch index {
+                            case 0: return "H"
+                            case 1: return "D"
+                            case 2: return "W"
+                            case 3: return "M"
+                            default: return "-"
+                            }
+                        }())
+                        .tag(index)
+                    }
                 }
+                .pickerStyle(.segmented)
             }
-            .chartXAxis {
-                AxisMarks(values: .stride(by: .day)) { _ in
-                    AxisTick()
-                    AxisGridLine()
-                    AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+            .listRowBackground(Color.clear)
+            Section(header: showHeader ? AnyView(header) : AnyView(Text("Heart Rate"))) {
+                Chart(data()) { point in
+                    Plot {
+                        BarMark(
+                            x: .value("Day", point.date),
+                            y: .value("BPM Min", point.value)
+                        )
+                        .clipShape(Capsule())
+                        .foregroundStyle(Color.red)
+                    }
                 }
+//                .chartXAxis {
+//                    AxisMarks(values: .stride(by: .day)) { _ in
+//                        AxisTick()
+//                        AxisGridLine()
+//                        AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+//                    }
+//                }
+                .frame(height: 250)
             }
-            .frame(height: 300)
+            .listRowBackground(Color.clear)
+            .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
         }
     }
 }

@@ -31,10 +31,12 @@ struct HeartSettingsView: View {
         do {
             try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
             
-            let activityVC = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
+            let activity = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
             
-            if let rootVC = UIApplication.shared.windows.first?.rootViewController {
-                rootVC.present(activityVC, animated: true, completion: nil)
+            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+               let keyWindow = windowScene.windows.first,
+               let root = keyWindow.rootViewController {
+                root.present(activity, animated: true, completion: nil)
             }
         } catch {
             log("Error writing heart data CSV file: \(error.localizedDescription)", caller: "HeartSettingsView")

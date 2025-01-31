@@ -32,15 +32,6 @@ struct SleepView: View {
                         }
                         return nil
                     }(), icon: "bed.double.fill", accent: .indigo), width: geo.size.width) {
-//                        Button {
-                            // We can't current change the tracking state over BLE
-//                        } label: {
-//                            Text("Stop Tracking")
-//                                .padding(14)
-//                                .background(Color.red)
-//                                .foregroundStyle(.white)
-//                                .clipShape(Capsule())
-//                        }
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
