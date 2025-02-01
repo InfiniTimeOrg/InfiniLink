@@ -488,6 +488,12 @@
     "Imperial" : {
 
     },
+    "Include Artist" : {
+
+    },
+    "Include Song Name" : {
+
+    },
     "InfiniLink " : {
 
     },
@@ -708,6 +714,9 @@
 
     },
     "Test Data" : {
+
+    },
+    "Test Music" : {
 
     },
     "Test Navigation" : {

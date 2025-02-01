@@ -554,8 +554,8 @@
 		E0C7C8362CAEF6BF0043DA2D /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				E05046872D136F0600FE4BCD /* Developer */,
 				E0A7C09F2CB245F70042A12D /* Components */,
+				E05046872D136F0600FE4BCD /* Developer */,
 				E059999A2CB2E55500D64E0B /* Apps */,
 				E0A7C0742CB0ECD10042A12D /* Settings */,
 				E0B85D172CB6241000D85122 /* Exercise */,

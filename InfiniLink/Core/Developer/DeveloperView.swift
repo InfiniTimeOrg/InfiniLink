@@ -8,9 +8,14 @@
 import SwiftUI
 
 struct DeveloperView: View {
-    let bleWriteManager = BLEWriteManager()
+    @ObservedObject var bleManager = BLEManager.shared
     
     @AppStorage("useExperimentalDFU") var useExperimentalDFU = false
+    @AppStorage("includeTestArtist") var includeTestArtist = true
+    @AppStorage("includeTestSongName") var includeTestSongName = true
+    
+    private let bleWriteManager = BLEWriteManager()
+    private let musicController = MusicController.shared
     
     var body: some View {
         List {
@@ -19,7 +24,7 @@ struct DeveloperView: View {
                     DebugLogsView()
                 }
             }
-            Section {
+            Section("Test Data") {
                 Button("Test Weather") {
                     bleWriteManager.writeForecastWeatherData(minimumTemperature: {
                         var mins = [Double]()
@@ -51,8 +56,27 @@ struct DeveloperView: View {
                 Button("Test Navigation") {
                     bleWriteManager.writeNavigationUpdate()
                 }
-            } header: {
-                Text("Test Data")
+            }
+            Section {
+                Button("Test Music") {
+                    if let playbackChar = bleManager.musicChars.position, let durationChar = bleManager.musicChars.length, let statusChar = bleManager.musicChars.status {
+                        bleWriteManager.writeHexToMusicApp(message: musicController.convertTime(value: 78), characteristic: playbackChar)
+                        bleWriteManager.writeHexToMusicApp(message: musicController.convertTime(value: 147), characteristic: durationChar)
+                        
+                        bleWriteManager.writeHexToMusicApp(message: Bool.random() ? [0x01] : [0x00], characteristic: statusChar)
+                    }
+                    
+                    if let artistChar = bleManager.musicChars.artist, includeTestArtist {
+                        bleWriteManager.writeToMusicApp(message: "Artist Name", characteristic: artistChar)
+                    }
+                    if let trackChar = bleManager.musicChars.track, includeTestSongName {
+                        bleWriteManager.writeToMusicApp(message: "Song Name", characteristic: trackChar)
+                    }
+                }
+            }
+            Section {
+                Toggle("Include Song Name", isOn: $includeTestSongName)
+                Toggle("Include Artist", isOn: $includeTestArtist)
             } footer: {
                 Text("Send randomly generated data to the various characteristics on the watch.")
             }

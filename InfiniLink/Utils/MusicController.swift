@@ -21,8 +21,8 @@ class MusicController {
     let volumeSlots: Float = 15.0
     
     struct SongInfo {
-        var trackName: String!
-        var artistName: String!
+        var trackName: String = ""
+        var artistName: String = ""
     }
     
     enum MusicState {
@@ -100,11 +100,14 @@ class MusicController {
         let bleWriteManager = BLEWriteManager()
         
         let songInfo = getCurrentSongInfo()
+        var playbackTime = musicPlayer.currentPlaybackTime
+        if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {
+            // The playback time will be the duration of the song if it just started, so set it to zero
+            playbackTime = 0.0
+        }
         
         bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
         bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
-        
-        var playbackTime = musicPlayer.currentPlaybackTime
         
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
