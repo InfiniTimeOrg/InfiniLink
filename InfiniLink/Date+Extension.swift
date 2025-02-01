@@ -41,6 +41,11 @@ extension Date {
         
         return calendar.date(from: components) ?? Date()
     }
+    
+    static func from(year: Int, month: Int, day: Int) -> Date {
+        let components = DateComponents(year: year, month: month, day: day)
+        return Calendar.current.date(from: components)!
+    }
 }
 
 func date(year: Int, month: Int, day: Int = 1, hour: Int = 0, minutes: Int = 0, seconds: Int = 0) -> Date {

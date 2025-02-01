@@ -95,7 +95,6 @@ struct DetailHeaderView<V: View>: View {
                     Image(systemName: header.icon)
                         .foregroundStyle(header.accent)
                         .font(.system(size: min(width / 4.4, 115)))
-                        .shadow(color: header.accent.opacity(0.7), radius: isHeartAnimating ? 20 : 0, x: 0, y: 0)
                         .scaleEffect(isHeartAnimating ? 0.85 : 1.0)
                         .animation(
                             .snappy(duration: 0.9)

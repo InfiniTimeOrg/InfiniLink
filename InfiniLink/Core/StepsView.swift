@@ -30,19 +30,19 @@ struct StepsView: View {
     var body: some View {
         GeometryReader { geo in
             List {
-                    Section {
-                        DetailHeaderView(Header(title: steps(for: Date()), subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
-                            HStack {
-                                DetailHeaderSubItemView(title: "Dis",
-                                                        value: String(format: "%.2f", exerciseCalculator.calculateDistance(steps: bleManager.stepCount)),
-                                                        unit: personalizationController.units == .imperial ? "mi" : "m")
-                                DetailHeaderSubItemView(title: "Kcal", value: String(format: "%.1f", exerciseCalculator.calculateCaloriesBurned(steps: bleManager.stepCount)))
-                            }
+                Section {
+                    DetailHeaderView(Header(title: steps(for: Date()), subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
+                        HStack {
+                            DetailHeaderSubItemView(title: "Dis",
+                                                    value: String(format: "%.2f", exerciseCalculator.calculateDistance(steps: bleManager.stepCount)),
+                                                    unit: personalizationController.units == .imperial ? "mi" : "m")
+                            DetailHeaderSubItemView(title: "Kcal", value: String(format: "%.1f", exerciseCalculator.calculateCaloriesBurned(steps: bleManager.stepCount)))
                         }
-                        .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                        .listRowBackground(Color.clear)
                     }
-                    StepChartView()
+                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                    .listRowBackground(Color.clear)
+                }
+                StepChartView()
             }
         }
         .navigationTitle("Steps")

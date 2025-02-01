@@ -92,14 +92,8 @@ class MusicController {
     
     
     func getCurrentSongInfo() -> SongInfo {
-        var currentSongInfo: SongInfo = SongInfo(trackName: "", artistName: "")
-        
-        DispatchQueue.main.async {
-            let currentTrack = self.musicPlayer.nowPlayingItem
-            currentSongInfo = SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
-        }
-        
-        return currentSongInfo
+        let currentTrack = self.musicPlayer.nowPlayingItem
+        return SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
     }
     
     func updateMusicInformation(songInfo: MusicController.SongInfo) {
@@ -110,7 +104,8 @@ class MusicController {
         bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
         bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
         
-        var playbackTime = musicPlayer.currentPlaybackTime; if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {playbackTime = 0.0}
+        var playbackTime = musicPlayer.currentPlaybackTime
+        
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
         
@@ -122,7 +117,7 @@ class MusicController {
     }
     
     func convertTime(value: Double) -> [UInt8] {
-        let val32 : UInt32 = UInt32(floor(value))
+        let val32: UInt32 = UInt32(floor(value))
         
         let byte1 = UInt8(val32 & 0x000000FF)
         let byte2 = UInt8((val32 & 0x0000FF00) >> 8)

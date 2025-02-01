@@ -63,7 +63,7 @@ struct NotificationsSettingsView: View {
                  Toggle("Stand-up Reminder", isOn: $standUpReminder)
                  }
                  */
-                Section(footer: Text("Get a notification whenn your heart rate goes above or below the specified range.")) {
+                Section(footer: Text("Get a notification when your heart rate goes above or below the specified range.")) {
                     Toggle("Heart Range Notifications", isOn: $heartRangeReminder)
                     if heartRangeReminder {
                         HStack {
