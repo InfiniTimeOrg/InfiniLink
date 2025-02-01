@@ -114,24 +114,19 @@ extension NotificationManager {
 // MARK: Health
 extension NotificationManager {
     func sendHeartRangeNotification(_ bpm: Int) {
-        let date = Date().formatted(.dateTime.hour().minute())
         let currentTime = Date().timeIntervalSince1970
-        
-        // FIXME: closures are being executed, but notifications are not being sent
         
         if bpm < minHeartRange, (currentTime - lastTimeMinHeartRangeNotified) >= (60 * 10) {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(minHeartRange) BPM at \(date)", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(minHeartRange) BPM", comment: ""))
             )
             self.lastTimeMinHeartRangeNotified = currentTime
-            print("Triggered min check")
         }
         if bpm > maxHeartRange, (currentTime - lastTimeMaxHeartRangeNotified) >= (60 * 10) {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(maxHeartRange) BPM at \(date)", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(maxHeartRange)", comment: ""))
             )
             self.lastTimeMaxHeartRangeNotified = currentTime
-            print("Triggered max check")
         }
     }
     
