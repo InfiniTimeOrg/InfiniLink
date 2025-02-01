@@ -21,7 +21,6 @@
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
 		E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396142D28E59400A13B90 /* DirectionsView.swift */; };
 		E04396172D2A410100A13B90 /* DFUUpdaterCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */; };
-		E048E3542D2B261300248B30 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E048E3532D2B261300248B30 /* Zip */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
@@ -49,6 +48,7 @@
 		E0599A0F2CB4E62800D64E0B /* SetUpDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */; };
 		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
+		E078ECFB2D4E6D9800560364 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E078ECFA2D4E6D9800560364 /* Zip */; };
 		E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F132CBD688A005C1325 /* CustomizationView.swift */; };
 		E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */; };
 		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
@@ -238,9 +238,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E048E3542D2B261300248B30 /* Zip in Frameworks */,
 				E0FC36092D2DE57B00659D48 /* SwiftUICharts in Frameworks */,
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
+				E078ECFB2D4E6D9800560364 /* Zip in Frameworks */,
 				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -623,8 +623,8 @@
 			packageProductDependencies = (
 				E0A7C0812CB1B4990042A12D /* Zip */,
 				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
-				E048E3532D2B261300248B30 /* Zip */,
 				E0FC36082D2DE57B00659D48 /* SwiftUICharts */,
+				E078ECFA2D4E6D9800560364 /* Zip */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -704,8 +704,8 @@
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
 				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
-				E048E3522D2B261300248B30 /* XCRemoteSwiftPackageReference "Zip" */,
 				E0FC36072D2DE57B00659D48 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
+				E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -1190,7 +1190,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E048E3522D2B261300248B30 /* XCRemoteSwiftPackageReference "Zip" */ = {
+		E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/Zip";
 			requirement = {
@@ -1217,9 +1217,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E048E3532D2B261300248B30 /* Zip */ = {
+		E078ECFA2D4E6D9800560364 /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = E048E3522D2B261300248B30 /* XCRemoteSwiftPackageReference "Zip" */;
+			package = E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
 		};
 		E0A7C0812CB1B4990042A12D /* Zip */ = {
