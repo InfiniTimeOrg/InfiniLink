@@ -23,12 +23,12 @@ struct AboutSettingsView: View {
                     NavigationLink {
                         RenameView()
                     } label: {
-                        AboutRowView(title: "Name", value: name)
+                        AboutRowView("Name", value: name)
                     }
-                    AboutRowView(title: "Software Version", value: deviceManager.firmware)
-                    AboutRowView(title: "Manufacturer", value: deviceManager.manufacturer)
-                    AboutRowView(title: "Model Name", value: deviceManager.modelNumber)
-                    AboutRowView(title: "UUID", value: deviceManager.bleUUID)
+                    AboutRowView("Software Version", value: deviceManager.firmware)
+                    AboutRowView("Manufacturer", value: deviceManager.manufacturer)
+                    AboutRowView("Model Name", value: deviceManager.modelNumber)
+                    AboutRowView("UUID", value: deviceManager.bleUUID)
                 }
                 if let timeService = bleManager.currentTimeService{
                     Section {
@@ -38,9 +38,9 @@ struct AboutSettingsView: View {
                     }
                 }
                 Section {
-                    AboutRowView(title: "File System", value: deviceManager.blefsVersion)
-                    AboutRowView(title: "Hardware Revision", value: deviceManager.hardwareRevision)
-                    AboutRowView(title: "Settings Version", value: String(deviceManager.settings.version))
+                    AboutRowView("File System", value: deviceManager.blefsVersion)
+                    AboutRowView("Hardware Revision", value: deviceManager.hardwareRevision)
+                    AboutRowView("Settings Version", value: String(deviceManager.settings.version))
                 }
                 Section {
                     Button("About InfiniLink") {
@@ -60,12 +60,17 @@ struct AboutSettingsView: View {
 }
 
 struct AboutRowView: View {
-    let title: String
+    let title: LocalizedStringKey
     let value: String
+    
+    init(_ title: LocalizedStringKey, value: String) {
+        self.title = title
+        self.value = value
+    }
     
     var body: some View {
         HStack {
-            Text(NSLocalizedString(title, comment: ""))
+            Text(title)
             Spacer()
             Text(value)
                 .foregroundStyle(.gray)

@@ -452,6 +452,9 @@
     "H" : {
 
     },
+    "Hardware Revision" : {
+
+    },
     "Health" : {
 
     },
@@ -557,6 +560,9 @@
     "M" : {
 
     },
+    "Manufacturer" : {
+
+    },
     "Maximum" : {
 
     },
@@ -566,6 +572,9 @@
     "Minimum" : {
 
     },
+    "Model Name" : {
+
+    },
     "Music" : {
 
     },
@@ -573,6 +582,9 @@
 
     },
     "My Watches" : {
+
+    },
+    "Name" : {
 
     },
     "Navigation" : {
@@ -680,6 +692,9 @@
     "Settings" : {
 
     },
+    "Settings Version" : {
+
+    },
     "Several days ago" : {
 
     },
@@ -690,6 +705,9 @@
 
     },
     "Software Update" : {
+
+    },
+    "Software Version" : {
 
     },
     "Start Date" : {
@@ -808,6 +826,9 @@
 
     },
     "user@watch:~ $ now" : {
+
+    },
+    "UUID" : {
 
     },
     "W" : {
