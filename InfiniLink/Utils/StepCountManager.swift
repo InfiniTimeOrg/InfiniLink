@@ -11,6 +11,7 @@ class StepCountManager: ObservableObject {
     static let shared = StepCountManager()
     
     let chartManager = ChartManager.shared
+    let persistenceManager = PersistenceController.shared
     
     func setStepCount(steps: Int32, isArbitrary: Bool, for date: Date) {
         let existingCounts = chartManager.stepPoints()
@@ -31,7 +32,10 @@ class StepCountManager: ObservableObject {
         }
         
         stepCount.timestamp = date
-        saveContext()
+        
+        Task {
+            await persistenceManager.save()
+        }
     }
     
     func clearCurrentDaySteps() {
@@ -45,14 +49,8 @@ class StepCountManager: ObservableObject {
             chartManager.addStepDataPoint(steps: 0, time: today)
         }
         
-        saveContext()
-    }
-    
-    private func saveContext() {
-        do {
-            try PersistenceController.shared.container.viewContext.save()
-        } catch {
-            log(error.localizedDescription, caller: "StepCountManager")
+        Task {
+            await persistenceManager.save()
         }
     }
 }

@@ -10,7 +10,7 @@ import SwiftUI
 import CoreData
 
 class ChartManager: ObservableObject {
-    let viewContext = PersistenceController.shared.container.viewContext
+    let persistenceController = PersistenceController.shared
     let bleManager = BLEManager.shared
     
     @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
@@ -19,41 +19,35 @@ class ChartManager: ObservableObject {
     static let shared = ChartManager()
     
     func addStepDataPoint(steps: Int32, time: Date) {
-        let heartRateDataPoint = StepCounts(context: viewContext)
+        let heartRateDataPoint = StepCounts(context: persistenceController.container.viewContext)
         heartRateDataPoint.steps = steps
         heartRateDataPoint.timestamp = time
         heartRateDataPoint.deviceId = bleManager.pairedDeviceID
         
-        do {
-            try viewContext.save()
-        } catch {
-            log("Failed to save heart rate data point: \(error.localizedDescription)", caller: "ChartManager")
+        Task {
+            await persistenceController.save()
         }
     }
     
     func addHeartRateDataPoint(heartRate: Double, time: Date) {
-        let heartRateDataPoint = HeartDataPoint(context: viewContext)
+        let heartRateDataPoint = HeartDataPoint(context: persistenceController.container.viewContext)
         heartRateDataPoint.value = heartRate
         heartRateDataPoint.timestamp = time
         heartRateDataPoint.deviceId = bleManager.pairedDeviceID
         
-        do {
-            try viewContext.save()
-        } catch {
-            log("Failed to save heart rate data point: \(error.localizedDescription)", caller: "ChartManager")
+        Task {
+            await persistenceController.save()
         }
     }
     
     func addBatteryDataPoint(batteryLevel: Double, time: Date) {
-        let batteryDataPoint = BatteryDataPoint(context: viewContext)
+        let batteryDataPoint = BatteryDataPoint(context: persistenceController.container.viewContext)
         batteryDataPoint.value = batteryLevel
         batteryDataPoint.timestamp = time
         batteryDataPoint.deviceId = bleManager.pairedDeviceID
         
-        do {
-            try viewContext.save()
-        } catch {
-            log("Failed to save battery data point: \(error.localizedDescription)", caller: "ChartManager")
+        Task {
+            await persistenceController.save()
         }
     }
     
@@ -61,7 +55,7 @@ class ChartManager: ObservableObject {
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
         
         do {
-            return try viewContext.fetch(fetchRequest)
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
                 .filter { record in
                     return record.deviceId == bleManager.pairedDeviceID
                 }
@@ -75,7 +69,7 @@ class ChartManager: ObservableObject {
         let fetchRequest: NSFetchRequest<StepCounts> = StepCounts.fetchRequest()
         
         do {
-            return try viewContext.fetch(fetchRequest)
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
                 .filter { record in
                     return record.deviceId == bleManager.pairedDeviceID
                 }
@@ -95,7 +89,7 @@ class ChartManager: ObservableObject {
         fetchRequest.predicate = NSPredicate(format: "time >= %@ AND time < %@", startOfDay as NSDate, endOfDay as NSDate)
         
         do {
-            return try viewContext.fetch(fetchRequest).filter({ $0.deviceId == bleManager.pairedDeviceID })
+            return try persistenceController.container.viewContext.fetch(fetchRequest).filter({ $0.deviceId == bleManager.pairedDeviceID })
         } catch {
             log("Failed to fetch battery data points: \(error)", caller: "ChartManager")
             return []

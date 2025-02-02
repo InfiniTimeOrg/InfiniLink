@@ -21,7 +21,7 @@ class DeviceManager: ObservableObject {
     }
     let cbuuids = cbuuid()
     
-    let context = PersistenceController.shared.container.viewContext
+    let persistenceController = PersistenceController.shared
     let bleManager = BLEManager.shared
     
     static let shared = DeviceManager()
@@ -92,12 +92,12 @@ class DeviceManager: ObservableObject {
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", id)
         
         do {
-            let existingDevices = try context.fetch(fetchRequest)
+            let existingDevices = try persistenceController.container.viewContext.fetch(fetchRequest)
             if let existingDevice = existingDevices.first {
                 return existingDevice
             }
             
-            let newDevice = Device(context: context)
+            let newDevice = Device(context: persistenceController.container.viewContext)
             newDevice.uuid = id
             newDevice.bleUUID = id
             newDevice.blefsVersion = ""
@@ -108,7 +108,10 @@ class DeviceManager: ObservableObject {
             newDevice.modelNumber = ""
             newDevice.serial = ""
             
-            try context.save()
+            Task {
+                await persistenceController.save()
+            }
+            
             return newDevice
         } catch {
             log("Error fetching or saving device: \(error)", caller: "DeviceManager")
@@ -131,7 +134,7 @@ class DeviceManager: ObservableObject {
         device.stepsGoal = Int32(settings.stepsGoal)
         device.screenTimeout = Int32(settings.screenTimeOut)
         
-        let pineTimeStyle = PineTimeStyleWatchface(context: context)
+        let pineTimeStyle = PineTimeStyleWatchface(context: persistenceController.container.viewContext)
         pineTimeStyle.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
         pineTimeStyle.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
         pineTimeStyle.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
@@ -139,13 +142,13 @@ class DeviceManager: ObservableObject {
         pineTimeStyle.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
         device.pineTimeStyle = pineTimeStyle
         
-        let infineatWatchFace = InfineatWatchface(context: context)
+        let infineatWatchFace = InfineatWatchface(context: persistenceController.container.viewContext)
         infineatWatchFace.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
         infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
         device.watchFaceInfineat = infineatWatchFace
         
         Task {
-            await save()
+            await persistenceController.save()
         }
         
         getSettings()
@@ -158,7 +161,7 @@ class DeviceManager: ObservableObject {
         device.name = name
         
         Task {
-            await save()
+            await persistenceController.save()
         }
     }
     
@@ -167,7 +170,7 @@ class DeviceManager: ObservableObject {
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", uuid)
         
         do {
-            let existingDevices = try context.fetch(fetchRequest)
+            let existingDevices = try persistenceController.container.viewContext.fetch(fetchRequest)
             
             if let existingDevice = existingDevices.first {
                 return existingDevice.name ?? "InfiniTime"
@@ -181,9 +184,9 @@ class DeviceManager: ObservableObject {
     
     func removeDevice(_ device: Device) async {
         do {
-            try await context.perform {
-                self.context.delete(device)
-                try self.context.save()
+            try await persistenceController.container.viewContext.perform {
+                self.persistenceController.container.viewContext.delete(device)
+                try self.persistenceController.container.viewContext.save()
             }
         } catch {
             log(error.localizedDescription, caller: "DeviceManager - removeDevice")
@@ -194,21 +197,11 @@ class DeviceManager: ObservableObject {
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         
         do {
-            try await context.perform {
-                self.watches = try self.context.fetch(fetchRequest)
+            try await persistenceController.container.viewContext.perform {
+                self.watches = try self.persistenceController.container.viewContext.fetch(fetchRequest)
             }
         } catch {
             log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
-        }
-    }
-    
-    func save() async {
-        do {
-            try await context.perform {
-                try self.context.save()
-            }
-        } catch {
-            log(error.localizedDescription, caller: "DeviceManager - updateSettings")
         }
     }
 }

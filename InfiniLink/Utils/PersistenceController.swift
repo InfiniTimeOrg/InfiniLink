@@ -62,4 +62,14 @@ struct PersistenceController {
         })
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
+    
+    func save() async {
+        do {
+            try await container.viewContext.perform {
+                try container.viewContext.save()
+            }
+        } catch {
+            log("Unresolved error saving context: \(error.localizedDescription)", caller: "PersistenceController")
+        }
+    }
 }
