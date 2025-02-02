@@ -187,8 +187,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func removeDevice(device: Device? = nil) {
-        deviceManager.removeDevice(device ?? pairedDevice)
-        unpair(device: device)
+        Task {
+            await deviceManager.removeDevice(device ?? pairedDevice)
+            unpair(device: device)
+        }
     }
     
     func resetDevice() {
@@ -197,12 +199,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func unpair(device: Device? = nil) {
-        if let pairedDevice {
-            // Delete the device object we have said for this watch
-            deviceManager.removeDevice(device ?? pairedDevice)
+        Task {
+            if let pairedDevice {
+                // Delete the device object we have said for this watch
+                await deviceManager.removeDevice(device ?? pairedDevice)
+            }
+            // Update the list of user watches
+            await deviceManager.fetchAllDevices()
         }
-        // Update the list of user watches
-        deviceManager.fetchAllDevices()
         
         if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
             // Switch to the user's next watch

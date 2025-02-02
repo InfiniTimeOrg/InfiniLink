@@ -144,10 +144,8 @@ class DeviceManager: ObservableObject {
         infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
         device.watchFaceInfineat = infineatWatchFace
         
-        do {
-            try context.save()
-        } catch {
-            log(error.localizedDescription, caller: "DeviceManager - updateSettings")
+        Task {
+            await save()
         }
         
         getSettings()
@@ -159,10 +157,8 @@ class DeviceManager: ObservableObject {
         
         device.name = name
         
-        do {
-            try context.save()
-        } catch {
-            log(error.localizedDescription, caller: "DeviceManager - updateName")
+        Task {
+            await save()
         }
     }
     
@@ -183,22 +179,36 @@ class DeviceManager: ObservableObject {
         }
     }
     
-    func removeDevice(_ device: Device) {
+    func removeDevice(_ device: Device) async {
         do {
-            context.delete(device)
-            try context.save()
+            try await context.perform {
+                self.context.delete(device)
+                try self.context.save()
+            }
         } catch {
             log(error.localizedDescription, caller: "DeviceManager - removeDevice")
         }
     }
     
-    func fetchAllDevices() {
+    func fetchAllDevices() async {
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         
         do {
-            self.watches = try context.fetch(fetchRequest)
+            try await context.perform {
+                self.watches = try self.context.fetch(fetchRequest)
+            }
         } catch {
             log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
+        }
+    }
+    
+    func save() async {
+        do {
+            try await context.perform {
+                try self.context.save()
+            }
+        } catch {
+            log(error.localizedDescription, caller: "DeviceManager - updateSettings")
         }
     }
 }

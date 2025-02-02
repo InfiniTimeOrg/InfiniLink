@@ -97,7 +97,9 @@ struct MyDevicesView: View {
                 ConnectView()
             }
             .onAppear {
-                deviceManager.fetchAllDevices()
+                Task {
+                    await deviceManager.fetchAllDevices()
+                }
             }
         }
         .navigationViewStyle(.stack)
