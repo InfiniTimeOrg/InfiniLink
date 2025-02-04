@@ -42,6 +42,7 @@
 
 ### Planned features:
 - InfiniTime navigation service using MapKit
+- Battery, heart, and step widgets
 
 ## Installation:
 - **Version 1.0.2** is available on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
