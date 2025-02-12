@@ -17,7 +17,7 @@ struct RecoveryModeView: View {
         VStack(spacing: 16) {
             Spacer()
             VStack(spacing: 12) {
-                Image("InfiniTime")
+                Image(.infiniTime)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: 75, height: 75)

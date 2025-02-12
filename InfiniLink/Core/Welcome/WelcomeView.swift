@@ -76,7 +76,7 @@ struct WelcomeView: View {
             }
             .padding(20)
             .background {
-                Image(.launchScreen)
+                Image(.welcomeScreen)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .ignoresSafeArea()

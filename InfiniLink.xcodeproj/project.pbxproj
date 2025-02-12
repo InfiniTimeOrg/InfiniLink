@@ -105,7 +105,6 @@
 		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
-		E0F7D8AF2CFD5E3400AE5171 /* TableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F7D8AE2CFD5E3400AE5171 /* TableView.swift */; };
 		E0FC36092D2DE57B00659D48 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E0FC36082D2DE57B00659D48 /* SwiftUICharts */; };
 /* End PBXBuildFile section */
 
@@ -230,7 +229,6 @@
 		E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersOnly.swift; sourceTree = "<group>"; };
 		E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizationController.swift; sourceTree = "<group>"; };
-		E0F7D8AE2CFD5E3400AE5171 /* TableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -511,7 +509,6 @@
 				E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */,
 				E07D8F172CBE2071005C1325 /* ActionView.swift */,
 				E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */,
-				E0F7D8AE2CFD5E3400AE5171 /* TableView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -812,7 +809,6 @@
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
 				E09696E32D2F807700CCCBF8 /* HeartChartView.swift in Sources */,
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,
-				E0F7D8AF2CFD5E3400AE5171 /* TableView.swift in Sources */,
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
 				E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */,
 				E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */,

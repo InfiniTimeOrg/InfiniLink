@@ -28,7 +28,7 @@ struct WatchFaceView: View {
     var body: some View {
         GeometryReader { geometry in
             ZStack {
-                Image("WatchScreen")
+                Image(.watchScreen)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                 ZStack {
@@ -60,7 +60,7 @@ struct WatchFaceView: View {
                 }
                 .frame(width: geometry.size.width, height: geometry.size.width, alignment: .center)
                 .clipped()
-                Image("WatchHomeClear")
+                Image(.watchBorder)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .brightness(colorScheme == .dark ? 0.0 : 0.04)
@@ -260,15 +260,15 @@ struct AnalogWF: View {
             let hour24 = Double(hour % 12 == 0 ? 12 : hour % 12)
             let minute = Double(Calendar.current.component(.minute, from: Date()))
             
-            Image("AnalogFace")
+            Image(.analogFace)
                 .resizable()
-            Image("AnalogHour")
+            Image(.analogHour)
                 .resizable()
                 .rotationEffect(Angle(degrees: ((hour24 * 60) + minute) / 2))
-            Image("AnalogMin")
+            Image(.analogMin)
                 .resizable()
                 .rotationEffect(Angle(degrees: minute * 6))
-            Image("AnalogSec")
+            Image(.analogSec)
                 .resizable()
                 .rotationEffect(Angle(degrees: Double(Calendar.current.component(.second, from: Date())) * 6))
         }
@@ -572,7 +572,7 @@ struct InfineatWF: View {
             )
             .foregroundColor(.gray)
             .frame(width: geometry.size.width, height: geometry.size.height / 2.2, alignment: .trailing)
-            Image("bluetooth")
+            Image(.bluetooth)
                 .resizable()
                 .frame(width: 18, height: 20)
                 .frame(width: geometry.size.width / 1.14, height: geometry.size.height / 2.8, alignment: .bottomTrailing)
@@ -618,7 +618,7 @@ struct InfineatWF: View {
                         .fill(Color.white)
                         .frame(width: 50, height: 75)
                         .offset(x: -5)
-                    Image("pine_logo")
+                    Image(.pineLogo)
                         .resizable()
                         .frame(width: 19, height: 25)
                 }

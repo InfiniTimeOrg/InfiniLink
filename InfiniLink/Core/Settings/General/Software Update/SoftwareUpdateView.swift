@@ -57,7 +57,7 @@ struct SoftwareUpdateView: View {
             Section {
                 VStack(alignment: .leading, spacing: 12) {
                     HStack(spacing: 8) {
-                        Image("InfiniTime")
+                        Image(.infiniTime)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
                             .frame(width: 70, height: 70)

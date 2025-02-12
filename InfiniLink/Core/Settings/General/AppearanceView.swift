@@ -10,11 +10,19 @@ import SwiftUI
 enum AppIcon: CaseIterable {
     case `default`
     case one
+    case two
+    case three
     
     init(from name: String) {
         switch name {
-        case "AppIcon-1": self = .one
-        default: self = .default
+        case "AppIcon-1":
+            self = .one
+        case "AppIcon-2":
+            self = .two
+        case "AppIcon-3":
+            self = .three
+        default:
+            self = .default
         }
     }
     
@@ -24,24 +32,36 @@ enum AppIcon: CaseIterable {
             return nil
         case .one:
             return "AppIcon-1"
+        case .two:
+            return "AppIcon-2"
+        case .three:
+            return "AppIcon-3"
         }
     }
     
     var description: String {
         switch self {
         case .default:
-            return "InfiniLink"
+            return "InfiniLink 1"
         case .one:
             return "InfiniLink 2"
+        case .two:
+            return "InfiniLink 3"
+        case .three:
+            return "InfiniLink 4"
         }
     }
     
     var icon: Image {
         switch self {
         case .default:
-            return Image("appIcon")
+            return Image(.appIconRendered)
         case .one:
-            return Image("appIcon-1")
+            return Image(.appIcon2Rendered)
+        case .two:
+            return Image(.appIcon3Rendered)
+        case .three:
+            return Image(.appIcon4Rendered)
         }
     }
 }

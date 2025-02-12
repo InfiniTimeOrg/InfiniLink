@@ -76,8 +76,6 @@
 		<string>fetch</string>
 		<string>processing</string>
 	</array>
-	<key>UILaunchScreen</key>
-	<dict/>
 	<key>UILaunchStoryboardName</key>
 	<string>Launch Screen.storyboard</string>
 	<key>UIRequiredDeviceCapabilities</key>
