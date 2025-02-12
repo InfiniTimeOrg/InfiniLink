@@ -15,6 +15,7 @@ struct BLEWriteManager {
     @AppStorage("watchNotifications") var watchNotifications = true
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
+        guard bleManager.infiniTime != nil else { return }
         guard let writeData = message.data(using: .ascii) else {
             // There's no title/artst, so update it with a blank string
             bleManager.infiniTime.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
@@ -24,11 +25,15 @@ struct BLEWriteManager {
     }
     
     func writeHexToMusicApp(message: [UInt8], characteristic: CBCharacteristic) -> Void {
+        guard bleManager.infiniTime != nil else { return }
         let writeData = Data(bytes: message, count: message.capacity)
+        
         bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
     }
     
     func setTime(characteristic: CBCharacteristic) {
+        guard bleManager.infiniTime != nil else { return }
+        
         do {
             try bleManager.infiniTime.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
         } catch {
@@ -37,6 +42,7 @@ struct BLEWriteManager {
     }
     
     func sendNotification(_ notif: AppNotification) {
+        guard bleManager.infiniTime != nil else { return }
         guard let titleData = ("   " + notif.title + "\0").data(using: .ascii) else { return }
         guard let bodyData = (notif.subtitle + "\0").data(using: .ascii) else { return }
         
@@ -44,24 +50,28 @@ struct BLEWriteManager {
         
         notification.append(bodyData)
         
-        if !notification.isEmpty && watchNotifications && bleManager.infiniTime != nil {
+        if !notification.isEmpty && watchNotifications {
             bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
         }
     }
     
     func sendLostNotification() {
+        guard bleManager.infiniTime != nil else { return }
+        
         let hexPrefix = Data([0x03, 0x01, 0x00]) // Hexadecimal representation of "\x03\x01\x00"
         let nameData = "InfiniLink".data(using: .ascii) ?? Data()
         
         let notification = hexPrefix + nameData
         
-        if notification.count > 0 && watchNotifications && bleManager.infiniTime != nil {
+        if notification.count > 0 && watchNotifications {
             bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
         }
     }
     
     func writeCurrentWeatherData(currentTemperature: Double, minimumTemperature: Double, maximumTemperature: Double, location: String, icon: UInt8)  {
-        var bytes : [UInt8] = [0, 0] // Message Type and Message Version
+        guard bleManager.infiniTime != nil else { return }
+        
+        var bytes: [UInt8] = [0, 0] // Message Type and Message Version
         bytes.append(contentsOf: timeSince1970())
         bytes.append(contentsOf: convertTemperature(value: Int(round(currentTemperature)))) // Current temperature
         bytes.append(contentsOf: convertTemperature(value: Int(round(minimumTemperature)))) // Minimum temperature
@@ -96,6 +106,8 @@ struct BLEWriteManager {
     }
     
     func writeForecastWeatherData(minimumTemperature: [Double], maximumTemperature: [Double], icon: [UInt8])  {
+        guard bleManager.infiniTime != nil else { return }
+        
         if (minimumTemperature.count + maximumTemperature.count + icon.count) / 3 != minimumTemperature.count && minimumTemperature.count >= 5 && minimumTemperature.count < 1 {
             log("Forecast data arrays do not match, forecast larger than 5 days, or forecast data is empty", caller: "BLEWriteManager")
             return
@@ -125,6 +137,7 @@ struct BLEWriteManager {
     }
     
     func writeNavigationUpdate() {
+        guard bleManager.infiniTime != nil else { return }
         guard bleManager.navigationFlagsCharacteristic != nil && bleManager.navigationNarrativeCharacteristic != nil && bleManager.navigationDistanceCharacteristic != nil && bleManager.navigationProgressCharacteristic != nil && bleManager.infiniTime != nil else { return }
         
         guard let icon = "fork".data(using: .ascii) else { return }

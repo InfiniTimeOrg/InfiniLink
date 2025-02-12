@@ -12,32 +12,6 @@ struct PersistenceController {
     
     let container: NSPersistentContainer
     
-    @MainActor
-    static let preview: PersistenceController = {
-        let result = PersistenceController(inMemory: true)
-        let viewContext = result.container.viewContext
-        
-        for _ in 0..<1 {
-            let exercise = UserExercise(context: viewContext)
-            
-            exercise.exerciseId = "soccer"
-            exercise.startDate = Date.distantPast
-            exercise.endDate = Date()
-            exercise.heartPoints = []
-            exercise.id = UUID()
-        }
-        
-        do {
-            try viewContext.save()
-        } catch {
-            // Replace this implementation with code to handle the error appropriately.
-            // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-            let nsError = error as NSError
-            log("Unresolved error \(nsError), \(nsError.userInfo)", caller: "PersistenceController")
-        }
-        return result
-    }()
-    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "InfiniLink")
         if inMemory {
@@ -48,7 +22,7 @@ struct PersistenceController {
             description?.shouldInferMappingModelAutomatically = true
         }
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
+            if let error {
                 /*
                  Typical reasons for an error here include:
                  * The parent directory does not exist, cannot be created, or disallows writing.
@@ -65,8 +39,8 @@ struct PersistenceController {
     
     func save() async {
         do {
-            try await container.viewContext.perform {
-                try container.viewContext.save()
+            try await container.performBackgroundTask { context in
+                try context.save()
             }
         } catch {
             log("Unresolved error saving context: \(error.localizedDescription)", caller: "PersistenceController")

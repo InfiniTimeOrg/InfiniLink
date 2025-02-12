@@ -183,13 +183,13 @@ class DeviceManager: ObservableObject {
     }
     
     func removeDevice(_ device: Device) async {
-        do {
-            try await persistenceController.container.viewContext.perform {
-                self.persistenceController.container.viewContext.delete(device)
-                try self.persistenceController.container.viewContext.save()
+        await persistenceController.container.performBackgroundTask { context in
+            do {
+                context.delete(device)
+                try context.save()
+            } catch {
+                log(error.localizedDescription, caller: "DeviceManager - removeDevice")
             }
-        } catch {
-            log(error.localizedDescription, caller: "DeviceManager - removeDevice")
         }
     }
     
@@ -197,8 +197,8 @@ class DeviceManager: ObservableObject {
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         
         do {
-            try await persistenceController.container.viewContext.perform {
-                self.watches = try self.persistenceController.container.viewContext.fetch(fetchRequest)
+            try await persistenceController.container.performBackgroundTask { context in
+                self.watches = try context.fetch(fetchRequest)
             }
         } catch {
             log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")

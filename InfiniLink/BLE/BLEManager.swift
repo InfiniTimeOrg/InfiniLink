@@ -193,11 +193,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
     }
     
-    func resetDevice() {
-        BLEFSHandler.shared.writeSettings(Settings())
-        deviceManager.settings = Settings()
-    }
-    
     func unpair(device: Device? = nil) {
         Task {
             if let pairedDevice {
@@ -206,23 +201,22 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             }
             // Update the list of user watches
             await deviceManager.fetchAllDevices()
-        }
-        
-        if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
-            // Switch to the user's next watch
-            pairedDeviceID = first.uuid
-            pairedDevice = deviceManager.fetchDevice()
-        } else {
-            // The user doesn't have another watch, this will show the welcome view
-            pairedDeviceID = nil
-        }
-        
-        log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
-        
-        if device == nil {
-            // FIXME: this only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
-            disconnect()
-            startScanning()
+            
+            if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
+                // Switch to the user's next watch
+                pairedDeviceID = first.uuid
+            } else {
+                // The user doesn't have another watch, this will show the welcome view
+                pairedDeviceID = nil
+            }
+            
+            log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+            
+            if device == nil {
+                // FIXME: this only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
+                disconnect()
+                startScanning()
+            }
         }
     }
     

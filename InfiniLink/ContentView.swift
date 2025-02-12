@@ -10,7 +10,6 @@ import EventKit
 
 struct ContentView: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var remindersManager = RemindersManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var notificationManager = NotificationManager.shared

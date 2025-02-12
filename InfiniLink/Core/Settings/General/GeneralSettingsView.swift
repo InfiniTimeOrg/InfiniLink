@@ -71,20 +71,6 @@ struct GeneralSettingsView: View {
                     Text(bleManager.isConnectedToPinetime ? "Disconnect": "Connect")
                 }
                 .disabled(bleManager.isBusy)
-                Button {
-                    showResetConfirmation = true
-                } label: {
-                    Text("Reset")
-                }
-                .disabled(bleManager.blefsTransfer == nil)
-                .alert("Are you sure you want to reset all content and settings from \(deviceManager.name)? You'll need to restart \(deviceManager.name) for the changes to take effect.", isPresented: $showResetConfirmation) {
-                    Button(role: .destructive) {
-                        bleManager.resetDevice()
-                        dismiss()
-                    } label: {
-                        Text("Reset")
-                    }
-                }
                 Button(role: .destructive) {
                     showUnpairConfirmation = true
                 } label: {

@@ -688,14 +688,6 @@ class BLEFSHandler: ObservableObject {
         return result
     }
     
-    @discardableResult func writeSettings(_ settings: Settings) -> WriteFileFS {
-        let settingsData = serializeSettings(settings)
-        
-        DeviceManager.shared.updateSettings(settings: settings)
-        
-        return writeFile(data: settingsData, path: "/settings.dat", offset: 0)
-    }
-    
     private func serializeSettings(_ settings: Settings) -> Data {
         var data = Data()
         

@@ -46,6 +46,7 @@ struct StepsView: View {
             }
         }
         .navigationTitle("Steps")
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
