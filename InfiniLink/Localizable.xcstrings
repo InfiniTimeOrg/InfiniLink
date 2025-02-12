@@ -764,6 +764,9 @@
     "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
 
     },
+    "Today you reached your daily step goal! Keep it up, and let's see how many more days can you reach it..." : {
+
+    },
     "Total" : {
 
     },
@@ -846,9 +849,6 @@
     "You can start one by choosing one from the list below." : {
 
     },
-    "You reached your daily goal on Monday, but didn't even come close on Tuesday. Come on Liam, let's do better." : {
-
-    },
     "You've reached your steps goal" : {
 
     },
@@ -857,6 +857,16 @@
     },
     "Your approximate weight, in lbs." : {
 
+    },
+    "Your daily step goal is %lld steps away. %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Your daily step goal is %1$lld steps away. %2$@"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

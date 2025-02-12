@@ -13,6 +13,13 @@ class StepCountManager: ObservableObject {
     let chartManager = ChartManager.shared
     let persistenceManager = PersistenceController.shared
     
+    var stepGoal: Int {
+        return Int(DeviceManager.shared.settings.stepsGoal)
+    }
+    var hasReachedStepGoal: Bool {
+        return BLEManager.shared.stepCount >= stepGoal
+    }
+    
     func setStepCount(steps: Int32, isArbitrary: Bool, for date: Date) {
         let existingCounts = chartManager.stepPoints()
         
