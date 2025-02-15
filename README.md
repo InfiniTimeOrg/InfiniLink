@@ -42,14 +42,15 @@
 
 ### Planned features:
 - InfiniTime navigation service using MapKit
+- Battery, heart, and step widgets
 
 ## Installation:
 - **Version 1.0.2** is available on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
 - **Version 1.1** is available on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
 - **Version 1.2** is available on [TestFlight](https://testflight.apple.com/join/VX7E73Wt).
 
-> [!WARNING]
-> Version *1.2* of InfiniLink has been built from the ground up and is still in early development stages, and as such, may not be stable.
+> [!CAUTION]
+> Version *1.2* of InfiniLink has been built from the ground up and is still in early development stages, and as such, may not work as expected.
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
