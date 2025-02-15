@@ -105,7 +105,6 @@
 		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
-		E0FC36092D2DE57B00659D48 /* SwiftUICharts in Frameworks */ = {isa = PBXBuildFile; productRef = E0FC36082D2DE57B00659D48 /* SwiftUICharts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -236,7 +235,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0FC36092D2DE57B00659D48 /* SwiftUICharts in Frameworks */,
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
 				E078ECFB2D4E6D9800560364 /* Zip in Frameworks */,
 				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
@@ -620,7 +618,6 @@
 			packageProductDependencies = (
 				E0A7C0812CB1B4990042A12D /* Zip */,
 				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
-				E0FC36082D2DE57B00659D48 /* SwiftUICharts */,
 				E078ECFA2D4E6D9800560364 /* Zip */,
 			);
 			productName = "Infini-iOS";
@@ -701,7 +698,6 @@
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
 				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
-				E0FC36072D2DE57B00659D48 /* XCRemoteSwiftPackageReference "SwiftUICharts" */,
 				E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
@@ -1202,14 +1198,6 @@
 				minimumVersion = 4.15.3;
 			};
 		};
-		E0FC36072D2DE57B00659D48 /* XCRemoteSwiftPackageReference "SwiftUICharts" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/willdale/SwiftUICharts";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.10.3;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1226,11 +1214,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
 			productName = NordicDFU;
-		};
-		E0FC36082D2DE57B00659D48 /* SwiftUICharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E0FC36072D2DE57B00659D48 /* XCRemoteSwiftPackageReference "SwiftUICharts" */;
-			productName = SwiftUICharts;
 		};
 /* End XCSwiftPackageProductDependency section */
 
