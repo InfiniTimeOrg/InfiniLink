@@ -8,30 +8,25 @@
 import SwiftUI
 
 enum AppIcon: CaseIterable {
-    case `default`
     case one
     case two
     case three
     
     init(from name: String) {
         switch name {
-        case "AppIcon-1":
-            self = .one
         case "AppIcon-2":
             self = .two
         case "AppIcon-3":
             self = .three
         default:
-            self = .default
+            self = .one
         }
     }
     
     var name: String? {
         switch self {
-        case .default:
-            return nil
         case .one:
-            return "AppIcon-1"
+            return nil
         case .two:
             return "AppIcon-2"
         case .three:
@@ -41,33 +36,29 @@ enum AppIcon: CaseIterable {
     
     var description: String {
         switch self {
-        case .default:
-            return "InfiniLink 1"
         case .one:
-            return "InfiniLink 2"
+            return "InfiniLink 1"
         case .two:
-            return "InfiniLink 3"
+            return "InfiniLink 2"
         case .three:
-            return "InfiniLink 4"
+            return "InfiniLink 3"
         }
     }
     
     var icon: Image {
         switch self {
-        case .default:
-            return Image(.appIconRendered)
         case .one:
-            return Image(.appIcon2Rendered)
+            return Image(.appIconRendered)
         case .two:
-            return Image(.appIcon3Rendered)
+            return Image(.appIcon2Rendered)
         case .three:
-            return Image(.appIcon4Rendered)
+            return Image(.appIcon3Rendered)
         }
     }
 }
 
 struct AppearanceView: View {
-    @State private var selectedIcon: AppIcon = .default
+    @State private var selectedIcon: AppIcon = .one
     
     @AppStorage("colorScheme") var colorScheme = "system"
     
@@ -75,7 +66,7 @@ struct AppearanceView: View {
         if let iconName = UIApplication.shared.alternateIconName {
             selectedIcon = AppIcon(from: iconName)
         } else {
-            selectedIcon = .default
+            selectedIcon = .one
         }
     }
     
