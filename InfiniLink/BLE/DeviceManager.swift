@@ -112,7 +112,11 @@ class DeviceManager: ObservableObject {
             newDevice.modelNumber = ""
             newDevice.serial = ""
             
-            try context.save()
+            Task {
+                try await context.perform {
+                    try context.save()
+                }
+            }
             
             return newDevice
         } catch {
@@ -150,9 +154,9 @@ class DeviceManager: ObservableObject {
         
         Task {
             await persistenceController.save()
+            
+            getSettings()
         }
-        
-        getSettings()
     }
     
     func updateName(name: String, for device: Device) {
@@ -183,13 +187,17 @@ class DeviceManager: ObservableObject {
         }
     }
     
-    func removeDevice(_ device: Device) async {
-        await persistenceController.container.performBackgroundTask { context in
-            do {
-                context.delete(device)
-                try context.save()
-            } catch {
-                log(error.localizedDescription, caller: "DeviceManager - removeDevice")
+    func removeDevice(_ device: Device) {
+        let context = persistenceController.container.viewContext
+        
+        Task {
+            await context.perform {
+                do {
+                    context.delete(device)
+                    try context.save()
+                } catch {
+                    log(error.localizedDescription, caller: "DeviceManager - removeDevice")
+                }
             }
         }
     }

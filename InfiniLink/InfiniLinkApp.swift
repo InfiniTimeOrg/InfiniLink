@@ -7,7 +7,6 @@
 
 import SwiftUI
 import CoreData
-import BackgroundTasks
 
 @main
 struct InfiniLink: App {

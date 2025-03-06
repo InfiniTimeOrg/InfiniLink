@@ -39,8 +39,8 @@ struct PersistenceController {
     
     func save() async {
         do {
-            try await container.performBackgroundTask { context in
-                try context.save()
+            try await container.viewContext.perform {
+                try container.viewContext.save()
             }
         } catch {
             log("Unresolved error saving context: \(error.localizedDescription)", caller: "PersistenceController")

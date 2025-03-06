@@ -24,6 +24,8 @@ struct Header {
 }
 
 struct DetailHeaderSubItemView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
     let title: String
     let value: String
     let unit: String?
@@ -51,7 +53,7 @@ struct DetailHeaderSubItemView: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
-        .background(Material.regular)
+        .background(colorScheme == .dark ? AnyShapeStyle(Material.regular) : AnyShapeStyle(Color(.systemBackground)))
         .clipShape(RoundedRectangle(cornerRadius: 15))
     }
 }

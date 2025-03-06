@@ -245,8 +245,7 @@ class BLEFSHandler: ObservableObject {
         
         var dataQueue = data
         var newOffset = 0
-        // FIXME: this line needs to be removed if we're uploading multiple files and want to show the overall progress percentage
-        self.progress = 0
+        self.progress = 0 // This line needs to be removed if we're uploading multiple files and want to show the overall progress percentage
         
         while !writeFileFS.completed {
             writeFileFS.group.enter()

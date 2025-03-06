@@ -25,6 +25,8 @@ struct ActiveExerciseView: View {
     @State private var newHeartPoints: [HeartDataPoint] = []
     @State private var currentStepCount = 0
     
+    private let fitnessCalculator = FitnessCalculator()
+    
     var body: some View {
         if let exercise {
             VStack(spacing: 16) {
@@ -35,7 +37,7 @@ struct ActiveExerciseView: View {
                 Spacer()
                 Text(exerciseViewModel.timeString())
                     .font(.system(size: 60).weight(.bold))
-                HStack {
+                HStack(spacing: 30) {
                     if exercise.components.contains(.heart) {
                         HStack(spacing: 6) {
                             Image(systemName: "heart.fill")
@@ -43,13 +45,17 @@ struct ActiveExerciseView: View {
                             Text(String(format: "%.0f", previousHeartPoints.compactMap({ $0.value }).last ?? 0))
                         }
                     }
-                    Spacer()
-                        .frame(maxWidth: 30)
                     if exercise.components.contains(.steps) {
                         HStack(spacing: 6) {
                             Image(systemName: "shoeprints.fill")
                                 .foregroundStyle(.blue)
                             Text(String(exerciseViewModel.stepsTaken))
+                        }
+                        // TODO: add to Core Data
+                        HStack(spacing: 6) {
+                            Image(systemName: "flame.fill")
+                                .foregroundStyle(.orange)
+                            Text(String(format: "%.1f", fitnessCalculator.calculateCaloriesBurned(steps: exerciseViewModel.stepsTaken)))
                         }
                     }
                 }

@@ -22,6 +22,11 @@ struct ExerciseView: View {
                 ActiveExerciseView(exercise: $exerciseViewModel.currentExercise)
             } else {
                 List {
+                    if !bleManager.hasLoadedCharacteristics {
+                        Section {
+                            Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
+                        }
+                    }
                     Section(header: Text("My Exercises"), footer: Text(userExercises.isEmpty ? "You can start one by choosing one from the list below." : "")) {
                         if userExercises.isEmpty {
                             Text("No Exercises")
@@ -45,11 +50,6 @@ struct ExerciseView: View {
                                 }
                             }
                             .onDelete(perform: delete)
-                        }
-                    }
-                    if !bleManager.hasLoadedCharacteristics {
-                        Section("All Exercises") {
-                            Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
                         }
                     }
                     Section {

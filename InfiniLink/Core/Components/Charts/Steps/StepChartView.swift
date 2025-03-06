@@ -27,27 +27,26 @@ struct StepChartView: View {
     @State private var selectedDate = Date()
     @State private var selectedSteps = 0
     
-    func weekSteps() -> [StepChartDataPoint] {
+    func steps() -> [StepChartDataPoint] {
         let calendar = Calendar.current
         let now = Date()
-        
         let startOfWeek = calendar.startOfDay(for: calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!)
         
-        // Right now we're only showing a week of data
-        
-        let daysInWeek = 7
         var filledData: [StepChartDataPoint] = []
         
         let rawPoints = chartManager.stepPoints().compactMap { record -> StepChartDataPoint? in
             guard let timestamp = record.timestamp else { return nil }
+            // Return each step point as a chart point
             return StepChartDataPoint(date: calendar.startOfDay(for: timestamp), steps: Int(record.steps))
         }
         
+        // Make sure any points for the same day are combined into one point
         let groupedPoints = Dictionary(grouping: rawPoints, by: { $0.date })
             .mapValues { $0.reduce(0) { $0 + $1.steps } }
+        let daysInWeek = 7
         
-        for i in 0..<daysInWeek {
-            if let date = calendar.date(byAdding: .day, value: i, to: startOfWeek) {
+        for weekDay in 0..<daysInWeek {
+            if let date = calendar.date(byAdding: .day, value: weekDay, to: startOfWeek) {
                 let steps = groupedPoints[date] ?? 0
                 filledData.append(StepChartDataPoint(date: date, steps: steps))
             }
@@ -57,10 +56,10 @@ struct StepChartView: View {
     }
     
     var earliestDate: Date {
-        weekSteps().compactMap({ $0.date }).min() ?? Date()
+        steps().compactMap({ $0.date }).min() ?? Date()
     }
     var latestDate: Date {
-        weekSteps().compactMap({ $0.date }).max() ?? Date()
+        steps().compactMap({ $0.date }).max() ?? Date()
     }
     
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -72,7 +71,7 @@ struct StepChartView: View {
                     RuleMark(y: .value("Daily Goal", deviceManager.settings.stepsGoal))
                         .foregroundStyle(.green)
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [4]))
-                    ForEach(weekSteps(), id: \.date) {
+                    ForEach(steps(), id: \.date) {
                         BarMark(
                             x: .value("Date", $0.date, unit: .weekday),
                             y: .value("Steps", $0.steps)
@@ -103,7 +102,7 @@ struct StepChartView: View {
                                         
                                         let (day, _) = proxy.value(at: location, as: (Date, Int).self) ?? (Date(), 0)
                                         // We compare the formatted dates because the dates are too specific otherwise
-                                        let steps = weekSteps().first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
+                                        let steps = steps().first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
                                         
                                         selectedDate = day
                                         selectedSteps = steps
@@ -115,7 +114,7 @@ struct StepChartView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: weekSteps().map({ $0.date })) {
+                    AxisMarks(values: steps().map({ $0.date })) {
                         AxisGridLine()
                         AxisValueLabel(format: .dateTime.weekday(.abbreviated))
                     }
@@ -123,17 +122,18 @@ struct StepChartView: View {
                 .frame(height: 250)
             } header: {
                 VStack(alignment: .leading) {
-                    Text(weekSteps().count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
+                    Text(steps().count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
                     Text({
                         if showSelectionBar {
                             return "\(selectedSteps) "
-                        } else if !weekSteps().isEmpty {
-                            return "\(weekSteps().reduce(0) { $0 + $1.steps } / weekSteps().count) "
+                        } else if !steps().isEmpty {
+                            return "\(steps().reduce(0) { $0 + $1.steps } / steps().count) "
                         }
                         return "0 "
                     }())
                     .font(.system(size: 28))
                     .foregroundColor(.primary)
+                    .fontWeight(.bold)
                     + Text("steps")
                     Text(showSelectionBar ? "\(selectedDate.formatted(date: .abbreviated, time: .omitted))" : "\(earliestDate.formatted(date: .abbreviated, time: .omitted)) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
                 }
@@ -155,20 +155,6 @@ struct StepChartView: View {
                     Text("You're \(stepCountManager.stepGoal - bleManager.stepCount) steps away your daily step goal! \(encouragementString)")
                 }
             }
-            // TODO: move to separate component
-            Section {
-                // TODO: add a monthly overview chart
-            } header: {
-                VStack(alignment: .leading, spacing: 7) {
-                    Text("Monthly Overview")
-                    Text("\(earliestDate.formatted(.dateTime.month(.abbreviated).day())) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
-                        .font(.system(size: 20))
-                        .foregroundColor(.primary)
-                }
-                .fontWeight(.semibold)
-            }
-            .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
         }
     }
 }

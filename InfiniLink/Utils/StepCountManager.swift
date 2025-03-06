@@ -11,6 +11,7 @@ class StepCountManager: ObservableObject {
     static let shared = StepCountManager()
     
     let chartManager = ChartManager.shared
+    let bleManager = BLEManager.shared
     let persistenceManager = PersistenceController.shared
     
     var stepGoal: Int {

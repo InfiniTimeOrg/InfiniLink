@@ -10,13 +10,12 @@ import SwiftUI
 struct SetUpDetailsView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
     
-    @State private var isNavActive: Bool = false
+    @State private var nextViewActive = false
+    @State private var weight = ""
+    @State private var height = ""
     
-    @FocusState var isBirthyearFocused: Bool
     @FocusState var isWeightFocused: Bool
     @FocusState var isHeightFocused: Bool
-
-    @ObservedObject var weight = NumbersOnly()
     
     let list: Bool
     
@@ -40,7 +39,7 @@ struct SetUpDetailsView: View {
             if !list {
                 VStack(alignment: .center, spacing: 8) {
                     // We can't use the nav link as the button because a chevron appears when inside a List/Form
-                    NavigationLink("", isActive: $isNavActive, destination: { NotificationsSetupView() })
+                    NavigationLink("", isActive: $nextViewActive, destination: { NotificationsSetupView() })
                         .hidden()
                     Image(systemName: "figure.arms.open")
                         .font(.system(size: 60).weight(.medium))
@@ -56,52 +55,64 @@ struct SetUpDetailsView: View {
             }
             Group {
                 Section {
-                    HStack(spacing: 12) {
-                        Text("Birth Year")
-                        TextField("Optional", text: .constant(""))
-                            .focused($isBirthyearFocused)
+                    Picker("Units", selection: $personalizationController.units) {
+                        Text("Metric").tag(PersonalizationController.Unit.metric)
+                        Text("Imperial").tag(PersonalizationController.Unit.imperial)
                     }
-                    .onTapGesture {
-                        isBirthyearFocused = true
+                    .onChange(of: personalizationController.units) { _ in
+                        personalizationController.weight = nil
+                        personalizationController.height = nil
+                        
+                        weight = ""
+                        height = ""
                     }
                 }
                 Section {
-                    // We need a better way to get this data
                     HStack(spacing: 12) {
                         Text("Weight")
-                        TextField("Optional", text: $weight.value)
+                        TextField("Optional", text: $weight)
                             .focused($isWeightFocused)
+                            .keyboardType(.decimalPad)
+                            .onSubmit {
+                                // TODO: process
+                                personalizationController.weight = Double(weight)
+                            }
+                        // TODO: do not allow text input
                     }
                     .onTapGesture {
                         isWeightFocused = true
                     }
                 } footer: {
-                    Text("Your approximate weight, in lbs.")
+                    Text("Your approximate weight, in \(personalizationController.units == .metric ? "kg" : "lbs").")
                 }
                 Section {
-                    // We need a better way to get this data
                     HStack(spacing: 12) {
                         Text("Height")
-                        TextField("Optional", text: .constant(""))
+                        TextField("Optional", text: $height)
                             .focused($isHeightFocused)
+                            .keyboardType(.decimalPad)
+                            .onSubmit {
+                                // TODO: process
+                                personalizationController.height = Double(height)
+                            }
+                        // TODO: do not allow text input
                     }
                     .onTapGesture {
                         isHeightFocused = true
                     }
                 } footer: {
-                    Text("Your approximate height, in inches.")
-                }
-                Section {
-                    Picker("Units", selection: $personalizationController.units) {
-                        Text("Metric").tag(PersonalizationController.Unit.metric)
-                        Text("Imperial").tag(PersonalizationController.Unit.imperial)
-                    }
+                    Text("Your approximate height, in \(personalizationController.units == .metric ? "cm" : "inches").")
                 }
             }
             .keyboardType(.decimalPad)
             if !list {
                 Button {
-                    isNavActive = true
+                    // Go to next view
+                    nextViewActive = true
+                    
+                    // TODO: process
+                    personalizationController.height = Double(height)
+                    personalizationController.weight = Double(weight)
                 } label: {
                     Text("Next")
                         .padding()
@@ -120,8 +131,16 @@ struct SetUpDetailsView: View {
         .toolbar {
             if !list {
                 Button("Skip") {
-                    isNavActive = true
+                    nextViewActive = true
                 }
+            }
+        }
+        .onAppear {
+            if let weight = personalizationController.weight {
+                self.weight = String(weight)
+            }
+            if let height = personalizationController.height {
+                self.height = String(height)
             }
         }
     }

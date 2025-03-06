@@ -15,14 +15,13 @@ class PersonalizationController: ObservableObject {
         case imperial = 1
     }
     
-    @AppStorage("weight") var weight: Int?
-    @AppStorage("age") var age: Int?
-    @AppStorage("height") var height: Int?
-    @AppStorage("units") var units: Unit = .metric
+    @AppStorage("weight") var weight: Double?
+    @AppStorage("height") var height: Double?
+    @AppStorage("units") var units: Unit = .metric // TODO: change this to use system setting
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
     
     var isPersonalizationAvailable: Bool {
-        !showSetupSheet && (weight != nil || height != nil || age != nil)
+        !showSetupSheet && (weight != nil || height != nil)
     }
 }

@@ -235,9 +235,6 @@
     "battery remaining" : {
 
     },
-    "Birth Year" : {
-
-    },
     "BLE" : {
 
     },
@@ -858,10 +855,10 @@
     "You've reached your steps goal" : {
 
     },
-    "Your approximate height, in inches." : {
+    "Your approximate height, in %@." : {
 
     },
-    "Your approximate weight, in lbs." : {
+    "Your approximate weight, in %@." : {
 
     }
   },
