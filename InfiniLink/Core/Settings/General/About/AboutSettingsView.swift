@@ -30,17 +30,16 @@ struct AboutSettingsView: View {
                     AboutRowView("Model Name", value: deviceManager.modelNumber)
                     AboutRowView("UUID", value: deviceManager.bleUUID)
                 }
-                if let timeService = bleManager.currentTimeService{
-                    Section {
-                        Button("Update Device Time") {
-                            BLEWriteManager().setTime(characteristic: timeService)
-                        }
-                    }
-                }
                 Section {
                     AboutRowView("File System", value: deviceManager.blefsVersion)
                     AboutRowView("Hardware Revision", value: deviceManager.hardwareRevision)
                     AboutRowView("Settings Version", value: String(deviceManager.settings.version))
+                }
+                Section {
+                    Button("Update Device Time") {
+                        BLEWriteManager().setTime(characteristic: bleManager.currentTimeService)
+                    }
+                    .disabled(bleManager.currentTimeService == nil)
                 }
                 Section {
                     Button("About InfiniLink") {

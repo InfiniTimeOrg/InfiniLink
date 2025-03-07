@@ -36,13 +36,12 @@ struct ExerciseDetailView: View {
         let minutes = (totalSeconds % 3600) / 60
         let seconds = totalSeconds % 60
         
-        print(difference)
         if hours > 0 {
-            return "\(hours) hr \(minutes) min"
+            return "\(hours) hour\(hours == 1 ? "" : "s") and \(minutes) minute\(minutes == 1 ? "" : "s")"
         } else if minutes > 0 {
-            return "\(minutes) min \(seconds) sec"
+            return "\(minutes) minute\(minutes == 1 ? "" : "s") and \(seconds) second\(seconds == 1 ? "" : "s")"
         } else {
-            return "\(seconds) sec"
+            return "\(seconds) second\(seconds == 1 ? "" : "s")"
         }
     }
     
@@ -63,42 +62,28 @@ struct ExerciseDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .listRowBackground(Color.clear)
-                Section {
-                    HStack {
-                        Text("Duration")
-                        Text(timeDifferenceFormatted(startDate: userExercise.startDate!, endDate: userExercise.endDate!))
-                            .foregroundStyle(.gray)
-                    }
-                    HStack {
-                        Text("Start Date")
-                        Text(userExercise.startDate!.formatted())
-                            .foregroundStyle(.gray)
-                    }
-                    HStack {
-                        Text("End Date")
-                        Text(userExercise.endDate!.formatted())
-                            .foregroundStyle(.gray)
-                    }
+                Section("Time") {
+                    let startDate = userExercise.startDate!
+                    
+                    Text("Starting on \(startDate.formatted(.dateTime.day().month())) at \(startDate.formatted(.dateTime.hour().minute())), the exercise lasted \(timeDifferenceFormatted(startDate: startDate, endDate: userExercise.endDate!)).")
+                }
+                Section("Heart Rate") {
+                    let heartValues = heartPoints.compactMap({ $0.value })
+                    let min = Int(heartValues.min() ?? 0)
+                    let max = Int(heartValues.max() ?? 0)
+                    
                     if heartPoints.count > 1 {
-                        HStack {
-                            Text("Heart Rate")
-                            Text("\(Int(heartPoints.compactMap({ $0.value }).min() ?? 0)) - \(Int(heartPoints.compactMap({ $0.value }).max() ?? 0))")
-                                .foregroundStyle(.gray)
-                        }
-                    }
-                    if exercise().components.contains(.steps) {
-                        HStack {
-                            Text("Total Steps")
-                            Text(String(userExercise.steps))
-                                .foregroundStyle(.gray)
-                        }
+                        Text("Averaging at \(String(format: "%.0f", Double(heartValues.reduce(0, +)) / Double(heartValues.count))) BPM, your heart rate ranged from \(min) to \(max) BPM.")
+                    } else {
+                        Text("There wasn't any heart rate data recorded for this exercise.")
                     }
                 }
-                if heartPoints.count > 1 {
-                    Section("Heart Rate") {
-                        HeartChartView(showHeader: false)
+                if exercise().components.contains(.steps) {
+                    Section("Steps") {
+                        let calories = FitnessCalculator().calculateCaloriesBurned(steps: Int(userExercise.steps))
+                        
+                        Text("You took \(userExercise.steps) step\(userExercise.steps == 1 ? "" : "s") and burned \(calories > 1 ? String(format: "%.0f", calories) + "calories": "less than one calorie").")
                     }
-                    .listRowBackground(Color.clear)
                 }
             }
         }

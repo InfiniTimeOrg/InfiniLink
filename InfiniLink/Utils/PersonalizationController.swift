@@ -14,14 +14,39 @@ class PersonalizationController: ObservableObject {
         case metric = 0
         case imperial = 1
     }
+    enum Gender: Int {
+        case male = 0
+        case female = 1
+    }
     
     @AppStorage("weight") var weight: Double?
     @AppStorage("height") var height: Double?
     @AppStorage("units") var units: Unit = .metric // TODO: change this to use system setting
+    @AppStorage("gender") var gender: Gender = .male
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
     
     var isPersonalizationAvailable: Bool {
         !showSetupSheet && (weight != nil || height != nil)
+    }
+    
+    var calculatedWeight: Double {
+        if units == .imperial {
+            // Convert from kg to lbs
+            return (weight ?? 0) * 2.205
+        } else {
+            return weight ?? 0
+        }
+    }
+
+    var calculatedHeight: Double {
+        let avgHeight = gender == .male ? 175.26 : 162.56
+        
+        if units == .imperial {
+            // Convert from cm to in
+            return (height ?? avgHeight) / 2.54
+        } else {
+            return height ?? avgHeight
+        }
     }
 }

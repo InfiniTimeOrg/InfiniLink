@@ -68,15 +68,17 @@ struct SetUpDetailsView: View {
                     }
                 }
                 Section {
+                    Picker("Gender", selection: $personalizationController.gender) {
+                        Text("Male").tag(PersonalizationController.Gender.male)
+                        Text("Female").tag(PersonalizationController.Gender.female)
+                    }
+                }
+                Section {
                     HStack(spacing: 12) {
                         Text("Weight")
                         TextField("Optional", text: $weight)
                             .focused($isWeightFocused)
                             .keyboardType(.decimalPad)
-                            .onSubmit {
-                                // TODO: process
-                                personalizationController.weight = Double(weight)
-                            }
                         // TODO: do not allow text input
                     }
                     .onTapGesture {
@@ -91,10 +93,6 @@ struct SetUpDetailsView: View {
                         TextField("Optional", text: $height)
                             .focused($isHeightFocused)
                             .keyboardType(.decimalPad)
-                            .onSubmit {
-                                // TODO: process
-                                personalizationController.height = Double(height)
-                            }
                         // TODO: do not allow text input
                     }
                     .onTapGesture {
@@ -110,7 +108,7 @@ struct SetUpDetailsView: View {
                     // Go to next view
                     nextViewActive = true
                     
-                    // TODO: process
+                    // Is this handled by the onDisappear?
                     personalizationController.height = Double(height)
                     personalizationController.weight = Double(weight)
                 } label: {
@@ -136,11 +134,16 @@ struct SetUpDetailsView: View {
             }
         }
         .onAppear {
-            if let weight = personalizationController.weight {
-                self.weight = String(weight)
-            }
-            if let height = personalizationController.height {
-                self.height = String(height)
+            self.weight = String(personalizationController.calculatedWeight)
+            self.height = String(personalizationController.calculatedHeight)
+        }
+        .onDisappear {
+            if personalizationController.units == .imperial {
+                personalizationController.height = (Double(height) ?? 0) * 2.54
+                personalizationController.weight = (Double(weight) ?? 0) / 2.205
+            } else {
+                personalizationController.height = Double(height)
+                personalizationController.weight = Double(weight)
             }
         }
     }

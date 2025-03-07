@@ -187,36 +187,32 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func removeDevice(device: Device? = nil) {
-        Task {
-            await deviceManager.removeDevice(device ?? pairedDevice)
-            unpair(device: device)
-        }
+        deviceManager.removeDevice(device ?? pairedDevice)
+        unpair(device: device)
     }
     
     func unpair(device: Device? = nil) {
-        Task {
-            if let pairedDevice {
-                // Delete the device object we have said for this watch
-                await deviceManager.removeDevice(device ?? pairedDevice)
-            }
-            // Update the list of user watches
-            deviceManager.fetchAllDevices()
-            
-            if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
-                // Switch to the user's next watch
-                pairedDeviceID = first.uuid
-            } else {
-                // The user doesn't have another watch, this will show the welcome view
-                pairedDeviceID = nil
-            }
-            
-            log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
-            
-            if device == nil {
-                // FIXME: this only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
-                disconnect()
-                startScanning()
-            }
+        if let pairedDevice {
+            // Delete the device object we have said for this watch
+            deviceManager.removeDevice(device ?? pairedDevice)
+        }
+        // Update the list of user watches
+        deviceManager.fetchAllDevices()
+        
+        if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
+            // Switch to the user's next watch
+            pairedDeviceID = first.uuid
+        } else {
+            // The user doesn't have another watch, this will show the welcome view
+            pairedDeviceID = nil
+        }
+        
+        log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        
+        if device == nil {
+            // FIXME: this only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
+            disconnect()
+            startScanning()
         }
     }
     

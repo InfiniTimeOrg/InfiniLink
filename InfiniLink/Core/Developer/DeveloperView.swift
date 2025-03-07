@@ -73,8 +73,6 @@ struct DeveloperView: View {
                         bleWriteManager.writeToMusicApp(message: "Song Name", characteristic: trackChar)
                     }
                 }
-            }
-            Section {
                 Toggle("Include Song Name", isOn: $includeTestSongName)
                 Toggle("Include Artist", isOn: $includeTestArtist)
             } footer: {

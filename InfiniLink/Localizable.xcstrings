@@ -111,16 +111,6 @@
     "%lld " : {
 
     },
-    "%lld - %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld - %2$lld"
-          }
-        }
-      }
-    },
     "%lld more device%@ found" : {
       "localizations" : {
         "en" : {
@@ -222,6 +212,16 @@
     },
     "Average" : {
 
+    },
+    "Averaging at %@ BPM, your heart rate ranged from %lld to %lld BPM." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Averaging at %1$@ BPM, your heart rate ranged from %2$lld to %3$lld BPM."
+          }
+        }
+      }
     },
     "Back" : {
 
@@ -355,16 +355,10 @@
     "Done" : {
 
     },
-    "Duration" : {
-
-    },
     "Enable Developer Mode" : {
 
     },
     "Enable Watch Notifications" : {
-
-    },
-    "End Date" : {
 
     },
     "End Exercise" : {
@@ -394,6 +388,9 @@
     "External resources are fonts and images that are required for some apps and watch faces." : {
 
     },
+    "Female" : {
+
+    },
     "File System" : {
 
     },
@@ -404,6 +401,9 @@
 
     },
     "Find Lost Device" : {
+
+    },
+    "Gender" : {
 
     },
     "General" : {
@@ -545,6 +545,9 @@
 
     },
     "M" : {
+
+    },
+    "Male" : {
 
     },
     "Manufacturer" : {
@@ -697,11 +700,18 @@
     "Software Version" : {
 
     },
-    "Start Date" : {
-
-    },
     "Start Pairing" : {
 
+    },
+    "Starting on %@ at %@, the exercise lasted %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Starting on %1$@ at %2$@, the exercise lasted %3$@."
+          }
+        }
+      }
     },
     "steps" : {
 
@@ -736,10 +746,16 @@
     "There aren't any available cloud builds" : {
 
     },
+    "There wasn't any heart rate data recorded for this exercise." : {
+
+    },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
 
     },
     "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
+
+    },
+    "Time" : {
 
     },
     "Time Format" : {
@@ -758,9 +774,6 @@
 
     },
     "Total" : {
-
-    },
-    "Total Steps" : {
 
     },
     "Units" : {
@@ -841,6 +854,16 @@
     },
     "You can start one by choosing one from the list below." : {
 
+    },
+    "You took %d step%@ and burned %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You took %1$d step%2$@ and burned %3$@."
+          }
+        }
+      }
     },
     "You're %lld steps away your daily step goal! %@" : {
       "localizations" : {

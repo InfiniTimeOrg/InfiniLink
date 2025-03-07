@@ -18,8 +18,8 @@ struct BLECharacteristicHandler {
     let notificationManager = NotificationManager.shared
     let remindersManager = RemindersManager.shared
     let deviceManager = DeviceManager.shared
-    let fitnessCalculator = FitnessCalculator.shared
     let persistenceController = PersistenceController.shared
+    let fitnessCalculator = FitnessCalculator()
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
