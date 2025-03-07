@@ -45,7 +45,7 @@ struct StepsView: View {
                             DetailHeaderSubItemView(title: "Dis",
                                                     value: String(format: "%.2f", exerciseCalculator.calculateDistance(steps: steps(for: Date()))),
                                                     unit: personalizationController.units == .imperial ? "mi" : "km")
-                            DetailHeaderSubItemView(title: "Kcal", value: String(format: "%.1f", exerciseCalculator.calculateCaloriesBurned(steps: steps(for: Date()))))
+                            DetailHeaderSubItemView(title: "Kcal", value: String(exerciseCalculator.calculateCaloriesBurned(steps: steps(for: Date()))))
                         }
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
