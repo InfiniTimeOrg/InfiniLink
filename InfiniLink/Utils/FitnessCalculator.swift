@@ -48,7 +48,7 @@ class FitnessCalculator {
     let personalizationController = PersonalizationController.shared
     let bleManager = BLEManager.shared
     
-    func calculateDistance(steps: Int, pace: FitnessCalculator.Pace = .avgWalk) -> Double {
+    func strideLength(pace: FitnessCalculator.Pace = .avgWalk) -> Double {
         let avgStrideRatio = personalizationController.gender == .male ? 0.415 : 0.413
         let calculatedHeight = personalizationController.calculatedHeight
         let height = personalizationController.units == .metric ? (calculatedHeight / 2.54) : (calculatedHeight) // Convert to inches
@@ -69,7 +69,11 @@ class FitnessCalculator {
         }()
         
         let strideLength = baseStrideLength * strideMultiplier
-        var distance = strideLength * Double(steps)
+        return strideLength
+    }
+    
+    func calculateDistance(steps: Int, pace: FitnessCalculator.Pace = .avgWalk) -> Double {
+        var distance = strideLength(pace: pace) * Double(steps)
 
         if personalizationController.units == .imperial {
             distance /= 63360 // Convert inches to miles
@@ -85,6 +89,8 @@ class FitnessCalculator {
         let distance = calculateDistance(steps: steps, pace: pace)
         let timeMinutes = (distance / pace.milesPerHour) * 60.0
         
+        guard steps > 0, timeMinutes > 0 else { return 0 }
+        
         let spm = Double(steps) / timeMinutes
         return Int(ceil(spm))
     }
@@ -96,7 +102,19 @@ class FitnessCalculator {
         let calculatedWeight = personalizationController.units == .metric ? weight : (weight * 0.453592)
         let durationInHours = Double(steps) / Double(spm) / 60.0
         
+        guard durationInHours > 0 else { return 0 }
+        
         let caloriesBurned = Int(ceil(pace.metValue * calculatedWeight * durationInHours))
         return caloriesBurned
+    }
+    
+    func minutesForDistance(distance: Double, pace: FitnessCalculator.Pace = .avgWalk) -> Double {
+        let speed = personalizationController.units == .imperial ? pace.milesPerHour : (pace.milesPerHour * 1.60934)
+        return (distance / speed) * 60
+    }
+    
+    func stepsPerUnit(steps: Int, pace: FitnessCalculator.Pace = .avgWalk) -> Int {
+        let unitInInches = personalizationController.units == .imperial ? 63360 : 39370.1
+        return Int(ceil(unitInInches / strideLength()))
     }
 }

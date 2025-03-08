@@ -19,9 +19,9 @@ struct StepsView: View {
     
     let exerciseCalculator = FitnessCalculator()
     
-    func steps(for date: Date) -> Int {
+    func steps() -> Int {
         for stepCount in chartManager.stepPoints() {
-            if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: date) {
+            if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: Date()) {
                 return Int(stepCount.steps)
             }
         }
@@ -40,12 +40,28 @@ struct StepsView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: "\(steps(for: Date()))", subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
-                        HStack {
-                            DetailHeaderSubItemView(title: "Dis",
-                                                    value: String(format: "%.2f", exerciseCalculator.calculateDistance(steps: steps(for: Date()))),
-                                                    unit: personalizationController.units == .imperial ? "mi" : "km")
-                            DetailHeaderSubItemView(title: "Kcal", value: String(exerciseCalculator.calculateCaloriesBurned(steps: steps(for: Date()))))
+                    DetailHeaderView(Header(title: "\(steps())", subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                            let unitsFull = personalizationController.units == .imperial ? "mile" : "kilometer"
+                            let units = personalizationController.units == .imperial ? "mi" : "km"
+                            let distance = exerciseCalculator.calculateDistance(steps: steps())
+                            let stepsPerUnit = exerciseCalculator.stepsPerUnit(steps: steps())
+                            
+                            DetailHeaderSubItemView(title: "Distance",
+                                                    value: String(format: "%.2f", distance),
+                                                    unit: units,
+                                                    icon: ("ruler", Color.blue))
+                            DetailHeaderSubItemView(title: "Kcal",
+                                                    value: String(exerciseCalculator.calculateCaloriesBurned(steps: steps())),
+                                                    icon: ("flame", Color.orange))
+                            DetailHeaderSubItemView(title: "Minutes per \(unitsFull)",
+                                                    value: String(format: "%.1f", exerciseCalculator.minutesForDistance(distance: distance)),
+                                                    unit: "min\(distance == 1 ? "" : "s")",
+                                                    icon: ("stopwatch", Color.primary))
+                            DetailHeaderSubItemView(title: "Steps per \(unitsFull)",
+                                                    value: String(stepsPerUnit),
+                                                    unit: "step\(stepsPerUnit == 1 ? "" : "s")",
+                                                    icon: ("shoeprints.fill", Color.blue))
                         }
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))

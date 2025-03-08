@@ -35,6 +35,7 @@ struct StepCalendarView: View {
                             .frame(maxWidth: .infinity)
                     }
                 }
+                // FIXME: poor performance
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: weekdays.count), spacing: 14) {
                     ForEach(fetchDates(), id: \.id) { value in
                         ZStack {

@@ -29,29 +29,39 @@ struct DetailHeaderSubItemView: View {
     let title: String
     let value: String
     let unit: String?
+    let icon: (String, Color)?
     
-    init(title: String, value: String, unit: String? = nil) {
+    init(title: String, value: String, unit: String? = nil, icon: (String, Color)? = nil) {
         self.title = title
         self.value = value
         self.unit = unit
+        self.icon = icon
     }
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 3) {
-            Text(title.uppercased())
-                .font(.caption)
-                .foregroundStyle(.gray)
-            HStack(alignment: .firstTextBaseline, spacing: 2) {
-                Text(value)
-                    .font(.system(size: 22).weight(.semibold))
-                if let unit {
-                    Text(unit)
-                        .font(.system(size: 17.5))
-                        .foregroundColor(.primary.opacity(0.75))
+        HStack(spacing: 9) {
+            if let name = icon?.0, let color = icon?.1 {
+                Image(systemName: name)
+                    .foregroundStyle(color)
+                    .font(.system(size: 21).weight(.medium))
+                    .frame(minWidth: 30)
+            }
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title.uppercased())
+                    .font(.caption)
+                    .foregroundStyle(.gray)
+                HStack(alignment: .firstTextBaseline, spacing: 2) {
+                    Text(value)
+                        .font(.system(size: 22).weight(.semibold))
+                    if let unit {
+                        Text(unit)
+                            .font(.system(size: 17).weight(.medium))
+                            .foregroundColor(.primary.opacity(0.75))
+                    }
                 }
             }
+            Spacer()
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
         .padding(12)
         .background(colorScheme == .dark ? AnyShapeStyle(Material.regular) : AnyShapeStyle(Color(.systemBackground)))
         .clipShape(RoundedRectangle(cornerRadius: 15))
