@@ -31,22 +31,24 @@ class PersonalizationController: ObservableObject {
     }
     
     var calculatedWeight: Double {
+        guard let weight = self.weight, weight > 0 else { return gender == .male ? 68.039 : 54.43 } // TODO: update these averages
+        
         if units == .imperial {
             // Convert from kg to lbs
-            return (weight ?? 0) * 2.205
+            return weight * 2.205
         } else {
-            return weight ?? 0
+            return weight
         }
     }
 
     var calculatedHeight: Double {
-        let avgHeight = gender == .male ? 175.26 : 162.56
+        guard let height = self.height, height > 0 else { return gender == .male ? 175.26 : 162.56 }
         
         if units == .imperial {
             // Convert from cm to in
-            return (height ?? avgHeight) / 2.54
+            return height / 2.54
         } else {
-            return height ?? avgHeight
+            return height
         }
     }
 }

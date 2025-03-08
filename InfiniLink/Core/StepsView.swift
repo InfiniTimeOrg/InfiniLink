@@ -13,8 +13,6 @@ struct StepsView: View {
     @ObservedObject var chartManager = ChartManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     
-    @FetchRequest var stepCounts: FetchedResults<StepCounts>
-    
     @AppStorage("stepChartDataSelection") private var dataSelection = 0
     
     let exerciseCalculator = FitnessCalculator()
@@ -27,14 +25,6 @@ struct StepsView: View {
         }
         return 0
     }
-
-    init() {
-        _stepCounts = FetchRequest(
-            entity: StepCounts.entity(),
-            sortDescriptors: [NSSortDescriptor(keyPath: \StepCounts.timestamp, ascending: true)],
-            predicate: NSPredicate(format: "deviceId == %@", BLEManager.shared.pairedDeviceID ?? "")
-        )
-    }
     
     var body: some View {
         GeometryReader { geo in
@@ -45,18 +35,17 @@ struct StepsView: View {
                             let unitsFull = personalizationController.units == .imperial ? "mile" : "kilometer"
                             let units = personalizationController.units == .imperial ? "mi" : "km"
                             let distance = exerciseCalculator.calculateDistance(steps: steps())
-                            let stepsPerUnit = exerciseCalculator.stepsPerUnit(steps: steps())
+                            let stepsPerUnit = exerciseCalculator.stepsPerUnit()
                             
                             DetailHeaderSubItemView(title: "Distance",
                                                     value: String(format: "%.2f", distance),
                                                     unit: units,
                                                     icon: ("ruler", Color.blue))
                             DetailHeaderSubItemView(title: "Kcal",
-                                                    value: String(exerciseCalculator.calculateCaloriesBurned(steps: steps())),
+                                                    value: String(format: "%.1f", exerciseCalculator.calculateCaloriesBurned(steps: steps())),
                                                     icon: ("flame", Color.orange))
-                            DetailHeaderSubItemView(title: "Minutes per \(unitsFull)",
-                                                    value: String(format: "%.1f", exerciseCalculator.minutesForDistance(distance: distance)),
-                                                    unit: "min\(distance == 1 ? "" : "s")",
+                            DetailHeaderSubItemView(title: "Total time",
+                                                    value: exerciseCalculator.secondsFormatted(seconds: exerciseCalculator.secondsForDistance(distance: distance)),
                                                     icon: ("stopwatch", Color.primary))
                             DetailHeaderSubItemView(title: "Steps per \(unitsFull)",
                                                     value: String(stepsPerUnit),

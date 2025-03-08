@@ -80,9 +80,7 @@ struct ExerciseDetailView: View {
                 }
                 if exercise().components.contains(.steps) {
                     Section("Steps") {
-                        let calories = FitnessCalculator().calculateCaloriesBurned(steps: Int(userExercise.steps))
-                        
-                        Text("You took \(userExercise.steps) step\(userExercise.steps == 1 ? "" : "s") and burned \(calories > 1 ? String(format: "%.0f", calories) + "calories": "less than one calorie").")
+                        Text("You took \(userExercise.steps) step\(userExercise.steps == 1 ? "" : "s") and burned \(userExercise.caloriesBurned > 1 ? String(format: "%.0f", userExercise.caloriesBurned) + "calories": "less than one calorie").")
                     }
                 }
             }

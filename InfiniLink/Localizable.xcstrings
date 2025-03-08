@@ -436,6 +436,16 @@
     "Good morning" : {
 
     },
+    "Great job, you reached your daily step goal today! You've walked %lf %@ and burned around %lf kcal. Keep it up and let's see how many streak days you can build!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Great job, you reached your daily step goal today! You've walked %1$lf %2$@ and burned around %3$lf kcal. Keep it up and let's see how many streak days you can build!"
+          }
+        }
+      }
+    },
     "H" : {
 
     },
@@ -770,9 +780,6 @@
     "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
 
     },
-    "Today you reached your daily step goal! Keep it up, and let's see how many more days can you reach it..." : {
-
-    },
     "Total" : {
 
     },
@@ -861,16 +868,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You took %1$d step%2$@ and burned %3$@."
-          }
-        }
-      }
-    },
-    "You're %lld steps away your daily step goal! %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You're %1$lld steps away your daily step goal! %2$@"
           }
         }
       }

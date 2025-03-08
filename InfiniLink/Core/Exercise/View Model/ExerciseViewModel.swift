@@ -22,21 +22,21 @@ class ExerciseViewModel: ObservableObject {
     var appDidEnterBackgroundDate: Date?
     
     let exercises = [
-        Exercise(id: "outdoor-run", name: "Outdoor Run", icon: "figure.run", components: [.heart, .steps]),
+        Exercise(id: "outdoor-run", name: "Outdoor Run", icon: "figure.run", components: [.heart, .steps], pace: .jog),
         Exercise(id: "outdoor-cycle", name: "Outdoor Cycle", icon: "figure.outdoor.cycle", components: [.heart]),
-        Exercise(id: "indoor-run", name: "Indoor Run", icon: "figure.run.treadmill", components: [.heart, .steps]),
+        Exercise(id: "indoor-run", name: "Indoor Run", icon: "figure.run.treadmill", components: [.heart, .steps], pace: .jog),
         Exercise(id: "indoor-cycle", name: "Indoor Cycle", icon: "figure.indoor.cycle", components: [.heart]),
         Exercise(id: "strength-training", name: "Strength Training", icon: "figure.strengthtraining.traditional", components: [.heart]),
         Exercise(id: "table-tennis", name: "Table Tennis", icon: "figure.table.tennis", components: [.heart]),
         Exercise(id: "tennis", name: "Tennis", icon: "figure.tennis", components: [.heart]),
-        Exercise(id: "soccer", name: "Soccer", icon: "figure.indoor.soccer", components: [.heart, .steps]),
-        Exercise(id: "basketball", name: "Basketball", icon: "figure.basketball", components: [.heart, .steps]),
-        Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart, .steps]),
+        Exercise(id: "soccer", name: "Soccer", icon: "figure.indoor.soccer", components: [.heart, .steps], pace: .run),
+        Exercise(id: "basketball", name: "Basketball", icon: "figure.basketball", components: [.heart, .steps], pace: .run),
+        Exercise(id: "badminton", name: "Badminton", icon: "figure.badminton", components: [.heart, .steps], pace: .run),
         Exercise(id: "boxing", name: "Boxing", icon: "figure.boxing", components: [.heart]),
         Exercise(id: "skiing", name: "Skiing", icon: "figure.skiing.downhill", components: [.heart]),
         Exercise(id: "bowling", name: "Bowling", icon: "figure.bowling", components: [.heart, .steps]),
         Exercise(id: "figure.golf", name: "Golf", icon: "figure.golf", components: [.heart, .steps]),
-        Exercise(id: "hockey", name: "Hockey", icon: "figure.hockey", components: [.heart, .steps])
+        Exercise(id: "hockey", name: "Hockey", icon: "figure.hockey", components: [.heart, .steps], pace: .fastRun)
     ]
     
     init() {
@@ -77,15 +77,16 @@ class ExerciseViewModel: ObservableObject {
         currentExercise = exercise
     }
     
-    func saveExercise(_ exercise: String, startDate: Date, heartPoints: [HeartDataPoint], viewContext: NSManagedObjectContext) {
+    func saveExercise(_ exercise: Exercise, startDate: Date, heartPoints: [HeartDataPoint], viewContext: NSManagedObjectContext) {
         let newExercise = UserExercise(context: viewContext)
         
         newExercise.id = UUID()
         newExercise.startDate = startDate
         newExercise.endDate = Date()
-        newExercise.exerciseId = exercise
+        newExercise.exerciseId = exercise.id
         newExercise.heartPoints = NSSet(array: heartPoints)
         newExercise.steps = Int32(stepsTaken)
+        newExercise.caloriesBurned = FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace)
         
         saveContext(viewContext)
     }

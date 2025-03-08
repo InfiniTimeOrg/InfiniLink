@@ -51,7 +51,6 @@ struct ActiveExerciseView: View {
                                 .foregroundStyle(.blue)
                             Text(String(exerciseViewModel.stepsTaken))
                         }
-                        // TODO: add to Core Data
                         HStack(spacing: 6) {
                             Image(systemName: "flame.fill")
                                 .foregroundStyle(.orange)
@@ -102,7 +101,7 @@ struct ActiveExerciseView: View {
                     timer?.invalidate()
                     
                     if exerciseViewModel.exerciseTime >= 30 {
-                        exerciseViewModel.saveExercise(exercise.id, startDate: Date().addingTimeInterval(-exerciseViewModel.exerciseTime), heartPoints: Array(heartPoints), viewContext: viewContext)
+                        exerciseViewModel.saveExercise(exercise, startDate: Date().addingTimeInterval(-exerciseViewModel.exerciseTime), heartPoints: Array(heartPoints), viewContext: viewContext)
                     }
                 } label: {
                     Text("End Exercise")

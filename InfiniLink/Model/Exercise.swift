@@ -17,4 +17,13 @@ struct Exercise: Identifiable {
     var name: String
     var icon: String
     let components: [ExerciseComponents]
+    let pace: Pace
+    
+    init(id: String, name: String, icon: String, components: [ExerciseComponents], pace: Pace = .avgWalk) {
+        self.id = id
+        self.name = name
+        self.icon = icon
+        self.components = components
+        self.pace = pace
+    }
 }

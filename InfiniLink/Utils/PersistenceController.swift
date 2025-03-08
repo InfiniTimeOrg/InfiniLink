@@ -16,24 +16,15 @@ struct PersistenceController {
         container = NSPersistentContainer(name: "InfiniLink")
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
-        } else {
-            let description = container.persistentStoreDescriptions.first
-            description?.shouldMigrateStoreAutomatically = true
-            description?.shouldInferMappingModelAutomatically = true
         }
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error {
-                /*
-                 Typical reasons for an error here include:
-                 * The parent directory does not exist, cannot be created, or disallows writing.
-                 * The persistent store is not accessible, due to permissions or data protection when the device is locked.
-                 * The device is out of space.
-                 * The store could not be migrated to the current model version.
-                 Check the error message to determine what the actual problem was.
-                 */
-                log("Unresolved error loading stores: \(error.localizedDescription)", caller: "PersistenceController")
+        container.loadPersistentStores { storeDescription, error in
+            storeDescription.shouldMigrateStoreAutomatically = true
+            storeDescription.shouldInferMappingModelAutomatically = true
+            
+            if let error = error as NSError? {
+                fatalError("Unresolved error \(error), \(error.userInfo)")
             }
-        })
+        }
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
     
