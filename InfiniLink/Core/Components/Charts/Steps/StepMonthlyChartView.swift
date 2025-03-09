@@ -91,6 +91,7 @@ struct StepCalendarView: View {
                             .background(background)
                             .clipShape(Circle())
                     }
+                    .disabled(fetchSelectedMonth(selectedMonth + 1) > Date())
                 }
             }
         }
@@ -112,7 +113,8 @@ struct StepCalendarView: View {
         return dates
     }
     
-    func fetchSelectedMonth() -> Date {
+    func fetchSelectedMonth(_ month: Int? = nil) -> Date {
+        let selectedMonth = month ?? selectedMonth
         let calendar = Calendar.current
         let month = calendar.date(byAdding: .month, value: selectedMonth, to: Date())!
         

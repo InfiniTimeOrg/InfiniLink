@@ -30,7 +30,7 @@ struct StepChartView: View {
     
     let fitnessCalculator = FitnessCalculator()
     
-    func steps() -> [StepChartDataPoint] {
+    func stepChartPoints() -> [StepChartDataPoint] {
         let calendar = Calendar.current
         let now = Date()
         let startOfWeek = calendar.startOfDay(for: calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!)
@@ -58,11 +58,25 @@ struct StepChartView: View {
         return filledData
     }
     
+    var streak: Int {
+        var streak = 0
+        
+        // Add limit to week or month to avoid iterating through thousands of points?
+        for point in chartManager.stepPoints().reversed().prefix(7) {
+            if point.steps >= deviceManager.settings.stepsGoal {
+                streak += 1
+            } else {
+                break
+            }
+        }
+        
+        return streak
+    }
     var earliestDate: Date {
-        steps().compactMap({ $0.date }).min() ?? Date()
+        stepChartPoints().compactMap({ $0.date }).min() ?? Date()
     }
     var latestDate: Date {
-        steps().compactMap({ $0.date }).max() ?? Date()
+        stepChartPoints().compactMap({ $0.date }).max() ?? Date()
     }
     
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -74,7 +88,7 @@ struct StepChartView: View {
                     RuleMark(y: .value("Daily Goal", deviceManager.settings.stepsGoal))
                         .foregroundStyle(.green)
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [4]))
-                    ForEach(steps(), id: \.date) {
+                    ForEach(stepChartPoints(), id: \.date) {
                         BarMark(
                             x: .value("Date", $0.date, unit: .weekday),
                             y: .value("Steps", $0.steps)
@@ -105,7 +119,7 @@ struct StepChartView: View {
                                         
                                         let (day, _) = proxy.value(at: location, as: (Date, Int).self) ?? (Date(), 0)
                                         // We compare the formatted dates because the dates are too specific otherwise
-                                        let steps = steps().first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
+                                        let steps = stepChartPoints().first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
                                         
                                         selectedDate = day
                                         selectedSteps = steps
@@ -117,20 +131,20 @@ struct StepChartView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: steps().map({ $0.date })) {
+                    AxisMarks(values: stepChartPoints().map({ $0.date })) {
                         AxisGridLine()
                         AxisValueLabel(format: .dateTime.weekday(.abbreviated))
                     }
                 }
-                .frame(height: 250)
+                .frame(height: 280)
             } header: {
                 VStack(alignment: .leading) {
-                    Text(steps().count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
+                    Text(stepChartPoints().count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
                     Text({
                         if showSelectionBar {
                             return "\(selectedSteps) "
-                        } else if !steps().isEmpty {
-                            return "\(steps().reduce(0) { $0 + $1.steps } / steps().count) "
+                        } else if !stepChartPoints().isEmpty {
+                            return "\(stepChartPoints().reduce(0) { $0 + $1.steps } / stepChartPoints().count) "
                         }
                         return "0 "
                     }())
@@ -139,6 +153,21 @@ struct StepChartView: View {
                     .fontWeight(.bold)
                     + Text("steps")
                     Text(showSelectionBar ? "\(selectedDate.formatted(date: .abbreviated, time: .omitted))" : "\(earliestDate.formatted(date: .abbreviated, time: .omitted)) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
+                    if streak > 0 {
+                        HStack(spacing: 5) {
+                            Image(systemName: "flame.fill")
+                                .imageScale(.large)
+                                .foregroundStyle(.orange)
+                            Text("This week you have a ") +
+                            Text("\(streak)-day")
+                                .foregroundColor(.orange)
+                                .fontWeight(.bold) +
+                            Text(" step goal streak!")
+                        }
+                        .foregroundStyle(Color.primary)
+                        .font(.system(size: 15))
+                        .padding(.vertical, 9)
+                    }
                 }
                 .fontWeight(.semibold)
             }
@@ -148,7 +177,7 @@ struct StepChartView: View {
                 let steps = Int(chartManager.stepPoints().last?.steps ?? 0)
                 
                 if stepCountManager.hasReachedStepGoal {
-                    Text("Great job, you reached your daily step goal today! You've walked \(fitnessCalculator.calculateDistance(steps: steps)) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
+                    Text("Great job, you reached your daily step goal today! You've walked \(String(format: "%.2f", fitnessCalculator.calculateDistance(steps: steps))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
                 } else {
                     let stepsRemaining = stepCountManager.stepGoal - steps
                     let distanceRemaining = fitnessCalculator.calculateDistance(steps: stepsRemaining)
@@ -156,7 +185,7 @@ struct StepChartView: View {
                     let timeRemaining = fitnessCalculator.secondsFormatted(seconds: Int(fitnessCalculator.secondsForDistance(distance: distanceRemaining)), full: true)
                     
                     if stepsRemaining <= 1000 {
-                        Text("You're almost there! A quick \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "mile" : "km") walk will get you to your goal. It should only take you about \(timeRemaining).")
+                        Text("You're almost there! A quick \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "mile" : "km") walk should get you to your goal. It should only take you about \(timeRemaining).")
                     } else if stepsRemaining <= 2500 {
                         Text("You're making great progress! You have about \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "miles" : "kilometers") to walk. At your current pace, you'll hit your goal in \(timeRemaining).")
                     } else {

@@ -16,6 +16,9 @@
     " Recovery" : {
 
     },
+    " step goal streak!" : {
+
+    },
     "-" : {
 
     },
@@ -143,6 +146,9 @@
           }
         }
       }
+    },
+    "%lld-day" : {
+
     },
     "%lld%%" : {
 
@@ -436,12 +442,12 @@
     "Good morning" : {
 
     },
-    "Great job, you reached your daily step goal today! You've walked %lf %@ and burned around %lld kcal." : {
+    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %lld kcal." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Great job, you reached your daily step goal today! You've walked %1$lf %2$@ and burned around %3$lld kcal."
+            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$lld kcal."
           }
         }
       }
@@ -771,6 +777,9 @@
     "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
 
     },
+    "This week you have a " : {
+
+    },
     "Time" : {
 
     },
@@ -888,12 +897,12 @@
         }
       }
     },
-    "You're almost there! A quick %@ %@ walk will get you to your goal. It should only take you about %@." : {
+    "You're almost there! A quick %@ %@ walk should get you to your goal. It should only take you about %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "You're almost there! A quick %1$@ %2$@ walk will get you to your goal. It should only take you about %3$@."
+            "value" : "You're almost there! A quick %1$@ %2$@ walk should get you to your goal. It should only take you about %3$@."
           }
         }
       }
