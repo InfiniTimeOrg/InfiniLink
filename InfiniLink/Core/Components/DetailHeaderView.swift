@@ -30,12 +30,14 @@ struct DetailHeaderSubItemView: View {
     let value: String
     let unit: String?
     let icon: (String, Color)?
+    let completion: (() -> Void)?
     
-    init(title: String, value: String, unit: String? = nil, icon: (String, Color)? = nil) {
+    init(title: String, value: String, unit: String? = nil, icon: (String, Color)? = nil, completion: (() -> Void)? = nil) {
         self.title = title
         self.value = value
         self.unit = unit
         self.icon = icon
+        self.completion = completion
     }
     
     var body: some View {
@@ -47,9 +49,18 @@ struct DetailHeaderSubItemView: View {
                     .frame(minWidth: 30)
             }
             VStack(alignment: .leading, spacing: 3) {
-                Text(title.uppercased())
-                    .font(.caption)
-                    .foregroundStyle(.gray)
+                HStack(alignment: .top, spacing: 3) {
+                    Text(title.uppercased())
+                        .font(.caption.weight(.medium))
+                    if let completion {
+                        Image(systemName: "info.circle")
+                            .font(.caption.weight(.medium))
+                            .onTapGesture {
+                                completion()
+                            }
+                    }
+                }
+                .foregroundStyle(.gray)
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text(value)
                         .font(.system(size: 22).weight(.semibold))

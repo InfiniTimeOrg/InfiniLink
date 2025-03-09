@@ -54,7 +54,7 @@ struct ActiveExerciseView: View {
                         HStack(spacing: 6) {
                             Image(systemName: "flame.fill")
                                 .foregroundStyle(.orange)
-                            Text(String(format: "%.1f", fitnessCalculator.calculateCaloriesBurned(steps: exerciseViewModel.stepsTaken)))
+                            Text("\(fitnessCalculator.calculateCaloriesBurned(steps: exerciseViewModel.stepsTaken))")
                         }
                     }
                 }

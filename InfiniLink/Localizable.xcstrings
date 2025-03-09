@@ -436,12 +436,12 @@
     "Good morning" : {
 
     },
-    "Great job, you reached your daily step goal today! You've walked %lf %@ and burned around %lf kcal. Keep it up and let's see how many streak days you can build!" : {
+    "Great job, you reached your daily step goal today! You've walked %lf %@ and burned around %lld kcal." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Great job, you reached your daily step goal today! You've walked %1$lf %2$@ and burned around %3$lf kcal. Keep it up and let's see how many streak days you can build!"
+            "value" : "Great job, you reached your daily step goal today! You've walked %1$lf %2$@ and burned around %3$lld kcal."
           }
         }
       }
@@ -710,6 +710,9 @@
     "Software Version" : {
 
     },
+    "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
+
+    },
     "Start Pairing" : {
 
     },
@@ -730,6 +733,9 @@
 
     },
     "Steps Goal" : {
+
+    },
+    "Steps Per Minute" : {
 
     },
     "Sync step and heart rate data to Apple Health." : {
@@ -868,6 +874,36 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "You took %1$d step%2$@ and burned %3$@."
+          }
+        }
+      }
+    },
+    "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're %1$lld steps away from your goal, which is about %2$@ %3$@. Once you complete your goal, you'll have burned %4$lld kcal and walked for about %5$@!"
+          }
+        }
+      }
+    },
+    "You're almost there! A quick %@ %@ walk will get you to your goal. It should only take you about %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're almost there! A quick %1$@ %2$@ walk will get you to your goal. It should only take you about %3$@."
+          }
+        }
+      }
+    },
+    "You're making great progress! You have about %@ %@ to walk. At your current pace, you'll hit your goal in %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You're making great progress! You have about %1$@ %2$@ to walk. At your current pace, you'll hit your goal in %3$@."
           }
         }
       }

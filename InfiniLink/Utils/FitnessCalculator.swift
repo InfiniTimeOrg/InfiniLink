@@ -94,7 +94,7 @@ class FitnessCalculator {
         return Int(ceil(spm))
     }
     
-    func calculateCaloriesBurned(steps: Int, pace: Pace = .avgWalk) -> Double {
+    func calculateCaloriesBurned(steps: Int, pace: Pace = .avgWalk) -> Int {
         // TODO: support custom duration
         let spm = stepsPerMinute(steps: steps, pace: pace)
         let weight = personalizationController.calculatedWeight
@@ -103,7 +103,7 @@ class FitnessCalculator {
         
         guard durationInHours > 0 else { return 0 }
         
-        return pace.metValue * calculatedWeight * durationInHours
+        return Int(ceil(pace.metValue * calculatedWeight * durationInHours))
     }
     
     func stepsPerUnit(pace: Pace = .avgWalk) -> Int {
@@ -117,17 +117,16 @@ class FitnessCalculator {
         return Int(ceil((distance / speed) * 60 * 60))
     }
     
-    func secondsFormatted(seconds: Int) -> String {
+    func secondsFormatted(seconds: Int, full: Bool = false) -> String {
         let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60
-        let seconds = seconds % 60
         
         if hours > 0 {
-            return "\(hours) hr\(hours == 1 ? "" : "s") and \(minutes) min\(minutes == 1 ? "" : "s")"
+            return "\(hours) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s") and \(minutes) \(full ? "minute" : "min")\(minutes == 1 ? "" : "s")"
         } else if minutes > 0 {
-            return "\(minutes) min\(minutes == 1 ? "" : "s")"
+            return "\(minutes) \(full ? "minute" : "min")\(minutes == 1 ? "" : "s")"
         } else {
-            return "<1 min"
+            return "<1 \(full ? "minute" : "min")"
         }
     }
 }

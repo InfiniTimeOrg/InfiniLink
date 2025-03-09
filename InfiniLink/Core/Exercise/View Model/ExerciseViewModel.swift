@@ -86,7 +86,7 @@ class ExerciseViewModel: ObservableObject {
         newExercise.exerciseId = exercise.id
         newExercise.heartPoints = NSSet(array: heartPoints)
         newExercise.steps = Int32(stepsTaken)
-        newExercise.caloriesBurned = FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace)
+        newExercise.caloriesBurned = Int32(FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace))
         
         saveContext(viewContext)
     }

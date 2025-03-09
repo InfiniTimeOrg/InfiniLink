@@ -19,6 +19,7 @@ struct StepChartView: View {
     @ObservedObject var chartManager = ChartManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var stepCountManager = StepCountManager.shared
+    @ObservedObject var personalizationController = PersonalizationController.shared
     
     @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
     
@@ -26,6 +27,8 @@ struct StepChartView: View {
     @State private var offset = 0.0
     @State private var selectedDate = Date()
     @State private var selectedSteps = 0
+    
+    let fitnessCalculator = FitnessCalculator()
     
     func steps() -> [StepChartDataPoint] {
         let calendar = Calendar.current
@@ -142,17 +145,23 @@ struct StepChartView: View {
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
             Section {
+                let steps = Int(chartManager.stepPoints().last?.steps ?? 0)
+                
                 if stepCountManager.hasReachedStepGoal {
-                    Text("Today you reached your daily step goal! Keep it up, and let's see how many more days can you reach it...")
+                    Text("Great job, you reached your daily step goal today! You've walked \(fitnessCalculator.calculateDistance(steps: steps)) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
                 } else {
-                    let encouragementString: String = {
-                        if (stepCountManager.stepGoal - bleManager.stepCount) <= 1000 {
-                            return "Take a short walk or a start an activity to complete your goal."
-                        }
-                        return "Complete a few activities to reach your goal."
-                    }()
+                    let stepsRemaining = stepCountManager.stepGoal - steps
+                    let distanceRemaining = fitnessCalculator.calculateDistance(steps: stepsRemaining)
+                    let caloriesRemaining = fitnessCalculator.calculateCaloriesBurned(steps: stepsRemaining)
+                    let timeRemaining = fitnessCalculator.secondsFormatted(seconds: Int(fitnessCalculator.secondsForDistance(distance: distanceRemaining)), full: true)
                     
-                    Text("You're \(stepCountManager.stepGoal - bleManager.stepCount) steps away your daily step goal! \(encouragementString)")
+                    if stepsRemaining <= 1000 {
+                        Text("You're almost there! A quick \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "mile" : "km") walk will get you to your goal. It should only take you about \(timeRemaining).")
+                    } else if stepsRemaining <= 2500 {
+                        Text("You're making great progress! You have about \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "miles" : "kilometers") to walk. At your current pace, you'll hit your goal in \(timeRemaining).")
+                    } else {
+                        Text("You're \(stepsRemaining) steps away from your goal, which is about \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "miles" : "kilometers"). Once you complete your goal, you'll have burned \(caloriesRemaining) kcal and walked for about \(timeRemaining)!")
+                    }
                 }
             }
         }
