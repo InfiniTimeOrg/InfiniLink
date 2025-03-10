@@ -41,7 +41,7 @@
 ### Currently non-functional features:
 - System-wide music controls—requires implementation of Apple Media Service.
 
-### Planned features:
+## Roadmap:
 - InfiniTime navigation service using MapKit
 - Battery, heart, and step widgets
 
@@ -51,7 +51,7 @@
 - **Version 1.2** is available on [TestFlight](https://testflight.apple.com/join/VX7E73Wt).
 
 > [!CAUTION]
-> Version *1.2* of InfiniLink has been built from the ground up and is still in early development stages, and as such, may not work as expected.
+> Version 1.2 has been built from the ground up and is still in early development stages, and as such, may not work as expected.
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
