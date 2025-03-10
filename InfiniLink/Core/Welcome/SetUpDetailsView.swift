@@ -134,8 +134,12 @@ struct SetUpDetailsView: View {
             }
         }
         .onAppear {
-            self.weight = String(personalizationController.calculatedWeight)
-            self.height = String(personalizationController.calculatedHeight)
+            if let weight = personalizationController.weight, weight > 0 {
+                self.weight = String(personalizationController.calculatedWeight)
+            }
+            if let height = personalizationController.height, height > 0 {
+                self.height = String(personalizationController.calculatedHeight)
+            }
         }
         .onDisappear {
             if personalizationController.units == .imperial {

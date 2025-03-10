@@ -216,6 +216,7 @@ class DeviceManager: ObservableObject {
 extension DeviceManager {
     func updateInfo(characteristic: CBCharacteristic) {
         guard let value = characteristic.value else { return }
+        guard bleManager.pairedDevice != nil else { return }
         
         bleManager.pairedDevice.bleUUID = characteristic.uuid.uuidString
         
