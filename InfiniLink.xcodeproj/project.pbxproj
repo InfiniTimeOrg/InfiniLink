@@ -47,6 +47,8 @@
 		E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */; };
 		E0599A0F2CB4E62800D64E0B /* SetUpDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */; };
 		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
+		E05D2E722D7E8801004A6CE0 /* EmptyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */; };
+		E05D2E752D7EA95B004A6CE0 /* ChartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E742D7EA95B004A6CE0 /* ChartType.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
 		E078ECFB2D4E6D9800560364 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E078ECFA2D4E6D9800560364 /* Zip */; };
@@ -173,6 +175,8 @@
 		E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemDetailView.swift; sourceTree = "<group>"; };
 		E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpDetailsView.swift; sourceTree = "<group>"; };
 		E0599A102CB5553B00D64E0B /* FSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSFile.swift; sourceTree = "<group>"; };
+		E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChartView.swift; sourceTree = "<group>"; };
+		E05D2E742D7EA95B004A6CE0 /* ChartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartType.swift; sourceTree = "<group>"; };
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
@@ -422,6 +426,14 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		E05D2E732D7EA249004A6CE0 /* Heart */ = {
+			isa = PBXGroup;
+			children = (
+				E09696E22D2F807700CCCBF8 /* HeartChartView.swift */,
+			);
+			path = Heart;
+			sourceTree = "<group>";
+		};
 		E08F2F312CC899D00094217A /* Weather */ = {
 			isa = PBXGroup;
 			children = (
@@ -434,8 +446,9 @@
 		E09696E12D2F806A00CCCBF8 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				E05D2E732D7EA249004A6CE0 /* Heart */,
 				E09990962D77684800B0FCAF /* Steps */,
-				E09696E22D2F807700CCCBF8 /* HeartChartView.swift */,
+				E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */,
 			);
 			path = Charts;
 			sourceTree = "<group>";
@@ -457,6 +470,7 @@
 				E0B85D202CB625FE00D85122 /* Exercise.swift */,
 				E08C4A482CC4048900013D15 /* SleepData.swift */,
 				E064D4092D77F32F008500AE /* CalendarDay.swift */,
+				E05D2E742D7EA95B004A6CE0 /* ChartType.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -564,12 +578,12 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C09F2CB245F70042A12D /* Components */,
-				E05046872D136F0600FE4BCD /* Developer */,
 				E059999A2CB2E55500D64E0B /* Apps */,
 				E0A7C0742CB0ECD10042A12D /* Settings */,
 				E0B85D172CB6241000D85122 /* Exercise */,
 				E0CD94CD2CC4A20F00DA53A2 /* Connect */,
 				E0C7C8372CAEF70B0043DA2D /* Welcome */,
+				E05046872D136F0600FE4BCD /* Developer */,
 				E0A7C0972CB227060042A12D /* HeartView.swift */,
 				E05999982CB25C5600D64E0B /* SleepView.swift */,
 				E03C30B62CC7417C00DD8363 /* WeatherView.swift */,
@@ -797,8 +811,10 @@
 				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,
 				E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */,
 				E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */,
+				E05D2E752D7EA95B004A6CE0 /* ChartType.swift in Sources */,
 				E0A7C0A32CB246D10042A12D /* DetailHeaderView.swift in Sources */,
 				E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */,
+				E05D2E722D7E8801004A6CE0 /* EmptyChartView.swift in Sources */,
 				E0599A0F2CB4E62800D64E0B /* SetUpDetailsView.swift in Sources */,
 				E03A7DF62D0D4DDB007A9209 /* DeveloperModeSettingsView.swift in Sources */,
 				E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */,

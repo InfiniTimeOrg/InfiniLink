@@ -81,12 +81,22 @@ struct DeveloperView: View {
             Section {
                 Toggle("Use Experimental DFU", isOn: $useExperimentalDFU)
             }
-            Section("Charts") {
+            Section {
                 Button(role: .destructive) {
                     StepCountManager.shared.clearCurrentDaySteps()
                 } label: {
                     Text("Clear Step Data")
                 }
+                Button(role: .destructive) {
+                    ChartManager.shared.deleteAllUserExercises()
+                } label: {
+                    Text("Clear All Exercises")
+                }
+            } header: {
+                Text("DANGER ZONE")
+                    .fontWeight(.bold)
+            } footer: {
+                Text("WARNING: These actions are permanent and cannot be undone!")
             }
         }
         .navigationTitle("Developer")

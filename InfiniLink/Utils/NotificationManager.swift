@@ -35,6 +35,7 @@ class NotificationManager: ObservableObject {
     @AppStorage("sendLowBatteryNotification") var sendBatteryNotifications = true
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
     @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
+    @AppStorage("lastTimeLowBatteryNotified") var lastTimeLowBatteryNotified: Double = 0
     
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("waterReminder") var waterReminder = true
@@ -49,6 +50,7 @@ class NotificationManager: ObservableObject {
     private var waterReminderStartHour: Int = 8
     private var waterReminderEndHour: Int = 20
     private var waterReminderInterval: TimeInterval = 0
+    private let tenMinutes = TimeInterval(60 * 10)
     
     func requestNotificationAuthorization() {
         let center = UNUserNotificationCenter.current()
@@ -86,6 +88,8 @@ extension NotificationManager {
         if watchNotifications {
             let bat = bleManager.batteryLevel
             
+            guard (Date().timeIntervalSince1970 - lastTimeLowBatteryNotified) > tenMinutes else { return }
+            
             if bat > 20 {
                 batteryIsUnderTwenty = false
                 batteryIsUnderTen = false
@@ -109,6 +113,8 @@ extension NotificationManager {
         if sendLowBatteryNotificationToiPhone && sendBatteryNotifications {
             self.sendNotificationToHost(notif)
         }
+        
+        lastTimeLowBatteryNotified = Date().timeIntervalSince1970
     }
 }
 
@@ -117,23 +123,22 @@ extension NotificationManager {
     func sendHeartRangeNotification(_ bpm: Int) {
         let currentTime = Date().timeIntervalSince1970
         
-        if bpm < minHeartRange, (currentTime - lastTimeMinHeartRangeNotified) >= (60 * 10) {
+        // Don't localize these notifications because InfiniTime doesn't (most) characters from other languages
+        if bpm < minHeartRange, (currentTime - lastTimeMinHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(minHeartRange) BPM", comment: ""))
+                AppNotification(title: "Heart Rate Low", subtitle: "Your heart rate fell below \(minHeartRange) BPM")
             )
             self.lastTimeMinHeartRangeNotified = currentTime
         }
-        if bpm > maxHeartRange, (currentTime - lastTimeMaxHeartRangeNotified) >= (60 * 10) {
+        if bpm > maxHeartRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(maxHeartRange)", comment: ""))
+                AppNotification(title: "Heart Rate High", subtitle: "Your heart rate rose above \(maxHeartRange)")
             )
             self.lastTimeMaxHeartRangeNotified = currentTime
         }
     }
     
     func setWaterRemindersPerDay() {
-        waterReminderAmount = waterReminderAmount
-        
         calculateReminderInterval()
         
         nextReminderCheckDate = getNextReminderDate()

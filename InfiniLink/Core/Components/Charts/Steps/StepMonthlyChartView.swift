@@ -63,7 +63,6 @@ struct StepCalendarView: View {
         } header: {
             VStack(alignment: .leading, spacing: 7) {
                 Text("Monthly Overview")
-                    .fontWeight(.semibold)
                 HStack(spacing: 12) {
                     Button {
                         selectedMonth -= 1

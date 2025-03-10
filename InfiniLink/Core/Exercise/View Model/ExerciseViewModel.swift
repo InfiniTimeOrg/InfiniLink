@@ -87,6 +87,7 @@ class ExerciseViewModel: ObservableObject {
         newExercise.heartPoints = NSSet(array: heartPoints)
         newExercise.steps = Int32(stepsTaken)
         newExercise.caloriesBurned = Int32(FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace))
+        newExercise.deviceId = BLEManager.shared.pairedDeviceID
         
         saveContext(viewContext)
     }
@@ -97,5 +98,16 @@ class ExerciseViewModel: ObservableObject {
         } catch {
             log("Error saving context: \(error.localizedDescription)", caller: "ExerciseViewModel")
         }
+    }
+    
+    func isDateDuringExercise(_ date: Date) -> Bool {
+        let exercises = ChartManager.shared.userExercises().filter { exercise in
+            guard let endDate = exercise.endDate else { return true }
+            
+            // Use end date because it will be present in the day for the longest
+            return Calendar.current.isDate(date, equalTo: endDate, toGranularity: .day)
+        }
+        
+        return !exercises.isEmpty
     }
 }

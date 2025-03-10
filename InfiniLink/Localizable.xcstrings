@@ -268,10 +268,10 @@
     "Cancel Update" : {
 
     },
-    "Charts" : {
+    "Checking for updates..." : {
 
     },
-    "Checking for updates..." : {
+    "Clear All Exercises" : {
 
     },
     "Clear Step Data" : {
@@ -320,6 +320,9 @@
 
     },
     "Daily Goals" : {
+
+    },
+    "DANGER ZONE" : {
 
     },
     "Dark" : {
@@ -470,12 +473,6 @@
     "Heart Rate" : {
 
     },
-    "Heart Rate High" : {
-
-    },
-    "Heart Rate Low" : {
-
-    },
     "Height" : {
 
     },
@@ -612,6 +609,9 @@
 
     },
     "No Logs" : {
+
+    },
+    "Nothing to see here" : {
 
     },
     "Notifications" : {
@@ -795,6 +795,16 @@
     "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
 
     },
+    "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today your heart rate reached a high of %1$lld, and dropped to a low of %2$lld BPM."
+          }
+        }
+      }
+    },
     "Total" : {
 
     },
@@ -857,6 +867,9 @@
 
     },
     "W" : {
+
+    },
+    "WARNING: These actions are permanent and cannot be undone!" : {
 
     },
     "Watch notifications are currently disabled." : {

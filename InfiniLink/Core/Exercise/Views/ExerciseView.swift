@@ -11,10 +11,9 @@ import CoreData
 struct ExerciseView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var chartManager = ChartManager.shared
     
     @Environment(\.managedObjectContext) var viewContext
-    
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \UserExercise.startDate, ascending: false)]) var userExercises: FetchedResults<UserExercise>
     
     var body: some View {
         VStack {
@@ -27,11 +26,11 @@ struct ExerciseView: View {
                             Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
                         }
                     }
-                    Section(header: Text("My Exercises"), footer: Text(userExercises.isEmpty ? "You can start one by choosing one from the list below." : "")) {
-                        if userExercises.isEmpty {
+                    Section(header: Text("My Exercises"), footer: Text(chartManager.userExercises().isEmpty ? "You can start one by choosing one from the list below." : "")) {
+                        if chartManager.userExercises().isEmpty {
                             Text("No Exercises")
                         } else {
-                            ForEach(userExercises) { userExercise in
+                            ForEach(Array(chartManager.userExercises()).sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in
                                 let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
                                 
                                 NavigationLink {
@@ -70,7 +69,7 @@ struct ExerciseView: View {
                 .navigationTitle("Exercise")
                 .toolbar {
                     EditButton()
-                        .disabled(userExercises.isEmpty)
+                        .disabled(chartManager.userExercises().isEmpty)
                 }
             }
         }
@@ -78,7 +77,7 @@ struct ExerciseView: View {
     
     func delete(at offsets: IndexSet) {
         for index in offsets {
-            let userExercise = userExercises[index]
+            let userExercise = chartManager.userExercises()[index]
             viewContext.delete(userExercise)
         }
         

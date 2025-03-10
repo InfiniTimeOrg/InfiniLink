@@ -140,6 +140,7 @@ struct StepChartView: View {
             } header: {
                 VStack(alignment: .leading) {
                     Text(stepChartPoints().count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
+                        .fontWeight(.regular)
                     Text({
                         if showSelectionBar {
                             return "\(selectedSteps) "

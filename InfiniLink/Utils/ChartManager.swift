@@ -52,21 +52,38 @@ class ChartManager: ObservableObject {
     }
     
     func heartPoints() -> [HeartDataPoint] {
+        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+        
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
-                .filter { record in
-                    return record.deviceId == bleManager.pairedDeviceID
-                }
         } catch {
-            log("Error fetching heart points: \(error)", caller: "BLECharacteristicHandler")
+            log("Error fetching heart points: \(error)", caller: "ChartManager")
             return []
         }
     }
     
     func stepPoints() -> [StepCounts] {
+        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+        
         let fetchRequest: NSFetchRequest<StepCounts> = StepCounts.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
+        
+        do {
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
+        } catch {
+            log("Error fetching step points: \(error)", caller: "ChartManager")
+            return []
+        }
+    }
+    
+    func userExercises() -> [UserExercise] {
+        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+                
+        let fetchRequest: NSFetchRequest<UserExercise> = UserExercise.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
@@ -74,25 +91,41 @@ class ChartManager: ObservableObject {
                     return record.deviceId == bleManager.pairedDeviceID
                 }
         } catch {
-            log("Error fetching step points: \(error)", caller: "StepChartView")
+            log("Error fetching user exercises: \(error)", caller: "ChartManager")
             return []
         }
     }
     
     func batteryPoints(for date: Date) -> [BatteryDataPoint] {
+        guard let deviceId = bleManager.pairedDeviceID else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
         
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: date)
         let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
         
-        fetchRequest.predicate = NSPredicate(format: "time >= %@ AND time < %@", startOfDay as NSDate, endOfDay as NSDate)
+        fetchRequest.predicate = NSPredicate(format: "deviceId == %@ AND time >= %@ AND time < %@", deviceId, startOfDay as NSDate, endOfDay as NSDate)
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest).filter({ $0.deviceId == bleManager.pairedDeviceID })
         } catch {
             log("Failed to fetch battery data points: \(error)", caller: "ChartManager")
             return []
+        }
+    }
+    
+    func deleteAllUserExercises() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserExercise.fetchRequest()
+        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        do {
+            try persistenceController.container.viewContext.execute(batchDeleteRequest)
+            
+            Task {
+                await persistenceController.save()
+            }
+        } catch {
+            log("Failed to delete user exercises: \(error)", caller: "ChartManager")
         }
     }
 }

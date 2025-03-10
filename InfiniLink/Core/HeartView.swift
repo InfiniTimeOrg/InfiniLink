@@ -12,10 +12,8 @@ struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var chartManager = ChartManager.shared
     
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartDataPoints: FetchedResults<HeartDataPoint>
-    
     var heartPointValues: [Double] {
-        return heartDataPoints.compactMap({ $0.value })
+        return chartManager.heartPoints().compactMap({ $0.value })
     }
     
     func heartRate(for val: Double) -> String {
@@ -45,32 +43,30 @@ struct HeartView: View {
     var body: some View {
         GeometryReader { geo in
             List {
-                Group {
-                    Section {
-                        DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: heartDataPoints.last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (heartDataPoints.last?.timestamp?.timeIntervalSinceNow ?? 60) < 60) {
-                            HStack {
-                                DetailHeaderSubItemView(
-                                    title: "Min",
-                                    value: heartRate(for: heartPointValues.min() ?? 0)
-                                )
-                                DetailHeaderSubItemView(
-                                    title: "Avg",
-                                    value: heartRate(for: {
-                                        guard heartPointValues.count > 0 else { return Double(0) }
-                                        
-                                        return Double(heartPointValues.compactMap({ Int($0) }).reduce(0, +) / heartPointValues.count)
-                                    }()))
-                                DetailHeaderSubItemView(
-                                    title: "Max",
-                                    value: heartRate(for: heartPointValues.max() ?? 0)
-                                )
-                            }
+                Section {
+                    DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (chartManager.heartPoints().last?.timestamp?.timeIntervalSinceNow ?? 60) < 60) {
+                        HStack {
+                            DetailHeaderSubItemView(
+                                title: "Min",
+                                value: heartRate(for: heartPointValues.min() ?? 0)
+                            )
+                            DetailHeaderSubItemView(
+                                title: "Avg",
+                                value: heartRate(for: {
+                                    guard heartPointValues.count > 0 else { return Double(0) }
+                                    
+                                    return Double(heartPointValues.compactMap({ Int($0) }).reduce(0, +) / heartPointValues.count)
+                                }()))
+                            DetailHeaderSubItemView(
+                                title: "Max",
+                                value: heartRate(for: heartPointValues.max() ?? 0)
+                            )
                         }
                     }
-                    .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                    HeartChartView()
                 }
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
+                HeartChartView()
             }
         }
         .navigationTitle("Heart Rate")

@@ -65,6 +65,7 @@
     </entity>
     <entity name="UserExercise" representedClassName="UserExercise" syncable="YES" codeGenerationType="class">
         <attribute name="caloriesBurned" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="exerciseId" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
