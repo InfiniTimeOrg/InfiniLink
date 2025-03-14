@@ -42,7 +42,7 @@ class NotificationManager: ObservableObject {
     
     @AppStorage("minHeartRange") var minHeartRange = 40
     @AppStorage("maxHeartRange") var maxHeartRange = 150
-    @AppStorage("heartRangeReminder") var heartRangeReminder = true
+    @AppStorage("heartRangeReminder") var heartRangeReminder = false
     @AppStorage("lastTimeMinHeartRangeNotified") var lastTimeMinHeartRangeNotified: Double = 0
     @AppStorage("lastTimeMaxHeartRangeNotified") var lastTimeMaxHeartRangeNotified: Double = 0
     

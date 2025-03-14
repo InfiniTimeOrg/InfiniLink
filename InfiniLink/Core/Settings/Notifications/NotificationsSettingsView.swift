@@ -15,9 +15,9 @@ struct NotificationsSettingsView: View {
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("standUpReminder") var standUpReminder = true
-    @AppStorage("heartRangeReminder") var heartRangeReminder = true
+    @AppStorage("heartRangeReminder") var heartRangeReminder = false
     @AppStorage("minHeartRange") var minHeartRange = 40
-    @AppStorage("maxHeartRange") var maxHeartRange = 150
+    @AppStorage("maxHeartRange") var maxHeartRange = 200
     @AppStorage("watchNotifications") var watchNotifications = true
     @AppStorage("enableReminders") var enableReminders = true
     @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true

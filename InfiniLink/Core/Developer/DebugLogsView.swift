@@ -14,16 +14,21 @@ struct DebugLogsView: View {
     
     var body: some View {
         TabView(selection: $logSelection) {
-            logs(for: .ble)
-                .tabItem {
-                    Label("BLE", systemImage: "radiowaves.right")
-                }
-                .tag("ble")
             logs(for: .app)
                 .tabItem {
                     Label("App", systemImage: "doc")
                 }
                 .tag("app")
+            logs(for: .ble)
+                .tabItem {
+                    Label("BLE", systemImage: "radiowaves.right")
+                }
+                .tag("ble")
+            logs(for: .dfu)
+                .tabItem {
+                    Label("DFU", systemImage: "arrow.up.doc")
+                }
+                .tag("dfu")
         }
         .navigationTitle("\(logSelection == "ble" ? "BLE" : NSLocalizedString("App", comment: "")) Logs")
     }

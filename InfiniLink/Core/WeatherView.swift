@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct WeatherView: View {
-    @ObservedObject var weatherController = WeatherController.shared
+    @StateObject var weatherController = WeatherController.shared
     
     var body: some View {
         GeometryReader { geo in

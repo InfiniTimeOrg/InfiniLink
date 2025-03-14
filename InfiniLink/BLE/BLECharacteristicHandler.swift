@@ -211,10 +211,10 @@ struct BLECharacteristicHandler {
             SleepController.shared.sleep = SleepData(startDate: timestamp, endDate: timestamp.addingTimeInterval(Double(minutesAsleep * 60)))
         case bleManager.cbuuidList.dfuPacket:
             guard let data = characteristic.value else { break }
-            log("Response from DFU Packet characteristic: \(String(decoding: data, as: UTF8.self))")
+            log("Packet char: \(String(decoding: data, as: UTF8.self))", target: .dfu)
         case bleManager.cbuuidList.dfuControlPoint:
             guard let data = characteristic.value else { break }
-            log("Response from DFU Control Point: \(String(decoding: data, as: UTF8.self))")
+            log("Control point: \(String(decoding: data, as: UTF8.self))", target: .dfu)
         default:
             break
         }

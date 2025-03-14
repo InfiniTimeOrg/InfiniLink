@@ -136,16 +136,16 @@ struct BLEWriteManager {
         }
     }
     
-    func writeNavigationUpdate() {
+    func writeNavigationUpdate(icon: String, instructions: String, distance: String, progress: UInt8) {
         guard bleManager.infiniTime != nil else { return }
         guard bleManager.navigationFlagsCharacteristic != nil && bleManager.navigationNarrativeCharacteristic != nil && bleManager.navigationDistanceCharacteristic != nil && bleManager.navigationProgressCharacteristic != nil && bleManager.infiniTime != nil else { return }
         
-        guard let icon = "fork".data(using: .ascii) else { return }
-        guard let narrative = "At the roundabout take the first exit".data(using: .ascii) else { return }
-        guard let distance = "20ft".data(using: .ascii) else { return }
+        guard let icon = icon.data(using: .ascii) else { return }
+        guard let narrative = instructions.data(using: .ascii) else { return }
+        guard let distance = distance.data(using: .ascii) else { return }
         
         var progress = Data()
-        progress.append(UInt8(23))
+        progress.append(progress)
         
         bleManager.infiniTime.writeValue(narrative, for: bleManager.navigationNarrativeCharacteristic, type: .withResponse)
         bleManager.infiniTime.writeValue(distance, for: bleManager.navigationDistanceCharacteristic, type: .withResponse)

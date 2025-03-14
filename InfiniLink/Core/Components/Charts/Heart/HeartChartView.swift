@@ -19,37 +19,35 @@ struct HeartChartView: View {
     
     @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
     
-    func heartPoints() -> [HeartChartDataPoint] {
-        let now = Date()
+    func heartPoints(currentDay: Bool = false) -> [HeartChartDataPoint] {
         let calendar = Calendar.current
+        let now = Date()
         
         let points = chartManager.heartPoints().map { point in
-            let timestamp = point.timestamp ?? Date() // Should we catch this date?
+            let timestamp = point.timestamp ?? now // Should we catch this date?
             let dataPoint = HeartChartDataPoint(date: timestamp, value: point.value)
             
             return dataPoint
         }
-        return points.filter { point in
-            switch dataSelection {
-            case 1:
-                if calendar.isDate(point.date, equalTo: now, toGranularity: .day) {
-                    return true
-                }
-            case 2:
-                if calendar.isDate(point.date, equalTo: now, toGranularity: .weekOfYear) {
-                    return true
-                }
-            case 3:
-                if calendar.isDate(point.date, equalTo: now, toGranularity: .month) {
-                    return true
-                }
-            default:
-                if calendar.isDate(point.date, equalTo: now, toGranularity: .hour) {
-                    return true
-                }
+        let granularity: Calendar.Component = {
+            if currentDay {
+                return .day
             }
             
-            return false
+            switch dataSelection {
+            case 1:
+                return .day
+            case 2:
+                return .weekOfYear
+            case 3:
+                return .month
+            default:
+                return .hour
+            }
+        }()
+        
+        return points.filter { point in
+            return calendar.isDate(point.date, equalTo: now, toGranularity: granularity)
         }
     }
     var earliestDate: Date {
@@ -120,9 +118,11 @@ struct HeartChartView: View {
                 }
             }
             .listRowBackground(Color.clear)
-            Section {
-                Text("Today your heart rate reached a high of \(max), and dropped to a low of \(min) BPM.")
-//                Text("Is a heart point in an exercise in the last day: \(ExerciseViewModel.shared.isDateDuringExercise(Date()))")
+            if heartPoints(currentDay: true).count >= 3 {
+                Section {
+                    Text("Today your heart rate reached a high of \(max), and dropped to a low of \(min) BPM.")
+                    // Text("Is a heart point in an exercise in the last day: \(ExerciseViewModel.shared.isDateDuringExercise(Date()))")
+                }
             }
         }
     }

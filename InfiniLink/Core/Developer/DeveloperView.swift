@@ -54,7 +54,12 @@ struct DeveloperView: View {
                     bleWriteManager.writeCurrentWeatherData(currentTemperature: Double.random(in: -2...50), minimumTemperature: Double.random(in: -2...50), maximumTemperature: Double.random(in: -2...50), location: "Location", icon: UInt8.random(in: 0...8))
                 }
                 Button("Test Navigation") {
-                    bleWriteManager.writeNavigationUpdate()
+                    bleWriteManager.writeNavigationUpdate(
+                        icon: "turn-right",
+                        instructions: "The destination is on your right",
+                        distance: "112 ft",
+                        progress: 98
+                    )
                 }
             }
             Section {

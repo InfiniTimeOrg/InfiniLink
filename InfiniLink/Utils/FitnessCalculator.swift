@@ -42,6 +42,19 @@ enum Pace: Int {
         case .veryFastRun: return 10.0
         }
     }
+    
+    var kmPerHour: Double {
+        switch self {
+        case .verySlowWalk: return 1.61
+        case .slowWalk: return 3.22
+        case .avgWalk: return 3.22
+        case .briskWalk: return 6.44
+        case .jog: return 8.047
+        case .run: return 9.66
+        case .fastRun: return 12.07
+        case .veryFastRun: return 16.093
+        }
+    }
 }
 
 class FitnessCalculator {
@@ -86,7 +99,7 @@ class FitnessCalculator {
     
     func stepsPerMinute(steps: Int, pace: Pace = .avgWalk) -> Int {
         let distance = calculateDistance(steps: steps, pace: pace)
-        let timeMinutes = (distance / pace.milesPerHour) * 60.0
+        let timeMinutes = (distance / (personalizationController.units == .metric ? pace.kmPerHour : pace.milesPerHour)) * 60.0
         
         guard steps > 0, timeMinutes > 0 else { return 0 }
         
@@ -121,8 +134,8 @@ class FitnessCalculator {
         let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60
         
-        if hours > 0 {
-            return "\(hours) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s") and \(minutes) \(full ? "minute" : "min")\(minutes == 1 ? "" : "s")"
+        if hours > 0 { // TODO: check
+            return "\(hours) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s")" //
         } else if minutes > 0 {
             return "\(minutes) \(full ? "minute" : "min")\(minutes == 1 ? "" : "s")"
         } else {

@@ -10,6 +10,7 @@ import Foundation
 enum DebugLogTarget: String {
     case ble
     case app
+    case dfu
 }
 
 enum DebugLogType: String {

@@ -66,11 +66,13 @@ class DownloadManager: NSObject, ObservableObject {
     private var isDownloadingResources = false
     private var hasDownloadedResources = false
     
-    var githubPAT: String {
+    var githubPAT: String? {
         if let key = ProcessInfo.processInfo.environment["INFINITIME_PAT"] {
             return key
+        } else {
+            log("Cannot find PAT", type: .error, caller: "DownloadManager - PAT")
         }
-        return ""
+        return nil
     }
     
     struct Asset: Codable {
@@ -221,6 +223,8 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getInfiniLinkReleases() {
+        guard let githubPAT else { return }
+        
         self.loadingAppReleases = true
         self.releases = []
         
@@ -259,6 +263,8 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getInfiniTimeReleases() {
+        guard let githubPAT else { return }
+        
         self.loadingReleases = true
         self.releases = []
         
@@ -272,6 +278,7 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
+                    print(String(data: data, encoding: .utf8))
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
                     DispatchQueue.main.async {
@@ -291,6 +298,8 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getWorkflowRuns() {
+        guard let githubPAT else { return }
+        
         self.loadingArtifacts = true
         self.buildArtifacts = []
         
@@ -304,6 +313,7 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
+                    print(String(data: data, encoding: .utf8))
                     let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
                     
                     DispatchQueue.main.async {
@@ -330,6 +340,7 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getBuildArtifacts(for run: WorkflowRun, completion: @escaping([Artifact]) -> Void) {
+        guard let githubPAT else { return }
         guard let url = URL(string: run.artifacts_url) else {
             return
         }
@@ -373,6 +384,8 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func startDownload(url: URL) {
+        guard let githubPAT else { return }
+        
         self.downloading = true
         
         var request = URLRequest(url: url)

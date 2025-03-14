@@ -59,18 +59,9 @@ struct StepChartView: View {
     }
     
     var streak: Int {
-        var streak = 0
-        
-        // Add limit to week or month to avoid iterating through thousands of points?
-        for point in chartManager.stepPoints().reversed().prefix(7) {
-            if point.steps >= deviceManager.settings.stepsGoal {
-                streak += 1
-            } else {
-                break
-            }
-        }
-        
-        return streak
+        return chartManager.stepPoints().reversed().prefix(7).filter({
+            return $0.steps >= deviceManager.settings.stepsGoal
+        }).count
     }
     var earliestDate: Date {
         stepChartPoints().compactMap({ $0.date }).min() ?? Date()

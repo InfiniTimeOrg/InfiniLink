@@ -182,10 +182,12 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
                         }
-                        NavigationLink {
-                            DirectionsView()
-                        } label: {
-                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
+                        if #available(iOS 17, *) {
+                            NavigationLink {
+                                DirectionsView()
+                            } label: {
+                                ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
+                            }
                         }
                         NavigationLink {
                             WeatherView()

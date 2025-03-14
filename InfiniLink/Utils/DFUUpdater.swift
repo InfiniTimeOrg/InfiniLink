@@ -133,6 +133,6 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	}
 	
 	func logWith(_ level: LogLevel, message: String) {
-        log("DFU log: \(message)", type: .info, caller: "DFUUpdater")
+        log("DFU log: \(message)", type: .info, caller: "DFUUpdater", target: .dfu)
 	}
 }

@@ -12,6 +12,7 @@ import MapKit
 class MapSearch: NSObject, ObservableObject {
     @Published var locationResults : [MKLocalSearchCompletion] = []
     @Published var searchTerm = ""
+    @Published var isLoading = false
     
     private var cancellables : Set<AnyCancellable> = []
     
@@ -40,6 +41,13 @@ class MapSearch: NSObject, ObservableObject {
     
     func searchTermToResults(searchTerm: String) -> Future<[MKLocalSearchCompletion], Error> {
         Future { promise in
+            guard !searchTerm.isEmpty else {
+                self.isLoading = false
+                promise(.success([]))
+                return
+            }
+            
+            self.isLoading = true
             self.searchCompleter.queryFragment = searchTerm
             self.currentPromise = promise
         }
@@ -48,10 +56,12 @@ class MapSearch: NSObject, ObservableObject {
 
 extension MapSearch : MKLocalSearchCompleterDelegate {
     func completerDidUpdateResults(_ completer: MKLocalSearchCompleter) {
+        isLoading = false
         currentPromise?(.success(completer.results))
     }
     
     func completer(_ completer: MKLocalSearchCompleter, didFailWithError error: Error) {
-        //currentPromise?(.failure(error))
+        isLoading = false
+        currentPromise?(.failure(error))
     }
 }
