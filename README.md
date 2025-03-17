@@ -41,7 +41,7 @@
 ### Currently non-functional features:
 - System-wide music controls—requires implementation of Apple Media Service.
 
-## Roadmap:
+### Planned features:
 - InfiniTime navigation service using MapKit
 - Battery, heart, and step widgets
 
