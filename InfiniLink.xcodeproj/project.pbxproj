@@ -23,7 +23,6 @@
 		E04396172D2A410100A13B90 /* DFUUpdaterCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
-		E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E059999B2CB2E56300D64E0B /* AlarmView.swift */; };
 		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
 		E05999AD2CB2ED7100D64E0B /* open_sans_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */; };
 		E05999AE2CB2ED7100D64E0B /* JetBrainsMono-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A42CB2ED7100D64E0B /* JetBrainsMono-Light.ttf */; };
@@ -152,7 +151,6 @@
 		E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUUpdaterCustom.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
-		E059999B2CB2E56300D64E0B /* AlarmView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlarmView.swift; sourceTree = "<group>"; };
 		E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
 		E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
 		E05999A22CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Bold.ttf"; sourceTree = "<group>"; };
@@ -367,14 +365,6 @@
 			path = Developer;
 			sourceTree = "<group>";
 		};
-		E059999A2CB2E55500D64E0B /* Apps */ = {
-			isa = PBXGroup;
-			children = (
-				E059999B2CB2E56300D64E0B /* AlarmView.swift */,
-			);
-			path = Apps;
-			sourceTree = "<group>";
-		};
 		E059999F2CB2ED5D00D64E0B /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
@@ -581,7 +571,6 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C09F2CB245F70042A12D /* Components */,
-				E059999A2CB2E55500D64E0B /* Apps */,
 				E0A7C0742CB0ECD10042A12D /* Settings */,
 				E0B85D172CB6241000D85122 /* Exercise */,
 				E0CD94CD2CC4A20F00DA53A2 /* Connect */,
@@ -842,7 +831,6 @@
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
 				E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */,
-				E059999C2CB2E56300D64E0B /* AlarmView.swift in Sources */,
 				E09990982D77685A00B0FCAF /* StepMonthlyChartView.swift in Sources */,
 				E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */,
 				E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */,

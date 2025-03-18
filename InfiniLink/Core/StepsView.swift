@@ -36,7 +36,7 @@ struct StepsView: View {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                             let units = personalizationController.units == .imperial ? "mi" : "km"
                             let distance = exerciseCalculator.calculateDistance(steps: steps())
-                            let stepsPerUnit = exerciseCalculator.stepsPerUnit()
+                            let stepsPerMinute = exerciseCalculator.stepsPerMinute(steps: steps())
                             
                             DetailHeaderSubItemView(title: "Distance",
                                                     value: String(format: "%.2f", distance),
@@ -49,7 +49,7 @@ struct StepsView: View {
                                                     value: exerciseCalculator.secondsFormatted(seconds: exerciseCalculator.secondsForDistance(distance: distance)),
                                                     icon: ("stopwatch", Color.primary))
                             DetailHeaderSubItemView(title: "SPM",
-                                                    value: String(stepsPerUnit),
+                                                    value: String(stepsPerMinute),
                                                     icon: ("shoeprints.fill", Color.blue)) {
                                 showInfoAlert = true
                             }

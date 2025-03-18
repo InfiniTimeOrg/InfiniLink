@@ -199,15 +199,6 @@ struct DeviceView: View {
                             ListRowView(title: "Music", icon: "music.note", iconColor: .red)
                         }
                     }
-                    Section {
-                        /*
-                         NavigationLink {
-                         AlarmView()
-                         } label: {
-                         ListRowView(title: "Alarms", icon: "alarm.fill")
-                         }
-                         */
-                    }
                     if enableDeveloperMode {
                         Section {
                             NavigationLink {
