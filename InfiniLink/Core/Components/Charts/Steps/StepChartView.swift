@@ -37,7 +37,7 @@ struct StepChartView: View {
         
         var filledData: [StepChartDataPoint] = []
         
-        let rawPoints = chartManager.stepPoints().compactMap { record -> StepChartDataPoint? in
+        let rawPoints = chartManager.stepPoints(predicate: chartManager.weekPredicate).compactMap { record -> StepChartDataPoint? in
             guard let timestamp = record.timestamp else { return nil }
             // Return each step point as a chart point
             return StepChartDataPoint(date: calendar.startOfDay(for: timestamp), steps: Int(record.steps))
@@ -59,9 +59,8 @@ struct StepChartView: View {
     }
     
     var streak: Int {
-        return chartManager.stepPoints().reversed().prefix(7).filter({
-            return $0.steps >= deviceManager.settings.stepsGoal
-        }).count
+        let points = chartManager.stepPoints(predicate: chartManager.weekPredicate)
+        return points.filter { $0.steps >= deviceManager.settings.stepsGoal }.count
     }
     var earliestDate: Date {
         stepChartPoints().compactMap({ $0.date }).min() ?? Date()

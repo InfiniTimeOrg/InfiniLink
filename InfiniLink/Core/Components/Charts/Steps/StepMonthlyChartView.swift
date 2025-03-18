@@ -35,7 +35,7 @@ struct StepCalendarView: View {
                             .frame(maxWidth: .infinity)
                     }
                 }
-                // FIXME: poor performance
+                let stepPoints = chartManager.stepPoints(predicate: chartManager.allTimePredicate)
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: weekdays.count), spacing: 14) {
                     ForEach(fetchDates(), id: \.id) { value in
                         ZStack {
@@ -47,7 +47,7 @@ struct StepCalendarView: View {
                                 .font(.system(size: 16).weight(.medium))
                                 .opacity(value.day == -1 ? 0 : 1)
                             if deviceManager.settings.stepsGoal > 0 && value.day != -1 {
-                                let progress = min(Double(chartManager.stepPoints().first(where: { Calendar.current.isDate(value.date, equalTo: $0.timestamp!, toGranularity: .day)})?.steps ?? 0) / Double(deviceManager.settings.stepsGoal), 1)
+                                let progress = min(Double(stepPoints.first(where: { Calendar.current.isDate(value.date, equalTo: $0.timestamp!, toGranularity: .day)})?.steps ?? 0) / Double(deviceManager.settings.stepsGoal), 1)
                                 PieSlice(progress: progress)
                                     .fill(Color.blue.opacity(0.8))
                                 label

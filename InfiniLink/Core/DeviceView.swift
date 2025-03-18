@@ -241,7 +241,6 @@ struct DeviceView: View {
                 notificationManager.setWaterRemindersPerDay()
                 remindersManager.requestAccess()
                 remindersManager.fetchAllItems()
-                downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {

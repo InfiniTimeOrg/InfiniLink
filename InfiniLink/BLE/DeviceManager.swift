@@ -154,11 +154,8 @@ class DeviceManager: ObservableObject {
         infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
         device.watchFaceInfineat = infineatWatchFace
         
-        Task {
-            await persistenceController.save()
-            
-            getSettings()
-        }
+        persistenceController.save()
+        getSettings()
     }
     
     func updateName(name: String, for device: Device) {
@@ -167,9 +164,7 @@ class DeviceManager: ObservableObject {
         
         device.name = name
         
-        Task {
-            await persistenceController.save()
-        }
+        persistenceController.save()
     }
     
     func getName(for uuid: String) -> String {

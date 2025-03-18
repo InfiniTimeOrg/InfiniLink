@@ -11,6 +11,9 @@ import CoreData
 @main
 struct InfiniLink: App {
     let persistenceController = PersistenceController.shared
+    let downloadManager = DownloadManager.shared
+    let notificationManager = NotificationManager.shared
+    let deviceManager = DeviceManager.shared
     
     @AppStorage("colorScheme") var colorScheme = "system"
     
@@ -20,6 +23,8 @@ struct InfiniLink: App {
         NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: nil, queue: .main) { _ in
             RemindersManager.shared.fetchAllItems()
         }
+        
+        downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
     }
     
     var body: some Scene {

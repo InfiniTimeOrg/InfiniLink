@@ -23,10 +23,10 @@ class StepCountManager: ObservableObject {
     
     // The following two functions need to use the viewContext to save because the objects they're updating were fetched on that context
     func setStepCount(steps: Int32, isArbitrary: Bool, for date: Date) {
-        let existingCounts = chartManager.stepPoints()
+        let existing = chartManager.stepsToday()
         
-        if let existingCount = existingCounts.first(where: { Calendar.current.isDate($0.timestamp!, inSameDayAs: date) }) {
-            updateStepCount(existingCount, with: steps, isArbitrary: isArbitrary, for: date)
+        if let existing {
+            updateStepCount(existing, with: steps, isArbitrary: isArbitrary, for: date)
         } else {
             chartManager.addStepDataPoint(steps: steps, time: date)
         }
@@ -42,24 +42,20 @@ class StepCountManager: ObservableObject {
         
         stepCount.timestamp = date
         
-        Task {
-            await persistenceManager.save()
-        }
+        persistenceManager.save()
     }
     
     func clearCurrentDaySteps() {
-        let today = Date()
-        let existingCounts = chartManager.stepPoints()
+        let now = Date()
+        let existing = chartManager.stepsToday()
         
-        if let currentDayCount = existingCounts.first(where: { Calendar.current.isDate($0.timestamp!, inSameDayAs: today) }) {
-            currentDayCount.steps = 0
-            currentDayCount.timestamp = today
+        if let existing {
+            existing.steps = 0
+            existing.timestamp = now
         } else {
-            chartManager.addStepDataPoint(steps: 0, time: today)
+            chartManager.addStepDataPoint(steps: 0, time: now)
         }
         
-        Task {
-            await persistenceManager.save()
-        }
+        persistenceManager.save()
     }
 }

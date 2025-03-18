@@ -20,10 +20,9 @@ struct StepsView: View {
     let exerciseCalculator = FitnessCalculator()
     
     func steps() -> Int {
-        for stepCount in chartManager.stepPoints() {
-            if Calendar.current.isDate(stepCount.timestamp!, inSameDayAs: Date()) {
-                return Int(stepCount.steps)
-            }
+        let stepCount = chartManager.stepsToday()
+        if let stepCount = stepCount {
+            return Int(stepCount.steps)
         }
         return 0
     }

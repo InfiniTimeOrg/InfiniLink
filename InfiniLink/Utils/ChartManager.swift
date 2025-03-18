@@ -13,6 +13,27 @@ class ChartManager: ObservableObject {
     let persistenceController = PersistenceController.shared
     let bleManager = BLEManager.shared
     
+    private let predicateString = "deviceId == %@ AND timestamp >= %@"
+    private let calendar = Calendar.current
+    
+    var weekPredicate: NSPredicate {
+        let deviceId = bleManager.pairedDeviceID ?? ""
+        // Get the days of the current week, not just -7 days from now
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
+        
+        return NSPredicate(format: predicateString, deviceId, startOfWeek as NSDate)
+    }
+    var dayPredicate: NSPredicate {
+        let deviceId = bleManager.pairedDeviceID ?? ""
+        let startOfDay = calendar.startOfDay(for: Date())
+        
+        return NSPredicate(format: predicateString, deviceId, startOfDay as NSDate)
+    }
+    var allTimePredicate: NSPredicate {
+        let deviceId = bleManager.pairedDeviceID ?? ""
+        return NSPredicate(format: "deviceId == %@", deviceId)
+    }
+    
     @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
     @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
     
@@ -80,11 +101,13 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func stepPoints() -> [StepCounts] {
-        guard let deviceId = bleManager.pairedDeviceID else { return [] }
-        
+    func stepsToday() -> StepCounts? {
+        return stepPoints().first
+    }
+    
+    func stepPoints(predicate: NSPredicate? = nil) -> [StepCounts] {
         let fetchRequest: NSFetchRequest<StepCounts> = StepCounts.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
+        fetchRequest.predicate = predicate ?? dayPredicate
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
