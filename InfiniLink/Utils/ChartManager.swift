@@ -19,35 +19,50 @@ class ChartManager: ObservableObject {
     static let shared = ChartManager()
     
     func addStepDataPoint(steps: Int32, time: Date) {
-        let heartRateDataPoint = StepCounts(context: persistenceController.container.viewContext)
-        heartRateDataPoint.steps = steps
-        heartRateDataPoint.timestamp = time
-        heartRateDataPoint.deviceId = bleManager.pairedDeviceID
-        
-        Task {
-            await persistenceController.save()
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let heartRateDataPoint = StepCounts(context: context)
+            heartRateDataPoint.steps = steps
+            heartRateDataPoint.timestamp = time
+            heartRateDataPoint.deviceId = self.bleManager.pairedDeviceID
+            
+            do {
+                try context.save()
+            } catch {
+                log("Error saving step point: \(error.localizedDescription)")
+            }
         }
     }
     
     func addHeartRateDataPoint(heartRate: Double, time: Date) {
-        let heartRateDataPoint = HeartDataPoint(context: persistenceController.container.viewContext)
-        heartRateDataPoint.value = heartRate
-        heartRateDataPoint.timestamp = time
-        heartRateDataPoint.deviceId = bleManager.pairedDeviceID
-        
-        Task {
-            await persistenceController.save()
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let heartRateDataPoint = HeartDataPoint(context: context)
+            heartRateDataPoint.value = heartRate
+            heartRateDataPoint.timestamp = time
+            heartRateDataPoint.deviceId = self.bleManager.pairedDeviceID
+            
+            do {
+                try context.save()
+            } catch {
+                log("Error saving heart point: \(error.localizedDescription)")
+            }
         }
     }
     
     func addBatteryDataPoint(batteryLevel: Double, time: Date) {
-        let batteryDataPoint = BatteryDataPoint(context: persistenceController.container.viewContext)
-        batteryDataPoint.value = batteryLevel
-        batteryDataPoint.timestamp = time
-        batteryDataPoint.deviceId = bleManager.pairedDeviceID
-        
-        Task {
-            await persistenceController.save()
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let batteryDataPoint = BatteryDataPoint(context: context)
+            batteryDataPoint.value = batteryLevel
+            batteryDataPoint.timestamp = time
+            batteryDataPoint.deviceId = self.bleManager.pairedDeviceID
+            
+            do {
+                try context.save()
+            } catch {
+                log("Error saving battery point: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -115,17 +130,17 @@ class ChartManager: ObservableObject {
     }
     
     func deleteAllUserExercises() {
-        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserExercise.fetchRequest()
-        let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-        
-        do {
-            try persistenceController.container.viewContext.execute(batchDeleteRequest)
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserExercise.fetchRequest()
+            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
-            Task {
-                await persistenceController.save()
+            do {
+                try context.execute(batchDeleteRequest)
+                try context.save()
+            } catch {
+                log("Failed to delete user exercises: \(error)", caller: "ChartManager")
             }
-        } catch {
-            log("Failed to delete user exercises: \(error)", caller: "ChartManager")
         }
     }
 }

@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DeviceView: View {
     @Environment(\.openURL) var openURL
+    @Environment(\.scenePhase) private var scenePhase
     
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
@@ -182,12 +183,10 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
                         }
-                        if #available(iOS 17, *) {
-                            NavigationLink {
-                                DirectionsView()
-                            } label: {
-                                ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
-                            }
+                        NavigationLink {
+                            DirectionsView()
+                        } label: {
+                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
                         }
                         NavigationLink {
                             WeatherView()
@@ -225,14 +224,22 @@ struct DeviceView: View {
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { values in
                 guard let value = values.first else { return }
                 
-                self.showNavigationTitle = (value <= -135)
+                withAnimation(.easeInOut(duration: 0.4)) {
+                    self.showNavigationTitle = (value <= -135)
+                }
             }
             .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
-                if blefsTransfer != nil {
+                if blefsTransfer != nil && scenePhase == .active {
                     BLEFSHandler.shared.readSettings { settings in
+                        // MARK: - Candidate
+                        // This is getting called while in the background, and fetching/updating objects from the UI/main thread, and could be the source of crashes
+                        // We need to add a check to make sure we're in the foreground when we call this method
                         deviceManager.updateSettings(settings: settings)
                     }
                 }
+            }
+            .onChange(of: scenePhase) { phase in
+                log("Phase changed to \(phase)", type: .info, caller: "DeviceView")
             }
             .onAppear {
                 if let pairedDeviceID = bleManager.pairedDeviceID {

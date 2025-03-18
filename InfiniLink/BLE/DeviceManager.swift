@@ -92,8 +92,7 @@ class DeviceManager: ObservableObject {
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", id)
         
         do {
-            let context = persistenceController.container.viewContext
-            let existingDevices = try context.fetch(fetchRequest)
+            let existingDevices = try persistenceController.container.viewContext.fetch(fetchRequest)
             
             // There's already a paired watch
             if let existingDevice = existingDevices.first {
@@ -101,20 +100,23 @@ class DeviceManager: ObservableObject {
             }
             
             // There's not already a paired watch, create a new object to save
+            let context = persistenceController.container.newBackgroundContext()
             let newDevice = Device(context: context)
-            newDevice.uuid = id
-            newDevice.bleUUID = id
-            newDevice.blefsVersion = ""
-            newDevice.firmware = ""
-            newDevice.softwareRevision = ""
-            newDevice.hardwareRevision = ""
-            newDevice.manufacturer = ""
-            newDevice.modelNumber = ""
-            newDevice.serial = ""
-            
-            Task {
-                try await context.perform {
+            context.perform {
+                newDevice.uuid = id
+                newDevice.bleUUID = id
+                newDevice.blefsVersion = ""
+                newDevice.firmware = ""
+                newDevice.softwareRevision = ""
+                newDevice.hardwareRevision = ""
+                newDevice.manufacturer = ""
+                newDevice.modelNumber = ""
+                newDevice.serial = ""
+                
+                do {
                     try context.save()
+                } catch {
+                    log("Error saving new device: \(error.localizedDescription)", caller: "DeviceManager - fetchDevice")
                 }
             }
             
@@ -188,17 +190,13 @@ class DeviceManager: ObservableObject {
     }
     
     func removeDevice(_ device: Device) {
-        let context = persistenceController.container.viewContext
+        let context = persistenceController.container.newBackgroundContext()
         
-        Task {
-            await context.perform {
-                do {
-                    context.delete(device)
-                    try context.save()
-                } catch {
-                    log(error.localizedDescription, caller: "DeviceManager - removeDevice")
-                }
-            }
+        do {
+            context.delete(device)
+            try context.save()
+        } catch {
+            log("Error removing device: \(error.localizedDescription)", caller: "DeviceManager")
         }
     }
     
