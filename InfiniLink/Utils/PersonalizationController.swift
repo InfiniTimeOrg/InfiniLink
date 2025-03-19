@@ -31,7 +31,7 @@ class PersonalizationController: ObservableObject {
     }
     
     var calculatedWeight: Double {
-        guard let weight = self.weight, weight > 0 else { return gender == .male ? 68.039 : 54.43 } // TODO: update these averages if needed
+        guard let weight = self.weight, weight > 0 else { return gender == .male ? 68.039 : 54.43 }
         
         if units == .imperial {
             // Convert from kg to lbs

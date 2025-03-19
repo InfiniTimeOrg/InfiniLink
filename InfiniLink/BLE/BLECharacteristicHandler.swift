@@ -162,6 +162,7 @@ struct BLECharacteristicHandler {
             if stepCount != 0 {
                 healthKitManager.readCurrentSteps { value, error in
                     if let error = error {
+                        // If this errors, it's most likely "protected health data is inaccessible" which occurs when the device is locked (iOS will not decrypt health data without being unlocked
                         log("Error reading current steps: \(error.localizedDescription)", caller: "HealthKitManager")
                         return
                     }

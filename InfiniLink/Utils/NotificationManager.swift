@@ -164,7 +164,7 @@ extension NotificationManager {
     func checkAndNotifyForWaterReminders() {
         let currentTime = Date()
         
-        if let nextReminderCheckDate = nextReminderCheckDate, currentTime >= nextReminderCheckDate {
+        if let nextReminderCheckDate, currentTime >= nextReminderCheckDate {
             if waterReminder {
                 bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Water Reminder", comment: ""), subtitle: NSLocalizedString("It's time to drink water", comment: "")))
             }

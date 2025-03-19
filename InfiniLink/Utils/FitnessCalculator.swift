@@ -135,8 +135,8 @@ class FitnessCalculator {
         let hours = seconds / 3600
         let minutes = (seconds % 3600) / 60
         
-        if hours > 0 { // TODO: check
-            return "\(hours) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s")" //
+        if hours > 0 {
+            return "\(String(format: "%.1f", hours)) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s")"
         } else if minutes > 0 {
             return "\(minutes) \(full ? "minute" : "min")\(minutes == 1 ? "" : "s")"
         } else {
