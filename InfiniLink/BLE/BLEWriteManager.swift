@@ -154,7 +154,6 @@ struct BLEWriteManager {
     }
 }
 
-// MARK: Helper functions
 extension BLEWriteManager {
     func timeSince1970() -> [UInt8] {
         let timeInterval : UInt64 = UInt64(Date().timeIntervalSince1970)

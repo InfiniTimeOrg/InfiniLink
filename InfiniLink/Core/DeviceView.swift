@@ -222,7 +222,7 @@ struct DeviceView: View {
             .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
                 if blefsTransfer != nil && scenePhase == .active {
                     BLEFSHandler.shared.readSettings { settings in
-                        // MARK: - Candidate
+                        // MARK: - Crash
                         // This is getting called while in the background, and fetching/updating objects from the UI/main thread, and could be the source of crashes
                         // We need to add a check to make sure we're in the foreground when we call this method
                         deviceManager.updateSettings(settings: settings)

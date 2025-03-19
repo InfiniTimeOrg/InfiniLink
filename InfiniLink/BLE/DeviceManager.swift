@@ -130,31 +130,40 @@ class DeviceManager: ObservableObject {
     // Get settings from settings file from watch and save it to keep device object up-to-date
     func updateSettings(settings: Settings) {
         guard let device = fetchDevice() else { return }
+        let context = persistenceController.container.viewContext
         
-        device.brightLevel = Int16(settings.brightLevel.rawValue)
-        device.chimesOption = Int16(settings.chimesOption.rawValue)
-        device.clockType = Int16(settings.clockType.rawValue)
-        device.notificationStatus = Int16(settings.notificationStatus.rawValue)
-        device.shakeWakeThreshold = Int16(settings.watchFace)
-        device.watchface = Int16(settings.watchFace)
-        device.weatherFormat = Int16(settings.weatherFormat.rawValue)
-        device.stepsGoal = Int32(settings.stepsGoal)
-        device.screenTimeout = Int32(settings.screenTimeOut)
-        
-        let pineTimeStyle = PineTimeStyleWatchface(context: persistenceController.container.viewContext)
-        pineTimeStyle.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
-        pineTimeStyle.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
-        pineTimeStyle.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
-        pineTimeStyle.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
-        pineTimeStyle.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
-        device.pineTimeStyle = pineTimeStyle
-        
-        let infineatWatchFace = InfineatWatchface(context: persistenceController.container.viewContext)
-        infineatWatchFace.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
-        infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
-        device.watchFaceInfineat = infineatWatchFace
-        
-        persistenceController.save()
+        // MARK: - Crash
+        // Crashes happening when creating watch face objects from the viewContext
+        context.perform {
+            device.brightLevel = Int16(settings.brightLevel.rawValue)
+            device.chimesOption = Int16(settings.chimesOption.rawValue)
+            device.clockType = Int16(settings.clockType.rawValue)
+            device.notificationStatus = Int16(settings.notificationStatus.rawValue)
+            device.shakeWakeThreshold = Int16(settings.watchFace)
+            device.watchface = Int16(settings.watchFace)
+            device.weatherFormat = Int16(settings.weatherFormat.rawValue)
+            device.stepsGoal = Int32(settings.stepsGoal)
+            device.screenTimeout = Int32(settings.screenTimeOut)
+            
+            let pineTimeStyle = PineTimeStyleWatchface(context: context)
+            pineTimeStyle.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
+            pineTimeStyle.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
+            pineTimeStyle.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
+            pineTimeStyle.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
+            pineTimeStyle.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
+            device.pineTimeStyle = pineTimeStyle
+            
+            let infineatWatchFace = InfineatWatchface(context: context)
+            infineatWatchFace.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
+            infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
+            device.watchFaceInfineat = infineatWatchFace
+            
+            do {
+                try context.save()
+            } catch {
+                log("Error saving settings: \(error.localizedDescription)", caller: "DeviceManager - updateSettings")
+            }
+        }
         getSettings()
     }
     
@@ -185,13 +194,19 @@ class DeviceManager: ObservableObject {
     }
     
     func removeDevice(_ device: Device) {
+        let objectID = device.objectID
         let context = persistenceController.container.newBackgroundContext()
         
-        do {
-            context.delete(device)
-            try context.save()
-        } catch {
-            log("Error removing device: \(error.localizedDescription)", caller: "DeviceManager")
+        context.perform {
+            do {
+                if let deviceToDelete = context.object(with: objectID) as? Device {
+                    context.delete(deviceToDelete)
+                    try context.save()
+                    log("Successfully removed device", caller: "DeviceManager")
+                }
+            } catch {
+                log("Error removing device: \(error.localizedDescription)", caller: "DeviceManager")
+            }
         }
     }
     
