@@ -176,23 +176,6 @@ class DeviceManager: ObservableObject {
         persistenceController.save()
     }
     
-    func getName(for uuid: String) -> String {
-        let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "uuid == %@", uuid)
-        
-        do {
-            let existingDevices = try persistenceController.container.viewContext.fetch(fetchRequest)
-            
-            if let existingDevice = existingDevices.first {
-                return existingDevice.name ?? "InfiniTime"
-            }
-            
-            return "InfiniTime"
-        } catch {
-            return "InfiniTime"
-        }
-    }
-    
     func removeDevice(_ device: Device) {
         let objectID = device.objectID
         let context = persistenceController.container.newBackgroundContext()

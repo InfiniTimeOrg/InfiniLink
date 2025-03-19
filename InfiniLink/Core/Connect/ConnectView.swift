@@ -76,7 +76,7 @@ struct ConnectView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(height: 150)
-                                    Text(deviceManager.getName(for: infiniTime.identifier.uuidString))
+                                    Text(deviceManager.name)
                                         .font(.title.weight(.bold))
                                 }
                                 Spacer()
@@ -132,7 +132,7 @@ struct ConnectView: View {
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(height: 70)
-                                                    Text(deviceManager.getName(for: device.identifier.uuidString))
+                                                    Text(deviceManager.name)
                                                         .font(.system(size: 19).weight(.semibold))
                                                     // Can't use .primary because button the primary is blue
                                                         .foregroundStyle(colorScheme == .dark ? .white : .black)

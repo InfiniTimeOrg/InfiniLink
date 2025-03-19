@@ -27,7 +27,7 @@ struct CurrentUpdateView: View {
                     Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...\(dfuUpdater.percentComplete == 0 ? "" : String(format: "%.0f", dfuUpdater.percentComplete) + "%")")
                         .font(.system(size: 22))
                         .foregroundStyle(.secondary)
-                    Text(deviceManager.getName(for: bleManager.pairedDeviceID ?? ""))
+                    Text(deviceManager.name)
                         .font(.title.weight(.bold))
                 }
                 Button {
