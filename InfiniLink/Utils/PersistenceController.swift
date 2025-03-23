@@ -24,15 +24,19 @@ struct PersistenceController {
         }
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
-    
+}
+
+extension PersistenceController {
     func save() {
-        Task {
+        guard container.viewContext.hasChanges else { return }
+        
+        container.viewContext.perform {
             do {
-                try await container.viewContext.perform {
-                    try container.viewContext.save()
-                }
+                try self.container.viewContext.save()
             } catch {
-                log("Unresolved error saving context: \(error.localizedDescription)", caller: "PersistenceController")
+                // Handle the error appropriately. However, it's useful to use
+                // `fatalError(_:file:line:)` during development.
+                log("Failed to save view context: \(error.localizedDescription)", caller: "PersistenceController")
             }
         }
     }

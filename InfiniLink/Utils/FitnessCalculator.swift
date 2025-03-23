@@ -126,7 +126,7 @@ class FitnessCalculator {
     }
     
     func secondsForDistance(distance: Double, pace: Pace = .avgWalk) -> Int {
-        let speed: Double = personalizationController.units == .imperial ? pace.milesPerHour : (pace.milesPerHour * 1.60934)
+        let speed: Double = personalizationController.units == .imperial ? pace.milesPerHour : (pace.kmPerHour * 1.60934)
         
         return Int(ceil((distance / speed) * 60 * 60))
     }

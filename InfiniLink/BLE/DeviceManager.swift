@@ -178,7 +178,7 @@ class DeviceManager: ObservableObject {
     
     func removeDevice(_ device: Device) {
         let objectID = device.objectID
-        let context = persistenceController.container.newBackgroundContext()
+        let context = persistenceController.container.viewContext
         
         context.perform {
             do {

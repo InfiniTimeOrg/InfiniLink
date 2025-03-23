@@ -173,7 +173,7 @@ struct StepChartView: View {
                     let stepsRemaining = stepCountManager.stepGoal - steps
                     let distanceRemaining = fitnessCalculator.calculateDistance(steps: stepsRemaining)
                     let caloriesRemaining = fitnessCalculator.calculateCaloriesBurned(steps: stepsRemaining)
-                    let timeRemaining = fitnessCalculator.secondsFormatted(seconds: Int(fitnessCalculator.secondsForDistance(distance: distanceRemaining)), full: true)
+                    let timeRemaining = fitnessCalculator.secondsFormatted(seconds: fitnessCalculator.secondsForDistance(distance: distanceRemaining), full: true)
                     
                     if stepsRemaining <= 1000 {
                         Text("You're almost there! A quick \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "mile" : "km") walk should get you to your goal. It should only take you about \(timeRemaining).")
