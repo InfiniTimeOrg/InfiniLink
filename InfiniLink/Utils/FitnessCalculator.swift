@@ -126,17 +126,18 @@ class FitnessCalculator {
     }
     
     func secondsForDistance(distance: Double, pace: Pace = .avgWalk) -> Int {
-        let speed: Double = personalizationController.units == .imperial ? pace.milesPerHour : (pace.kmPerHour * 1.60934)
+        // Convert kph to mph if needed
+        let speed: Double = personalizationController.units == .imperial ? pace.milesPerHour : (pace.kmPerHour / 1.609)
         
         return Int(ceil((distance / speed) * 60 * 60))
     }
     
     func secondsFormatted(seconds: Int, full: Bool = false) -> String {
-        let hours = seconds / 3600
+        let hours = Double(seconds) / 3600.0
         let minutes = (seconds % 3600) / 60
         
-        if hours > 0 {
-            return "\(String(format: "%.1f", hours)) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s")"
+        if hours >= 1 {
+            return "\(String(format: "%.2f", hours)) \(full ? "hour" : "hr")\(hours == 1 ? "" : "s")"
         } else if minutes > 0 {
             return "\(minutes) \(full ? "minute" : "min")\(minutes == 1 ? "" : "s")"
         } else {
