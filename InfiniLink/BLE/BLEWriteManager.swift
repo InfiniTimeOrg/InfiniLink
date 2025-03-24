@@ -22,7 +22,7 @@ struct BLEWriteManager {
             return
         }
         bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
-        log("Wrote to music app", type: .info, caller: "BLEWriteManager")
+        log("Wrote to music app", type: .info, caller: "BLEWriteManager", target: .ble)
     }
     
     func writeHexToMusicApp(message: [UInt8], characteristic: CBCharacteristic) -> Void {
@@ -30,7 +30,7 @@ struct BLEWriteManager {
         let writeData = Data(bytes: message, count: message.capacity)
         
         bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
-        log("Wrote to music app", type: .info, caller: "BLEWriteManager")
+        log("Wrote to music app", type: .info, caller: "BLEWriteManager", target: .ble)
     }
     
     func setTime(characteristic: CBCharacteristic) {
@@ -38,10 +38,10 @@ struct BLEWriteManager {
         
         do {
             try bleManager.infiniTime.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
-            log("Set watch time", type: .info, caller: "BLEWriteManager")
+            log("Set watch time", type: .info, caller: "BLEWriteManager", target: .ble)
         } catch {
             bleManager.setTimeError = true
-            log("Error setting watch time", caller: "BLEWriteManager")
+            log("Error setting watch time", caller: "BLEWriteManager", target: .ble)
         }
     }
     
@@ -56,7 +56,7 @@ struct BLEWriteManager {
         
         if !notification.isEmpty && watchNotifications {
             bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
-            log("Notification sent with title: \(notif.title)", caller: "BLEWriteManager")
+            log("Notification sent with title: \(notif.title)", caller: "BLEWriteManager", target: .ble)
         }
     }
     
@@ -70,7 +70,7 @@ struct BLEWriteManager {
         
         if notification.count > 0 && watchNotifications {
             bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
-            log("Sent lost notification", type: .info, caller: "BLEWriteManager")
+            log("Sent lost notification", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
@@ -97,7 +97,7 @@ struct BLEWriteManager {
         }
         
         if locationData.count > 32 {
-            log("Weather location string is too big to send", caller: "BLEWriteManager")
+            log("Weather location string is too big to send", caller: "BLEWriteManager", target: .ble)
             for _ in 1...32 {bytes.append(0)}
         } else {
             for _ in 1...32-locationData.count {locationData.append(0)}
@@ -108,7 +108,7 @@ struct BLEWriteManager {
         let writeData = Data(bytes: bytes as [UInt8], count: 49)
         if bleManager.weatherCharacteristic != nil && bleManager.infiniTime != nil {
             bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
-            log("Set watch current weather", type: .info, caller: "BLEWriteManager")
+            log("Set watch current weather", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
@@ -140,7 +140,7 @@ struct BLEWriteManager {
         
         if bleManager.weatherCharacteristic != nil && bleManager.infiniTime != nil {
             bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
-            log("Set watch forecast", type: .info, caller: "BLEWriteManager")
+            log("Set watch forecast", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
@@ -160,7 +160,7 @@ struct BLEWriteManager {
         bleManager.infiniTime.writeValue(progress, for: bleManager.navigationProgressCharacteristic, type: .withResponse)
         bleManager.infiniTime.writeValue(icon, for: bleManager.navigationFlagsCharacteristic, type: .withResponse)
         
-        log("Wrote navigation update", type: .info, caller: "BLEWriteManager")
+        log("Wrote navigation update", type: .info, caller: "BLEWriteManager", target: .ble)
     }
 }
 

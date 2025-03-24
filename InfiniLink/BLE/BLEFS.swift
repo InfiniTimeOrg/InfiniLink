@@ -100,7 +100,7 @@ class BLEFSHandler: ObservableObject {
     @Published var externalResourcesSize: Int = 0
     
     func uploadExternalResources(completion: @escaping() -> Void) {
-        log("External resource upload requested", type: .info, caller: "BLEFSHandler")
+        log("External resource upload requested", type: .info, caller: "BLEFSHandler", target: .ble)
         
         DispatchQueue.global(qos: .default).async { [self] in
             do {
@@ -163,7 +163,7 @@ class BLEFSHandler: ObservableObject {
     }
     
     private func createDir(path: String) {
-        log("Create directory called", type: .info, caller: "BLEFSHandler")
+        log("Create directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         let dir = path.components(separatedBy: "/").filter { $0 != "" }
         
@@ -182,7 +182,7 @@ class BLEFSHandler: ObservableObject {
     }
 
     func readFile(path: String, offset: UInt32) -> ReadFileFS {
-        log("Read file called", type: .info, caller: "BLEFSHandler")
+        log("Read file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var writeData = Data()
         
@@ -226,7 +226,7 @@ class BLEFSHandler: ObservableObject {
     }
 
     func writeFile(data: Data, path: String, offset: UInt32) -> WriteFileFS {
-        log("Write file called", type: .info, caller: "BLEFSHandler")
+        log("Write file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var write = WriteFileFS()
         write.group = DispatchGroup()
@@ -305,7 +305,7 @@ class BLEFSHandler: ObservableObject {
     }
 
     func deleteFile(path: String) -> Bool {
-        log("Delete file called", type: .info, caller: "BLEFSHandler")
+        log("Delete file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var rm = InformationFS()
         rm.group = DispatchGroup()
@@ -331,7 +331,7 @@ class BLEFSHandler: ObservableObject {
     }
     
     func makeDir(path: String) -> Bool {
-        log("Make directory called", type: .info, caller: "BLEFSHandler")
+        log("Make directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var mk = InformationFS()
         mk.group = DispatchGroup()
@@ -364,7 +364,7 @@ class BLEFSHandler: ObservableObject {
     }
 
     func listDir(path: String) -> DirList {
-        log("List directory called", type: .info, caller: "BLEFSHandler")
+        log("List directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var ls = InformationFS()
         ls.group = DispatchGroup()
@@ -391,7 +391,7 @@ class BLEFSHandler: ObservableObject {
     }
 
     func moveFileOrDir(oldPath: String, newPath: String) -> Bool {
-        log("Move file/directory called", type: .info, caller: "BLEFSHandler")
+        log("Move file/directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var mv = InformationFS()
         mv.group = DispatchGroup()
@@ -602,7 +602,7 @@ class BLEFSHandler: ObservableObject {
     }
     
     func readSettings(completion: @escaping(Settings) -> Void) {
-        log("Settings requested", type: .info, caller: "BLEFSHandler")
+        log("Settings requested", type: .info, caller: "BLEFSHandler", target: .ble)
         
         DispatchQueue.global(qos: .default).async {
             let readFile = self.readFile(path: "/settings.dat", offset: 0)
