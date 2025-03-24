@@ -43,6 +43,7 @@ class DownloadManager: NSObject, ObservableObject {
     
     @AppStorage("releases") var releases: [Result] = []
     @AppStorage("buildArtifacts") var buildArtifacts: [Artifact] = []
+    @AppStorage("lastTimeReleasesFetched") var lastTimeReleasesFetched: Double = 0
     
     @Published var updateVersion: String = "0.0.0"
     @Published var updateBody: String = ""
@@ -217,9 +218,16 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getUpdates() {
-        getInfiniLinkReleases()
-        getInfiniTimeReleases()
-        getWorkflowRuns()
+        let now = Date()
+        
+        // Make sure we haven't checked for updates in the past 30 minutes
+        if (now.timeIntervalSince1970 - lastTimeReleasesFetched) > (30 * 20) {
+            getInfiniLinkReleases()
+            getInfiniTimeReleases()
+            getWorkflowRuns()
+            
+            lastTimeReleasesFetched = now.timeIntervalSince1970
+        }
     }
     
     func getInfiniLinkReleases() {
