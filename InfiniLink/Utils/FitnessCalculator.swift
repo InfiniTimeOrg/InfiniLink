@@ -120,6 +120,8 @@ class FitnessCalculator {
         return Int(ceil(pace.metValue * calculatedWeight * durationInHours))
     }
     
+    /// - Parameter pace: the average pace the user is walking
+    /// - Returns: the numbers the user takes per mile or kilometer
     func stepsPerUnit(pace: Pace = .avgWalk) -> Int {
         let unitInInches = personalizationController.units == .imperial ? 63360 : 39370.1
         return Int(ceil(unitInInches / strideLength()))

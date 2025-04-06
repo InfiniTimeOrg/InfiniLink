@@ -28,18 +28,6 @@ struct BLECharacteristicHandler {
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
     
-    func fetchHeartPoints() -> [HeartDataPoint] {
-        let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
-        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
-        
-        do {
-            return try persistenceController.container.viewContext.fetch(fetchRequest)
-        } catch {
-            log("Error fetching heart points: \(error)", caller: "BLECharacteristicHandler")
-            return []
-        }
-    }
-    
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
         let byteArray = [UInt8](characteristicData)
@@ -130,14 +118,14 @@ struct BLECharacteristicHandler {
                 let timeDifference = currentTime - lastHeartRateUpdateTimestamp
                 
                 // Check if the last data point is available and if filtering is enabled
-                if let referenceValue = fetchHeartPoints().last?.value, filterHeartRateData {
+                if let referenceValue = chartManager.heartPoints().last?.value, filterHeartRateData {
                     let isWithinRange = abs(referenceValue - bleManager.heartRate) <= 25
                     
                     // Update heart rate if within the valid range or recent enough
                     if isWithinRange || timeDifference <= 15 {
                         updateHeartRate(bpm: bpm)
                     } else {
-                        log("Abnormal heart rate value detected: \(bpm)", caller: "BLECharacteristicHandler")
+                        log("Abnormal heart rate value detected: \(bpm)", type: .info, caller: "BLECharacteristicHandler")
                     }
                 } else {
                     // If no last data point or filtering is not applied, update heart rate

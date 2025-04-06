@@ -20,3 +20,4 @@ xcuserdata/
 *.xcuserstate // <--- Here
 !default.xcworkspace
 *.swp
+.DS_Store
