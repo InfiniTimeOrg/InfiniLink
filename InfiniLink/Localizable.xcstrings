@@ -1,909 +1,68 @@
 {
-  "sourceLanguage" : "en",
   "strings" : {
-    "" : {
-
-    },
-    " " : {
-
-    },
-    " • " : {
-
-    },
-    " is due" : {
-
-    },
-    " Recovery" : {
-
-    },
-    " step goal streak!" : {
-
-    },
-    "-" : {
-
-    },
-    "[BATT]" : {
-
-    },
-    "[DATE]" : {
-
-    },
-    "[L_HR]" : {
-
-    },
-    "[STAT]" : {
-
-    },
-    "[STEP]" : {
-
-    },
-    "[TIME]" : {
-
-    },
-    "%@" : {
-
-    },
-    "%@ - %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ - %2$@"
-          }
-        }
-      }
-    },
-    "%@ Logs" : {
-
-    },
-    "%@ needs to be connected to update its software." : {
-
-    },
-    "%@-%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@-%2$@"
-          }
-        }
-      }
-    },
-    "%@:%@:%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@:%2$@:%3$@"
-          }
-        }
-      }
-    },
-    "%@:%@:%@ %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@:%2$@:%3$@ %4$@"
-          }
-        }
-      }
-    },
-    "%@!" : {
-
-    },
-    "%@...%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@...%2$@"
-          }
-        }
-      }
-    },
-    "%@'s battery must be charged to at least 10%% to update its software." : {
-
-    },
-    "%@%%" : {
-
-    },
-    "%lld" : {
-
-    },
-    "%lld " : {
-
-    },
-    "%lld more device%@ found" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld more device%2$@ found"
-          }
-        }
-      }
-    },
-    "%lld steps" : {
-
-    },
-    "%lld time%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld time%2$@"
-          }
-        }
-      }
-    },
-    "%lld-%lld " : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld-%2$lld "
-          }
-        }
-      }
-    },
-    "%lld-day" : {
-
-    },
-    "%lld%%" : {
-
-    },
-    "0 " : {
-
-    },
-    "1 device discovered" : {
-
-    },
-    "12 Hour" : {
-
-    },
-    "24 Hour" : {
-
-    },
-    "A new section will be added to your device overview." : {
-
-    },
-    "About" : {
-
-    },
-    "About InfiniLink" : {
-
-    },
-    "All Exercises" : {
-
-    },
-    "Allow Event Access" : {
-
-    },
-    "Allow Music Control" : {
-
-    },
-    "Allow Volume Control" : {
-
-    },
-    "Allow your watch to control the currently playing music from Apple Music." : {
-
-    },
-    "Always Allow Access" : {
-
-    },
-    "Always allowed location access is required to fetch weather data while the app is not active." : {
-
-    },
-    "App" : {
-
-    },
-    "App Icon" : {
-
-    },
-    "App Update Available" : {
-
-    },
-    "Appearance" : {
-
-    },
-    "Apple Health" : {
-
-    },
-    "Are you sure you want to end the exercise? %@" : {
-
-    },
-    "Are you sure you want to unpair from %@?" : {
-
-    },
-    "Average" : {
-
-    },
-    "Averaging at %@ BPM, your heart rate ranged from %lld to %lld BPM." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Averaging at %1$@ BPM, your heart rate ranged from %2$lld to %3$lld BPM."
-          }
-        }
-      }
-    },
-    "Back" : {
-
-    },
-    "Battery" : {
-
-    },
-    "Battery Low" : {
-
-    },
-    "battery remaining" : {
-
-    },
-    "BLE" : {
-
-    },
-    "Bluetooth needs to be enabled to pair a watch." : {
-
-    },
-    "BPM" : {
-
-    },
     "BPM Min" : {
-
-    },
-    "Brightness Level" : {
-
-    },
-    "Calendar Notifications" : {
-
-    },
-    "Calender" : {
-
-    },
-    "Cancel" : {
-
-    },
-    "Cancel Update" : {
-
-    },
-    "Checking for updates..." : {
-
-    },
-    "Clear All Exercises" : {
-
-    },
-    "Clear Step Data" : {
-
-    },
-    "Clock Type" : {
-
-    },
-    "Color Scheme" : {
-
-    },
-    "Connect" : {
-
-    },
-    "Connected" : {
-
-    },
-    "Connecting..." : {
-
-    },
-    "Continue" : {
-
-    },
-    "Continue to Update" : {
-
-    },
-    "Converting..." : {
-
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BPM Min"
+          }
+        }
+      }
     },
     "Copy" : {
-
-    },
-    "Create" : {
-
-    },
-    "Custom Location" : {
-
-    },
-    "Customization" : {
-
-    },
-    "D" : {
-
-    },
-    "Daily Goal" : {
-
-    },
-    "Daily Goals" : {
-
-    },
-    "DANGER ZONE" : {
-
-    },
-    "Dark" : {
-
-    },
-    "Data Sync" : {
-
-    },
-    "Date" : {
-
-    },
-    "Day" : {
-
-    },
-    "Debug Logs" : {
-
-    },
-    "Delete" : {
-
-    },
-    "Developer" : {
-
-    },
-    "Developer Mode" : {
-
-    },
-    "Device not appearing?" : {
-
-    },
-    "DFU" : {
-
-    },
-    "Directions" : {
-
-    },
-    "Disconnect" : {
-
-    },
-    "Disconnected" : {
-
-    },
-    "Display Timeout" : {
-
-    },
-    "Done" : {
-
-    },
-    "Enable Developer Mode" : {
-
-    },
-    "Enable Watch Notifications" : {
-
-    },
-    "End Exercise" : {
-
-    },
-    "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
-
-    },
-    "Error" : {
-
-    },
-    "Error fetching weather" : {
-
-    },
-    "Exercise" : {
-
-    },
-    "Export All Data" : {
-
-    },
-    "Export your heart rate data to a CSV file." : {
-
-    },
-    "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
-
-    },
-    "External resources are fonts and images that are required for some apps and watch faces." : {
-
-    },
-    "Female" : {
-
-    },
-    "File System" : {
-
-    },
-    "Filter inconsistent data from your heart rate measurements." : {
-
-    },
-    "Filter Values" : {
-
-    },
-    "Find Lost Device" : {
-
-    },
-    "Gender" : {
-
-    },
-    "General" : {
-
-    },
-    "Get a notification when your heart rate goes above or below the specified range." : {
-
-    },
-    "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
-
-    },
-    "Get notified when you reach your daily fitness goals." : {
-
-    },
-    "GitHub Actions" : {
-
-    },
-    "GitHub Actions body here..." : {
-
-    },
-    "Goal Reached" : {
-
-    },
-    "Good afternoon" : {
-
-    },
-    "Good evening" : {
-
-    },
-    "Good morning" : {
-
-    },
-    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %lld kcal." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$lld kcal."
-          }
-        }
+
       }
-    },
-    "H" : {
-
-    },
-    "Hardware Revision" : {
-
-    },
-    "Health" : {
-
-    },
-    "Health Details" : {
-
-    },
-    "Heart Range Notifications" : {
-
-    },
-    "Heart Rate" : {
-
-    },
-    "Height" : {
-
-    },
-    "Hello" : {
-
-    },
-    "Hourly Chimes" : {
-
-    },
-    "If you have an InfiniTime device, you can pair it here." : {
-
-    },
-    "Imperial" : {
-
-    },
-    "In %@ meters" : {
-
-    },
-    "Include Artist" : {
-
-    },
-    "Include Song Name" : {
-
-    },
-    "InfiniLink " : {
-
-    },
-    "InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect." : {
-
-    },
-    "InfiniLink is the official iOS companion app for InfiniTime. To submit a bug report or request a feature, open an issue on InfiniLink's GitHub repository, or send feedback in TestFlight.\n\nReceiving notifications on your InfiniTime device requires the Apple Notification Center Service, implemented in pull request #2217, linked below.\n\nMusic control from InfiniTime is available when using the Apple Music app, but system-wide media control will require the Apple Media Service to be implemented InfiniTime.\n\nFor more information on InfiniLink or InfiniTime, visit their GitHub repositories." : {
-
-    },
-    "InfiniLink on GitHub" : {
-
-    },
-    "InfiniLink on TestFlight" : {
-
-    },
-    "InfiniTime" : {
-
-    },
-    "InfiniTime " : {
-
-    },
-    "InfiniTime is up-to-date." : {
-
-    },
-    "InfiniTime on GitHub" : {
-
-    },
-    "Installing update..." : {
-
-    },
-    "Interval" : {
-
-    },
-    "It looks like your watch is in recovery mode. You'll need to update it to continue." : {
-
-    },
-    "It's time to drink water" : {
-
-    },
-    "Learn more" : {
-
-    },
-    "Let's get you set up." : {
-
-    },
-    "Light" : {
-
-    },
-    "Links" : {
-
-    },
-    "Loading weather..." : {
-
-    },
-    "Loading..." : {
-
-    },
-    "Looking for your watch..." : {
-
-    },
-    "M" : {
-
-    },
-    "Male" : {
-
-    },
-    "Manufacturer" : {
-
-    },
-    "Maximum" : {
-
-    },
-    "Metric" : {
-
-    },
-    "Minimum" : {
-
-    },
-    "Model Name" : {
-
-    },
-    "Monthly Overview" : {
-
-    },
-    "Music" : {
-
-    },
-    "My Exercises" : {
-
-    },
-    "My Watches" : {
-
-    },
-    "Name" : {
-
-    },
-    "New Folder" : {
-
-    },
-    "Next" : {
-
-    },
-    "No Data" : {
-
-    },
-    "No Exercises" : {
-
-    },
-    "No Logs" : {
-
-    },
-    "Nothing to see here" : {
-
-    },
-    "Notifications" : {
-
-    },
-    "Notify on Low Battery" : {
-
-    },
-    "Now" : {
-
     },
     "OK" : {
-
-    },
-    "Optional" : {
-
-    },
-    "Other" : {
-
-    },
-    "Other Versions" : {
-
-    },
-    "Pair New Device" : {
-
-    },
-    "Pull Request #2217 on GitHub" : {
-
-    },
-    "Range" : {
-
-    },
-    "Receive a reminder to drink water for the set amount of times a day." : {
-
-    },
-    "Receive notifications on your watch when reminders and calendar events are due." : {
-
-    },
-    "Refresh" : {
-
-    },
-    "Releases" : {
-
-    },
-    "Reminder Notifications" : {
-
-    },
-    "Reminders" : {
-
-    },
-    "Rename" : {
-
-    },
-    "Screen Timeout" : {
-
-    },
-    "Search for an address..." : {
-
-    },
-    "Seconds" : {
-
-    },
-    "Send" : {
-
-    },
-    "Send a notification to your devices when your watch is on low battery." : {
-
-    },
-    "Send Notification" : {
-
-    },
-    "Send randomly generated data to the various characteristics on the watch." : {
-
-    },
-    "Send to iPhone" : {
-
-    },
-    "Send to Watch" : {
-
-    },
-    "Set a fixed location to use to fetch weather." : {
-
-    },
-    "Settings" : {
-
-    },
-    "Settings Version" : {
-
-    },
-    "Several days ago" : {
-
-    },
-    "Skip" : {
-
-    },
-    "Sleep" : {
-
-    },
-    "Software Update" : {
-
-    },
-    "Software Version" : {
-
-    },
-    "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
-
-    },
-    "Start Pairing" : {
-
-    },
-    "Starting on %@ at %@, the exercise lasted %@." : {
       "localizations" : {
-        "en" : {
+
+      }
+    },
+    "Customization" : {
+      "localizations" : {
+        "fr" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "Starting on %1$@ at %2$@, the exercise lasted %3$@."
+            "value" : "Personnalisation",
+            "state" : "translated"
           }
         }
       }
     },
-    "steps" : {
+    "0 " : {
+      "localizations" : {
 
+      }
     },
-    "Steps" : {
+    "Error" : {
+      "localizations" : {
 
+      }
     },
-    "Steps Goal" : {
-
+    "Female" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Femme"
+          }
+        }
+      }
     },
-    "Steps Per Minute" : {
+    "[L_HR]" : {
+      "localizations" : {
 
-    },
-    "Sync step and heart rate data to Apple Health." : {
-
-    },
-    "System" : {
-
-    },
-    "Test Data" : {
-
-    },
-    "Test Music" : {
-
-    },
-    "Test Navigation" : {
-
-    },
-    "Test Weather" : {
-
-    },
-    "The folder name cannot contain a period." : {
-
-    },
-    "There aren't any available cloud builds" : {
-
-    },
-    "There wasn't any heart rate data recorded for this exercise." : {
-
+      }
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
-
-    },
-    "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
-
-    },
-    "This week you have a " : {
-
-    },
-    "Time" : {
-
-    },
-    "Time Format" : {
-
-    },
-    "Title" : {
-
-    },
-    "To accurately measure calories and distance, you'll need to enter some basic details." : {
-
-    },
-    "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
-
-    },
-    "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
-
-    },
-    "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Today your heart rate reached a high of %1$lld, and dropped to a low of %2$lld BPM."
-          }
-        }
+
       }
-    },
-    "Total" : {
-
-    },
-    "Units" : {
-
-    },
-    "Unpair" : {
-
-    },
-    "Update Available" : {
-
-    },
-    "Update Device Time" : {
-
-    },
-    "Update External Resources" : {
-
-    },
-    "Update Now" : {
-
-    },
-    "Upload %lld File%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Upload %1$lld File%2$@"
-          }
-        }
-      }
-    },
-    "Upload Files" : {
-
-    },
-    "Uploading..." : {
-
-    },
-    "Use Current Location" : {
-
-    },
-    "Use Experimental DFU" : {
-
-    },
-    "Use Local File" : {
-
-    },
-    "Use the search bar to find a location." : {
-
-    },
-    "Use your current location to fetch local weather data. Location accuracy can be managed in Settings." : {
-
-    },
-    "user@watch:~ $" : {
-
-    },
-    "user@watch:~ $ now" : {
-
-    },
-    "UUID" : {
-
-    },
-    "W" : {
-
-    },
-    "WARNING: These actions are permanent and cannot be undone!" : {
-
-    },
-    "Watch notifications are currently disabled." : {
-
-    },
-    "Water Reminder" : {
-
-    },
-    "Weather" : {
-
-    },
-    "Weather Format" : {
-
-    },
-    "Weight" : {
-
     },
     "You can start one by choosing one from the list below." : {
-
-    },
-    "You took %d step%@ and burned %@." : {
       "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "You took %1$d step%2$@ and burned %3$@."
-          }
-        }
+
       }
     },
     "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
@@ -916,35 +75,1808 @@
         }
       }
     },
-    "You're almost there! A quick %@ %@ walk should get you to your goal. It should only take you about %@." : {
+    "Daily Goals" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Objectifs quotidiens",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "File System" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Système de fichiers",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Appearance" : {
+      "localizations" : {
+
+      }
+    },
+    "Update Device Time" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Mise à jour de l'heure de l'appareil",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Developer Mode" : {
+      "localizations" : {
+
+      }
+    },
+    "[STAT]" : {
+      "localizations" : {
+
+      }
+    },
+    "Allow Event Access" : {
+      "localizations" : {
+
+      }
+    },
+    "Installing update..." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Installation de la mise à jour...",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "[TIME]" : {
+      "localizations" : {
+
+      }
+    },
+    "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "value" : "Today your heart rate reached a high of %1$lld, and dropped to a low of %2$lld BPM.",
+            "state" : "new"
+          }
+        }
+      }
+    },
+    "24 Hour" : {
+      "localizations" : {
+
+      }
+    },
+    "Other Versions" : {
+      "localizations" : {
+
+      }
+    },
+    "Seconds" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Secondes"
+          }
+        }
+      }
+    },
+    " • " : {
+      "localizations" : {
+
+      }
+    },
+    "user@watch:~ $ now" : {
+      "localizations" : {
+
+      }
+    },
+    "Always Allow Access" : {
+      "localizations" : {
+
+      }
+    },
+    "Done" : {
+      "localizations" : {
+
+      }
+    },
+    "Upload Files" : {
+      "localizations" : {
+
+      }
+    },
+    "[STEP]" : {
+      "localizations" : {
+
+      }
+    },
+    "Cancel Update" : {
+      "localizations" : {
+
+      }
+    },
+    "Enable Developer Mode" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer le mode développeur"
+          }
+        }
+      }
+    },
+    "Maximum" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Maximum",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Search for an address..." : {
+      "localizations" : {
+
+      }
+    },
+    "Pair New Device" : {
+      "localizations" : {
+
+      }
+    },
+    "Apple Health" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Health"
+          }
+        }
+      }
+    },
+    "Cancel" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Annuler",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Gender" : {
+      "localizations" : {
+
+      }
+    },
+    "Your approximate height, in %@." : {
+      "localizations" : {
+
+      }
+    },
+    "No Data" : {
+      "localizations" : {
+
+      }
+    },
+    "Are you sure you want to unpair from %@?" : {
+      "localizations" : {
+
+      }
+    },
+    "Your approximate weight, in %@." : {
+      "localizations" : {
+
+      }
+    },
+    "Error fetching weather" : {
+      "localizations" : {
+
+      }
+    },
+    "You've reached your steps goal" : {
+      "localizations" : {
+
+      }
+    },
+    "steps" : {
+      "localizations" : {
+
+      }
+    },
+    "Enable Watch Notifications" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Activer les notifications de la montre"
+          }
+        }
+      }
+    },
+    "Watch notifications are currently disabled." : {
+      "localizations" : {
+
+      }
+    },
+    "Update Available" : {
+      "localizations" : {
+
+      }
+    },
+    "battery remaining" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "batterie restante"
+          }
+        }
+      }
+    },
+    "Steps Per Minute" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pas par minute"
+          }
+        }
+      }
+    },
+    "Calender" : {
+      "localizations" : {
+
+      }
+    },
+    "Software Version" : {
+      "localizations" : {
+
+      }
+    },
+    "Settings Version" : {
+      "localizations" : {
+
+      }
+    },
+    "It looks like your watch is in recovery mode. You'll need to update it to continue." : {
+      "localizations" : {
+
+      }
+    },
+    "My Exercises" : {
+      "localizations" : {
+
+      }
+    },
+    "Imperial" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Impérial",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Learn more" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "En savoir plus"
+          }
+        }
+      }
+    },
+    "Averaging at %@ BPM, your heart rate ranged from %lld to %lld BPM." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "value" : "Averaging at %1$@ BPM, your heart rate ranged from %2$lld to %3$lld BPM.",
+            "state" : "new"
+          }
+        }
+      }
+    },
+    "%lld%%" : {
+      "localizations" : {
+
+      }
+    },
+    "Are you sure you want to end the exercise? %@" : {
+      "localizations" : {
+
+      }
+    },
+    "Test Music" : {
+      "localizations" : {
+
+      }
+    },
+    "Light" : {
+      "localizations" : {
+
+      }
+    },
+    "Loading weather..." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Chargement de la météo...",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "%lld " : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "%lld",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Update Now" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mise à jour"
+          }
+        }
+      }
+    },
+    "Time" : {
+      "localizations" : {
+
+      }
+    },
+    "Weight" : {
+      "localizations" : {
+
+      }
+    },
+    "Custom Location" : {
+      "localizations" : {
+
+      }
+    },
+    "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Les ressources externes sont des polices et des images qui ne sont pas incluses dans le micrologiciel et qui sont nécessaires à l'utilisation de certaines applications et de certains cadrans de montre.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Allow your watch to control the currently playing music from Apple Music." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Permettez à votre montre de contrôler la musique en cours de lecture à partir d'Apple Music.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Date" : {
+      "localizations" : {
+
+      }
+    },
+    "Update External Resources" : {
+      "localizations" : {
+
+      }
+    },
+    " step goal streak!" : {
+      "localizations" : {
+
+      }
+    },
+    "M" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "M",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "InfiniTime on GitHub" : {
+      "localizations" : {
+
+      }
+    },
+    "About" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A propos de"
+          }
+        }
+      }
+    },
+    "[BATT]" : {
+      "localizations" : {
+
+      }
+    },
+    "Releases" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Communiqués"
+          }
+        }
+      }
+    },
+    "W" : {
+      "localizations" : {
+
+      }
+    },
+    "Several days ago" : {
+      "localizations" : {
+
+      }
+    },
+    "%@'s battery must be charged to at least 10%% to update its software." : {
+      "localizations" : {
+
+      }
+    },
+    "Weather Format" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Format météo"
+          }
+        }
+      }
+    },
+    "There wasn't any heart rate data recorded for this exercise." : {
+      "localizations" : {
+
+      }
+    },
+    "Data Sync" : {
+      "localizations" : {
+
+      }
+    },
+    "Use your current location to fetch local weather data. Location accuracy can be managed in Settings." : {
+      "localizations" : {
+
+      }
+    },
+    "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
+      "localizations" : {
+
+      }
+    },
+    "Skip" : {
+      "localizations" : {
+
+      }
+    },
+    "Starting on %@ at %@, the exercise lasted %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "You're almost there! A quick %1$@ %2$@ walk should get you to your goal. It should only take you about %3$@."
+            "value" : "Starting on %1$@ at %2$@, the exercise lasted %3$@."
           }
         }
+      }
+    },
+    "Debug Logs" : {
+      "localizations" : {
+
+      }
+    },
+    "-" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "-",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Now" : {
+      "localizations" : {
+
+      }
+    },
+    "Optional" : {
+      "localizations" : {
+
+      }
+    },
+    "Health Details" : {
+      "localizations" : {
+
+      }
+    },
+    "%@-%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@-%2$@"
+          }
+        }
+      }
+    },
+    "Day" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jour"
+          }
+        }
+      }
+    },
+    "Goal Reached" : {
+      "localizations" : {
+
+      }
+    },
+    "Connected" : {
+      "localizations" : {
+
+      }
+    },
+    "Sleep" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sommeil"
+          }
+        }
+      }
+    },
+    "Screen Timeout" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Délai d'attente de l'écran"
+          }
+        }
+      }
+    },
+    "Settings" : {
+      "localizations" : {
+
+      }
+    },
+    "user@watch:~ $" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "user@watch:~ $"
+          }
+        }
+      }
+    },
+    "Continue" : {
+      "localizations" : {
+
+      }
+    },
+    "Battery" : {
+      "localizations" : {
+
+      }
+    },
+    "You're almost there! A quick %@ %@ walk should get you to your goal. It should only take you about %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "value" : "You're almost there! A quick %1$@ %2$@ walk should get you to your goal. It should only take you about %3$@.",
+            "state" : "new"
+          }
+        }
+      }
+    },
+    "Other" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Autres",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "DANGER ZONE" : {
+      "localizations" : {
+
+      }
+    },
+    "Sync step and heart rate data to Apple Health." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Synchronisation des données relatives aux pas et à la fréquence cardiaque avec Apple Health.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    " Recovery" : {
+      "localizations" : {
+
+      }
+    },
+    "Directions" : {
+      "localizations" : {
+
+      }
+    },
+    "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pour recevoir des notifications de rappel, vous devez donner à InfiniLink un accès en lecture aux rappels et aux événements."
+          }
+        }
+      }
+    },
+    "System" : {
+      "localizations" : {
+
+      }
+    },
+    "%lld more device%@ found" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld more device%2$@ found"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld plus de dispositif%2$@ trouvé"
+          }
+        }
+      }
+    },
+    "Send" : {
+      "localizations" : {
+
+      }
+    },
+    "Name" : {
+      "localizations" : {
+
+      }
+    },
+    "Back" : {
+      "localizations" : {
+
+      }
+    },
+    "No Exercises" : {
+      "localizations" : {
+
+      }
+    },
+    "Hello" : {
+      "localizations" : {
+
+      }
+    },
+    "Software Update" : {
+      "localizations" : {
+
+      }
+    },
+    "My Watches" : {
+      "localizations" : {
+
+      }
+    },
+    "Good afternoon" : {
+      "localizations" : {
+
+      }
+    },
+    "Display Timeout" : {
+      "localizations" : {
+
+      }
+    },
+    "InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniLink n'a pas pu se connecter à votre appareil car le lien n'est plus présent. Veuillez retirer la montre des paramètres Bluetooth pour vous reconnecter."
+          }
+        }
+      }
+    },
+    "Dark" : {
+      "localizations" : {
+
+      }
+    },
+    "Height" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hauteur"
+          }
+        }
+      }
+    },
+    "You took %d step%@ and burned %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You took %1$d step%2$@ and burned %3$@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vous avez fait %1$d step%2$@ et brûlé %3$@."
+          }
+        }
+      }
+    },
+    "%lld" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
+    },
+    "Brightness Level" : {
+      "localizations" : {
+
+      }
+    },
+    "Steps" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Étapes"
+          }
+        }
+      }
+    },
+    "Test Data" : {
+      "localizations" : {
+
+      }
+    },
+    "Interval" : {
+      "localizations" : {
+
+      }
+    },
+    "Notifications" : {
+      "localizations" : {
+
+      }
+    },
+    "Clear Step Data" : {
+      "localizations" : {
+
+      }
+    },
+    "Bluetooth needs to be enabled to pair a watch." : {
+      "localizations" : {
+
+      }
+    },
+    "External resources are fonts and images that are required for some apps and watch faces." : {
+      "localizations" : {
+
+      }
+    },
+    "Find Lost Device" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Retrouver un appareil perdu",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Get notified when you reach your daily fitness goals." : {
+      "localizations" : {
+
+      }
+    },
+    "Connect" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Connecter"
+          }
+        }
+      }
+    },
+    "Continue to Update" : {
+      "localizations" : {
+
+      }
+    },
+    "There aren't any available cloud builds" : {
+      "localizations" : {
+
+      }
+    },
+    "Allow Volume Control" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser le contrôle du volume"
+          }
+        }
+      }
+    },
+    "App" : {
+      "localizations" : {
+
+      }
+    },
+    "Set a fixed location to use to fetch weather." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Définir un emplacement fixe à utiliser pour récupérer les données météorologiques."
+          }
+        }
+      }
+    },
+    " " : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " "
+          }
+        }
+      }
+    },
+    "InfiniTime is up-to-date." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniTime est à jour."
+          }
+        }
+      }
+    },
+    "Upload %lld File%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "value" : "Upload %1$lld File%2$@",
+            "state" : "new"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Télécharger %1$lld Fichier%2$@"
+          }
+        }
+      }
+    },
+    "App Update Available" : {
+      "localizations" : {
+
+      }
+    },
+    "Next" : {
+      "localizations" : {
+
+      }
+    },
+    "Good morning" : {
+      "localizations" : {
+
+      }
+    },
+    "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
+      "localizations" : {
+
+      }
+    },
+    "Include Song Name" : {
+      "localizations" : {
+
+      }
+    },
+    "%@...%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@...%2$@"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "value" : "%1$@...%2$@",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "%lld steps" : {
+      "localizations" : {
+
+      }
+    },
+    "%@ Logs" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Logs"
+          }
+        }
+      }
+    },
+    "Rename" : {
+      "localizations" : {
+
+      }
+    },
+    "Notify on Low Battery" : {
+      "localizations" : {
+
+      }
+    },
+    "InfiniTime " : {
+      "localizations" : {
+
+      }
+    },
+    "Receive a reminder to drink water for the set amount of times a day." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recevez un rappel pour boire de l'eau le nombre de fois défini par jour."
+          }
+        }
+      }
+    },
+    "%@:%@:%@ %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "value" : "%1$@:%2$@:%3$@ %4$@",
+            "state" : "new"
+          }
+        }
+      }
+    },
+    "All Exercises" : {
+      "localizations" : {
+
+      }
+    },
+    " is due" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : " est due",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Let's get you set up." : {
+      "localizations" : {
+
+      }
+    },
+    "InfiniLink on TestFlight" : {
+      "localizations" : {
+
       }
     },
     "You're making great progress! You have about %@ %@ to walk. At your current pace, you'll hit your goal in %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
-            "state" : "new",
-            "value" : "You're making great progress! You have about %1$@ %2$@ to walk. At your current pace, you'll hit your goal in %3$@."
+            "value" : "You're making great progress! You have about %1$@ %2$@ to walk. At your current pace, you'll hit your goal in %3$@.",
+            "state" : "new"
           }
         }
       }
     },
-    "You've reached your steps goal" : {
+    "In %@ meters" : {
+      "localizations" : {
 
+      }
     },
-    "Your approximate height, in %@." : {
+    "Converting..." : {
+      "localizations" : {
 
+      }
     },
-    "Your approximate weight, in %@." : {
+    "This week you have a " : {
+      "localizations" : {
 
+      }
+    },
+    "WARNING: These actions are permanent and cannot be undone!" : {
+      "localizations" : {
+
+      }
+    },
+    "A new section will be added to your device overview." : {
+      "localizations" : {
+
+      }
+    },
+    "%@:%@:%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "value" : "%1$@:%2$@:%3$@",
+            "state" : "new"
+          }
+        }
+      }
+    },
+    "Hourly Chimes" : {
+      "localizations" : {
+
+      }
+    },
+    "End Exercise" : {
+      "localizations" : {
+
+      }
+    },
+    "Export All Data" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Exporter toutes les données",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Send a notification to your devices when your watch is on low battery." : {
+      "localizations" : {
+
+      }
+    },
+    "Clock Type" : {
+      "localizations" : {
+
+      }
+    },
+    "Water Reminder" : {
+      "localizations" : {
+
+      }
+    },
+    "Total" : {
+      "localizations" : {
+
+      }
+    },
+    "Reminders" : {
+      "localizations" : {
+
+      }
+    },
+    "BLE" : {
+      "localizations" : {
+
+      }
+    },
+    "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
+      "localizations" : {
+
+      }
+    },
+    "Use Experimental DFU" : {
+      "localizations" : {
+
+      }
+    },
+    "Range" : {
+      "localizations" : {
+
+      }
+    },
+    "Reminder Notifications" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notifications de rappel"
+          }
+        }
+      }
+    },
+    "Hardware Revision" : {
+      "localizations" : {
+
+      }
+    },
+    "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
+      "localizations" : {
+
+      }
+    },
+    "InfiniTime" : {
+      "localizations" : {
+
+      }
+    },
+    "%@ needs to be connected to update its software." : {
+      "localizations" : {
+
+      }
+    },
+    "InfiniLink is the official iOS companion app for InfiniTime. To submit a bug report or request a feature, open an issue on InfiniLink's GitHub repository, or send feedback in TestFlight.\n\nReceiving notifications on your InfiniTime device requires the Apple Notification Center Service, implemented in pull request #2217, linked below.\n\nMusic control from InfiniTime is available when using the Apple Music app, but system-wide media control will require the Apple Media Service to be implemented InfiniTime.\n\nFor more information on InfiniLink or InfiniTime, visit their GitHub repositories." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniLink est l'application compagnon iOS officielle d'InfiniTime. Pour soumettre un rapport de bug ou demander une fonctionnalité, ouvrez un problème sur le dépôt GitHub d'InfiniLink, ou envoyez vos commentaires dans TestFlight.\n\nLa réception de notifications sur votre appareil InfiniTime nécessite le service Apple Notification Center, implémenté dans la pull request #2217, dont le lien figure ci-dessous.\n\nLe contrôle de la musique depuis InfiniTime est disponible en utilisant l'application Apple Music, mais le contrôle des médias à l'échelle du système nécessitera l'implémentation du service Apple Media Service dans InfiniTime.\n\nPour plus d'informations sur InfiniLink ou InfiniTime, visitez leurs dépôts GitHub."
+          }
+        }
+      }
+    },
+    "Minimum" : {
+      "localizations" : {
+
+      }
+    },
+    "Test Navigation" : {
+      "localizations" : {
+
+      }
+    },
+    "Checking for updates..." : {
+      "localizations" : {
+
+      }
+    },
+    "Average" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moyenne"
+          }
+        }
+      }
+    },
+    "%lld time%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld time%2$@"
+          }
+        }
+      }
+    },
+    "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
+      "localizations" : {
+
+      }
+    },
+    "GitHub Actions" : {
+      "localizations" : {
+
+      }
+    },
+    "%lld-%lld " : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld-%2$lld "
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld-%2$lld"
+          }
+        }
+      }
+    },
+    "%@%%" : {
+      "localizations" : {
+
+      }
+    },
+    "%@" : {
+      "localizations" : {
+
+      }
+    },
+    "Color Scheme" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schéma de couleurs"
+          }
+        }
+      }
+    },
+    "Send Notification" : {
+      "localizations" : {
+
+      }
+    },
+    "Daily Goal" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Objectif quotidien"
+          }
+        }
+      }
+    },
+    "%@!" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "%@ !",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "InfiniLink " : {
+      "localizations" : {
+
+      }
+    },
+    "" : {
+      "localizations" : {
+
+      }
+    },
+    "Nothing to see here" : {
+      "localizations" : {
+
+      }
+    },
+    "Health" : {
+      "localizations" : {
+
+      }
+    },
+    "No Logs" : {
+      "localizations" : {
+
+      }
+    },
+    "Test Weather" : {
+      "localizations" : {
+
+      }
+    },
+    "If you have an InfiniTime device, you can pair it here." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Si vous avez un appareil InfiniTime, vous pouvez l'appairer ici.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Links" : {
+      "localizations" : {
+
+      }
+    },
+    "Exercise" : {
+      "localizations" : {
+
+      }
+    },
+    "Title" : {
+      "localizations" : {
+
+      }
+    },
+    "Monthly Overview" : {
+      "localizations" : {
+
+      }
+    },
+    "Use Current Location" : {
+      "localizations" : {
+
+      }
+    },
+    "Get a notification when your heart rate goes above or below the specified range." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Recevez une notification lorsque votre fréquence cardiaque est supérieure ou inférieure à la plage spécifiée.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "D" : {
+      "localizations" : {
+
+      }
+    },
+    "It's time to drink water" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Il est temps de boire de l'eau",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Uploading..." : {
+      "localizations" : {
+
+      }
+    },
+    "Always allowed location access is required to fetch weather data while the app is not active." : {
+      "localizations" : {
+
+      }
+    },
+    "Units" : {
+      "localizations" : {
+
+      }
+    },
+    "Create" : {
+      "localizations" : {
+
+      }
+    },
+    "Include Artist" : {
+      "localizations" : {
+
+      }
+    },
+    "Calendar Notifications" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar Notifications"
+          }
+        }
+      }
+    },
+    "Heart Range Notifications" : {
+      "localizations" : {
+
+      }
+    },
+    "12 Hour" : {
+      "localizations" : {
+
+      }
+    },
+    "UUID" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "UUID",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Pull Request #2217 on GitHub" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pull Request #2217 sur GitHub"
+          }
+        }
+      }
+    },
+    "Connecting..." : {
+      "localizations" : {
+
+      }
+    },
+    "%@ - %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ - %2$@"
+          }
+        }
+      }
+    },
+    "App Icon" : {
+      "localizations" : {
+
+      }
+    },
+    "Clear All Exercises" : {
+      "localizations" : {
+
+      }
+    },
+    "[DATE]" : {
+      "localizations" : {
+
+      }
+    },
+    "Allow Music Control" : {
+      "localizations" : {
+
+      }
+    },
+    "Model Name" : {
+      "localizations" : {
+
+      }
+    },
+    "Filter Values" : {
+      "localizations" : {
+
+      }
+    },
+    "Looking for your watch..." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "A la recherche de votre montre...",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "New Folder" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Nouveau dossier",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Time Format" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Format de l'heure",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Export your heart rate data to a CSV file." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Exportez vos données de fréquence cardiaque vers un fichier CSV.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "BPM" : {
+      "localizations" : {
+
+      }
+    },
+    "Disconnect" : {
+      "localizations" : {
+
+      }
+    },
+    "Send to iPhone" : {
+      "localizations" : {
+
+      }
+    },
+    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %lld kcal." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$lld kcal."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bravo, vous avez atteint votre objectif de pas quotidiens aujourd'hui ! Vous avez marché %1$@ %2$@ et brûlé environ %3$lld kcal."
+          }
+        }
+      }
+    },
+    "The folder name cannot contain a period." : {
+      "localizations" : {
+
+      }
+    },
+    "Battery Low" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Batterie faible",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Filter inconsistent data from your heart rate measurements." : {
+      "localizations" : {
+
+      }
+    },
+    "Start Pairing" : {
+      "localizations" : {
+
+      }
+    },
+    "Steps Goal" : {
+      "localizations" : {
+
+      }
+    },
+    "To accurately measure calories and distance, you'll need to enter some basic details." : {
+      "localizations" : {
+
+      }
+    },
+    "Metric" : {
+      "localizations" : {
+
+      }
+    },
+    "Male" : {
+      "localizations" : {
+
+      }
+    },
+    "Device not appearing?" : {
+      "localizations" : {
+
+      }
+    },
+    "Good evening" : {
+      "localizations" : {
+
+      }
+    },
+    "Music" : {
+      "localizations" : {
+
+      }
+    },
+    "Loading..." : {
+      "localizations" : {
+
+      }
+    },
+    "Developer" : {
+      "localizations" : {
+
+      }
+    },
+    "1 device discovered" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "1 dispositif découvert",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "GitHub Actions body here..." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Le corps des actions GitHub ici...",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Receive notifications on your watch when reminders and calendar events are due." : {
+      "localizations" : {
+
+      }
+    },
+    "Disconnected" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Déconnecté"
+          }
+        }
+      }
+    },
+    "Use Local File" : {
+      "localizations" : {
+
+      }
+    },
+    "Weather" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Météo",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Manufacturer" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Fabricant",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Refresh" : {
+      "localizations" : {
+
+      }
+    },
+    "DFU" : {
+      "localizations" : {
+
+      }
+    },
+    "InfiniLink on GitHub" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "InfiniLink sur GitHub",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "H" : {
+      "localizations" : {
+
+      }
+    },
+    "Heart Rate" : {
+      "localizations" : {
+
+      }
+    },
+    "Delete" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Supprimer"
+          }
+        }
+      }
+    },
+    "Send to Watch" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Envoyer à Watch"
+          }
+        }
+      }
+    },
+    "General" : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Général",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "%lld-day" : {
+      "localizations" : {
+
+      }
+    },
+    "Send randomly generated data to the various characteristics on the watch." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Envoyer des données générées de manière aléatoire aux différentes caractéristiques de la montre.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "About InfiniLink" : {
+      "localizations" : {
+
+      }
+    },
+    "Use the search bar to find a location." : {
+      "localizations" : {
+        "fr" : {
+          "stringUnit" : {
+            "value" : "Utilisez la barre de recherche pour trouver un lieu.",
+            "state" : "translated"
+          }
+        }
+      }
+    },
+    "Unpair" : {
+      "localizations" : {
+
+      }
     }
   },
-  "version" : "1.0"
+  "version" : "1.0",
+  "sourceLanguage" : "en"
 }
