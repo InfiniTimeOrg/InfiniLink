@@ -61,7 +61,7 @@ struct ConnectView: View {
                     dismiss()
                 }
                 .frame(maxWidth: .infinity, alignment: .trailing)
-                if bleManager.isCentralOn {
+                if bleManager.isBluetoothOn {
                     if devices.isEmpty {
                         ProgressView("Looking for your watch...")
                             .frame(maxHeight: .infinity)

@@ -18,7 +18,7 @@ struct ExerciseView: View {
     var body: some View {
         VStack {
             if exerciseViewModel.currentExercise != nil {
-                ActiveExerciseView(exercise: $exerciseViewModel.currentExercise)
+                ActiveExerciseView()
             } else {
                 List {
                     if !bleManager.hasLoadedCharacteristics {
@@ -26,33 +26,15 @@ struct ExerciseView: View {
                             Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
                         }
                     }
-                    Section(header: Text("My Exercises"), footer: Text(chartManager.userExercises().isEmpty ? "You can start one by choosing one from the list below." : "")) {
-                        if chartManager.userExercises().isEmpty {
-                            Text("No Exercises")
-                        } else {
-                            ForEach(Array(chartManager.userExercises()).sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in
-                                let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
-                                
-                                NavigationLink {
-                                    ExerciseDetailView(userExercise: userExercise)
-                                } label: {
-                                    HStack {
-                                        Image(systemName: exercise.icon)
-                                            .font(.system(size: 24).weight(.medium))
-                                        VStack(alignment: .leading, spacing: 4) {
-                                            Text(exercise.name)
-                                                .font(.body.weight(.medium))
-                                            Text(userExercise.startDate!.formatted())
-                                                .foregroundStyle(Color.gray)
-                                        }
-                                    }
-                                }
-                            }
-                            .onDelete(perform: delete)
+                    Section(footer: Text("You can start a new exercise by choosing one from the list below.")) {
+                        NavigationLink {
+                            AllExercisesView()
+                        } label: {
+                            Text("My Exercises")
                         }
                     }
                     Section {
-                        ForEach(exerciseViewModel.exercises) { exercise in
+                        ForEach(exerciseViewModel.exercises, id: \.id) { exercise in
                             Button {
                                 exerciseViewModel.startExercise(exercise)
                             } label: {
@@ -67,21 +49,8 @@ struct ExerciseView: View {
                     }
                 }
                 .navigationTitle("Exercise")
-                .toolbar {
-                    EditButton()
-                        .disabled(chartManager.userExercises().isEmpty)
-                }
             }
         }
-    }
-    
-    func delete(at offsets: IndexSet) {
-        for index in offsets {
-            let userExercise = chartManager.userExercises()[index]
-            viewContext.delete(userExercise)
-        }
-        
-        exerciseViewModel.saveContext(viewContext)
     }
 }
 

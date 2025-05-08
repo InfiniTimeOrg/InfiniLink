@@ -14,15 +14,45 @@ struct MyDevicesView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
     @State private var showConnectSheet = false
-    @State private var showSettings = false
+    @State private var showSettingsView = false
     @State private var showUnpairConfirmation = false
     
     @State private var selectedWatch: Device!
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
-                NavigationLink("", isActive: $showSettings, destination: {
+                List {
+                    Section {
+                        ForEach(deviceManager.watches, id: \.self) { watch in
+                            HStack {
+                                Button {
+                                    bleManager.switchDevice(device: watch)
+                                    dismiss()
+                                } label: {
+                                    DeviceRowView(watch: watch)
+                                }
+                                .disabled(bleManager.pairedDeviceID ?? "" == watch.uuid ?? "")
+                                Image(systemName: "info.circle")
+                                    .foregroundStyle(Color.accentColor)
+                                    .onTapGesture {
+                                        selectedWatch = watch
+                                        showSettingsView = true
+                                    }
+                            }
+                            .imageScale(.large)
+                        }
+                    }
+                    Section {
+                        Button {
+                            showConnectSheet = true
+                            bleManager.isPairingNewDevice = true
+                        } label: {
+                            Text("Pair New Device")
+                        }
+                    }
+                }
+                .navigationDestination(isPresented: $showSettingsView) {
                     if let selectedWatch {
                         List {
                             Section {
@@ -44,7 +74,7 @@ struct MyDevicesView: View {
                                 .alert("Are you sure you want to unpair from \(selectedWatch.name ?? "InfiniTime")?", isPresented: $showUnpairConfirmation) {
                                     Button(role: .destructive) {
                                         bleManager.unpair(device: selectedWatch)
-                                        showSettings = false
+                                        showSettingsView = false
                                     } label: {
                                         Text("Unpair")
                                     }
@@ -53,37 +83,6 @@ struct MyDevicesView: View {
                         }
                         .navigationTitle(selectedWatch.name ?? "InfiniTime")
                         .navigationBarTitleDisplayMode(.inline)
-                    }
-                })
-                .hidden()
-                List {
-                    Section {
-                        ForEach(deviceManager.watches, id: \.self) { watch in
-                            HStack {
-                                Button {
-                                    bleManager.switchDevice(device: watch)
-                                    dismiss()
-                                } label: {
-                                    DeviceRowView(watch: watch)
-                                }
-                                .disabled(bleManager.pairedDeviceID ?? "" == watch.uuid ?? "")
-                                Image(systemName: "info.circle")
-                                    .foregroundStyle(Color.accentColor)
-                                    .onTapGesture {
-                                        selectedWatch = watch
-                                        showSettings = true
-                                    }
-                            }
-                            .imageScale(.large)
-                        }
-                    }
-                    Section {
-                        Button {
-                            showConnectSheet = true
-                            bleManager.isPairingNewDevice = true
-                        } label: {
-                            Text("Pair New Device")
-                        }
                     }
                 }
             }
@@ -100,7 +99,6 @@ struct MyDevicesView: View {
                 deviceManager.fetchAllDevices()
             }
         }
-        .navigationViewStyle(.stack)
     }
 }
 

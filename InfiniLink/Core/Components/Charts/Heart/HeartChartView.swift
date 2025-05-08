@@ -18,6 +18,8 @@ struct HeartChartView: View {
     @ObservedObject var chartManager = ChartManager.shared
     
     @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
+    @AppStorage("minHeartRange") private var minHeartRange = 40
+    @AppStorage("maxHeartRange") private var maxHeartRange = 200
     
     func heartPoints(currentDay: Bool = false) -> [HeartChartDataPoint] {
         let calendar = Calendar.current
@@ -66,37 +68,38 @@ struct HeartChartView: View {
     var body: some View {
         Group {
             Group {
-            Section {
-                Picker("Range", selection: $dataSelection) {
-                    ForEach(0...3, id: \.self) { index in
-                        Text({
-                            switch index {
-                            case 0: return "H"
-                            case 1: return "D"
-                            case 2: return "W"
-                            case 3: return "M"
-                            default: return "-"
-                            }
-                        }())
-                        .tag(index)
+                Section {
+                    Picker("Range", selection: $dataSelection) {
+                        ForEach(0...3, id: \.self) { index in
+                            Text({
+                                switch index {
+                                case 0: return "H"
+                                case 1: return "D"
+                                case 2: return "W"
+                                case 3: return "M"
+                                default: return "-"
+                                }
+                            }())
+                            .tag(index)
+                        }
                     }
+                    .pickerStyle(.segmented)
                 }
-                .pickerStyle(.segmented)
-            }
-            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 if heartPoints().count <= 1 {
                     EmptyChartView(.heart)
                 } else {
                     Section {
                         Chart(heartPoints()) { point in
-                            BarMark(
-                                x: .value("Day", point.date),
-                                y: .value("BPM Min", point.value)
+                            PointMark(
+                                x: .value("Time", point.date),
+                                y: .value("BPM", point.value)
                             )
                             .clipShape(Capsule())
                             .foregroundStyle(Color.red)
                         }
                         .frame(height: 280)
+                        .chartYScale(domain: minHeartRange...maxHeartRange)
                     } header: {
                         VStack(alignment: .leading) {
                             Text(heartPoints().count > 1 ? "Range" : "No Data")

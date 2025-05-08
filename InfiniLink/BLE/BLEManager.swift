@@ -78,7 +78,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let cbuuidList = CBUUIDList()
     var musicChars = MusicCharacteristics()
     
-    @Published var isCentralOn = false
+    // Keep this variable initally true because otherwise it could quickly flash the "Bluetooth Disabled" message
+    @Published var isBluetoothOn = true
     @Published var isScanning = false
     @Published var isConnecting = false
     @Published var setTimeError = false
@@ -157,15 +158,15 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isScanning = false
     }
     
-    func connect(peripheral: CBPeripheral, completion: @escaping() -> Void) {
-        guard isCentralOn else { return }
+    func connect(peripheral: CBPeripheral, completion: (() -> Void)? = nil) {
+        guard isBluetoothOn else { return }
         
         if peripheral.name == "InfiniTime" {
             isConnecting = true
             peripheralToConnect = peripheral
             central.connect(peripheralToConnect, options: nil)
             
-            completion()
+            completion?()
         }
     }
     
@@ -186,33 +187,29 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
-    func removeDevice(device: Device? = nil) {
-        deviceManager.removeDevice(device ?? pairedDevice)
-        unpair(device: device)
-    }
-    
     func unpair(device: Device? = nil) {
-        if let pairedDevice {
-            // Delete the device object we have said for this watch
-            deviceManager.removeDevice(device ?? pairedDevice)
-        }
-        // Update the list of user watches
-        deviceManager.fetchAllDevices()
-        
-        if let first = deviceManager.watches.first, deviceManager.watches.count <= 1 {
-            // Switch to the user's next watch
-            pairedDeviceID = first.uuid
-        } else {
-            // The user doesn't have another watch, this will show the welcome view
-            pairedDeviceID = nil
-        }
-        
-        log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
-        
-        if device == nil {
-            // FIXME: this only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
-            disconnect()
-            startScanning()
+        // Delete the device object we have said for this watch
+        deviceManager.removeDevice(device ?? pairedDevice!)
+        // FIXME: Better way to do this? We have to give core data some time to update
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
+            // Update the list of user watches
+            deviceManager.fetchAllDevices()
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
+                if let first = deviceManager.watches.first, deviceManager.watches.count >= 1 {
+                    // Switch to the user's next watch
+                    pairedDeviceID = first.uuid
+                } else {
+                    // The user doesn't have another watch, this will show the welcome view
+                    pairedDeviceID = nil
+                    // This only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
+                    // and we have no way to remove it
+                    disconnect()
+                    startScanning()
+                }
+                
+                log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+            }
         }
     }
     
@@ -274,7 +271,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         
         // The connection was abruptly terminated, so we try connecting again
-        connect(peripheral: peripheral) {}
+        connect(peripheral: peripheral)
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
@@ -287,17 +284,17 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         notifyCharacteristic = nil
         
         if let error {
-            connect(peripheral: peripheral) {}
+            connect(peripheral: peripheral)
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
         }
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        isCentralOn = (central.state == .poweredOn)
+        isBluetoothOn = (central.state == .poweredOn)
         isConnecting = false
         isScanning = false
         
-        if isCentralOn && !isConnectedToPinetime {
+        if isBluetoothOn && !isConnectedToPinetime {
             startScanning()
         }
     }

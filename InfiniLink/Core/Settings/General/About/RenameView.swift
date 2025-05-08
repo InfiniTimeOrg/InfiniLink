@@ -12,10 +12,15 @@ struct RenameView: View {
     @Environment(\.dismiss) var dismiss
     
     @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
     
-    @State var name: String = DeviceManager.shared.name
+    @Binding var name: String
     
     @FocusState var isFocused: Bool
+    
+    init(_ name: Binding<String>) {
+        self._name = name
+    }
     
     var body: some View {
         List {
@@ -31,16 +36,18 @@ struct RenameView: View {
                             name = "InfiniTime"
                         }
                         
-                        deviceManager.updateName(name: name.trimmingCharacters(in: .whitespaces), for: BLEManager.shared.pairedDevice)
+                        guard bleManager.pairedDevice != nil else { return }
+                        
+                        deviceManager.updateName(name: name.trimmingCharacters(in: .whitespaces), for: bleManager.pairedDevice!)
                     }
-                if isFocused && !name.isEmpty {
+                if !name.isEmpty {
                     Button {
                         name = ""
                     } label: {
                         Image(systemName: "xmark")
-                            .font(.system(size: 10).weight(.semibold))
+                            .font(.system(size: 11).weight(.bold))
                             .foregroundStyle(.gray)
-                            .padding(5)
+                            .padding(6)
                             .background(Material.regular)
                             .clipShape(Circle())
                     }
@@ -51,11 +58,5 @@ struct RenameView: View {
         .onAppear {
             isFocused = true
         }
-    }
-}
-
-#Preview {
-    NavigationView {
-        RenameView()
     }
 }

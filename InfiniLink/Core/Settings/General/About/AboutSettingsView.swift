@@ -21,7 +21,7 @@ struct AboutSettingsView: View {
             List {
                 Section {
                     NavigationLink {
-                        RenameView()
+                        RenameView($name)
                     } label: {
                         AboutRowView("Name", value: name)
                     }

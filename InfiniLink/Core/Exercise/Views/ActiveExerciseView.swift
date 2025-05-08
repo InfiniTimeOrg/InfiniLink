@@ -16,9 +16,6 @@ struct ActiveExerciseView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject var bleManager = BLEManager.shared
     
-    @Binding var exercise: Exercise?
-    
-    @State private var timer: Timer?
     @State private var showEndConfirmation = false
     
     @State private var previousHeartPoints: [HeartDataPoint] = []
@@ -28,13 +25,14 @@ struct ActiveExerciseView: View {
     private let fitnessCalculator = FitnessCalculator()
     
     var body: some View {
-        if let exercise {
-            VStack(spacing: 16) {
+        VStack(spacing: 16) {
+            if let exercise = exerciseViewModel.currentExercise {
+                Spacer()
                 HStack(spacing: 6) {
                     Image(systemName: exercise.icon)
                     Text(exercise.name)
                 }
-                Spacer()
+                .font(.title2.weight(.medium))
                 Text(exerciseViewModel.timeString())
                     .font(.system(size: 60).weight(.bold))
                 HStack(spacing: 30) {
@@ -63,9 +61,10 @@ struct ActiveExerciseView: View {
                     Spacer()
                     Button {
                         if exerciseViewModel.exercisePaused {
-                            startTimer()
+                            exerciseViewModel.startTimer()
                         } else {
-                            timer?.invalidate()
+                            exerciseViewModel.timer?.invalidate()
+                            exerciseViewModel.timer = nil
                         }
                         exerciseViewModel.exercisePaused.toggle()
                     } label: {
@@ -89,54 +88,48 @@ struct ActiveExerciseView: View {
                             .foregroundStyle(Color.white)
                             .clipShape(Circle())
                     }
+                    // This centers the other elements
                     Color.clear
                         .frame(width: 45, height: 45)
                     Spacer()
                 }
+                Spacer()
             }
-            .padding()
-            .alert("Are you sure you want to end the exercise? \(exerciseViewModel.exerciseTime >= 30 ? "" : "The duration of the exercise is too short to save.")", isPresented: $showEndConfirmation) {
-                Button(role: .destructive) {
-                    self.exercise = nil
-                    timer?.invalidate()
-                    
-                    if exerciseViewModel.exerciseTime >= 30 {
-                        exerciseViewModel.saveExercise(exercise, startDate: Date().addingTimeInterval(-exerciseViewModel.exerciseTime), heartPoints: Array(heartPoints), viewContext: viewContext)
-                    }
-                } label: {
-                    Text("End Exercise")
-                }
-                Button("Cancel", role: .cancel) { }
-            }
-            .onAppear {
-                currentStepCount = bleManager.stepCount
-                DispatchQueue.main.async {
-                    startTimer()
-                }
-            }
-            // Should these onChanges go in BLECharacteristicHandler?
-            .onChange(of: Array(heartPoints)) { newPoints in
-                let currentHeartPoints = Array(newPoints)
-                
-                newHeartPoints = currentHeartPoints.filter { !previousHeartPoints.contains($0) }
-                previousHeartPoints = currentHeartPoints
-            }
-            .onChange(of: bleManager.stepCount) { allSteps in
-                let steps = max(0, allSteps - currentStepCount)
-                
-                exerciseViewModel.stepsTaken = steps
-            }
-            .navigationBarHidden(true)
         }
-    }
-    
-    func startTimer() {
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
-            exerciseViewModel.exerciseTime += 1
+        .padding()
+        .alert("Are you sure you want to end the exercise? \(exerciseViewModel.exerciseTime >= 30 ? "" : "The duration of the exercise is too short to save.")", isPresented: $showEndConfirmation) {
+            Button(role: .destructive) {
+                guard let exercise = exerciseViewModel.currentExercise else { return }
+                
+                if exerciseViewModel.exerciseTime >= 30 {
+                    exerciseViewModel.saveExercise(exercise, startDate: Date().addingTimeInterval(-exerciseViewModel.exerciseTime), heartPoints: Array(heartPoints))
+                }
+                
+                exerciseViewModel.currentExercise = nil
+                exerciseViewModel.timer?.invalidate()
+            } label: {
+                Text("End Exercise")
+            }
+            Button("Cancel", role: .cancel) { }
+        }
+        .onAppear {
+            currentStepCount = bleManager.stepCount
+        }
+        // Should these onChanges go in BLECharacteristicHandler?
+        .onChange(of: Array(heartPoints)) { newPoints in
+            let currentHeartPoints = Array(newPoints)
+            
+            newHeartPoints = currentHeartPoints.filter { !previousHeartPoints.contains($0) }
+            previousHeartPoints = currentHeartPoints
+        }
+        .onChange(of: bleManager.stepCount) { allSteps in
+            let steps = max(0, allSteps - currentStepCount)
+            
+            exerciseViewModel.stepsTaken = steps
         }
     }
 }
 
 #Preview {
-    ActiveExerciseView(exercise: .constant(Exercise(id: "volleyball", name: "Volleyball", icon: "figure.volleyball", components: [.steps, .heart])))
+    ActiveExerciseView()
 }

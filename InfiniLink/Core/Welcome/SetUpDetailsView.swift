@@ -27,7 +27,7 @@ struct SetUpDetailsView: View {
         if list {
             content
         } else {
-            NavigationView {
+            NavigationStack {
                 content
             }
             .navigationViewStyle(.stack)
@@ -38,9 +38,6 @@ struct SetUpDetailsView: View {
         Form {
             if !list {
                 VStack(alignment: .center, spacing: 8) {
-                    // We can't use the nav link as the button because a chevron appears when inside a List/Form
-                    NavigationLink("", isActive: $nextViewActive, destination: { NotificationsSetupView() })
-                        .hidden()
                     Image(systemName: "figure.arms.open")
                         .font(.system(size: 60).weight(.medium))
                         .foregroundStyle(.blue)
@@ -125,6 +122,9 @@ struct SetUpDetailsView: View {
             }
         }
         .navigationTitle(list ? "Health Details" : "")
+        .navigationDestination(isPresented: $nextViewActive) {
+            NotificationsSetupView()
+        }
         .interactiveDismissDisabled()
         .toolbar {
             if !list {

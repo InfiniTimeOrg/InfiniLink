@@ -15,6 +15,7 @@
 		264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */; };
 		E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */; };
 		E02C62122CD05DA900C4D19B /* CurrentUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C62112CD05DA900C4D19B /* CurrentUpdateView.swift */; };
+		E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02F66982DCD0B9D0050243E /* AllExercisesView.swift */; };
 		E03A7DF62D0D4DDB007A9209 /* DeveloperModeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF52D0D4DDB007A9209 /* DeveloperModeSettingsView.swift */; };
 		E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */; };
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
@@ -52,7 +53,6 @@
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
 		E078ECFB2D4E6D9800560364 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E078ECFA2D4E6D9800560364 /* Zip */; };
-		E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F132CBD688A005C1325 /* CustomizationView.swift */; };
 		E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */; };
 		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
 		E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */; };
@@ -143,6 +143,7 @@
 		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModeView.swift; sourceTree = "<group>"; };
 		E02C62112CD05DA900C4D19B /* CurrentUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrentUpdateView.swift; sourceTree = "<group>"; };
+		E02F66982DCD0B9D0050243E /* AllExercisesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllExercisesView.swift; sourceTree = "<group>"; };
 		E03A7DF52D0D4DDB007A9209 /* DeveloperModeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperModeSettingsView.swift; sourceTree = "<group>"; };
 		E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperView.swift; sourceTree = "<group>"; };
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
@@ -180,7 +181,6 @@
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
-		E07D8F132CBD688A005C1325 /* CustomizationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomizationView.swift; sourceTree = "<group>"; };
 		E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersManager.swift; sourceTree = "<group>"; };
 		E07D8F172CBE2071005C1325 /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
 		E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
@@ -553,6 +553,7 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C09D2CB2454A0042A12D /* ExerciseView.swift */,
+				E02F66982DCD0B9D0050243E /* AllExercisesView.swift */,
 				E0B85D1E2CB6248000D85122 /* ActiveExerciseView.swift */,
 				E0B85D5D2CB628E200D85122 /* ExerciseDetailView.swift */,
 			);
@@ -582,7 +583,6 @@
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
 				E04396142D28E59400A13B90 /* DirectionsView.swift */,
-				E07D8F132CBD688A005C1325 /* CustomizationView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -813,6 +813,7 @@
 				E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */,
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
+				E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */,
 				E08C4A492CC4048900013D15 /* SleepData.swift in Sources */,
 				E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */,
 				E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */,
@@ -851,7 +852,6 @@
 				E07D8F222CC00AB0005C1325 /* UnitTemperature+Extension.swift in Sources */,
 				E08F2F352CC89A530094217A /* MapSearch.swift in Sources */,
 				E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */,
-				E07D8F142CBD688A005C1325 /* CustomizationView.swift in Sources */,
 				E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */,
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,

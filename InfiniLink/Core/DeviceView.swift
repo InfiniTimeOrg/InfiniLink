@@ -17,6 +17,7 @@ struct DeviceView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var remindersManager = RemindersManager.shared
     @ObservedObject var notificationManager = NotificationManager.shared
+    @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     
     @AppStorage("sleepGoal") var sleepGoal = 28800
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
@@ -73,78 +74,119 @@ struct DeviceView: View {
                                 .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
                                 .clipped(antialiased: true)
                             VStack(spacing: 5) {
-                                Group {
-                                    Text(connectionState()) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
-                                        .foregroundColor({
-                                            if bleManager.batteryLevel > 20 {
-                                                return Color.gray
-                                            } else if bleManager.batteryLevel > 10 {
-                                                return Color.orange
-                                            } else {
-                                                return Color.red
-                                            }
-                                        }())
-                                }
-                                .foregroundStyle(Color.gray)
                                 Text(deviceManager.name)
                                     .font(.title.weight(.bold))
+                                if bleManager.isBluetoothOn {
+                                    Group {
+                                        Text(connectionState()) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
+                                            .foregroundColor({
+                                                if bleManager.batteryLevel > 20 {
+                                                    return Color.gray
+                                                } else if bleManager.batteryLevel > 10 {
+                                                    return Color.orange
+                                                } else {
+                                                    return Color.red
+                                                }
+                                            }())
+                                    }
+                                    .foregroundStyle(Color.gray)
+                                }
                             }
                             .opacity(showNavigationTitle ? 0 : 1)
                         }
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
-                        if downloadManager.updateAvailable {
-                            if !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil {
-                                Section {
-                                    NavigationLink {
-                                        SoftwareUpdateView()
-                                    } label: {
-                                        HStack(spacing: 10) {
-                                            Image(.infiniTime)
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width: 50, height: 50)
-                                            VStack(alignment: .leading, spacing: 3) {
-                                                Text("Update Available")
-                                                    .foregroundStyle(Color.primary)
-                                                    .font(.body.weight(.bold))
-                                                Group {
-                                                    Text("InfiniTime ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
-                                                }
-                                                .foregroundStyle(Color.gray)
-                                            }
-                                        }
-                                    }
+                    let comparison = deviceManager.firmware.compare(downloadManager.updateVersion, options: .numeric)
+                    if !bleManager.isBluetoothOn {
+                        // We don't use a button because there's no App Store-safe way to deeplink to Settings without opening InfiniLink settings, which could confuse the user
+                        Section {
+                            HStack(spacing: 14) {
+                                // Make sure we show the current app icon
+                                Image("logo.bluetooth")
+                                    .resizable()
+                                    .frame(width: 21, height: 35)
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text("Bluetooth Disabled")
+                                        .foregroundStyle(Color.primary)
+                                        .fontWeight(.bold)
+                                    Text("To connect to your watch, you'll need to enable Bluetooth.")
+                                        .foregroundStyle(.gray)
                                 }
                             }
-                        } else if let update = downloadManager.appUpdate {
-                            Section {
-                                Button {
-                                    guard let testFlight = URL(string: testFlightLink) else { return }
-                                    guard let appStore = URL(string: appStoreLink) else { return }
-                                    
-                                    openURL(update.isBeta ? testFlight : appStore)
-                                } label: {
-                                    HStack(spacing: 10) {
-                                        Image("appIcon")
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width: 50, height: 50)
-                                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                                        VStack(alignment: .leading, spacing: 3) {
-                                            Text("App Update Available")
-                                                .foregroundStyle(Color.primary)
-                                                .font(.body.weight(.bold))
-                                            Group {
-                                                Text("InfiniLink ") + Text(update.version).font(.body.weight(.medium))
-                                            }
-                                            .foregroundStyle(Color.gray)
-                                        }
+                        }
+                    } else if let exercise = exerciseViewModel.currentExercise {
+                        Section {
+                            NavigationLink {
+                                ActiveExerciseView()
+                            } label: {
+                                HStack(spacing: 10) {
+                                    Image(systemName: exercise.icon)
+                                        .font(.title2.weight(.medium))
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text("Active Exercise")
+                                            .font(.system(size: 13).weight(.medium))
+                                            .foregroundStyle(.gray)
+                                        Text(exercise.name)
+                                            .foregroundStyle(Color.primary)
+                                            .fontWeight(.bold)
+                                        Text(exerciseViewModel.timeString())
                                     }
                                 }
                             }
                         }
+                    } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
+                        Section {
+                            NavigationLink {
+                                SoftwareUpdateView()
+                            } label: {
+                                HStack(spacing: 10) {
+                                    Image(.infiniTime)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text("Update Available")
+                                            .foregroundStyle(Color.primary)
+                                            .fontWeight(.bold)
+                                        Group {
+                                            Text("InfiniTime ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
+                                        }
+                                        .foregroundStyle(.gray)
+                                    }
+                                }
+                            }
+                        }
+                    } else if let update = downloadManager.appUpdate {
+                        Section {
+                            Button {
+                                guard let testFlight = URL(string: testFlightLink) else { return }
+                                guard let appStore = URL(string: appStoreLink) else { return }
+                                
+                                openURL(update.isBeta ? testFlight : appStore)
+                            } label: {
+                                HStack(spacing: 10) {
+                                    // Make sure we show the current app icon
+                                    Image((UIApplication.shared.alternateIconName ?? "AppIcon") + "-Rendered")
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                                    VStack(alignment: .leading, spacing: 3) {
+                                        Text("App Update Available")
+                                            .foregroundStyle(Color.primary)
+                                            .fontWeight(.bold)
+                                        Group {
+                                            Text("InfiniLink ") +
+                                            Text(update.version)
+                                                .fontWeight(.semibold)
+                                        }
+                                        .foregroundStyle(.gray)
+                                    }
+                                }
+                            }
+                        }
+                    }
                     Section {
                         NavigationLink {
                             ExerciseView()
@@ -215,16 +257,11 @@ struct DeviceView: View {
             .onPreferenceChange(ScrollOffsetPreferenceKey.self) { values in
                 guard let value = values.first else { return }
                 
-                withAnimation(.easeInOut(duration: 0.4)) {
-                    self.showNavigationTitle = (value <= -135)
-                }
+                self.showNavigationTitle = (value <= -135)
             }
             .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
                 if blefsTransfer != nil && scenePhase == .active {
                     BLEFSHandler.shared.readSettings { settings in
-                        // MARK: - Crash
-                        // This is getting called while in the background, and fetching/updating objects from the UI/main thread, and could be the source of crashes
-                        // We need to add a check to make sure we're in the foreground when we call this method
                         deviceManager.updateSettings(settings: settings)
                     }
                 }
@@ -300,7 +337,7 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 #Preview {
     DeviceView()
         .onAppear {
-            BLEManager.shared.pairedDevice.firmware = "0.14.1"
+            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
             DFUUpdater.shared.local = false
         }

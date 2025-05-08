@@ -13,11 +13,13 @@ class ExerciseViewModel: ObservableObject {
     static let shared = ExerciseViewModel()
     
     let healthKitManager = HealthKitManager.shared
+    let persistenceController = PersistenceController.shared
     
     @Published var exerciseTime: TimeInterval = 0
     @Published var stepsTaken: Int = 0
     @Published var currentExercise: Exercise?
     @Published var exercisePaused = false
+    @Published var timer: Timer?
     
     var appDidEnterBackgroundDate: Date?
     
@@ -75,10 +77,12 @@ class ExerciseViewModel: ObservableObject {
     func startExercise(_ exercise: Exercise) {
         reset()
         currentExercise = exercise
+        startTimer()
     }
     
-    func saveExercise(_ exercise: Exercise, startDate: Date, heartPoints: [HeartDataPoint], viewContext: NSManagedObjectContext) {
-        let newExercise = UserExercise(context: viewContext)
+    func saveExercise(_ exercise: Exercise, startDate: Date, heartPoints: [HeartDataPoint]) {
+        let context = persistenceController.container.viewContext
+        let newExercise = UserExercise(context: context)
         
         newExercise.id = UUID()
         newExercise.startDate = startDate
@@ -89,15 +93,7 @@ class ExerciseViewModel: ObservableObject {
         newExercise.caloriesBurned = Int32(FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace))
         newExercise.deviceId = BLEManager.shared.pairedDeviceID
         
-        saveContext(viewContext)
-    }
-    
-    func saveContext(_ context: NSManagedObjectContext) {
-        do {
-            try context.save()
-        } catch {
-            log("Error saving context: \(error.localizedDescription)", caller: "ExerciseViewModel")
-        }
+       persistenceController.save()
     }
     
     func isDateDuringExercise(_ date: Date) -> Bool {
@@ -109,5 +105,11 @@ class ExerciseViewModel: ObservableObject {
         }
         
         return !exercises.isEmpty
+    }
+    
+    func startTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            self.exerciseTime += 1
+        }
     }
 }
