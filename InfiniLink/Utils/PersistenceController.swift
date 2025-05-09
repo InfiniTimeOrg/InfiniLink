@@ -6,22 +6,31 @@
 //
 
 import CoreData
+import CloudKit
 
 struct PersistenceController {
     static let shared = PersistenceController()
     
-    let container: NSPersistentContainer
+    let container: NSPersistentCloudKitContainer
     
     init() {
-        container = NSPersistentContainer(name: "InfiniLink")
+        container = NSPersistentCloudKitContainer(name: "InfiniLink")
+        
+        guard let description = container.persistentStoreDescriptions.first else {
+            log("No persistent store descriptions")
+            return
+        }
+        
+        description.shouldMigrateStoreAutomatically = true
+        description.shouldInferMappingModelAutomatically = true
+        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.alexemry.Infini-iOS")
+        
         container.loadPersistentStores { storeDescription, error in
-            storeDescription.shouldMigrateStoreAutomatically = true
-            storeDescription.shouldInferMappingModelAutomatically = true
-            
             if let error = error as NSError? {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         }
+        
         container.viewContext.automaticallyMergesChangesFromParent = true
     }
 }

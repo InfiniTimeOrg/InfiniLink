@@ -106,6 +106,7 @@ struct DeviceView: View {
                                 Image("logo.bluetooth")
                                     .resizable()
                                     .frame(width: 21, height: 35)
+                                    .foregroundStyle(.blue)
                                 VStack(alignment: .leading, spacing: 3) {
                                     Text("Bluetooth Disabled")
                                         .foregroundStyle(Color.primary)

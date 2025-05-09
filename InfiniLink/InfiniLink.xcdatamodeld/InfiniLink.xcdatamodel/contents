@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23605" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="BatteryDataPoint" representedClassName="BatteryDataPoint" syncable="YES" codeGenerationType="class">
         <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -8,24 +8,24 @@
     </entity>
     <entity name="Device" representedClassName="Device" syncable="YES" codeGenerationType="class">
         <attribute name="alwaysOnDisplay" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
-        <attribute name="blefsVersion" attributeType="String"/>
-        <attribute name="bleUUID" attributeType="String"/>
+        <attribute name="blefsVersion" attributeType="String" defaultValueString=""/>
+        <attribute name="bleUUID" attributeType="String" defaultValueString=""/>
         <attribute name="brightLevel" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
         <attribute name="chimesOption" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="clockType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="firmware" attributeType="String"/>
-        <attribute name="hardwareRevision" attributeType="String"/>
-        <attribute name="manufacturer" attributeType="String"/>
-        <attribute name="modelNumber" attributeType="String"/>
+        <attribute name="firmware" attributeType="String" defaultValueString=""/>
+        <attribute name="hardwareRevision" attributeType="String" defaultValueString=""/>
+        <attribute name="manufacturer" attributeType="String" defaultValueString=""/>
+        <attribute name="modelNumber" attributeType="String" defaultValueString=""/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="notificationStatus" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="screenTimeout" attributeType="Integer 32" defaultValueString="15000" usesScalarValueType="YES"/>
-        <attribute name="serial" attributeType="String"/>
+        <attribute name="serial" attributeType="String" defaultValueString=""/>
         <attribute name="settingsVersion" attributeType="Integer 32" defaultValueString="4" usesScalarValueType="YES"/>
         <attribute name="shakeWakeThreshold" attributeType="Integer 16" defaultValueString="150" usesScalarValueType="YES"/>
-        <attribute name="softwareRevision" attributeType="String"/>
+        <attribute name="softwareRevision" attributeType="String" defaultValueString=""/>
         <attribute name="stepsGoal" attributeType="Integer 32" defaultValueString="10000" usesScalarValueType="YES"/>
-        <attribute name="uuid" attributeType="String"/>
+        <attribute name="uuid" attributeType="String" defaultValueString=""/>
         <attribute name="watchface" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="weatherFormat" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="pineTimeStyle" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="PineTimeStyleWatchface" inverseName="device" inverseEntity="PineTimeStyleWatchface"/>
@@ -34,7 +34,7 @@
     <entity name="HeartDataPoint" representedClassName="HeartDataPoint" syncable="YES" codeGenerationType="class">
         <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="value" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="exercise" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="UserExercise" inverseName="heartPoints" inverseEntity="UserExercise"/>
     </entity>
@@ -53,9 +53,9 @@
     </entity>
     <entity name="SleepDataPoint" representedClassName="SleepDataPoint" syncable="YES" codeGenerationType="class">
         <attribute name="deviceId" optional="YES" attributeType="String"/>
-        <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="minutes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
-        <attribute name="timestamp" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="StepCounts" representedClassName="StepCounts" syncable="YES" codeGenerationType="class">
         <attribute name="deviceId" optional="YES" attributeType="String"/>
@@ -66,10 +66,10 @@
     <entity name="UserExercise" representedClassName="UserExercise" syncable="YES" codeGenerationType="class">
         <attribute name="caloriesBurned" optional="YES" attributeType="Integer 32" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="deviceId" optional="YES" attributeType="String"/>
-        <attribute name="endDate" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="exerciseId" attributeType="String"/>
+        <attribute name="endDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="exerciseId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
-        <attribute name="startDate" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="startDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="steps" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="heartPoints" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="HeartDataPoint" inverseName="exercise" inverseEntity="HeartDataPoint"/>
     </entity>
