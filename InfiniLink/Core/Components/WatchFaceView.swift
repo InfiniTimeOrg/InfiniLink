@@ -220,7 +220,7 @@ struct PineTimeStyleWF: View {
                     .foregroundColor(getColor(for: .time))
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24() {
+            if !hour24() {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 let hour24 = currentHour > 12 ? currentHour - 12 : (currentHour == 0 ? 12 : currentHour)
                 let hourString = String(format: "%02d", hour24)
