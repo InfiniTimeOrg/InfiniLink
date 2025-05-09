@@ -120,6 +120,10 @@ class MusicController {
     }
     
     func convertTime(value: Double) -> [UInt8] {
+        guard value.isFinite && !value.isNaN else {
+            return [0, 0, 0, 0]
+        }
+        
         let val32: UInt32 = UInt32(floor(value))
         
         let byte1 = UInt8(val32 & 0x000000FF)

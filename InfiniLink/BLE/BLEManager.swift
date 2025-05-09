@@ -294,6 +294,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isConnecting = false
         isScanning = false
         
+        if !isBluetoothOn {
+            disconnect()
+        }
+        
         if isBluetoothOn && !isConnectedToPinetime {
             startScanning()
         }
@@ -324,6 +328,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+        guard error == nil else {
+            log(error!.localizedDescription, caller: "didUpdateValueFor characteristic", target: .ble)
+            return
+        }
+        
         deviceManager.updateInfo(characteristic: characteristic)
         characteristicHandler.handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }

@@ -225,8 +225,12 @@ extension DeviceManager {
         case cbuuids.manufacturer:
             bleManager.pairedDevice.manufacturer = String(data: value, encoding: .utf8) ?? ""
         case cbuuids.blefsVersion:
-            let byteArray = [UInt8](characteristic.value!)
-            bleManager.pairedDevice.blefsVersion = String(Int(byteArray[1])) + String(Int(byteArray[0]))
+            let byteArray = [UInt8](value)
+            if byteArray.count >= 2 {
+                bleManager.pairedDevice.blefsVersion = "\(Int(byteArray[1]))\(Int(byteArray[0]))"
+            } else {
+                bleManager.pairedDevice.blefsVersion = "00" // or some fallback
+            }
         default:
             break
         }
