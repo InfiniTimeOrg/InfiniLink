@@ -11,10 +11,10 @@ import CloudKit
 struct PersistenceController {
     static let shared = PersistenceController()
     
-    let container: NSPersistentCloudKitContainer
+    let container: NSPersistentContainer
     
     init() {
-        container = NSPersistentCloudKitContainer(name: "InfiniLink")
+        container = NSPersistentContainer(name: "InfiniLink")
         
         guard let description = container.persistentStoreDescriptions.first else {
             log("No persistent store descriptions")
@@ -23,7 +23,8 @@ struct PersistenceController {
         
         description.shouldMigrateStoreAutomatically = true
         description.shouldInferMappingModelAutomatically = true
-        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.alexemry.Infini-iOS")
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+//        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.alexemry.Infini-iOS")
         
         container.loadPersistentStores { storeDescription, error in
             if let error = error as NSError? {
