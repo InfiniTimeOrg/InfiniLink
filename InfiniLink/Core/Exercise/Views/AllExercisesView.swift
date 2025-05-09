@@ -47,19 +47,19 @@ struct AllExercisesView: View {
                     Text("You don't have any saved exercises. When you complete one, they'll show up here.")
                 } else {
                     ForEach(filteredExercises.sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in
-                        let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId })!
-                        
-                        NavigationLink {
-                            ExerciseDetailView(userExercise: userExercise)
-                        } label: {
-                            HStack {
-                                Image(systemName: exercise.icon)
-                                    .font(.system(size: 24).weight(.medium))
-                                VStack(alignment: .leading, spacing: 4) {
-                                    Text(exercise.name)
-                                        .font(.body.weight(.medium))
-                                    Text(userExercise.startDate!.formatted())
-                                        .foregroundStyle(Color.gray)
+                        if let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId }) {
+                            NavigationLink {
+                                ExerciseDetailView(userExercise: userExercise)
+                            } label: {
+                                HStack {
+                                    Image(systemName: exercise.icon)
+                                        .font(.system(size: 24).weight(.medium))
+                                    VStack(alignment: .leading, spacing: 4) {
+                                        Text(exercise.name)
+                                            .font(.body.weight(.medium))
+                                        Text(userExercise.startDate?.formatted() ?? "Unknown date")
+                                            .foregroundStyle(Color.gray)
+                                    }
                                 }
                             }
                         }

@@ -300,7 +300,7 @@ struct DigitalWF: View {
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) > 12 && !hour24() {
+            if !hour24() {
                 CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
@@ -319,8 +319,8 @@ struct DigitalWF: View {
                 
                 return formatter.string(from: current).uppercased()
             }(), font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
-                .foregroundColor(Color(.lightGray))
-                .frame(width: geometry.size.width, height: geometry.size.height / 1.6, alignment: .bottom)
+            .foregroundColor(Color(.lightGray))
+            .frame(width: geometry.size.width, height: geometry.size.height / 1.6, alignment: .bottom)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
@@ -534,7 +534,7 @@ struct InfineatWF: View {
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
             }
-            if Calendar.current.component(.hour, from: Date()) >= 12 && !hour24() {
+            if !hour24() {
                 let currentHour = Calendar.current.component(.hour, from: Date())
                 let hour24 = currentHour % 12 == 0 ? 12 : currentHour
                 let hourString = String(format: "%02d", hour24)
@@ -673,22 +673,17 @@ struct TerminalWF: View {
                 .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
                 .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.5)
-            if !hour24() {
-                Group {
-                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour % 12 == 0 ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")").foregroundColor(.green)
+            Group {
+                if !hour24() {
+                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour % 12 == 0 ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")")
+                } else {
+                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond))")
                 }
-                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
-            } else {
-                Group {
-                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond))").foregroundColor(.green)
-                }
-                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
             }
+            .foregroundColor(.green)
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
             Group {
                 Text("[DATE]").foregroundColor(.white) + Text("\(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: Date()), Calendar.current.component(.month, from: Date()), Calendar.current.component(.day, from: Date())))").foregroundColor(.blue)
             }
@@ -868,4 +863,13 @@ enum InfineatItem {
     case topBottom
     case midBottom
     case midTop
+}
+
+#Preview {
+    GeometryReader { geo in
+        VStack {
+            TerminalWF(geometry: .constant(geo), device: Device())
+        }
+        .frame(maxWidth: geo.size.width / 2.5)
+    }
 }

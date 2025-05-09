@@ -11,6 +11,7 @@ struct WeatherSettingsView: View {
     @ObservedObject var locationManager = LocationManager.shared
     
     @AppStorage("useCurrentLocation") var useCurrentLocation = true
+    @AppStorage("setLocation") var setLocation = "Cupertino"
     @AppStorage("displayLocation") var displayLocation = "Cupertino"
     
     var body: some View {
@@ -40,8 +41,12 @@ struct WeatherSettingsView: View {
             }
         }
         .navigationTitle("Settings")
-        .onChange(of: useCurrentLocation) { _ in
-            locationManager.getLocation()
+        .onChange(of: useCurrentLocation) { useCurrentLocation in
+            if useCurrentLocation {
+                locationManager.getLocation()
+            } else {
+                locationManager.setLocation(setLocation)
+            }
         }
         .onAppear {
             locationManager.requestLocation()
