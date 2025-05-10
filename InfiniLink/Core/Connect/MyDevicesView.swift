@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct MyDevicesView: View {
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Device.name, ascending: true)], animation: .default) var devices: FetchedResults<Device>
+    
     @Environment(\.dismiss) var dismiss
     
     @ObservedObject var deviceManager = DeviceManager.shared
@@ -24,13 +27,34 @@ struct MyDevicesView: View {
             VStack {
                 List {
                     Section {
-                        ForEach(deviceManager.watches, id: \.self) { watch in
+                        ForEach(devices, id: \.self) { watch in
                             HStack {
                                 Button {
                                     bleManager.switchDevice(device: watch)
                                     dismiss()
                                 } label: {
-                                    DeviceRowView(watch: watch)
+                                    HStack(spacing: 8) {
+                                        Image(systemName: "checkmark")
+                                            .foregroundStyle(.blue)
+                                            .font(.body.weight(.semibold))
+                                            .opacity(bleManager.pairedDeviceID  == watch.uuid ? 1 : 0)
+                                        WatchFaceView(watchface: UInt8(watch.watchface), device: watch)
+                                            .frame(width: 90, height: 90)
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text(watch.name ?? "InfiniTime")
+                                                .foregroundStyle(Color.primary)
+                                                .font(.title2.weight(.semibold))
+                                            Text({
+                                                if let peripheral = bleManager.peripheralToConnect, peripheral.identifier.uuidString == watch.uuid {
+                                                    return "Connecting..."
+                                                } else {
+                                                    return "InfiniTime " + "\(watch.firmware ?? "")"
+                                                }
+                                            }())
+                                                .foregroundStyle(.gray)
+                                        }
+                                        Spacer()
+                                    }
                                 }
                                 .disabled(bleManager.pairedDeviceID ?? "" == watch.uuid ?? "")
                                 Image(systemName: "info.circle")
@@ -95,36 +119,6 @@ struct MyDevicesView: View {
             .sheet(isPresented: $showConnectSheet, onDismiss: { bleManager.isPairingNewDevice = false }) {
                 ConnectView()
             }
-            .onAppear {
-                deviceManager.fetchAllDevices()
-            }
-        }
-    }
-}
-
-struct DeviceRowView: View {
-    @Environment(\.dismiss) var dismiss
-    
-    @ObservedObject var bleManager = BLEManager.shared
-    
-    let watch: Device
-    
-    var body: some View {
-        HStack(spacing: 8) {
-            Image(systemName: "checkmark")
-                .foregroundStyle(.blue)
-                .font(.body.weight(.semibold))
-                .opacity(bleManager.pairedDeviceID  == watch.uuid ? 1 : 0)
-            WatchFaceView(watchface: .constant(UInt8(watch.watchface)), device: watch)
-                .frame(width: 90, height: 90)
-            VStack(alignment: .leading, spacing: 4) {
-                Text(watch.name ?? "InfiniTime")
-                    .foregroundStyle(Color.primary)
-                    .font(.title2.weight(.semibold))
-                Text("InfiniTime " + "\(watch.firmware ?? "")")
-                    .foregroundStyle(.gray)
-            }
-            Spacer()
         }
     }
 }

@@ -9,18 +9,17 @@ import SwiftUI
 import CoreData
 import CoreBluetooth
 
+struct CharacteristicIdentifier {
+    static let modelNumber = CBUUID(string: "2A24")
+    static let serial = CBUUID(string: "2A25")
+    static let firmware = CBUUID(string: "2A26")
+    static let hardwareRevision = CBUUID(string: "2A27")
+    static let softwareRevision = CBUUID(string: "2A28")
+    static let manufacturer = CBUUID(string: "2A29")
+    static let blefsVersion = CBUUID(string: "adaf0100-4669-6c65-5472-616e73666572")
+}
+
 class DeviceManager: ObservableObject {
-    struct cbuuid {
-        let modelNumber = CBUUID(string: "2A24")
-        let serial = CBUUID(string: "2A25")
-        let firmware = CBUUID(string: "2A26")
-        let hardwareRevision = CBUUID(string: "2A27")
-        let softwareRevision = CBUUID(string: "2A28")
-        let manufacturer = CBUUID(string: "2A29")
-        let blefsVersion = CBUUID(string: "adaf0100-4669-6c65-5472-616e73666572")
-    }
-    let cbuuids = cbuuid()
-    
     let persistenceController = PersistenceController.shared
     let bleManager = BLEManager.shared
     
@@ -61,9 +60,9 @@ class DeviceManager: ObservableObject {
     @Published var settings = Settings()
     @Published var watches = [Device]()
     
-    // Get persisted settings, before settings.dat has loaded
-    func getSettings() {
-        guard let device = bleManager.pairedDevice else { return }
+    // Update persisted settings, before settings.dat has loaded
+    func setSettings(_ device: Device? = nil) {
+        let device = device ?? fetchDevice()!
         
         DispatchQueue.main.async {
             self.settings = Settings(
@@ -88,19 +87,20 @@ class DeviceManager: ObservableObject {
     func fetchDevice(with uuid: String? = nil) -> Device? {
         guard let id = uuid ?? bleManager.pairedDeviceID else { return nil }
         
+        let context = persistenceController.container.viewContext
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "uuid == %@", id)
         
         do {
-            let existingDevices = try persistenceController.container.viewContext.fetch(fetchRequest)
+            let existingDevices = try context.fetch(fetchRequest)
             
             // There's already a paired watch
             if let existingDevice = existingDevices.first {
+                setSettings(existingDevice)
                 return existingDevice
             }
             
             // There's not already a paired watch, create a new object to save
-            let context = persistenceController.container.newBackgroundContext()
             let newDevice = Device(context: context)
             context.perform {
                 newDevice.uuid = id
@@ -120,6 +120,8 @@ class DeviceManager: ObservableObject {
                 }
             }
             
+            setSettings(newDevice)
+            
             return newDevice
         } catch {
             log("Error fetching or saving device: \(error)", caller: "DeviceManager")
@@ -133,7 +135,7 @@ class DeviceManager: ObservableObject {
         let context = persistenceController.container.viewContext
         
         // MARK: - Crash
-        // Crashes happening when creating watch face objects from the viewContext
+        // Crashes occasionally happening when creating watch face objects from the viewContext
         context.perform {
             device.brightLevel = Int16(settings.brightLevel.rawValue)
             device.chimesOption = Int16(settings.chimesOption.rawValue)
@@ -164,12 +166,13 @@ class DeviceManager: ObservableObject {
                 log("Error saving settings: \(error.localizedDescription)", caller: "DeviceManager - updateSettings")
             }
         }
-        getSettings()
+        
+        // We've gotten the settings from the watch, now set our variables
+        setSettings(device)
     }
     
-    func updateName(name: String, for device: Device) {
-        guard let uuid = device.uuid else { return }
-        guard let device = fetchDevice(with: uuid) else { return }
+    func updateName(name: String, for id: String) {
+        guard let device = fetchDevice(with: id) else { return }
         
         device.name = name
         
@@ -196,10 +199,12 @@ class DeviceManager: ObservableObject {
     func fetchAllDevices() {
         let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
         
-        do {
-            self.watches = try self.persistenceController.container.viewContext.fetch(fetchRequest)
-        } catch {
-            log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
+        DispatchQueue.main.async {
+            do {
+                self.watches = try self.persistenceController.container.viewContext.fetch(fetchRequest)
+            } catch {
+                log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
+            }
         }
     }
 }
@@ -207,38 +212,50 @@ class DeviceManager: ObservableObject {
 extension DeviceManager {
     func updateInfo(characteristic: CBCharacteristic) {
         guard let value = characteristic.value else { return }
-        guard bleManager.pairedDevice != nil else { return }
-        
-        bleManager.pairedDevice.bleUUID = characteristic.uuid.uuidString
-        
-        switch characteristic.uuid {
-        case cbuuids.modelNumber:
-            bleManager.pairedDevice.modelNumber = String(data: value, encoding: .utf8) ?? ""
-        case cbuuids.serial:
-            bleManager.pairedDevice.serial = String(data: value, encoding: .utf8) ?? ""
-        case cbuuids.firmware:
-            bleManager.pairedDevice.firmware = String(data: value, encoding: .utf8) ?? ""
-        case cbuuids.hardwareRevision:
-            bleManager.pairedDevice.hardwareRevision = String(data: value, encoding: .utf8) ?? ""
-        case cbuuids.softwareRevision:
-            bleManager.pairedDevice.softwareRevision = String(data: value, encoding: .utf8) ?? ""
-        case cbuuids.manufacturer:
-            bleManager.pairedDevice.manufacturer = String(data: value, encoding: .utf8) ?? ""
-        case cbuuids.blefsVersion:
-            let byteArray = [UInt8](value)
-            if byteArray.count >= 2 {
-                bleManager.pairedDevice.blefsVersion = "\(Int(byteArray[1]))\(Int(byteArray[0]))"
-            } else {
-                bleManager.pairedDevice.blefsVersion = "00" // or some fallback
+        guard let objectID = bleManager.pairedDevice?.objectID else { return }
+
+        let context = persistenceController.container.viewContext
+
+        context.perform {
+            do {
+                guard let device = try context.existingObject(with: objectID) as? Device else { return }
+                
+                device.bleUUID = characteristic.uuid.uuidString
+
+                switch characteristic.uuid {
+                case CharacteristicIdentifier.modelNumber:
+                    device.modelNumber = String(data: value, encoding: .utf8) ?? ""
+                case CharacteristicIdentifier.serial:
+                    device.serial = String(data: value, encoding: .utf8) ?? ""
+                case CharacteristicIdentifier.firmware:
+                    device.firmware = String(data: value, encoding: .utf8) ?? ""
+                case CharacteristicIdentifier.hardwareRevision:
+                    device.hardwareRevision = String(data: value, encoding: .utf8) ?? ""
+                case CharacteristicIdentifier.softwareRevision:
+                    device.softwareRevision = String(data: value, encoding: .utf8) ?? ""
+                case CharacteristicIdentifier.manufacturer:
+                    device.manufacturer = String(data: value, encoding: .utf8) ?? ""
+                case CharacteristicIdentifier.blefsVersion:
+                    let byteArray = [UInt8](value)
+                    if byteArray.count >= 2 {
+                        device.blefsVersion = "\(Int(byteArray[1]))\(Int(byteArray[0]))"
+                    } else {
+                        device.blefsVersion = "00"
+                    }
+                default:
+                    break
+                }
+
+                try context.save()
+            } catch {
+                log("Failed to update paired device: \(error)", caller: "DeviceManager", target: .ble)
             }
-        default:
-            break
         }
     }
     
     func readInfoCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
         switch characteristic.uuid {
-        case cbuuids.modelNumber, cbuuids.serial, cbuuids.firmware, cbuuids.hardwareRevision, cbuuids.softwareRevision, cbuuids.manufacturer, cbuuids.blefsVersion: peripheral.readValue(for: characteristic)
+        case CharacteristicIdentifier.modelNumber, CharacteristicIdentifier.serial, CharacteristicIdentifier.firmware, CharacteristicIdentifier.hardwareRevision, CharacteristicIdentifier.softwareRevision, CharacteristicIdentifier.manufacturer, CharacteristicIdentifier.blefsVersion: peripheral.readValue(for: characteristic)
         default:
             break
         }

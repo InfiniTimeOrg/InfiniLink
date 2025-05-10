@@ -48,9 +48,6 @@ struct WeatherSettingsView: View {
                 locationManager.setLocation(setLocation)
             }
         }
-        .onAppear {
-            locationManager.requestLocation()
-        }
     }
 }
 

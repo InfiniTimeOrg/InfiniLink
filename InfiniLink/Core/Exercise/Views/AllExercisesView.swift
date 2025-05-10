@@ -11,17 +11,19 @@ struct AllExercisesView: View {
     @ObservedObject private var chartManager = ChartManager.shared
     @ObservedObject private var exerciseViewModel = ExerciseViewModel.shared
     
-    @State private var userExercises = [UserExercise]()
     @State private var searchText = ""
     
     @Environment(\.managedObjectContext) var viewContext
+    @Environment(\.dismiss) var dismiss
+    
+    private let persistenceController = PersistenceController.shared
     
     private var filteredExercises: [UserExercise] {
         let query = searchText.trimmingCharacters(in: .whitespaces).lowercased()
         if query.isEmpty {
-            return userExercises
+            return exerciseViewModel.userExercises
         }
-        return userExercises.filter {
+        return exerciseViewModel.userExercises.filter {
             guard let startDate = $0.startDate, let exercise = exerciseViewModel.exercises.first(where: { $0.id == $0.id }) else { return false }
             
             return exercise.name.lowercased().contains(query) || startDate.formatted().lowercased().contains(query)
@@ -29,7 +31,7 @@ struct AllExercisesView: View {
     }
     
     private func updateUserExercises() {
-        userExercises = chartManager.userExercises()
+        exerciseViewModel.userExercises = chartManager.userExercises()
     }
     private func delete(at offsets: IndexSet) {
         for index in offsets {
@@ -37,14 +39,19 @@ struct AllExercisesView: View {
             viewContext.delete(userExercise)
         }
         
-        PersistenceController.shared.save()
+        persistenceController.save()
+        updateUserExercises()
+        
+        if exerciseViewModel.userExercises.isEmpty {
+            dismiss()
+        }
     }
     
     var body: some View {
         List {
             Section {
-                if userExercises.isEmpty {
-                    Text("You don't have any saved exercises. When you complete one, they'll show up here.")
+                if filteredExercises.isEmpty {
+                    Text("Nothing matched your search. Ensure your spelling is correct and try again.")
                 } else {
                     ForEach(filteredExercises.sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in
                         if let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId }) {
@@ -72,14 +79,10 @@ struct AllExercisesView: View {
         .searchable(text: $searchText, prompt: "Search by name or date")
         .toolbar {
             EditButton()
-                .disabled(userExercises.isEmpty)
+                .disabled(exerciseViewModel.userExercises.isEmpty)
         }
         .onAppear {
             updateUserExercises()
         }
     }
-}
-
-#Preview {
-    AllExercisesView()
 }

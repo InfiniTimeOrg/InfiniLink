@@ -286,7 +286,6 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
-                    print(String(data: data, encoding: .utf8))
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
                     DispatchQueue.main.async {
@@ -321,7 +320,6 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
-                    print(String(data: data, encoding: .utf8))
                     let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
                     
                     DispatchQueue.main.async {
@@ -401,6 +399,18 @@ class DownloadManager: NSObject, ObservableObject {
         
         self.downloadTask = urlSession.downloadTask(with: request)
         self.downloadTask.resume()
+    }
+    
+    func clearUpdate() {
+        updateVersion = "0.0.0"
+        updateBody = ""
+        updateSize = 0
+        browserDownloadUrl = URL(fileURLWithPath: "")
+        browserDownloadResourcesUrl = URL(fileURLWithPath: "")
+        updateStarted = false
+        updateAvailable = false
+        startTransfer = false
+        externalResources = false
     }
     
     private func updateTasks() {

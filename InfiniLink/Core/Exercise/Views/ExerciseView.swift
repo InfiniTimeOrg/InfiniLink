@@ -26,11 +26,15 @@ struct ExerciseView: View {
                             Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
                         }
                     }
-                    Section(footer: Text("You can start a new exercise by choosing one from the list below.")) {
-                        NavigationLink {
-                            AllExercisesView()
-                        } label: {
-                            Text("My Exercises")
+                    if bleManager.hasLoadedCharacteristics || !exerciseViewModel.userExercises.isEmpty {
+                        if !exerciseViewModel.userExercises.isEmpty {
+                            NavigationLink {
+                                AllExercisesView()
+                            } label: {
+                                Text("My Exercises")
+                            }
+                        } else {
+                            Text("You don't have any saved exercises. You can start a new exercise by choosing one from the list below.")
                         }
                     }
                     Section {
@@ -43,13 +47,14 @@ struct ExerciseView: View {
                             .disabled(!bleManager.hasLoadedCharacteristics)
                         }
                     } header: {
-                        if bleManager.hasLoadedCharacteristics {
-                            Text("All Exercises")
-                        }
+                        Text("All Exercises")
                     }
                 }
                 .navigationTitle("Exercise")
             }
+        }
+        .onAppear {
+            exerciseViewModel.userExercises = chartManager.userExercises()
         }
     }
 }

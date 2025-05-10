@@ -28,12 +28,18 @@ struct ConnectView: View {
     ]
     
     var devices: [CBPeripheral] {
-        return bleManager.newPeripherals.filter({ !deviceManager.watches.compactMap({ $0.uuid ?? "" }).contains($0.identifier.uuidString) })
+        return bleManager.newPeripherals.filter {
+            !deviceManager.watches.compactMap({ UUID(uuidString: $0.bleUUID!) }).contains($0.identifier)
+        }
     }
     
     func connect(_ device: CBPeripheral) {
         deviceWithPendingConnectionID = device.identifier
-        bleManager.connect(peripheral: device) {}
+        bleManager.connect(peripheral: device) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                dismiss()
+            }
+        }
     }
     
     func startCircleAnimation(geo: CGSize) {
@@ -65,8 +71,8 @@ struct ConnectView: View {
                     if devices.isEmpty {
                         ProgressView("Looking for your watch...")
                             .frame(maxHeight: .infinity)
-                    } else {
-                        if let infiniTime = devices.first, !showAllDevices {
+                    } else if let infiniTime = devices.first {
+                        if !showAllDevices {
                             VStack {
                                 Spacer()
                                 VStack(spacing: 16) {
@@ -76,7 +82,7 @@ struct ConnectView: View {
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(height: 150)
-                                    Text(deviceManager.name)
+                                    Text("InfiniTime")
                                         .font(.title.weight(.bold))
                                 }
                                 Spacer()
@@ -100,10 +106,11 @@ struct ConnectView: View {
                                 .disabled(deviceWithPendingConnectionID != nil)
                                 
                                 let count = (devices.count) - 1
-                                Button("\(count) more device\(count == 1 ? "" : "s") found") {
-                                    showAllDevices = true
+                                if count >= 1 {
+                                    Button("\(count) more device\(count == 1 ? "" : "s") found") {
+                                        showAllDevices = true
+                                    }
                                 }
-                                .opacity(count < 1 ? 0 : 1)
                             }
                             .background {
                                 // Discovery animation; is there a more efficient way to do this?
@@ -132,9 +139,8 @@ struct ConnectView: View {
                                                         .resizable()
                                                         .aspectRatio(contentMode: .fit)
                                                         .frame(height: 70)
-                                                    Text(deviceManager.name)
+                                                    Text("InfiniTime")
                                                         .font(.system(size: 19).weight(.semibold))
-                                                    // Can't use .primary because button the primary is blue
                                                         .foregroundStyle(colorScheme == .dark ? .white : .black)
                                                 }
                                             }

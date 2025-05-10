@@ -42,9 +42,11 @@ struct SetWeatherLocationView: View {
                         VStack(alignment: .leading, spacing: 4) {
                             Text(location.title)
                                 .foregroundStyle(Color.primary)
-                            Text(location.subtitle)
-                                .font(.system(size: 14))
-                                .foregroundStyle(.gray)
+                            if !location.subtitle.isEmpty {
+                                Text(location.subtitle)
+                                    .font(.system(size: 14))
+                                    .foregroundStyle(.gray)
+                            }
                         }
                         .frame(maxWidth: .infinity, alignment: .leading)
                     }

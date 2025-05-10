@@ -9,26 +9,14 @@ import SwiftUI
 import EventKit
 
 struct ContentView: View {
-    @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var remindersManager = RemindersManager.shared
-    @ObservedObject var personalizationController = PersonalizationController.shared
-    @ObservedObject var notificationManager = NotificationManager.shared
+    @ObservedObject private var bleManager = BLEManager.shared
     
-    @AppStorage("pairedDeviceID") var pairedDeviceID: String?
+    @AppStorage("pairedDeviceID") private var pairedDeviceID: String?
     
     var body: some View {
         Group {
             if pairedDeviceID != nil {
                 DeviceView()
-                    .onChange(of: bleManager.weatherCharacteristic) { _ in
-                        WeatherController.shared.fetchWeatherData()
-                    }
-                    .onChange(of: bleManager.batteryLevel) { bat in
-                        notificationManager.checkToSendLowBatteryNotification()
-                    }
-                    .sheet(isPresented: $personalizationController.showSetupSheet) {
-                        SetUpDetailsView()
-                    }
             } else {
                 WelcomeView()
             }

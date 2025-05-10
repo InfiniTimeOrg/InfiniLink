@@ -20,6 +20,7 @@ class ExerciseViewModel: ObservableObject {
     @Published var currentExercise: Exercise?
     @Published var exercisePaused = false
     @Published var timer: Timer?
+    @Published var userExercises = [UserExercise]()
     
     var appDidEnterBackgroundDate: Date?
     
@@ -93,7 +94,8 @@ class ExerciseViewModel: ObservableObject {
         newExercise.caloriesBurned = Int32(FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace))
         newExercise.deviceId = BLEManager.shared.pairedDeviceID
         
-       persistenceController.save()
+        persistenceController.save()
+        userExercises = ChartManager.shared.userExercises()
     }
     
     func isDateDuringExercise(_ date: Date) -> Bool {

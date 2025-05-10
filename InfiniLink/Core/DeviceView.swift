@@ -70,7 +70,7 @@ struct DeviceView: View {
                         }
                         .frame(height: 0)
                         VStack(spacing: 4) {
-                            WatchFaceView(watchface: .constant(nil), device: bleManager.pairedDevice)
+                            WatchFaceView(watchface: nil, device: bleManager.pairedDevice)
                                 .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
                                 .clipped(antialiased: true)
                             VStack(spacing: 5) {
@@ -260,26 +260,6 @@ struct DeviceView: View {
                 
                 self.showNavigationTitle = (value <= -135)
             }
-            .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
-                if blefsTransfer != nil && scenePhase == .active {
-                    BLEFSHandler.shared.readSettings { settings in
-                        deviceManager.updateSettings(settings: settings)
-                    }
-                }
-            }
-            .onChange(of: scenePhase) { phase in
-                log("Phase changed to \(phase)", type: .info, caller: "DeviceView")
-            }
-            .onAppear {
-                if let pairedDeviceID = bleManager.pairedDeviceID {
-                    bleManager.pairedDevice = deviceManager.fetchDevice(with: pairedDeviceID)
-                    deviceManager.getSettings()
-                }
-                
-                notificationManager.setWaterRemindersPerDay()
-                remindersManager.requestAccess()
-                remindersManager.fetchAllItems()
-            }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button {
@@ -288,6 +268,29 @@ struct DeviceView: View {
                         Text("My Watches")
                     }
                 }
+            }
+            .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
+                if blefsTransfer != nil && scenePhase == .active {
+                    BLEFSHandler.shared.readSettings { settings in
+                        deviceManager.updateSettings(settings: settings)
+                    }
+                }
+            }
+            .onAppear {
+                bleManager.pairedDevice = deviceManager.fetchDevice()
+                
+                notificationManager.setWaterRemindersPerDay()
+                remindersManager.requestAccess()
+                remindersManager.fetchAllItems()
+            }
+            .onChange(of: bleManager.weatherCharacteristic) { _ in
+                WeatherController.shared.fetchWeatherData()
+            }
+            .onChange(of: bleManager.batteryLevel) { bat in
+                notificationManager.checkToSendLowBatteryNotification()
+            }
+            .sheet(isPresented: $personalizationController.showSetupSheet) {
+                SetUpDetailsView()
             }
             .sheet(isPresented: $showMyDevicesSheet) {
                 MyDevicesView()

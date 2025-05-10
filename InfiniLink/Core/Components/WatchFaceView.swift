@@ -16,12 +16,11 @@ struct WatchFaceView: View {
     
     let date = Date()
     
-    @Binding var watchface: UInt8?
-    
+    let watchface: UInt8?
     let device: Device?
     
-    init(watchface: Binding<UInt8?>, device: Device? = nil) {
-        self._watchface = watchface
+    init(watchface: UInt8? = nil, device: Device? = nil) {
+        self.watchface = watchface
         self.device = device
     }
     

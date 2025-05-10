@@ -89,53 +89,42 @@ struct SoftwareUpdateView: View {
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(height: dfuUpdater.local ? 50 : 300)
-                    if !bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10 {
-                        Text({
-                            if !bleManager.hasLoadedCharacteristics {
-                                return "\(deviceManager.name) needs to be connected to update its software."
-                            } else {
-                                return "\(deviceManager.name)'s battery must be charged to at least 10% to update its software."
-                            }
-                        }())
-                            .foregroundStyle(.gray)
-                            .font(.system(size: 14).weight(.semibold))
-                            .multilineTextAlignment(.center)
-                            .frame(maxWidth: .infinity)
-                            .padding(12)
-                    }
                 }
             }
-            if bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10 {
-                Section {
-                    if !dfuUpdater.local {
-                        Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
-                    }
-                    Button {
-                        dfuUpdater.percentComplete = 0
-                        if downloadManager.externalResources {
-                            downloadManager.startTransfer = true
-                            downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
-                            downloadManager.updateStarted = true
-                        } else {
-                            if dfuUpdater.local {
-                                if useExperimentalDFU {
-                                    DFUUpdaterCustom.shared.startDFU()
-                                } else {
-                                    dfuUpdater.transfer()
-                                    downloadManager.updateStarted = true
-                                }
+            Section {
+                if !dfuUpdater.local {
+                    Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
+                }
+                Button {
+                    dfuUpdater.percentComplete = 0
+                    if downloadManager.externalResources {
+                        downloadManager.startTransfer = true
+                        downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
+                        downloadManager.updateStarted = true
+                    } else {
+                        if dfuUpdater.local {
+                            if useExperimentalDFU {
+                                DFUUpdaterCustom.shared.startDFU()
                             } else {
-                                downloadManager.startTransfer = true
-                                downloadManager.startDownload(url: downloadManager.browserDownloadUrl)
-                                
+                                dfuUpdater.transfer()
                                 downloadManager.updateStarted = true
                             }
+                        } else {
+                            downloadManager.startTransfer = true
+                            downloadManager.startDownload(url: downloadManager.browserDownloadUrl)
+                            
+                            downloadManager.updateStarted = true
                         }
-                    } label: {
-                        Text("Update Now")
                     }
+                } label: {
+                    Text("Update Now")
+                }
+            } footer: {
+                if !bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10 {
+                    Text(!bleManager.hasLoadedCharacteristics ? "\(deviceManager.name) needs to be connected to update its software." : "\(deviceManager.name)'s battery must be charged to at least 10% to update its software.")
                 }
             }
+            .disabled(!bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10)
         }
     }
     

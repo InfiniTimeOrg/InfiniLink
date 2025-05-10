@@ -78,14 +78,12 @@ struct BLECharacteristicHandler {
             BLEWriteManager().setTime(characteristic: characteristic)
         case bleManager.cbuuidList.weather:
             bleManager.weatherCharacteristic = characteristic
-            
         case bleManager.cbuuidList.dfuControlPoint:
             bleManager.dfuControlPointCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
         case bleManager.cbuuidList.dfuPacket:
             bleManager.dfuPacketCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
-            
         case bleManager.cbuuidList.navigationFlags:
             bleManager.navigationFlagsCharacteristic = characteristic
         case bleManager.cbuuidList.navigationNarrative:
