@@ -13,12 +13,10 @@ import SwiftUI
 class MusicController {
     static let shared = MusicController()
     
-    let bleManager = BLEManager.shared
-    
-    var musicPlayer = MPMusicPlayerController.systemMusicPlayer
-    var musicPlaying = 0
-    
-    let volumeSlots: Float = 15.0
+    private let bleManager = BLEManager.shared
+    private let volumeNotch: Float = 0.1
+    private var musicPlayer = MPMusicPlayerController.systemMusicPlayer
+    private var musicPlaying = 0
     
     struct SongInfo {
         var trackName: String = ""
@@ -32,7 +30,7 @@ class MusicController {
     @AppStorage("allowMusicControl") var allowMusicControl = true
     @AppStorage("allowVolumeControl") var allowVolumeControl = true
     
-    private init() {
+    init() {
         initialize()
     }
     
@@ -73,15 +71,9 @@ class MusicController {
             case 4:
                 musicPlayer.skipToPreviousItem()
             case 5:
-                if allowVolumeControl {
-                    let newVolume = min(session.outputVolume + (1 / volumeSlots), 1.0)
-                    MPVolumeView.setVolume(newVolume)
-                }
+                changeVolume(up: true)
             case 6:
-                if allowVolumeControl {
-                    let newVolume = max(session.outputVolume - (1 / volumeSlots), 0.0)
-                    MPVolumeView.setVolume(newVolume)
-                }
+                changeVolume(up: false)
             default:
                 break
             }
@@ -90,6 +82,17 @@ class MusicController {
         }
     }
     
+    func changeVolume(up: Bool) {
+        guard allowVolumeControl else { return }
+        
+        let session = AVAudioSession.sharedInstance()
+        let sessionVolume = session.outputVolume // FIXME: session.outputVolume is always 1
+        
+        print(session.outputVolume)
+        
+        let volume = up ? min(sessionVolume + volumeNotch, 1.0) : max(sessionVolume - volumeNotch, 0.0)
+        MPVolumeView.setVolume(volume)
+    }
     
     func getCurrentSongInfo() -> SongInfo {
         let currentTrack = self.musicPlayer.nowPlayingItem
@@ -140,7 +143,7 @@ extension MPVolumeView {
         let volumeView = MPVolumeView()
         let slider = volumeView.subviews.first(where: { $0 is UISlider }) as? UISlider
         
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.01) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.01) {
             slider?.value = volume
         }
     }

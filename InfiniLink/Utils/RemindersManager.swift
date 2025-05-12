@@ -91,33 +91,29 @@ class RemindersManager: ObservableObject {
     }
     
     func requestReminderAccess() {
-        eventStore.requestAccess(to: .reminder) { granted, error in
-            if let error = error {
-                log("Unknown error while requesting reminder access: \(error.localizedDescription)", caller: "RemindersManager")
-            } else if granted {
-                DispatchQueue.main.async {
-                    self.areRemindersAuthorized = true
-                    self.fetchAllItems()
-                }
-            }
+        eventStore.requestAccess(to: .reminder) {
+            self.onAccessRequest($0, $1, reminder: true)
         }
     }
     
     func requestCalendarAccess() {
-        eventStore.requestAccess(to: .event) { granted, error in
-            if let error = error {
-                log("Unknown error while requesting calendar access: \(error.localizedDescription)", caller: "RemindersManager")
-            } else if granted {
-                DispatchQueue.main.async {
-                    self.areEventsAuthorized = true
-                    self.fetchAllItems()
-                }
-            }
+        eventStore.requestAccess(to: .event) {
+            self.onAccessRequest($0, $1, reminder: false)
         }
     }
     
-    func requestAccess() {
-        requestReminderAccess()
-        requestCalendarAccess()
+    func onAccessRequest(_ granted: Bool, _ error: Error?, reminder: Bool) {
+        if let error = error {
+            log("Unknown error while requesting \(reminder ? "reminder" : "calendar") access: \(error.localizedDescription)", caller: "RemindersManager")
+        } else if granted {
+            DispatchQueue.main.async {
+                if reminder {
+                    self.areRemindersAuthorized = true
+                } else {
+                    self.areEventsAuthorized = true
+                }
+                self.fetchAllItems()
+            }
+        }
     }
 }

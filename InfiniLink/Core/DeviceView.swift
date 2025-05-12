@@ -21,6 +21,8 @@ struct DeviceView: View {
     
     @AppStorage("sleepGoal") var sleepGoal = 28800
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
+    @AppStorage("enableReminders") var enableReminders = true
+    @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     
     @Environment(\.colorScheme) var colorScheme
     
@@ -280,8 +282,16 @@ struct DeviceView: View {
                 bleManager.pairedDevice = deviceManager.fetchDevice()
                 
                 notificationManager.setWaterRemindersPerDay()
-                remindersManager.requestAccess()
-                remindersManager.fetchAllItems()
+                
+                if !personalizationController.showSetupSheet {
+                    // We've already gone through the inital setup and the user has enabled reminder/calendar notifications so set state and fetch the events
+                    if enableReminders {
+                        remindersManager.requestReminderAccess()
+                    }
+                    if enableCalendarNotifications {
+                        remindersManager.requestCalendarAccess()
+                    }
+                }
             }
             .onChange(of: bleManager.weatherCharacteristic) { _ in
                 WeatherController.shared.fetchWeatherData()

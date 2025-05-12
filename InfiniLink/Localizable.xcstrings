@@ -33,6 +33,9 @@
     " step goal streak!" : {
 
     },
+    " You can customize this in notification settings." : {
+
+    },
     "-" : {
       "localizations" : {
         "fr" : {
@@ -701,6 +704,9 @@
 
     },
     "Get notified when you reach your daily fitness goals." : {
+
+    },
+    "Get notified when your watch's battery is low." : {
 
     },
     "GitHub Actions" : {

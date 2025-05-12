@@ -49,16 +49,18 @@ struct BatterySettingsView: View {
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                Section(footer: Text("Send a notification to your devices when your watch is on low battery.")) {
-                    Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
-                }
-                if sendLowBatteryNotification {
-                    Section(footer: watchNotifications ? nil : Text("Watch notifications are currently disabled.")) {
-                        Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
-                        Toggle("Send to Watch", isOn: $sendLowBatteryNotificationToWatch)
-                            .disabled(!watchNotifications)
+                Group {
+                    Section(footer: watchNotifications ? Text("Send a notification to your devices when your watch is on low battery.") : Text("Watch notifications are currently disabled.")) {
+                        Toggle("Notify on Low Battery", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
+                    }
+                    if sendLowBatteryNotification && watchNotifications {
+                        Section {
+                            Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
+                            Toggle("Send to Watch", isOn: $sendLowBatteryNotificationToWatch)
+                        }
                     }
                 }
+                .disabled(!watchNotifications)
             }
         }
         .navigationTitle("Battery")

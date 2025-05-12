@@ -19,6 +19,16 @@ struct SetUpDetailsView: View {
     
     let list: Bool
     
+    func resetFields() {
+        personalizationController.weight = nil
+        personalizationController.height = nil
+        weight = ""
+        height = ""
+    }
+    func filteredUnit(_ unit: Double) -> String {
+        String(unit).replacingOccurrences(of: ".0", with: "")
+    }
+    
     init(list: Bool = false) {
         self.list = list
     }
@@ -30,7 +40,6 @@ struct SetUpDetailsView: View {
             NavigationStack {
                 content
             }
-            .navigationViewStyle(.stack)
         }
     }
     
@@ -57,11 +66,7 @@ struct SetUpDetailsView: View {
                         Text("Imperial").tag(PersonalizationController.Unit.imperial)
                     }
                     .onChange(of: personalizationController.units) { _ in
-                        personalizationController.weight = nil
-                        personalizationController.height = nil
-                        
-                        weight = ""
-                        height = ""
+                        resetFields()
                     }
                 }
                 Section {
@@ -102,20 +107,17 @@ struct SetUpDetailsView: View {
             .keyboardType(.decimalPad)
             if !list {
                 Button {
-                    // Go to next view
                     nextViewActive = true
                     
-                    // Is this handled by the onDisappear?
-                    personalizationController.height = Double(height)
-                    personalizationController.weight = Double(weight)
+                    // We don't need to assign any vars here because it's handled by the onDisappear
                 } label: {
                     Text("Next")
                         .padding()
-                        .font(.body.weight(.semibold))
+                        .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .foregroundStyle(.white)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
+                        .clipShape(.rect(cornerRadius: 20))
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
@@ -127,7 +129,8 @@ struct SetUpDetailsView: View {
         }
         .interactiveDismissDisabled()
         .toolbar {
-            if !list {
+            // Don't show the button if the user has edited anything
+            if !list && weight == filteredUnit(personalizationController.calculatedWeight) && height == filteredUnit(personalizationController.calculatedHeight) {
                 Button("Skip") {
                     nextViewActive = true
                 }
@@ -135,10 +138,10 @@ struct SetUpDetailsView: View {
         }
         .onAppear {
             if let weight = personalizationController.weight, weight > 0 {
-                self.weight = String(personalizationController.calculatedWeight)
+                self.weight = filteredUnit(personalizationController.calculatedWeight)
             }
             if let height = personalizationController.height, height > 0 {
-                self.height = String(personalizationController.calculatedHeight)
+                self.height = filteredUnit(personalizationController.calculatedHeight)
             }
         }
         .onDisappear {
@@ -162,6 +165,8 @@ struct NotificationsSetupView: View {
     @AppStorage("enableReminders") var enableReminders = true
     @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
+    @AppStorage("heartRangeReminder") var heartRangeReminder = false
+    @AppStorage("sendLowBatteryNotification") var sendLowBatteryNotification = true
     
     var body: some View {
         Form {
@@ -177,11 +182,17 @@ struct NotificationsSetupView: View {
             .multilineTextAlignment(.center)
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
-            Section("Health") {
+            Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.") + Text(" You can customize this in notification settings.")) {
                 Toggle("Water Reminder", isOn: $waterReminder)
+            }
+            Section(footer: Text("Get a notification when your heart rate goes above or below the specified range.") + Text(" You can customize this in notification settings.")) {
+                Toggle("Heart Range Notifications", isOn: $heartRangeReminder)
             }
             Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                 Toggle("Steps", isOn: $remindOnStepGoalCompletion)
+            }
+            Section(header: Text("Battery"), footer: Text("Get notified when your watch's battery is low.")) {
+                Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
             }
             Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
                 Toggle("Reminder Notifications", isOn: $enableReminders)
@@ -189,7 +200,13 @@ struct NotificationsSetupView: View {
             }
             Button {
                 notificationManager.requestNotificationAuthorization()
-                remindersManager.requestAccess()
+                
+                if enableReminders {
+                    remindersManager.requestReminderAccess()
+                }
+                if enableCalendarNotifications {
+                    remindersManager.requestCalendarAccess()
+                }
                 
                 personalizationController.showSetupSheet = false
             } label: {

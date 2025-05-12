@@ -129,6 +129,8 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func scanForNewDevices() {
+        guard !isScanning else { return }
+        
         central.scanForPeripherals(withServices: nil, options: nil)
         newPeripherals = []
         isScanning = true

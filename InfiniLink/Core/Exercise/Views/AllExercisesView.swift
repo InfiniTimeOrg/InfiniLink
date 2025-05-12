@@ -50,7 +50,7 @@ struct AllExercisesView: View {
     var body: some View {
         List {
             Section {
-                if filteredExercises.isEmpty {
+                if filteredExercises.isEmpty && !searchText.trimmingCharacters(in: .whitespaces).isEmpty {
                     Text("Nothing matched your search. Ensure your spelling is correct and try again.")
                 } else {
                     ForEach(filteredExercises.sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in

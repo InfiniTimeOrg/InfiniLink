@@ -26,12 +26,19 @@ class PersonalizationController: ObservableObject {
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
     
+    private let avgMaleWeight: Double = 68.039
+    private let avgFemaleWeight: Double = 54.43
+    private let avgMaleHeight: Double = 175.26
+    private let avgFemaleHeight: Double = 162.56
+    
     var isPersonalizationAvailable: Bool {
         !showSetupSheet && (weight != nil || height != nil)
     }
     
     var calculatedWeight: Double {
-        guard let weight = self.weight, weight > 0 else { return gender == .male ? 68.039 : 54.43 }
+        guard let weight = self.weight, weight > 0 else {
+            return gender == .male ? avgMaleWeight : avgFemaleWeight
+        }
         
         if units == .imperial {
             // Convert from kg to lbs
@@ -42,7 +49,9 @@ class PersonalizationController: ObservableObject {
     }
 
     var calculatedHeight: Double {
-        guard let height = self.height, height > 0 else { return gender == .male ? 175.26 : 162.56 }
+        guard let height = self.height, height > 0 else {
+            return gender == .male ? avgMaleHeight : avgFemaleHeight
+        }
         
         if units == .imperial {
             // Convert from cm to in
