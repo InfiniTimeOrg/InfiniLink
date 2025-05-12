@@ -14,7 +14,7 @@ class MusicController {
     static let shared = MusicController()
     
     private let bleManager = BLEManager.shared
-    private let volumeNotch: Float = 0.1
+    private let volumeNotch: Float = (1 / 15)
     private var musicPlayer = MPMusicPlayerController.systemMusicPlayer
     private var musicPlaying = 0
     
@@ -53,7 +53,7 @@ class MusicController {
             
             do {
                 try session.setCategory(.playback, options: .mixWithOthers)
-                try session.setActive(false)
+                try session.setActive(true)
             } catch {
                 log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
             }
@@ -86,7 +86,7 @@ class MusicController {
         guard allowVolumeControl else { return }
         
         let session = AVAudioSession.sharedInstance()
-        let sessionVolume = session.outputVolume // FIXME: session.outputVolume is always 1
+        let sessionVolume = session.outputVolume
         
         print(session.outputVolume)
         
