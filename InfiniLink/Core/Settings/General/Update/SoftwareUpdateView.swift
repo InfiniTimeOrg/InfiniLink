@@ -99,14 +99,14 @@ struct SoftwareUpdateView: View {
                     dfuUpdater.percentComplete = 0
                     if downloadManager.externalResources {
                         downloadManager.startTransfer = true
-                        downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
                         downloadManager.updateStarted = true
+                        downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
                     } else {
                         if dfuUpdater.local {
                             if useExperimentalDFU {
                                 DFUUpdaterCustom.shared.startDFU()
                             } else {
-                                dfuUpdater.transfer()
+                                dfuUpdater.updateFirmware()
                                 downloadManager.updateStarted = true
                             }
                         } else {

@@ -16,10 +16,6 @@ class WeatherController: ObservableObject {
     
     @ObservedObject var deviceManager = DeviceManager.shared
     
-    @Published var weather: Weather?
-    
-    @Published var errorWhileFetching: Error?
-    
     @AppStorage("latitude") var latitude: Double = 0.0
     @AppStorage("longitude") var longitude: Double = 0.0
     
@@ -27,8 +23,11 @@ class WeatherController: ObservableObject {
     
     @AppStorage("useCurrentLocation") var useCurrentLocation = true
     
+    @Published var weather: Weather?
+    @Published var errorWhileFetching: Error?
     @Published var temperature = 0.0
     @Published var forecastDays = [DayWeather]()
+    @Published var lastTimeWeatherFetched: Date?
     
     private let service = WeatherService()
     private var locationManager = LocationManager.shared
@@ -70,12 +69,18 @@ class WeatherController: ObservableObject {
     }
     
     func fetchWeatherData() {
+        let guardInterval: TimeInterval = 600
+        
+        // Make sure the weather has not been fetched in the past 5 minutes
+        guard lastTimeWeatherFetched?.timeIntervalSinceNow ?? guardInterval >= guardInterval else { return }
+        
         let currentLocation = CLLocation(latitude: latitude, longitude: longitude)
         
         Task {
             do {
                 let weather = try await service.weather(for: currentLocation)
                 
+                self.lastTimeWeatherFetched = Date()
                 self.weather = weather
                 self.forecastDays = Array(weather.dailyForecast.dropFirst().prefix(5))
                 

@@ -18,7 +18,6 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	
 	@Published var dfuState: String = ""
     @Published var transferCompleted = false
-    @Published var isUpdating = false
 	@Published var isUpdatingResources = false
 	@Published var percentComplete: Double = 0
 	
@@ -31,35 +30,11 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
 	
-    func transfer() {
-        guard let url = firmwareURL else {return}
-        guard url.startAccessingSecurityScopedResource() else { return }
-        guard let selectedFirmware = try? DFUFirmware(urlToZipFile:url) else {
-            log("Failed to load firmware.", caller: "DFUUpdater")
-            return
-        }
-        let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
-        
-        // Optional:
-        // initiator.forceDfu = true/false // default false
-        initiator.packetReceiptNotificationParameter = 20
-        initiator.logger = self // - to get log info
-        initiator.delegate = self // - to be informed about current state and errors
-        initiator.progressDelegate = self // - to show progress bar
-        // initiator.peripheralSelector = ... // the default selector is used
-        if bleManager.infiniTime != nil {
-            dfuController = initiator.start(target: bleManager.infiniTime)
-        }
-        url.stopAccessingSecurityScopedResource()
-    }
-    
     func updateFirmware() {
         guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
             log("Failed to load firmware.", caller: "DFUUpdater")
             return
         }
-        
-        self.isUpdating = true
         
         let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
         
@@ -89,15 +64,22 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         }
 	}
 	
-	func stopTransfer() {
-		if dfuController != nil {
+    func stopTransfer(abort: Bool) {
+		if abort {
 			_ = dfuController.abort()
-			dfuController = nil
 		}
+        
+        firmwareURL?.stopAccessingSecurityScopedResource()
+        
+        dfuController = nil
 		dfuState = ""
-		transferCompleted = false
-        isUpdating = false
+        
 		percentComplete = 0
+        
+        downloadManager.updateAvailable = false
+        downloadManager.updateStarted = false
+        firmwareSelected = false
+        transferCompleted = false
 	}
 	
 	func dfuStateDidChange(to state: DFUState) {
@@ -105,27 +87,18 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         
         switch state {
         case .completed:
-            transferCompleted = true
-            isUpdating = false
-            firmwareSelected = false
-            
-            downloadManager.updateAvailable = false
-            downloadManager.updateStarted = false
-            
-            dfuController = nil
-            percentComplete = 0
+            stopTransfer(abort: false)
         case .disconnecting:
             bleManager.hasDisconnectedForUpdate = true
         case .aborted:
-            dfuController = nil
-            percentComplete = 0
+            log("DFU upload successfully aborted", caller: "DFUUpdater", target: .dfu)
         default:
             break
         }
 	}
 	
 	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-        self.stopTransfer()
+        stopTransfer(abort: false)
 	}
 	
 	func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {

@@ -428,7 +428,6 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
     
     func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         do {
-            
             let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
             let savedURL = documentsURL.appendingPathComponent(
                 isDownloadingResources ? "resources.zip" : "firmware.zip")
@@ -441,32 +440,31 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
             // move downloaded file out of ephemeral storage and tell DFU where to look
             try FileManager.default.moveItem(at: location, to: savedURL)
             
-            DispatchQueue.main.async {
-                if self.isDownloadingResources && self.dfuUpdater.resourceURL == nil {
-                    self.dfuUpdater.resourceURL = savedURL
-                    self.hasDownloadedResources = true
+            DispatchQueue.main.async { [self] in
+                if isDownloadingResources && dfuUpdater.resourceURL == nil {
+                    dfuUpdater.resourceURL = savedURL
+                    hasDownloadedResources = true
                 } else {
-                    self.dfuUpdater.firmwareURL = savedURL
+                    dfuUpdater.firmwareURL = savedURL
                 }
             }
         } catch {
             log("Error downloading resource or firmware: \(error.localizedDescription)", caller: "DownloadManager")
         }
         
-        DispatchQueue.main.async {
-            if !self.hasDownloadedResources && self.dfuUpdater.updateResourcesWithFirmware {
-                self.isDownloadingResources = true
-                self.startDownload(url: self.browserDownloadResourcesUrl)
+        DispatchQueue.main.async { [self] in
+            if !hasDownloadedResources && dfuUpdater.updateResourcesWithFirmware {
+                isDownloadingResources = true
+                startDownload(url: browserDownloadResourcesUrl)
             } else {
-                if self.startTransfer {
-                    self.startTransfer = false
-                    self.dfuUpdater.isUpdating = true
-                    self.downloading = false
+                if startTransfer {
+                    startTransfer = false
+                    downloading = false
                     
-                    if self.externalResources {
+                    if externalResources {
                         BLEFSHandler.shared.uploadExternalResources {}
                     } else {
-                        DFUUpdater.shared.downloadTransfer()
+                        dfuUpdater.downloadTransfer()
                     }
                 }
             }

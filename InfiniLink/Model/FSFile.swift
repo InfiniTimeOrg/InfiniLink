@@ -9,6 +9,6 @@ import Foundation
 
 struct FSFile: Identifiable {
     let id = UUID()
-    var url: URL?
+    var url: URL
     var filename: String
 }

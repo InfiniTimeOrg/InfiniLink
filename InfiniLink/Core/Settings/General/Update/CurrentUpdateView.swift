@@ -31,8 +31,7 @@ struct CurrentUpdateView: View {
                         .font(.title.weight(.bold))
                 }
                 Button {
-                    dfuUpdater.stopTransfer()
-                    dfuUpdater.isUpdating = false
+                    dfuUpdater.stopTransfer(abort: true)
                     downloadManager.updateStarted = false
                 } label: {
                     Text("Cancel Update")

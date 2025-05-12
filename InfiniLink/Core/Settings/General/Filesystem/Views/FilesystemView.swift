@@ -16,9 +16,7 @@ struct FileSystemToolbar: ViewModifier {
             for file in fileSystemViewModel.files {
                 let lowercaseFilename = file.filename.lowercased()
                 
-                guard let fileDataPath = file.url else {
-                    continue
-                }
+                guard file.url.startAccessingSecurityScopedResource() else { return }
                 
                 do {
                     if lowercaseFilename.hasSuffix(".png") ||
@@ -31,7 +29,7 @@ struct FileSystemToolbar: ViewModifier {
                         lowercaseFilename.hasSuffix(".heif") ||
                         lowercaseFilename.hasSuffix(".heic") {
                         
-                        guard let img = UIImage(contentsOfFile: fileDataPath.path),
+                        guard let img = UIImage(contentsOfFile: file.url.path),
                               let cgImage = img.cgImage else {
                             continue
                         }
@@ -47,7 +45,7 @@ struct FileSystemToolbar: ViewModifier {
                             var _ = bleFSHandler.writeFile(data: convertedImage, path: fileSystemViewModel.directory + "/" + String(fileNameWithoutExtension.prefix(26).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)) + ".bin", offset: 0)
                         }
                     } else {
-                        let fileData = try Data(contentsOf: fileDataPath)
+                        let fileData = try Data(contentsOf: file.url)
                         
                         DispatchQueue.main.async {
                             self.fileSystemViewModel.fileSize = 0
@@ -61,6 +59,8 @@ struct FileSystemToolbar: ViewModifier {
                 } catch {
                     log("Error sending files: \(error.localizedDescription)", caller: "FilesystemView",  target: .ble)
                 }
+                
+                file.url.stopAccessingSecurityScopedResource()
             }
             
             DispatchQueue.main.async {
@@ -224,8 +224,7 @@ struct FileSystemView: View {
                     
                     self.fileSystemViewModel.files.append(FSFile(url: fileURL, filename: fileURL.lastPathComponent))
                     
-                    // Don't stop accessing the security-scoped resource because then the upload button won't work due to lack of necessary permissions
-                    // fileURL.stopAccessingSecurityScopedResource()
+                    fileURL.stopAccessingSecurityScopedResource()
                 }
             } catch {
                 log("Error getting file: \(error.localizedDescription)", caller: "FilesystemView")
