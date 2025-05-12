@@ -66,6 +66,13 @@ struct StepsView: View {
         .alert(isPresented: $showInfoAlert) {
             Alert(title: Text("Steps Per Minute"), message: Text("SPM stands for steps per minute and measures how many steps you take for each minute of walking."), dismissButton: .default(Text("OK")))
         }
+        .toolbar {
+            NavigationLink {
+                StepSettingsView()
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+        }
     }
 }
 

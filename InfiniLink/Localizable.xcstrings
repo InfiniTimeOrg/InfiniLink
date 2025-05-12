@@ -784,6 +784,9 @@
     "Hourly Chimes" : {
 
     },
+    "If the watch reboots, add steps to the saved count instead of resetting it to zero." : {
+
+    },
     "If you have an InfiniTime device, you can pair it here." : {
       "localizations" : {
         "fr" : {
@@ -1330,6 +1333,9 @@
       }
     },
     "Total" : {
+
+    },
+    "Track Resets" : {
 
     },
     "Units" : {

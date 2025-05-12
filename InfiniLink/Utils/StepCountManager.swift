@@ -6,6 +6,7 @@
 //
 
 import CoreData
+import SwiftUI
 
 class StepCountManager: ObservableObject {
     static let shared = StepCountManager()
@@ -13,6 +14,8 @@ class StepCountManager: ObservableObject {
     let chartManager = ChartManager.shared
     let bleManager = BLEManager.shared
     let persistenceManager = PersistenceController.shared
+    
+    @AppStorage("addInsteadOfOverwrite") var addInsteadOfOverwrite: Bool = false
     
     var stepGoal: Int {
         return Int(DeviceManager.shared.settings.stepsGoal)
@@ -32,28 +35,34 @@ class StepCountManager: ObservableObject {
         }
     }
     
-    private func updateStepCount(_ stepCount: StepCounts, with steps: Int32, isArbitrary: Bool, for date: Date) {
-        if isArbitrary {
-            stepCount.steps += steps
+    private func updateStepCount(_ current: StepCounts, with steps: Int32, isArbitrary: Bool, for date: Date) {
+        // Last saved step count is current.steps = 978
+        // We just received steps = 0
+        if addInsteadOfOverwrite {
+            // We have to do some math here because otherwise we'll just double the value
+            if steps <= current.steps { // The watch reset, so add the new steps to the old count
+                // This is fairly accurate, although about 6 steps get added because the watch tracks around that many before it sends the count (before we can set current.previousSteps)
+                current.steps += abs(current.previousSteps - steps)
+            } else {
+                current.steps += abs(current.steps - steps)
+            }
+        } else if isArbitrary {
+            current.steps += steps
         } else {
             clearCurrentDaySteps()
-            stepCount.steps = max(stepCount.steps, steps)
+            current.steps = steps
         }
         
-        stepCount.timestamp = date
+        current.timestamp = date
+        current.previousSteps = steps
         
         persistenceManager.save()
     }
     
     func clearCurrentDaySteps() {
-        let now = Date()
-        let existing = chartManager.stepsToday()
-        
-        if let existing {
+        if let existing = chartManager.stepsToday(){
             existing.steps = 0
-            existing.timestamp = now
-        } else {
-            chartManager.addStepDataPoint(steps: 0, time: now)
+            existing.timestamp = Date()
         }
         
         persistenceManager.save()
