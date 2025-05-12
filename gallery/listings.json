@@ -2,6 +2,7 @@
     "version": 1,
     "applications": [
         {
+            "id": "infinisleep",
             "name": "InfiniSleep",
             "screenshotURL": "https://example.com",
             "state": "Pending Merge",
@@ -13,6 +14,7 @@
     ],
     "watchfaces": [
         {
+            "id": "binaryface",
             "name": "Binary",
             "screenshotURL": "https://example.com",
             "state": "Pending Merge",
