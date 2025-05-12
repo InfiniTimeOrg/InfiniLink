@@ -243,6 +243,11 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Music", icon: "music.note", iconColor: .red)
                         }
+                        NavigationLink {
+                            GalleryView()
+                        } label: {
+                            ListRowView(title: "Gallery", icon: "rectangle.stack.fill", iconColor: .blue)
+                        }
                     }
                     if enableDeveloperMode {
                         Section {

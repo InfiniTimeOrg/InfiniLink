@@ -1,5 +1,5 @@
 {
-  "originHash" : "8c4a5780567db7c376e7ff5208525a749adbbb01ad5d3e3139767fdb9a912328",
+  "originHash" : "977831ba3abc87d15d5149f9cb259aea7847f204e981b4cdfb420ac9eb458833",
   "pins" : [
     {
       "identity" : "ios-dfu-library",
@@ -8,6 +8,15 @@
       "state" : {
         "revision" : "2db0d4f26a4812dfb7553e50e2a10f53f7b95114",
         "version" : "4.15.3"
+      }
+    },
+    {
+      "identity" : "kingfisher",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/onevcat/Kingfisher",
+      "state" : {
+        "revision" : "7deda23bbdca612076c5c315003d8638a08ed0f1",
+        "version" : "8.3.2"
       }
     },
     {

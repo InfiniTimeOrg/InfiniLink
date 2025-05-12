@@ -312,6 +312,9 @@
         }
       }
     },
+    "Applications" : {
+
+    },
     "Are you sure you want to end the exercise? %@" : {
 
     },
@@ -676,6 +679,9 @@
           }
         }
       }
+    },
+    "Gallery" : {
+
     },
     "Gender" : {
 
@@ -1441,6 +1447,9 @@
 
     },
     "WARNING: These actions are permanent and cannot be undone!" : {
+
+    },
+    "Watch Faces" : {
 
     },
     "Watch notifications are currently disabled." : {
