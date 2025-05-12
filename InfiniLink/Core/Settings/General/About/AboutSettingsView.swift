@@ -73,6 +73,11 @@ struct AboutRowView: View {
             Spacer()
             Text(value)
                 .foregroundStyle(.gray)
+                .contextMenu {
+                    Button("Copy") {
+                        UIPasteboard.general.string = value
+                    }
+                }
         }
     }
 }

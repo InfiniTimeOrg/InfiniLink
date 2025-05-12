@@ -487,6 +487,7 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */,
+				E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */,
 				E05999FD2CB462BF00D64E0B /* ChartManager.swift */,
 				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
 				E05999FF2CB46EB100D64E0B /* StepCountManager.swift */,
@@ -608,7 +609,6 @@
 				E0A7C07E2CB1B3300042A12D /* BLEFS.swift */,
 				E0C7C8512CAF14870043DA2D /* SetTime.swift */,
 				E07D8F232CC012FC005C1325 /* DeviceManager.swift */,
-				E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";

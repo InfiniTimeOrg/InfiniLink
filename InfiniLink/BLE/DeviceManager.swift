@@ -112,6 +112,7 @@ class DeviceManager: ObservableObject {
                 newDevice.manufacturer = ""
                 newDevice.modelNumber = ""
                 newDevice.serial = ""
+                newDevice.stepsGoal = 10000
                 
                 do {
                     try context.save()

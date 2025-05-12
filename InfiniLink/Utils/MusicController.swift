@@ -34,15 +34,17 @@ class MusicController {
         initialize()
     }
     
-    @objc func onNotificationReceipt(_ notification: NSNotification) {
+    @objc func onPlaybackChange(_ notification: NSNotification) {
         musicPlaying = musicPlayer.playbackState.rawValue
+    }
+    @objc func onNowPlayingChange(_ notification: NSNotification) {
         updateMusicInformation(songInfo: getCurrentSongInfo())
     }
     
     func initialize() {
         musicPlayer.beginGeneratingPlaybackNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onNotificationReceipt(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
     func controlMusic(controlNumber: Int) {
