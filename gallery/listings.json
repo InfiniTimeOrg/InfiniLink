@@ -1,0 +1,19 @@
+{
+  "applications": [
+      "infinisleep": {
+          name: "InfiniSleep",
+          
+      }
+  ],
+  "watchfaces": [
+      "binary": {
+          "name": "Binary",
+          "screenshotURL": "https://example.com",
+          "state": "Pending Merge",
+          "description": "Lorem ipsum...",
+          "prURL": "https://github.com/InfiniTimeOrg/InfiniTime/pulls/xxxx",
+          "firmwareZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx",
+          "resourcesZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx"
+      }
+  ]
+}
