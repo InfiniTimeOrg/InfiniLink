@@ -110,7 +110,6 @@
 		E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84E2CAF14870043DA2D /* BLECharacteristicHandler.swift */; };
 		E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84C2CAF14870043DA2D /* BLEManager.swift */; };
 		E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */; };
-		E0C982CF2DD2D46900F0E858 /* listings.json in Resources */ = {isa = PBXBuildFile; fileRef = E0C982CE2DD2D46900F0E858 /* listings.json */; };
 		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };

@@ -25,11 +25,11 @@ struct MusicSettingsView: View {
                 unauthorized
             }
         }
-        .onChange(of: allowMusicControl) { allowed in
-            if allowed {
-                MusicController.shared.initialize()
-            }
-        }
+//        .onChange(of: allowMusicControl) { allowed in
+//            if allowed {
+//                MusicController.shared.initialize()
+//            }
+//        }
         .onAppear {
             MPMediaLibrary.requestAuthorization { self.authorizationStatus = $0 }
         }

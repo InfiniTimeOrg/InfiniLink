@@ -54,26 +54,19 @@ struct GalleryRowView: View {
             GalleryDetailView(listing: listing)
         } label: {
             HStack(spacing: 8) {
+                let dimensions = CGFloat(70)
                 ZStack {
                     Image(.watchScreen)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .brightness(colorScheme == .dark ? 0.0 : 0.04)
-                    if let image = listing.screenshots?.first {
+                    if let image = GalleryManager.shared.imageURL(for: listing.screenshots?.first) {
                         KFImage(image)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: 50, height: 50)
-                            .clipShape(.rect(cornerRadius: 10))
-                    } else {
-                        Image(systemName: "questionmark")
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: 15, height: 15)
-                            .foregroundStyle(.white)
+                            .frame(width: dimensions / 1.75, height: dimensions / 1.75)
                     }
                 }
-                .frame(width: 70, height: 70)
+                .frame(width: dimensions, height: dimensions)
                 VStack(alignment: .leading, spacing: 5) {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(listing.name)
@@ -134,16 +127,6 @@ struct GalleryDetailView: View {
                                 .font(.system(size: 15).weight(.semibold))
                         }
                         .multilineTextAlignment(.center)
-//                        Button {
-//                            
-//                        } label: {
-//                            Text("Install to \(DeviceManager.shared.name)")
-//                                .padding(12)
-//                                .foregroundStyle(Color.white)
-//                                .background(Color.blue)
-//                                .clipShape(Capsule())
-//                        }
-//                        .padding(.top, 20)
                     }
                     .frame(maxWidth: .infinity)
                     .frame(minHeight: geo.size.height / 3)
@@ -205,7 +188,7 @@ struct WatchScreenshotView: View {
             Image(.watchScreen)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
-            if let url {
+            if let url = GalleryManager.shared.imageURL(for: url) {
                 KFImage(url)
                     .placeholder {
                         ProgressView()
@@ -223,9 +206,9 @@ struct WatchScreenshotView: View {
 
 #Preview {
     NavigationStack {
-//        GalleryView()
-//            .navigationBarTitleDisplayMode(.inline)
-        let listing = GalleryManager.shared.watchfaces.first(where: { $0.id == "photoface" })!
-        GalleryDetailView(listing: listing)
+        GalleryView()
+            .navigationBarTitleDisplayMode(.inline)
+//        let listing = GalleryManager.shared.watchfaces.first(where: { $0.id == "photoface" })!
+//        GalleryDetailView(listing: listing)
     }
 }

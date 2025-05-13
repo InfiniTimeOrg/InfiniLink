@@ -27,8 +27,7 @@ struct GalleryListing: Identifiable, Codable {
 
 class GalleryManager: ObservableObject {
     static let shared = GalleryManager()
-    
-    private let listingURL = "https://raw.githubusercontent.com/InfiniTimeOrg/InfiniLink/gallery/gallery/listings.json"
+    static let listingURL = "https://infinitimeorg.github.io/InfiniLink-gallery"
     
     @Published var watchfaces: [GalleryListing] = []
     @Published var applications: [GalleryListing] = []
@@ -42,7 +41,7 @@ class GalleryManager: ObservableObject {
     func getListings() {
         isLoading = true
         
-        URLSession.shared.dataTask(with: URL(string: listingURL)!) { data, response, error in
+        URLSession.shared.dataTask(with: URL(string: GalleryManager.listingURL + "/listings.json")!) { data, response, error in
             if let error {
                 self.setError(error)
                 return
@@ -63,6 +62,17 @@ class GalleryManager: ObservableObject {
                 self.setError(error)
             }
         }.resume()
+    }
+    
+    func imageURL(for url: URL?) -> URL? {
+        guard let url else { return nil }
+        
+        let urlString = url.absoluteString
+        let fullString = GalleryManager.listingURL + urlString
+        
+        guard let fullURL = URL(string: fullString) else { return nil }
+        
+        return fullURL
     }
     
     private func setError(_ error: Error) {
