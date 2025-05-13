@@ -92,7 +92,6 @@ struct BLECharacteristicHandler {
             bleManager.navigationDistanceCharacteristic = characteristic
         case bleManager.cbuuidList.navigationProgress:
             bleManager.navigationProgressCharacteristic = characteristic
-            
         case bleManager.cbuuidList.sleep:
             peripheral.setNotifyValue(true, for: characteristic)
         default:

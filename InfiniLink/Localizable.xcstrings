@@ -290,6 +290,9 @@
     "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
+    "ANCS Enabled" : {
+
+    },
     "App" : {
 
     },
@@ -319,6 +322,9 @@
 
     },
     "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Author" : {
 
     },
     "Average" : {
@@ -541,6 +547,9 @@
           }
         }
       }
+    },
+    "Description" : {
+
     },
     "Developer" : {
 
@@ -877,6 +886,9 @@
     "InfiniTime on GitHub" : {
 
     },
+    "Install to %@" : {
+
+    },
     "Installing update..." : {
       "localizations" : {
         "fr" : {
@@ -1015,6 +1027,9 @@
     "Next" : {
 
     },
+    "No" : {
+
+    },
     "No Data" : {
 
     },
@@ -1039,6 +1054,9 @@
     "OK" : {
 
     },
+    "Open on GitHub" : {
+
+    },
     "Optional" : {
 
     },
@@ -1056,6 +1074,9 @@
 
     },
     "Pair New Device" : {
+
+    },
+    "Planned Release Version" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -1120,6 +1141,9 @@
           }
         }
       }
+    },
+    "Screenshots" : {
+
     },
     "Search by name or date" : {
 
@@ -1223,6 +1247,9 @@
           }
         }
       }
+    },
+    "State" : {
+
     },
     "steps" : {
 
@@ -1479,6 +1506,9 @@
       }
     },
     "Weight" : {
+
+    },
+    "Yes" : {
 
     },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {

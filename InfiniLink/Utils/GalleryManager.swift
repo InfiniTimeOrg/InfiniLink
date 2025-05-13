@@ -15,9 +15,11 @@ struct GalleryResponse: Codable {
 struct GalleryListing: Identifiable, Codable {
     let id: String
     let name: String
-    let screenshotURL: URL?
+    let screenshots: [URL]?
     let state: String?
     let description: String
+    let shortDescription: String
+    let author: String
     let prURL: URL
     let firmwareZipURL: URL
     let resourcesZipURL: URL

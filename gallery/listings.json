@@ -4,9 +4,16 @@
         {
             "id": "infinisleep",
             "name": "InfiniSleep",
-            "screenshotURL": "https://example.com",
-            "state": "Pending Merge",
+            "screenshots": [
+                "https://example.com",
+                "https://example.com",
+                "https://example.com",
+                "https://example.com"
+            ],
+            "state": "approved",
             "description": "Lorem ipsum...",
+            "shortDescription": "A port of wasp-os's sleep tracker",
+            "author": "CyberNeel",
             "prURL": "https://github.com/InfiniTimeOrg/InfiniTime/pulls/xxxx",
             "firmwareZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx",
             "resourcesZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx"
@@ -16,9 +23,27 @@
         {
             "id": "binaryface",
             "name": "Binary",
-            "screenshotURL": "https://example.com",
-            "state": "Pending Merge",
+            "state": "merged",
             "description": "Lorem ipsum...",
+            "shortDescription": "Lorem ipsum...",
+            "author": "Unknown",
+            "prURL": "https://github.com/InfiniTimeOrg/InfiniTime/pulls/xxxx",
+            "firmwareZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx",
+            "resourcesZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx"
+        },
+        {
+            "id": "photoface",
+            "name": "Photo Face",
+            "screenshots": [
+                "https://dummyimage.com/240x240/000/ffffff",
+                "https://dummyimage.com/240x240/000/0000FF",
+                "https://example.com",
+                "https://example.com"
+            ],
+            "state": "pending",
+            "description": "This watch face adds support for a custom background image via external resources.\n\nTo set a background image, upload a converted image named watchface.bin to a directory named gallery.\n\nYou can also customize text color and position by long pressing on the watch face.",
+            "shortDescription": "Digital face with a user-set background image",
+            "author": "JenJell",
             "prURL": "https://github.com/InfiniTimeOrg/InfiniTime/pulls/xxxx",
             "firmwareZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx",
             "resourcesZipURL": "https://github.com/InfiniTimeOrg/InfiniTime/xxxxxxxxxx"

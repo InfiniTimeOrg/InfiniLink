@@ -31,7 +31,10 @@ class MusicController {
     @AppStorage("allowVolumeControl") var allowVolumeControl = true
     
     init() {
-        initialize()
+        musicPlayer.beginGeneratingPlaybackNotifications()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
     @objc func onPlaybackChange(_ notification: NSNotification) {
@@ -39,12 +42,6 @@ class MusicController {
     }
     @objc func onNowPlayingChange(_ notification: NSNotification) {
         updateMusicInformation(songInfo: getCurrentSongInfo())
-    }
-    
-    func initialize() {
-        musicPlayer.beginGeneratingPlaybackNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
     func controlMusic(controlNumber: Int) {
@@ -98,7 +95,8 @@ class MusicController {
     
     func getCurrentSongInfo() -> SongInfo {
         let currentTrack = self.musicPlayer.nowPlayingItem
-        return SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
+        
+        return SongInfo(trackName: currentTrack?.title ?? "", artistName: currentTrack?.artist ?? "Not Playing")
     }
     
     func updateMusicInformation(songInfo: MusicController.SongInfo) {
