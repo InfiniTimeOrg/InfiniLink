@@ -33,6 +33,7 @@
 - Weather fetch (using WeatherKit) and push (using InfiniTime 1.14's [Simple Weather Service](https://github.com/InfiniTimeOrg/InfiniTime/blob/main/doc/SimpleWeatherService.md))
 - Uploading of [external resource packages](https://github.com/InfiniTimeOrg/InfiniTime/blob/develop/doc/gettingStarted/updating-software.md#updating-resources)
 - Download and install InfiniTime firmware updates from releases and GitHub Actions using the GitHub API (local file updates are supported)
+- View available apps and watch faces in a gallery
 
 ### Partially implemented features:
 - Apple Charts with date range selection
