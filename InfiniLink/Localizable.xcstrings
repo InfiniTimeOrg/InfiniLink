@@ -518,6 +518,9 @@
     "Dark" : {
 
     },
+    "Data is fetched from GitHub. " : {
+
+    },
     "Data Sync" : {
 
     },
@@ -724,10 +727,8 @@
     "Get notified when your watch's battery is low." : {
 
     },
-    "GitHub Actions" : {
-
-    },
     "GitHub Actions body here..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -1076,7 +1077,7 @@
     "Pair New Device" : {
 
     },
-    "Planned Release Version" : {
+    "Planned Release" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -1142,9 +1143,6 @@
         }
       }
     },
-    "Screenshots" : {
-
-    },
     "Search by name or date" : {
 
     },
@@ -1161,6 +1159,9 @@
           }
         }
       }
+    },
+    "See Source" : {
+
     },
     "Send" : {
 
@@ -1303,9 +1304,6 @@
 
     },
     "The folder name cannot contain a period." : {
-
-    },
-    "There aren't any available cloud builds" : {
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {

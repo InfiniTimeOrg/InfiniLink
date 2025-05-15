@@ -7,72 +7,75 @@
 
 import Foundation
 
-struct GalleryResponse: Codable {
-    let version: Int
-    let applications: [GalleryListing]
-    let watchfaces: [GalleryListing]
-}
-struct GalleryListing: Identifiable, Codable {
-    let id: String
-    let name: String
-    let screenshots: [URL]?
-    let state: String?
-    let description: String
-    let shortDescription: String
-    let author: String
-    let prURL: URL
-    let firmwareZipURL: URL
-    let resourcesZipURL: URL
-}
-
 class GalleryManager: ObservableObject {
     static let shared = GalleryManager()
     static let listingURL = "https://infinitimeorg.github.io/InfiniLink-gallery"
     
-    @Published var watchfaces: [GalleryListing] = []
-    @Published var applications: [GalleryListing] = []
+    @Published var pullRequests = [PullRequest]()
     @Published var error: Error?
     @Published var isLoading = false
     
     init() {
-        getListings()
+        fetchAllPullRequests()
     }
     
-    func getListings() {
-        isLoading = true
-        
-        URLSession.shared.dataTask(with: URL(string: GalleryManager.listingURL + "/listings.json")!) { data, response, error in
-            if let error {
-                self.setError(error)
-                return
+    func fetchAllPullRequests() {
+        var all: [PullRequest] = []
+        let nextURL = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/pulls?per_page=100&state=open")
+
+        func fetch(url: URL) {
+            DispatchQueue.main.async {
+                self.isLoading = true
             }
             
-            guard let data = data else { return }
-            
-            do {
-                let decoder = JSONDecoder()
-                let response = try decoder.decode(GalleryResponse.self, from: data)
-                
-                DispatchQueue.main.async {
-                    self.applications = response.applications
-                    self.watchfaces = response.watchfaces
-                    self.isLoading = false
+            var request = URLRequest(url: url)
+            request.setValue("application/vnd.github+json", forHTTPHeaderField: "Accept")
+            // request.setValue("Bearer \()", forHTTPHeaderField: "Authorization")
+
+            URLSession.shared.dataTask(with: request) { data, response, _ in
+                guard let data = data,
+                      let httpResponse = response as? HTTPURLResponse else { return }
+
+                do {
+                    var prs = [PullRequest]()
+                    let decoder = JSONDecoder()
+                    
+                    decoder.dateDecodingStrategy = .iso8601
+                    prs = try decoder.decode([PullRequest].self, from: data)
+                    all += prs
+                    
+                    if let linkHeader = httpResponse.value(forHTTPHeaderField: "Link"),
+                       let next = self.parseNextLink(from: linkHeader) {
+                        fetch(url: next)
+                    } else {
+                        // We're done fetching all the pulls, update the UI
+                        DispatchQueue.main.async {
+                            self.pullRequests = all
+                            self.isLoading = false
+                        }
+                    }
+                } catch {
+                    self.setError(error)
                 }
-            } catch {
-                self.setError(error)
-            }
-        }.resume()
+            }.resume()
+        }
+
+        if let url = nextURL {
+            fetch(url: url)
+        }
     }
     
-    func imageURL(for url: URL?) -> URL? {
-        guard let url else { return nil }
-        
-        let urlString = url.absoluteString
-        let fullString = GalleryManager.listingURL + urlString
-        
-        guard let fullURL = URL(string: fullString) else { return nil }
-        
-        return fullURL
+    func parseNextLink(from linkHeader: String) -> URL? {
+        let links = linkHeader.components(separatedBy: ",")
+        for link in links {
+            let parts = link.components(separatedBy: ";")
+            if parts.count == 2,
+               parts[1].trimmingCharacters(in: .whitespaces) == #"rel="next""# {
+                let urlString = parts[0].trimmingCharacters(in: CharacterSet(charactersIn: " <>"))
+                return URL(string: urlString)
+            }
+        }
+        return nil
     }
     
     private func setError(_ error: Error) {

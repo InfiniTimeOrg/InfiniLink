@@ -62,23 +62,31 @@ struct AboutSettingsView: View {
 struct AboutRowView: View {
     let title: LocalizedStringKey
     let value: String
+    let canCopy: Bool
     
-    init(_ title: LocalizedStringKey, value: String) {
+    init(_ title: LocalizedStringKey, value: String, allowCopy: Bool = true) {
         self.title = title
         self.value = value
+        self.canCopy = allowCopy
     }
     
     var body: some View {
-        HStack {
+        let body = HStack {
             Text(title)
             Spacer()
             Text(value)
                 .foregroundStyle(.gray)
+        }
+        
+        if canCopy {
+            body
                 .contextMenu {
                     Button("Copy") {
                         UIPasteboard.general.string = value
                     }
                 }
+        } else {
+            body
         }
     }
 }

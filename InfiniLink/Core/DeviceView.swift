@@ -52,7 +52,9 @@ struct DeviceView: View {
             if downloadManager.updateStarted {
                 CurrentUpdateView()
             } else {
-                if bleManager.isDeviceInRecoveryMode {
+                // Make sure we've fully connected to the watch before showing the recovery view
+                // because the persisted device object might have a the right criteria
+                if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
                     RecoveryModeView()
                 } else {
                     content

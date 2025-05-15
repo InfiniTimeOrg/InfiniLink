@@ -42,7 +42,6 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var lastCheck: Date!
     
     @AppStorage("releases") var releases: [Result] = []
-    @AppStorage("buildArtifacts") var buildArtifacts: [Artifact] = []
     @AppStorage("lastTimeReleasesFetched") var lastTimeReleasesFetched: Double = 0
     
     @Published var updateVersion: String = "0.0.0"
@@ -100,80 +99,6 @@ class DownloadManager: NSObject, ObservableObject {
         }
     }
     
-    struct WorkflowRunResponse: Codable {
-        let total_count: Int
-        let workflow_runs: [WorkflowRun]
-    }
-    
-    struct WorkflowRun: Codable {
-        let id: Int
-        let name: String
-        let head_branch: String
-        let head_sha: String
-        let display_title: String
-        let run_number: Int
-        let event: String
-        let status: String
-        let conclusion: String
-        let workflow_id: Int
-        let url: String
-        let created_at: String
-        let updated_at: String
-        let run_attempt: Int
-        let run_started_at: String
-        let artifacts_url: String
-        let workflow_url: String
-    }
-    
-    struct ArtifactsResponse: Codable {
-        let total_count: Int
-        let artifacts: [Artifact]
-    }
-    
-    struct Artifact: Codable {
-        let id: Int
-        let nodeID: String
-        let name: String
-        let sizeInBytes: Int
-        let url: String
-        let archiveDownloadURL: String
-        let expired: Bool
-        let createdAt: String
-        let updatedAt: String
-        let expiresAt: String
-        let workflowRun: ArtifactWorkflowRun
-        
-        enum CodingKeys: String, CodingKey {
-            case id
-            case nodeID = "node_id"
-            case name
-            case sizeInBytes = "size_in_bytes"
-            case url
-            case archiveDownloadURL = "archive_download_url"
-            case expired
-            case createdAt = "created_at"
-            case updatedAt = "updated_at"
-            case expiresAt = "expires_at"
-            case workflowRun = "workflow_run"
-        }
-    }
-    
-    struct ArtifactWorkflowRun: Codable {
-        let id: Int
-        let repositoryID: Int
-        let headRepositoryID: Int
-        let headBranch: String
-        let headSHA: String
-        
-        enum CodingKeys: String, CodingKey {
-            case id
-            case repositoryID = "repository_id"
-            case headRepositoryID = "head_repository_id"
-            case headBranch = "head_branch"
-            case headSHA = "head_sha"
-        }
-    }
-    
     func newVersion(_ releaseVersion: String, than currentVersion: String) -> AppVersion? {
         let isBeta = releaseVersion.contains("beta")
         let releaseComponents = releaseVersion.versionComponents()
@@ -224,7 +149,6 @@ class DownloadManager: NSObject, ObservableObject {
         if (now.timeIntervalSince1970 - lastTimeReleasesFetched) > (30 * 20) {
             getInfiniLinkReleases()
             getInfiniTimeReleases()
-            getWorkflowRuns()
             
             lastTimeReleasesFetched = now.timeIntervalSince1970
         }
@@ -299,73 +223,6 @@ class DownloadManager: NSObject, ObservableObject {
                     }
                 } catch {
                     log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
-                }
-            }
-        }.resume()
-    }
-    
-    func getWorkflowRuns() {
-        guard let githubPAT else { return }
-        
-        self.loadingArtifacts = true
-        self.buildArtifacts = []
-        
-        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs") else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        let filteredRuns = result.workflow_runs.filter { $0.name == "CI" }
-                        let dispatchGroup = DispatchGroup()
-                        
-                        for run in filteredRuns {
-                            dispatchGroup.enter()
-                            self.getBuildArtifacts(for: run) { artifacts in
-                                self.buildArtifacts.append(contentsOf: artifacts)
-                                dispatchGroup.leave()
-                            }
-                        }
-                        
-                        dispatchGroup.notify(queue: .main) {
-                            self.loadingArtifacts = false
-                        }
-                    }
-                } catch {
-                    log("Error decoding workflow runs JSON: \(error.localizedDescription)", caller: "DownloadManager")
-                }
-            }
-        }.resume()
-    }
-    
-    func getBuildArtifacts(for run: WorkflowRun, completion: @escaping([Artifact]) -> Void) {
-        guard let githubPAT else { return }
-        guard let url = URL(string: run.artifacts_url) else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        completion(result.artifacts.filter({
-                            $0.name.contains("DFU") && !result.artifacts.compactMap({ $0.name }).contains($0.name)
-                        }))
-                    }
-                } catch {
-                    log("Error decoding artifacts JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
             }
         }.resume()

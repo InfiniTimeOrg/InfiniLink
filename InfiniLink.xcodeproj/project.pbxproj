@@ -25,7 +25,6 @@
 		E043FFCC2DD19FBD00BBFBBC /* StepSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043FFCB2DD19FBD00BBFBBC /* StepSettingsView.swift */; };
 		E043FFD02DD28B6700BBFBBC /* GalleryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043FFCF2DD28B6700BBFBBC /* GalleryManager.swift */; };
 		E043FFD32DD28D8400BBFBBC /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043FFD22DD28D8400BBFBBC /* GalleryView.swift */; };
-		E043FFD62DD2915800BBFBBC /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = E043FFD52DD2915800BBFBBC /* Kingfisher */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
@@ -68,6 +67,7 @@
 		E08C4A492CC4048900013D15 /* SleepData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A482CC4048900013D15 /* SleepData.swift */; };
 		E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */; };
 		E08F2F352CC89A530094217A /* MapSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F342CC89A530094217A /* MapSearch.swift */; };
+		E0928AF52DD3E77000EB17DF /* PullRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0928AF42DD3E77000EB17DF /* PullRequest.swift */; };
 		E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */; };
 		E09696DF2D2EC7EC00CCCBF8 /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696DE2D2EC7EC00CCCBF8 /* String+Extension.swift */; };
 		E09696E32D2F807700CCCBF8 /* HeartChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696E22D2F807700CCCBF8 /* HeartChartView.swift */; };
@@ -102,6 +102,7 @@
 		E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B85D5D2CB628E200D85122 /* ExerciseDetailView.swift */; };
 		E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B85D5F2CB6D41700D85122 /* FitnessCalculator.swift */; };
 		E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B85D6E2CB8CDC700D85122 /* Date+Extension.swift */; };
+		E0C393712DD5213200F57DBC /* MarkdownUI in Frameworks */ = {isa = PBXBuildFile; productRef = E0C393702DD5213200F57DBC /* MarkdownUI */; };
 		E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */; };
 		E0C7C83F2CAEF91C0043DA2D /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */; };
 		E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8462CAF01950043DA2D /* DeviceView.swift */; };
@@ -113,6 +114,7 @@
 		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
+		E0F366012DD6331700DAB5A4 /* Formatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -199,6 +201,7 @@
 		E08C4A482CC4048900013D15 /* SleepData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepData.swift; sourceTree = "<group>"; };
 		E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWeatherLocationView.swift; sourceTree = "<group>"; };
 		E08F2F342CC89A530094217A /* MapSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearch.swift; sourceTree = "<group>"; };
+		E0928AF42DD3E77000EB17DF /* PullRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullRequest.swift; sourceTree = "<group>"; };
 		E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailsView.swift; sourceTree = "<group>"; };
 		E09696DE2D2EC7EC00CCCBF8 /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
 		E09696E22D2F807700CCCBF8 /* HeartChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartChartView.swift; sourceTree = "<group>"; };
@@ -243,6 +246,7 @@
 		E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersOnly.swift; sourceTree = "<group>"; };
 		E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizationController.swift; sourceTree = "<group>"; };
+		E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Formatter+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -250,10 +254,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E043FFD62DD2915800BBFBBC /* Kingfisher in Frameworks */,
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
 				E078ECFB2D4E6D9800560364 /* Zip in Frameworks */,
 				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
+				E0C393712DD5213200F57DBC /* MarkdownUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -310,6 +314,7 @@
 				E09696DE2D2EC7EC00CCCBF8 /* String+Extension.swift */,
 				E0B85D6E2CB8CDC700D85122 /* Date+Extension.swift */,
 				E09696E42D318AFB00CCCBF8 /* Data+Extension.swift */,
+				E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */,
 				E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */,
 				E05999BD2CB419D300D64E0B /* InfiniLink.xcdatamodeld */,
 				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
@@ -479,6 +484,7 @@
 				E08C4A482CC4048900013D15 /* SleepData.swift */,
 				E064D4092D77F32F008500AE /* CalendarDay.swift */,
 				E05D2E742D7EA95B004A6CE0 /* ChartType.swift */,
+				E0928AF42DD3E77000EB17DF /* PullRequest.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -658,7 +664,7 @@
 				E0A7C0812CB1B4990042A12D /* Zip */,
 				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
 				E078ECFA2D4E6D9800560364 /* Zip */,
-				E043FFD52DD2915800BBFBBC /* Kingfisher */,
+				E0C393702DD5213200F57DBC /* MarkdownUI */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -739,7 +745,7 @@
 			packageReferences = (
 				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */,
-				E043FFD42DD2915800BBFBBC /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				E0C3936F2DD5213200F57DBC /* XCRemoteSwiftPackageReference "swift-markdown-ui" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -844,6 +850,7 @@
 				E0B85D1B2CB6243800D85122 /* ExerciseViewModel.swift in Sources */,
 				E0599A002CB46EB200D64E0B /* StepCountManager.swift in Sources */,
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
+				E0928AF52DD3E77000EB17DF /* PullRequest.swift in Sources */,
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
 				E043FFD32DD28D8400BBFBBC /* GalleryView.swift in Sources */,
@@ -866,6 +873,7 @@
 				E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */,
 				E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */,
 				E05999B82CB2FC7900D64E0B /* RenameView.swift in Sources */,
+				E0F366012DD6331700DAB5A4 /* Formatter+Extension.swift in Sources */,
 				264BFE4226BC51CE0050A223 /* InfiniLinkApp.swift in Sources */,
 				E0B85D212CB625FE00D85122 /* Exercise.swift in Sources */,
 				E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */,
@@ -1230,14 +1238,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		E043FFD42DD2915800BBFBBC /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/onevcat/Kingfisher";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 8.3.2;
-			};
-		};
 		E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/marmelroy/Zip";
@@ -1254,14 +1254,17 @@
 				minimumVersion = 4.15.3;
 			};
 		};
+		E0C3936F2DD5213200F57DBC /* XCRemoteSwiftPackageReference "swift-markdown-ui" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/gonzalezreal/swift-markdown-ui";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		E043FFD52DD2915800BBFBBC /* Kingfisher */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E043FFD42DD2915800BBFBBC /* XCRemoteSwiftPackageReference "Kingfisher" */;
-			productName = Kingfisher;
-		};
 		E078ECFA2D4E6D9800560364 /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */;
@@ -1275,6 +1278,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
 			productName = NordicDFU;
+		};
+		E0C393702DD5213200F57DBC /* MarkdownUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E0C3936F2DD5213200F57DBC /* XCRemoteSwiftPackageReference "swift-markdown-ui" */;
+			productName = MarkdownUI;
 		};
 /* End XCSwiftPackageProductDependency section */
 

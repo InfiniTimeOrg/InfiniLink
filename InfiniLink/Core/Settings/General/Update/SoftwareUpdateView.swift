@@ -261,38 +261,6 @@ struct OtherUpdateVersions: View {
                     }
                 }
             }
-            Section {
-                if downloadManager.buildArtifacts.isEmpty && !downloadManager.loadingArtifacts {
-                    Text("There aren't any available cloud builds")
-                } else {
-                    ForEach(downloadManager.buildArtifacts, id: \.id) { artifact in
-                        Button {
-                            dfuUpdater.firmwareFilename = artifact.name
-                            dfuUpdater.firmwareSelected = true
-                            dfuUpdater.local = false
-                            downloadManager.updateAvailable = true
-                            downloadManager.updateVersion = "GitHub Actions"
-                            downloadManager.updateBody = NSLocalizedString("GitHub Actions body here...", comment: "")
-                            downloadManager.updateSize = artifact.sizeInBytes
-                            downloadManager.browserDownloadUrl = URL(string: artifact.archiveDownloadURL)!
-                            
-                            downloadManager.externalResources = false
-                            
-                            dismiss()
-                        } label: {
-                            Text(artifact.name)
-                                .foregroundStyle(Color.primary)
-                        }
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("GitHub Actions")
-                    if downloadManager.loadingArtifacts {
-                        ProgressView()
-                    }
-                }
-            }
         }
         .navigationTitle("Other Versions")
         .toolbar {

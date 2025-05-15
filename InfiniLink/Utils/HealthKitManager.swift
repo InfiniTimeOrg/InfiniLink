@@ -29,7 +29,6 @@ class HealthKitManager: ObservableObject {
         if healthStore?.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth && stepsToAdd != 0 {
             if let healthStore = healthStore {
                 healthStore.save(stepsSample, withCompletion: { success, error in
-                    
                     if let error {
                         log(error.localizedDescription, caller: "HealthKitManager")
                         return
