@@ -167,7 +167,7 @@ struct StepChartView: View {
             Section {
                 let steps = Int(chartManager.stepPoints().last?.steps ?? 0)
                 
-                if stepCountManager.hasReachedStepGoal {
+                if bleManager.stepCount >= deviceManager.settings.stepsGoal {
                     Text("Great job, you reached your daily step goal today! You've walked \(String(format: "%.2f", fitnessCalculator.calculateDistance(steps: steps))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
                 } else {
                     let stepsRemaining = stepCountManager.stepGoal - steps

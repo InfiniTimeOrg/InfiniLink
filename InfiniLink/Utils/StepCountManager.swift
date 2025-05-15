@@ -20,9 +20,6 @@ class StepCountManager: ObservableObject {
     var stepGoal: Int {
         return Int(DeviceManager.shared.settings.stepsGoal)
     }
-    var hasReachedStepGoal: Bool {
-        return BLEManager.shared.stepCount >= stepGoal
-    }
     
     // The following two functions need to use the viewContext to save because the objects they're updating were fetched on that context
     func setStepCount(steps: Int32, isArbitrary: Bool, for date: Date) {

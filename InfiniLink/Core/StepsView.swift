@@ -19,6 +19,9 @@ struct StepsView: View {
     
     let exerciseCalculator = FitnessCalculator()
     
+    func formattedSteps(_ steps: Int) -> String {
+        Formatter.localizedDecimal.string(from: NSNumber(value: steps)) ?? "\(steps)"
+    }
     func steps() -> Int {
         let stepCount = chartManager.stepsToday()
         if let stepCount = stepCount {
@@ -31,7 +34,7 @@ struct StepsView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: "\(steps())", subtitle: String(deviceManager.settings.stepsGoal), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
+                    DetailHeaderView(Header(title: "\(formattedSteps(steps()))", subtitle: formattedSteps(Int(deviceManager.settings.stepsGoal)), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                             let units = personalizationController.units == .imperial ? "mi" : "km"
                             let distance = exerciseCalculator.calculateDistance(steps: steps())
