@@ -23,15 +23,26 @@ extension String {
     /// Convert Hexadecimal String to Array<UInt>
     ///     "0123".hex                // [1, 35]
     ///     "aabbccdd 00112233".hex   // 170, 187, 204, 221, 0, 17, 34, 51]
-    var hex : [UInt8] {
+    var hex: [UInt8] {
         return convertHex(self.unicodeScalars, i: self.unicodeScalars.startIndex, appendTo: [])
     }
     
     /// Convert Hexadecimal String to Data
     ///     "0123".hexData                    /// 0123
     ///     "aa bb cc dd 00 11 22 33".hexData /// aabbccdd 00112233
-    var hexData : Data {
+    var hexData: Data {
         return Data(convertHex(self.unicodeScalars, i: self.unicodeScalars.startIndex, appendTo: []))
+    }
+    
+    var asciiSafe: String {
+        // Remove all non-InfiniTime-readable characters from the string
+        // including emojis, symbols, accents
+        let latinized = self
+            .applyingTransform(.toLatin, reverse: false)?
+            .applyingTransform(.stripDiacritics, reverse: false) ?? self
+        
+        let filteredScalars = latinized.unicodeScalars.filter { $0.isASCII }
+        return String(String.UnicodeScalarView(filteredScalars))
     }
 }
 

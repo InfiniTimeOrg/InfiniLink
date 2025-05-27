@@ -21,7 +21,7 @@ struct NotificationsSettingsView: View {
     @AppStorage("watchNotifications") var watchNotifications = true
     @AppStorage("enableReminders") var enableReminders = true
     @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
-    
+    @AppStorage("transliterationEnabled") var transliterationEnabled = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     
     @State private var reminderAuthStatus = EKEventStore.authorizationStatus(for: .reminder)
@@ -90,6 +90,11 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
                     Toggle("Reminder Notifications", isOn: $enableReminders)
                     Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
+                }
+                Section {
+                    Toggle("Transliterate to ASCII", isOn: $transliterationEnabled)
+                } footer: {
+                    Text("Convert accented characters to plain text so notifications display correctly.")
                 }
                 if authDenied(reminderAuthStatus) || authDenied(eventAuthStatus) {
                     Section(footer: Text("To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events.")) {

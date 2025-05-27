@@ -1,8 +1,8 @@
 //
-//  Notifications.swift
+//  BLEWriteManager.swift
 //  InfiniLink
 //
-//  Created by Alex Emry on 8/8/21.
+//  Created by Liam Willey on 5/27/25.
 //
 
 import Foundation
@@ -13,6 +13,7 @@ struct BLEWriteManager {
     let bleManager = BLEManager.shared
     
     @AppStorage("watchNotifications") var watchNotifications = true
+    @AppStorage("transliterationEnabled") var transliterationEnabled = true
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
         guard bleManager.infiniTime != nil else { return }
@@ -47,16 +48,33 @@ struct BLEWriteManager {
     
     func sendNotification(_ notif: AppNotification) {
         guard bleManager.infiniTime != nil else { return }
-        guard let titleData = ("   " + notif.title + "\0").data(using: .ascii) else { return }
-        guard let bodyData = (notif.subtitle + "\0").data(using: .ascii) else { return }
         
-        var notification = titleData
+        let title = transliterationEnabled ? notif.title.asciiSafe : notif.title
+        let body = transliterationEnabled ? notif.subtitle.asciiSafe : notif.subtitle
         
-        notification.append(bodyData)
+        // Convert strings to ASCII
+        let titleData = (title + "\0").data(using: .ascii)
+        let bodyData = (body + "\0").data(using: .ascii)
+        
+        // Log if there was a failure when converting
+        if titleData == nil {
+            log("Failed to convert \(notif.title) to ASCII data", caller: "BLEWriteManager", target: .ble)
+        }
+        if bodyData == nil {
+            log("Failed to convert \(notif.subtitle) to ASCII data", caller: "BLEWriteManager", target: .ble)
+        }
+
+        // If either the strings couldn't be converted, don't send the notification
+        if titleData == nil || bodyData == nil {
+            return
+        }
+        
+        var notification = titleData!
+        notification.append(bodyData!)
         
         if !notification.isEmpty && watchNotifications {
             bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
-            log("Notification sent with title: \(notif.title)", caller: "BLEWriteManager", target: .ble)
+            log("Notification sent with title: \(title)", caller: "BLEWriteManager", target: .ble)
         }
     }
     
@@ -64,7 +82,7 @@ struct BLEWriteManager {
         guard bleManager.infiniTime != nil else { return }
         
         let hexPrefix = Data([0x03, 0x01, 0x00]) // Hexadecimal representation of "\x03\x01\x00"
-        let nameData = "InfiniLink".data(using: .ascii) ?? Data()
+        let nameData = "InfiniLink".data(using: .ascii)!
         
         let notification = hexPrefix + nameData
         
@@ -86,7 +104,10 @@ struct BLEWriteManager {
         guard var locationData = location.data(using: .ascii) else {
             log("Error encoding location string", caller: "BLEWriteManager")
             
-            for _ in 1...32 {bytes.append(0)}
+            for _ in 1...32 {
+                bytes.append(0)
+            }
+            
             bytes.append(icon)
             
             let writeData = Data(bytes: bytes as [UInt8], count: 49)
@@ -98,9 +119,13 @@ struct BLEWriteManager {
         
         if locationData.count > 32 {
             log("Weather location string is too big to send", caller: "BLEWriteManager", target: .ble)
-            for _ in 1...32 {bytes.append(0)}
+            for _ in 1...32 {
+                bytes.append(0)
+            }
         } else {
-            for _ in 1...32-locationData.count {locationData.append(0)}
+            for _ in (1...32 - locationData.count) {
+                locationData.append(0)
+            }
             bytes.append(contentsOf: locationData)
         }
         bytes.append(icon)
@@ -124,14 +149,14 @@ struct BLEWriteManager {
         bytes.append(contentsOf: timeSince1970())
         bytes.append(UInt8(minimumTemperature.count))
         
-        for idx in 0...minimumTemperature.count-1 {
+        for idx in (0...minimumTemperature.count - 1) {
             bytes.append(contentsOf: convertTemperature(value: Int(round(minimumTemperature[idx])))) // Minimum temperature
             bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature[idx])))) // Maximum temperature
             bytes.append(icon[idx])
         }
         
         if minimumTemperature.count < 5 {
-            for _ in 0...4-minimumTemperature.count {
+            for _ in (0...4 - minimumTemperature.count) {
                 bytes.append(contentsOf: [0, 0, 0, 0, 0])
             }
         }
@@ -149,7 +174,8 @@ struct BLEWriteManager {
         guard bleManager.navigationFlagsCharacteristic != nil && bleManager.navigationNarrativeCharacteristic != nil && bleManager.navigationDistanceCharacteristic != nil && bleManager.navigationProgressCharacteristic != nil && bleManager.infiniTime != nil else { return }
         
         guard let icon = icon.data(using: .ascii) else { return }
-        guard let narrative = instructions.data(using: .ascii) else { return }
+        // The narrative may contain non-InfiniTime-readable characters, so transliterate if enabled
+        guard let narrative = (transliterationEnabled ? instructions.asciiSafe : instructions).data(using: .ascii) else { return }
         guard let distance = distance.data(using: .ascii) else { return }
         
         var progress = Data()
@@ -166,7 +192,7 @@ struct BLEWriteManager {
 
 extension BLEWriteManager {
     func timeSince1970() -> [UInt8] {
-        let timeInterval : UInt64 = UInt64(Date().timeIntervalSince1970)
+        let timeInterval: UInt64 = UInt64(Date().timeIntervalSince1970)
         
         let byte1 = UInt8(timeInterval & 0x00000000000000FF)
         let byte2 = UInt8((timeInterval & 0x000000000000FF00) >> 8)

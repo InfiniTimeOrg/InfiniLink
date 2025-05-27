@@ -457,6 +457,9 @@
     "Continue to Update" : {
 
     },
+    "Convert accented characters to plain text so notifications display correctly." : {
+
+    },
     "Converting..." : {
 
     },
@@ -1336,6 +1339,9 @@
 
     },
     "Track Resets" : {
+
+    },
+    "Transliterate to ASCII" : {
 
     },
     "Units" : {
