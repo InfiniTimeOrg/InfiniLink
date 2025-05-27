@@ -53,7 +53,7 @@ struct BLEWriteManager {
         let body = transliterationEnabled ? notif.subtitle.asciiSafe : notif.subtitle
         
         // Convert strings to ASCII
-        let titleData = (title + "\0").data(using: .ascii)
+        let titleData = ("   " + title + "\0").data(using: .ascii)
         let bodyData = (body + "\0").data(using: .ascii)
         
         // Log if there was a failure when converting
