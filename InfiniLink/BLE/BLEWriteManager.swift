@@ -52,16 +52,15 @@ struct BLEWriteManager {
         let title = transliterationEnabled ? notif.title.asciiSafe : notif.title
         let body = transliterationEnabled ? notif.subtitle.asciiSafe : notif.subtitle
         
-        // Convert strings to ASCII
-        let titleData = ("   " + title + "\0").data(using: .ascii)
-        let bodyData = (body + "\0").data(using: .ascii)
+        let titleData = ("   " + title + "\0").data(using: .utf8)
+        let bodyData = (body + "\0").data(using: .utf8)
         
         // Log if there was a failure when converting
         if titleData == nil {
-            log("Failed to convert \(notif.title) to ASCII data", caller: "BLEWriteManager", target: .ble)
+            log("Failed to convert \(notif.title) to UTF-8 data", caller: "BLEWriteManager", target: .ble)
         }
         if bodyData == nil {
-            log("Failed to convert \(notif.subtitle) to ASCII data", caller: "BLEWriteManager", target: .ble)
+            log("Failed to convert \(notif.subtitle) to UTF-8 data", caller: "BLEWriteManager", target: .ble)
         }
 
         // If either the strings couldn't be converted, don't send the notification
