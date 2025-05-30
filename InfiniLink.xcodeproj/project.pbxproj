@@ -107,6 +107,7 @@
 		E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84E2CAF14870043DA2D /* BLECharacteristicHandler.swift */; };
 		E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C84C2CAF14870043DA2D /* BLEManager.swift */; };
 		E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */; };
+		E0DB931C2DEA54DB00BE9413 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E0DB931B2DEA54DB00BE9413 /* README.md */; };
 		E0E772AF2CCD552100D60C24 /* NumbersOnly.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
@@ -236,6 +237,7 @@
 		E0C7C84F2CAF14870043DA2D /* BLEWriteManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEWriteManager.swift; sourceTree = "<group>"; };
 		E0C7C8512CAF14870043DA2D /* SetTime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetTime.swift; sourceTree = "<group>"; };
 		E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		E0DB931B2DEA54DB00BE9413 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
 		E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersOnly.swift; sourceTree = "<group>"; };
 		E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManager.swift; sourceTree = "<group>"; };
 		E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizationController.swift; sourceTree = "<group>"; };
@@ -309,6 +311,7 @@
 				E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */,
 				E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */,
 				E05999BD2CB419D300D64E0B /* InfiniLink.xcdatamodeld */,
+				E0DB931B2DEA54DB00BE9413 /* README.md */,
 				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
@@ -752,6 +755,7 @@
 				E05999B22CB2ED7100D64E0B /* 7-Segment.ttf in Resources */,
 				E05999B32CB2ED7100D64E0B /* JetBrainsMono-Regular.ttf in Resources */,
 				E05999B42CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf in Resources */,
+				E0DB931C2DEA54DB00BE9413 /* README.md in Resources */,
 				E05999B52CB2ED7100D64E0B /* JetBrainsMono-ExtraBold.ttf in Resources */,
 				264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */,
 				E0C7C8612CAF260A0043DA2D /* Localizable.xcstrings in Resources */,
