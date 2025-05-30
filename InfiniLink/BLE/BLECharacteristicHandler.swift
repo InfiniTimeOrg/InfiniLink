@@ -18,6 +18,7 @@ struct BLECharacteristicHandler {
     let notificationManager = NotificationManager.shared
     let remindersManager = RemindersManager.shared
     let deviceManager = DeviceManager.shared
+    let weatherController = WeatherController.shared
     let persistenceController = PersistenceController.shared
     let fitnessCalculator = FitnessCalculator()
     
@@ -175,8 +176,8 @@ struct BLECharacteristicHandler {
             if timeDifference > 5 {
                 remindersManager.checkForDueItems()
                 notificationManager.checkAndNotifyForWaterReminders()
-
-                // TODO: we need to make sure this is in fact better than using onChange in ContentView
+                
+                weatherController.checkForUpdate()
                 
                 checkForCompletedStepGoal()
                 

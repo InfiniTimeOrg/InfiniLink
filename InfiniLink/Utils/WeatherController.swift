@@ -10,7 +10,6 @@ import WeatherKit
 import CoreLocation
 import Combine
 
-@MainActor
 class WeatherController: ObservableObject {
     static let shared = WeatherController()
     
@@ -63,16 +62,29 @@ class WeatherController: ObservableObject {
                 self?.latitude = location.coordinate.latitude
                 self?.longitude = location.coordinate.longitude
                 
+                // Bypass the check function, this one will already ensure we're not calling multiple times a minute
                 self?.fetchWeatherData()
             }
             .store(in: &cancellables)
     }
     
-    func fetchWeatherData() {
-        let guardInterval: TimeInterval = 600
+    func checkForUpdate() {
+        // This function is called every five seconds
+        // We want to update the weather no more than once every two minutes, and no less than once every 15 minutes
         
-        // Make sure the weather has not been fetched in the past 5 minutes
-        guard lastTimeWeatherFetched?.timeIntervalSinceNow ?? guardInterval >= guardInterval else { return }
+        let guardInterval: TimeInterval = 900 // 15 mins
+        
+        if abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? 0) >= guardInterval {
+            // The weather hasn't been fetched (location hasn't been updated) in the past 15 minutes, so fetch it now
+            fetchWeatherData(checkTimeInterval: false)
+        }
+    }
+    
+    func fetchWeatherData(checkTimeInterval: Bool = true) {
+        let guardInterval: TimeInterval = 120 // 2 mins
+        
+        // Make sure the weather has not been fetched in the past 2 minutes
+        guard !checkTimeInterval || abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? guardInterval) >= guardInterval else { return }
         
         let currentLocation = CLLocation(latitude: latitude, longitude: longitude)
         
@@ -120,7 +132,7 @@ class WeatherController: ObservableObject {
         - 8 = Mist, smog
         */
         switch icon {
-            // Don't include the "sunny" icons, because they'll be handled by `default`
+            // Don't include the "sunny" icons, because they'll be handled by default
         case "cloud.sun":
             return 1
         case "cloud":
