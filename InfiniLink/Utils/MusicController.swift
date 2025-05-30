@@ -32,7 +32,12 @@ class MusicController {
     @AppStorage("allowVolumeControl") var allowVolumeControl = true
     
     init() {
-        initialize()
+        musicPlayer.beginGeneratingPlaybackNotifications()
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
+        
+        // Create the player instance
+        controlMusic(controlNumber: -1)
     }
     
     @objc func onPlaybackChange(_ notification: NSNotification) {
@@ -43,15 +48,6 @@ class MusicController {
     @objc func onNowPlayingChange(_ notification: NSNotification) {
         print("Now playing changed")
         updateMusicInformation(songInfo: getCurrentSongInfo())
-    }
-    
-    func initialize() {
-        musicPlayer.beginGeneratingPlaybackNotifications()
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
-        
-        // Create the player instance
-        controlMusic(controlNumber: -1)
     }
     
     func controlMusic(controlNumber: Int) {
