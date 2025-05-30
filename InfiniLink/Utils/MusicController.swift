@@ -14,6 +14,7 @@ class MusicController {
     static let shared = MusicController()
     
     private let bleManager = BLEManager.shared
+    private let bleWriteManager = BLEWriteManager()
     private let volumeNotch: Float = (1 / 15)
     private var musicPlayer = MPMusicPlayerController.systemMusicPlayer
     private var musicPlaying = 0
@@ -35,9 +36,12 @@ class MusicController {
     }
     
     @objc func onPlaybackChange(_ notification: NSNotification) {
+        print("onPlayback changed")
         musicPlaying = musicPlayer.playbackState.rawValue
+        updateMusicInformation(songInfo: getCurrentSongInfo())
     }
     @objc func onNowPlayingChange(_ notification: NSNotification) {
+        print("Now playing changed")
         updateMusicInformation(songInfo: getCurrentSongInfo())
     }
     
@@ -45,6 +49,9 @@ class MusicController {
         musicPlayer.beginGeneratingPlaybackNotifications()
         NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
+        
+        // Create the player instance
+        controlMusic(controlNumber: -1)
     }
     
     func controlMusic(controlNumber: Int) {
@@ -60,6 +67,9 @@ class MusicController {
                 log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
             }
             musicPlaying = musicPlayer.playbackState.rawValue
+            
+            // Don't send anything if we're just starting the session
+            guard controlNumber != -1 else { return }
             
             switch controlNumber {
             case 0:
@@ -102,8 +112,6 @@ class MusicController {
     }
     
     func updateMusicInformation(songInfo: MusicController.SongInfo) {
-        let bleWriteManager = BLEWriteManager()
-        
         let songInfo = getCurrentSongInfo()
         var playbackTime = musicPlayer.currentPlaybackTime
         if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {
@@ -117,11 +125,7 @@ class MusicController {
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
         
-        if musicPlaying == 1 {
-            bleWriteManager.writeHexToMusicApp(message: [0x01], characteristic: bleManager.musicChars.status)
-        } else {
-            bleWriteManager.writeHexToMusicApp(message: [0x00], characteristic: bleManager.musicChars.status)
-        }
+        bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00], characteristic: bleManager.musicChars.status)
     }
     
     func convertTime(value: Double) -> [UInt8] {
