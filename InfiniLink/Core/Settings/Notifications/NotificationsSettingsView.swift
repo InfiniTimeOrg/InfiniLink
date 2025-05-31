@@ -28,6 +28,7 @@ struct NotificationsSettingsView: View {
     @State private var eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
     
     @State private var showSendNotificationSheet = false
+    @State private var showFindLostDeviceSheet = false
     
     let bleWriteManager = BLEWriteManager()
     
@@ -87,10 +88,11 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                 }
-                Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
+                Section(header: Text("Other"), footer: bleManager.infiniTime?.ancsAuthorized ?? false ? Text("Calendar and reminder notifications are not sent when ANCS is enabled.") : Text("Receive notifications on your watch when reminders and calendar events are due.")) {
                     Toggle("Reminder Notifications", isOn: $enableReminders)
                     Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
                 }
+                .disabled(bleManager.infiniTime?.ancsAuthorized ?? false)
                 Section {
                     Toggle("Transliterate to ASCII", isOn: $transliterationEnabled)
                 } footer: {
@@ -107,14 +109,17 @@ struct NotificationsSettingsView: View {
                     Button("Send Notification") {
                         showSendNotificationSheet = true
                     }
+                    .disabled(bleManager.notifyCharacteristic == nil)
                     .sheet(isPresented: $showSendNotificationSheet) {
                         ArbitraryNotificationView()
                     }
                     Button("Find Lost Device") {
-                        bleWriteManager.sendLostNotification()
+                        showFindLostDeviceSheet = true
+                    }
+                    .sheet(isPresented: $showFindLostDeviceSheet) {
+                        FindLostDeviceView()
                     }
                 }
-                .disabled(bleManager.notifyCharacteristic == nil)
             }
         }
         .navigationTitle("Notifications")

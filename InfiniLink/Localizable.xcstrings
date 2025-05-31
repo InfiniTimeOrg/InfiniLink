@@ -77,6 +77,16 @@
         }
       }
     },
+    "%@ is %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ is %2$@"
+          }
+        }
+      }
+    },
     "%@ Logs" : {
       "localizations" : {
         "fr" : {
@@ -87,8 +97,21 @@
         }
       }
     },
+    "%@ must be connected to ping it." : {
+
+    },
     "%@ needs to be connected to update its software." : {
 
+    },
+    "%@ was last seen %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ was last seen %2$@."
+          }
+        }
+      }
     },
     "%@-%@" : {
       "localizations" : {
@@ -290,6 +313,9 @@
     "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
+    "ANCS Enabled" : {
+
+    },
     "App" : {
 
     },
@@ -390,6 +416,9 @@
     "Brightness Level" : {
 
     },
+    "Calendar and reminder notifications are not sent when ANCS is enabled." : {
+
+    },
     "Calendar Notifications" : {
       "localizations" : {
         "fr" : {
@@ -422,6 +451,9 @@
     "Clear All Exercises" : {
 
     },
+    "Clear Disconnect Pins" : {
+
+    },
     "Clear Step Data" : {
 
     },
@@ -449,6 +481,9 @@
 
     },
     "Connecting..." : {
+
+    },
+    "Connection strength: " : {
 
     },
     "Continue" : {
@@ -608,6 +643,9 @@
     "Error fetching weather" : {
 
     },
+    "Excellent" : {
+
+    },
     "Exercise" : {
 
     },
@@ -642,6 +680,9 @@
       }
     },
     "External resources are fonts and images that are required for some apps and watch faces." : {
+
+    },
+    "Fair" : {
 
     },
     "Female" : {
@@ -703,6 +744,9 @@
         }
       }
     },
+    "Get Directions" : {
+
+    },
     "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
 
     },
@@ -726,6 +770,9 @@
       }
     },
     "Goal Reached" : {
+
+    },
+    "Good" : {
 
     },
     "Good afternoon" : {
@@ -1012,6 +1059,9 @@
     "Next" : {
 
     },
+    "No" : {
+
+    },
     "No Data" : {
 
     },
@@ -1053,6 +1103,18 @@
 
     },
     "Pair New Device" : {
+
+    },
+    "Pause any currently playing music when %@ goes out of range of your phone." : {
+
+    },
+    "Pause on Walk-Away" : {
+
+    },
+    "Ping %@" : {
+
+    },
+    "Poor" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -1246,6 +1308,9 @@
           }
         }
       }
+    },
+    "Stop Pinging" : {
+
     },
     "Sync step and heart rate data to Apple Health." : {
       "localizations" : {
@@ -1478,6 +1543,9 @@
     "Weight" : {
 
     },
+    "Yes" : {
+
+    },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {
 
     },
@@ -1534,6 +1602,9 @@
 
     },
     "Your approximate weight, in %@." : {
+
+    },
+    "Your watch is estimated to be around %@ away." : {
 
     }
   },

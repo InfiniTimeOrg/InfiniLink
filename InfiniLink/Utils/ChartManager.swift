@@ -134,6 +134,23 @@ class ChartManager: ObservableObject {
         }
     }
     
+    func disconnectMapPoints() -> [DisconnectMapPoint] {
+        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+                
+        let fetchRequest: NSFetchRequest<DisconnectMapPoint> = DisconnectMapPoint.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
+        
+        do {
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
+                .filter { record in
+                    return record.deviceId == bleManager.pairedDeviceID
+                }
+        } catch {
+            log("Error fetching disconnect points: \(error)", caller: "ChartManager")
+            return []
+        }
+    }
+    
     func batteryPoints(for date: Date) -> [BatteryDataPoint] {
         guard let deviceId = bleManager.pairedDeviceID else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
@@ -163,6 +180,21 @@ class ChartManager: ObservableObject {
                 try context.save()
             } catch {
                 log("Failed to delete user exercises: \(error)", caller: "ChartManager")
+            }
+        }
+    }
+    
+    func deleteAllDisconnectMapPoints() {
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = DisconnectMapPoint.fetchRequest()
+            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            
+            do {
+                try context.execute(batchDeleteRequest)
+                try context.save()
+            } catch {
+                log("Failed to delete disconnect pins: \(error)", caller: "ChartManager")
             }
         }
     }

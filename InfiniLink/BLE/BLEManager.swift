@@ -8,6 +8,7 @@
 import Foundation
 import CoreBluetooth
 import SwiftUI
+import CoreLocation
 
 class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
     static let shared = BLEManager()
@@ -16,7 +17,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     lazy var characteristicHandler = BLECharacteristicHandler()
     lazy var deviceManager = DeviceManager.shared
     
+    let locationManager = LocationManager.shared
     let downloadManager = DownloadManager.shared
+    let persistenceController =  PersistenceController.shared
     
     var central: CBCentralManager!
     var blefsTransfer: CBCharacteristic!
@@ -100,12 +103,15 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var batteryLevel: Double = 0
     @Published var stepCount: Int = 0
     
+    @Published var rssi: Int?
+    
     @Published var error: String = ""
     @Published var showError: Bool = false
     
     @Published var pairedDevice: Device!
     
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
+    @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     
     var hasLoadedCharacteristics: Bool {
         // Use currentTimeService because it's present in all firmware versions
@@ -228,7 +234,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             self.hasLoadedBatteryLevel = false
             self.isConnectedToPinetime = false
             
-            log("Disconnected from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+            log("Disconnected", type: .info, caller: "BLEManager", target: .ble)
         }
     }
     
@@ -285,14 +291,42 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         
-        if pauseOnWalkaway {
-            // The watch went out of range, pause any currently playing music
-            MusicController.shared.pause()
-        }
-        
         if let error {
-            connect(peripheral: peripheral)
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
+            
+            if let rssi, pauseOnWalkaway && RSSI.from(rssi: rssi) == RSSI.poor { // Make sure the disconnect was a range issue
+                // The watch went out of range, pause any currently playing music
+                MusicController.shared.pause()
+                log("Music paused due to watch disconnect", caller: "BLEManager")
+                
+                // Drop a pin on the map where the watch disconnected with an error, in case it's because the user left it behind
+                let latitude = locationManager.location?.coordinate.latitude ?? 0
+                let longitude = locationManager.location?.coordinate.longitude ?? 0
+                let location = CLLocation(latitude: latitude, longitude: longitude)
+                
+                // Check for proximity match within 30 meters
+                let isDuplicate = ChartManager.shared.disconnectMapPoints().contains { point in
+                    let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude)
+                    return location.isNear(pointLocation)
+                }
+                
+                guard !isDuplicate else {
+                    print("Pin already dropped near this location.")
+                    return
+                }
+                
+                let context = persistenceController.container.viewContext
+                let disconnectPoint = DisconnectMapPoint(context: context)
+                disconnectPoint.deviceId = peripheral.identifier.uuidString
+                disconnectPoint.latitude = latitude
+                disconnectPoint.longitude = longitude
+                disconnectPoint.timestamp = Date()
+                
+                persistenceController.save()
+            }
+            
+            // Try reconnecting to the watch
+            connect(peripheral: peripheral)
         }
     }
     
@@ -342,5 +376,23 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         deviceManager.updateInfo(characteristic: characteristic)
         characteristicHandler.handleUpdates(characteristic: characteristic, peripheral: peripheral)
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+        if let error {
+            print(error.localizedDescription)
+        }
+        
+        print(RSSI.intValue)
+        
+        self.rssi = RSSI.intValue
+    }
+}
+
+extension CLLocation {
+    func isNear(_ other: CLLocation) -> Bool {
+        let avgDistance: Double = 30 // Around a 100 ft
+        
+        return self.distance(from: other) <= avgDistance
     }
 }

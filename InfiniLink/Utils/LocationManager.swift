@@ -9,6 +9,13 @@ import Foundation
 import CoreLocation
 import SwiftUI
 
+enum AddressComponent: CaseIterable {
+    case name
+    case locality
+    case administrativeArea
+    case country
+}
+
 class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     static let shared = LocationManager()
     
@@ -55,6 +62,36 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    func getAddressFrom(coordinate: CLLocationCoordinate2D, addressComponents: [AddressComponent] = AddressComponent.allCases, completion: @escaping (_ address: String?) -> ()) {
+        let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+        
+        CLGeocoder().reverseGeocodeLocation(location) { placemarks, error in
+            if let placemark = placemarks?.first {
+                var components: [String] = []
+                
+                if let name = placemark.name, addressComponents.contains(.name) {
+                    components.append(name)
+                }
+                if let locality = placemark.locality, addressComponents.contains(.locality) {
+                    components.append(locality)
+                }
+                if let administrativeArea = placemark.administrativeArea, addressComponents.contains(.administrativeArea) {
+                    components.append(administrativeArea)
+                }
+                if let country = placemark.country, addressComponents.contains(.country) {
+                    components.append(country)
+                }
+                
+                completion(components.joined(separator: ", "))
+            } else {
+                if let error = error {
+                    log("Error during reverse geocoding: \(error.localizedDescription)", caller: "LocationManager")
+                }
+                completion(nil)
+            }
+        }
+    }
+    
     func requestLocation() {
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -75,8 +112,10 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        DispatchQueue.main.async {
-            WeatherController.shared.errorWhileFetching = error
+        if useCurrentLocation {
+            DispatchQueue.main.async {
+                WeatherController.shared.errorWhileFetching = error
+            }
         }
     }
     

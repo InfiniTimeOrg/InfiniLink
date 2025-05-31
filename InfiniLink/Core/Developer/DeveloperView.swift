@@ -97,9 +97,13 @@ struct DeveloperView: View {
                 } label: {
                     Text("Clear All Exercises")
                 }
+                Button(role: .destructive) {
+                    ChartManager.shared.deleteAllDisconnectMapPoints()
+                } label: {
+                    Text("Clear Disconnect Pins")
+                }
             } header: {
                 Text("DANGER ZONE")
-                    .fontWeight(.bold)
             } footer: {
                 Text("WARNING: These actions are permanent and cannot be undone!")
             }

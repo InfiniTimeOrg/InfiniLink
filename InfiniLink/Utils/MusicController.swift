@@ -41,13 +41,11 @@ class MusicController {
     }
     
     @objc func onPlaybackChange(_ notification: NSNotification) {
-        print("onPlayback changed")
         musicPlaying = musicPlayer.playbackState.rawValue
-        updateMusicInformation(songInfo: getCurrentSongInfo())
+        updateMusicInformation()
     }
     @objc func onNowPlayingChange(_ notification: NSNotification) {
-        print("Now playing changed")
-        updateMusicInformation(songInfo: getCurrentSongInfo())
+        updateMusicInformation()
     }
     
     func controlMusic(controlNumber: Int) {
@@ -62,10 +60,11 @@ class MusicController {
             } catch {
                 log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
             }
-            musicPlaying = musicPlayer.playbackState.rawValue
             
             // Don't send anything if we're just starting the session
             guard controlNumber != -1 else { return }
+            
+            musicPlaying = musicPlayer.playbackState.rawValue
             
             switch controlNumber {
             case 0:
@@ -85,7 +84,7 @@ class MusicController {
                 break
             }
             
-            updateMusicInformation(songInfo: getCurrentSongInfo())
+            updateMusicInformation()
         }
     }
     
@@ -106,24 +105,29 @@ class MusicController {
         return SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
     }
     
-    func updateMusicInformation(songInfo: MusicController.SongInfo) {
+    func updateMusicInformation() {
         let songInfo = getCurrentSongInfo()
-        var playbackTime = musicPlayer.currentPlaybackTime
-        if playbackTime == musicPlayer.nowPlayingItem?.playbackDuration {
-            // The playback time will be the duration of the song if it just started, so set it to zero
-            playbackTime = 0.0
-        }
+        
+        bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00], characteristic: bleManager.musicChars.status)
         
         bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
         bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
         
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
+        guard let nowPlayingItem = musicPlayer.nowPlayingItem else { return }
         
-        bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00], characteristic: bleManager.musicChars.status)
+        var playbackTime = musicPlayer.currentPlaybackTime
+        if playbackTime == nowPlayingItem.playbackDuration {
+            // The playback time will be the duration of the song if it just started, so set it to zero
+            playbackTime = 0.0
+        }
+        
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: nowPlayingItem.playbackDuration), characteristic: bleManager.musicChars.length)
     }
     
     func pause() {
+        guard musicPlayer.playbackState != .paused  else { return }
+        
         musicPlayer.pause()
         musicPlaying = 2
     }

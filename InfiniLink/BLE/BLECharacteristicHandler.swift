@@ -172,6 +172,8 @@ struct BLECharacteristicHandler {
             let currentTime = Date().timeIntervalSince1970
             let timeDifference = currentTime - lastTimeCheckCompleted
             
+            peripheral.readRSSI()
+            
             // Only update every five seconds
             if timeDifference > 5 {
                 remindersManager.checkForDueItems()

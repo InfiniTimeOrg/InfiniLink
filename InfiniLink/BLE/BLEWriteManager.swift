@@ -73,7 +73,7 @@ struct BLEWriteManager {
         
         if !notification.isEmpty && watchNotifications {
             bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
-            log("Notification sent with title: \(title)", caller: "BLEWriteManager", target: .ble)
+            log("Notification sent with title: \(title)", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
