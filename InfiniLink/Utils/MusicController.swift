@@ -72,8 +72,7 @@ class MusicController {
                 musicPlayer.play()
                 musicPlaying = 1
             case 1:
-                musicPlayer.pause()
-                musicPlaying = 2
+                pause()
             case 3:
                 musicPlayer.skipToNextItem()
             case 4:
@@ -122,6 +121,11 @@ class MusicController {
         bleWriteManager.writeHexToMusicApp(message: convertTime(value: musicPlayer.nowPlayingItem?.playbackDuration ?? 0.0), characteristic: bleManager.musicChars.length)
         
         bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00], characteristic: bleManager.musicChars.status)
+    }
+    
+    func pause() {
+        musicPlayer.pause()
+        musicPlaying = 2
     }
     
     func convertTime(value: Double) -> [UInt8] {

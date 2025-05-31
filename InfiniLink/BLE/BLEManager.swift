@@ -285,6 +285,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         isConnectedToPinetime = false
         notifyCharacteristic = nil
         
+        if pauseOnWalkaway {
+            // The watch went out of range, pause any currently playing music
+            MusicController.shared.pause()
+        }
+        
         if let error {
             connect(peripheral: peripheral)
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
