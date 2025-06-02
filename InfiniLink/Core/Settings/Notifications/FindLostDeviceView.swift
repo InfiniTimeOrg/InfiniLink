@@ -80,6 +80,7 @@ struct FindLostDeviceView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .frame(height: min(geo.size.width / 2, 200))
+                        .multilineTextAlignment(.center)
                     }
                     if let last = chartManager.disconnectMapPoints().last {
                         let date = {
