@@ -756,10 +756,8 @@
     "Get notified when your watch's battery is low." : {
 
     },
-    "GitHub Actions" : {
-
-    },
     "GitHub Actions body here..." : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -1338,9 +1336,6 @@
 
     },
     "The folder name cannot contain a period." : {
-
-    },
-    "There aren't any available cloud builds" : {
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {

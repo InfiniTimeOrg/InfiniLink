@@ -231,7 +231,7 @@ struct OtherUpdateVersions: View {
                     Text("External resources are fonts and images that are required for some apps and watch faces.")
                 }
             }
-            Section {
+            Section("Releases") {
                 ForEach(downloadManager.releases, id: \.tag_name) { release in
                     Button {
                         let asset = downloadManager.chooseAsset(response: release)
@@ -253,53 +253,19 @@ struct OtherUpdateVersions: View {
                             .foregroundStyle(Color.primary)
                     }
                 }
-            } header: {
-                HStack {
-                    Text("Releases")
-                    if downloadManager.loadingReleases {
-                        ProgressView()
-                    }
-                }
-            }
-            Section {
-                if downloadManager.buildArtifacts.isEmpty && !downloadManager.loadingArtifacts {
-                    Text("There aren't any available cloud builds")
-                } else {
-                    ForEach(downloadManager.buildArtifacts, id: \.id) { artifact in
-                        Button {
-                            dfuUpdater.firmwareFilename = artifact.name
-                            dfuUpdater.firmwareSelected = true
-                            dfuUpdater.local = false
-                            downloadManager.updateAvailable = true
-                            downloadManager.updateVersion = "GitHub Actions"
-                            downloadManager.updateBody = NSLocalizedString("GitHub Actions body here...", comment: "")
-                            downloadManager.updateSize = artifact.sizeInBytes
-                            downloadManager.browserDownloadUrl = URL(string: artifact.archiveDownloadURL)!
-                            
-                            downloadManager.externalResources = false
-                            
-                            dismiss()
-                        } label: {
-                            Text(artifact.name)
-                                .foregroundStyle(Color.primary)
-                        }
-                    }
-                }
-            } header: {
-                HStack {
-                    Text("GitHub Actions")
-                    if downloadManager.loadingArtifacts {
-                        ProgressView()
-                    }
-                }
             }
         }
         .navigationTitle("Other Versions")
         .toolbar {
-            Button {
-                downloadManager.getUpdates()
-            } label: {
-                Label("Refresh", systemImage: "arrow.clockwise")
+            if downloadManager.loadingReleases {
+                ProgressView()
+            } else if !downloadManager.hasCheckedForUpdatesBefore {
+                Button {
+                    downloadManager.getInfiniTimeReleases()
+                    downloadManager.hasCheckedForUpdatesBefore = true
+                } label: {
+                    Label("Refresh", systemImage: "arrow.clockwise")
+                }
             }
         }
     }

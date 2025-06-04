@@ -42,7 +42,6 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var lastCheck: Date!
     
     @AppStorage("releases") var releases: [Result] = []
-    @AppStorage("buildArtifacts") var buildArtifacts: [Artifact] = []
     @AppStorage("lastTimeReleasesFetched") var lastTimeReleasesFetched: Double = 0
     
     @Published var updateVersion: String = "0.0.0"
@@ -53,12 +52,12 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var browserDownloadUrl: URL = URL(fileURLWithPath: "")
     @Published var browserDownloadResourcesUrl: URL = URL(fileURLWithPath: "")
     
+    @Published var hasCheckedForUpdatesBefore: Bool = false
     @Published var updateStarted: Bool = false
     @Published var updateAvailable: Bool = false
     @Published var startTransfer: Bool = false
     @Published var loadingAppReleases: Bool = false
     @Published var loadingReleases: Bool = false
-    @Published var loadingArtifacts: Bool = false
     @Published var externalResources: Bool = false
     @Published var appUpdate: AppVersion?
     
@@ -68,8 +67,8 @@ class DownloadManager: NSObject, ObservableObject {
     private var hasDownloadedResources = false
     
     var githubPAT: String? {
-        if let key = ProcessInfo.processInfo.environment["INFINITIME_PAT"] {
-            return key
+        if let token = Bundle.main.infoDictionary?["pat"] as? String {
+            return token
         } else {
             log("Cannot find PAT", type: .error, caller: "DownloadManager - PAT")
         }
@@ -222,9 +221,10 @@ class DownloadManager: NSObject, ObservableObject {
         
         // Make sure we haven't checked for updates in the past 30 minutes
         if (now.timeIntervalSince1970 - lastTimeReleasesFetched) > (30 * 20) {
-            getInfiniLinkReleases()
+            log("Fetching releases", type: .info, caller: "DownloadManager")
+            
             getInfiniTimeReleases()
-            getWorkflowRuns()
+            getInfiniLinkReleases()
             
             lastTimeReleasesFetched = now.timeIntervalSince1970
         }
@@ -299,73 +299,6 @@ class DownloadManager: NSObject, ObservableObject {
                     }
                 } catch {
                     log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
-                }
-            }
-        }.resume()
-    }
-    
-    func getWorkflowRuns() {
-        guard let githubPAT else { return }
-        
-        self.loadingArtifacts = true
-        self.buildArtifacts = []
-        
-        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/actions/runs") else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(WorkflowRunResponse.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        let filteredRuns = result.workflow_runs.filter { $0.name == "CI" }
-                        let dispatchGroup = DispatchGroup()
-                        
-                        for run in filteredRuns {
-                            dispatchGroup.enter()
-                            self.getBuildArtifacts(for: run) { artifacts in
-                                self.buildArtifacts.append(contentsOf: artifacts)
-                                dispatchGroup.leave()
-                            }
-                        }
-                        
-                        dispatchGroup.notify(queue: .main) {
-                            self.loadingArtifacts = false
-                        }
-                    }
-                } catch {
-                    log("Error decoding workflow runs JSON: \(error.localizedDescription)", caller: "DownloadManager")
-                }
-            }
-        }.resume()
-    }
-    
-    func getBuildArtifacts(for run: WorkflowRun, completion: @escaping([Artifact]) -> Void) {
-        guard let githubPAT else { return }
-        guard let url = URL(string: run.artifacts_url) else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode(ArtifactsResponse.self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        completion(result.artifacts.filter({
-                            $0.name.contains("DFU") && !result.artifacts.compactMap({ $0.name }).contains($0.name)
-                        }))
-                    }
-                } catch {
-                    log("Error decoding artifacts JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
             }
         }.resume()
