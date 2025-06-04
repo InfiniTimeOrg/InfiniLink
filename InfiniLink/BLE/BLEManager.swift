@@ -297,7 +297,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             if let rssi, pauseOnWalkaway && RSSI.from(rssi: rssi) == RSSI.poor { // Make sure the disconnect was a range issue
                 // The watch went out of range, pause any currently playing music
                 MusicController.shared.pause()
-                log("Music paused due to watch disconnect", caller: "BLEManager")
+                log("Music paused due to watch disconnect", type: .info, caller: "BLEManager")
                 
                 // Drop a pin on the map where the watch disconnected with an error, in case it's because the user left it behind
                 let latitude = locationManager.location?.coordinate.latitude ?? 0
@@ -310,19 +310,18 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                     return location.isNear(pointLocation)
                 }
                 
-                guard !isDuplicate else {
-                    print("Pin already dropped near this location.")
-                    return
+                if isDuplicate {
+                    log("Pin already dropped near this location", target: .app)
+                } else {
+                    let context = persistenceController.container.viewContext
+                    let disconnectPoint = DisconnectMapPoint(context: context)
+                    disconnectPoint.deviceId = peripheral.identifier.uuidString
+                    disconnectPoint.latitude = latitude
+                    disconnectPoint.longitude = longitude
+                    disconnectPoint.timestamp = Date()
+                    
+                    persistenceController.save()
                 }
-                
-                let context = persistenceController.container.viewContext
-                let disconnectPoint = DisconnectMapPoint(context: context)
-                disconnectPoint.deviceId = peripheral.identifier.uuidString
-                disconnectPoint.latitude = latitude
-                disconnectPoint.longitude = longitude
-                disconnectPoint.timestamp = Date()
-                
-                persistenceController.save()
             }
             
             // Try reconnecting to the watch
@@ -382,8 +381,6 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let error {
             print(error.localizedDescription)
         }
-        
-        print(RSSI.intValue)
         
         self.rssi = RSSI.intValue
     }
