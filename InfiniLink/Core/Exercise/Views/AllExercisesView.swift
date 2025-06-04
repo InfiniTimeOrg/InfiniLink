@@ -61,6 +61,7 @@ struct AllExercisesView: View {
                                 HStack {
                                     Image(systemName: exercise.icon)
                                         .font(.system(size: 24).weight(.medium))
+                                        .frame(minWidth: 40)
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(exercise.name)
                                             .font(.body.weight(.medium))

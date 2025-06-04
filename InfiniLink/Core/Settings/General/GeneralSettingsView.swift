@@ -71,19 +71,6 @@ struct GeneralSettingsView: View {
                     Text(bleManager.isConnectedToPinetime ? "Disconnect": "Connect")
                 }
                 .disabled(bleManager.isBusy)
-                Button(role: .destructive) {
-                    showUnpairConfirmation = true
-                } label: {
-                    Text("Unpair")
-                }
-                .alert("Are you sure you want to unpair from \(deviceManager.name)?", isPresented: $showUnpairConfirmation) {
-                    Button(role: .destructive) {
-                        bleManager.unpair()
-                        dismiss()
-                    } label: {
-                        Text("Unpair")
-                    }
-                }
             }
         }
         .navigationTitle("General")
