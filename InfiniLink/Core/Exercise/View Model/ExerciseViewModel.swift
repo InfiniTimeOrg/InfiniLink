@@ -49,12 +49,18 @@ class ExerciseViewModel: ObservableObject {
     
     @objc func applicationDidEnterBackground(_ notification: NotificationCenter) {
         appDidEnterBackgroundDate = Date()
+        
+        if currentExercise != nil {
+            stopTimer()
+        }
     }
     
     @objc func applicationWillEnterForeground(_ notification: NotificationCenter) {
         guard let previousDate = appDidEnterBackgroundDate else { return }
         
         if currentExercise != nil && !exercisePaused {
+            startTimer()
+            
             let calendar = Calendar.current
             let difference = calendar.dateComponents([.second], from: previousDate, to: Date())
             let seconds = difference.second!
@@ -79,6 +85,11 @@ class ExerciseViewModel: ObservableObject {
         reset()
         currentExercise = exercise
         startTimer()
+    }
+    
+    func stopTimer() {
+        timer?.invalidate()
+        timer = nil
     }
     
     func saveExercise(_ exercise: Exercise, startDate: Date, heartPoints: [HeartDataPoint]) {

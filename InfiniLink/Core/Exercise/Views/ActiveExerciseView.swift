@@ -63,8 +63,7 @@ struct ActiveExerciseView: View {
                         if exerciseViewModel.exercisePaused {
                             exerciseViewModel.startTimer()
                         } else {
-                            exerciseViewModel.timer?.invalidate()
-                            exerciseViewModel.timer = nil
+                            exerciseViewModel.stopTimer()
                         }
                         exerciseViewModel.exercisePaused.toggle()
                     } label: {
