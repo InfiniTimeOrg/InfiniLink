@@ -1,6 +1,15 @@
 {
-  "originHash" : "8c4a5780567db7c376e7ff5208525a749adbbb01ad5d3e3139767fdb9a912328",
+  "originHash" : "825ffda8d0905a3f44a2401286edaae4cc70af5b93d6f99c6965aeccdf114b59",
   "pins" : [
+    {
+      "identity" : "bottomsheet",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/adamfootdev/BottomSheet",
+      "state" : {
+        "revision" : "0e6db002eeb5e3ba402e94dfe6a120f78b5a64df",
+        "version" : "0.2.4"
+      }
+    },
     {
       "identity" : "ios-dfu-library",
       "kind" : "remoteSourceControl",

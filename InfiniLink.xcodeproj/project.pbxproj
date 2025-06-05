@@ -26,6 +26,8 @@
 		E04396172D2A410100A13B90 /* DFUUpdaterCustom.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */; };
 		E043FFCC2DD19FBD00BBFBBC /* StepSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043FFCB2DD19FBD00BBFBBC /* StepSettingsView.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
+		E055D2542DF229AC00AF19AD /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2532DF229AC00AF19AD /* CalendarDayView.swift */; };
+		E055D2562DF229BD00AF19AD /* CalendarDayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */; };
 		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
 		E05999AD2CB2ED7100D64E0B /* open_sans_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */; };
@@ -74,6 +76,7 @@
 		E09696E52D318AFB00CCCBF8 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696E42D318AFB00CCCBF8 /* Data+Extension.swift */; };
 		E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696E62D323A6D00CCCBF8 /* StepChartView.swift */; };
 		E09990982D77685A00B0FCAF /* StepMonthlyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09990972D77685A00B0FCAF /* StepMonthlyChartView.swift */; };
+		E09B60F62DF145E0008C85B9 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = E09B60F52DF145E0008C85B9 /* BottomSheet */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -160,6 +163,8 @@
 		E04396162D2A410100A13B90 /* DFUUpdaterCustom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUUpdaterCustom.swift; sourceTree = "<group>"; };
 		E043FFCB2DD19FBD00BBFBBC /* StepSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepSettingsView.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
+		E055D2532DF229AC00AF19AD /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
+		E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayDetailView.swift; sourceTree = "<group>"; };
 		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
 		E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
@@ -256,6 +261,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
+				E09B60F62DF145E0008C85B9 /* BottomSheet in Frameworks */,
 				E078ECFB2D4E6D9800560364 /* Zip in Frameworks */,
 				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
 			);
@@ -465,6 +471,8 @@
 			children = (
 				E09696E62D323A6D00CCCBF8 /* StepChartView.swift */,
 				E09990972D77685A00B0FCAF /* StepMonthlyChartView.swift */,
+				E055D2532DF229AC00AF19AD /* CalendarDayView.swift */,
+				E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */,
 			);
 			path = Steps;
 			sourceTree = "<group>";
@@ -657,6 +665,7 @@
 				E0A7C0812CB1B4990042A12D /* Zip */,
 				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
 				E078ECFA2D4E6D9800560364 /* Zip */,
+				E09B60F52DF145E0008C85B9 /* BottomSheet */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -737,6 +746,7 @@
 			packageReferences = (
 				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */,
+				E09B60F42DF145E0008C85B9 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -838,6 +848,7 @@
 				E08C4A492CC4048900013D15 /* SleepData.swift in Sources */,
 				E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */,
 				E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */,
+				E055D2562DF229BD00AF19AD /* CalendarDayDetailView.swift in Sources */,
 				E0599A022CB4C38700D64E0B /* FilesystemView.swift in Sources */,
 				E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */,
 				E0B85D1B2CB6243800D85122 /* ExerciseViewModel.swift in Sources */,
@@ -861,6 +872,7 @@
 				E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */,
 				E09696DF2D2EC7EC00CCCBF8 /* String+Extension.swift in Sources */,
 				E08C4A2F2CC1551300013D15 /* MyDevicesView.swift in Sources */,
+				E055D2542DF229AC00AF19AD /* CalendarDayView.swift in Sources */,
 				E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */,
 				E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */,
 				E00A862A2DEB8383001533E1 /* FindLostDeviceView.swift in Sources */,
@@ -1238,6 +1250,14 @@
 				minimumVersion = 2.1.2;
 			};
 		};
+		E09B60F42DF145E0008C85B9 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/adamfootdev/BottomSheet";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.2.4;
+			};
+		};
 		E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library";
@@ -1253,6 +1273,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
+		};
+		E09B60F52DF145E0008C85B9 /* BottomSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E09B60F42DF145E0008C85B9 /* XCRemoteSwiftPackageReference "BottomSheet" */;
+			productName = BottomSheet;
 		};
 		E0A7C0812CB1B4990042A12D /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;

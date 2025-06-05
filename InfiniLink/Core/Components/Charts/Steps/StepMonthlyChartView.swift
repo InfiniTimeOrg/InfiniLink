@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import BottomSheet
 
 struct StepCalendarView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
@@ -13,6 +14,7 @@ struct StepCalendarView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
+    @State private var showPopover = false
     @State private var selectedMonth = 0
     @State private var selectedDate = Date()
     
@@ -36,27 +38,17 @@ struct StepCalendarView: View {
                     }
                 }
                 let stepPoints = chartManager.stepPoints(predicate: chartManager.allTimePredicate)
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: weekdays.count), spacing: 14) {
-                    ForEach(fetchDates(), id: \.id) { value in
-                        ZStack {
-                            Circle()
-                                .stroke(Color.gray.opacity(0.8), style: value.day == -1 ? StrokeStyle(lineWidth: 2.5, lineCap: .round, dash: [7]) : StrokeStyle(lineWidth: 0))
-                                .background(value.day == -1 ? AnyShapeStyle(Color.clear) : background)
-                                .clipShape(Circle())
-                            let label = Text("\(value.day)")
-                                .font(.system(size: 16).weight(.medium))
-                                .opacity(value.day == -1 ? 0 : 1)
-                            if deviceManager.settings.stepsGoal > 0 && value.day != -1 {
-                                let progress = min(Double(stepPoints.first(where: { Calendar.current.isDate(value.date, equalTo: $0.timestamp!, toGranularity: .day)})?.steps ?? 0) / Double(deviceManager.settings.stepsGoal), 1)
-                                PieSlice(progress: progress)
-                                    .fill(Color.blue.opacity(0.8))
-                                label
-                                    .foregroundStyle(progress > 0.5 ? Color.white : Color.primary)
-                            } else {
-                                label
-                            }
+                let rows = fetchDates().chunked(into: weekdays.count)
+                ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+                    HStack(spacing: 14) {
+                        ForEach(row, id: \.id) { day in
+                            CalendarDayView(day, points: stepPoints)
+                                .onTapGesture {
+                                    selectedDate = day.date
+                                    showPopover = true
+                                }
+                                .frame(maxWidth: .infinity)
                         }
-                        .frame(minWidth: 42, maxWidth: 55, minHeight: 42, maxHeight: 55)
                     }
                 }
             }
@@ -84,9 +76,9 @@ struct StepCalendarView: View {
                         selectedDate = fetchSelectedMonth()
                     } label: {
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 16))
+                            .font(.system(size: 14))
                             .fontWeight(.semibold)
-                            .padding(10)
+                            .padding(12)
                             .background(background)
                             .clipShape(Circle())
                     }
@@ -96,17 +88,33 @@ struct StepCalendarView: View {
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
+        .bottomSheet(isPresented: $showPopover, detents: [.medium()]) {
+            CalendarDayDetailView(selectedDay: $selectedDate)
+        }
     }
     
     func fetchDates() -> [CalendarDay] {
         let calendar = Calendar.current
         let currentMonth = fetchSelectedMonth()
         
-        var dates = currentMonth.datesOfMonth().map({ CalendarDay(day: calendar.component(.day, from: $0), date: $0) })
-        let firstDayOfWeek = calendar.component(.weekday, from: dates.first?.date ?? Date()) - 1
+        var dates = currentMonth.datesOfMonth().map {
+            CalendarDay(day: calendar.component(.day, from: $0), date: $0)
+        }
         
-        for _ in 0..<firstDayOfWeek {
+        // Calculate leading empty days
+        let firstWeekday = calendar.component(.weekday, from: dates.first?.date ?? Date()) - calendar.firstWeekday
+        let leadingEmpty = (firstWeekday + 7) % 7 // Ensure non-negative
+        
+        for _ in 0..<leadingEmpty {
             dates.insert(CalendarDay(day: -1, date: Date()), at: 0)
+        }
+        
+        // Calculate trailing empty days
+        let remainder = dates.count % 7
+        let trailingEmpty = (remainder == 0 ? 0 : (7 - remainder))
+        
+        for _ in 0..<trailingEmpty {
+            dates.append(CalendarDay(day: -1, date: Date()))
         }
         
         return dates
@@ -137,6 +145,14 @@ struct PieSlice: Shape {
         path.closeSubpath()
         
         return path
+    }
+}
+
+extension Array {
+    func chunked(into size: Int) -> [[Element]] {
+        stride(from: 0, to: count, by: size).map {
+            Array(self[$0..<Swift.min($0 + size, count)])
+        }
     }
 }
 

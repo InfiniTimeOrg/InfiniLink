@@ -1274,9 +1274,6 @@
     "Software Version" : {
 
     },
-    "Some more data here..." : {
-
-    },
     "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
 
     },
@@ -1345,6 +1342,9 @@
 
     },
     "Test Weather" : {
+
+    },
+    "That's %@%% of your goal." : {
 
     },
     "The folder name cannot contain a period." : {
@@ -1574,6 +1574,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Vous avez fait %1$d step%2$@ et brûlé %3$@."
+          }
+        }
+      }
+    },
+    "You took %d steps on %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You took %1$d steps on %2$@"
           }
         }
       }
