@@ -1112,7 +1112,13 @@
     "Pause on Walk-Away" : {
 
     },
+    "Pin" : {
+
+    },
     "Ping %@" : {
+
+    },
+    "Pinned" : {
 
     },
     "Poor" : {
@@ -1268,6 +1274,9 @@
     "Software Version" : {
 
     },
+    "Some more data here..." : {
+
+    },
     "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
 
     },
@@ -1413,6 +1422,9 @@
     "Unpair" : {
 
     },
+    "Unpin" : {
+
+    },
     "Update Available" : {
 
     },
@@ -1542,6 +1554,9 @@
 
     },
     "Yes" : {
+
+    },
+    "You can pin an exercise by long pressing the exercise you want to pin." : {
 
     },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {

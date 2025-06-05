@@ -37,17 +37,27 @@ struct ExerciseView: View {
                             Text("You don't have any saved exercises. You can start a new exercise by choosing one from the list below.")
                         }
                     }
+                    if !exerciseViewModel.pinnedExercises.isEmpty {
+                        Section("Pinned") {
+                            ForEach(exerciseViewModel.pinnedExercises, id: \.self) { id in
+                                let exercise = exerciseViewModel.exercises.first(where: { $0.id == id })
+                                
+                                if let exercise {
+                                    ExerciseRowView(exercise, pinned: true)
+                                }
+                            }
+                        }
+                    }
                     Section {
                         ForEach(exerciseViewModel.exercises, id: \.id) { exercise in
-                            Button {
-                                exerciseViewModel.startExercise(exercise)
-                            } label: {
-                                Label(exercise.name, systemImage: exercise.icon)
+                            if !exerciseViewModel.pinnedExercises.contains(exercise.id) {
+                                ExerciseRowView(exercise)
                             }
-                            .disabled(!bleManager.hasLoadedCharacteristics)
                         }
                     } header: {
                         Text("All Exercises")
+                    } footer: {
+                        Text("You can pin an exercise by long pressing the exercise you want to pin.")
                     }
                 }
                 .navigationTitle("Exercise")

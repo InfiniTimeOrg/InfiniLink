@@ -14,6 +14,7 @@ class ExerciseViewModel: ObservableObject {
     
     let healthKitManager = HealthKitManager.shared
     let persistenceController = PersistenceController.shared
+    let userDefaults = UserDefaults(suiteName: "group.com.alexemry.Infini-iOS")
     
     @Published var exerciseTime: TimeInterval = 0
     @Published var stepsTaken: Int = 0
@@ -21,6 +22,7 @@ class ExerciseViewModel: ObservableObject {
     @Published var exercisePaused = false
     @Published var timer: Timer?
     @Published var userExercises = [UserExercise]()
+    @Published var pinnedExercises = [String]()
     
     var appDidEnterBackgroundDate: Date?
     
@@ -45,6 +47,8 @@ class ExerciseViewModel: ObservableObject {
     init() {
         NotificationCenter.default.addObserver(self, selector: #selector(applicationDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(applicationWillEnterForeground(_:)), name: UIApplication.willEnterForegroundNotification, object: nil)
+        
+        self.getPinnedExercises()
     }
     
     @objc func applicationDidEnterBackground(_ notification: NotificationCenter) {
@@ -66,6 +70,15 @@ class ExerciseViewModel: ObservableObject {
             let seconds = difference.second!
             exerciseTime += Double(seconds)
         }
+    }
+    
+    func getPinnedExercises() {
+        let pinnedExercises = userDefaults?.array(forKey: "pinnedExercises") as? [String] ?? []
+        self.pinnedExercises = pinnedExercises
+    }
+    
+    func setPinnedExercises() {
+        userDefaults?.set(self.pinnedExercises, forKey: "pinnedExercises")
     }
     
     func reset() {

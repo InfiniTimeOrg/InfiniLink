@@ -65,6 +65,7 @@
 		E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F252CC0C0D2005C1325 /* SleepController.swift */; };
 		E08C4A2F2CC1551300013D15 /* MyDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */; };
 		E08C4A492CC4048900013D15 /* SleepData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A482CC4048900013D15 /* SleepData.swift */; };
+		E08D0E8F2DF1FFBD0012175F /* ExerciseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08D0E8E2DF1FFBD0012175F /* ExerciseRowView.swift */; };
 		E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */; };
 		E08F2F352CC89A530094217A /* MapSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F342CC89A530094217A /* MapSearch.swift */; };
 		E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */; };
@@ -198,6 +199,7 @@
 		E07D8F252CC0C0D2005C1325 /* SleepController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepController.swift; sourceTree = "<group>"; };
 		E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDevicesView.swift; sourceTree = "<group>"; };
 		E08C4A482CC4048900013D15 /* SleepData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepData.swift; sourceTree = "<group>"; };
+		E08D0E8E2DF1FFBD0012175F /* ExerciseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRowView.swift; sourceTree = "<group>"; };
 		E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWeatherLocationView.swift; sourceTree = "<group>"; };
 		E08F2F342CC89A530094217A /* MapSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearch.swift; sourceTree = "<group>"; };
 		E09696DC2D2E3D6500CCCBF8 /* AppDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDetailsView.swift; sourceTree = "<group>"; };
@@ -572,6 +574,7 @@
 				E02F66982DCD0B9D0050243E /* AllExercisesView.swift */,
 				E0B85D1E2CB6248000D85122 /* ActiveExerciseView.swift */,
 				E0B85D5D2CB628E200D85122 /* ExerciseDetailView.swift */,
+				E08D0E8E2DF1FFBD0012175F /* ExerciseRowView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -801,6 +804,7 @@
 				E0A7C07F2CB1B3300042A12D /* BLEFS.swift in Sources */,
 				E05999BA2CB335DC00D64E0B /* DataSyncView.swift in Sources */,
 				E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */,
+				E08D0E8F2DF1FFBD0012175F /* ExerciseRowView.swift in Sources */,
 				E0C7C83F2CAEF91C0043DA2D /* ConnectView.swift in Sources */,
 				E0B58CF92D0F2DE600F1ABBB /* AppearanceView.swift in Sources */,
 				E0A7C0842CB1B7A60042A12D /* WatchFaceView.swift in Sources */,
