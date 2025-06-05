@@ -35,7 +35,7 @@ struct AllExercisesView: View {
     }
     private func delete(at offsets: IndexSet) {
         for index in offsets {
-            let userExercise = chartManager.userExercises()[index]
+            let userExercise = filteredExercises[index]
             viewContext.delete(userExercise)
         }
         
@@ -68,6 +68,14 @@ struct AllExercisesView: View {
                                         Text(userExercise.startDate?.formatted() ?? "Unknown date")
                                             .foregroundStyle(Color.gray)
                                     }
+                                }
+                            }
+                            .contextMenu {
+                                Button(role: .destructive) {
+                                    guard let index = filteredExercises.firstIndex(where: { $0.id == userExercise.id }) else { return }
+                                    delete(at: IndexSet(integer: index))
+                                } label: {
+                                    Label("Delete", systemImage: "trash")
                                 }
                             }
                         }
