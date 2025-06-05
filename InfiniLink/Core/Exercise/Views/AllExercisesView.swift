@@ -23,8 +23,8 @@ struct AllExercisesView: View {
         if query.isEmpty {
             return exerciseViewModel.userExercises
         }
-        return exerciseViewModel.userExercises.filter {
-            guard let startDate = $0.startDate, let exercise = exerciseViewModel.exercises.first(where: { $0.id == $0.id }) else { return false }
+        return exerciseViewModel.userExercises.filter { userExercise in
+            guard let startDate = userExercise.startDate, let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId! }) else { return false }
             
             return exercise.name.lowercased().contains(query) || startDate.formatted().lowercased().contains(query)
         }
