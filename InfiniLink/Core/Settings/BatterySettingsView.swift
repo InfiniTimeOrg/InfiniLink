@@ -54,9 +54,10 @@ struct BatterySettingsView: View {
                         Toggle("Notify on Low Battery", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
                     }
                     if sendLowBatteryNotification && watchNotifications {
-                        Section {
+                        Section(footer: bleManager.ancsAuthorized ? Text("ANCS is already enabled.") : nil) {
                             Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
-                            Toggle("Send to Watch", isOn: $sendLowBatteryNotificationToWatch)
+                            Toggle("Send to Watch", isOn: bleManager.ancsAuthorized ? .constant(true) : $sendLowBatteryNotificationToWatch)
+                                .disabled(bleManager.ancsAuthorized)
                         }
                     }
                 }

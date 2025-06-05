@@ -107,7 +107,8 @@ extension NotificationManager {
         let bat = bleManager.batteryLevel
         let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
         
-        if sendLowBatteryNotificationToWatch && sendBatteryNotifications {
+        let canSendNotificationsToWatch = (sendLowBatteryNotificationToWatch && sendBatteryNotifications)
+        if sendLowBatteryNotificationToiPhone ? (canSendNotificationsToWatch && !bleManager.ancsAuthorized) : (canSendNotificationsToWatch) { // Make sure we don't send any notifications to the watch that we're already sending to the host when ANCS is enabled because the notification will ping twice
             self.bleWriteManager.sendNotification(notif)
         }
         if sendLowBatteryNotificationToiPhone && sendBatteryNotifications {
@@ -193,12 +194,16 @@ extension NotificationManager {
 // MARK: Reminders
 extension NotificationManager {
     func sendReminderDueNotification(_ reminder: EKReminder) {
+        guard bleManager.ancsAuthorized else { return }
+        
         let notif = AppNotification(title: NSLocalizedString("Reminders", comment: ""), subtitle: reminder.title + NSLocalizedString(" is due", comment: ""))
         
         self.bleWriteManager.sendNotification(notif)
     }
     
     func sendEventDueNotification(_ event: EKEvent) {
+        guard bleManager.ancsAuthorized else { return }
+        
         let notif = AppNotification(title: NSLocalizedString("Calender", comment: ""), subtitle: event.title + NSLocalizedString(" is due", comment: ""))
         
         self.bleWriteManager.sendNotification(notif)

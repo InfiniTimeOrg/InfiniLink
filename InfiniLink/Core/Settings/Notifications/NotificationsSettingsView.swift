@@ -88,11 +88,11 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                 }
-                Section(header: Text("Other"), footer: bleManager.infiniTime?.ancsAuthorized ?? false ? Text("Calendar and reminder notifications are not sent when ANCS is enabled.") : Text("Receive notifications on your watch when reminders and calendar events are due.")) {
-                    Toggle("Reminder Notifications", isOn: $enableReminders)
-                    Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
+                Section(header: Text("Other"), footer: bleManager.ancsAuthorized ? Text("Calendar and reminder notifications are not sent when ANCS is enabled.") : Text("Receive notifications on your watch when reminders and calendar events are due.")) {
+                    Toggle("Reminder Notifications", isOn: bleManager.ancsAuthorized ? .constant(false) : $enableReminders)
+                    Toggle("Calendar Notifications", isOn: bleManager.ancsAuthorized ? .constant(false) : $enableCalendarNotifications)
                 }
-                .disabled(bleManager.infiniTime?.ancsAuthorized ?? false)
+                .disabled(bleManager.ancsAuthorized)
                 Section {
                     Toggle("Transliterate to ASCII", isOn: $transliterationEnabled)
                 } footer: {

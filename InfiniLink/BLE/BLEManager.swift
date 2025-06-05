@@ -128,6 +128,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var isBusy: Bool {
         return isConnecting || isScanning
     }
+    var ancsAuthorized: Bool {
+        return infiniTime?.ancsAuthorized ?? false
+    }
     
     override init() {
         super.init()
