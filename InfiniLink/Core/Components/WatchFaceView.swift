@@ -362,7 +362,6 @@ struct Infineat: View {
         Color(red: 0xe8 / 255.0, green: 0x51 / 255.0, blue: 0x02 / 255.0),
         Color(red: 0xea / 255.0, green: 0x1c / 255.0, blue: 0x00 / 255.0)
     ]
-    
     let blueColors: [Color] = [
         Color(red: 0xe7 / 255.0, green: 0xf8 / 255.0, blue: 0xff / 255.0),
         Color(red: 0x16 / 255.0, green: 0x36 / 255.0, blue: 0xff / 255.0),
@@ -371,7 +370,6 @@ struct Infineat: View {
         Color(red: 0x59 / 255.0, green: 0x91 / 255.0, blue: 0xff / 255.0),
         Color(red: 0x16 / 255.0, green: 0x36 / 255.0, blue: 0xff / 255.0)
     ]
-    
     let greenColors: [Color] = [
         Color(red: 0xb8 / 255.0, green: 0xff / 255.0, blue: 0x9b / 255.0),
         Color(red: 0x08 / 255.0, green: 0x86 / 255.0, blue: 0x08 / 255.0),
@@ -380,7 +378,6 @@ struct Infineat: View {
         Color(red: 0x62 / 255.0, green: 0xd5 / 255.0, blue: 0x15 / 255.0),
         Color(red: 0x00 / 255.0, green: 0x74 / 255.0, blue: 0x00 / 255.0)
     ]
-    
     let rainbowColors: [Color] = [
         Color(red: 0x2d / 255.0, green: 0xa4 / 255.0, blue: 0x00 / 255.0),
         Color(red: 0xac / 255.0, green: 0x09 / 255.0, blue: 0xc4 / 255.0),
@@ -389,7 +386,6 @@ struct Infineat: View {
         Color(red: 0xe0 / 255.0, green: 0xb9 / 255.0, blue: 0x00 / 255.0),
         Color(red: 0xe8 / 255.0, green: 0x51 / 255.0, blue: 0x02 / 255.0)
     ]
-    
     let grayColors: [Color] = [
         Color(red: 0xee / 255.0, green: 0xee / 255.0, blue: 0xee / 255.0),
         Color(red: 0x98 / 255.0, green: 0x95 / 255.0, blue: 0x9b / 255.0),
@@ -407,7 +403,6 @@ struct Infineat: View {
         Color(red: 0x5d / 255.0, green: 0x8a / 255.0, blue: 0xd2 / 255.0),
         Color(red: 0x21 / 255.0, green: 0x51 / 255.0, blue: 0x8a / 255.0)
     ]
-    
     let nordGreenColors: [Color] = [
         Color(red: 0xd5 / 255.0, green: 0xf0 / 255.0, blue: 0xe9 / 255.0),
         Color(red: 0x23 / 255.0, green: 0x83 / 255.0, blue: 0x73 / 255.0),
@@ -590,10 +585,6 @@ struct Infineat: View {
             )
             .foregroundColor(.gray)
             .frame(width: geometry.size.width, height: geometry.size.height / 2.2, alignment: .trailing)
-            Image(.bluetooth)
-                .resizable()
-                .frame(width: 18, height: 20)
-                .frame(width: geometry.size.width / 1.14, height: geometry.size.height / 2.8, alignment: .bottomTrailing)
             HStack(spacing: 4) {
                 Image(systemName: "shoeprints.fill")
                     .rotationEffect(Angle(degrees: 90))
