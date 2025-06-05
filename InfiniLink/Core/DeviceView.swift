@@ -296,9 +296,6 @@ struct DeviceView: View {
             .onChange(of: bleManager.weatherCharacteristic) { _ in
                 WeatherController.shared.fetchWeatherData()
             }
-            .onChange(of: bleManager.batteryLevel) { bat in
-                notificationManager.checkToSendLowBatteryNotification()
-            }
             .sheet(isPresented: $personalizationController.showSetupSheet) {
                 SetUpDetailsView()
             }

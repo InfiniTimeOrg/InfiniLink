@@ -17,14 +17,12 @@ struct AppNotification {
 class NotificationManager: ObservableObject {
     static let shared = NotificationManager()
     
-    private var batteryIsUnderTwenty: Bool = false
-    private var batteryIsUnderTen: Bool = false
-    
     let bleWriteManager = BLEWriteManager()
     let bleManager = BLEManager.shared
     
     init() {
         if !PersonalizationController.shared.showSetupSheet {
+            // Don't request permissions if the user hasn't had the chance to manually enable them
             requestNotificationAuthorization()
         }
     }
@@ -88,17 +86,11 @@ extension NotificationManager {
         if watchNotifications {
             let bat = bleManager.batteryLevel
             
+            // Don't send more than one notification within ten minutes
             guard (Date().timeIntervalSince1970 - lastTimeLowBatteryNotified) > tenMinutes else { return }
             
-            if bat > 20 {
-                batteryIsUnderTwenty = false
-                batteryIsUnderTen = false
-            } else if (bat <= 20 && bat > 10) && !batteryIsUnderTwenty {
+            if bat == 20 || bat == 10 || bat == 5 {
                 self.sendLowBatteryNotification()
-                self.batteryIsUnderTwenty = true
-            } else if (bat <= 10 && bat > 5) && !batteryIsUnderTen {
-                self.sendLowBatteryNotification()
-                self.batteryIsUnderTen = true
             }
         }
     }
