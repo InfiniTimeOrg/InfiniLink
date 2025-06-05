@@ -14,7 +14,7 @@ struct WatchFaceView: View {
     
     @Environment(\.colorScheme) var colorScheme
     
-    let date = Date()
+    @State private var date = Date()
     
     let watchface: UInt8?
     let device: Device?
@@ -34,17 +34,17 @@ struct WatchFaceView: View {
                     ZStack {
                         switch watchface == nil ? deviceManager.settings.watchFace : watchface {
                         case 0:
-                            DigitalWF(geometry: .constant(geometry), device: device)
+                            Digital(geometry: .constant(geometry), date: $date, device: device)
                         case 1:
-                            AnalogWF(geometry: .constant(geometry))
+                            Analog(geometry: .constant(geometry), date: $date)
                         case 2:
-                            PineTimeStyleWF(geometry: .constant(geometry), device: device)
+                            PineTimeStyle(geometry: .constant(geometry), date: $date, device: device)
                         case 3:
-                            TerminalWF(geometry: .constant(geometry), device: device)
+                            Terminal(geometry: .constant(geometry), date: $date, device: device)
                         case 4:
-                            InfineatWF(geometry: .constant(geometry), device: device)
+                            Infineat(geometry: .constant(geometry), date: $date, device: device)
                         case 5:
-                            CasioWF(geometry: .constant(geometry), device: device)
+                            Casio(geometry: .constant(geometry), date: $date, device: device)
                         default:
                             ProgressView()
                                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
@@ -65,14 +65,18 @@ struct WatchFaceView: View {
                     .brightness(colorScheme == .dark ? 0.0 : 0.04)
             }
         }
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { newDate in
+            self.date = newDate
+        }
     }
 }
 
-struct PineTimeStyleWF: View {
+struct PineTimeStyle: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry: GeometryProxy
+    @Binding var date: Date
     
     let device: Device?
     
@@ -215,22 +219,22 @@ struct PineTimeStyleWF: View {
         ZStack {
             getColor(for: .background)
             if !hour24() {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
+                CustomTextView(text: Calendar.current.component(.hour, from: date) >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
                     .foregroundColor(getColor(for: .time))
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
             }
             if !hour24() {
-                let currentHour = Calendar.current.component(.hour, from: Date())
+                let currentHour = Calendar.current.component(.hour, from: date)
                 let hour24 = currentHour > 12 ? currentHour - 12 : (currentHour == 0 ? 12 : currentHour)
                 let hourString = String(format: "%02d", hour24)
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
+                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
                 
                 CustomTextView(text: "\(hourString)\n\(minuteString)", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
                     .foregroundColor(getColor(for: .time))
                     .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
             } else {
-                let hourString = String(format: "%02d", Calendar.current.component(.hour, from: Date()))
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
+                let hourString = String(format: "%02d", Calendar.current.component(.hour, from: date))
+                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
                 
                 CustomTextView(text: "\(hourString)\n\(minuteString)", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
                     .foregroundColor(getColor(for: .time))
@@ -243,46 +247,60 @@ struct PineTimeStyleWF: View {
                     .frame(width: geometry.size.width / 6.0, height: geometry.size.height + 4, alignment: .center)
             }
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
 
-struct AnalogWF: View {
+struct Analog: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     @Binding var geometry: GeometryProxy
+    @Binding var date: Date
+    
+    var minute: Double {
+        return Double(Calendar.current.component(.minute, from: date))
+    }
+    var hour: Double {
+        let hour = Calendar.current.component(.hour, from: date)
+        return Double(hour % 12 == 0 ? 12 : hour % 12)
+    }
     
     var body: some View {
         ZStack {
-            let hour = Calendar.current.component(.hour, from: Date())
-            let hour24 = Double(hour % 12 == 0 ? 12 : hour % 12)
-            let minute = Double(Calendar.current.component(.minute, from: Date()))
-            
             Image(.analogFace)
                 .resizable()
+                .aspectRatio(contentMode: .fit)
             Image(.analogHour)
                 .resizable()
-                .rotationEffect(Angle(degrees: ((hour24 * 60) + minute) / 2))
+                .aspectRatio(contentMode: .fit)
+                .rotationEffect(Angle(degrees: ((hour * 60) + minute) / 2))
             Image(.analogMin)
                 .resizable()
+                .aspectRatio(contentMode: .fit)
                 .rotationEffect(Angle(degrees: minute * 6))
             Image(.analogSec)
                 .resizable()
-                .rotationEffect(Angle(degrees: Double(Calendar.current.component(.second, from: Date())) * 6))
+                .aspectRatio(contentMode: .fit)
+                .rotationEffect(Angle(degrees: Double(Calendar.current.component(.second, from: date)) * 6))
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
 }
 
-struct DigitalWF: View {
+struct Digital: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var geometry: GeometryProxy
+    @Binding var date: Date
     
     let device: Device?
+    
+    var twelveHour: Int {
+        let hour = Calendar.current.component(.hour, from: date)
+        return hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
+    }
     
     func hour24() -> Bool {
         if let device {
@@ -295,23 +313,23 @@ struct DigitalWF: View {
     var body: some View {
         ZStack {
             if !hour24() {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
+                CustomTextView(text: Calendar.current.component(.hour, from: date) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
                     .foregroundColor(.white)
-                    .frame(width: geometry.size.width, height: geometry.size.height / 1.95, alignment: .topTrailing)
+                    .frame(width: geometry.size.width, height: geometry.size.height / 3.95, alignment: .topTrailing)
             }
             if !hour24() {
-                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) - 12):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
+                CustomTextView(text: "\(twelveHour):\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
                     .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
             } else {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: Date()))):\(String(format: "%02d", Calendar.current.component(.minute, from: Date())))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
+                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: date))):\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
                     .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
             }
             CustomTextView(text: {
-                let current = Date()
+                let current = date
                 let formatter = DateFormatter()
                 
                 formatter.dateFormat = "EEE MMM d yyyy"
@@ -325,13 +343,14 @@ struct DigitalWF: View {
     }
 }
 
-struct InfineatWF: View {
+struct Infineat: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var geometry: GeometryProxy
+    @Binding var date: Date
     
     let device: Device?
     
@@ -529,15 +548,15 @@ struct InfineatWF: View {
     var body: some View {
         ZStack {
             if !hour24() {
-                CustomTextView(text: Calendar.current.component(.hour, from: Date()) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
+                CustomTextView(text: Calendar.current.component(.hour, from: date) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
                     .foregroundColor(.white)
                     .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
             }
             if !hour24() {
-                let currentHour = Calendar.current.component(.hour, from: Date())
+                let currentHour = Calendar.current.component(.hour, from: date)
                 let hour24 = currentHour % 12 == 0 ? 12 : currentHour
                 let hourString = String(format: "%02d", hour24)
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
+                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
                 
                 VStack(alignment: .center, spacing: -28) {
                     Text(hourString)
@@ -548,8 +567,8 @@ struct InfineatWF: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
             } else {
-                let hourString = String(format: "%02d", Calendar.current.component(.hour, from: Date()))
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
+                let hourString = String(format: "%02d", Calendar.current.component(.hour, from: date))
+                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
                 
                 VStack(alignment: .center, spacing: -28) {
                     Text(hourString)
@@ -564,7 +583,7 @@ struct InfineatWF: View {
                 text: {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "E dd"
-                    return dateFormatter.string(from: Date())
+                    return dateFormatter.string(from: date)
                 }(),
                 font: .custom("Teko-Light", size: geometry.size.width * 0.118),
                 lineSpacing: 0
@@ -643,13 +662,14 @@ struct InfineatWF: View {
     }
 }
 
-struct TerminalWF: View {
+struct Terminal: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var geometry: GeometryProxy
+    @Binding var date: Date
     
     let device: Device?
     
@@ -661,11 +681,11 @@ struct TerminalWF: View {
         }
     }
     
-    let currentHour = Calendar.current.component(.hour, from: Date())
-    let currentMinute = Calendar.current.component(.minute, from: Date())
-    let currentSecond = Calendar.current.component(.second, from: Date())
-    
     var body: some View {
+        let currentHour = Calendar.current.component(.hour, from: date)
+        let currentMinute = Calendar.current.component(.minute, from: date)
+        let currentSecond = Calendar.current.component(.second, from: date)
+        
         ZStack {
             Text("user@watch:~ $ now")
                 .foregroundColor(.white)
@@ -684,7 +704,7 @@ struct TerminalWF: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
             Group {
-                Text("[DATE]").foregroundColor(.white) + Text("\(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: Date()), Calendar.current.component(.month, from: Date()), Calendar.current.component(.day, from: Date())))").foregroundColor(.blue)
+                Text("[DATE]").foregroundColor(.white) + Text("\(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: date), Calendar.current.component(.month, from: date), Calendar.current.component(.day, from: date)))").foregroundColor(.blue)
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
@@ -723,13 +743,14 @@ struct TerminalWF: View {
     }
 }
 
-struct CasioWF: View {
+struct Casio: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     
     @Environment(\.colorScheme) var colorScheme
     
     @Binding var geometry: GeometryProxy
+    @Binding var date: Date
     
     let device: Device?
     
@@ -753,9 +774,9 @@ struct CasioWF: View {
                     let dateFormatter = DateFormatter()
                     dateFormatter.dateFormat = "E"
                     
-                    let weekOfYear = Calendar.current.component(.weekOfYear, from: Date())
+                    let weekOfYear = Calendar.current.component(.weekOfYear, from: date)
                     
-                    return "WK\(weekOfYear)\n\(dateFormatter.string(from: Date()).uppercased())"
+                    return "WK\(weekOfYear)\n\(dateFormatter.string(from: date).uppercased())"
                 }(),
                 font: .custom("repetitionscrolling", size: geometry.size.width * 0.16),
                 lineSpacing: 0
@@ -764,7 +785,7 @@ struct CasioWF: View {
             CustomTextView(
                 text: {
                     let calendar = Calendar.current
-                    let now = Date()
+                    let now = date
                     
                     let startOfYear = calendar.startOfDay(for: calendar.date(from: DateComponents(year: calendar.component(.year, from: now)))!)
                     let endOfYear = calendar.startOfDay(for: calendar.date(byAdding: DateComponents(year: 1, day: -1), to: calendar.date(from: DateComponents(year: calendar.component(.year, from: now)))!)!)
@@ -781,7 +802,7 @@ struct CasioWF: View {
             CustomTextView(
                 text: {
                     let calendar = Calendar.current
-                    let now = Date()
+                    let now = date
                     
                     let month = calendar.component(.month, from: now)
                     let day = calendar.component(.day, from: now)
@@ -793,7 +814,7 @@ struct CasioWF: View {
             )
             .frame(width: geometry.size.width / 1.08, height: geometry.size.height / 2.25, alignment: .topTrailing)
             CustomTextView(text: {
-                let currentHour = Calendar.current.component(.hour, from: Date())
+                let currentHour = Calendar.current.component(.hour, from: date)
                 var hourString = ""
                 
                 if hour24() {
@@ -802,14 +823,14 @@ struct CasioWF: View {
                     let hour24 = currentHour % 12 == 0 ? 12 : currentHour
                     hourString = "\(hour24)"
                 }
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: Date()))
+                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
                 
                 return "\(hourString):\(minuteString)"
             }(), font: .custom("7-Segment", size: geometry.size.width * 0.44), lineSpacing: 0)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
             .position(x: geometry.size.width / 2.1, y: geometry.size.height / 1.4)
             if !hour24() {
-                CustomTextView(text: "\(Calendar.current.component(.hour, from: Date()) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
+                CustomTextView(text: "\(Calendar.current.component(.hour, from: date) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
                     .padding(.leading, 6)
                     .padding(.top, -5)
@@ -865,10 +886,6 @@ enum InfineatItem {
 }
 
 #Preview {
-    GeometryReader { geo in
-        VStack {
-            TerminalWF(geometry: .constant(geo), device: Device())
-        }
-        .frame(maxWidth: geo.size.width / 2.5)
-    }
+    WatchFaceView(watchface: 2)
+        .frame(width: 300, height: 300)
 }
