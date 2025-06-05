@@ -105,16 +105,39 @@ struct FindLostDeviceView: View {
                             Text("\(deviceManager.name) was last seen \(address.isEmpty ? "at \(date)" : "at \(address), at \(date)").")
                         }
                         .onAppear {
-                            locationManager.getAddressFrom(coordinate: CLLocationCoordinate2D(latitude: last.latitude, longitude: last.longitude), addressComponents: [.name, .locality, .administrativeArea]) { address in
+                            var coordinates = CLLocationCoordinate2D(latitude: last.latitude, longitude: last.longitude)
+                            if let coordinate = locationManager.location?.coordinate, bleManager.isConnectedToPinetime {
+                                coordinates = coordinate
+                            }
+                            locationManager.getAddressFrom(coordinate: coordinates, addressComponents: [.name, .locality, .administrativeArea]) { address in
                                 self.address = address ?? ""
                             }
                         }
+                        Section(footer: bleManager.notifyCharacteristic == nil ? Text("\(deviceManager.name) must be connected to ping it.") : nil) {
+                            Button(isPinging ? "Stop Pinging" : "Ping \(deviceManager.name)") {
+                                isPinging.toggle()
+                                
+                                if isPinging {
+                                    // Send this immediately, because otherwise there'll be a six second delay
+                                    bleWriteManager.sendLostNotification()
+                                    
+                                    // Start timer for repeated notifications
+                                    pingTimer = Timer.scheduledTimer(withTimeInterval: 6, repeats: true) { _ in
+                                        bleWriteManager.sendLostNotification()
+                                    }
+                                } else {
+                                    pingTimer?.invalidate()
+                                    pingTimer = nil
+                                }
+                            }
+                            .disabled(bleManager.notifyCharacteristic == nil)
+                        }
                     }
-                    if !chartManager.disconnectMapPoints().isEmpty {
+                    if !chartManager.disconnectMapPoints().isEmpty && !bleManager.isConnectedToPinetime {
                         Section {
                             Map(
                                 coordinateRegion: $region,
-                                annotationItems: chartManager.disconnectMapPoints() // TODO: show just one for now
+                                annotationItems: [chartManager.disconnectMapPoints().last!] // Show just one for now
                             ) { point in
                                 MapPin(coordinate: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude), tint: .red)
                             }
@@ -127,25 +150,6 @@ struct FindLostDeviceView: View {
                                 openInMaps(to: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude))
                             }
                         }
-                    }
-                    Section(footer: bleManager.notifyCharacteristic == nil ? Text("\(deviceManager.name) must be connected to ping it.") : nil) {
-                        Button(isPinging ? "Stop Pinging" : "Ping \(deviceManager.name)") {
-                            isPinging.toggle()
-                            
-                            if isPinging {
-                                // Send this immediately, because otherwise there'll be a five second delay
-                                bleWriteManager.sendLostNotification()
-                                
-                                // Start timer for repeated notifications
-                                pingTimer = Timer.scheduledTimer(withTimeInterval: 6, repeats: true) { _ in
-                                    bleWriteManager.sendLostNotification()
-                                }
-                            } else {
-                                pingTimer?.invalidate()
-                                pingTimer = nil
-                            }
-                        }
-                        .disabled(bleManager.notifyCharacteristic == nil)
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
