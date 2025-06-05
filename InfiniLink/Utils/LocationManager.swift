@@ -26,6 +26,8 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     @Published var locationName: String = ""
     @Published var locationManager = CLLocationManager()
     
+    private lazy var weatherController = WeatherController.shared
+    
     func canGetUserLocation() -> Bool {
         return locationManager.authorizationStatus != .restricted && locationManager.authorizationStatus != .denied && locationManager.authorizationStatus != .notDetermined
     }
@@ -37,13 +39,15 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         self.requestLocation()
     }
     
-    func getLocation() {
+    func getLocation(_ manual: Bool = false) {
         if useCurrentLocation {
             self.requestLocation()
+            self.weatherController.fetchWeatherData(checkTimeInterval: manual)
         } else {
             self.getCoordinateFrom(address: setLocation) { coordinate, error in
                 if let coordinate = coordinate {
                     self.location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+                    self.weatherController.fetchWeatherData(checkTimeInterval: manual)
                 } else if let error = error {
                     log("Error finding location for address \(self.setLocation): \(error.localizedDescription)", caller: "LocationManager")
                 }
@@ -51,9 +55,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
-    func setLocation(_ location: String) {
+    func setLocation(_ location: String, manual: Bool = false) {
         self.setLocation = location
-        self.getLocation()
+        self.getLocation(manual)
     }
     
     func getCoordinateFrom(address: String, completion: @escaping (_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> ()) {

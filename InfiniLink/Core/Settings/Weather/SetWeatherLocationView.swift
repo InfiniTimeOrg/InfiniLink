@@ -35,7 +35,7 @@ struct SetWeatherLocationView: View {
                         displayLocation = location.title
                         setLocation = "\(location.title), \(location.subtitle)"
                         
-                        LocationManager.shared.setLocation(setLocation)
+                        LocationManager.shared.setLocation(setLocation, manual: true)
                         
                         dismiss()
                     } label: {

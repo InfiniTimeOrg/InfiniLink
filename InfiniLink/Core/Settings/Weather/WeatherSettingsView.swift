@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WeatherSettingsView: View {
     @ObservedObject var locationManager = LocationManager.shared
+    @ObservedObject var weatherController = WeatherController.shared
     
     @AppStorage("useCurrentLocation") var useCurrentLocation = true
     @AppStorage("setLocation") var setLocation = "Cupertino"
@@ -41,11 +42,9 @@ struct WeatherSettingsView: View {
             }
         }
         .navigationTitle("Settings")
-        .onChange(of: useCurrentLocation) { useCurrentLocation in
-            if useCurrentLocation {
-                locationManager.getLocation()
-            } else {
-                locationManager.setLocation(setLocation)
+        .onChange(of: useCurrentLocation) { useCurrent in
+            if !useCurrent {
+                locationManager.setLocation(setLocation, manual: true)
             }
         }
     }
