@@ -109,27 +109,25 @@ struct BLECharacteristicHandler {
             MusicController.shared.controlMusic(controlNumber: Int(musicControl[0]))
         case bleManager.cbuuidList.hrm:
             let bpm = heartRate(from: characteristic)
-            
             bleManager.heartRate = Double(bpm)
-            
-            if bpm > 0 {
-                let currentTime = Date().timeIntervalSince1970
-                let timeDifference = currentTime - lastHeartRateUpdateTimestamp
-                
-                // Check if the last data point is available and if filtering is enabled
-                if let referenceValue = chartManager.heartPoints().last?.value, filterHeartRateData {
-                    let isWithinRange = abs(referenceValue - bleManager.heartRate) <= 25
-                    
-                    // Update heart rate if within the valid range or recent enough
-                    if isWithinRange || timeDifference <= 15 {
-                        updateHeartRate(bpm: bpm)
-                    } else {
-                        log("Abnormal heart rate value detected: \(bpm)", type: .info, caller: "BLECharacteristicHandler")
-                    }
-                } else {
-                    // If no last data point or filtering is not applied, update heart rate
+
+            guard bpm > 0 else { return }
+
+            let currentTime = Date().timeIntervalSince1970
+            let timeSinceLastUpdate = (currentTime - lastHeartRateUpdateTimestamp) / 60
+
+            // Check if the last data point is available and if filtering is enabled
+            if let lastValue = chartManager.heartPoints().last?.value, filterHeartRateData {
+                let isWithinRange = abs(lastValue - bleManager.heartRate) <= 25
+
+                // Update heart rate if within the valid range or recent enough
+                if isWithinRange || timeSinceLastUpdate >= 30 {
                     updateHeartRate(bpm: bpm)
+                } else {
+                    log("Abnormal heart rate value detected: \(bpm)", type: .info, caller: "BLECharacteristicHandler")
                 }
+            } else {
+                updateHeartRate(bpm: bpm)
             }
         case bleManager.cbuuidList.bat:
             guard let value = characteristic.value else { break }
