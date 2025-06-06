@@ -29,6 +29,23 @@ class ChartManager: ObservableObject {
         
         return NSPredicate(format: predicateString, deviceId, startOfDay as NSDate)
     }
+    var monthPredicate: NSPredicate {
+        let deviceId = bleManager.pairedDeviceID ?? ""
+        let calendar = Calendar.current
+        let now = Date()
+        
+        guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)),
+              let startOfNextMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth) else {
+            return NSPredicate(value: false)
+        }
+
+        return NSPredicate(
+            format: "deviceId == %@ AND timestamp >= %@ AND timestamp < %@",
+            deviceId,
+            startOfMonth as NSDate,
+            startOfNextMonth as NSDate
+        )
+    }
     var allTimePredicate: NSPredicate {
         let deviceId = bleManager.pairedDeviceID ?? ""
         return NSPredicate(format: "deviceId == %@", deviceId)
@@ -42,10 +59,11 @@ class ChartManager: ObservableObject {
     func addStepDataPoint(steps: Int32, time: Date) {
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
-            let heartRateDataPoint = StepCounts(context: context)
-            heartRateDataPoint.steps = steps
-            heartRateDataPoint.timestamp = time
-            heartRateDataPoint.deviceId = self.bleManager.pairedDeviceID
+            let stepCount = StepCounts(context: context)
+            stepCount.id = UUID()
+            stepCount.steps = steps
+            stepCount.timestamp = time
+            stepCount.deviceId = self.bleManager.pairedDeviceID
             
             do {
                 try context.save()
@@ -184,10 +202,12 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func deleteAllDisconnectMapPoints() {
+    func deleteAllDisconnectMapPoints(all: Bool = true) {
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
             let fetchRequest: NSFetchRequest<NSFetchRequestResult> = DisconnectMapPoint.fetchRequest()
+            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+            fetchRequest.fetchOffset = 3
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
             do {

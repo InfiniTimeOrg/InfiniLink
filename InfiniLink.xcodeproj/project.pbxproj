@@ -76,7 +76,6 @@
 		E09696E52D318AFB00CCCBF8 /* Data+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696E42D318AFB00CCCBF8 /* Data+Extension.swift */; };
 		E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09696E62D323A6D00CCCBF8 /* StepChartView.swift */; };
 		E09990982D77685A00B0FCAF /* StepMonthlyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E09990972D77685A00B0FCAF /* StepMonthlyChartView.swift */; };
-		E09B60F62DF145E0008C85B9 /* BottomSheet in Frameworks */ = {isa = PBXBuildFile; productRef = E09B60F52DF145E0008C85B9 /* BottomSheet */; };
 		E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C06A2CB0DE4C0042A12D /* Weather.swift */; };
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
@@ -261,7 +260,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
-				E09B60F62DF145E0008C85B9 /* BottomSheet in Frameworks */,
 				E078ECFB2D4E6D9800560364 /* Zip in Frameworks */,
 				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
 			);
@@ -665,7 +663,6 @@
 				E0A7C0812CB1B4990042A12D /* Zip */,
 				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
 				E078ECFA2D4E6D9800560364 /* Zip */,
-				E09B60F52DF145E0008C85B9 /* BottomSheet */,
 			);
 			productName = "Infini-iOS";
 			productReference = 264BFE3E26BC51CE0050A223 /* InfiniLink.app */;
@@ -746,7 +743,6 @@
 			packageReferences = (
 				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */,
-				E09B60F42DF145E0008C85B9 /* XCRemoteSwiftPackageReference "BottomSheet" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
 			projectDirPath = "";
@@ -1250,14 +1246,6 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		E09B60F42DF145E0008C85B9 /* XCRemoteSwiftPackageReference "BottomSheet" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/adamfootdev/BottomSheet";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.4;
-			};
-		};
 		E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library";
@@ -1273,11 +1261,6 @@
 			isa = XCSwiftPackageProductDependency;
 			package = E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */;
 			productName = Zip;
-		};
-		E09B60F52DF145E0008C85B9 /* BottomSheet */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E09B60F42DF145E0008C85B9 /* XCRemoteSwiftPackageReference "BottomSheet" */;
-			productName = BottomSheet;
 		};
 		E0A7C0812CB1B4990042A12D /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;
