@@ -51,8 +51,8 @@ struct CalendarDayDetailView: View {
                             .lineLimit(selectedDetent == .medium ? 1 : nil)
                     }
                     .multilineTextAlignment(.center)
-                    Spacer()
                     if selectedDetent == .medium {
+                        Spacer()
                         VStack(spacing: 4) {
                             Image(systemName: "chevron.up").font(.body.weight(.medium))
                             Text("Swipe up for more details")

@@ -81,7 +81,7 @@ struct SetUpDetailsView: View {
                         TextField("Optional", text: $weight)
                             .focused($isWeightFocused)
                             .keyboardType(.decimalPad)
-                        // TODO: do not allow text input
+                            .filterText(input: $weight)
                     }
                     .onTapGesture {
                         isWeightFocused = true
@@ -95,7 +95,7 @@ struct SetUpDetailsView: View {
                         TextField("Optional", text: $height)
                             .focused($isHeightFocused)
                             .keyboardType(.decimalPad)
-                        // TODO: do not allow text input
+                            .filterText(input: $height)
                     }
                     .onTapGesture {
                         isHeightFocused = true
@@ -117,7 +117,7 @@ struct SetUpDetailsView: View {
                         .frame(maxWidth: .infinity)
                         .background(Color.blue)
                         .foregroundStyle(.white)
-                        .clipShape(.rect(cornerRadius: 20))
+                        .clipShape(.rect(cornerRadius: 15))
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
@@ -129,10 +129,12 @@ struct SetUpDetailsView: View {
         }
         .interactiveDismissDisabled()
         .toolbar {
-            // Don't show the button if the user has edited anything
-            if !list && weight == filteredUnit(personalizationController.calculatedWeight) && height == filteredUnit(personalizationController.calculatedHeight) {
-                Button("Skip") {
-                    nextViewActive = true
+            ToolbarItem(placement: .confirmationAction) {
+                // Don't show the button if the user has edited anything
+                if !list && weight == filteredUnit(personalizationController.calculatedWeight) && height == filteredUnit(personalizationController.calculatedHeight) {
+                    Button("Skip") {
+                        nextViewActive = true
+                    }
                 }
             }
         }
@@ -157,6 +159,7 @@ struct SetUpDetailsView: View {
 }
 
 struct NotificationsSetupView: View {
+    @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var notificationManager = NotificationManager.shared
     @ObservedObject var remindersManager = RemindersManager.shared
@@ -194,9 +197,11 @@ struct NotificationsSetupView: View {
             Section(header: Text("Battery"), footer: Text("Get notified when your watch's battery is low.")) {
                 Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
             }
-            Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
-                Toggle("Reminder Notifications", isOn: $enableReminders)
-                Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
+            if !bleManager.ancsAuthorized {
+                Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
+                    Toggle("Reminder Notifications", isOn: $enableReminders)
+                    Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
+                }
             }
             Button {
                 notificationManager.requestNotificationAuthorization()
@@ -216,11 +221,36 @@ struct NotificationsSetupView: View {
                     .frame(maxWidth: .infinity)
                     .background(Color.blue)
                     .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .clipShape(RoundedRectangle(cornerRadius: 15))
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
         }
+    }
+}
+
+struct FilteredText: ViewModifier {
+    @Binding var text: String
+    
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: text) { newValue in
+                let filtered = newValue.filter { "0123456789.".contains($0) }
+                
+                if filtered != text {
+                    //The string contained bad characters
+                    text = ""
+                    return
+                }
+                
+                text = filtered
+            }
+    }
+}
+
+extension View {
+    func filterText(input: Binding<String>) -> some View {
+        modifier(FilteredText(text: input))
     }
 }
 
