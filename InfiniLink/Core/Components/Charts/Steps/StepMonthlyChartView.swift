@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import BottomSheet
 
 struct StepCalendarView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
