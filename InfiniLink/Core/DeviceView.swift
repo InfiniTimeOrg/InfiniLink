@@ -52,7 +52,7 @@ struct DeviceView: View {
             if downloadManager.updateStarted {
                 CurrentUpdateView()
             } else {
-                if bleManager.isDeviceInRecoveryMode {
+                if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
                     RecoveryModeView()
                 } else {
                     content
