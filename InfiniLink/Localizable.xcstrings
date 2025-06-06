@@ -344,6 +344,9 @@
     "Are you sure you want to end the exercise? %@" : {
 
     },
+    "Are you sure you want to stop this update?" : {
+
+    },
     "Are you sure you want to unpair from %@?" : {
 
     },
@@ -1322,6 +1325,12 @@
     "Stop Pinging" : {
 
     },
+    "Stop Update" : {
+
+    },
+    "Swipe up for more details" : {
+
+    },
     "Sync step and heart rate data to Apple Health." : {
       "localizations" : {
         "fr" : {
@@ -1351,6 +1360,9 @@
 
     },
     "The folder name cannot contain a period." : {
+
+    },
+    "There aren't any available releases." : {
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {

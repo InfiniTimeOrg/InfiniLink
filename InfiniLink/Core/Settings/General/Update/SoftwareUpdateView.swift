@@ -232,25 +232,29 @@ struct OtherUpdateVersions: View {
                 }
             }
             Section("Releases") {
-                ForEach(downloadManager.releases, id: \.tag_name) { release in
-                    Button {
-                        let asset = downloadManager.chooseAsset(response: release)
-                        
-                        dfuUpdater.firmwareFilename = asset.name
-                        dfuUpdater.firmwareSelected = true
-                        dfuUpdater.local = false
-                        downloadManager.updateAvailable = true
-                        downloadManager.updateVersion = release.tag_name
-                        downloadManager.updateBody = release.body
-                        downloadManager.updateSize = asset.size
-                        downloadManager.browserDownloadUrl = asset.browser_download_url
-                        
-                        downloadManager.externalResources = false
-                        
-                        dismiss()
-                    } label: {
-                        Text(release.tag_name)
-                            .foregroundStyle(Color.primary)
+                if downloadManager.releases.isEmpty && !downloadManager.loadingReleases {
+                    Text("There aren't any available releases.")
+                } else {
+                    ForEach(downloadManager.releases, id: \.tag_name) { release in
+                        Button {
+                            let asset = downloadManager.chooseAsset(response: release)
+                            
+                            dfuUpdater.firmwareFilename = asset.name
+                            dfuUpdater.firmwareSelected = true
+                            dfuUpdater.local = false
+                            downloadManager.updateAvailable = true
+                            downloadManager.updateVersion = release.tag_name
+                            downloadManager.updateBody = release.body
+                            downloadManager.updateSize = asset.size
+                            downloadManager.browserDownloadUrl = asset.browser_download_url
+                            
+                            downloadManager.externalResources = false
+                            
+                            dismiss()
+                        } label: {
+                            Text(release.tag_name)
+                                .foregroundStyle(Color.primary)
+                        }
                     }
                 }
             }

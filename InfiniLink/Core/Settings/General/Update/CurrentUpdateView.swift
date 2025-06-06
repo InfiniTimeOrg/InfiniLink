@@ -14,6 +14,12 @@ struct CurrentUpdateView: View {
     @ObservedObject var downloadManager = DownloadManager.shared
     
     @State private var backgroundScaled = true
+    @State private var showConfirmation = true
+    
+    func cancelUpdate() {
+        dfuUpdater.stopTransfer(abort: true)
+        downloadManager.updateStarted = false
+    }
     
     var body: some View {
         ZStack {
@@ -31,8 +37,12 @@ struct CurrentUpdateView: View {
                         .font(.title.weight(.bold))
                 }
                 Button {
-                    dfuUpdater.stopTransfer(abort: true)
-                    downloadManager.updateStarted = false
+                    // If we're only just starting the update, don't show a confirmation
+                    if dfuUpdater.dfuState != "Connecting" || dfuUpdater.dfuState != "Starting" {
+                        showConfirmation = true
+                    } else {
+                        cancelUpdate()
+                    }
                 } label: {
                     Text("Cancel Update")
                         .padding(14)
@@ -52,6 +62,14 @@ struct CurrentUpdateView: View {
             withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
                 backgroundScaled.toggle()
             }
+        }
+        .alert("Are you sure you want to stop this update?", isPresented: $showConfirmation) {
+            Button(role: .destructive) {
+                cancelUpdate()
+            } label: {
+                Text("Stop Update")
+            }
+            Button("Cancel", role: .cancel) { }
         }
     }
 }
