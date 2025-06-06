@@ -323,6 +323,13 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                     disconnectPoint.longitude = longitude
                     disconnectPoint.timestamp = Date()
                     
+                    let points = ChartManager.shared.disconnectMapPoints()
+                    for index in points.indices {
+                        if index > 3 { // Only keep the last three disconnect points
+                            ChartManager.shared.deleteAllDisconnectMapPoints(all: false)
+                        }
+                    }
+                    
                     persistenceController.save()
                 }
             }
