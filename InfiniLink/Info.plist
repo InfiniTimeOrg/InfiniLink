@@ -106,6 +106,6 @@
 	<key>kTCCServiceMediaLibrary</key>
 	<string>This app needs permission to allow your PineTime to control your music.</string>
 	<key>pat</key>
-	<string>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</string>
+	<string>$(GITHUB_READ_TOKEN)</string>
 </dict>
 </plist>
