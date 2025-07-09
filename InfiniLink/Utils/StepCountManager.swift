@@ -26,27 +26,22 @@ class StepCountManager: ObservableObject {
         let existing = chartManager.stepsToday()
         
         if let existing {
-            updateStepCount(existing, with: steps, isArbitrary: isArbitrary, for: date)
+            updateStepCount(existing, with: steps, for: date, isArbitrary: isArbitrary)
         } else {
             chartManager.addStepDataPoint(steps: steps, time: date)
         }
     }
     
-    private func updateStepCount(_ current: StepCounts, with steps: Int32, isArbitrary: Bool, for date: Date) {
-        // Last saved step count is current.steps = 978
-        // We just received steps = 0
-        if addInsteadOfOverwrite {
-            // We have to do some math here because otherwise we'll just double the value
-            if steps <= current.steps { // The watch reset, so add the new steps to the old count
-                // This is fairly accurate, although about 6 steps get added because the watch tracks around that many before it sends the count (before we can set current.previousSteps)
-                current.steps += abs(current.previousSteps - steps)
-            } else {
-                current.steps += abs(current.steps - steps)
-            }
-        } else if isArbitrary {
+    private func updateStepCount(_ current: StepCounts, with steps: Int32, for date: Date, isArbitrary: Bool) {
+        if isArbitrary {
             current.steps += steps
+        } else if addInsteadOfOverwrite && steps <= current.steps {
+            if steps <= current.previousSteps {
+                current.steps += steps
+            } else {
+                current.steps += abs(current.previousSteps - steps)
+            }
         } else {
-            clearCurrentDaySteps()
             current.steps = steps
         }
         
@@ -57,7 +52,7 @@ class StepCountManager: ObservableObject {
     }
     
     func clearCurrentDaySteps() {
-        if let existing = chartManager.stepsToday(){
+        if let existing = chartManager.stepsToday() {
             existing.steps = 0
             existing.timestamp = Date()
         }
