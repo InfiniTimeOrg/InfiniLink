@@ -46,7 +46,14 @@ struct MyDevicesView: View {
                                                 .font(.title2.weight(.semibold))
                                             Text({
                                                 if let peripheral = bleManager.peripheralToConnect, peripheral.identifier.uuidString == watch.uuid {
-                                                    return "Connecting..."
+                                                    switch (bleManager.isConnectedToPinetime, bleManager.hasLoadedBatteryLevel) {
+                                                    case (true, true):
+                                                        return "Connected"
+                                                    case (true, false):
+                                                        return "Connecting..."
+                                                    default:
+                                                        return "Disconnected"
+                                                    }
                                                 } else {
                                                     return "InfiniTime " + "\(watch.firmware ?? "")"
                                                 }
