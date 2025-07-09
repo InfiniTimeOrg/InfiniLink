@@ -19,9 +19,6 @@
 
 </div>
 
-> [!NOTE]
-> This is branch is under heavy development and may be unstable. Please refer to the `main` branch for the most stable version of the app.
-
 ### Features:
 - Discover and connect to nearby InfiniTime devices
 - Set time and date immediately after connection
@@ -46,11 +43,7 @@
 
 ## Installation:
 - **Version 1.0.2** is available on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
-- **Version 1.1** is available on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
-- **Version 1.2** is available on [TestFlight](https://testflight.apple.com/join/VX7E73Wt).
-
-> [!CAUTION]
-> Version 1.2 has been built from the ground up and is still in early development stages, and as such, may not work as expected.
+- **Version 1.2** is available on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
