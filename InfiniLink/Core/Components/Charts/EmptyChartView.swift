@@ -48,7 +48,7 @@ struct EmptyChartView: View {
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 11)
+            RoundedRectangle(cornerRadius: 28)
                 .stroke(backgroundColor, lineWidth: 1)
             HStack(spacing: 0) {
                 ForEach(1...4, id: \.self) { _ in

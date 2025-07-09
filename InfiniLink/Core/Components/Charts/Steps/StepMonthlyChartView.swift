@@ -16,7 +16,10 @@ struct StepCalendarView: View {
     @State private var showPopover = false
     @State private var selectedMonth = 0
     @State private var selectedDate = Date()
+    @State private var selectedPoint: StepCounts?
     @State private var selectedDetent: PresentationDetent = .medium
+    @State private var stepPoints = [StepCounts]()
+    @State private var fetchedDates = [CalendarDay]()
     
     let geo: GeometryProxy
     
@@ -40,26 +43,44 @@ struct StepCalendarView: View {
                     }
                 }
                 VStack {
-                    let stepPoints = chartManager.stepPoints(predicate: chartManager.allTimePredicate)
-                    let rows = fetchDates().chunked(into: weekdays.count)
-                    ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
-                        HStack {
-                            ForEach(row, id: \.id) { day in
-                                CalendarDayView(day, points: stepPoints)
-                                    .onTapGesture {
-                                        guard day.day != -1 else { return } // Don't show anything for the next/previous month's days
-                                        
-                                        selectedDate = day.date
-                                        showPopover = true
-                                    }
-                                    .frame(maxWidth: .infinity)
-                            }
+//                    let rows = fetchedDates.chunked(into: weekdays.count)
+//                    ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
+//                        HStack {
+//                            ForEach(row, id: \.id) { day in
+//                                let point = stepPoints.first(where: { Calendar.current.isDate(day.date, equalTo: $0.timestamp!, toGranularity: .day)})
+//                                CalendarDayView(day, point: point)
+//                                    .onTapGesture {
+//                                        guard day.day != -1 else { return } // Don't show anything for the next/previous month's days
+//                                        
+//                                        selectedPoint = point
+//                                        selectedDate = day.date
+//                                        selectedDetent = .medium
+//                                        showPopover = true
+//                                    }
+//                                    .frame(maxWidth: .infinity)
+//                            }
+//                        }
+//                    }
+                    LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: weekdays.count), spacing: 14) {
+                        ForEach(fetchedDates, id: \.id) { day in
+                            let point = stepPoints.first(where: { Calendar.current.isDate(day.date, equalTo: $0.timestamp!, toGranularity: .day)})
+                            CalendarDayView(day, point: point)
+                                .onTapGesture {
+                                    guard day.day != -1 else { return } // Don't show anything for the next/previous month's days
+                                    
+                                    selectedPoint = point
+                                    selectedDate = day.date
+                                    selectedDetent = .medium
+                                    showPopover = true
+                                }
+                                .frame(maxWidth: .infinity)
                         }
                     }
                 }
                 .sheet(isPresented: $showPopover) {
-                    CalendarDayDetailView(selectedDay: $selectedDate, selectedDetent: $selectedDetent)
-                        .presentationDetents([.medium, .large], selection: $selectedDetent)
+                    CalendarDayDetailView($selectedPoint, selectedDetent: $selectedDetent, selectedDate: selectedDate)
+//                        .presentationDetents([.medium, .large], selection: $selectedDetent)
+                        .presentationDetents([.medium], selection: $selectedDetent)
                 }
             }
             .padding(.bottom)
@@ -68,8 +89,7 @@ struct StepCalendarView: View {
                 Text("Monthly Overview")
                 HStack(spacing: 12) {
                     Button {
-                        selectedMonth -= 1
-                        selectedDate = fetchSelectedMonth()
+                        setMonth(up: false)
                     } label: {
                         Image(systemName: "chevron.left")
                             .font(.system(size: 16))
@@ -83,8 +103,7 @@ struct StepCalendarView: View {
                         .foregroundColor(.primary)
                         .fontWeight(.bold)
                     Button {
-                        selectedMonth += 1
-                        selectedDate = fetchSelectedMonth()
+                        setMonth(up: true)
                     } label: {
                         Image(systemName: "chevron.right")
                             .font(.system(size: 14))
@@ -99,6 +118,20 @@ struct StepCalendarView: View {
         }
         .listRowBackground(Color.clear)
         .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
+        .onAppear {
+            getStepPoints()
+        }
+    }
+    
+    func getStepPoints() {
+        fetchedDates = fetchDates()
+        stepPoints = chartManager.stepPoints(predicate: chartManager.monthPredicate)
+    }
+    
+    func setMonth(up: Bool) {
+        selectedMonth += (up ? 1 : -1)
+        selectedDate = fetchSelectedMonth()
+        getStepPoints()
     }
     
     func fetchDates() -> [CalendarDay] {

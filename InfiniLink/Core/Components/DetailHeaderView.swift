@@ -19,7 +19,7 @@ struct Header {
         self.subtitle = subtitle
         self.units = units
         self.icon = icon
-        self.accent = accent
+        self.accent =  accent
     }
 }
 

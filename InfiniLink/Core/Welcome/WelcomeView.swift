@@ -9,6 +9,7 @@ import SwiftUI
 
 struct WelcomeView: View {
     @Environment(\.openURL) var openURL
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var showPairingSheet = false
     
@@ -44,6 +45,7 @@ struct WelcomeView: View {
             VStack(alignment: .leading) {
                 VStack(alignment: .leading, spacing: 10) {
                     Text("\(greeting)!")
+                        .foregroundStyle(.white)
                         .font(.largeTitle.weight(.bold))
                     Text("If you have an InfiniTime device, you can pair it here.")
                         .foregroundStyle(.gray)

@@ -245,12 +245,10 @@ struct DeviceView: View {
                         }
                     }
                     if enableDeveloperMode {
-                        Section {
-                            NavigationLink {
-                                DeveloperView()
-                            } label: {
-                                ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
-                            }
+                        NavigationLink {
+                            DeveloperView()
+                        } label: {
+                            ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
                         }
                     }
                 }
@@ -327,10 +325,14 @@ struct ListRowView: View {
         } icon: {
             Image(systemName: icon)
                 .font(.system(size: 13).weight(.medium))
-                .frame(width: 34, height: 34)
-                .background(iconColor)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .foregroundStyle(.white)
+                .frame(width: 31, height: 31)
+                .background(colorScheme == .dark ? AnyShapeStyle(Gradient(colors: [Color(.darkGray), Color.black.opacity(0.6)])) : AnyShapeStyle(iconColor))
+                .clipShape(.rect(cornerRadius: 8))
+                .foregroundStyle(colorScheme == .dark ? iconColor : .white)
+                .overlay {
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.primary.opacity(0.3), lineWidth: 0.3)
+                }
         }
     }
 }
@@ -346,10 +348,11 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 }
 
 #Preview {
-    DeviceView()
-        .onAppear {
-            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
-            DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
-            DFUUpdater.shared.local = false
-        }
+//    DeviceView()
+//        .onAppear {
+//            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
+//            DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
+//            DFUUpdater.shared.local = false
+//        }
+    ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
 }

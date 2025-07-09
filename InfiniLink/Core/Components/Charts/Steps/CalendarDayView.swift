@@ -13,15 +13,15 @@ struct CalendarDayView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
     let value: CalendarDay
-    let stepPoints: [StepCounts]
+    let stepPoint: StepCounts?
     
     var background: AnyShapeStyle {
         return colorScheme == .dark ? AnyShapeStyle(Material.regular) : AnyShapeStyle(Color(.systemBackground))
     }
     
-    init(_ value: CalendarDay, points stepPoints: [StepCounts]) {
+    init(_ value: CalendarDay, point: StepCounts?) {
         self.value = value
-        self.stepPoints = stepPoints
+        self.stepPoint = point
     }
     
     var body: some View {
@@ -34,7 +34,7 @@ struct CalendarDayView: View {
                 .font(.system(size: 16).weight(.medium))
                 .opacity(value.day == -1 ? 0 : 1)
             if deviceManager.settings.stepsGoal > 0 && value.day != -1 {
-                let progress = min(Double(stepPoints.first(where: { Calendar.current.isDate(value.date, equalTo: $0.timestamp!, toGranularity: .day)})?.steps ?? 0) / Double(deviceManager.settings.stepsGoal), 1)
+                let progress = min(Double(stepPoint?.steps ?? 0) / Double(deviceManager.settings.stepsGoal), 1)
                 PieSlice(progress: progress)
                     .fill(Color.blue.opacity(0.8))
                 label

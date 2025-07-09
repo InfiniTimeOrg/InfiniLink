@@ -22,17 +22,17 @@ struct GeneralSettingsView: View {
                 NavigationLink {
                     AboutSettingsView()
                 } label: {
-                    Text("About")
+                    ListRowView(title: "About", icon: "watch.analog", iconColor: .gray)
                 }
                 NavigationLink {
                     SoftwareUpdateView()
                 } label: {
-                    Text("Software Update")
+                    ListRowView(title: "Software Update", icon: "gear.badge", iconColor: .gray)
                 }
                 NavigationLink {
                     FileSystemView()
                 } label: {
-                    Text("File System")
+                    ListRowView(title: "File System", icon: "doc.on.doc.fill", iconColor: .gray)
                 }
                 .disabled(bleManager.blefsTransfer == nil)
             }
@@ -40,24 +40,24 @@ struct GeneralSettingsView: View {
                 NavigationLink {
                     AppearanceView()
                 } label: {
-                    Text("Appearance")
+                    ListRowView(title: "Appearance", icon: "sun.max.fill")
                 }
                 NavigationLink {
                     SetUpDetailsView(list: true)
                 } label: {
-                    Text("Health Details")
+                    ListRowView(title: "Health Details", icon: "figure.walk", iconColor: .gray)
                 }
                 NavigationLink {
                     DataSyncView()
                 } label: {
-                    Text("Data Sync")
+                    ListRowView(title: "Data Sync", icon: "arrow.triangle.2.circlepath", iconColor: .green)
                 }
             }
             Section {
                 NavigationLink {
                     DeveloperModeSettingsView()
                 } label: {
-                    Text("Developer")
+                    ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
                 }
             }
             Section {

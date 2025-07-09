@@ -260,12 +260,12 @@ class DownloadManager: NSObject, ObservableObject {
                                 return
                             }
                         }
-                        
-                        self.loadingAppReleases = false
                     }
                 } catch {
                     log("Error decoding InfiniLink releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
+                
+                self.loadingAppReleases = false
             }
         }.resume()
     }
@@ -286,6 +286,8 @@ class DownloadManager: NSObject, ObservableObject {
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let data = data {
                 do {
+                    print(String(data: data, encoding: .utf8))
+                    
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
                     DispatchQueue.main.async {
@@ -294,12 +296,12 @@ class DownloadManager: NSObject, ObservableObject {
                                 self.releases.append(release)
                             }
                         }
-                        
-                        self.loadingReleases = false
                     }
                 } catch {
                     log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
+                
+                self.loadingReleases = false
             }
         }.resume()
     }

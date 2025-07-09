@@ -72,6 +72,14 @@ class ExerciseViewModel: ObservableObject {
         }
     }
     
+    func setExercisePinned(_ exercise: Exercise) {
+        if pinnedExercises.contains(exercise.id) {
+            pinnedExercises.removeAll(where: { $0 == exercise.id })
+        } else {
+            pinnedExercises.append(exercise.id)
+        }
+    }
+    
     func getPinnedExercises() {
         let pinnedExercises = userDefaults?.array(forKey: "pinnedExercises") as? [String] ?? []
         self.pinnedExercises = pinnedExercises

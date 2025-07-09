@@ -12,15 +12,17 @@ struct CalendarDayDetailView: View {
     
     @ObservedObject private var chartManager = ChartManager.shared
     
-    @Binding var selectedDay: Date
     @Binding var selectedDetent: PresentationDetent
+    @Binding var stepPoint: StepCounts?
     
     private let fitnessCalculator = FitnessCalculator()
+    
+    let date: Date
     
     var dayName: String {
         let formatter = DateFormatter()
         formatter.dateFormat = "MMM d"
-        return formatter.string(from: selectedDay)
+        return formatter.string(from: date)
     }
     var progress: Double {
         return min(Double(stepPoint?.steps ?? 0) / Double(DeviceManager.shared.settings.stepsGoal), 1)
@@ -28,45 +30,45 @@ struct CalendarDayDetailView: View {
     var percentComplete: String {
         return String(format: "%.0f", progress * 100)
     }
-    var stepPoint: StepCounts? {
-        let points = chartManager.stepPoints(predicate: chartManager.monthPredicate)
-        let point = points.first(where: { Calendar.current.isDate(selectedDay, equalTo: $0.timestamp!, toGranularity: .day)})
-        return point
+    
+    init(_ selectedPoint: Binding<StepCounts?>, selectedDetent: Binding<PresentationDetent>, selectedDate date: Date) {
+        self._stepPoint = selectedPoint
+        self.date = selectedPoint.wrappedValue?.timestamp ?? date
+        self._selectedDetent = selectedDetent
     }
     
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
-                VStack(spacing: 14) {
-                    Spacer()
-                    VStack {
-                        progressCircle(geo)
-                        Text("You took \(stepPoint?.steps ?? 0) steps on \(dayName)")
-                            .font(selectedDetent == .medium ? .title2 : .title)
-                            .fontWeight(selectedDetent == .medium ? .semibold : .bold)
-                            .transition(.opacity.animation(.easeInOut))
-                            .fixedSize(horizontal: false, vertical: true)
-                        Text(percentComplete == "100" ? "Great job, you reached your daily step goal! Keep up the good work!" : "That's \(percentComplete)% of your goal.")
-                            .foregroundStyle(.secondary)
-                            .lineLimit(selectedDetent == .medium ? 1 : nil)
-                    }
-                    .multilineTextAlignment(.center)
-                    if selectedDetent == .medium {
-                        Spacer()
-                        VStack(spacing: 4) {
-                            Image(systemName: "chevron.up").font(.body.weight(.medium))
-                            Text("Swipe up for more details")
+                ScrollView {
+                    VStack(spacing: 14) {
+                        VStack {
+                            progressCircle(geo)
+                            Text("You took \(stepPoint?.steps ?? 0) steps on \(dayName)")
+                                .font(selectedDetent == .medium ? .title2 : .title)
+                                .fontWeight(selectedDetent == .medium ? .semibold : .bold)
+                                .transition(.opacity.animation(.easeInOut))
+                                .fixedSize(horizontal: false, vertical: true)
+                            Text(percentComplete == "100" ? "You reached your goal, keep up the good work!" : "That's \(percentComplete)% of your goal.")
+                                .foregroundStyle(.secondary)
+                                .lineLimit(selectedDetent == .medium ? 1 : nil)
                         }
-                        .font(.subheadline)
-                        .foregroundStyle(.gray)
-                    } else {
-                        StepMenuItemView(steps: Int(stepPoint?.steps ?? 0))
-                        Spacer()
+                        .multilineTextAlignment(.center)
+//                        if selectedDetent == .medium {
+//                            VStack(spacing: 4) {
+//                                Image(systemName: "chevron.up").font(.body.weight(.medium))
+//                                Text("Swipe up for more details")
+//                            }
+//                            .font(.subheadline)
+//                            .foregroundStyle(.gray)
+//                        } else {
+//                            StepMenuItemView(steps: Int(stepPoint?.steps ?? 0))
+//                        }
                     }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .padding()
+//                    .animation(.easeInOut(duration: 0.3), value: selectedDetent)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .padding()
-                .animation(.easeInOut(duration: 0.3), value: selectedDetent)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -81,8 +83,9 @@ struct CalendarDayDetailView: View {
     
     func progressCircle(_ geo: GeometryProxy) -> some View {
         ZStack {
-            Circle()
+            Rectangle()
                 .fill(Material.regular)
+                .clipShape(Circle())
             Group {
                 if let daySteps = stepPoint?.steps, daySteps > 0 {
                     PieSlice(progress: progress)
@@ -95,17 +98,7 @@ struct CalendarDayDetailView: View {
             }
             .font(.system(size: 42).weight(.semibold))
         }
-        .frame(width: geo.size.width / 2.2)
+        .frame(width: geo.size.width / 2.4, height: geo.size.width / 2.4)
         .fixedSize()
-    }
-}
-
-#Preview {
-    GeometryReader { geo in
-        CalendarDayDetailView(selectedDay: .constant(Date().addingTimeInterval(-86400)), selectedDetent: .constant(.medium))
-            .frame(height: geo.size.height / 2)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .shadow(radius: 120)
-            .frame(maxHeight: .infinity, alignment: .bottom)
     }
 }

@@ -54,6 +54,14 @@ struct AllExercisesView: View {
                     Text("Nothing matched your search. Ensure your spelling is correct and try again.")
                 } else {
                     ForEach(filteredExercises.sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in
+                        let exerciseButton = {
+                            Button(role: .destructive) {
+                                guard let index = filteredExercises.firstIndex(where: { $0.id == userExercise.id }) else { return }
+                                delete(at: IndexSet(integer: index))
+                            } label: {
+                                Label("Delete", systemImage: "trash")
+                            }
+                        }()
                         if let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId }) {
                             NavigationLink {
                                 ExerciseDetailView(userExercise: userExercise)
@@ -71,12 +79,10 @@ struct AllExercisesView: View {
                                 }
                             }
                             .contextMenu {
-                                Button(role: .destructive) {
-                                    guard let index = filteredExercises.firstIndex(where: { $0.id == userExercise.id }) else { return }
-                                    delete(at: IndexSet(integer: index))
-                                } label: {
-                                    Label("Delete", systemImage: "trash")
-                                }
+                                exerciseButton
+                            }
+                            .swipeActions(edge: .trailing, allowsFullSwipe: true) {
+                                exerciseButton
                             }
                         }
                     }

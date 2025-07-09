@@ -13,6 +13,9 @@ struct ExerciseRowView: View {
     
     let exercise: Exercise
     let pinned: Bool
+    var pinLabel: some View {
+        Label(pinned ? "Unpin" : "Pin", systemImage: pinned ? "pin.slash" : "pin")
+    }
     
     init(_ exercise: Exercise, pinned: Bool = false) {
         self.exercise = exercise
@@ -28,15 +31,23 @@ struct ExerciseRowView: View {
         .disabled(!bleManager.hasLoadedCharacteristics)
         .contextMenu {
             Button {
-                if pinned {
-                    exerciseViewModel.pinnedExercises.removeAll(where: { $0 == exercise.id })
-                } else {
-                    exerciseViewModel.pinnedExercises.append(exercise.id)
+                withAnimation {
+                    exerciseViewModel.setExercisePinned(exercise)
                 }
                 exerciseViewModel.setPinnedExercises()
             } label: {
-                Label(pinned ? "Unpin" : "Pin", systemImage: pinned ? "pin.slash" : "pin")
+                pinLabel
             }
+        }
+        .swipeActions(edge: .leading, allowsFullSwipe: true) {
+            Button {
+                withAnimation {
+                    exerciseViewModel.setExercisePinned(exercise)
+                }
+            } label: {
+                pinLabel
+            }
+            .tint(.yellow)
         }
     }
 }
