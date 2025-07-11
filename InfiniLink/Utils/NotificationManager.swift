@@ -33,7 +33,7 @@ class NotificationManager: ObservableObject {
     @AppStorage("sendLowBatteryNotification") var sendBatteryNotifications = true
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
     @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
-    @AppStorage("lastTimeLowBatteryNotified") var lastTimeLowBatteryNotified: Double = 0
+    @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("waterReminder") var waterReminder = true
@@ -86,11 +86,12 @@ extension NotificationManager {
         if watchNotifications {
             let bat = bleManager.batteryLevel
             
-            // Don't send more than one notification within ten minutes
-            guard (Date().timeIntervalSince1970 - lastTimeLowBatteryNotified) > tenMinutes else { return }
+            // Don't send a notification if we've already sent one with the same battery level
+            guard lastBatteryLevelNotified == -1 || lastBatteryLevelNotified != bat else { return }
             
             if bat == 20 || bat == 10 || bat == 5 {
                 self.sendLowBatteryNotification()
+                self.lastBatteryLevelNotified = bat
             }
         }
     }
@@ -99,15 +100,14 @@ extension NotificationManager {
         let bat = bleManager.batteryLevel
         let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
         
-        let canSendNotificationsToWatch = (sendLowBatteryNotificationToWatch && sendBatteryNotifications)
-        if sendLowBatteryNotificationToiPhone ? (canSendNotificationsToWatch && !bleManager.ancsAuthorized) : (canSendNotificationsToWatch) { // Make sure we don't send any notifications to the watch that we're already sending to the host when ANCS is enabled because the notification will ping twice
-            self.bleWriteManager.sendNotification(notif)
+        if sendBatteryNotifications {
+            if sendLowBatteryNotificationToiPhone ? (!bleManager.ancsAuthorized && sendLowBatteryNotificationToWatch) : sendLowBatteryNotificationToWatch { // Make sure we don't send any notifications to the watch where we're already sending a notif to the host when ANCS is enabled because the notification will ping twice
+                self.bleWriteManager.sendNotification(notif)
+            }
+            if sendLowBatteryNotificationToiPhone {
+                self.sendNotificationToHost(notif)
+            }
         }
-        if sendLowBatteryNotificationToiPhone && sendBatteryNotifications {
-            self.sendNotificationToHost(notif)
-        }
-        
-        lastTimeLowBatteryNotified = Date().timeIntervalSince1970
     }
 }
 
