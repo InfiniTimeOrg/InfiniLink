@@ -14,7 +14,7 @@ struct CurrentUpdateView: View {
     @ObservedObject var downloadManager = DownloadManager.shared
     
     @State private var backgroundScaled = true
-    @State private var showConfirmation = true
+    @State private var showConfirmation = false
     
     func cancelUpdate() {
         dfuUpdater.stopTransfer(abort: true)
