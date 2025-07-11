@@ -35,13 +35,15 @@ class StepCountManager: ObservableObject {
     private func updateStepCount(_ current: StepCounts, with steps: Int32, for date: Date, isArbitrary: Bool) {
         if isArbitrary {
             current.steps += steps
-        } else if addInsteadOfOverwrite && steps <= current.steps {
-            if steps <= current.previousSteps {
-                current.steps += steps
-            } else {
-                current.steps += abs(current.previousSteps - steps)
-            }
-        } else {
+        }
+//        else if addInsteadOfOverwrite && steps <= current.steps {
+//            if steps <= current.previousSteps {
+//                current.steps += steps
+//            } else {
+//                current.steps += abs(current.previousSteps - steps)
+//            }
+//        }
+        else {
             current.steps = steps
         }
         
