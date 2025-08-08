@@ -29,24 +29,6 @@ struct DeviceView: View {
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
     
-    func connectionState() -> String {
-        if bleManager.isBusy {
-            return NSLocalizedString("Connecting...", comment: "")
-        }
-        switch (bleManager.isConnectedToPinetime, bleManager.hasLoadedBatteryLevel) {
-        case (true, true):
-            return NSLocalizedString("Connected", comment: "")
-        case (true, false):
-            return NSLocalizedString("Connecting...", comment: "")
-        default:
-            if bleManager.hasDisconnectedForUpdate {
-                return NSLocalizedString("Installing update...", comment: "")
-            } else {
-                return NSLocalizedString("Disconnected", comment: "")
-            }
-        }
-    }
-    
     var body: some View {
         Group {
             if downloadManager.updateStarted {
@@ -80,7 +62,7 @@ struct DeviceView: View {
                                     .font(.title.weight(.bold))
                                 if bleManager.isBluetoothOn {
                                     Group {
-                                        Text(connectionState()) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
+                                        Text(bleManager.connectionState) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
                                             .foregroundColor({
                                                 if bleManager.batteryLevel > 20 {
                                                     return Color.gray

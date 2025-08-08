@@ -131,6 +131,23 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     var ancsAuthorized: Bool {
         return infiniTime?.ancsAuthorized ?? false
     }
+    var connectionState: String {
+        if isBusy {
+            return NSLocalizedString("Connecting...", comment: "")
+        }
+        switch (isConnectedToPinetime, hasLoadedBatteryLevel) {
+        case (true, true):
+            return NSLocalizedString("Connected", comment: "")
+        case (true, false):
+            return NSLocalizedString("Connecting...", comment: "")
+        default:
+            if hasDisconnectedForUpdate {
+                return NSLocalizedString("Installing update...", comment: "")
+            } else {
+                return NSLocalizedString("Disconnected", comment: "")
+            }
+        }
+    }
     
     override init() {
         super.init()
