@@ -91,6 +91,8 @@ struct SoftwareUpdateView: View {
                     .frame(height: dfuUpdater.local ? 50 : 300)
                 }
             }
+            let updateDisabled = !bleManager.isDeviceInRecoveryMode &&
+                                 (!bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10)
             Section {
                 if !dfuUpdater.local {
                     Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
@@ -120,11 +122,11 @@ struct SoftwareUpdateView: View {
                     Text("Update Now")
                 }
             } footer: {
-                if !bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10 {
+                if updateDisabled {
                     Text(!bleManager.hasLoadedCharacteristics ? "\(deviceManager.name) needs to be connected to update its software." : "\(deviceManager.name)'s battery must be charged to at least 10% to update its software.")
                 }
             }
-            .disabled(!bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10)
+            .disabled(updateDisabled)
         }
     }
     
