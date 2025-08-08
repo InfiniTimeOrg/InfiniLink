@@ -39,15 +39,13 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
         
         // Optional:
-        // initiator.forceDfu = true/false // default false
+        initiator.forceDfu = true
         initiator.packetReceiptNotificationParameter = 20
         initiator.logger = self // - to get log info
         initiator.delegate = self // - to be informed about current state and errors
         initiator.progressDelegate = self // - to show progress bar
         // initiator.peripheralSelector = ... // the default selector is used
-        if bleManager.infiniTime != nil {
-            dfuController = initiator.start(target: bleManager.infiniTime)
-        }
+        dfuController = initiator.start(target: bleManager.infiniTime)
     }
 	
 	func downloadTransfer() {
@@ -66,7 +64,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
 	
     func stopTransfer(abort: Bool) {
 		if abort {
-			_ = dfuController.abort()
+			_ = dfuController?.abort()
 		}
         
         firmwareURL?.stopAccessingSecurityScopedResource()
