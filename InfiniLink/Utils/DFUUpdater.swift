@@ -31,21 +31,30 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
 	
     func updateFirmware() {
-        guard let selectedFirmware = try? DFUFirmware(urlToZipFile: firmwareURL) else {
-            log("Failed to load firmware.", caller: "DFUUpdater")
+        guard let firmwareURL = firmwareURL else {
+            log("Firmware URL is nil or invalid")
             return
         }
         
-        let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
+        let _ = firmwareURL.startAccessingSecurityScopedResource()
         
-        // Optional:
-        initiator.forceDfu = true
-        initiator.packetReceiptNotificationParameter = 20
-        initiator.logger = self // - to get log info
-        initiator.delegate = self // - to be informed about current state and errors
-        initiator.progressDelegate = self // - to show progress bar
-        // initiator.peripheralSelector = ... // the default selector is used
-        dfuController = initiator.start(target: bleManager.infiniTime)
+        print(firmwareURL)
+        
+        do {
+            let selectedFirmware = try DFUFirmware(urlToZipFile: firmwareURL.absoluteURL)
+            
+            let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
+            
+            initiator.forceDfu = true
+            initiator.packetReceiptNotificationParameter = 20
+            initiator.logger = self // to get log info
+            initiator.delegate = self // to be informed about current state and errors
+            initiator.progressDelegate = self // to show progress bar
+            dfuController = initiator.start(target: bleManager.infiniTime)
+        } catch {
+            print(error)
+        }
+        
     }
 	
 	func downloadTransfer() {

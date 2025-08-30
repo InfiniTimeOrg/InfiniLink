@@ -10,6 +10,11 @@ import SwiftUI
 import CoreData
 
 class ChartManager: ObservableObject {
+    @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
+    @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
+    
+    static let shared = ChartManager()
+    
     let persistenceController = PersistenceController.shared
     let bleManager = BLEManager.shared
     
@@ -29,20 +34,21 @@ class ChartManager: ObservableObject {
         
         return NSPredicate(format: predicateString, deviceId, startOfDay as NSDate)
     }
-    var monthPredicate: NSPredicate {
+    func monthPredicate(offset: Int = 0) -> NSPredicate {
         let deviceId = bleManager.pairedDeviceID ?? ""
         let calendar = Calendar.current
         let now = Date()
         
         guard let startOfMonth = calendar.date(from: calendar.dateComponents([.year, .month], from: now)),
-              let startOfNextMonth = calendar.date(byAdding: .month, value: 1, to: startOfMonth) else {
+              let startOfOffsettedMonth = calendar.date(byAdding: .month, value: offset, to: startOfMonth),
+              let startOfNextMonth = calendar.date(byAdding: .month, value: 1, to: startOfOffsettedMonth) else {
             return NSPredicate(value: false)
         }
-
+        
         return NSPredicate(
             format: "deviceId == %@ AND timestamp >= %@ AND timestamp < %@",
             deviceId,
-            startOfMonth as NSDate,
+            startOfOffsettedMonth as NSDate,
             startOfNextMonth as NSDate
         )
     }
@@ -50,11 +56,6 @@ class ChartManager: ObservableObject {
         let deviceId = bleManager.pairedDeviceID ?? ""
         return NSPredicate(format: "deviceId == %@", deviceId)
     }
-    
-    @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
-    @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
-    
-    static let shared = ChartManager()
     
     func addStepDataPoint(steps: Int32, time: Date) {
         let context = persistenceController.container.newBackgroundContext()
@@ -105,11 +106,9 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func heartPoints() -> [HeartDataPoint] {
-        guard let deviceId = bleManager.pairedDeviceID else { return [] }
-        
+    func heartPoints(predicate: NSPredicate? = nil) -> [HeartDataPoint] {
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
+        fetchRequest.predicate = predicate ?? dayPredicate
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
@@ -137,15 +136,12 @@ class ChartManager: ObservableObject {
     
     func userExercises() -> [UserExercise] {
         guard let deviceId = bleManager.pairedDeviceID else { return [] }
-                
+        
         let fetchRequest: NSFetchRequest<UserExercise> = UserExercise.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
-                .filter { record in
-                    return record.deviceId == bleManager.pairedDeviceID
-                }
         } catch {
             log("Error fetching user exercises: \(error)", caller: "ChartManager")
             return []
@@ -154,15 +150,12 @@ class ChartManager: ObservableObject {
     
     func disconnectMapPoints() -> [DisconnectMapPoint] {
         guard let deviceId = bleManager.pairedDeviceID else { return [] }
-                
+        
         let fetchRequest: NSFetchRequest<DisconnectMapPoint> = DisconnectMapPoint.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
-                .filter { record in
-                    return record.deviceId == bleManager.pairedDeviceID
-                }
         } catch {
             log("Error fetching disconnect points: \(error)", caller: "ChartManager")
             return []
@@ -180,7 +173,7 @@ class ChartManager: ObservableObject {
         fetchRequest.predicate = NSPredicate(format: "deviceId == %@ AND time >= %@ AND time < %@", deviceId, startOfDay as NSDate, endOfDay as NSDate)
         
         do {
-            return try persistenceController.container.viewContext.fetch(fetchRequest).filter({ $0.deviceId == bleManager.pairedDeviceID })
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
         } catch {
             log("Failed to fetch battery data points: \(error)", caller: "ChartManager")
             return []

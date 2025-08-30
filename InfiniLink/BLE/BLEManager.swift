@@ -151,7 +151,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     override init() {
         super.init()
-        self.central = CBCentralManager(delegate: self, queue: nil)
+        self.central = CBCentralManager(delegate: self,
+                                        queue: nil,
+                                        options: [
+                                            CBPeripheralManagerOptionRestoreIdentifierKey: "com.alex-emry.Infini-iOS.central"
+                                        ])
     }
     
     func scanForNewDevices() {
@@ -166,7 +170,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         guard central.state == .poweredOn else { return }
         
         if let pairedDeviceID = pairedDeviceID,
-            let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice { // The user has a paired device and they're not trying to pair a new one
+           let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice { // The user has a paired device and they're not trying to pair a new one
             let peripherals = central.retrievePeripherals(withIdentifiers: [uuid])
             log("\(peripherals)", type: .info, caller: "BLEManager - startScanning")
             
@@ -367,6 +371,16 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         if isBluetoothOn && !isConnectedToPinetime {
             startScanning()
+        }
+    }
+    
+    func centralManager(_ central: CBCentralManager,
+                        willRestoreState dict: [String : Any]) {
+        if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
+            for peripheral in peripherals {
+                log("Restored peripheral: \(peripheral.identifier)", type: .info, caller: "willRestoreState")
+                peripheral.delegate = self
+            }
         }
     }
     

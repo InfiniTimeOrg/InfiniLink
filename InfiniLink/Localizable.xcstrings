@@ -36,16 +36,6 @@
     " You can customize this in notification settings." : {
 
     },
-    "-" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "-"
-          }
-        }
-      }
-    },
     "[BATT]" : {
 
     },
@@ -88,14 +78,7 @@
       }
     },
     "%@ Logs" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ Logs"
-          }
-        }
-      }
+
     },
     "%@ must be connected to ping it." : {
 
@@ -144,26 +127,13 @@
       }
     },
     "%@!" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%@ !"
-          }
-        }
-      }
+
     },
     "%@...%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@...%2$@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
             "value" : "%1$@...%2$@"
           }
         }
@@ -176,24 +146,10 @@
 
     },
     "%lld" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
-          }
-        }
-      }
+
     },
     "%lld " : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld"
-          }
-        }
-      }
+
     },
     "%lld more device%@ found" : {
       "localizations" : {
@@ -201,12 +157,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld more device%2$@ found"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld plus de dispositif%2$@ trouvé"
           }
         }
       }
@@ -231,12 +181,6 @@
             "state" : "new",
             "value" : "%1$lld-%2$lld "
           }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%1$lld-%2$lld"
-          }
         }
       }
     },
@@ -250,27 +194,13 @@
 
     },
     "1 device discovered" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "1 dispositif découvert"
-          }
-        }
-      }
+
     },
     "A new section will be added to your device overview." : {
 
     },
     "About" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "A propos de"
-          }
-        }
-      }
+
     },
     "About InfiniLink" : {
 
@@ -288,24 +218,10 @@
 
     },
     "Allow Volume Control" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Autoriser le contrôle du volume"
-          }
-        }
-      }
+
     },
     "Allow your watch to control the currently playing music from Apple Music." : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Permettez à votre montre de contrôler la musique en cours de lecture à partir d'Apple Music."
-          }
-        }
-      }
+
     },
     "Always Allow Access" : {
 
@@ -329,14 +245,7 @@
 
     },
     "Apple Health" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Health"
-          }
-        }
-      }
+
     },
     "Are you sure you want to end the exercise? %@" : {
 
@@ -348,14 +257,7 @@
 
     },
     "Average" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Moyenne"
-          }
-        }
-      }
+
     },
     "Averaging at %@ BPM, your heart rate ranged from %lld to %lld BPM." : {
       "localizations" : {
@@ -374,24 +276,10 @@
 
     },
     "Battery Low" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Batterie faible"
-          }
-        }
-      }
+
     },
     "battery remaining" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "batterie restante"
-          }
-        }
-      }
+
     },
     "BLE" : {
 
@@ -405,17 +293,6 @@
     "BPM" : {
 
     },
-    "BPM Min" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "BPM Min"
-          }
-        }
-      }
-    },
     "Brightness Level" : {
 
     },
@@ -423,27 +300,13 @@
 
     },
     "Calendar Notifications" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Calendar Notifications"
-          }
-        }
-      }
+
     },
     "Calender" : {
 
     },
     "Cancel" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Annuler"
-          }
-        }
-      }
+
     },
     "Cancel Update" : {
 
@@ -461,24 +324,10 @@
 
     },
     "Color Scheme" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Schéma de couleurs"
-          }
-        }
-      }
+
     },
     "Connect" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Connecter"
-          }
-        }
-      }
+
     },
     "Connected" : {
 
@@ -508,20 +357,6 @@
 
     },
     "Custom Location" : {
-
-    },
-    "Customization" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Personnalisation"
-          }
-        }
-      }
-    },
-    "D" : {
 
     },
     "Daily Goal" : {
@@ -790,9 +625,6 @@
         }
       }
     },
-    "H" : {
-
-    },
     "Hardware Revision" : {
 
     },
@@ -980,6 +812,7 @@
       }
     },
     "M" : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -1512,9 +1345,6 @@
           }
         }
       }
-    },
-    "W" : {
-
     },
     "WARNING: These actions are permanent and cannot be undone!" : {
 

@@ -41,18 +41,18 @@ struct StepsView: View {
                     .listRowBackground(Color.clear)
                 }
                 StepChartView()
-                StepCalendarView(geo: geo)
+                StepCalendarView()
             }
         }
         .navigationTitle("Steps")
         .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            NavigationLink {
-                StepSettingsView()
-            } label: {
-                Label("Settings", systemImage: "gear")
-            }
-        }
+//        .toolbar {
+//            NavigationLink {
+//                StepSettingsView()
+//            } label: {
+//                Label("Settings", systemImage: "gear")
+//            }
+//        }
     }
 }
 

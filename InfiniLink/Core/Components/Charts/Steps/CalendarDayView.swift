@@ -44,5 +44,6 @@ struct CalendarDayView: View {
             }
         }
         .frame(minWidth: 42, maxWidth: 55, minHeight: 42, maxHeight: 55)
+        .frame(maxWidth: .infinity)
     }
 }

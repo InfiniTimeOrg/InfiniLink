@@ -17,7 +17,6 @@ struct StepChartDataPoint: Identifiable {
 struct StepChartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var chartManager = ChartManager.shared
-    @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var stepCountManager = StepCountManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     
@@ -27,6 +26,7 @@ struct StepChartView: View {
     @State private var offset = 0.0
     @State private var selectedDate = Date()
     @State private var selectedSteps = 0
+    @State private var points = [StepChartDataPoint]()
     
     let fitnessCalculator = FitnessCalculator()
     
@@ -59,14 +59,13 @@ struct StepChartView: View {
     }
     
     var streak: Int {
-        let points = chartManager.stepPoints(predicate: chartManager.weekPredicate)
-        return points.filter { $0.steps >= deviceManager.settings.stepsGoal }.count
+        return points.filter { $0.steps >= stepCountManager.stepGoal }.count
     }
     var earliestDate: Date {
-        stepChartPoints().compactMap({ $0.date }).min() ?? Date()
+        points.compactMap({ $0.date }).min() ?? Date()
     }
     var latestDate: Date {
-        stepChartPoints().compactMap({ $0.date }).max() ?? Date()
+        points.compactMap({ $0.date }).max() ?? Date()
     }
     
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -75,10 +74,10 @@ struct StepChartView: View {
         Group {
             Section {
                 Chart {
-                    RuleMark(y: .value("Daily Goal", deviceManager.settings.stepsGoal))
+                    RuleMark(y: .value("Daily Goal", stepCountManager.stepGoal))
                         .foregroundStyle(.green)
                         .lineStyle(StrokeStyle(lineWidth: 2, dash: [4]))
-                    ForEach(stepChartPoints(), id: \.date) {
+                    ForEach(points, id: \.date) {
                         BarMark(
                             x: .value("Date", $0.date, unit: .weekday),
                             y: .value("Steps", $0.steps)
@@ -109,7 +108,7 @@ struct StepChartView: View {
                                         
                                         let (day, _) = proxy.value(at: location, as: (Date, Int).self) ?? (Date(), 0)
                                         // We compare the formatted dates because the dates are too specific otherwise
-                                        let steps = stepChartPoints().first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
+                                        let steps = points.first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
                                         
                                         selectedDate = day
                                         selectedSteps = steps
@@ -121,7 +120,7 @@ struct StepChartView: View {
                     }
                 }
                 .chartXAxis {
-                    AxisMarks(values: stepChartPoints().map({ $0.date })) {
+                    AxisMarks(values: points.map({ $0.date })) {
                         AxisGridLine()
                         AxisValueLabel(format: .dateTime.weekday(.abbreviated))
                     }
@@ -129,13 +128,13 @@ struct StepChartView: View {
                 .frame(height: 280)
             } header: {
                 VStack(alignment: .leading) {
-                    Text(stepChartPoints().count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
+                    Text(points.count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
                         .fontWeight(.regular)
                     Text({
                         if showSelectionBar {
                             return "\(selectedSteps) "
-                        } else if !stepChartPoints().isEmpty {
-                            return "\(stepChartPoints().reduce(0) { $0 + $1.steps } / stepChartPoints().count) "
+                        } else if !points.isEmpty {
+                            return "\(points.reduce(0) { $0 + $1.steps } / points.count) "
                         }
                         return "0 "
                     }())
@@ -165,9 +164,9 @@ struct StepChartView: View {
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
             Section {
-                let steps = Int(chartManager.stepPoints().last?.steps ?? 0)
+                let steps = Int(points.last?.steps ?? 0)
                 
-                if bleManager.stepCount >= deviceManager.settings.stepsGoal {
+                if bleManager.stepCount >= stepCountManager.stepGoal {
                     Text("Great job, you reached your daily step goal today! You've walked \(String(format: "%.2f", fitnessCalculator.calculateDistance(steps: steps))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
                 } else {
                     let stepsRemaining = stepCountManager.stepGoal - steps
@@ -186,6 +185,12 @@ struct StepChartView: View {
                     }
                 }
             }
+        }
+        .onAppear {
+            points = stepChartPoints()
+        }
+        .onChange(of: bleManager.stepCount) { _ in
+            points = stepChartPoints()
         }
     }
 }

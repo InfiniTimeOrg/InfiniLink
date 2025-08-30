@@ -21,14 +21,21 @@ struct StepCalendarView: View {
     @State private var stepPoints = [StepCounts]()
     @State private var fetchedDates = [CalendarDay]()
     
-    let geo: GeometryProxy
-    
     var weekdays: [String] {
         let calendar = Calendar.current
         return calendar.veryShortStandaloneWeekdaySymbols
     }
     var background: AnyShapeStyle {
         return colorScheme == .dark ? AnyShapeStyle(Material.regular) : AnyShapeStyle(Color(.systemBackground))
+    }
+    
+    private func showPointPopover(_ day: CalendarDay, _ point: StepCounts?) {
+        guard day.day != -1 else { return } // Don't show anything for the next/previous month's days
+        
+        selectedPoint = point
+        selectedDate = day.date
+        selectedDetent = .medium
+        showPopover = true
     }
     
     var body: some View {
@@ -43,43 +50,16 @@ struct StepCalendarView: View {
                     }
                 }
                 VStack {
-//                    let rows = fetchedDates.chunked(into: weekdays.count)
-//                    ForEach(Array(rows.enumerated()), id: \.offset) { _, row in
-//                        HStack {
-//                            ForEach(row, id: \.id) { day in
-//                                let point = stepPoints.first(where: { Calendar.current.isDate(day.date, equalTo: $0.timestamp!, toGranularity: .day)})
-//                                CalendarDayView(day, point: point)
-//                                    .onTapGesture {
-//                                        guard day.day != -1 else { return } // Don't show anything for the next/previous month's days
-//                                        
-//                                        selectedPoint = point
-//                                        selectedDate = day.date
-//                                        selectedDetent = .medium
-//                                        showPopover = true
-//                                    }
-//                                    .frame(maxWidth: .infinity)
-//                            }
-//                        }
-//                    }
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: weekdays.count), spacing: 14) {
                         ForEach(fetchedDates, id: \.id) { day in
                             let point = stepPoints.first(where: { Calendar.current.isDate(day.date, equalTo: $0.timestamp!, toGranularity: .day)})
                             CalendarDayView(day, point: point)
-                                .onTapGesture {
-                                    guard day.day != -1 else { return } // Don't show anything for the next/previous month's days
-                                    
-                                    selectedPoint = point
-                                    selectedDate = day.date
-                                    selectedDetent = .medium
-                                    showPopover = true
-                                }
-                                .frame(maxWidth: .infinity)
+                                .onTapGesture(perform: { showPointPopover(day, point) })
                         }
                     }
                 }
                 .sheet(isPresented: $showPopover) {
                     CalendarDayDetailView($selectedPoint, selectedDetent: $selectedDetent, selectedDate: selectedDate)
-//                        .presentationDetents([.medium, .large], selection: $selectedDetent)
                         .presentationDetents([.medium], selection: $selectedDetent)
                 }
             }
@@ -125,7 +105,7 @@ struct StepCalendarView: View {
     
     func getStepPoints() {
         fetchedDates = fetchDates()
-        stepPoints = chartManager.stepPoints(predicate: chartManager.monthPredicate)
+        stepPoints = chartManager.stepPoints(predicate: chartManager.monthPredicate(offset: selectedMonth))
     }
     
     func setMonth(up: Bool) {
@@ -144,7 +124,7 @@ struct StepCalendarView: View {
         
         // Calculate leading empty days
         let firstWeekday = calendar.component(.weekday, from: dates.first?.date ?? Date()) - calendar.firstWeekday
-        let leadingEmpty = (firstWeekday + 7) % 7 // Ensure non-negative
+        let leadingEmpty = (firstWeekday + 7) % 7
         
         for _ in 0..<leadingEmpty {
             dates.insert(CalendarDay(day: -1, date: Date()), at: 0)

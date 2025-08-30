@@ -75,7 +75,7 @@ struct SoftwareUpdateView: View {
                                     if downloadManager.externalResources {
                                         return dfuUpdater.resourceFilename
                                     } else {
-                                        return "\(Int(ceil(Double(downloadManager.updateSize) / 1000.0))) KB"
+                                        return "\(Int(ceil(Double(downloadManager.updateSize) / 1000))) KB"
                                     }
                                 }())
                                 .lineLimit(1)

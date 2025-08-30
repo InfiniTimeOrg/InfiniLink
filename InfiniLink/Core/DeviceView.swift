@@ -308,7 +308,7 @@ struct ListRowView: View {
                 .foregroundStyle(colorScheme == .dark ? .white : .black)
         } icon: {
             Image(systemName: icon)
-                .font(.system(size: 13).weight(.medium))
+                .font(.system(size: 14).weight(.medium))
                 .frame(width: 31, height: 31)
                 .background(colorScheme == .dark ? AnyShapeStyle(Gradient(colors: [Color(.darkGray), Color.black.opacity(0.6)])) : AnyShapeStyle(iconColor))
                 .clipShape(.rect(cornerRadius: 8))

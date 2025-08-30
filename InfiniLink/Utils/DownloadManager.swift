@@ -265,7 +265,9 @@ class DownloadManager: NSObject, ObservableObject {
                     log("Error decoding InfiniLink releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
                 
-                self.loadingAppReleases = false
+                DispatchQueue.main.async {
+                    self.loadingAppReleases = false
+                }
             }
         }.resume()
     }
@@ -301,7 +303,9 @@ class DownloadManager: NSObject, ObservableObject {
                     log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
                 
-                self.loadingReleases = false
+                DispatchQueue.main.async {
+                    self.loadingReleases = false
+                }
             }
         }.resume()
     }
