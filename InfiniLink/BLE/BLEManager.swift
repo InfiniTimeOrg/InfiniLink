@@ -203,7 +203,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func onConnect(_ peripheral: CBPeripheral) {
         stopScanning()
         
-//        downloadManager.clearUpdate()
+        if pairedDeviceID != peripheralToConnect.identifier.uuidString { // Only clear the update for a new device
+            downloadManager.clearUpdate()
+        }
         
         isConnecting = false
         pairedDeviceID = peripheralToConnect.identifier.uuidString
@@ -318,10 +320,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
             
-            if let rssi, pauseOnWalkaway && RSSI.from(rssi: rssi) == RSSI.poor { // Make sure the disconnect was a range issue
-                // The watch went out of range, pause any currently playing music
-                MusicController.shared.pause()
-                log("Music paused due to watch disconnect", type: .info, caller: "BLEManager")
+            if let rssi, RSSI.from(rssi: rssi) == RSSI.poor { // Make sure the disconnect was a range issue
+                if pauseOnWalkaway { // The watch went out of range, pause any currently playing music
+                    MusicController.shared.pause()
+                }
                 
                 // Drop a pin on the map where the watch disconnected with an error, in case it's because the user left it behind
                 let latitude = locationManager.location?.coordinate.latitude ?? 0
@@ -334,9 +336,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
                     return location.isNear(pointLocation)
                 }
                 
-                if isDuplicate {
-                    log("Pin already dropped near this location", target: .app)
-                } else {
+                if !isDuplicate {
                     let context = persistenceController.container.viewContext
                     let disconnectPoint = DisconnectMapPoint(context: context)
                     disconnectPoint.deviceId = peripheral.identifier.uuidString
@@ -379,7 +379,11 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
             for peripheral in peripherals {
                 log("Restored peripheral: \(peripheral.identifier)", type: .info, caller: "willRestoreState")
-                peripheral.delegate = self
+                if peripheral.state == .disconnected && !isConnecting {
+                    self.connect(peripheral: peripheral)
+                } else if peripheral.state == .connected {
+                    self.onConnect(peripheral)
+                }
             }
         }
     }
