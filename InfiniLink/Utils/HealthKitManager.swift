@@ -21,49 +21,25 @@ class HealthKitManager: ObservableObject {
         }
     }
     
-    func writeSteps(date: Date, stepsToAdd: Double) {
+    func writeSteps(_ stepsToAdd: Int, for date: Date = Date()) {
         let stepType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
         
-        let stepsSample = HKQuantitySample(type: stepType, quantity: HKQuantity.init(unit: HKUnit.count(), doubleValue: stepsToAdd), start: date, end: date)
+        let stepsSample = HKQuantitySample(type: stepType, quantity: HKQuantity.init(unit: HKUnit.count(), doubleValue: Double(stepsToAdd)), start: date, end: date)
         
-        if healthStore?.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth && stepsToAdd != 0 {
-            if let healthStore = healthStore {
-                healthStore.save(stepsSample, withCompletion: { success, error in
-                    
-                    if let error {
-                        log(error.localizedDescription, caller: "HealthKitManager")
-                        return
-                    }
-                    
-                    if success {
-                        log("Steps successfully saved", type: .info, caller: "HealthKitManager")
-                        return
-                    } else {
-                        log("Unknown error while writing steps", caller: "HealthKitManager")
-                    }
-                })
-            }
-        }
-    }
-    
-    func readCurrentSteps(completion: @escaping (Double?, Error?) -> Void) {
-        let stepType = HKQuantityType.quantityType(forIdentifier: .stepCount)!
-        let calendar = Calendar.current
-        let now = Date()
-        let startOfDay = calendar.startOfDay(for: now)
-        let predicate = HKQuery.predicateForSamples(withStart: startOfDay, end: now, options: .strictStartDate)
-
-        let query = HKStatisticsQuery(quantityType: stepType, quantitySamplePredicate: predicate, options: .cumulativeSum) { _, result, error in
-            DispatchQueue.main.async {
-                guard let result = result, let sum = result.sumQuantity()?.doubleValue(for: HKUnit.count()) else {
-                    completion(nil, error)
+        if let healthStore, healthStore.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth {
+            healthStore.save(stepsSample, withCompletion: { success, error in
+                if let error {
+                    log(error.localizedDescription, caller: "HealthKitManager")
                     return
                 }
-                completion(sum, nil)
-            }
+                
+                if success {
+                    log("Steps successfully saved", type: .info, caller: "HealthKitManager")
+                } else {
+                    log("Unknown error while writing steps", caller: "HealthKitManager")
+                }
+            })
         }
-
-        healthStore?.execute(query)
     }
     
     func writeHeartRate(date: Date, dataToAdd: Double) {

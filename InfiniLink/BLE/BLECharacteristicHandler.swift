@@ -20,6 +20,7 @@ struct BLECharacteristicHandler {
     let deviceManager = DeviceManager.shared
     let weatherController = WeatherController.shared
     let persistenceController = PersistenceController.shared
+    let stepCountManager = StepCountManager.shared
     let fitnessCalculator = FitnessCalculator()
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
@@ -147,21 +148,12 @@ struct BLECharacteristicHandler {
             bleManager.stepCount = stepCount
             
             if stepCount != 0 {
-                healthKitManager.readCurrentSteps { value, error in
-                    if let error = error {
-                        // If this errors, it's most likely "protected health data is inaccessible" which occurs when the device is locked (iOS will not decrypt health data without being unlocked
-                        log("Error reading current steps: \(error.localizedDescription)", caller: "HealthKitManager")
-                        return
-                    }
-                    
-                    let currentSteps = value ?? 0.0
-                    let newSteps = Double(stepCount)
-                    
-                    let stepsToAdd = max(newSteps - currentSteps, 0)
-                    healthKitManager.writeSteps(date: Date(), stepsToAdd: stepsToAdd)
-                }
+                let stepsToday = chartManager.stepsToday()?.steps
+                let currentSteps = Int(stepsToday ?? 0)
+                let stepsToAdd = max(stepCount - currentSteps, 0)
                 
-                StepCountManager.shared.setStepCount(steps: Int32(stepCount), isArbitrary: false, for: Date())
+                healthKitManager.writeSteps(stepsToAdd)
+                stepCountManager.setStepCount(stepCount)
             }
         case bleManager.cbuuidList.blefsTransfer:
             guard let value = characteristic.value else { break }

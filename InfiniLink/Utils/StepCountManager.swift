@@ -22,8 +22,9 @@ class StepCountManager: ObservableObject {
     }
     
     // The following two functions need to use the viewContext to save because the objects they're updating were fetched on that context
-    func setStepCount(steps: Int32, isArbitrary: Bool, for date: Date) {
+    func setStepCount(_ steps: Int, for date: Date = Date(), isArbitrary: Bool = false) {
         let existing = chartManager.stepsToday()
+        let steps = Int32(steps)
         
         if let existing {
             updateStepCount(existing, with: steps, for: date, isArbitrary: isArbitrary)
