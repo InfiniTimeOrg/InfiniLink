@@ -19,6 +19,9 @@
 
 </div>
 
+> [!WARNING]
+> This branch is still in development and may not have all features implemented and/or unexpected bugs!
+
 ### Features:
 - Discover and connect to nearby InfiniTime devices
 - Set time and date immediately after connection
