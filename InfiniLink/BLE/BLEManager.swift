@@ -203,7 +203,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func onConnect(_ peripheral: CBPeripheral) {
         stopScanning()
         
-        if pairedDeviceID != peripheralToConnect.identifier.uuidString { // Only clear the update for a new device
+        if let peripheralToConnect, pairedDeviceID != peripheralToConnect.identifier.uuidString { // Only clear the update for a new device
             downloadManager.clearUpdate()
         }
         
