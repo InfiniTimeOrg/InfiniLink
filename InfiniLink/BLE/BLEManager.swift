@@ -92,7 +92,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral!
-    @Published var peripheralToConnect: CBPeripheral!
+    @Published var peripheralToConnect: CBPeripheral?
     
     @Published var weatherInformation = WeatherInformation()
     @Published var weatherForecastDays = [WeatherForecastDay]()
@@ -195,7 +195,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         isConnecting = true
         peripheralToConnect = peripheral
-        central.connect(peripheralToConnect, options: nil)
+        central.connect(peripheralToConnect!, options: nil)
         
         completion?()
     }
@@ -203,16 +203,16 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     func onConnect(_ peripheral: CBPeripheral) {
         stopScanning()
         
-        if let peripheralToConnect, pairedDeviceID != peripheralToConnect.identifier.uuidString { // Only clear the update for a new device
+        if pairedDeviceID != peripheral.identifier.uuidString { // Only clear the update for a new device
             downloadManager.clearUpdate()
         }
         
         isConnecting = false
-        pairedDeviceID = peripheralToConnect.identifier.uuidString
-        pairedDevice = deviceManager.fetchDevice(with: peripheralToConnect.identifier.uuidString)
+        pairedDeviceID = peripheral.identifier.uuidString
+        pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
         hasDisconnectedForUpdate = false
         
-        infiniTime = peripheralToConnect
+        infiniTime = peripheral
         infiniTime?.delegate = self
         infiniTime.discoverServices(nil)
         isConnectedToPinetime = true
