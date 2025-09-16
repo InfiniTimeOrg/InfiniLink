@@ -44,9 +44,12 @@
 - InfiniTime navigation service using MapKit
 - Battery, heart, and step widgets
 
-## Installation:
+## Installation
 - **Version 1.0.2** is available on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
 - **Version 1.2** is available on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
+
+## Demo
+[Video Demo](https://hc-cdn.hel1.your-objectstorage.com/s/v3/20adb8c097303e5eef4d8d537c5ffc22003e4886_screenrecording_08-22-2025_14-42-13_1.mp4)
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).
