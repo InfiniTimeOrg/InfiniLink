@@ -108,21 +108,33 @@ class MusicController {
     func updateMusicInformation() {
         let songInfo = getCurrentSongInfo()
         
-        bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00], characteristic: bleManager.musicChars.status)
+        guard
+            let statusChar = bleManager.musicChars.status,
+            let trackChar = bleManager.musicChars.track,
+            let artistChar = bleManager.musicChars.artist,
+            let positionChar = bleManager.musicChars.position,
+            let lengthChar = bleManager.musicChars.length
+        else {
+            log("Music characteristics not available, skipping update", caller: "MusicController")
+            return
+        }
         
-        bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
-        bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
+        bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00],
+                                           characteristic: statusChar)
+        bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: trackChar)
+        bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: artistChar)
         
-        guard let nowPlayingItem = musicPlayer.nowPlayingItem, let positionChar = bleManager.musicChars.position, let lengthChar = bleManager.musicChars.length else { return }
+        guard let nowPlayingItem = musicPlayer.nowPlayingItem else { return }
         
         var playbackTime = musicPlayer.currentPlaybackTime
         if playbackTime == nowPlayingItem.playbackDuration {
-            // The playback time will be the duration of the song if it just started, so set it to zero
             playbackTime = 0.0
         }
         
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: positionChar)
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: nowPlayingItem.playbackDuration), characteristic: lengthChar)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime),
+                                           characteristic: positionChar)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: nowPlayingItem.playbackDuration),
+                                           characteristic: lengthChar)
     }
     
     func pause() {
