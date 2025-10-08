@@ -53,10 +53,13 @@ struct BatterySettingsView: View {
                     Section(footer: watchNotifications ? Text("Send a notification to your devices when your watch is on low battery.") : Text("Watch notifications are currently disabled.")) {
                         Toggle("Notify on Low Battery", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
                     }
+                    Section(footer: Text("Send a notification when your watch's battery level reaches full capacity.")) {
+                        Toggle("Notify on Fully Charged", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
+                    }
                     if sendLowBatteryNotification && watchNotifications {
                         Section {
                             Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
-                            if !bleManager.ancsAuthorized {
+                            if !bleManager.ancsAuthorized && !sendLowBatteryNotificationToiPhone {
                                 // Only show this option when ANCS isn't enabled
                                 Toggle("Send to Watch", isOn: $sendLowBatteryNotificationToWatch)
                             }

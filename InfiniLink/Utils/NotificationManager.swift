@@ -91,8 +91,11 @@ extension NotificationManager {
             
             if bat == 20 || bat == 10 || bat == 5 {
                 self.sendLowBatteryNotification()
-                self.lastBatteryLevelNotified = bat
+            } else if bat == 100 {
+                let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("\(DeviceManager.shared.name) is fully charged", comment: ""))
+                self.bleWriteManager.sendNotification(notif)
             }
+            self.lastBatteryLevelNotified = bat
         }
     }
     
