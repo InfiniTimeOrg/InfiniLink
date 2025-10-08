@@ -208,6 +208,9 @@
     "Active Exercise" : {
 
     },
+    "Add 2" : {
+
+    },
     "All Exercises" : {
 
     },
@@ -1077,6 +1080,9 @@
         }
       }
     },
+    "Set to 0" : {
+
+    },
     "Settings" : {
 
     },
@@ -1173,6 +1179,9 @@
 
     },
     "Test Navigation" : {
+
+    },
+    "Test Steps" : {
 
     },
     "Test Weather" : {

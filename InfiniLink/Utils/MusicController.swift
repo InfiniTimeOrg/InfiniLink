@@ -113,7 +113,7 @@ class MusicController {
         bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: bleManager.musicChars.track)
         bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: bleManager.musicChars.artist)
         
-        guard let nowPlayingItem = musicPlayer.nowPlayingItem else { return }
+        guard let nowPlayingItem = musicPlayer.nowPlayingItem, let positionChar = bleManager.musicChars.position, let lengthChar = bleManager.musicChars.length else { return }
         
         var playbackTime = musicPlayer.currentPlaybackTime
         if playbackTime == nowPlayingItem.playbackDuration {
@@ -121,8 +121,8 @@ class MusicController {
             playbackTime = 0.0
         }
         
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: bleManager.musicChars.position)
-        bleWriteManager.writeHexToMusicApp(message: convertTime(value: nowPlayingItem.playbackDuration), characteristic: bleManager.musicChars.length)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: playbackTime), characteristic: positionChar)
+        bleWriteManager.writeHexToMusicApp(message: convertTime(value: nowPlayingItem.playbackDuration), characteristic: lengthChar)
     }
     
     func pause() {

@@ -86,6 +86,15 @@ struct DeveloperView: View {
             Section {
                 Toggle("Use Experimental DFU", isOn: $useExperimentalDFU)
             }
+            Section("Test Steps") {
+                Button("Add 2") {
+                    let todaySteps = ChartManager.shared.stepPoints().first?.steps ?? 0
+                    StepCountManager.shared.setStepCount(Int(todaySteps + 2))
+                }
+                Button("Set to 0") {
+                    StepCountManager.shared.setStepCount(0)
+                }
+            }
             Section {
                 Button(role: .destructive) {
                     StepCountManager.shared.clearCurrentDaySteps()

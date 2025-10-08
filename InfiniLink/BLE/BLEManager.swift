@@ -379,11 +379,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
             for peripheral in peripherals {
                 log("Restored peripheral: \(peripheral.identifier)", type: .info, caller: "willRestoreState")
-                if peripheral.state == .disconnected && !isConnecting {
-                    self.connect(peripheral: peripheral)
-                } else if peripheral.state == .connected {
-                    self.onConnect(peripheral)
-                }
+                self.connect(peripheral: peripheral)
             }
         }
     }

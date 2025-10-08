@@ -53,10 +53,11 @@ struct HeartView: View {
                             DetailHeaderSubItemView(
                                 title: "Avg",
                                 value: heartRate(for: {
-                                    guard heartPointValues.count > 0 else { return Double(0) }
-                                    
-                                    return Double(heartPointValues.compactMap({ Int($0) }).reduce(0, +) / heartPointValues.count)
-                                }()))
+                                    let ints = heartPointValues.compactMap { Int($0) }
+                                    guard ints.count > 0 else { return 0.0 }
+                                    return Double(ints.reduce(0, +)) / Double(ints.count)
+                                }())
+                            )
                             DetailHeaderSubItemView(
                                 title: "Max",
                                 value: heartRate(for: heartPointValues.max() ?? 0)
