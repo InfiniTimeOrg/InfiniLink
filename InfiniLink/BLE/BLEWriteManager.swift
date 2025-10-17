@@ -63,16 +63,16 @@ struct BLEWriteManager {
             log("Failed to convert \(notif.subtitle) to UTF-8 data", caller: "BLEWriteManager", target: .ble)
         }
 
-        // If either the strings couldn't be converted, don't send the notification
-        if titleData == nil || bodyData == nil {
+        // If both of the strings couldn't be converted, don't send the notification
+        if titleData == nil && bodyData == nil {
             return
         }
         
-        var notification = titleData!
-        notification.append(bodyData!)
+        var notification = titleData ?? Data()
+        notification.append(bodyData ?? Data())
         
-        if !notification.isEmpty && watchNotifications {
-            bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
+        if let notifyCharacteristic = bleManager.notifyCharacteristic, !notification.isEmpty && watchNotifications {
+            bleManager.infiniTime.writeValue(notification, for: notifyCharacteristic, type: .withResponse)
             log("Notification sent with title: \(title)", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
