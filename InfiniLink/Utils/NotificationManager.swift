@@ -31,8 +31,9 @@ class NotificationManager: ObservableObject {
     
     @AppStorage("watchNotifications") var watchNotifications = true
     @AppStorage("sendLowBatteryNotification") var sendBatteryNotifications = true
-    @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
-    @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
+    @AppStorage("sendFullBatteryNotification") var sendFullBatteryNotification = true
+    @AppStorage("sendLowBatteryNotificationToiPhone") var sendBatteryNotificationsToiPhone = true
+    @AppStorage("sendLowBatteryNotificationToWatch") var sendBatteryNotificationsToWatch = true
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
@@ -83,7 +84,7 @@ class NotificationManager: ObservableObject {
 // MARK: Battery
 extension NotificationManager {
     func checkToSendLowBatteryNotification() {
-        if watchNotifications {
+        if watchNotifications && sendBatteryNotifications {
             let bat = bleManager.batteryLevel
             
             // Don't send a notification if we've already sent one with the same battery level
@@ -92,8 +93,7 @@ extension NotificationManager {
             if bat == 20 || bat == 10 || bat == 5 {
                 self.sendLowBatteryNotification()
             } else if bat == 100 {
-                let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("\(DeviceManager.shared.name) is fully charged", comment: ""))
-                self.bleWriteManager.sendNotification(notif)
+                self.sendFullyChargedBatteryNotification()
             }
             self.lastBatteryLevelNotified = bat
         }
@@ -103,14 +103,17 @@ extension NotificationManager {
         let bat = bleManager.batteryLevel
         let notif = AppNotification(title: NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
         
-        if sendBatteryNotifications {
-            if sendLowBatteryNotificationToiPhone ? (!bleManager.ancsAuthorized && sendLowBatteryNotificationToWatch) : sendLowBatteryNotificationToWatch { // Make sure we don't send any notifications to the watch where we're already sending a notif to the host when ANCS is enabled because the notification will ping twice
-                self.bleWriteManager.sendNotification(notif)
-            }
-            if sendLowBatteryNotificationToiPhone {
-                self.sendNotificationToHost(notif)
-            }
+        if sendBatteryNotificationsToiPhone ? (!bleManager.ancsAuthorized && sendBatteryNotificationsToWatch) : sendBatteryNotificationsToWatch { // Make sure we don't send any notifications to the watch where we're already sending a notif to the host when ANCS is enabled because the notification will ping twice
+            self.bleWriteManager.sendNotification(notif)
         }
+        if sendBatteryNotificationsToiPhone {
+            self.sendNotificationToHost(notif)
+        }
+    }
+    
+    private func sendFullyChargedBatteryNotification() {
+        let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("\(DeviceManager.shared.name) is fully charged", comment: ""))
+        self.sendNotificationToHost(notif)
     }
 }
 
