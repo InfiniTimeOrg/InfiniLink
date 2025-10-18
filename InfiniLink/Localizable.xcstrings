@@ -906,10 +906,10 @@
     "Notifications" : {
 
     },
-    "Notify on Fully Charged" : {
+    "Notify on Low Battery" : {
 
     },
-    "Notify on Low Battery" : {
+    "Notify when Fully Charged" : {
 
     },
     "Now" : {

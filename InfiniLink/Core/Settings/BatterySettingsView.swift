@@ -54,7 +54,7 @@ struct BatterySettingsView: View {
                         Toggle("Notify on Low Battery", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
                     }
                     Section(footer: Text("Send a notification when your watch's battery level reaches full capacity.")) {
-                        Toggle("Notify on Fully Charged", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
+                        Toggle("Notify when Fully Charged", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
                     }
                     if sendLowBatteryNotification && watchNotifications {
                         Section {
