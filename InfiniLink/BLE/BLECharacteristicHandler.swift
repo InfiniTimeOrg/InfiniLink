@@ -146,11 +146,9 @@ struct BLECharacteristicHandler {
             let stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
             
             bleManager.stepCount = stepCount
-            
             if stepCount != 0 {
-                let stepsToday = chartManager.stepsToday()?.steps
-                let currentSteps = Int(stepsToday ?? 0)
-                let stepsToAdd = max(stepCount - currentSteps, 0)
+                let stepsToday = chartManager.stepsToday()?.steps ?? 0
+                let stepsToAdd = max(stepCount - Int(stepsToday), 0)
                 
                 healthKitManager.writeSteps(stepsToAdd)
                 stepCountManager.setStepCount(stepCount)

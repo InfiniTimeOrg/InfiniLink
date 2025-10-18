@@ -21,35 +21,26 @@ class StepCountManager: ObservableObject {
         return Int(DeviceManager.shared.settings.stepsGoal)
     }
     
-    // The following two functions need to use the viewContext to save because the objects they're updating were fetched on that context
-    func setStepCount(_ steps: Int, for date: Date = Date(), isArbitrary: Bool = false) {
+    func setStepCount(_ steps: Int, for date: Date = Date()) {
         let existing = chartManager.stepsToday()
         let steps = Int32(steps)
         
         if let existing {
-            updateStepCount(existing, with: steps, for: date, isArbitrary: isArbitrary)
+            updateStepCount(existing, with: steps, for: date)
         } else {
             chartManager.addStepDataPoint(steps: steps, time: date)
         }
     }
     
-    private func updateStepCount(_ current: StepCounts, with steps: Int32, for date: Date, isArbitrary: Bool) {
-        if isArbitrary {
-            current.steps += steps
-        }
-//        else if addInsteadOfOverwrite && steps <= current.steps {
-//            if steps <= current.previousSteps {
-//                current.steps += steps
-//            } else {
-//                current.steps += abs(current.previousSteps - steps)
-//            }
-//        }
-        else {
-            current.steps = steps
-        }
+    private func updateStepCount(_ existing: StepCounts, with steps: Int32, for date: Date = Date(), isArbitrary: Bool = false) {
+        existing.timestamp = date
+        existing.previousSteps = existing.steps
         
-        current.timestamp = date
-        current.previousSteps = steps
+        if isArbitrary {
+            existing.steps += steps
+        } else {
+            existing.steps = steps
+        }
         
         persistenceManager.save()
     }
