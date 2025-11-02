@@ -51,7 +51,7 @@ struct BatterySettingsView: View {
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 Group {
-                    Section(header: Text("Low Battery"), footer: watchNotifications ? Text("Send a notification to your devices when your watch is on low battery.") : Text("Watch notifications are currently disabled.")) {
+                    Section(footer: watchNotifications ? Text("Send a notification to your devices when your watch is on low battery.") : Text("Watch notifications are currently disabled.")) {
                         Toggle("Notify on Low Battery", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
                     }
                     if sendLowBatteryNotification || sendFullBatteryNotification && watchNotifications {
@@ -63,7 +63,7 @@ struct BatterySettingsView: View {
                             }
                         }
                     }
-                    Section(footer: Text("Send a notification when your watch's battery level reaches full capacity.")) {
+                    Section(footer: Text("Send a notification to your iPhone when your watch's battery level reaches full capacity.")) {
                         Toggle("Notify when Fully Charged", isOn: watchNotifications ? $sendFullBatteryNotification : .constant(false))
                     }
                 }

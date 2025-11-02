@@ -817,9 +817,6 @@
         }
       }
     },
-    "Low Battery" : {
-
-    },
     "M" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1044,7 +1041,7 @@
     "Send a notification to your devices when your watch is on low battery." : {
 
     },
-    "Send a notification when your watch's battery level reaches full capacity." : {
+    "Send a notification to your iPhone when your watch's battery level reaches full capacity." : {
 
     },
     "Send Notification" : {
