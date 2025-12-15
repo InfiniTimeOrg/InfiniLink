@@ -54,7 +54,7 @@ struct DeviceView: View {
                         }
                         .frame(height: 0)
                         VStack(spacing: 4) {
-                            WatchFaceView(watchface: nil, device: bleManager.pairedDevice)
+                            WatchFaceView(device: bleManager.pairedDevice)
                                 .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
                                 .clipped(antialiased: true)
                             VStack(spacing: 5) {
