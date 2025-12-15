@@ -135,8 +135,6 @@ class DeviceManager: ObservableObject {
         guard let device = fetchDevice() else { return }
         let context = persistenceController.container.viewContext
         
-        // MARK: - Crash
-        // Crashes occasionally happening when creating watch face objects from the viewContext
         context.perform {
             device.brightLevel = Int16(settings.brightLevel.rawValue)
             device.chimesOption = Int16(settings.chimesOption.rawValue)
@@ -148,18 +146,14 @@ class DeviceManager: ObservableObject {
             device.stepsGoal = Int32(settings.stepsGoal)
             device.screenTimeout = Int32(settings.screenTimeOut)
             
-            let pineTimeStyle = PineTimeStyleWatchface(context: context)
-            pineTimeStyle.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
-            pineTimeStyle.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
-            pineTimeStyle.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
-            pineTimeStyle.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
-            pineTimeStyle.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
-            device.pineTimeStyle = pineTimeStyle
+            device.pineTimeStyle?.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
+            device.pineTimeStyle?.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
+            device.pineTimeStyle?.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
+            device.pineTimeStyle?.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
+            device.pineTimeStyle?.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
             
-            let infineatWatchFace = InfineatWatchface(context: context)
-            infineatWatchFace.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
-            infineatWatchFace.showSideCover = settings.watchFaceInfineat.showSideCover
-            device.watchFaceInfineat = infineatWatchFace
+            device.watchFaceInfineat?.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
+            device.watchFaceInfineat?.showSideCover = settings.watchFaceInfineat.showSideCover
             
             do {
                 try context.save()
