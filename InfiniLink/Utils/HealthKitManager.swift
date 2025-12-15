@@ -28,50 +28,74 @@ class HealthKitManager: ObservableObject {
         
         if let healthStore, healthStore.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth {
             healthStore.save(stepsSample, withCompletion: { success, error in
-                if let error {
-                    log(error.localizedDescription, caller: "HealthKitManager")
-                    return
-                }
-                
                 if success {
                     log("Steps successfully saved", type: .info, caller: "HealthKitManager")
-                } else {
-                    log("Unknown error while writing steps", caller: "HealthKitManager")
+                } else if let error {
+                    log("Error saving steps: \(error.localizedDescription)", caller: "HealthKitManager")
                 }
             })
         }
     }
     
     func writeHeartRate(date: Date, dataToAdd: Double) {
-        let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        guard let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate) else { return }
 
-        let heartRateSample = HKQuantitySample(type: heartRateType, quantity: HKQuantity(unit: HKUnit.count().unitDivided(by: .minute()), doubleValue: dataToAdd), start: date, end: date)
+        let sample = HKQuantitySample(type: heartRateType, quantity: HKQuantity(unit: HKUnit.count().unitDivided(by: .minute()), doubleValue: dataToAdd), start: date, end: date)
 
-        if healthStore?.authorizationStatus(for: heartRateType) == .sharingAuthorized && syncToAppleHealth {
-            if let healthStore = healthStore {
-                healthStore.save(heartRateSample, withCompletion: { success, error in
-                    if let error = error {
-                        log("Error saving heart rate: \(error.localizedDescription)", caller: "HealthKitManager")
-                        return
-                    }
+        if let healthStore, healthStore.authorizationStatus(for: heartRateType) == .sharingAuthorized && syncToAppleHealth {
+            healthStore.save(sample, withCompletion: { success, error in
+                if success {
+                    log("Heart rate successfully saved", type: .info, caller: "HealthKitManager")
+                } else if let error {
+                    log("Error saving heart rate: \(error.localizedDescription)", caller: "HealthKitManager")
+                }
+            })
+        }
+    }
+    
+    func saveExercise(minutes: Double, date: Date = Date()) {
+        guard let exerciseType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime) else { return }
 
-                    if success {
-                        log("Heart rate successfully saved", type: .info, caller: "HealthKitManager")
-                    } else {
-                        log("Unknown error while writing heart rate", caller: "HealthKitManager")
-                    }
-                })
+        let exerciseQuantity = HKQuantity(unit: HKUnit.minute(), doubleValue: minutes)
+        let sample = HKQuantitySample(type: exerciseType, quantity: exerciseQuantity, start: date, end: date)
+
+        if let healthStore, healthStore.authorizationStatus(for: exerciseType) == .sharingAuthorized && syncToAppleHealth {
+            healthStore.save(sample) { success, error in
+                if success {
+                    log("Exercise successfully saved", type: .info, caller: "HealthKitManager")
+                } else if let error {
+                    log("Error saving exercise: \(error.localizedDescription)", caller: "HealthKitManager")
+                }
+            }
+        }
+    }
+    
+    func saveCalories(kcal: Double, date: Date = Date()) {
+        guard let caloriesType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
+
+        let caloriesQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: kcal)
+        let sample = HKQuantitySample(type: caloriesType, quantity: caloriesQuantity, start: date, end: date)
+
+        if let healthStore, healthStore.authorizationStatus(for: caloriesType) == .sharingAuthorized && syncToAppleHealth {
+            healthStore.save(sample) { success, error in
+                if success {
+                    log("Calories successfully saved", type: .info, caller: "HealthKitManager")
+                } else if let error {
+                    log("Error saving calories: \(error.localizedDescription)", type: .info, caller: "HealthKitManager")
+                }
             }
         }
     }
     
     func requestAuthorization() {
-        let steps = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
-        let heartRate = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate)!
+        guard let stepsType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) else { return }
+        guard let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate) else { return }
+        guard let caloriesType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
+        guard let exerciseType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime) else { return }
         
         guard let healthStore = self.healthStore else { return }
         
-        healthStore.requestAuthorization(toShare: [steps, heartRate], read: [steps]) { success, error in
+        healthStore.requestAuthorization(toShare: [stepsType, heartRateType, caloriesType, exerciseType], read: [stepsType, heartRateType]) { success, error in
             if let error = error {
                 log(error.localizedDescription, caller: "HealthKitManager")
             }

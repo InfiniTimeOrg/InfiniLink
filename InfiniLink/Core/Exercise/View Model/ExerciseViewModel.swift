@@ -116,10 +116,11 @@ class ExerciseViewModel: ObservableObject {
     func saveExercise(_ exercise: Exercise, startDate: Date, heartPoints: [HeartDataPoint]) {
         let context = persistenceController.container.viewContext
         let newExercise = UserExercise(context: context)
+        let endDate = Date()
         
         newExercise.id = UUID()
         newExercise.startDate = startDate
-        newExercise.endDate = Date()
+        newExercise.endDate = endDate
         newExercise.exerciseId = exercise.id
         newExercise.heartPoints = NSSet(array: heartPoints)
         newExercise.steps = Int32(stepsTaken)
@@ -127,6 +128,7 @@ class ExerciseViewModel: ObservableObject {
         newExercise.deviceId = BLEManager.shared.pairedDeviceID
         
         persistenceController.save()
+        healthKitManager.saveExercise(minutes: endDate.timeIntervalSince(startDate) / 60)
         userExercises = ChartManager.shared.userExercises()
     }
     

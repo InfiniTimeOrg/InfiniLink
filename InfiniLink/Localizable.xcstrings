@@ -1007,6 +1007,18 @@
     "Reminders" : {
 
     },
+    "Rename" : {
+
+    },
+    "Save 10min Exercise" : {
+
+    },
+    "Save 100 Steps" : {
+
+    },
+    "Save 300 Calories" : {
+
+    },
     "Screen Timeout" : {
       "extractionState" : "stale",
       "localizations" : {
@@ -1173,6 +1185,9 @@
 
     },
     "Test Data" : {
+
+    },
+    "Test HealthKit" : {
 
     },
     "Test Music" : {

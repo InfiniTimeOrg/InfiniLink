@@ -16,6 +16,7 @@ struct DeveloperView: View {
     
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
+    private let healthKitManager = HealthKitManager.shared
     
     var body: some View {
         List {
@@ -83,8 +84,17 @@ struct DeveloperView: View {
             } footer: {
                 Text("Send randomly generated data to the various characteristics on the watch.")
             }
-            Section {
-                Toggle("Use Experimental DFU", isOn: $useExperimentalDFU)
+            Toggle("Use Experimental DFU", isOn: $useExperimentalDFU)
+            Section("Test HealthKit") {
+                Button("Save 300 Calories") {
+                    healthKitManager.saveCalories(kcal: 300)
+                }
+                Button("Save 10min Exercise") {
+                    healthKitManager.saveExercise(minutes: 10)
+                }
+                Button("Save 100 Steps") {
+                    healthKitManager.writeSteps(100)
+                }
             }
             Section("Test Steps") {
                 Button("Add 2") {
