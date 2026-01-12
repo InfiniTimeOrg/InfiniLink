@@ -31,7 +31,8 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
 	
     func updateFirmware() {
-        guard let firmwareURL = firmwareURL else {
+        guard let infiniTime = bleManager.infiniTime else { return }
+        guard let firmwareURL else {
             log("Firmware URL is nil or invalid")
             return
         }
@@ -50,7 +51,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             initiator.logger = self // to get log info
             initiator.delegate = self // to be informed about current state and errors
             initiator.progressDelegate = self // to show progress bar
-            dfuController = initiator.start(target: bleManager.infiniTime)
+            dfuController = initiator.start(target: infiniTime)
         } catch {
             print(error)
         }

@@ -13,7 +13,7 @@ class HealthKitManager: ObservableObject {
     
     @AppStorage("syncToAppleHealth") var syncToAppleHealth = true
     
-    var healthStore: HKHealthStore?
+    @Published var healthStore: HKHealthStore?
     
     private init() {
         if HKHealthStore.isHealthDataAvailable() {
@@ -53,14 +53,10 @@ class HealthKitManager: ObservableObject {
         }
     }
     
-    func saveExercise(minutes: Double, date: Date = Date()) {
-        guard let exerciseType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime) else { return }
-
-        let exerciseQuantity = HKQuantity(unit: HKUnit.minute(), doubleValue: minutes)
-        let sample = HKQuantitySample(type: exerciseType, quantity: exerciseQuantity, start: date, end: date)
-
-        if let healthStore, healthStore.authorizationStatus(for: exerciseType) == .sharingAuthorized && syncToAppleHealth {
-            healthStore.save(sample) { success, error in
+    func saveWorkout(_ workout: HKWorkout) {
+        let workoutType = HKObjectType.workoutType()
+        if let healthStore, healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized && syncToAppleHealth {
+            healthStore.save(workout) { success, error in
                 if success {
                     log("Exercise successfully saved", type: .info, caller: "HealthKitManager")
                 } else if let error {
@@ -88,14 +84,14 @@ class HealthKitManager: ObservableObject {
     }
     
     func requestAuthorization() {
+        let workoutType = HKObjectType.workoutType()
         guard let stepsType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount) else { return }
         guard let heartRateType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.heartRate) else { return }
         guard let caloriesType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
-        guard let exerciseType = HKQuantityType.quantityType(forIdentifier: .appleExerciseTime) else { return }
         
         guard let healthStore = self.healthStore else { return }
         
-        healthStore.requestAuthorization(toShare: [stepsType, heartRateType, caloriesType, exerciseType], read: [stepsType, heartRateType]) { success, error in
+        healthStore.requestAuthorization(toShare: [stepsType, heartRateType, caloriesType, workoutType], read: [stepsType, heartRateType]) { success, error in
             if let error = error {
                 log(error.localizedDescription, caller: "HealthKitManager")
             }

@@ -89,9 +89,6 @@ struct DeveloperView: View {
                 Button("Save 300 Calories") {
                     healthKitManager.saveCalories(kcal: 300)
                 }
-                Button("Save 10min Exercise") {
-                    healthKitManager.saveExercise(minutes: 10)
-                }
                 Button("Save 100 Steps") {
                     healthKitManager.writeSteps(100)
                 }

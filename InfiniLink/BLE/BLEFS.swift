@@ -202,7 +202,7 @@ class BLEFSHandler: ObservableObject {
         let pathData = path.data(using: .utf8)!
         writeData.append(pathData)
 
-        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         readFileFS.group.wait()
         
         while !readFileFS.completed {
@@ -218,7 +218,7 @@ class BLEFSHandler: ObservableObject {
             writeData.append(contentsOf: convertUInt32ToUInt8Array(value: readFileFS.chunkOffset + readFileFS.chunkLength))
             writeData.append(contentsOf: convertUInt32ToUInt8Array(value: 490))
             
-            bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+            bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
             readFileFS.group.wait()
         }
         
@@ -248,7 +248,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(pathData)
 
         writeFileFS = write
-        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
 //        writeFileFS.group.wait()
         
         var dataQueue = data
@@ -281,7 +281,7 @@ class BLEFSHandler: ObservableObject {
             writeData.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(dataToSend.count)))
             writeData.append(contentsOf: dataToSend)
             
-            bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+            bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
 //            writeFileFS.group.wait()
             
             newOffset += dataToSend.count
@@ -322,7 +322,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(pathData)
 
         informationTransfer.append(rm)
-        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
         informationTransfer[0].group.wait()
         let isValid = informationTransfer[0].valid
@@ -355,7 +355,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(pathData)
         
         informationTransfer.append(mk)
-        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
         informationTransfer[0].group.wait()
         let isValid = informationTransfer[0].valid
@@ -382,7 +382,7 @@ class BLEFSHandler: ObservableObject {
         
         ls.dirList.parentPath = path
         informationTransfer.append(ls)
-        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
         informationTransfer[0].group.wait()
         ls = informationTransfer[0]
@@ -415,7 +415,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(newPathData)
 
         informationTransfer.append(mv)
-        bleManager.infiniTime.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
         
         informationTransfer[0].group.wait()
         let isValid = informationTransfer[0].valid

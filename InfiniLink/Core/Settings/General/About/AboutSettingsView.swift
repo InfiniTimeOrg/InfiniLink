@@ -38,7 +38,7 @@ struct AboutSettingsView: View {
                 }
                 Section {
                     Button("Update Device Time") {
-                        BLEWriteManager().setTime(characteristic: bleManager.currentTimeService)
+                        BLEWriteManager().setTime(characteristic: bleManager.currentTimeService!)
                     }
                     .disabled(bleManager.currentTimeService == nil)
                 }

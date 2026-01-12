@@ -41,12 +41,12 @@ class DFUUpdaterCustom: ObservableObject {
         let datPacketSent = Data([0x02, 0x01])
         let packetReceiptInterval = Data([0x08, 0x0A])
         
-        if let infiniTime = bleManager.infiniTime {
+        if let infiniTime = bleManager.infiniTime, let dfuCP = bleManager.dfuControlPointCharacteristic, let packetChar = bleManager.dfuPacketCharacteristic {
             /*
              MARK: Step One
             For the first step, write `0x01`, `0x04` to the control point characteristic. This will signal InfiniTime that a DFU upgrade is to be started.
              */
-            infiniTime.writeValue(start, for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+            infiniTime.writeValue(start, for: dfuCP, type: .withResponse)
             
             do {
                 let unzipDirectory = try Zip.quickUnzipFile(dfuUpdater.firmwareURL)
@@ -69,38 +69,38 @@ class DFUUpdaterCustom: ObservableObject {
                 
                 print("Data to send: \(data.map { String(format: "%02X", $0) }.joined(separator: " "))")
                 
-                infiniTime.writeValue(data, for: bleManager.dfuPacketCharacteristic, type: .withResponse)
+                infiniTime.writeValue(data, for: packetChar, type: .withResponse)
                 
                 /*
                  MARK: Step Three
                  Before running step three, wait for a response from the control point. This response should be `0x10`, `0x01`, `0x01` which indicates a successful DFU start. In step three, send `0x02`, `0x00` to the control point. This will signal InfiniTime to expect the init packet on the packet characteristic.
                  */
                 // TODO: wait for response
-                infiniTime.writeValue(initPacket, for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                infiniTime.writeValue(initPacket, for: dfuCP, type: .withResponse)
                 
                 /*
                  MARK: Step Four
                  The previous step prepared InfiniTime for this one. In this step, send the contents of the .dat init packet file to the packet characteristic.
                  */
                 let datData = try Data(contentsOf: unzipDirectory.appendingPathComponent(decodedManifest.manifest.application.dat_file))
-                infiniTime.writeValue(datData, for: bleManager.dfuPacketCharacteristic, type: .withResponse)
+                infiniTime.writeValue(datData, for: packetChar, type: .withResponse)
                 /*
                  After this, send `0x02`, `0x01` indicating that the packet has been sent.
                  */
-                infiniTime.writeValue(datPacketSent, for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                infiniTime.writeValue(datPacketSent, for: dfuCP, type: .withResponse)
                 
                 /*
                  MARK: Step Five
                  Before running this step, wait to receive `0x10`, `0x02`, `0x01` which indicates that the packet has been received. During this step, send the packet receipt interval to the control point. The firmware file will be sent in segments of 20 bytes each. The packet receipt interval indicates how many segments should be received before sending a receipt containing the amount of bytes received so that it can be confirmed to be the same as the amount sent. This is very useful for detecting packet loss. `itd` uses `0x08`, `0x0A` which indicates 10 segments.
                  */
                 // TODO: wait for response
-                infiniTime.writeValue(packetReceiptInterval, for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                infiniTime.writeValue(packetReceiptInterval, for: dfuCP, type: .withResponse)
                 
                 /*
                  MARK: Step Six
                  Write `0x03` to the control point, indicating that the firmware will be sent next on the packet characteristic.
                  */
-                infiniTime.writeValue(Data([0x03]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                infiniTime.writeValue(Data([0x03]), for: dfuCP, type: .withResponse)
                 
                 /*
                  MARK: Step Seven
@@ -112,7 +112,7 @@ class DFUUpdaterCustom: ObservableObject {
                 let firmwareSegments = firmwareData.split(separator: Data([0x08, 0x0A]))
                 
                 for (_, segment) in firmwareSegments.enumerated() {
-                    infiniTime.writeValue(segment, for: bleManager.dfuPacketCharacteristic, type: .withResponse)
+                    infiniTime.writeValue(segment, for: packetChar, type: .withResponse)
                     // TODO: wait for response
                 }
                 
@@ -120,14 +120,14 @@ class DFUUpdaterCustom: ObservableObject {
                  MARK: Step Eight
                  Before running this step, wait to receive `0x10`, `0x03`, `0x01` which indicates a successful receipt of the firmware image. In this step, write `0x04` to the control point to signal InfiniTime to validate the image it has received.
                  */
-                infiniTime.writeValue(Data([0x04]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                infiniTime.writeValue(Data([0x04]), for: dfuCP, type: .withResponse)
                 
                 /*
                  MARK: Step Nine
                  Before running this step, wait to receive `0x10`, `0x04`, `0x01` which indicates that the image has been validated. In this step, send `0x05` to the control point as a command with no response. This signals InfiniTime to activate the new firmware and reboot.
                  */
                 // TODO: wait for response
-                infiniTime.writeValue(Data([0x05]), for: bleManager.dfuControlPointCharacteristic, type: .withResponse)
+                infiniTime.writeValue(Data([0x05]), for: dfuCP, type: .withResponse)
             } catch {
                 log("\(error.localizedDescription)", caller: "DFUUpdaterCustom")
             }

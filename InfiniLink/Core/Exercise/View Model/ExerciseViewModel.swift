@@ -8,11 +8,13 @@
 import Foundation
 import SwiftUI
 import CoreData
+import HealthKit
 
 class ExerciseViewModel: ObservableObject {
     static let shared = ExerciseViewModel()
     
     let healthKitManager = HealthKitManager.shared
+    let deviceManager = DeviceManager.shared
     let persistenceController = PersistenceController.shared
     let userDefaults = UserDefaults(suiteName: "group.com.alexemry.Infini-iOS")
     
@@ -117,18 +119,37 @@ class ExerciseViewModel: ObservableObject {
         let context = persistenceController.container.viewContext
         let newExercise = UserExercise(context: context)
         let endDate = Date()
+        let calories: Double = Double(FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace))
+        let exerciseId = UUID()
         
-        newExercise.id = UUID()
+        newExercise.id = exerciseId
         newExercise.startDate = startDate
         newExercise.endDate = endDate
         newExercise.exerciseId = exercise.id
         newExercise.heartPoints = NSSet(array: heartPoints)
         newExercise.steps = Int32(stepsTaken)
-        newExercise.caloriesBurned = Int32(FitnessCalculator().calculateCaloriesBurned(steps: stepsTaken, pace: exercise.pace))
+        newExercise.caloriesBurned = Int32(calories)
         newExercise.deviceId = BLEManager.shared.pairedDeviceID
         
+        let duration = endDate.timeIntervalSince(startDate)
+        let hkCalories = HKQuantity(
+            unit: .kilocalorie(),
+            doubleValue: calories
+        )
+        let device = HKDevice(name: deviceManager.name, manufacturer: deviceManager.manufacturer, model: deviceManager.modelNumber, hardwareVersion: deviceManager.hardwareRevision, firmwareVersion: deviceManager.firmware, softwareVersion: deviceManager.softwareRevision, localIdentifier: exerciseId.uuidString, udiDeviceIdentifier: nil)
+        let workout = HKWorkout(
+            activityType: .running, // TODO:
+            start: startDate,
+            end: endDate,
+            duration: duration,
+            totalEnergyBurned: hkCalories,
+            totalDistance: nil,
+            device: device,
+            metadata: nil
+        )
+        
         persistenceController.save()
-        healthKitManager.saveExercise(minutes: endDate.timeIntervalSince(startDate) / 60)
+        healthKitManager.saveWorkout(workout)
         userExercises = ChartManager.shared.userExercises()
     }
     

@@ -19,10 +19,10 @@ struct BLEWriteManager {
         guard bleManager.infiniTime != nil else { return }
         guard let writeData = message.data(using: .ascii) else {
             // There's no title/artst, so update it with a blank string
-            bleManager.infiniTime.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
+            bleManager.infiniTime?.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
             return
         }
-        bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: characteristic, type: .withResponse)
         log("Wrote to music app", type: .info, caller: "BLEWriteManager", target: .ble)
     }
     
@@ -30,7 +30,7 @@ struct BLEWriteManager {
         guard bleManager.infiniTime != nil else { return }
         let writeData = Data(bytes: message, count: message.capacity)
         
-        bleManager.infiniTime.writeValue(writeData, for: characteristic, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: characteristic, type: .withResponse)
         log("Wrote to music app", type: .info, caller: "BLEWriteManager", target: .ble)
     }
     
@@ -38,7 +38,7 @@ struct BLEWriteManager {
         guard bleManager.infiniTime != nil else { return }
         
         do {
-            try bleManager.infiniTime.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
+            try bleManager.infiniTime?.writeValue(SetTime().currentTime().hexData, for: characteristic, type: .withResponse)
             log("Set watch time", type: .info, caller: "BLEWriteManager", target: .ble)
         } catch {
             bleManager.setTimeError = true
@@ -72,13 +72,13 @@ struct BLEWriteManager {
         notification.append(bodyData ?? Data())
         
         if let notifyCharacteristic = bleManager.notifyCharacteristic, !notification.isEmpty && watchNotifications {
-            bleManager.infiniTime.writeValue(notification, for: notifyCharacteristic, type: .withResponse)
+            bleManager.infiniTime?.writeValue(notification, for: notifyCharacteristic, type: .withResponse)
             log("Notification sent with title: \(title)", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
     func sendLostNotification() {
-        guard bleManager.infiniTime != nil else { return }
+        guard let infiniTime = bleManager.infiniTime, let notify = bleManager.notifyCharacteristic else { return }
         
         let hexPrefix = Data([0x03, 0x01, 0x00]) // Hexadecimal representation of "\x03\x01\x00"
         let nameData = "InfiniLink".data(using: .ascii)!
@@ -86,13 +86,13 @@ struct BLEWriteManager {
         let notification = hexPrefix + nameData
         
         if notification.count > 0 && watchNotifications {
-            bleManager.infiniTime.writeValue(notification, for: bleManager.notifyCharacteristic, type: .withResponse)
+            infiniTime.writeValue(notification, for: notify, type: .withResponse)
             log("Sent lost notification", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
     func writeCurrentWeatherData(currentTemperature: Double, minimumTemperature: Double, maximumTemperature: Double, location: String, icon: UInt8)  {
-        guard bleManager.infiniTime != nil else { return }
+        guard let infiniTime = bleManager.infiniTime, let weatherChar = bleManager.weatherCharacteristic else { return }
         
         var bytes: [UInt8] = [0, 0] // Message Type and Message Version
         bytes.append(contentsOf: timeSince1970())
@@ -111,7 +111,7 @@ struct BLEWriteManager {
             
             let writeData = Data(bytes: bytes as [UInt8], count: 49)
             if bleManager.weatherCharacteristic != nil {
-                bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
+                infiniTime.writeValue(writeData, for: weatherChar, type: .withResponse)
             }
             return
         }
@@ -130,8 +130,8 @@ struct BLEWriteManager {
         bytes.append(icon)
         
         let writeData = Data(bytes: bytes as [UInt8], count: 49)
-        if bleManager.weatherCharacteristic != nil && bleManager.infiniTime != nil {
-            bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
+        if let weatherChar = bleManager.weatherCharacteristic, let infiniTime = bleManager.infiniTime {
+            infiniTime.writeValue(writeData, for: weatherChar, type: .withResponse)
             log("Set watch current weather", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
@@ -162,15 +162,15 @@ struct BLEWriteManager {
         
         let writeData = Data(bytes: bytes as [UInt8], count: 36)
         
-        if bleManager.weatherCharacteristic != nil && bleManager.infiniTime != nil {
-            bleManager.infiniTime.writeValue(writeData, for: bleManager.weatherCharacteristic, type: .withResponse)
+        if let weatherChar = bleManager.weatherCharacteristic, let infiniTime = bleManager.infiniTime {
+            infiniTime.writeValue(writeData, for: weatherChar, type: .withResponse)
             log("Set watch forecast", type: .info, caller: "BLEWriteManager", target: .ble)
         }
     }
     
     func writeNavigationUpdate(icon: String, instructions: String, distance: String, progress: UInt8) {
-        guard bleManager.infiniTime != nil else { return }
-        guard bleManager.navigationFlagsCharacteristic != nil && bleManager.navigationNarrativeCharacteristic != nil && bleManager.navigationDistanceCharacteristic != nil && bleManager.navigationProgressCharacteristic != nil && bleManager.infiniTime != nil else { return }
+        guard let infiniTime = bleManager.infiniTime else { return }
+        guard let _ = bleManager.navigationFlagsCharacteristic, let nar = bleManager.navigationNarrativeCharacteristic, let dis = bleManager.navigationDistanceCharacteristic, let prog = bleManager.navigationProgressCharacteristic, let flags = bleManager.navigationFlagsCharacteristic else { return }
         
         guard let icon = icon.data(using: .ascii) else { return }
         // The narrative may contain non-InfiniTime-readable characters, so transliterate if enabled
@@ -180,10 +180,10 @@ struct BLEWriteManager {
         var progress = Data()
         progress.append(progress)
         
-        bleManager.infiniTime.writeValue(narrative, for: bleManager.navigationNarrativeCharacteristic, type: .withResponse)
-        bleManager.infiniTime.writeValue(distance, for: bleManager.navigationDistanceCharacteristic, type: .withResponse)
-        bleManager.infiniTime.writeValue(progress, for: bleManager.navigationProgressCharacteristic, type: .withResponse)
-        bleManager.infiniTime.writeValue(icon, for: bleManager.navigationFlagsCharacteristic, type: .withResponse)
+        infiniTime.writeValue(narrative, for: nar, type: .withResponse)
+        infiniTime.writeValue(distance, for: dis, type: .withResponse)
+        infiniTime.writeValue(progress, for: prog, type: .withResponse)
+        infiniTime.writeValue(icon, for: flags, type: .withResponse)
         
         log("Wrote navigation update", type: .info, caller: "BLEWriteManager", target: .ble)
     }

@@ -10,38 +10,36 @@ import CoreBluetooth
 import SwiftUI
 import CoreLocation
 
-class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeripheralDelegate {
+class BLEManager: NSObject, ObservableObject {
     static let shared = BLEManager()
     
-    // BLECharacteristicHandler and DeviceManager both create an instance of BLEManager, so they need to lazy to avoid a crash
-    lazy var characteristicHandler = BLECharacteristicHandler()
-    lazy var deviceManager = DeviceManager.shared
+    lazy var deviceManager = DeviceManager.shared // This references BLEManager so it needs to be lazy to avoid a crash
     
     let locationManager = LocationManager.shared
     let downloadManager = DownloadManager.shared
     let persistenceController =  PersistenceController.shared
     
-    var central: CBCentralManager!
-    var blefsTransfer: CBCharacteristic!
-    var currentTimeService: CBCharacteristic!
-    var notifyCharacteristic: CBCharacteristic!
-    var weatherCharacteristic: CBCharacteristic!
+    var manager: CBCentralManager?
+    var blefsTransfer: CBCharacteristic?
+    var currentTimeService: CBCharacteristic?
+    var notifyCharacteristic: CBCharacteristic?
+    var weatherCharacteristic: CBCharacteristic?
     
-    var dfuControlPointCharacteristic: CBCharacteristic!
-    var dfuPacketCharacteristic: CBCharacteristic!
+    var dfuControlPointCharacteristic: CBCharacteristic?
+    var dfuPacketCharacteristic: CBCharacteristic?
     
-    var navigationFlagsCharacteristic: CBCharacteristic!
-    var navigationNarrativeCharacteristic: CBCharacteristic!
-    var navigationDistanceCharacteristic: CBCharacteristic!
-    var navigationProgressCharacteristic: CBCharacteristic!
+    var navigationFlagsCharacteristic: CBCharacteristic?
+    var navigationNarrativeCharacteristic: CBCharacteristic?
+    var navigationDistanceCharacteristic: CBCharacteristic?
+    var navigationProgressCharacteristic: CBCharacteristic?
     
     struct MusicCharacteristics {
-        var control: CBCharacteristic!
-        var track: CBCharacteristic!
-        var artist: CBCharacteristic!
-        var status: CBCharacteristic!
-        var position: CBCharacteristic!
-        var length: CBCharacteristic!
+        var control: CBCharacteristic?
+        var track: CBCharacteristic?
+        var artist: CBCharacteristic?
+        var status: CBCharacteristic?
+        var position: CBCharacteristic?
+        var length: CBCharacteristic?
     }
     struct CBUUIDList {
         let hrm = CBUUID(string: "2A37")
@@ -81,8 +79,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     let cbuuidList = CBUUIDList()
     var musicChars = MusicCharacteristics()
     
-    // Keep this variable initally true because otherwise it could quickly flash the "Bluetooth Disabled" message
-    @Published var isBluetoothOn = true
+    @Published var isBluetoothOn = true // Keep this variable initally true because otherwise it could quickly flash the "Bluetooth Disabled" message
     @Published var isScanning = false
     @Published var isConnecting = false
     @Published var setTimeError = false
@@ -91,18 +88,14 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @Published var hasDisconnectedForUpdate = false
     
     @Published var newPeripherals: [CBPeripheral] = []
-    @Published var infiniTime: CBPeripheral!
+    @Published var infiniTime: CBPeripheral?
     @Published var peripheralToConnect: CBPeripheral?
     
-    @Published var weatherInformation = WeatherInformation()
-    @Published var weatherForecastDays = [WeatherForecastDay]()
-    @Published var loadingWeather = true
     @Published var hasLoadedBatteryLevel = false
     
     @Published var heartRate: Double = 0
     @Published var batteryLevel: Double = 0
     @Published var stepCount: Int = 0
-    
     @Published var rssi: Int?
     
     @Published var error: String = ""
@@ -114,16 +107,10 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     
     var hasLoadedCharacteristics: Bool {
-        // Use currentTimeService because it's present in all firmware versions
-        return currentTimeService != nil && isConnectedToPinetime
-    }
-    var isHeartRateBeingRead: Bool {
-        return heartRate != 0
+        return currentTimeService != nil && isConnectedToPinetime // Use currentTimeService because it's present in all firmware versions
     }
     var isDeviceInRecoveryMode: Bool {
-        let first = deviceManager.firmware.components(separatedBy: ".").first
-        
-        return first == "0"
+        return deviceManager.firmware.components(separatedBy: ".").first == "0"
     }
     var isBusy: Bool {
         return isConnecting || isScanning
@@ -151,31 +138,30 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     override init() {
         super.init()
-        self.central = CBCentralManager(delegate: self,
-                                        queue: nil,
-                                        options: [
-                                            CBPeripheralManagerOptionRestoreIdentifierKey: "com.alex-emry.Infini-iOS.central"
-                                        ])
+        manager = CBCentralManager(delegate: self,
+                                   queue: nil,
+                                   options: [
+                                    CBPeripheralManagerOptionRestoreIdentifierKey: "com.alex-emry.Infini-iOS.central"
+                                   ])
     }
     
     func scanForNewDevices() {
         guard !isScanning else { return }
         
-        central.scanForPeripherals(withServices: nil, options: nil)
+        manager?.scanForPeripherals(withServices: nil, options: nil)
         newPeripherals = []
         isScanning = true
     }
     
     func startScanning() {
-        guard central.state == .poweredOn else { return }
+        guard manager?.state == .poweredOn else { return }
         
         if let pairedDeviceID = pairedDeviceID,
            let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice { // The user has a paired device and they're not trying to pair a new one
-            let peripherals = central.retrievePeripherals(withIdentifiers: [uuid])
-            log("\(peripherals)", type: .info, caller: "BLEManager - startScanning")
+            let peripherals = manager?.retrievePeripherals(withIdentifiers: [uuid])
+            log("\(peripherals ?? [])", type: .info, caller: "BLEManager - startScanning")
             
-            if let peripheral = peripherals.first, !isConnectedToPinetime {
-                // FIXME: should we add a check to confirm the watch is already not connected to the system (state != .connected), or let it pair this way?
+            if let peripheral = peripherals?.first, !isConnectedToPinetime {
                 connect(peripheral: peripheral)
             } else {
                 scanForNewDevices()
@@ -186,7 +172,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     }
     
     func stopScanning() {
-        central.stopScan()
+        manager?.stopScan()
         isScanning = false
     }
     
@@ -195,7 +181,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         isConnecting = true
         peripheralToConnect = peripheral
-        central.connect(peripheralToConnect!, options: nil)
+        manager?.connect(peripheralToConnect!, options: nil)
         
         completion?()
     }
@@ -214,7 +200,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         infiniTime = peripheral
         infiniTime?.delegate = self
-        infiniTime.discoverServices(nil)
+        infiniTime?.discoverServices(nil)
         isConnectedToPinetime = true
         peripheralToConnect = nil // We're done using this, so set it to nil
         
@@ -250,7 +236,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
     
     func disconnect() {
         if let infiniTime = infiniTime {
-            self.central.cancelPeripheralConnection(infiniTime)
+            self.manager?.cancelPeripheralConnection(infiniTime)
             
             // Update the rest of the app to reflect the disconnected state
             self.infiniTime = nil
@@ -272,7 +258,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         self.disconnect()
         self.startScanning()
     }
-    
+}
+
+extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
         if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
             connect(peripheral: peripheral) {}
@@ -383,7 +371,9 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
             }
         }
     }
-    
+}
+
+extension BLEManager: CBPeripheralDelegate {
     func peripheral(_ peripheral: CBPeripheral, didDiscoverServices error: Error?) {
         guard let services = peripheral.services else {
             if let error {
@@ -404,7 +394,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         
         for characteristic in characteristics {
             deviceManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
-            characteristicHandler.handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
+            BLECharacteristicHandler().handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
         }
     }
     
@@ -415,7 +405,7 @@ class BLEManager: NSObject, ObservableObject, CBCentralManagerDelegate, CBPeriph
         }
         
         deviceManager.updateInfo(characteristic: characteristic)
-        characteristicHandler.handleUpdates(characteristic: characteristic, peripheral: peripheral)
+        BLECharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
