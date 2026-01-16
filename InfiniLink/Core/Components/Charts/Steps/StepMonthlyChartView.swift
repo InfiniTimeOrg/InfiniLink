@@ -23,7 +23,9 @@ struct StepCalendarView: View {
     
     var weekdays: [String] {
         let calendar = Calendar.current
-        return calendar.veryShortStandaloneWeekdaySymbols
+        let symbols = calendar.veryShortStandaloneWeekdaySymbols
+        let first = calendar.firstWeekday - 1
+        return Array(symbols[first...] + symbols[..<first])
     }
     var background: AnyShapeStyle {
         return colorScheme == .dark ? AnyShapeStyle(Material.regular) : AnyShapeStyle(Color(.systemBackground))
@@ -124,7 +126,9 @@ struct StepCalendarView: View {
         
         // Calculate leading empty days
         let firstWeekday = calendar.component(.weekday, from: dates.first?.date ?? Date()) - calendar.firstWeekday
-        let leadingEmpty = (firstWeekday + 7) % 7
+        let leadingEmpty = calendar.ordinality(of: .weekday,
+                                               in: .weekOfMonth,
+                                               for: dates.first!.date)! - 1
         
         for _ in 0..<leadingEmpty {
             dates.insert(CalendarDay(day: -1, date: Date()), at: 0)
