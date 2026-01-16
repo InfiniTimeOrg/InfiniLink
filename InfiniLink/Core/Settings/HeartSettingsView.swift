@@ -60,12 +60,10 @@ struct HeartSettingsView: View {
             Section(footer: Text("Filter inconsistent data from your heart rate measurements.")) {
                 Toggle("Filter Values", isOn: $filterHeartRateData)
             }
-            Section(footer: Text("Export your heart rate data to a CSV file.")) {
-                Button {
-                    exportCSV(generateCSV(from: Array(heartPoints)))
-                } label: {
-                    Text("Export All Data")
-                }
+            Button {
+                exportCSV(generateCSV(from: Array(heartPoints)))
+            } label: {
+                Text("Export All Data")
             }
         }
         .navigationTitle("Settings")
