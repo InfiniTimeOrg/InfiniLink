@@ -13,6 +13,8 @@ struct BatterySettingsView: View {
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendBatteryNotificationsToiPhone = true
     @AppStorage("sendLowBatteryNotificationToWatch") var sendBatteryNotificationsToWatch = true
     @AppStorage("watchNotifications") var watchNotifications = true
+    @AppStorage("sendCustomBatteryNotification") var sendCustomBatteryNotification = false
+    @AppStorage("customBatteryNotificationPercentage") var customBatteryNotificationPercentage = 50
     
     @ObservedObject var bleManager = BLEManager.shared
     
@@ -55,16 +57,26 @@ struct BatterySettingsView: View {
                         Toggle("Notify on Low Battery", isOn: watchNotifications ? $sendLowBatteryNotification : .constant(false))
                     }
                     if sendLowBatteryNotification || sendFullBatteryNotification && watchNotifications {
-                        Section {
+                        Section(footer: (bleManager.ancsAuthorized && sendBatteryNotificationsToiPhone) ? AnyView(Text("You can't disable watch notifications while iPhone notifications are on and ANCS is enabled.")) : AnyView(EmptyView())) {
                             Toggle("Send to iPhone", isOn: $sendBatteryNotificationsToiPhone)
-                            if !bleManager.ancsAuthorized && !sendBatteryNotificationsToiPhone {
-                                // Only show this option when ANCS isn't enabled
-                                Toggle("Send to Watch", isOn: $sendBatteryNotificationsToWatch)
-                            }
+                            // Notifications will send to watch when iPhone notifications are on and ANCS is enabled
+                            Toggle("Send to Watch", isOn: bleManager.ancsAuthorized ? .constant(true) : $sendBatteryNotificationsToWatch)
+                                .disabled(bleManager.ancsAuthorized && sendBatteryNotificationsToiPhone)
                         }
                     }
                     Section(footer: Text("Send a notification to your iPhone when your watch's battery level reaches full capacity.")) {
                         Toggle("Notify when Fully Charged", isOn: watchNotifications ? $sendFullBatteryNotification : .constant(false))
+                    }
+                    Section(footer: sendCustomBatteryNotification ? AnyView(Text("You will be notified when your watch's battery level reaches \(customBatteryNotificationPercentage)%.")) : AnyView(EmptyView())) {
+                        Toggle("Notify at Custom Percentage", isOn: $sendCustomBatteryNotification)
+                        if sendCustomBatteryNotification {
+                            HStack {
+                                Text("Custom Percentage")
+                                Spacer()
+                                Text("\(customBatteryNotificationPercentage)%").opacity(0.6)
+                                Stepper("Custom Percentage", value: $customBatteryNotificationPercentage, in: 0...100, step: 5).labelsHidden()
+                            }
+                        }
                     }
                 }
                 .disabled(!watchNotifications)

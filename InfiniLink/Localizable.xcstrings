@@ -278,6 +278,9 @@
     "Battery" : {
 
     },
+    "Battery Alert" : {
+
+    },
     "Battery Low" : {
 
     },
@@ -360,6 +363,9 @@
 
     },
     "Custom Location" : {
+
+    },
+    "Custom Percentage" : {
 
     },
     "Daily Goal" : {
@@ -485,16 +491,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Exporter toutes les données"
-          }
-        }
-      }
-    },
-    "Export your heart rate data to a CSV file." : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exportez vos données de fréquence cardiaque vers un fichier CSV."
           }
         }
       }
@@ -906,6 +902,9 @@
     "Notifications" : {
 
     },
+    "Notify at Custom Percentage" : {
+
+    },
     "Notify on Low Battery" : {
 
     },
@@ -1005,9 +1004,6 @@
       }
     },
     "Reminders" : {
-
-    },
-    "Rename" : {
 
     },
     "Save 100 Steps" : {
@@ -1446,6 +1442,9 @@
           }
         }
       }
+    },
+    "You will be notified when your watch's battery level reaches %lld%%." : {
+
     },
     "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
       "localizations" : {
