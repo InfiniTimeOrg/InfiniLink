@@ -17,6 +17,7 @@ struct FindLostDeviceView: View {
     @ObservedObject private var locationManager = LocationManager.shared
     
     private let bleWriteManager = BLEWriteManager()
+    private let rssiTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     @State private var region = MKCoordinateRegion(
         center: CLLocationCoordinate2D(latitude: 0, longitude: 0),
@@ -169,6 +170,9 @@ struct FindLostDeviceView: View {
                 }
             }
             .navigationViewStyle(.stack)
+        }
+        .onReceive(rssiTimer) { _ in
+            bleManager.infiniTime?.readRSSI()
         }
     }
 }

@@ -25,6 +25,7 @@ struct BLECharacteristicHandler {
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
+    @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
@@ -134,6 +135,8 @@ struct BLECharacteristicHandler {
             guard let value = characteristic.value else { break }
             let batData = [UInt8](value)
             
+            log("Received battery value", type: .info, caller: "BLECharacteristicHandler")
+            
             bleManager.batteryLevel = Double(batData[0])
             bleManager.hasLoadedBatteryLevel = true
             
@@ -162,7 +165,10 @@ struct BLECharacteristicHandler {
             let currentTime = Date().timeIntervalSince1970
             let timeDifference = currentTime - lastTimeCheckCompleted
             
-            peripheral.readRSSI()
+            // We only need to read the rssi here (in the background) for the pause on walkway feature
+            if MusicController.shared.musicPlaying == 1 && pauseOnWalkaway {
+                peripheral.readRSSI()
+            }
             
             // Only update every five seconds
             if timeDifference > 5 {

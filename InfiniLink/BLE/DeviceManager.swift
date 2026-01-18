@@ -178,11 +178,23 @@ class DeviceManager: ObservableObject {
         let objectID = device.objectID
         let context = persistenceController.container.viewContext
         
-        context.perform {
+        context.perform { [self] in
             do {
                 if let deviceToDelete = context.object(with: objectID) as? Device {
                     context.delete(deviceToDelete)
                     try context.save()
+                    
+                    self.watches = try context.fetch(Device.fetchRequest())
+                    if watches.count > 0 {
+                        let nextWatch = watches.first!
+                        bleManager.pairedDeviceID = nextWatch.uuid // Switch to the user's next watch
+                        bleManager.pairedDevice = nextWatch
+                    } else {
+                        bleManager.pairedDeviceID = nil // The user doesn't have another watch, this will show the welcome view
+                        // This only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
+                        // and we have no way to remove it
+                    }
+                    bleManager.startScanning()
                     log("Successfully removed device", caller: "DeviceManager")
                 }
             } catch {
@@ -192,11 +204,9 @@ class DeviceManager: ObservableObject {
     }
     
     func fetchAllDevices() {
-        let fetchRequest: NSFetchRequest<Device> = Device.fetchRequest()
-        
         DispatchQueue.main.async {
             do {
-                self.watches = try self.persistenceController.container.viewContext.fetch(fetchRequest)
+                self.watches = try self.persistenceController.container.viewContext.fetch(Device.fetchRequest())
             } catch {
                 log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
             }

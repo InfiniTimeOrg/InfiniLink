@@ -97,6 +97,7 @@ struct MyDevicesView: View {
                             .alert("Are you sure you want to unpair from \(selectedWatch.name ?? "InfiniTime")?", isPresented: $showUnpairConfirmation) {
                                 Button(role: .destructive) {
                                     bleManager.unpair(device: selectedWatch)
+                                    dismiss()
                                 } label: {
                                     Text("Unpair")
                                 }

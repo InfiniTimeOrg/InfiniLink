@@ -200,7 +200,7 @@ class ChartManager: ObservableObject {
         context.perform {
             let fetchRequest: NSFetchRequest<NSFetchRequestResult> = DisconnectMapPoint.fetchRequest()
             fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-            fetchRequest.fetchOffset = 3
+            fetchRequest.fetchOffset = all ? 0 : 3
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
             do {

@@ -17,7 +17,7 @@ class MusicController {
     private let bleWriteManager = BLEWriteManager()
     private let volumeNotch: Float = (1 / 15)
     private var musicPlayer = MPMusicPlayerController.systemMusicPlayer
-    private var musicPlaying = 0
+    var musicPlaying = 0
     
     struct SongInfo {
         var trackName: String = ""

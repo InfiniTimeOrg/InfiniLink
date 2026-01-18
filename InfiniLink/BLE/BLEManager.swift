@@ -179,9 +179,9 @@ class BLEManager: NSObject, ObservableObject {
     func connect(peripheral: CBPeripheral, completion: (() -> Void)? = nil) {
         guard isBluetoothOn else { return }
         
-        isConnecting = true
-        peripheralToConnect = peripheral
-        manager?.connect(peripheralToConnect!, options: nil)
+        self.isConnecting = true
+        self.peripheralToConnect = peripheral
+        self.manager?.connect(peripheralToConnect!, options: nil)
         
         completion?()
     }
@@ -212,26 +212,8 @@ class BLEManager: NSObject, ObservableObject {
         disconnect()
         // Delete the device object we have said for this watch
         deviceManager.removeDevice(device ?? pairedDevice!)
-        // FIXME: Better way to do this? We have to give core data some time to update
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
-            // Update the list of user watches
-            deviceManager.fetchAllDevices()
-            
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) { [self] in
-                if let first = deviceManager.watches.first, deviceManager.watches.count >= 1 {
-                    // Switch to the user's next watch
-                    pairedDeviceID = first.uuid
-                } else {
-                    // The user doesn't have another watch, this will show the welcome view
-                    pairedDeviceID = nil
-                    // This only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
-                    // and we have no way to remove it
-                    startScanning()
-                }
-                
-                log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
-            }
-        }
+        
+        log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
     func disconnect() {
@@ -253,7 +235,8 @@ class BLEManager: NSObject, ObservableObject {
     func switchDevice(device: Device) {
         // We just switched devices, update the UI
         self.pairedDeviceID = device.uuid
-        self.pairedDevice = deviceManager.fetchDevice()
+        self.pairedDevice = device
+        self.deviceManager.setSettings()
         
         self.disconnect()
         self.startScanning()

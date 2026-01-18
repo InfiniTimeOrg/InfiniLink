@@ -32,7 +32,7 @@ struct WatchFaceView: View {
                     .aspectRatio(contentMode: .fit)
                 ZStack {
                     ZStack {
-                        switch watchface == nil ? deviceManager.settings.watchFace : watchface {
+                        switch watchface ?? deviceManager.settings.watchFace {
                         case 0:
                             Digital(geometry: .constant(geometry), date: $date, device: device)
                         case 1:

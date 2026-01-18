@@ -124,8 +124,6 @@ struct StepCalendarView: View {
             CalendarDay(day: calendar.component(.day, from: $0), date: $0)
         }
         
-        // Calculate leading empty days
-        let firstWeekday = calendar.component(.weekday, from: dates.first?.date ?? Date()) - calendar.firstWeekday
         let leadingEmpty = calendar.ordinality(of: .weekday,
                                                in: .weekOfMonth,
                                                for: dates.first!.date)! - 1
