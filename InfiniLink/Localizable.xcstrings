@@ -1410,6 +1410,9 @@
     "You can pin an exercise by long pressing the exercise you want to pin." : {
 
     },
+    "You can't disable watch notifications while iPhone notifications are on and ANCS is enabled." : {
+
+    },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {
 
     },

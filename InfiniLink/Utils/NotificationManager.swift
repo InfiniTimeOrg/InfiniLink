@@ -126,6 +126,8 @@ extension NotificationManager {
 // MARK: Health
 extension NotificationManager {
     func sendHeartRangeNotification(_ bpm: Int) {
+        guard heartRangeReminder else { return } // Disable this notification if the user has turned them off
+        
         let currentTime = Date().timeIntervalSince1970
         
         // Don't localize these notifications because InfiniTime doesn't (most) characters from other languages
