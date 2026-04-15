@@ -169,8 +169,8 @@ struct NotificationsSetupView: View {
     @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("heartRangeReminder") var heartRangeReminder = false
-    @AppStorage("sendLowBatteryNotification") var sendLowBatteryNotification = true
-    
+    @AppStorage("allowBatteryNotifications") var allowBatteryNotifications = true
+
     var body: some View {
         Form {
             VStack(alignment: .center, spacing: 8) {
@@ -194,8 +194,8 @@ struct NotificationsSetupView: View {
             Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                 Toggle("Steps", isOn: $remindOnStepGoalCompletion)
             }
-            Section(header: Text("Battery"), footer: Text("Get notified when your watch's battery is low.")) {
-                Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
+            Section(header: Text("Battery"), footer: Text("Send notifications to your devices about your watch's battery status.")) {
+                Toggle("Battery Notifications", isOn: $allowBatteryNotifications)
             }
             if !bleManager.ancsAuthorized {
                 Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
