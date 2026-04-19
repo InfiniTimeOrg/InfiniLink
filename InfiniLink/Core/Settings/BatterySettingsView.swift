@@ -83,19 +83,20 @@ struct BatterySettingsView: View {
                             }
                         }
                     } else {
-                        Section {
+                        NavigationLink {
+                            NotificationsSettingsView()
+                        } label: {
                             HStack(spacing: 14) {
                                 Image(systemName: "bell.slash.fill")
-                                    .font(.system(size: 35).weight(.medium))
+                                    .font(.system(size: 32).weight(.medium))
                                     .foregroundStyle(.red)
                                 VStack(alignment: .leading, spacing: 3) {
-                                    Text("Battery Notifications Disabled")
+                                    Text("Watch Notifications Disabled")
                                         .foregroundStyle(Color.primary)
                                         .fontWeight(.bold)
-                                    Text("To customize Battery Notifications, you need to enable them in the Notifications Settings.")
+                                    Text("To customize battery notifications, you need to allow watch notifications in notification settings.")
                                         .foregroundStyle(.gray)
                                 }
-                                
                             }
                         }
                     }
@@ -107,5 +108,8 @@ struct BatterySettingsView: View {
 }
 
 #Preview {
-    BatterySettingsView()
+    NavigationStack {
+        BatterySettingsView()
+            .navigationBarTitleDisplayMode(.inline)
+    }
 }
