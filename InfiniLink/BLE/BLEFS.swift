@@ -138,7 +138,7 @@ class BLEFSHandler: ObservableObject {
                     }
                     
                     let writeFileFS = writeFile(data: fileData, path: resource.path, offset: 0)
-                    writeFileFS.group.notify(queue: .main) {
+                    writeFileFS?.group.notify(queue: .main) {
                         if resources.resources.count < fileIndex {
                             self.dfuUpdater.dfuState = "Starting file \(fileIndex + 1)"
                         }
@@ -225,7 +225,9 @@ class BLEFSHandler: ObservableObject {
         return readFileFS
     }
 
-    func writeFile(data: Data, path: String, offset: UInt32) -> WriteFileFS {
+    func writeFile(data: Data, path: String, offset: UInt32) -> WriteFileFS? {
+        guard let transferChar = BLEManager.shared.blefsTransfer else { return nil }
+        
         log("Write file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var write = WriteFileFS()
@@ -281,7 +283,7 @@ class BLEFSHandler: ObservableObject {
             writeData.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(dataToSend.count)))
             writeData.append(contentsOf: dataToSend)
             
-            bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+            bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
 //            writeFileFS.group.wait()
             
             newOffset += dataToSend.count
@@ -305,6 +307,8 @@ class BLEFSHandler: ObservableObject {
     }
 
     func deleteFile(path: String) -> Bool {
+        guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
+        
         log("Delete file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var rm = InformationFS()
@@ -322,7 +326,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(pathData)
 
         informationTransfer.append(rm)
-        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
         
         informationTransfer[0].group.wait()
         let isValid = informationTransfer[0].valid
@@ -331,6 +335,8 @@ class BLEFSHandler: ObservableObject {
     }
     
     func makeDir(path: String) -> Bool {
+        guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
+        
         log("Make directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var mk = InformationFS()
@@ -355,7 +361,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(pathData)
         
         informationTransfer.append(mk)
-        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
         
         informationTransfer[0].group.wait()
         let isValid = informationTransfer[0].valid
@@ -363,7 +369,9 @@ class BLEFSHandler: ObservableObject {
         return isValid
     }
 
-    func listDir(path: String) -> DirList {
+    func listDir(path: String) -> DirList? {
+        guard let transferChar = BLEManager.shared.blefsTransfer else { return nil }
+        
         log("List directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var ls = InformationFS()
@@ -382,7 +390,7 @@ class BLEFSHandler: ObservableObject {
         
         ls.dirList.parentPath = path
         informationTransfer.append(ls)
-        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
         
         informationTransfer[0].group.wait()
         ls = informationTransfer[0]
@@ -391,6 +399,8 @@ class BLEFSHandler: ObservableObject {
     }
 
     func moveFileOrDir(oldPath: String, newPath: String) -> Bool {
+        guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
+        
         log("Move file/directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         var mv = InformationFS()
@@ -415,7 +425,7 @@ class BLEFSHandler: ObservableObject {
         writeData.append(newPathData)
 
         informationTransfer.append(mv)
-        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
+        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
         
         informationTransfer[0].group.wait()
         let isValid = informationTransfer[0].valid
