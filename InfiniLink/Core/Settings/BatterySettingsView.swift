@@ -59,8 +59,17 @@ struct BatterySettingsView: View {
                             Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
                             if sendLowBatteryNotification {
                                 Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
-                                Toggle("Send to Watch", isOn: bleManager.ancsAuthorized ? .constant(true) : $sendLowBatteryNotificationToWatch) // Notifications will already send to watch when iPhone notifications are on and ANCS is enabled
-                                    .disabled(bleManager.ancsAuthorized && sendLowBatteryNotificationToiPhone)
+                                Toggle(isOn: bleManager.ancsAuthorized ? .constant(true) : $sendLowBatteryNotificationToWatch) { // Notifications will already send to watch when iPhone notifications are on and ANCS is enabled
+                                    VStack(alignment: .leading) {
+                                        Text("Send to Watch")
+                                        if bleManager.ancsAuthorized {
+                                            Text("You can't disable watch notifications while iPhone notifications are on and ANCS is enabled.")
+                                                .font(.subheadline)
+                                                .foregroundStyle(.secondary)
+                                        }
+                                    }
+                                }
+                                .disabled(bleManager.ancsAuthorized && sendLowBatteryNotificationToiPhone)
                             }
                         }
                         Section(footer: Text("Send a notification to your iPhone when your watch's battery level reaches full capacity.")) {
