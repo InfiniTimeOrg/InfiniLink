@@ -15,7 +15,7 @@ struct BatterySettingsView: View {
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
     @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
     @AppStorage("sendCustomBatteryNotification") var sendCustomBatteryNotification = false
-    @AppStorage("customBatteryNotificationPercentage") var customBatteryNotificationPercentage = 50
+    @AppStorage("customBatteryNotificationPercentage") var customBatteryNotificationPercentage = 50.0
     
     @ObservedObject var bleManager = BLEManager.shared
     
@@ -66,16 +66,13 @@ struct BatterySettingsView: View {
                         Section(footer: Text("Send a notification to your iPhone when your watch's battery level reaches full capacity.")) {
                             Toggle("Notify when Fully Charged", isOn: $sendFullBatteryNotification)
                         }
-                        Section(footer: sendCustomBatteryNotification ? AnyView(Text("You will be notified when your watch's battery level reaches \(customBatteryNotificationPercentage)%.")) : AnyView(EmptyView())) {
+                        Section(footer: sendCustomBatteryNotification ? AnyView(Text("You will be notified when your watch's battery level reaches \(Int(customBatteryNotificationPercentage))%.")) : AnyView(EmptyView())) {
                             Toggle("Notify at Custom Percentage", isOn: $sendCustomBatteryNotification)
                             if sendCustomBatteryNotification {
                                 VStack {
                                     HStack {
                                             Text("0%").font(.caption).foregroundStyle(.secondary)
-                                            Slider(value: Binding(
-                                                get: { Double(customBatteryNotificationPercentage) },
-                                                set: { customBatteryNotificationPercentage = Int($0) }
-                                            ), in: 0...99, step: 5)
+                                            Slider(value: $customBatteryNotificationPercentage, in: 0...95, step: 5)
                                             Text("95%").font(.caption).foregroundStyle(.secondary)
                                         }
                                 }
