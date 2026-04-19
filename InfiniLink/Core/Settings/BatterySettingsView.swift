@@ -9,7 +9,6 @@ import SwiftUI
 
 struct BatterySettingsView: View {
     @AppStorage("watchNotifications") var watchNotifications = true
-    @AppStorage("allowBatteryNotifications") var allowBatteryNotifications = true
     @AppStorage("sendLowBatteryNotification") var sendLowBatteryNotification = true
     @AppStorage("sendFullBatteryNotification") var sendFullBatteryNotification = true
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
@@ -54,7 +53,7 @@ struct BatterySettingsView: View {
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 Group {
-                    if allowBatteryNotifications {
+                    if watchNotifications {
                         Section(footer: Text(bleManager.ancsAuthorized ? "You can't disable watch notifications while iPhone notifications are on and ANCS is enabled." : "Send a notification to your devices when your watch is low on battery.")) {
                             Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
                             if sendLowBatteryNotification {
@@ -80,10 +79,10 @@ struct BatterySettingsView: View {
                             if sendCustomBatteryNotification {
                                 VStack {
                                     HStack {
-                                            Text("0%").font(.caption).foregroundStyle(.secondary)
-                                            Slider(value: $customBatteryNotificationPercentage, in: 0...95, step: 5)
-                                            Text("95%").font(.caption).foregroundStyle(.secondary)
-                                        }
+                                        Text("0%").font(.caption).foregroundStyle(.secondary)
+                                        Slider(value: $customBatteryNotificationPercentage, in: 0...95, step: 5)
+                                        Text("95%").font(.caption).foregroundStyle(.secondary)
+                                    }
                                 }
                             }
                         }
@@ -107,8 +106,8 @@ struct BatterySettingsView: View {
                     }
                 }
             }
+            .navigationTitle("Battery")
         }
-        .navigationTitle("Battery")
     }
 }
 

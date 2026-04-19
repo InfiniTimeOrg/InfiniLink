@@ -30,7 +30,6 @@ class NotificationManager: ObservableObject {
     @Published var canSendNotifications = false
     
     @AppStorage("watchNotifications") var watchNotifications = true
-    @AppStorage("allowBatteryNotifications") var allowBatteryNotifications = true
     @AppStorage("sendLowBatteryNotification") var sendLowBatteryNotification = true
     @AppStorage("sendFullBatteryNotification") var sendFullBatteryNotification = true
     @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
@@ -89,7 +88,6 @@ class NotificationManager: ObservableObject {
 // MARK: Battery
 extension NotificationManager {
     func checkToSendLowBatteryNotification() {
-        guard allowBatteryNotifications else { return } // Disable this notification if the user has turned them off
         if watchNotifications && sendLowBatteryNotification {
             let bat = bleManager.batteryLevel
             

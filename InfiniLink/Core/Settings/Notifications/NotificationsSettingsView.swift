@@ -12,7 +12,6 @@ struct NotificationsSettingsView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var notificationManager = NotificationManager.shared
     
-    @AppStorage("allowBatteryNotifications") var allowBatteryNotifications = true
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("waterReminderAmount") var waterReminderAmount = 7
     @AppStorage("standUpReminder") var standUpReminder = true
@@ -83,10 +82,6 @@ struct NotificationsSettingsView: View {
                                 .labelsHidden()
                         }
                     }
-                }
-                Section(header: Text("Battery"), footer: Text("Send notifications to your devices about your watch's battery status.")) {
-                    Toggle("Battery Notifications", isOn: $allowBatteryNotifications)
-                        .disabled(!watchNotifications)
                 }
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
