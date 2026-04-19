@@ -76,7 +76,7 @@ struct BatterySettingsView: View {
                                                 get: { Double(customBatteryNotificationPercentage) },
                                                 set: { customBatteryNotificationPercentage = Int($0) }
                                             ), in: 0...99, step: 5)
-                                            Text("99%").font(.caption).foregroundStyle(.secondary)
+                                            Text("95%").font(.caption).foregroundStyle(.secondary)
                                         }
                                 }
                             }
