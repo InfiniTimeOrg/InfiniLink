@@ -60,12 +60,12 @@ class FileSystemViewModel: ObservableObject {
         }
         
         DispatchQueue.global(qos: .default).async {
-            let dirLS = BLEFSHandler.shared.listDir(path: self.directory)
-            if dirLS.valid {
+            let lsDir = BLEFSHandler.shared.listDir(path: self.directory)
+            if let dir = lsDir, dir.valid {
                 self.clearList()
                 
                 DispatchQueue.main.async {
-                    self.commandHistory.append(contentsOf: dirLS.ls.compactMap({ $0.pathNames }))
+                    self.commandHistory.append(contentsOf: dir.ls.compactMap({ $0.pathNames }))
                     self.loadingFs = false
                 }
             } else {

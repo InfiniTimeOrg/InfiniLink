@@ -20,10 +20,6 @@ struct InfiniLink: App {
     init() {
         HealthKitManager.shared.requestAuthorization()
         
-        NotificationCenter.default.addObserver(forName: .EKEventStoreChanged, object: nil, queue: .main) { _ in
-            RemindersManager.shared.fetchAllItems()
-        }
-        
         downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
     }
     

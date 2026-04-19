@@ -162,11 +162,8 @@ struct NotificationsSetupView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var notificationManager = NotificationManager.shared
-    @ObservedObject var remindersManager = RemindersManager.shared
     
     @AppStorage("waterReminder") var waterReminder = true
-    @AppStorage("enableReminders") var enableReminders = true
-    @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("heartRangeReminder") var heartRangeReminder = false
     @AppStorage("allowBatteryNotifications") var allowBatteryNotifications = true
@@ -197,21 +194,8 @@ struct NotificationsSetupView: View {
             Section(header: Text("Battery"), footer: Text("Send notifications to your devices about your watch's battery status.")) {
                 Toggle("Battery Notifications", isOn: $allowBatteryNotifications)
             }
-            if !bleManager.ancsAuthorized {
-                Section(header: Text("Other"), footer: Text("Receive notifications on your watch when reminders and calendar events are due.")) {
-                    Toggle("Reminder Notifications", isOn: $enableReminders)
-                    Toggle("Calendar Notifications", isOn: $enableCalendarNotifications)
-                }
-            }
             Button {
                 notificationManager.requestNotificationAuthorization()
-                
-                if enableReminders {
-                    remindersManager.requestReminderAccess()
-                }
-                if enableCalendarNotifications {
-                    remindersManager.requestCalendarAccess()
-                }
                 
                 personalizationController.showSetupSheet = false
             } label: {

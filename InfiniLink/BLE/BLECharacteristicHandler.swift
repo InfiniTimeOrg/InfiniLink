@@ -16,7 +16,6 @@ struct BLECharacteristicHandler {
     let healthKitManager = HealthKitManager.shared
     let chartManager = ChartManager.shared
     let notificationManager = NotificationManager.shared
-    let remindersManager = RemindersManager.shared
     let deviceManager = DeviceManager.shared
     let weatherController = WeatherController.shared
     let persistenceController = PersistenceController.shared
@@ -172,7 +171,6 @@ struct BLECharacteristicHandler {
             
             // Only update every five seconds
             if timeDifference > 5 {
-                remindersManager.checkForDueItems()
                 notificationManager.checkAndNotifyForWaterReminders()
                 
                 weatherController.checkForUpdate()
