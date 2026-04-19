@@ -214,9 +214,6 @@
     "All Exercises" : {
 
     },
-    "Allow Event Access" : {
-
-    },
     "Allow Music Control" : {
 
     },
@@ -300,12 +297,6 @@
 
     },
     "Brightness Level" : {
-
-    },
-    "Calendar and reminder notifications are not sent when ANCS is enabled." : {
-
-    },
-    "Calendar Notifications" : {
 
     },
     "Calender" : {
@@ -921,6 +912,7 @@
 
     },
     "Other" : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -977,9 +969,6 @@
         }
       }
     },
-    "Receive notifications on your watch when reminders and calendar events are due." : {
-
-    },
     "Refresh" : {
 
     },
@@ -994,6 +983,7 @@
       }
     },
     "Reminder Notifications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -1239,6 +1229,7 @@
 
     },
     "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {

@@ -19,8 +19,6 @@ struct NotificationsSettingsView: View {
     @AppStorage("minHeartRange") var minHeartRange = 40
     @AppStorage("maxHeartRange") var maxHeartRange = 200
     @AppStorage("watchNotifications") var watchNotifications = true
-    @AppStorage("enableReminders") var enableReminders = true
-    @AppStorage("enableCalendarNotifications") var enableCalendarNotifications = true
     @AppStorage("transliterationEnabled") var transliterationEnabled = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     
@@ -88,22 +86,10 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $remindOnStepGoalCompletion)
                 }
-                Section(header: Text("Other"), footer: bleManager.ancsAuthorized ? Text("Calendar and reminder notifications are not sent when ANCS is enabled.") : Text("Receive notifications on your watch when reminders and calendar events are due.")) {
-                    Toggle("Reminder Notifications", isOn: bleManager.ancsAuthorized ? .constant(false) : $enableReminders)
-                    Toggle("Calendar Notifications", isOn: bleManager.ancsAuthorized ? .constant(false) : $enableCalendarNotifications)
-                }
-                .disabled(bleManager.ancsAuthorized)
                 Section {
                     Toggle("Transliterate to ASCII", isOn: $transliterationEnabled)
                 } footer: {
                     Text("Convert accented characters to plain text so notifications display correctly.")
-                }
-                if authDenied(reminderAuthStatus) || authDenied(eventAuthStatus) {
-                    Section(footer: Text("To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events.")) {
-                        Button("Allow Event Access") {
-                            UIApplication.shared.open(URL(string: UIApplication.openSettingsURLString)!)
-                        }
-                    }
                 }
                 Section {
                     Button("Send Notification") {
@@ -125,10 +111,6 @@ struct NotificationsSettingsView: View {
         .navigationTitle("Notifications")
         .onChange(of: waterReminderAmount) { _ in
             notificationManager.setWaterRemindersPerDay()
-            
-            // For when view foregrounds
-            reminderAuthStatus = EKEventStore.authorizationStatus(for: .reminder)
-            eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
         }
     }
 }

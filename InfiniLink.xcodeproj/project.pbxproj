@@ -58,7 +58,6 @@
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
 		E078ECFB2D4E6D9800560364 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E078ECFA2D4E6D9800560364 /* Zip */; };
-		E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */; };
 		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
 		E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */; };
 		E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1F2CBF051A005C1325 /* LocationManager.swift */; };
@@ -194,7 +193,6 @@
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
-		E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemindersManager.swift; sourceTree = "<group>"; };
 		E07D8F172CBE2071005C1325 /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
 		E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		E07D8F1F2CBF051A005C1325 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -518,7 +516,6 @@
 				E0599A032CB4C58800D64E0B /* LV_IMG_Convert.swift */,
 				E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */,
 				E0B85D5F2CB6D41700D85122 /* FitnessCalculator.swift */,
-				E07D8F152CBE1F6F005C1325 /* RemindersManager.swift */,
 				E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */,
 				E07D8F1F2CBF051A005C1325 /* LocationManager.swift */,
 				E07D8F252CC0C0D2005C1325 /* SleepController.swift */,
@@ -852,7 +849,6 @@
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
-				E07D8F162CBE1F6F005C1325 /* RemindersManager.swift in Sources */,
 				E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */,
 				E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */,
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
