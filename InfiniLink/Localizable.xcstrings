@@ -19,6 +19,12 @@
     },
     " is due" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ist fällig"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -84,10 +90,23 @@
 
     },
     "%@ needs to be connected to update its software." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ muss verbunden sein um die Software zu aktualisieren."
+          }
+        }
+      }
     },
     "%@ was last seen %@." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ wurde zuletzt gesehen %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -140,7 +159,14 @@
       }
     },
     "%@'s battery must be charged to at least 10%% to update its software." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@’s Batterie muss mindestens um 10%% aufgeladen sein, um die Software zu aktualisieren."
+          }
+        }
+      }
     },
     "%@%%" : {
 
@@ -152,7 +178,14 @@
 
     },
     "%lld more device%@ found" : {
+      "comment" : "In this sentence, the plural version would be “weitere Geräte”, while the singular version would be “weiteres Gerät” which requires two different suffix-letters here.",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld weitere%2$@ Gerät%2$@ gefunden"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -162,7 +195,14 @@
       }
     },
     "%lld steps" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Schritte"
+          }
+        }
+      }
     },
     "%lld time%@" : {
       "localizations" : {
@@ -197,43 +237,130 @@
 
     },
     "1 device discovered" : {
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1 Gerät gefunden"
+          }
+        }
+      }
+    },
+    "100%" : {
 
     },
     "95%" : {
 
     },
     "A new section will be added to your device overview." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ein neuer Bereich wird zu deiner Geräteübersicht hinzugefügt."
+          }
+        }
+      }
     },
     "About" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über"
+          }
+        }
+      }
     },
     "About InfiniLink" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Über InfiniLink"
+          }
+        }
+      }
     },
     "Active Exercise" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktives Workout"
+          }
+        }
+      }
     },
     "Add 2" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Füge 2 hinzu"
+          }
+        }
+      }
     },
     "All Exercises" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Workouts"
+          }
+        }
+      }
     },
     "Allow Music Control" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaube Musik-Kontrolle"
+          }
+        }
+      }
     },
     "Allow Volume Control" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaube Lautstärke-Kontrolle"
+          }
+        }
+      }
     },
     "Allow your watch to control the currently playing music from Apple Music." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erlaube deiner Uhr, die aktuell wiedergegebene Musik von Apple Music zu kontrollieren."
+          }
+        }
+      }
     },
     "Always Allow Access" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Immer Zugriff erlauben"
+          }
+        }
+      }
     },
     "Always allowed location access is required to fetch weather data while the app is not active." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dauerhafter Standortzugriff ist benötigt, um Wetter-Daten abzurufen wenn die App nicht aktiv ist."
+          }
+        }
+      }
     },
     "ANCS Enabled" : {
 
@@ -286,6 +413,14 @@
     },
     "Battery Low" : {
 
+    },
+    "Battery Notifications" : {
+      "comment" : "A toggle that enables or disables notifications when your watch's battery is low.",
+      "isCommentAutoGenerated" : true
+    },
+    "Battery Notifications Disabled" : {
+      "comment" : "A message displayed when battery notifications are disabled.",
+      "isCommentAutoGenerated" : true
     },
     "battery remaining" : {
 
@@ -1364,7 +1499,8 @@
       }
     },
     "You will be notified when your watch's battery level reaches %lld%%." : {
-
+      "comment" : "A section that allows the user to set a custom percentage for battery notifications.",
+      "isCommentAutoGenerated" : true
     },
     "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
       "localizations" : {
