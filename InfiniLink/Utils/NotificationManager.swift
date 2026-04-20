@@ -30,10 +30,10 @@ class NotificationManager: ObservableObject {
     @Published var canSendNotifications = false
     
     @AppStorage("watchNotifications") var watchNotifications = true
-    @AppStorage("sendLowBatteryNotification") var sendBatteryNotifications = true
+    @AppStorage("sendLowBatteryNotification") var sendLowBatteryNotification = true
     @AppStorage("sendFullBatteryNotification") var sendFullBatteryNotification = true
-    @AppStorage("sendLowBatteryNotificationToiPhone") var sendBatteryNotificationsToiPhone = true
-    @AppStorage("sendLowBatteryNotificationToWatch") var sendBatteryNotificationsToWatch = true
+    @AppStorage("sendLowBatteryNotificationToiPhone") var sendLowBatteryNotificationToiPhone = true
+    @AppStorage("sendLowBatteryNotificationToWatch") var sendLowBatteryNotificationToWatch = true
     @AppStorage("sendCustomBatteryNotification") var sendCustomBatteryNotification = false
     @AppStorage("customBatteryNotificationPercentage") var customBatteryNotificationPercentage = 50
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
@@ -67,7 +67,7 @@ class NotificationManager: ObservableObject {
     }
     
     func sendNotificationToHost(_ notif: AppNotification) {
-        guard sendBatteryNotificationsToiPhone else { return }
+        guard sendLowBatteryNotificationToiPhone else { return }
         
         let content = UNMutableNotificationContent()
         content.title = notif.title
@@ -88,7 +88,7 @@ class NotificationManager: ObservableObject {
 // MARK: Battery
 extension NotificationManager {
     func checkToSendLowBatteryNotification() {
-        if watchNotifications && sendBatteryNotifications {
+        if watchNotifications && sendLowBatteryNotification {
             let bat = bleManager.batteryLevel
             
             // Don't send a notification if we've already sent one with the same battery level
@@ -106,9 +106,9 @@ extension NotificationManager {
     }
     
     private func sendLowBatteryNotification(custom: Bool) {
-        let sendNotifToWatch = sendBatteryNotificationsToiPhone ? (!bleManager.ancsAuthorized && sendBatteryNotificationsToWatch) : sendBatteryNotificationsToWatch
+        let sendNotifToWatch = sendLowBatteryNotificationToiPhone ? (!bleManager.ancsAuthorized && sendLowBatteryNotificationToWatch) : sendLowBatteryNotificationToWatch
         
-        if sendNotifToWatch || sendBatteryNotificationsToiPhone {
+        if sendNotifToWatch || sendLowBatteryNotificationToiPhone {
             let bat = bleManager.batteryLevel
             let notif = AppNotification(title: custom ? NSLocalizedString("Battery Alert", comment: "") : NSLocalizedString("Battery Low", comment: ""), subtitle: "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: ""))
             

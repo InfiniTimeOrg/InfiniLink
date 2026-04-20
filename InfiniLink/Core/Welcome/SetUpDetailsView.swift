@@ -166,8 +166,7 @@ struct NotificationsSetupView: View {
     @AppStorage("waterReminder") var waterReminder = true
     @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("heartRangeReminder") var heartRangeReminder = false
-    @AppStorage("sendLowBatteryNotification") var sendLowBatteryNotification = true
-    
+
     var body: some View {
         Form {
             VStack(alignment: .center, spacing: 8) {
@@ -190,9 +189,6 @@ struct NotificationsSetupView: View {
             }
             Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                 Toggle("Steps", isOn: $remindOnStepGoalCompletion)
-            }
-            Section(header: Text("Battery"), footer: Text("Get notified when your watch's battery is low.")) {
-                Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
             }
             Button {
                 notificationManager.requestNotificationAuthorization()
