@@ -11,8 +11,6 @@
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
-		264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */; };
-		264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */; };
 		E00A862A2DEB8383001533E1 /* FindLostDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */; };
 		E00A86312DEBF3C1001533E1 /* RSSI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A86302DEBF3C1001533E1 /* RSSI.swift */; };
 		E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */; };
@@ -143,11 +141,7 @@
 		264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkTests.swift; sourceTree = "<group>"; };
-		264BFE5A26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkUITests.swift; sourceTree = "<group>"; };
-		264BFE6526BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLostDeviceView.swift; sourceTree = "<group>"; };
 		E00A86302DEBF3C1001533E1 /* RSSI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSI.swift; sourceTree = "<group>"; };
 		E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModeView.swift; sourceTree = "<group>"; };
@@ -284,8 +278,6 @@
 			isa = PBXGroup;
 			children = (
 				264BFE4026BC51CE0050A223 /* InfiniLink */,
-				264BFE5726BC51CF0050A223 /* InfiniLinkTests */,
-				264BFE6226BC51CF0050A223 /* InfiniLinkUITests */,
 				E0B85D702CB9905400D85122 /* Frameworks */,
 				264BFE3F26BC51CE0050A223 /* Products */,
 			);
@@ -334,24 +326,6 @@
 				264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
-			sourceTree = "<group>";
-		};
-		264BFE5726BC51CF0050A223 /* InfiniLinkTests */ = {
-			isa = PBXGroup;
-			children = (
-				264BFE5826BC51CF0050A223 /* InfiniLinkTests.swift */,
-				264BFE5A26BC51CF0050A223 /* Info.plist */,
-			);
-			path = InfiniLinkTests;
-			sourceTree = "<group>";
-		};
-		264BFE6226BC51CF0050A223 /* InfiniLinkUITests */ = {
-			isa = PBXGroup;
-			children = (
-				264BFE6326BC51CF0050A223 /* InfiniLinkUITests.swift */,
-				264BFE6526BC51CF0050A223 /* Info.plist */,
-			);
-			path = InfiniLinkUITests;
 			sourceTree = "<group>";
 		};
 		E02C62102CD05D8E00C4D19B /* Update */ = {
@@ -892,7 +866,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				264BFE5926BC51CF0050A223 /* InfiniLinkTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -900,7 +873,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				264BFE6426BC51CF0050A223 /* InfiniLinkUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
