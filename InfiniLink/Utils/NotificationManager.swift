@@ -87,25 +87,28 @@ class NotificationManager: ObservableObject {
 
 // MARK: Battery
 extension NotificationManager {
-    func checkToSendLowBatteryNotification() {
-        if watchNotifications && sendLowBatteryNotification {
+    func checkToSendBatteryNotifications() {
+        if watchNotifications {
             let bat = bleManager.batteryLevel
             
             // Don't send a notification if we've already sent one with the same battery level
             guard lastBatteryLevelNotified == -1 || lastBatteryLevelNotified != bat else { return }
             
-            if sendCustomBatteryNotification && bat == Double(customBatteryNotificationPercentage) {
-                self.sendLowBatteryNotification(custom: true)
-            } else if bat == 20 || bat == 10 || bat == 5 {
-                self.sendLowBatteryNotification(custom: false)
-            } else if bat == 100 {
+            if bat == 100 {
                 self.sendFullyChargedBatteryNotification()
             }
+            
+            if sendCustomBatteryNotification && bat == Double(customBatteryNotificationPercentage) {
+                self.sendBatteryNotification(custom: true)
+            } else if sendLowBatteryNotification && (bat == 20 || bat == 10 || bat == 5) {
+                self.sendBatteryNotification(custom: false)
+            }
+            
             self.lastBatteryLevelNotified = bat
         }
     }
     
-    private func sendLowBatteryNotification(custom: Bool) {
+    private func sendBatteryNotification(custom: Bool) {
         let sendNotifToWatch = sendLowBatteryNotificationToiPhone ? (!bleManager.ancsAuthorized && sendLowBatteryNotificationToWatch) : sendLowBatteryNotificationToWatch
         
         if sendNotifToWatch || sendLowBatteryNotificationToiPhone {
