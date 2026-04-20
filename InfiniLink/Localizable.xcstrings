@@ -193,7 +193,13 @@
     "0 " : {
 
     },
+    "0%" : {
+
+    },
     "1 device discovered" : {
+
+    },
+    "95%" : {
 
     },
     "A new section will be added to your device overview." : {
@@ -354,9 +360,6 @@
 
     },
     "Custom Location" : {
-
-    },
-    "Custom Percentage" : {
 
     },
     "Daily Goal" : {
@@ -572,20 +575,6 @@
     },
     "Get notified when you reach your daily fitness goals." : {
 
-    },
-    "Get notified when your watch's battery is low." : {
-
-    },
-    "GitHub Actions body here..." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Le corps des actions GitHub ici..."
-          }
-        }
-      }
     },
     "Goal Reached" : {
 
@@ -804,17 +793,6 @@
         }
       }
     },
-    "M" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "M"
-          }
-        }
-      }
-    },
     "Male" : {
 
     },
@@ -911,17 +889,6 @@
     "Optional" : {
 
     },
-    "Other" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Autres"
-          }
-        }
-      }
-    },
     "Other Versions" : {
 
     },
@@ -982,17 +949,6 @@
         }
       }
     },
-    "Reminder Notifications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Notifications de rappel"
-          }
-        }
-      }
-    },
     "Reminders" : {
 
     },
@@ -1002,38 +958,16 @@
     "Save 300 Calories" : {
 
     },
-    "Screen Timeout" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Délai d'attente de l'écran"
-          }
-        }
-      }
-    },
     "Search by name or date" : {
 
     },
     "Search for an address..." : {
 
     },
-    "Seconds" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Secondes"
-          }
-        }
-      }
-    },
     "Send" : {
 
     },
-    "Send a notification to your devices when your watch is on low battery." : {
+    "Send a notification to your devices when your watch is low on battery." : {
 
     },
     "Send a notification to your iPhone when your watch's battery level reaches full capacity." : {
@@ -1228,16 +1162,8 @@
     "To connect to your watch, you'll need to enable Bluetooth." : {
 
     },
-    "To receive reminder notifications, you'll need to give InfiniLink read access to reminders and events." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pour recevoir des notifications de rappel, vous devez donner à InfiniLink un accès en lecture aux rappels et aux événements."
-          }
-        }
-      }
+    "To customize battery notifications, you need to allow watch notifications in notification settings." : {
+
     },
     "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
 
@@ -1366,7 +1292,7 @@
     "WARNING: These actions are permanent and cannot be undone!" : {
 
     },
-    "Watch notifications are currently disabled." : {
+    "Watch Notifications Disabled" : {
 
     },
     "Water Reminder" : {
