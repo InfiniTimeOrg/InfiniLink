@@ -94,12 +94,12 @@ struct SoftwareUpdateView: View {
             let updateDisabled = !bleManager.isDeviceInRecoveryMode &&
                                  (!bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10)
             Section {
-                if !dfuUpdater.local {
+                if !dfuUpdater.local && !bleManager.isDeviceInRecoveryMode {
                     Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
                 }
                 Button {
                     dfuUpdater.percentComplete = 0
-                    if downloadManager.externalResources {
+                    if downloadManager.externalResources && !bleManager.isDeviceInRecoveryMode {
                         downloadManager.startTransfer = true
                         downloadManager.updateStarted = true
                         downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
