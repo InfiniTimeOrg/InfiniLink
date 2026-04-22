@@ -34,13 +34,34 @@
       }
     },
     " Recovery" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wiederherstellung"
+          }
+        }
+      }
     },
     " step goal streak!" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrittziel-Serie!"
+          }
+        }
+      }
     },
     " You can customize this in notification settings." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst dies in den Benachrichtigungseinstellungen anpassen."
+          }
+        }
+      }
     },
     "[BATT]" : {
 
@@ -75,6 +96,12 @@
     },
     "%@ is %@" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ ist %2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -87,14 +114,21 @@
 
     },
     "%@ must be connected to ping it." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ muss verbunden sein um es anzupingen."
+          }
+        }
+      }
     },
     "%@ needs to be connected to update its software." : {
       "localizations" : {
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@ muss verbunden sein um die Software zu aktualisieren."
+            "value" : "%@ muss verbunden sein, um die Software zu aktualisieren."
           }
         }
       }
@@ -163,7 +197,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "%@’s Batterie muss mindestens um 10%% aufgeladen sein, um die Software zu aktualisieren."
+            "value" : "Die Batterie von %@ muss zu mindestens 10%% aufgeladen sein, um die Software zu aktualisieren."
           }
         }
       }
@@ -205,7 +239,14 @@
       }
     },
     "%lld time%@" : {
+      "comment" : "suffix issue",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Mal%2$@"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -225,7 +266,14 @@
       }
     },
     "%lld-day" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld-Tage"
+          }
+        }
+      }
     },
     "%lld%%" : {
 
@@ -246,9 +294,6 @@
         }
       }
     },
-    "100%" : {
-
-    },
     "95%" : {
 
     },
@@ -257,7 +302,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ein neuer Bereich wird zu deiner Geräteübersicht hinzugefügt."
+            "value" : "Ein neuer Abschnitt wird deiner Geräteübersicht hinzugefügt."
           }
         }
       }
@@ -287,7 +332,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Aktives Workout"
+            "value" : "Aktive Übung"
           }
         }
       }
@@ -307,7 +352,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Alle Workouts"
+            "value" : "Alle Übungen"
           }
         }
       }
@@ -317,7 +362,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erlaube Musik-Kontrolle"
+            "value" : "Musiksteuerung zulassen"
           }
         }
       }
@@ -327,7 +372,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erlaube Lautstärke-Kontrolle"
+            "value" : "Lautstärkeregelung zulassen"
           }
         }
       }
@@ -337,7 +382,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Erlaube deiner Uhr, die aktuell wiedergegebene Musik von Apple Music zu kontrollieren."
+            "value" : "Erlaube deiner Uhr, die aktuell in Apple Music wiedergegebene Musik zu steuern."
           }
         }
       }
@@ -347,7 +392,7 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Immer Zugriff erlauben"
+            "value" : "Zugriff immer zulassen"
           }
         }
       }
@@ -357,43 +402,105 @@
         "de" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Dauerhafter Standortzugriff ist benötigt, um Wetter-Daten abzurufen wenn die App nicht aktiv ist."
+            "value" : "Um Wetterdaten abzurufen, während die App nicht aktiv ist, ist ein ständiger Zugriff auf den Standort erforderlich."
           }
         }
       }
     },
     "ANCS Enabled" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ANCS aktiviert"
+          }
+        }
+      }
     },
     "App" : {
 
     },
     "App Icon" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Symbol"
+          }
+        }
+      }
     },
     "App Update Available" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "App-Update verfügbar"
+          }
+        }
+      }
     },
     "Appearance" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erscheinungsbild"
+          }
+        }
+      }
     },
     "Apple Health" : {
 
     },
     "Are you sure you want to end the exercise? %@" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möchtest du die Übung wirklich beenden? %@"
+          }
+        }
+      }
     },
     "Are you sure you want to stop this update?" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möchtest du dieses Update wirklich abbrechen?"
+          }
+        }
+      }
     },
     "Are you sure you want to unpair from %@?" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Möchtest du die Verbindung mit %@ wirklich trennen?"
+          }
+        }
+      }
     },
     "Average" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Durchschnitt"
+          }
+        }
+      }
     },
     "Averaging at %@ BPM, your heart rate ranged from %lld to %lld BPM." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit einem Durchschnitt von %1$@ BPM lag deine Herzfrequenz zwischen %2$lld und %3$lld BPM."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -403,102 +510,303 @@
       }
     },
     "Back" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zurück"
+          }
+        }
+      }
     },
     "Battery" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batterie"
+          }
+        }
+      }
     },
     "Battery Alert" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batteriewarnung"
+          }
+        }
+      }
     },
     "Battery Low" : {
-
-    },
-    "Battery Notifications" : {
-      "comment" : "A toggle that enables or disables notifications when your watch's battery is low.",
-      "isCommentAutoGenerated" : true
-    },
-    "Battery Notifications Disabled" : {
-      "comment" : "A message displayed when battery notifications are disabled.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Niedriger Batteriestand"
+          }
+        }
+      }
     },
     "battery remaining" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Batterie verbleibend"
+          }
+        }
+      }
     },
     "BLE" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BLE"
+          }
+        }
+      }
     },
     "Bluetooth Disabled" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bluetooth deaktiviert"
+          }
+        }
+      }
     },
     "Bluetooth needs to be enabled to pair a watch." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bluetooth muss aktiviert sein, um eine Uhr zu koppeln."
+          }
+        }
+      }
     },
     "BPM" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BPM"
+          }
+        }
+      }
     },
     "Brightness Level" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Helligkeitsstufe"
+          }
+        }
+      }
     },
     "Calender" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kalender"
+          }
+        }
+      }
     },
     "Cancel" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abbrechen"
+          }
+        }
+      }
     },
     "Cancel Update" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update abbrechen"
+          }
+        }
+      }
     },
     "Checking for updates..." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Suche nach Updates…"
+          }
+        }
+      }
     },
     "Clear All Exercises" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Übungen löschen"
+          }
+        }
+      }
     },
     "Clear Disconnect Pins" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbindungsabbruch-Pins löschen"
+          }
+        }
+      }
     },
     "Clear Step Data" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrittdaten löschen"
+          }
+        }
+      }
     },
     "Color Scheme" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Farbschema"
+          }
+        }
+      }
     },
     "Connect" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinden"
+          }
+        }
+      }
     },
     "Connected" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbunden"
+          }
+        }
+      }
     },
     "Connecting..." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbinde…"
+          }
+        }
+      }
     },
     "Connection strength: " : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verbindungsstärke:"
+          }
+        }
+      }
     },
     "Continue" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        }
+      }
     },
     "Continue to Update" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Update fortfahren"
+          }
+        }
+      }
     },
     "Convert accented characters to plain text so notifications display correctly." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Akzentzeichen in einfachen Text umwandeln, damit Benachrichtigungen korrekt angezeigt werden."
+          }
+        }
+      }
     },
     "Converting..." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Konvertiere…"
+          }
+        }
+      }
     },
     "Copy" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopieren"
+          }
+        }
+      }
     },
     "Create" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erstellen"
+          }
+        }
+      }
     },
     "Custom Location" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benutzerdefinierter Standort"
+          }
+        }
+      }
     },
     "Daily Goal" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tägliches Ziel"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -509,6 +817,12 @@
     },
     "Daily Goals" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tägliche Ziele"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -518,22 +832,56 @@
       }
     },
     "DANGER ZONE" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "GEFAHRENBEREICH"
+          }
+        }
+      }
     },
     "Dark" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dunkel"
+          }
+        }
+      }
     },
     "Data Sync" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datensynchronisation"
+          }
+        }
+      }
     },
     "Date" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Datum"
+          }
+        }
+      }
     },
     "Debug Logs" : {
 
     },
     "Delete" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Löschen"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -543,25 +891,73 @@
       }
     },
     "Developer" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwickler"
+          }
+        }
+      }
     },
     "Developer Mode" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklermodus"
+          }
+        }
+      }
     },
     "Device not appearing?" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerät wird nicht angezeigt?"
+          }
+        }
+      }
     },
     "DFU" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DFU"
+          }
+        }
+      }
     },
     "Directions" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation"
+          }
+        }
+      }
     },
     "Disconnect" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Trennen"
+          }
+        }
+      }
     },
     "Disconnected" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Getrennt"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -571,13 +967,33 @@
       }
     },
     "Display Timeout" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Display-Timeout"
+          }
+        }
+      }
     },
     "Done" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fertig"
+          }
+        }
+      }
     },
     "Enable Developer Mode" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entwicklermodus aktivieren"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -588,6 +1004,12 @@
     },
     "Enable Watch Notifications" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uhr-Benachrichtigungen aktivieren"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -597,25 +1019,73 @@
       }
     },
     "End Exercise" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übung beenden"
+          }
+        }
+      }
     },
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stelle sicher, dass deine Uhr nicht mit einem anderen Gerät verbunden ist. Wenn das Problem weiterhin besteht, halte die Seitentaste gedrückt, bis die Uhr neu startet."
+          }
+        }
+      }
     },
     "Error" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler"
+          }
+        }
+      }
     },
     "Error fetching weather" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fehler beim Abrufen des Wetters"
+          }
+        }
+      }
     },
     "Excellent" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exzellent"
+          }
+        }
+      }
     },
     "Exercise" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Übung"
+          }
+        }
+      }
     },
     "Export All Data" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Alle Daten exportieren"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -626,6 +1096,12 @@
     },
     "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Ressourcen sind Schriftarten und Bilder, die nicht in der Firmware enthalten sind und von einigen Apps und Zifferblättern benötigt werden."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -635,13 +1111,33 @@
       }
     },
     "External resources are fonts and images that are required for some apps and watch faces." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Ressourcen sind Schriftarten und Bilder, die von einigen Apps und Zifferblättern benötigt werden."
+          }
+        }
+      }
     },
     "Fair" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mäßig"
+          }
+        }
+      }
     },
     "Female" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiblich"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -652,6 +1148,12 @@
     },
     "File System" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateisystem"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -661,13 +1163,33 @@
       }
     },
     "Filter inconsistent data from your heart rate measurements." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inkonsistente Daten aus deinen Herzfrequenzmessungen herausfiltern."
+          }
+        }
+      }
     },
     "Filter Values" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werte filtern"
+          }
+        }
+      }
     },
     "Find Lost Device" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verlorenes Gerät finden"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -677,13 +1199,33 @@
       }
     },
     "Fully Charged" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vollständig geladen"
+          }
+        }
+      }
     },
     "Gender" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Geschlecht"
+          }
+        }
+      }
     },
     "General" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allgemein"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -694,6 +1236,12 @@
     },
     "Get a notification when your heart rate goes above or below the specified range." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalte eine Benachrichtigung, wenn deine Herzfrequenz den angegebenen Bereich über- oder unterschreitet."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -703,31 +1251,93 @@
       }
     },
     "Get Directions" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Route berechnen"
+          }
+        }
+      }
     },
     "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalte Benachrichtigungen auf deiner Uhr, wenn du Ziele erreichst, wenn es Zeit ist Wasser zu trinken, und mehr."
+          }
+        }
+      }
     },
     "Get notified when you reach your daily fitness goals." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Werde benachrichtigt, wenn du deine täglichen Fitnessziele erreichst."
+          }
+        }
+      }
     },
     "Goal Reached" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ziel erreicht"
+          }
+        }
+      }
     },
     "Good" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gut"
+          }
+        }
+      }
     },
     "Good afternoon" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guten Nachmittag"
+          }
+        }
+      }
     },
     "Good evening" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guten Abend"
+          }
+        }
+      }
     },
     "Good morning" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Guten Morgen"
+          }
+        }
+      }
     },
     "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %lld kcal." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Super, du hast heute dein tägliches Schrittziel erreicht! Du bist %1$@ %2$@ gelaufen und hast dabei etwa %3$lld kcal verbrannt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -743,22 +1353,63 @@
       }
     },
     "Hardware Revision" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hardware-Revision"
+          }
+        }
+      }
     },
     "Health" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesundheit"
+          }
+        }
+      }
     },
     "Health Details" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gesundheitsdetails"
+          }
+        }
+      }
     },
     "Heart Range Notifications" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herzfrequenzbereich-Benachrichtigungen\n"
+          }
+        }
+      }
     },
     "Heart Rate" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Herzfrequenz"
+          }
+        }
+      }
     },
     "Height" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Größe"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -768,16 +1419,43 @@
       }
     },
     "Hello" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hallo"
+          }
+        }
+      }
     },
     "Hourly Chimes" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stündliche Töne"
+          }
+        }
+      }
     },
     "If the watch reboots, add steps to the saved count instead of resetting it to zero." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn die Uhr neu startet, werden Schritte zum gespeicherten Zählerstand hinzugefügt, anstatt ihn auf null zurückzusetzen."
+          }
+        }
+      }
     },
     "If you have an InfiniTime device, you can pair it here." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wenn du ein InfiniTime-Gerät hast, kannst du es hier koppeln."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -788,6 +1466,12 @@
     },
     "Imperial" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imperial"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -797,19 +1481,46 @@
       }
     },
     "In %@ meters" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In %@ Metern"
+          }
+        }
+      }
     },
     "Include Artist" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Künstler"
+          }
+        }
+      }
     },
     "Include Song Name" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mit Songtitel"
+          }
+        }
+      }
     },
     "InfiniLink " : {
 
     },
     "InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniLink konnte keine Verbindung zu deinem Gerät herstellen, da die Kopplung nicht mehr vorhanden ist. Bitte entferne die Uhr aus den Bluetooth-Einstellungen, um sie erneut zu verbinden."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -820,6 +1531,12 @@
     },
     "InfiniLink is the official iOS companion app for InfiniTime. To submit a bug report or request a feature, open an issue on InfiniLink's GitHub repository, or send feedback in TestFlight.\n\nReceiving notifications on your InfiniTime device requires the Apple Notification Center Service, implemented in pull request #2217, linked below.\n\nMusic control from InfiniTime is available when using the Apple Music app, but system-wide media control will require the Apple Media Service to be implemented InfiniTime.\n\nFor more information on InfiniLink or InfiniTime, visit their GitHub repositories." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniLink ist die offizielle iOS-Begleit-App für InfiniTime. Um einen Fehlerbericht einzureichen oder eine Funktion anzufordern, öffne ein Issue im GitHub-Repository von InfiniLink oder sende Feedback über TestFlight.\n\nUm Benachrichtigungen auf deinem InfiniTime-Gerät zu empfangen, wird der Apple Notification Center Service benötigt, der in Pull Request #2217 implementiert wurde und unten verlinkt ist.\n\nDie Musiksteuerung über InfiniTime ist bei Verwendung der Apple Music App verfügbar, die systemweite Mediensteuerung erfordert jedoch die Implementierung des Apple Media Service in InfiniTime.\n\nWeitere Informationen zu InfiniLink oder InfiniTime findest du in den jeweiligen GitHub-Repositories."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -830,6 +1547,12 @@
     },
     "InfiniLink on GitHub" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniLink auf GitHub"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -839,16 +1562,43 @@
       }
     },
     "InfiniLink on TestFlight" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniLink auf TestFlight"
+          }
+        }
+      }
     },
     "InfiniTime" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniTime"
+          }
+        }
+      }
     },
     "InfiniTime " : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniTime"
+          }
+        }
+      }
     },
     "InfiniTime is up-to-date." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniTime ist auf dem neusten Stand."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -858,10 +1608,23 @@
       }
     },
     "InfiniTime on GitHub" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "InfiniTime auf GitHub"
+          }
+        }
+      }
     },
     "Installing update..." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Installiere Update…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -871,13 +1634,33 @@
       }
     },
     "Interval" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intervall"
+          }
+        }
+      }
     },
     "It looks like your watch is in recovery mode. You'll need to update it to continue." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es sieht so aus, als ob sich deine Uhr im Wiederherstellungsmodus befindet. Du musst sie aktualisieren, um fortzufahren."
+          }
+        }
+      }
     },
     "It's time to drink water" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es ist Zeit, Wasser zu trinken"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -888,6 +1671,12 @@
     },
     "Learn more" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mehr erfahren"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -897,16 +1686,43 @@
       }
     },
     "Let's get you set up." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lass uns alles einrichten."
+          }
+        }
+      }
     },
     "Light" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hell"
+          }
+        }
+      }
     },
     "Links" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Links"
+          }
+        }
+      }
     },
     "Loading weather..." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wetter wird geladen…"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -916,10 +1732,23 @@
       }
     },
     "Loading..." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Laden…"
+          }
+        }
+      }
     },
     "Looking for your watch..." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uhr wird gesucht..."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -929,10 +1758,23 @@
       }
     },
     "Male" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Männlich"
+          }
+        }
+      }
     },
     "Manufacturer" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hersteller"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -943,6 +1785,12 @@
     },
     "Maximum" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maximum"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -952,31 +1800,93 @@
       }
     },
     "Metric" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Metrisch"
+          }
+        }
+      }
     },
     "Minimum" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minimum"
+          }
+        }
+      }
     },
     "Model Name" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modellname"
+          }
+        }
+      }
     },
     "Monthly Overview" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monatliche Übersicht"
+          }
+        }
+      }
     },
     "Music" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musik"
+          }
+        }
+      }
     },
     "My Exercises" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meine Übungen"
+          }
+        }
+      }
     },
     "My Watches" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Meine Uhren"
+          }
+        }
+      }
     },
     "Name" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
     },
     "New Folder" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neuer Ordner"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -986,70 +1896,223 @@
       }
     },
     "Next" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weiter"
+          }
+        }
+      }
     },
     "No" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nein"
+          }
+        }
+      }
     },
     "No Data" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Daten"
+          }
+        }
+      }
     },
     "No Logs" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Logs"
+          }
+        }
+      }
     },
     "Nothing matched your search. Ensure your spelling is correct and try again." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keine Ergebnisse für deine Suche. Überprüfe die Schreibweise und versuche es erneut."
+          }
+        }
+      }
     },
     "Nothing to see here" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hier gibt es nichts zu sehen"
+          }
+        }
+      }
     },
     "Notifications" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benachrichtigungen"
+          }
+        }
+      }
     },
     "Notify at Custom Percentage" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei benutzerdefiniertem Ladestand benachrichtigen"
+          }
+        }
+      }
     },
     "Notify on Low Battery" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei niedrigem Ladestand benachrichtigen"
+          }
+        }
+      }
     },
     "Notify when Fully Charged" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei vollständiger Ladung benachrichtigen"
+          }
+        }
+      }
     },
     "Now" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt"
+          }
+        }
+      }
     },
     "OK" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "Optional" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Optional"
+          }
+        }
+      }
     },
     "Other Versions" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Andere Versionen"
+          }
+        }
+      }
     },
     "Pair New Device" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Neues Gerät koppeln"
+          }
+        }
+      }
     },
     "Pause any currently playing music when %@ goes out of range of your phone." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuell wiedergegebene Musik pausieren, wenn %@ die Reichweite deines iPhones verlässt."
+          }
+        }
+      }
     },
     "Pause on Walk-Away" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bei Entfernung pausieren"
+          }
+        }
+      }
     },
     "Pin" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Anpinnen"
+          }
+        }
+      }
     },
     "Ping %@" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ anpingen"
+          }
+        }
+      }
     },
     "Pinned" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Angepinnt"
+          }
+        }
+      }
     },
     "Poor" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlecht"
+          }
+        }
+      }
     },
     "Pull Request #2217 on GitHub" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Pull Request #2217 auf GitHub"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1059,10 +2122,23 @@
       }
     },
     "Range" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bereich"
+          }
+        }
+      }
     },
     "Receive a reminder to drink water for the set amount of times a day." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erhalte eine Erinnerung, die eingestellte Anzahl an Malen pro Tag Wasser zu trinken."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1072,10 +2148,23 @@
       }
     },
     "Refresh" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktualisieren"
+          }
+        }
+      }
     },
     "Releases" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Versionen"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1085,34 +2174,103 @@
       }
     },
     "Reminders" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Erinnerungen"
+          }
+        }
+      }
     },
     "Save 100 Steps" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "100 Schritte speichern"
+          }
+        }
+      }
     },
     "Save 300 Calories" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "300 Kalorien speichern"
+          }
+        }
+      }
     },
     "Search by name or date" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nach Name oder Datum filtern"
+          }
+        }
+      }
     },
     "Search for an address..." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Adresse suchen…"
+          }
+        }
+      }
     },
     "Send" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Senden"
+          }
+        }
+      }
     },
     "Send a notification to your devices when your watch is low on battery." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Benachrichtigung an deine Geräte senden, wenn der Batteriestand deiner Uhr niedrig ist."
+          }
+        }
+      }
     },
     "Send a notification to your iPhone when your watch's battery level reaches full capacity." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Eine Benachrichtigung an dein iPhone senden, wenn deine Uhr vollständig geladen ist."
+          }
+        }
+      }
     },
     "Send Notification" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Benachrichtigung senden"
+          }
+        }
+      }
     },
     "Send randomly generated data to the various characteristics on the watch." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zufällig generierte Daten an die verschiedenen Charakteristiken der Uhr senden."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1122,10 +2280,23 @@
       }
     },
     "Send to iPhone" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An iPhone senden"
+          }
+        }
+      }
     },
     "Send to Watch" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "An Uhr senden"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1136,6 +2307,12 @@
     },
     "Set a fixed location to use to fetch weather." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einen festen Standort zum Abrufen des Wetters festlegen."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1145,22 +2322,63 @@
       }
     },
     "Set to 0" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Auf 0 setzen"
+          }
+        }
+      }
     },
     "Settings" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungen"
+          }
+        }
+      }
     },
     "Settings Version" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einstellungsversion"
+          }
+        }
+      }
     },
     "Several days ago" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vor einigen Tagen"
+          }
+        }
+      }
     },
     "Skip" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Überspringen"
+          }
+        }
+      }
     },
     "Sleep" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schlaf"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1170,19 +2388,53 @@
       }
     },
     "Software Update" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Software-Update"
+          }
+        }
+      }
     },
     "Software Version" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Software-Version"
+          }
+        }
+      }
     },
     "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SPM steht für Schritte pro Minute und gibt an, wie viele Schritte du pro Minute beim Gehen machst."
+          }
+        }
+      }
     },
     "Start Pairing" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Kopplung starten"
+          }
+        }
+      }
     },
     "Starting on %@ at %@, the exercise lasted %@." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Beginnent am %1$@ um %2$@ dauerte die Übung %3$@."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1192,10 +2444,23 @@
       }
     },
     "steps" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritte"
+          }
+        }
+      }
     },
     "Steps" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritte"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1205,10 +2470,23 @@
       }
     },
     "Steps Goal" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schrittziel"
+          }
+        }
+      }
     },
     "Steps Per Minute" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritte pro Minute"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1218,13 +2496,33 @@
       }
     },
     "Stop Pinging" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ping stoppen"
+          }
+        }
+      }
     },
     "Stop Update" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update stoppen"
+          }
+        }
+      }
     },
     "Sync step and heart rate data to Apple Health." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritt- und Herzfrequenzdaten mit Apple Health synchronisieren."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1234,52 +2532,163 @@
       }
     },
     "System" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "System"
+          }
+        }
+      }
     },
     "Test Data" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Testdaten"
+          }
+        }
+      }
     },
     "Test HealthKit" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HealthKit testen"
+          }
+        }
+      }
     },
     "Test Music" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Musik testen"
+          }
+        }
+      }
     },
     "Test Navigation" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Navigation testen"
+          }
+        }
+      }
     },
     "Test Steps" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schritte testen"
+          }
+        }
+      }
     },
     "Test Weather" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wetter testen"
+          }
+        }
+      }
     },
     "That's %@%% of your goal." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Das sind %@%% deines Ziels."
+          }
+        }
+      }
     },
     "The folder name cannot contain a period." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Der Ordnername darf keinen Punkt enthalten."
+          }
+        }
+      }
     },
     "There aren't any available releases." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Es sind keine Versionen verfügbar."
+          }
+        }
+      }
     },
     "There wasn't any heart rate data recorded for this exercise." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Für diese Übung wurden keine Herzfrequenzdaten aufgezeichnet."
+          }
+        }
+      }
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dies ist eine lokale Firmware-Datei und kann nicht verifiziert werden. Fortfahren auf eigenes Risiko."
+          }
+        }
+      }
     },
     "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diese neue Version von InfiniLink wurde noch nicht lokalisiert. Wenn du bei der Übersetzung helfen kannst, besuche das InfiniLink GitHub-Repository, um einen Pull Request zu öffnen!"
+          }
+        }
+      }
     },
     "This week you have a " : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast diese Woche eine "
+          }
+        }
+      }
     },
     "Time" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uhrzeit"
+          }
+        }
+      }
     },
     "Time Format" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Zeitformat"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1289,22 +2698,63 @@
       }
     },
     "Title" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Titel"
+          }
+        }
+      }
     },
     "To accurately measure calories and distance, you'll need to enter some basic details." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um Kalorien und Distanz genau zu messen, werden einige grundlegende Informationen benötigt."
+          }
+        }
+      }
     },
     "To connect to your watch, you'll need to enable Bluetooth." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um eine Verbindung zu deiner Uhr herzustellen, musst du Bluetooth aktivieren."
+          }
+        }
+      }
     },
     "To customize battery notifications, you need to allow watch notifications in notification settings." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um Batteriebenachrichtigungen anzupassen, musst du Uhr-Benachrichtigungen in den Benachrichtigungseinstellungen erlauben."
+          }
+        }
+      }
     },
     "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Um eine Route zu starten, musst du in den Einstellungen die Standortberechtigung \"Immer erlauben\" für InfiniLink aktivieren."
+          }
+        }
+      }
     },
     "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Heute erreichte deine Herzfrequenz ein Maximum von %1$lld und ein Minimum von %2$lld BPM."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1314,28 +2764,83 @@
       }
     },
     "Total" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Insgesamt"
+          }
+        }
+      }
     },
     "Track Resets" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rücksetzungen erfassen"
+          }
+        }
+      }
     },
     "Transliterate to ASCII" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In ASCII umwandeln"
+          }
+        }
+      }
     },
     "Units" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Einheiten"
+          }
+        }
+      }
     },
     "Unpair" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Entkoppeln"
+          }
+        }
+      }
     },
     "Unpin" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ablösen"
+          }
+        }
+      }
     },
     "Update Available" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Update verfügbar"
+          }
+        }
+      }
     },
     "Update Device Time" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gerätezeit aktualisieren"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1345,10 +2850,23 @@
       }
     },
     "Update External Resources" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Externe Ressourcen aktualisieren"
+          }
+        }
+      }
     },
     "Update Now" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Jetzt aktualisieren"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1358,7 +2876,14 @@
       }
     },
     "Upload %lld File%@" : {
+      "comment" : "German works differently here as well. Plural would be “Dateien” while singular is “Datei”. The count is at first place in the sentence here. Not sure how to change the second placeholder to be “en” instead of the suffix “s” for “File(s)”",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Datei%2$@ hochladen"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1374,22 +2899,63 @@
       }
     },
     "Upload Files" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dateien hochladen"
+          }
+        }
+      }
     },
     "Uploading..." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wird hochgeladen..."
+          }
+        }
+      }
     },
     "Use Current Location" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuellen Standort verwenden"
+          }
+        }
+      }
     },
     "Use Experimental DFU" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Experimentelles DFU verwenden"
+          }
+        }
+      }
     },
     "Use Local File" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lokale Datei verwenden"
+          }
+        }
+      }
     },
     "Use the search bar to find a location." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Verwende die Suchleiste, um einen Standort zu finden."
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1399,7 +2965,14 @@
       }
     },
     "Use your current location to fetch local weather data. Location accuracy can be managed in Settings." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aktuellen Standort verwenden, um lokale Wetterdaten abzurufen. Die Standortgenauigkeit kann in den Einstellungen angepasst werden."
+          }
+        }
+      }
     },
     "user@watch:~ $" : {
       "localizations" : {
@@ -1425,16 +2998,43 @@
       }
     },
     "WARNING: These actions are permanent and cannot be undone!" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "WARNUNG: Diese Aktionen sind dauerhaft und können nicht rückgängig gemacht werden!"
+          }
+        }
+      }
     },
     "Watch Notifications Disabled" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uhr-Benachrichtigungen deaktiviert"
+          }
+        }
+      }
     },
     "Water Reminder" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wasserbenachrichtigung"
+          }
+        }
+      }
     },
     "Weather" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wetter"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1445,6 +3045,12 @@
     },
     "Weather Format" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Wetterformat"
+          }
+        },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
@@ -1454,26 +3060,74 @@
       }
     },
     "Weight" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gewicht"
+          }
+        }
+      }
     },
     "Yes" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ja"
+          }
+        }
+      }
     },
     "You can pin an exercise by long pressing the exercise you want to pin." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst eine Übung anheften, indem du lange auf die gewünschte Übung drückst."
+          }
+        }
+      }
     },
     "You can't disable watch notifications while iPhone notifications are on and ANCS is enabled." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du kannst Uhr-Benachrichtigungen nicht deaktivieren, während iPhone-Benachrichtigungen aktiviert und ANCS eingeschaltet ist."
+          }
+        }
+      }
     },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast keine gespeicherten Übungen. Du kannst eine neue Übung starten, indem du eine aus der Liste unten auswählst."
+          }
+        }
+      }
     },
     "You reached your goal, keep up the good work!" : {
-      "comment" : "A caption displayed below the number of steps taken on a specific day.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast dein Ziel erreicht, weiter so!"
+          }
+        }
+      }
     },
     "You took %d step%@ and burned %@." : {
+      "comment" : "Same suffix issue here",
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast %1$d Schritt%2$@ gemacht und %3$@ verbrannt."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1490,6 +3144,12 @@
     },
     "You took %d steps on %@" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast %1$d Schritte am %2$@ gemacht"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1499,11 +3159,23 @@
       }
     },
     "You will be notified when your watch's battery level reaches %lld%%." : {
-      "comment" : "A section that allows the user to set a custom percentage for battery notifications.",
-      "isCommentAutoGenerated" : true
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du wirst benachrichtigt, wenn der Batteriestand deiner Uhr %lld%% erreicht."
+          }
+        }
+      }
     },
     "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du bist noch %1$lld Schritte von deinem Ziel entfernt, was etwa %2$@ %3$@ enstpricht. Wenn du dein Ziel erreichst, hast du %4$lldkcal verbrannt und bist etwa %5$@ gelaufen!"
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1514,6 +3186,12 @@
     },
     "You're almost there! A quick %@ %@ walk should get you to your goal. It should only take you about %@." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast es fast geschafft! Ein kurzer %1$@ %2$@ langer Spaziergang sollte dich zu deinem Ziel bringen. Es sollte nur etwa %3$@ dauern."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1524,6 +3202,12 @@
     },
     "You're making great progress! You have about %@ %@ to walk. At your current pace, you'll hit your goal in %@." : {
       "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du machst gute Fortschritte! Du hast noch etwa %1$@ %2$@ zu gehen. Bei deinem aktuellen Tempo erreichst du dein Ziel in %3$@."
+          }
+        },
         "en" : {
           "stringUnit" : {
             "state" : "new",
@@ -1533,19 +3217,54 @@
       }
     },
     "You're so close! Just about a minute left and only %lld steps to reach your goal!" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du bist so nah dran! Nur noch etwa eine Minute und %lld Schritte bis zu deinem Ziel!"
+          }
+        }
+      }
     },
     "You've reached your steps goal" : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Du hast dein Schrittziel erreicht"
+          }
+        }
+      }
     },
     "Your approximate height, in %@." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine ungefähre Körpergröße, in %@."
+          }
+        }
+      }
     },
     "Your approximate weight, in %@." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dein ungefähres Körpergewicht, in %@."
+          }
+        }
+      }
     },
     "Your watch is estimated to be around %@ away." : {
-
+      "localizations" : {
+        "de" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deine Uhr ist schätzungsweise etwa %@ entfernt."
+          }
+        }
+      }
     }
   },
   "version" : "1.1"
