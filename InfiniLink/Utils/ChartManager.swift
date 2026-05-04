@@ -108,7 +108,7 @@ class ChartManager: ObservableObject {
     
     func heartPoints(predicate: NSPredicate? = nil) -> [HeartDataPoint] {
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
-        fetchRequest.predicate = predicate ?? dayPredicate
+        fetchRequest.predicate = predicate ?? weekPredicate
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)

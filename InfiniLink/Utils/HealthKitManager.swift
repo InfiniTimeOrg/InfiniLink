@@ -91,10 +91,10 @@ class HealthKitManager: ObservableObject {
         
         guard let healthStore = self.healthStore else { return }
         
-        healthStore.requestAuthorization(toShare: [stepsType, heartRateType, caloriesType, workoutType], read: [stepsType, heartRateType]) { success, error in
+        /*healthStore.requestAuthorization(toShare: [stepsType, heartRateType, caloriesType, workoutType], read: [stepsType, heartRateType]) { success, error in
             if let error = error {
                 log(error.localizedDescription, caller: "HealthKitManager")
             }
-        }
+        }*/
     }
 }
