@@ -97,6 +97,16 @@
         }
       }
     },
+    "%@-%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@-%2$@"
+          }
+        }
+      }
+    },
     "%@:%@:%@" : {
       "localizations" : {
         "en" : {
@@ -165,18 +175,18 @@
         }
       }
     },
-    "%lld-day" : {
-
-    },
-    "%lld–%lld " : {
+    "%lld-%lld " : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$lld–%2$lld "
+            "value" : "%1$lld-%2$lld "
           }
         }
       }
+    },
+    "%lld-day" : {
+
     },
     "%lld%%" : {
 
@@ -810,9 +820,6 @@
         }
       }
     },
-    "Max" : {
-
-    },
     "Maximum" : {
       "localizations" : {
         "fr" : {
@@ -824,9 +831,6 @@
       }
     },
     "Metric" : {
-
-    },
-    "Min" : {
 
     },
     "Minimum" : {
@@ -864,6 +868,9 @@
 
     },
     "No" : {
+
+    },
+    "No Data" : {
 
     },
     "No Logs" : {
