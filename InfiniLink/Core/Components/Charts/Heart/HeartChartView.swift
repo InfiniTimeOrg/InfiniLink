@@ -152,6 +152,7 @@ struct HeartChartView: View {
                                 }
                             }
                             .frame(height: 280)
+                            .padding(.horizontal, 8)
                             .chartYScale(domain: (displayedMin - 20)...(displayedMax + 20))
                             .chartXScale(domain: windowStart...windowEnd)
                             .chartXAxis {
