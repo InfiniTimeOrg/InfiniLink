@@ -25,22 +25,19 @@ struct HeartChartView: View {
     @AppStorage("maxHeartRange") private var maxHeartRange = 200
     
     @State private var points = [HeartChartDataPoint]()
-    @State private var scrollPosition: Date = Date(timeInterval: -86400, since: Date())
+    @State private var dayOffset: Int = 0
     @State private var displayedDate: Date = Date()
     @State private var displayedMin: Int = 0
     @State private var displayedMax: Int = 0
 
-    var visiblePoints: [HeartChartDataPoint] {
-        let windowStart = scrollPosition
-        let windowEnd = Date(timeInterval: 86400, since: scrollPosition)
-        return points.filter { $0.date >= windowStart && $0.date <= windowEnd }
+    var windowStart: Date {
+        Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: dayOffset, to: Date())!)
     }
-
-    var visibleMax: Int {
-        Int(visiblePoints.map({ $0.max }).max() ?? 200)
+    var windowEnd: Date {
+        Date(timeInterval: 86400, since: windowStart)
     }
-    var visibleMin: Int {
-        Int(visiblePoints.map({ $0.min }).min() ?? 0)
+    var windowPoints: [HeartChartDataPoint] {
+        points.filter { $0.date >= windowStart && $0.date <= windowEnd }
     }
     
     func heartPoints() -> [HeartChartDataPoint] {
@@ -68,12 +65,6 @@ struct HeartChartView: View {
     }
     var latestDate: Date {
         points.map({ $0.date }).max() ?? Date()
-    }
-    var overallMax: Int {
-        Int(points.map({ $0.max }).max() ?? 0)
-    }
-    var overallMin: Int {
-        Int(points.map({ $0.min }).min() ?? 0)
     }
     
     let heartColor = Color(red: 0.996, green: 0.212, blue: 0.369)
@@ -113,6 +104,12 @@ struct HeartChartView: View {
         }
     }
     
+    func updateDisplayed() {
+        displayedDate = windowStart
+        displayedMin = Int(windowPoints.map({ $0.min }).min() ?? 0)
+        displayedMax = Int(windowPoints.map({ $0.max }).max() ?? 0)
+    }
+    
     var body: some View {
         Group {
             Group {
@@ -120,29 +117,53 @@ struct HeartChartView: View {
                     EmptyChartView(.heart)
                 } else {
                     Section {
-                        Chart {
-                            ForEach(points) { point in
-                                chartContent(for: point)
+                        VStack(spacing: 0) {
+                            HStack {
+                                Button {
+                                    dayOffset -= 1
+                                } label: {
+                                    Image(systemName: "chevron.left")
+                                }
+                                .disabled(windowStart <= earliestDate)
+                                
+                                Spacer()
+                                
+                                Text(displayedDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                Button {
+                                    dayOffset += 1
+                                } label: {
+                                    Image(systemName: "chevron.right")
+                                }
+                                .disabled(dayOffset >= 0)
                             }
-                        }
-                        .frame(height: 280)
-                        .chartYScale(domain: (displayedMin - 20)...(displayedMax + 20))
-                        .chartXAxis {
-                            AxisMarks(values: .stride(by: .hour, count: 6)) { value in
-                                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
-                                AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 8)
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .clipShape(Capsule())
+                            .padding(.bottom, 8)
+                            
+                            Chart {
+                                ForEach(windowPoints) { point in
+                                    chartContent(for: point)
+                                }
                             }
-                        }
-                        .chartScrollableAxes(.horizontal)
-                        .chartXVisibleDomain(length: 86400)
-                        .chartScrollPosition(x: $scrollPosition)
-                        .onChange(of: scrollPosition) { newValue in
-                            Task {
-                                try? await Task.sleep(nanoseconds: 300_000_000)
-                                if scrollPosition == newValue {
-                                    displayedDate = newValue
-                                    displayedMin = visibleMin
-                                    displayedMax = visibleMax
+                            .frame(height: 280)
+                            .chartYScale(domain: (displayedMin - 20)...(displayedMax + 20))
+                            .chartXScale(domain: windowStart...windowEnd)
+                            .chartXAxis {
+                                AxisMarks(values: .stride(by: .hour, count: 6)) { value in
+                                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
+                                    AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
+                                }
+                            }
+                            .chartYAxis {
+                                AxisMarks(position: .trailing) { value in
+                                    AxisGridLine()
+                                    AxisValueLabel()
                                 }
                             }
                         }
@@ -155,9 +176,6 @@ struct HeartChartView: View {
                                 .font(.system(.title, design: .rounded))
                                 .foregroundColor(.primary)
                             + Text("BPM")
-                            Text(displayedDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
-                                .foregroundColor(.secondary)
-                                .font(.subheadline)
                         }
                         .fontWeight(.semibold)
                     }
@@ -173,13 +191,14 @@ struct HeartChartView: View {
         }
         .onAppear {
             points = heartPoints()
-            scrollPosition = Date(timeInterval: -86400, since: latestDate)
-            displayedDate = latestDate
-            displayedMin = visibleMin
-            displayedMax = visibleMax
+            updateDisplayed()
         }
-        .onChange(of: bleManager.heartRate) { _ in
+        .onChange(of: dayOffset) { _, _ in
+            updateDisplayed()
+        }
+        .onChange(of: bleManager.heartRate) { _, _ in
             points = heartPoints()
+            updateDisplayed()
         }
     }
 }
