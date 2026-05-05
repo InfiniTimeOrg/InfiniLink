@@ -124,7 +124,7 @@ struct HeartChartView: View {
                                 } label: {
                                     Image(systemName: "chevron.left")
                                 }
-                                .disabled(windowStart <= earliestDate)
+                                .disabled(Calendar.current.isDate(windowStart, inSameDayAs: earliestDate))
                                 
                                 Spacer()
                                 
@@ -167,6 +167,7 @@ struct HeartChartView: View {
                                 }
                             }
                         }
+                        .buttonStyle(.plain)
                     } header: {
                         VStack(alignment: .leading) {
                             Text("Range")
@@ -193,10 +194,10 @@ struct HeartChartView: View {
             points = heartPoints()
             updateDisplayed()
         }
-        .onChange(of: dayOffset) { _, _ in
+        .onChange(of: dayOffset) { _ in
             updateDisplayed()
         }
-        .onChange(of: bleManager.heartRate) { _, _ in
+        .onChange(of: bleManager.heartRate) { _ in
             points = heartPoints()
             updateDisplayed()
         }
