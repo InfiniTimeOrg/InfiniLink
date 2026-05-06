@@ -29,6 +29,7 @@ struct HeartChartView: View {
     @State private var displayedDate: Date = Date()
     @State private var displayedMin: Int = 0
     @State private var displayedMax: Int = 0
+    @State private var scrollPositionDate: Date = Date()
 
     var windowStart: Date {
         Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: dayOffset, to: Date())!)
@@ -38,6 +39,17 @@ struct HeartChartView: View {
     }
     var windowPoints: [HeartChartDataPoint] {
         points.filter { $0.date >= windowStart && $0.date <= windowEnd }
+    }
+    
+    var visiblePoints: [HeartChartDataPoint] {
+        let visibleEnd = Date(timeInterval: 86400, since: scrollPositionDate)
+        return points.filter { $0.date >= scrollPositionDate && $0.date <= visibleEnd }
+    }
+    var visibleMin: Int {
+        Int(visiblePoints.map({ $0.min }).min() ?? 0)
+    }
+    var visibleMax: Int {
+        Int(visiblePoints.map({ $0.max }).max() ?? 0)
     }
     
     func heartPoints() -> [HeartChartDataPoint] {
@@ -51,10 +63,16 @@ struct HeartChartView: View {
         return grouped.map { (bucket, samples) in
             let values = samples.map { $0.value }
             return HeartChartDataPoint(
-                date: bucket,
+                date: Calendar.current.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
                 min: values.min() ?? 0,
                 max: values.max() ?? 0,
-                average: values.reduce(0, +) / Double(values.count),
+                average: {
+                    let sorted = values.sorted()
+                    let mid = sorted.count / 2
+                    return sorted.count % 2 == 0
+                        ? (sorted[mid - 1] + sorted[mid]) / 2
+                        : sorted[mid]
+                }(),
                 values: values
             )
         }.sorted { $0.date < $1.date }
@@ -110,6 +128,94 @@ struct HeartChartView: View {
         displayedMax = Int(windowPoints.map({ $0.max }).max() ?? 0)
     }
     
+    func chartPage(for offset: Int) -> some View {
+        let start = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: offset, to: Date())!)
+        let end = Date(timeInterval: 86400, since: start)
+        let pagePoints = points.filter { $0.date >= start && $0.date <= end }
+        let pageMin = Int(pagePoints.map({ $0.min }).min() ?? 0)
+        let pageMax = Int(pagePoints.map({ $0.max }).max() ?? 0)
+
+        return Chart {
+            ForEach(pagePoints) { point in
+                chartContent(for: point)
+            }
+        }
+        .frame(height: 280)
+        .padding(.horizontal, 8)
+        .chartYScale(domain: (pageMin - 20)...(pageMax + 20))
+        .chartXScale(domain: start...end)
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .hour, count: 6)) { value in
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
+                AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
+            }
+        }
+        .chartYAxis {
+            AxisMarks(position: .trailing) { value in
+                AxisGridLine()
+                AxisValueLabel()
+            }
+        }
+    }
+    
+    var pagedChart: some View {
+        VStack(spacing: 0) {
+            HStack {
+                Button {
+                    dayOffset -= 1
+                } label: {
+                    Image(systemName: "chevron.left")
+                }
+                .disabled(Calendar.current.isDate(windowStart, inSameDayAs: earliestDate))
+                
+                Spacer()
+                
+                Button {
+                    dayOffset += 1
+                } label: {
+                    Image(systemName: "chevron.right")
+                }
+                .disabled(dayOffset >= 0)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 8)
+            .background(Color(.secondarySystemGroupedBackground))
+            .clipShape(Capsule())
+            .padding(.bottom, 8)
+            
+            chartPage(for: dayOffset)
+        }
+    }
+    
+    @available(iOS 17, *)
+    var scrollableChart: some View {
+        Chart {
+            ForEach(points) { point in
+                chartContent(for: point)
+            }
+        }
+        .frame(height: 280)
+        .padding(.horizontal, 8)
+        .chartYScale(domain: (displayedMin - 20)...(displayedMax + 20))
+        .chartXAxis {
+            AxisMarks(values: .stride(by: .hour, count: 6)) { value in
+                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
+                AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
+            }
+        }
+        .chartYAxis {
+            AxisMarks(position: .trailing) { value in
+                AxisGridLine()
+                AxisValueLabel()
+            }
+        }
+        .chartScrollableAxes(.horizontal)
+        .chartXVisibleDomain(length: 86400)
+        .chartXScale(domain: (earliestDate - 1800)...(latestDate + 1800))
+        .chartScrollPosition(x: $scrollPositionDate)
+        .chartScrollTargetBehavior(.valueAligned(unit: 3600))
+    }
+    
     var body: some View {
         Group {
             Group {
@@ -118,54 +224,10 @@ struct HeartChartView: View {
                 } else {
                     Section {
                         VStack(spacing: 0) {
-                            HStack {
-                                Button {
-                                    dayOffset -= 1
-                                } label: {
-                                    Image(systemName: "chevron.left")
-                                }
-                                .disabled(Calendar.current.isDate(windowStart, inSameDayAs: earliestDate))
-                                
-                                Spacer()
-                                
-                                Text(displayedDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
-                                    .foregroundColor(.primary)
-                                
-                                Spacer()
-                                
-                                Button {
-                                    dayOffset += 1
-                                } label: {
-                                    Image(systemName: "chevron.right")
-                                }
-                                .disabled(dayOffset >= 0)
-                            }
-                            .padding(.horizontal, 12)
-                            .padding(.vertical, 8)
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .clipShape(Capsule())
-                            .padding(.bottom, 8)
-                            
-                            Chart {
-                                ForEach(windowPoints) { point in
-                                    chartContent(for: point)
-                                }
-                            }
-                            .frame(height: 280)
-                            .padding(.horizontal, 8)
-                            .chartYScale(domain: (displayedMin - 20)...(displayedMax + 20))
-                            .chartXScale(domain: windowStart...windowEnd)
-                            .chartXAxis {
-                                AxisMarks(values: .stride(by: .hour, count: 6)) { value in
-                                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
-                                    AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
-                                }
-                            }
-                            .chartYAxis {
-                                AxisMarks(position: .trailing) { value in
-                                    AxisGridLine()
-                                    AxisValueLabel()
-                                }
+                            if #available(iOS 17, *) {
+                                scrollableChart
+                            } else {
+                                pagedChart
                             }
                         }
                         .buttonStyle(.plain)
@@ -178,6 +240,9 @@ struct HeartChartView: View {
                                 .font(.system(.title, design: .rounded))
                                 .foregroundColor(.primary)
                             + Text("BPM")
+                            Text(displayedDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
+                                .foregroundColor(.secondary)
+                                .font(.subheadline)
                         }
                         .fontWeight(.semibold)
                     }
@@ -193,20 +258,31 @@ struct HeartChartView: View {
         }
         .onAppear {
             points = heartPoints()
+            scrollPositionDate = windowStart
             updateDisplayed()
         }
         .onChange(of: dayOffset) { _ in
             updateDisplayed()
         }
+        .onChange(of: scrollPositionDate) { newValue in
+            displayedDate = newValue
+        }
+        .onChange(of: scrollPositionDate) { newValue in
+            Task {
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                if scrollPositionDate == newValue {
+                    let clamped = min(max(newValue, Calendar.current.startOfDay(for: earliestDate)), Calendar.current.startOfDay(for: latestDate))
+                    if clamped != newValue {
+                        scrollPositionDate = clamped
+                    }
+                    displayedMin = visibleMin
+                    displayedMax = visibleMax
+                }
+            }
+        }
         .onChange(of: bleManager.heartRate) { _ in
             points = heartPoints()
             updateDisplayed()
         }
-    }
-}
-
-#Preview {
-    List {
-        HeartChartView()
     }
 }
