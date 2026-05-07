@@ -54,14 +54,14 @@ struct BatterySettingsView: View {
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 Group {
                     if watchNotifications {
-                        Section(footer: Text(bleManager.ancsAuthorized ? "You can't disable watch notifications while iPhone notifications are on and ANCS is enabled." : "Send a notification to your devices when your watch is low on battery.")) {
+                        Section(footer: Text("Send a notification to your devices when your watch is low on battery.")) {
                             Toggle("Notify on Low Battery", isOn: $sendLowBatteryNotification)
                             if sendLowBatteryNotification {
                                 Toggle("Send to iPhone", isOn: $sendLowBatteryNotificationToiPhone)
-                                Toggle(isOn: bleManager.ancsAuthorized ? .constant(true) : $sendLowBatteryNotificationToWatch) { // Notifications will already send to watch when iPhone notifications are on and ANCS is enabled
+                                Toggle(isOn: (bleManager.ancsAuthorized && sendLowBatteryNotificationToiPhone) ? .constant(true) : $sendLowBatteryNotificationToWatch) { // Notifications will already send to watch when iPhone notifications are on and ANCS is enabled
                                     VStack(alignment: .leading) {
                                         Text("Send to Watch")
-                                        if bleManager.ancsAuthorized {
+                                        if bleManager.ancsAuthorized && sendLowBatteryNotificationToiPhone {
                                             Text("You can't disable watch notifications while iPhone notifications are on and ANCS is enabled.")
                                                 .font(.subheadline)
                                                 .foregroundStyle(.secondary)
