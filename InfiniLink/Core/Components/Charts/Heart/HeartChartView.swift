@@ -164,6 +164,7 @@ struct HeartChartView: View {
         }
     }
     
+    // MARK: iOS 16- fixed chart
     var pagedChart: some View {
         VStack(spacing: 0) {
             HStack {
@@ -193,6 +194,7 @@ struct HeartChartView: View {
         }
     }
     
+    // MARK: iOS 17+ scrollable chart
     @available(iOS 17, *)
     var scrollableChart: some View {
         Chart {
@@ -246,9 +248,14 @@ struct HeartChartView: View {
                                 .font(.system(.title, design: .rounded))
                                 .foregroundColor(.primary)
                             + Text("BPM")
-                            Text(displayedDate.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year()))
-                                .foregroundColor(.secondary)
-                                .font(.subheadline)
+                            let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
+                            let end = Date(timeInterval: 86400, since: rounded)
+                            let isFullDay = Calendar.current.component(.hour, from: rounded) == 0
+                            Text(isFullDay
+                                ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                                 : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
+                            .foregroundColor(.secondary)
+                            .font(.subheadline)
                         }
                         .fontWeight(.semibold)
                     }
