@@ -92,6 +92,11 @@ struct HeartChartView: View {
         point.min == point.max
     }
     
+    func updateYScale() {
+        displayedMin = visibleMin
+        displayedMax = visibleMax
+    }
+    
     @ChartContentBuilder
     func chartContent(for point: HeartChartDataPoint) -> some ChartContent {
         if isSingleReading(point) {
@@ -122,6 +127,7 @@ struct HeartChartView: View {
         }
     }
     
+    // fixed graph
     func updateDisplayed() {
         displayedDate = windowStart
         displayedMin = Int(windowPoints.map({ $0.min }).min() ?? 0)
@@ -258,12 +264,23 @@ struct HeartChartView: View {
         }
         .onAppear {
             points = heartPoints()
-            scrollPositionDate = windowStart
+            scrollPositionDate = Date(timeInterval: -86400, since: latestDate)
+            displayedDate = scrollPositionDate
             updateDisplayed()
         }
-        .onChange(of: dayOffset) { _ in
+        .onChange(of: bleManager.heartRate) { _ in
+            let previousLatest = latestDate
+            let wasAtLatest = scrollPositionDate >= Date(timeInterval: -86400, since: previousLatest)
+            points = heartPoints()
+            if Calendar.current.component(.hour, from: latestDate) > Calendar.current.component(.hour, from: previousLatest) {
+                if wasAtLatest {
+                    scrollPositionDate = Date(timeInterval: -86400, since: latestDate)
+                }
+            }
             updateDisplayed()
+            updateYScale() // scrollable chart
         }
+        // scrollable graph
         .onChange(of: scrollPositionDate) { newValue in
             displayedDate = newValue
         }
@@ -271,17 +288,12 @@ struct HeartChartView: View {
             Task {
                 try? await Task.sleep(nanoseconds: 300_000_000)
                 if scrollPositionDate == newValue {
-                    let clamped = min(max(newValue, Calendar.current.startOfDay(for: earliestDate)), Calendar.current.startOfDay(for: latestDate))
-                    if clamped != newValue {
-                        scrollPositionDate = clamped
-                    }
-                    displayedMin = visibleMin
-                    displayedMax = visibleMax
+                    updateYScale()
                 }
             }
         }
-        .onChange(of: bleManager.heartRate) { _ in
-            points = heartPoints()
+        // fixed graph
+        .onChange(of: dayOffset) { _ in
             updateDisplayed()
         }
     }
