@@ -274,6 +274,7 @@ struct HeartChartView: View {
             scrollPositionDate = Date(timeInterval: -86400, since: latestDate)
             displayedDate = scrollPositionDate
             updateDisplayed()
+            updateYScale()
         }
         .onChange(of: bleManager.heartRate) { _ in
             let previousLatest = latestDate
