@@ -231,19 +231,10 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getInfiniLinkReleases() {
-        guard let githubPAT else { return }
-        
         self.loadingAppReleases = true
         self.releases = []
         
-        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniLink/releases") else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniLink/releases")!)) { data, response, error in
             if let data = data {
                 do {
                     let result = try JSONDecoder().decode([Result].self, from: data)
@@ -273,23 +264,12 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func getInfiniTimeReleases() {
-        guard let githubPAT else { return }
-        
         self.loadingReleases = true
         self.releases = []
         
-        guard let url = URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases") else {
-            return
-        }
-        
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        URLSession.shared.dataTask(with: request) { data, response, error in
+        URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases")!)) { data, response, error in
             if let data = data {
                 do {
-                    print(String(data: data, encoding: .utf8))
-                    
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
                     DispatchQueue.main.async {

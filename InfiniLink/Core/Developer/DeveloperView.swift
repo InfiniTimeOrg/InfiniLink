@@ -10,7 +10,6 @@ import SwiftUI
 struct DeveloperView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
-    @AppStorage("useExperimentalDFU") var useExperimentalDFU = false
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
     
@@ -84,7 +83,6 @@ struct DeveloperView: View {
             } footer: {
                 Text("Send randomly generated data to the various characteristics on the watch.")
             }
-            Toggle("Use Experimental DFU", isOn: $useExperimentalDFU)
             Section("Test HealthKit") {
                 Button("Save 300 Calories") {
                     healthKitManager.saveCalories(kcal: 300)
