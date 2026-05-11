@@ -99,32 +99,23 @@ struct HeartChartView: View {
     
     @ChartContentBuilder
     func chartContent(for point: HeartChartDataPoint) -> some ChartContent {
-        if isSingleReading(point) {
-            PointMark(
-                x: .value("Time", point.date),
-                y: .value("BPM", point.min)
-            )
-            .foregroundStyle(heartColor)
-            .symbolSize(40)
-            .symbol(.circle)
-        } else {
-            RectangleMark(
-                x: .value("Time", point.date),
-                yStart: .value("Min", point.min),
-                yEnd: .value("Max", point.max),
-                width: 7
-            )
-            .foregroundStyle(darkHeartColor)
-            .clipShape(Capsule())
-            
-            PointMark(
-                x: .value("Time", point.date),
-                y: .value("BPM", point.average)
-            )
-            .foregroundStyle(heartColor)
-            .symbolSize(CGSize(width: 7, height: 7))
-            .symbol(.circle)
-        }
+        BarMark(
+            x: .value("Time", point.date),
+            yStart: .value("Min", point.min),
+            yEnd: .value("Max", point.max),
+            width: 7
+        )
+        .foregroundStyle(darkHeartColor)
+        .cornerRadius(4)
+        //.clipShape(Capsule())
+        
+        PointMark(
+            x: .value("Time", point.date),
+            y: .value("BPM", point.average)
+        )
+        .foregroundStyle(heartColor)
+        .symbolSize(CGSize(width: 7, height: 7))
+        .symbol(.circle)
     }
     
     // fixed graph
@@ -134,6 +125,7 @@ struct HeartChartView: View {
         displayedMax = Int(windowPoints.map({ $0.max }).max() ?? 0)
     }
     
+    // MARK: iOS 16- fixed chart
     func chartPage(for offset: Int) -> some View {
         let start = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: offset, to: Date())!)
         let end = Date(timeInterval: 86400, since: start)
@@ -164,7 +156,6 @@ struct HeartChartView: View {
         }
     }
     
-    // MARK: iOS 16- fixed chart
     var pagedChart: some View {
         VStack(spacing: 0) {
             HStack {
@@ -197,14 +188,20 @@ struct HeartChartView: View {
     // MARK: iOS 17+ scrollable chart
     @available(iOS 17, *)
     var scrollableChart: some View {
-        Chart {
+        let xMin = Calendar.current.startOfDay(for: earliestDate)
+        //let xMax = Calendar.current.date(byAdding: .day, value: 2, to: Calendar.current.startOfDay(for: latestDate)) ?? latestDate
+        let xMax = Calendar.current.startOfDay(for: latestDate) + 86400 + 3600
+        let yMin = displayedMin - 20
+        let yMax = displayedMax + 20
+        
+        return Chart {
             ForEach(points) { point in
                 chartContent(for: point)
             }
         }
         .frame(height: 280)
         .padding(.horizontal, 8)
-        .chartYScale(domain: (displayedMin - 20)...(displayedMax + 20))
+        .chartYScale(domain: (yMin...yMax))
         .chartXAxis {
             AxisMarks(values: .stride(by: .hour, count: 6)) { value in
                 AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
@@ -219,9 +216,14 @@ struct HeartChartView: View {
         }
         .chartScrollableAxes(.horizontal)
         .chartXVisibleDomain(length: 86400)
-        .chartXScale(domain: (earliestDate - 1800)...(latestDate + 1800))
+        .chartXScale(domain: (xMin...xMax))
         .chartScrollPosition(x: $scrollPositionDate)
-        .chartScrollTargetBehavior(.valueAligned(unit: 3600))
+        .chartScrollTargetBehavior(
+            .valueAligned(
+                matching: DateComponents(timeZone: .current, minute: 0, second: 0),
+                majorAlignment: .matching(DateComponents(timeZone: .current, hour: 0))
+            )
+        )
     }
     
     var body: some View {
@@ -263,15 +265,17 @@ struct HeartChartView: View {
                 }
             }
             .listRowBackground(Color.clear)
-            if points.count >= 3 {
+            /*
+             if points.count >= 3 {
                 Section {
                     Text("Today your heart rate reached a high of \(displayedMax), and dropped to a low of \(displayedMin) BPM.")
                 }
             }
+             */
         }
         .onAppear {
             points = heartPoints()
-            scrollPositionDate = Date(timeInterval: -86400, since: latestDate)
+            scrollPositionDate = Calendar.current.startOfDay(for: latestDate)
             displayedDate = scrollPositionDate
             updateDisplayed()
             updateYScale()
@@ -306,3 +310,4 @@ struct HeartChartView: View {
         }
     }
 }
+
