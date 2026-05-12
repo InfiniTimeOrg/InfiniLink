@@ -30,7 +30,8 @@ struct HeartChartView: View {
     @State private var displayedMin: Int = 0
     @State private var displayedMax: Int = 0
     @State private var scrollPositionDate: Date = Date()
-
+    @State private var rawSelectedHour: Date? = nil
+    
     var windowStart: Date {
         Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: dayOffset, to: Date())!)
     }
@@ -95,6 +96,13 @@ struct HeartChartView: View {
     func updateYScale() {
         displayedMin = visibleMin
         displayedMax = visibleMax
+    }
+    
+    var selectedViewHour: HeartChartDataPoint? {
+        guard let rawSelectedHour else { return nil }
+        return points.first {
+            Calendar.current.isDate(rawSelectedHour, equalTo: $0.date, toGranularity: .hour)
+        }
     }
     
     @ChartContentBuilder
@@ -195,6 +203,11 @@ struct HeartChartView: View {
         let yMax = displayedMax + 20
         
         return Chart {
+            if let selectedViewHour {
+                RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
+                    .foregroundStyle(.secondary)
+            }
+            
             ForEach(points) { point in
                 chartContent(for: point)
             }
@@ -224,6 +237,7 @@ struct HeartChartView: View {
                 majorAlignment: .matching(DateComponents(timeZone: .current, hour: 0))
             )
         )
+        .chartXSelection(value: $rawSelectedHour)
     }
     
     var body: some View {
@@ -242,25 +256,45 @@ struct HeartChartView: View {
                         }
                         .buttonStyle(.plain)
                     } header: {
-                        VStack(alignment: .leading) {
-                            Text("Range")
-                                .font(.caption)
+                        if let selectedViewHour {
+                            let rangeFirstHour = Calendar.current.dateInterval(of: .hour, for: selectedViewHour.date)?.start ?? selectedViewHour.date
+                            let rangeLastHour = Calendar.current.date(byAdding: .hour, value: 1, to: rangeFirstHour) ?? rangeFirstHour
+                            
+                            VStack(alignment: .leading) {
+                                Text("Range")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text(isSingleReading(selectedViewHour) ? "\(Int(selectedViewHour.min)) " : "\(Int(selectedViewHour.min))–\(Int(selectedViewHour.max)) ")
+                                    .font(.system(.title, design: .rounded))
+                                    .foregroundColor(.primary)
+                                + Text("BPM")
+                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(.dateTime.hour()))–\(rangeLastHour.formatted(.dateTime.hour()))")
+                                    .foregroundColor(.secondary)
+                                    .font(.subheadline)
+                            }
+                            .fontWeight(.semibold)
+                        } else {
+                            VStack(alignment: .leading) {
+                                Text("Range")
+                                    .font(.caption)
+                                    .foregroundColor(.secondary)
+                                Text(displayedMax == 0 || displayedMin == 0 ? "0 " : "\(displayedMin)–\(displayedMax) ")
+                                    .font(.system(.title, design: .rounded))
+                                    .foregroundColor(.primary)
+                                + Text("BPM")
+                                let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
+                                let end = Date(timeInterval: 86400, since: rounded)
+                                let isFullDay = Calendar.current.component(.hour, from: rounded) == 0
+                                Text(isFullDay
+                                    ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                                    : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
                                 .foregroundColor(.secondary)
-                            Text(displayedMax == 0 || displayedMin == 0 ? "0 " : "\(displayedMin)–\(displayedMax) ")
-                                .font(.system(.title, design: .rounded))
-                                .foregroundColor(.primary)
-                            + Text("BPM")
-                            let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
-                            let end = Date(timeInterval: 86400, since: rounded)
-                            let isFullDay = Calendar.current.component(.hour, from: rounded) == 0
-                            Text(isFullDay
-                                ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-                                 : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
-                            .foregroundColor(.secondary)
-                            .font(.subheadline)
+                                .font(.subheadline)
+                            }
+                            .fontWeight(.semibold)
                         }
-                        .fontWeight(.semibold)
                     }
+
                     .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
                 }
             }
