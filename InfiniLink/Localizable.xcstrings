@@ -18,6 +18,7 @@
 
     },
     " is due" : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -244,9 +245,6 @@
     "App Icon" : {
 
     },
-    "App Update Available" : {
-
-    },
     "Appearance" : {
 
     },
@@ -303,9 +301,6 @@
 
     },
     "Brightness Level" : {
-
-    },
-    "Calender" : {
 
     },
     "Cancel" : {
@@ -451,7 +446,11 @@
         }
       }
     },
+    "Enable Notifications" : {
+
+    },
     "Enable Watch Notifications" : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -541,6 +540,9 @@
         }
       }
     },
+    "Full Battery Notifications" : {
+
+    },
     "Fully Charged" : {
 
     },
@@ -622,6 +624,12 @@
     "Heart Rate" : {
 
     },
+    "Heart Rate High" : {
+
+    },
+    "Heart Rate Low" : {
+
+    },
     "Height" : {
       "localizations" : {
         "fr" : {
@@ -636,9 +644,6 @@
 
     },
     "Hourly Chimes" : {
-
-    },
-    "If the watch reboots, add steps to the saved count instead of resetting it to zero." : {
 
     },
     "If you have an InfiniTime device, you can pair it here." : {
@@ -670,7 +675,7 @@
     "Include Song Name" : {
 
     },
-    "InfiniLink " : {
+    "InfiniLink" : {
 
     },
     "InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect." : {
@@ -709,9 +714,6 @@
     "InfiniTime" : {
 
     },
-    "InfiniTime " : {
-
-    },
     "InfiniTime is up-to-date." : {
       "localizations" : {
         "fr" : {
@@ -736,6 +738,9 @@
       }
     },
     "Interval" : {
+
+    },
+    "iPhone" : {
 
     },
     "It looks like your watch is in recovery mode. You'll need to update it to continue." : {
@@ -792,6 +797,12 @@
           }
         }
       }
+    },
+    "Low Battery" : {
+
+    },
+    "Low Battery Notifications" : {
+
     },
     "Male" : {
 
@@ -871,13 +882,19 @@
     "Notifications" : {
 
     },
+    "Notifications Disabled" : {
+
+    },
+    "Notifications have been disabled in system settings. To receive notifications on your iPhone, please turn them on." : {
+
+    },
     "Notify at Custom Percentage" : {
 
     },
-    "Notify on Low Battery" : {
+    "Notify on Full Battery" : {
 
     },
-    "Notify when Fully Charged" : {
+    "Notify on Low Battery" : {
 
     },
     "Now" : {
@@ -949,9 +966,6 @@
         }
       }
     },
-    "Reminders" : {
-
-    },
     "Save 100 Steps" : {
 
     },
@@ -967,10 +981,22 @@
     "Send" : {
 
     },
+    "Send a notification to your devices when they reach low battery." : {
+
+    },
+    "Send a notification to your devices when they're fully charged." : {
+
+    },
+    "Send a notification to your devices when your iPhone drops to 20% charge." : {
+
+    },
+    "Send a notification to your devices when your iPhone's battery level reaches full capacity." : {
+
+    },
     "Send a notification to your devices when your watch is low on battery." : {
 
     },
-    "Send a notification to your iPhone when your watch's battery level reaches full capacity." : {
+    "Send a notification to your devices when your watch's battery level reaches full capacity." : {
 
     },
     "Send Notification" : {
@@ -1162,7 +1188,7 @@
     "To connect to your watch, you'll need to enable Bluetooth." : {
 
     },
-    "To customize battery notifications, you need to allow watch notifications in notification settings." : {
+    "To customize battery notifications, you need to allow notifications in notification settings." : {
 
     },
     "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
@@ -1179,9 +1205,6 @@
       }
     },
     "Total" : {
-
-    },
-    "Track Resets" : {
 
     },
     "Transliterate to ASCII" : {
@@ -1287,6 +1310,9 @@
       }
     },
     "WARNING: These actions are permanent and cannot be undone!" : {
+
+    },
+    "Watch" : {
 
     },
     "Watch Notifications Disabled" : {
@@ -1403,6 +1429,9 @@
 
     },
     "Your approximate weight, in %@." : {
+
+    },
+    "Your iPhone has less than 20% battery remaining." : {
 
     },
     "Your watch is estimated to be around %@ away." : {

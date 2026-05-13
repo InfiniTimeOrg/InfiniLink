@@ -14,8 +14,7 @@ class StepCountManager: ObservableObject {
     let chartManager = ChartManager.shared
     let bleManager = BLEManager.shared
     let persistenceManager = PersistenceController.shared
-    
-    @AppStorage("addInsteadOfOverwrite") var addInsteadOfOverwrite: Bool = false
+    let deviceManager = DeviceManager.shared
     
     var stepGoal: Int {
         return Int(DeviceManager.shared.settings.stepsGoal)

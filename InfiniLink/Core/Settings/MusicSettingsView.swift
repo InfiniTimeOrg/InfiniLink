@@ -19,12 +19,9 @@ struct MusicSettingsView: View {
     
     var body: some View {
         Group {
-            switch authorizationStatus {
-            case .authorized:
+            if authorizationStatus == .authorized {
                 authorized
-            case .denied, .notDetermined, .restricted:
-                unauthorized
-            @unknown default:
+            } else {
                 unauthorized
             }
         }

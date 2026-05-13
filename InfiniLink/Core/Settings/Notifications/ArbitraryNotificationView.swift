@@ -15,8 +15,7 @@ struct ArbitraryNotificationView: View {
     @State private var title = ""
     @State private var content = ""
     
-    @FocusState var isTitleFocused: Bool
-    @FocusState var isBodyFocused: Bool
+    @FocusState var isFocused: Bool
     
     var body: some View {
         NavigationView {
@@ -24,13 +23,12 @@ struct ArbitraryNotificationView: View {
                 TextField("Title", text: $title)
                     .autocapitalization(.none)
                     .disableAutocorrection(true)
-                    .focused($isTitleFocused)
+                    .focused($isFocused)
                 TextEditor(text: $content)
-                    .focused($isBodyFocused)
             }
             .navigationTitle("Send Notification")
             .onAppear {
-                isTitleFocused = true
+                isFocused = true
             }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -49,7 +47,7 @@ struct ArbitraryNotificationView: View {
         .navigationViewStyle(.stack)
         .onChange(of: bleManager.notifyCharacteristic) { characteristic in
             if characteristic == nil {
-                // Dismiss the sheet if we can't send a notification
+                // Dismiss the sheet if we disconnect/can't send a notification
                 dismiss()
             }
         }

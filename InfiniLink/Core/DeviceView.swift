@@ -78,93 +78,57 @@ struct DeviceView: View {
                     }
                     .frame(maxWidth: .infinity)
                     .listRowBackground(Color.clear)
-                    let comparison = deviceManager.firmware.compare(downloadManager.updateVersion, options: .numeric)
-                    if !bleManager.isBluetoothOn {
-                        // We don't use a button because there's no App Store-safe way to deeplink to Settings without opening InfiniLink settings, which could confuse the user
-                        Section {
-                            HStack(spacing: 14) {
-                                // Make sure we show the current app icon
+                    Section {
+                        let comparison = deviceManager.firmware.compare(downloadManager.updateVersion, options: .numeric)
+                        if !bleManager.isBluetoothOn {
+                            // We don't use a button because there's no App Store-safe way to deeplink to Settings without opening InfiniLink settings, which could confuse the user
+                            BannerView("Bluetooth Disabled", "To connect to your watch, you'll need to enable Bluetooth.") {
                                 Image("logo.bluetooth")
                                     .resizable()
                                     .frame(width: 21, height: 35)
                                     .foregroundStyle(.blue)
-                                VStack(alignment: .leading, spacing: 3) {
-                                    Text("Bluetooth Disabled")
-                                        .foregroundStyle(Color.primary)
-                                        .fontWeight(.bold)
-                                    Text("To connect to your watch, you'll need to enable Bluetooth.")
-                                        .foregroundStyle(.gray)
-                                }
                             }
-                        }
-                    } else if let exercise = exerciseViewModel.currentExercise {
-                        Section {
+                        } else if let exercise = exerciseViewModel.currentExercise {
                             NavigationLink {
                                 ActiveExerciseView()
                             } label: {
-                                HStack(spacing: 10) {
+                                BannerView("\(exercise.name)", "\(exerciseViewModel.timeString())", "Active Exercise") {
                                     Image(systemName: exercise.icon)
                                         .font(.title2.weight(.medium))
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        Text("Active Exercise")
-                                            .font(.system(size: 13).weight(.medium))
-                                            .foregroundStyle(.gray)
-                                        Text(exercise.name)
-                                            .foregroundStyle(Color.primary)
-                                            .fontWeight(.bold)
-                                        Text(exerciseViewModel.timeString())
-                                    }
                                 }
                             }
-                        }
-                    } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
-                        Section {
+                        } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
                             NavigationLink {
                                 SoftwareUpdateView()
                             } label: {
-                                HStack(spacing: 10) {
+                                BannerView(
+                                    "InfiniTime",
+                                    "\(downloadManager.updateVersion)",
+                                    "Update Available"
+                                ) {
                                     Image(.infiniTime)
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 50, height: 50)
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        Text("Update Available")
-                                            .foregroundStyle(Color.primary)
-                                            .fontWeight(.bold)
-                                        Group {
-                                            Text("InfiniTime ") + Text(downloadManager.updateVersion).font(.body.weight(.medium))
-                                        }
-                                        .foregroundStyle(.gray)
-                                    }
                                 }
                             }
-                        }
-                    } else if let update = downloadManager.appUpdate {
-                        Section {
+                        } else if let update = downloadManager.appUpdate {
                             Button {
                                 guard let testFlight = URL(string: testFlightLink) else { return }
                                 guard let appStore = URL(string: appStoreLink) else { return }
                                 
                                 openURL(update.isBeta ? testFlight : appStore)
                             } label: {
-                                HStack(spacing: 10) {
-                                    // Make sure we show the current app icon
+                                BannerView(
+                                    "InfiniLink",
+                                    "\(update.version)",
+                                    "Update Available"
+                                ) {
                                     Image((UIApplication.shared.alternateIconName ?? "AppIcon") + "-Rendered")
                                         .resizable()
                                         .aspectRatio(contentMode: .fit)
                                         .frame(width: 50, height: 50)
                                         .clipShape(RoundedRectangle(cornerRadius: 10))
-                                    VStack(alignment: .leading, spacing: 3) {
-                                        Text("App Update Available")
-                                            .foregroundStyle(Color.primary)
-                                            .fontWeight(.bold)
-                                        Group {
-                                            Text("InfiniLink ") +
-                                            Text(update.version)
-                                                .fontWeight(.semibold)
-                                        }
-                                        .foregroundStyle(.gray)
-                                    }
                                 }
                             }
                         }
@@ -319,11 +283,10 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 }
 
 #Preview {
-//    DeviceView()
-//        .onAppear {
-//            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
-//            DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
-//            DFUUpdater.shared.local = false
-//        }
-    ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
+    DeviceView()
+        .onAppear {
+            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
+            DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
+            DFUUpdater.shared.local = false
+        }
 }

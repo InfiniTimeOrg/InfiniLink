@@ -21,7 +21,6 @@
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
 		E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396142D28E59400A13B90 /* DirectionsView.swift */; };
-		E043FFCC2DD19FBD00BBFBBC /* StepSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E043FFCB2DD19FBD00BBFBBC /* StepSettingsView.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E055D2542DF229AC00AF19AD /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2532DF229AC00AF19AD /* CalendarDayView.swift */; };
 		E055D2562DF229BD00AF19AD /* CalendarDayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */; };
@@ -54,6 +53,8 @@
 		E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
+		E076FEC82FB415AC00FF6A17 /* NotificationSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */; };
+		E076FECA2FB4375300FF6A17 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E076FEC92FB4375300FF6A17 /* BannerView.swift */; };
 		E078ECFB2D4E6D9800560364 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E078ECFA2D4E6D9800560364 /* Zip */; };
 		E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F172CBE2071005C1325 /* ActionView.swift */; };
 		E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */; };
@@ -151,7 +152,6 @@
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
 		E04396142D28E59400A13B90 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
-		E043FFCB2DD19FBD00BBFBBC /* StepSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepSettingsView.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E055D2532DF229AC00AF19AD /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
 		E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayDetailView.swift; sourceTree = "<group>"; };
@@ -185,6 +185,8 @@
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsManager.swift; sourceTree = "<group>"; };
+		E076FEC92FB4375300FF6A17 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		E07D8F172CBE2071005C1325 /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
 		E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherController.swift; sourceTree = "<group>"; };
 		E07D8F1F2CBF051A005C1325 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
@@ -468,7 +470,6 @@
 				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
 				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
 				E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */,
-				E043FFCB2DD19FBD00BBFBBC /* StepSettingsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -494,6 +495,7 @@
 				E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */,
 				E05DA4C02D13752C00A49203 /* DebugLogManager.swift */,
 				E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */,
+				E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -520,6 +522,7 @@
 				E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */,
 				E07D8F172CBE2071005C1325 /* ActionView.swift */,
 				E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */,
+				E076FEC92FB4375300FF6A17 /* BannerView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -767,11 +770,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				E02C62122CD05DA900C4D19B /* CurrentUpdateView.swift in Sources */,
+				E076FEC82FB415AC00FF6A17 /* NotificationSettingsManager.swift in Sources */,
 				E0A7C0782CB193BC0042A12D /* WeatherSettingsView.swift in Sources */,
 				E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */,
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
-				E043FFCC2DD19FBD00BBFBBC /* StepSettingsView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
 				E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */,
 				E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */,
@@ -828,6 +831,7 @@
 				E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */,
 				E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */,
 				E09990982D77685A00B0FCAF /* StepMonthlyChartView.swift in Sources */,
+				E076FECA2FB4375300FF6A17 /* BannerView.swift in Sources */,
 				E0A7C06B2CB0DE4C0042A12D /* Weather.swift in Sources */,
 				E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */,
 				E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */,

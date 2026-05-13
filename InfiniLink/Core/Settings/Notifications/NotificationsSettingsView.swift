@@ -11,105 +11,87 @@ import EventKit
 struct NotificationsSettingsView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var notificationManager = NotificationManager.shared
-    
-    @AppStorage("waterReminder") var waterReminder = true
-    @AppStorage("waterReminderAmount") var waterReminderAmount = 7
-    @AppStorage("standUpReminder") var standUpReminder = true
-    @AppStorage("heartRangeReminder") var heartRangeReminder = false
-    @AppStorage("minHeartRange") var minHeartRange = 40
-    @AppStorage("maxHeartRange") var maxHeartRange = 200
-    @AppStorage("watchNotifications") var watchNotifications = true
-    @AppStorage("transliterationEnabled") var transliterationEnabled = true
-    @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
-    
-    @State private var reminderAuthStatus = EKEventStore.authorizationStatus(for: .reminder)
-    @State private var eventAuthStatus = EKEventStore.authorizationStatus(for: .event)
+    @ObservedObject var settingsManager = NotificationSettingsManager.shared
     
     @State private var showSendNotificationSheet = false
     @State private var showFindLostDeviceSheet = false
     
     let bleWriteManager = BLEWriteManager()
     
-    func authDenied(_ status: EKAuthorizationStatus) -> Bool {
-        switch status {
-        case .authorized, .fullAccess:
-            return false
-        case .denied, .notDetermined, .restricted, .writeOnly:
-            return true
-        @unknown default:
-            return true
-        }
-    }
-    
     var body: some View {
         List {
-            Section {
-                Toggle("Enable Watch Notifications", isOn: $watchNotifications)
+            if !notificationManager.canSendHostNotifs {
+                Button {
+                    UIApplication.shared.open(URL(string: UIApplication.openNotificationSettingsURLString)!)
+                } label: {
+                    BannerView("Notifications Disabled", "Notifications have been disabled in system settings. To receive notifications on your iPhone, please turn them on.") {
+                        Image(systemName: "bell.slash.fill")
+                            .font(.system(size: 28).weight(.medium))
+                            .foregroundStyle(.red)
+                    }
+                }
             }
-            if watchNotifications {
+            Section {
+                Toggle("Enable Notifications", isOn: $settingsManager.settings.watchNotificationsEnabled)
+            }
+            if settingsManager.settings.watchNotificationsEnabled {
                 Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.")) {
-                    Toggle("Water Reminder", isOn: $waterReminder)
-                    if waterReminder {
-                        Picker("Interval", selection: $waterReminderAmount) {
+                    Toggle("Water Reminder", isOn: $settingsManager.settings.waterReminderEnabled)
+                    if settingsManager.settings.waterReminderEnabled {
+                        Picker("Interval", selection: $settingsManager.settings.waterReminderAmount) {
                             ForEach(0..<9, id: \.self) { amount in
                                 Text("\(amount + 1) time\(amount == 0 ? "" : "s")")
                             }
                         }
                     }
                 }
-                /*
-                 Section(footer: Text("Have your watch remind you when to stand up if you've been sedentary for too long.")) {
-                 Toggle("Stand-up Reminder", isOn: $standUpReminder)
-                 }
-                 */
                 Section(footer: Text("Get a notification when your heart rate goes above or below the specified range.")) {
-                    Toggle("Heart Range Notifications", isOn: $heartRangeReminder)
-                    if heartRangeReminder {
+                    Toggle("Heart Range Notifications", isOn: $settingsManager.settings.heartSettings.rangeReminderEnabled)
+                    if settingsManager.settings.heartSettings.rangeReminderEnabled {
                         HStack {
                             Text("Minimum")
                             Spacer()
-                            Text("\(minHeartRange)")
-                            Stepper("\(minHeartRange)", value: $minHeartRange, in: 40...(maxHeartRange - 1), step: 1)
+                            Text("\(settingsManager.settings.heartSettings.minRange)")
+                            Stepper("\(settingsManager.settings.heartSettings.minRange)", value: $settingsManager.settings.heartSettings.minRange, in: 40...(settingsManager.settings.heartSettings.maxRange - 1), step: 1)
                                 .fontWeight(.semibold)
                                 .labelsHidden()
                         }
                         HStack {
                             Text("Maximum")
                             Spacer()
-                            Text("\(maxHeartRange)")
-                            Stepper("\(maxHeartRange)", value: $maxHeartRange, in: (minHeartRange + 1)...220, step: 1)
+                            Text("\(settingsManager.settings.heartSettings.maxRange)")
+                            Stepper("\(settingsManager.settings.heartSettings.maxRange)", value: $settingsManager.settings.heartSettings.maxRange, in: (settingsManager.settings.heartSettings.minRange + 1)...220, step: 1)
                                 .fontWeight(.semibold)
                                 .labelsHidden()
                         }
                     }
                 }
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
-                    Toggle("Steps", isOn: $remindOnStepGoalCompletion)
+                    Toggle("Steps", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled)
                 }
                 Section {
-                    Toggle("Transliterate to ASCII", isOn: $transliterationEnabled)
+                    Toggle("Transliterate to ASCII", isOn: $settingsManager.settings.transliterationEnabled)
                 } footer: {
                     Text("Convert accented characters to plain text so notifications display correctly.")
                 }
-                Section {
-                    Button("Send Notification") {
-                        showSendNotificationSheet = true
-                    }
-                    .disabled(bleManager.notifyCharacteristic == nil)
-                    .sheet(isPresented: $showSendNotificationSheet) {
-                        ArbitraryNotificationView()
-                    }
-                    Button("Find Lost Device") {
-                        showFindLostDeviceSheet = true
-                    }
-                    .sheet(isPresented: $showFindLostDeviceSheet) {
-                        FindLostDeviceView()
-                    }
+                Button("Send Notification") {
+                    showSendNotificationSheet = true
                 }
+                .disabled(bleManager.notifyCharacteristic == nil)
+                .sheet(isPresented: $showSendNotificationSheet) {
+                    ArbitraryNotificationView()
+                }
+            }
+            
+            Button("Find Lost Device") {
+                showFindLostDeviceSheet = true
+            }
+            .sheet(isPresented: $showFindLostDeviceSheet) {
+                FindLostDeviceView()
             }
         }
         .navigationTitle("Notifications")
-        .onChange(of: waterReminderAmount) { _ in
+        .onChange(of: settingsManager.settings.waterReminderAmount) { _ in
             notificationManager.setWaterRemindersPerDay()
         }
     }

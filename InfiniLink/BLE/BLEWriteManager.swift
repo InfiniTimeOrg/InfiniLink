@@ -11,9 +11,7 @@ import SwiftUI
 
 struct BLEWriteManager {
     let bleManager = BLEManager.shared
-    
-    @AppStorage("watchNotifications") var watchNotifications = true
-    @AppStorage("transliterationEnabled") var transliterationEnabled = true
+    let settingsManager = NotificationSettingsManager.shared
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
         guard bleManager.infiniTime != nil else { return }
@@ -49,8 +47,8 @@ struct BLEWriteManager {
     func sendNotification(_ notif: AppNotification) {
         guard bleManager.infiniTime != nil else { return }
         
-        let title = transliterationEnabled ? notif.title.asciiSafe : notif.title
-        let body = transliterationEnabled ? notif.subtitle.asciiSafe : notif.subtitle
+        let title = settingsManager.settings.transliterationEnabled ? notif.title.asciiSafe : notif.title
+        let body = settingsManager.settings.transliterationEnabled ? notif.subtitle.asciiSafe : notif.subtitle
         
         let titleData = ("   " + title + "\0").data(using: .utf8)
         let bodyData = (body + "\0").data(using: .utf8)
@@ -63,15 +61,10 @@ struct BLEWriteManager {
             log("Failed to convert \(notif.subtitle) to UTF-8 data", caller: "BLEWriteManager", target: .ble)
         }
 
-        // If both of the strings couldn't be converted, don't send the notification
-        if titleData == nil && bodyData == nil {
-            return
-        }
+        guard let title = titleData, let body = bodyData else { return } // If both of the strings couldn't be converted, don't send the notification
         
-        var notification = titleData ?? Data()
-        notification.append(bodyData ?? Data())
-        
-        if let notifyCharacteristic = bleManager.notifyCharacteristic, !notification.isEmpty && watchNotifications {
+        let notification = title + body
+        if let notifyCharacteristic = bleManager.notifyCharacteristic, !notification.isEmpty && settingsManager.settings.watchNotificationsEnabled {
             bleManager.infiniTime?.writeValue(notification, for: notifyCharacteristic, type: .withResponse)
             log("Notification sent with title: \(title)", type: .info, caller: "BLEWriteManager", target: .ble)
         }
@@ -85,7 +78,7 @@ struct BLEWriteManager {
         
         let notification = hexPrefix + nameData
         
-        if notification.count > 0 && watchNotifications {
+        if notification.count > 0 && settingsManager.settings.watchNotificationsEnabled {
             infiniTime.writeValue(notification, for: notify, type: .withResponse)
             log("Sent lost notification", type: .info, caller: "BLEWriteManager", target: .ble)
         }
@@ -174,7 +167,7 @@ struct BLEWriteManager {
         
         guard let icon = icon.data(using: .ascii) else { return }
         // The narrative may contain non-InfiniTime-readable characters, so transliterate if enabled
-        guard let narrative = (transliterationEnabled ? instructions.asciiSafe : instructions).data(using: .ascii) else { return }
+        guard let narrative = (settingsManager.settings.transliterationEnabled ? instructions.asciiSafe : instructions).data(using: .ascii) else { return }
         guard let distance = distance.data(using: .ascii) else { return }
         
         var progress = Data()
