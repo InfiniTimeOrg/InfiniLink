@@ -86,8 +86,8 @@ struct HeartChartView: View {
         points.map({ $0.date }).max() ?? Date()
     }
     
-    let heartColor = Color(red: 0.996, green: 0.212, blue: 0.369)
-    let darkHeartColor = Color(red: 0.369, green: 0.090, blue: 0.145)
+    let heartColor = Color.pink
+    let darkHeartColor = Color(red: 0.369, green: 0.090, blue: 0.145) // darkened version of heartColor
     
     func isSingleReading(_ point: HeartChartDataPoint) -> Bool {
         point.min == point.max
@@ -197,16 +197,15 @@ struct HeartChartView: View {
     @available(iOS 17, *)
     var scrollableChart: some View {
         let xMin = Calendar.current.startOfDay(for: earliestDate)
-        //let xMax = Calendar.current.date(byAdding: .day, value: 2, to: Calendar.current.startOfDay(for: latestDate)) ?? latestDate
-        let xMax = Calendar.current.startOfDay(for: latestDate) + 86400 + 3600
+        let xMax = Calendar.current.startOfDay(for: latestDate) + 86400 + 3600 // + one day and an hour, fixes the snappy scrolling otherwise breaking sometimes
         let yMin = displayedMin - 20
         let yMax = displayedMax + 20
         
         return Chart {
             if let selectedViewHour {
-                RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
-                    .foregroundStyle(.secondary)
-            }
+                            RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
+                                .foregroundStyle(Color.gray)
+                        }
             
             ForEach(points) { point in
                 chartContent(for: point)
@@ -268,7 +267,9 @@ struct HeartChartView: View {
                                     .font(.system(.title, design: .rounded))
                                     .foregroundColor(.primary)
                                 + Text("BPM")
-                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(.dateTime.hour()))–\(rangeLastHour.formatted(.dateTime.hour()))")
+                                
+                                let style = Date.FormatStyle().hour(.defaultDigits(amPM: .abbreviated))
+                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings") · \(Int(selectedViewHour.average)) BPM avg")
                                     .foregroundColor(.secondary)
                                     .font(.subheadline)
                             }
@@ -299,13 +300,6 @@ struct HeartChartView: View {
                 }
             }
             .listRowBackground(Color.clear)
-            /*
-             if points.count >= 3 {
-                Section {
-                    Text("Today your heart rate reached a high of \(displayedMax), and dropped to a low of \(displayedMin) BPM.")
-                }
-            }
-             */
         }
         .onAppear {
             points = heartPoints()
