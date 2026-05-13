@@ -229,7 +229,7 @@ struct HeartChartView: View {
     var body: some View {
         Group {
             Group {
-                if points.count <= 1 {
+                if points.flatMap({ $0.values }).count <= 1 {
                     EmptyChartView(.heart)
                 } else {
                     Section {
