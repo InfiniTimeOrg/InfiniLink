@@ -10,6 +10,7 @@ import SwiftUI
 struct GeneralSettingsView: View {
     @State private var showUnpairConfirmation = false
     @State private var showResetConfirmation = false
+    @State private var showFindView = false
     
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
@@ -61,14 +62,18 @@ struct GeneralSettingsView: View {
                 }
             }
             Section {
-                Button {
+                Button("Find Lost Watch") {
+                    showFindView = true
+                }
+                .sheet(isPresented: $showFindView) {
+                    FindLostDeviceView()
+                }
+                Button(bleManager.isConnectedToPinetime ? "Disconnect": "Connect") {
                     if bleManager.isConnectedToPinetime {
                         bleManager.disconnect()
                     } else {
                         bleManager.startScanning()
                     }
-                } label: {
-                    Text(bleManager.isConnectedToPinetime ? "Disconnect": "Connect")
                 }
                 .disabled(bleManager.isBusy)
             }

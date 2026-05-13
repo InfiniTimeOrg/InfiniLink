@@ -9,14 +9,13 @@ import SwiftUI
 import EventKit
 
 struct NotificationsSettingsView: View {
-    @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var notificationManager = NotificationManager.shared
-    @ObservedObject var settingsManager = NotificationSettingsManager.shared
+    @ObservedObject private var bleManager = BLEManager.shared
+    @ObservedObject private var notificationManager = NotificationManager.shared
+    @ObservedObject private var settingsManager = NotificationSettingsManager.shared
     
     @State private var showSendNotificationSheet = false
-    @State private var showFindLostDeviceSheet = false
     
-    let bleWriteManager = BLEWriteManager()
+    private let bleWriteManager = BLEWriteManager()
     
     var body: some View {
         List {
@@ -81,13 +80,6 @@ struct NotificationsSettingsView: View {
                 .sheet(isPresented: $showSendNotificationSheet) {
                     ArbitraryNotificationView()
                 }
-            }
-            
-            Button("Find Lost Device") {
-                showFindLostDeviceSheet = true
-            }
-            .sheet(isPresented: $showFindLostDeviceSheet) {
-                FindLostDeviceView()
             }
         }
         .navigationTitle("Notifications")

@@ -148,17 +148,27 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func disconnectMapPoints() -> [DisconnectMapPoint] {
-        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+    func disconnectMapPoint() -> DisconnectMapPoint? {
+        guard let deviceId = bleManager.pairedDeviceID else { return nil }
+        
+        let context = persistenceController.container.viewContext
         
         let fetchRequest: NSFetchRequest<DisconnectMapPoint> = DisconnectMapPoint.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
+        fetchRequest.fetchLimit = 1
         
         do {
-            return try persistenceController.container.viewContext.fetch(fetchRequest)
+            if let existing = try context.fetch(fetchRequest).first {
+                return existing
+            }
+            
+            let point = DisconnectMapPoint(context: context)
+            point.deviceId = deviceId
+            
+            return point
         } catch {
-            log("Error fetching disconnect points: \(error)", caller: "ChartManager")
-            return []
+            log("Error fetching disconnect point: \(error)", caller: "ChartManager")
+            return nil
         }
     }
     

@@ -296,31 +296,10 @@ extension BLEManager: CBCentralManagerDelegate {
                     MusicController.shared.pause()
                 }
                 
-                // Drop a pin on the map where the watch disconnected with an error, in case it's because the user left it behind
-                let latitude = locationManager.location?.coordinate.latitude ?? 0
-                let longitude = locationManager.location?.coordinate.longitude ?? 0
-                let location = CLLocation(latitude: latitude, longitude: longitude)
-                
-                // Check for proximity match within 30 meters
-                let isDuplicate = ChartManager.shared.disconnectMapPoints().contains { point in
-                    let pointLocation = CLLocation(latitude: point.latitude, longitude: point.longitude)
-                    return location.isNear(pointLocation)
-                }
-                
-                if !isDuplicate {
-                    let context = persistenceController.container.viewContext
-                    let disconnectPoint = DisconnectMapPoint(context: context)
-                    disconnectPoint.deviceId = peripheral.identifier.uuidString
-                    disconnectPoint.latitude = latitude
-                    disconnectPoint.longitude = longitude
-                    disconnectPoint.timestamp = Date()
-                    
-                    let points = ChartManager.shared.disconnectMapPoints()
-                    for index in points.indices {
-                        if index > 3 { // Only keep the last three disconnect points
-                            ChartManager.shared.deleteAllDisconnectMapPoints(all: false)
-                        }
-                    }
+                if let point = ChartManager.shared.disconnectMapPoint(), let lon = locationManager.location?.coordinate.longitude, let lat = locationManager.location?.coordinate.latitude {
+                    point.latitude = lat
+                    point.longitude = lon
+                    point.timestamp = Date()
                     
                     persistenceController.save()
                 }
@@ -397,13 +376,5 @@ extension BLEManager: CBPeripheralDelegate {
         }
         
         self.rssi = RSSI.intValue
-    }
-}
-
-extension CLLocation {
-    func isNear(_ other: CLLocation) -> Bool {
-        let avgDistance: Double = 30 // Around a 100 ft
-        
-        return self.distance(from: other) <= avgDistance
     }
 }
