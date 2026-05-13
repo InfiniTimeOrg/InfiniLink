@@ -45,24 +45,6 @@ struct HeartView: View {
             List {
                 Section {
                     DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (chartManager.heartPoints().last?.timestamp?.timeIntervalSinceNow ?? 60) < 60) {
-                        HStack {
-                            DetailHeaderSubItemView(
-                                title: "Min",
-                                value: heartRate(for: heartPointValues.min() ?? 0)
-                            )
-                            DetailHeaderSubItemView(
-                                title: "Avg",
-                                value: heartRate(for: {
-                                    let ints = heartPointValues.compactMap { Int($0) }
-                                    guard ints.count > 0 else { return 0.0 }
-                                    return Double(ints.reduce(0, +)) / Double(ints.count)
-                                }())
-                            )
-                            DetailHeaderSubItemView(
-                                title: "Max",
-                                value: heartRate(for: heartPointValues.max() ?? 0)
-                            )
-                        }
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))

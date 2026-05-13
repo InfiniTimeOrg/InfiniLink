@@ -13,7 +13,7 @@ struct HeartChartDataPoint: Identifiable, Equatable {
     let date: Date
     let min: Double
     let max: Double
-    let average: Double
+    let median: Double
     let values: [Double]
 }
 
@@ -67,7 +67,7 @@ struct HeartChartView: View {
                 date: Calendar.current.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
                 min: values.min() ?? 0,
                 max: values.max() ?? 0,
-                average: {
+                median: {
                     let sorted = values.sorted()
                     let mid = sorted.count / 2
                     return sorted.count % 2 == 0
@@ -119,7 +119,7 @@ struct HeartChartView: View {
         
         PointMark(
             x: .value("Time", point.date),
-            y: .value("BPM", point.average)
+            y: .value("BPM", point.median)
         )
         .foregroundStyle(heartColor)
         .symbolSize(CGSize(width: 7, height: 7))
@@ -136,11 +136,10 @@ struct HeartChartView: View {
     
     // MARK: iOS 16- fixed chart
     func chartPage(for offset: Int) -> some View {
-        let start = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: offset, to: Date())!)
-        let end = Date(timeInterval: 86400, since: start)
-        let pagePoints = points.filter { $0.date >= start && $0.date <= end }
-        let pageMin = Int(pagePoints.map({ $0.min }).min() ?? 0)
-        let pageMax = Int(pagePoints.map({ $0.max }).max() ?? 0)
+        let xMin = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: offset, to: Date())!)
+        let xMax = Date(timeInterval: 86400, since: xMin)
+        let yMin = displayedMin - 20
+        let yMax = displayedMax + 20
 
         return Chart {
             if let selectedViewHour {
@@ -148,14 +147,14 @@ struct HeartChartView: View {
                                 .foregroundStyle(Color.gray)
                         }
             
-            ForEach(pagePoints) { point in
+            ForEach(windowPoints) { point in
                 chartContent(for: point, selected: selectedViewHour)
             }
         }
         .frame(height: 280)
         .padding(.horizontal, 8)
-        .chartYScale(domain: (pageMin - 20)...(pageMax + 20))
-        .chartXScale(domain: start...end)
+        .chartYScale(domain: (yMin...yMax))
+        .chartXScale(domain: xMin...xMax)
         .chartXAxis {
             AxisMarks(values: .stride(by: .hour, count: 6)) { value in
                 AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
@@ -174,13 +173,9 @@ struct HeartChartView: View {
                     .contentShape(Rectangle())
                     .gesture(DragGesture(minimumDistance: 0)
                         .onChanged { value in
-                            let leadingPadding: CGFloat = 8
-                            let yAxisWidth: CGFloat = 40
-                            let adjustedWidth = geo.size.width - yAxisWidth - leadingPadding
-                            let clampedX = min(max(value.location.x - leadingPadding, 0), adjustedWidth)
-                            let fraction = clampedX / adjustedWidth
-                            let totalSeconds: TimeInterval = 86400
-                            rawSelectedHour = start.addingTimeInterval(fraction * totalSeconds)
+                            let adjustedWidth = geo.size.width - 48 // 40 y-axis + 8 horizontal padding
+                            let normalizedXPosition = min(max(value.location.x - 8, 0), adjustedWidth) / adjustedWidth
+                            rawSelectedHour = xMin.addingTimeInterval(normalizedXPosition * 86400)
                         }
                         .onEnded { _ in
                             rawSelectedHour = nil
@@ -295,7 +290,7 @@ struct HeartChartView: View {
                                 + Text("BPM")
                                 
                                 let style = Date.FormatStyle().hour(.defaultDigits(amPM: .abbreviated))
-                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings") · \(Int(selectedViewHour.average)) BPM avg")
+                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings")\(selectedViewHour.values.count > 1 ? " · \(Int(selectedViewHour.median)) BPM avg" : "")")
                                     .foregroundColor(.secondary)
                                     .font(.subheadline)
                             }
