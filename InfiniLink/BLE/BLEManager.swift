@@ -86,6 +86,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
     @Published var hasDisconnectedForUpdate = false
+    @Published var ancsAuthorized = false // We don't need to persist this, it only matters when we're connected
     
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var infiniTime: CBPeripheral?
@@ -114,9 +115,6 @@ class BLEManager: NSObject, ObservableObject {
     }
     var isBusy: Bool {
         return isConnecting || isScanning
-    }
-    var ancsAuthorized: Bool {
-        return infiniTime?.ancsAuthorized ?? false
     }
     var connectionState: String {
         if isBusy {
@@ -204,6 +202,8 @@ class BLEManager: NSObject, ObservableObject {
         isConnectedToPinetime = true
         peripheralToConnect = nil // We're done using this, so set it to nil
         
+        updateAncsStatus(peripheral)
+        
         log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
@@ -240,6 +240,10 @@ class BLEManager: NSObject, ObservableObject {
         
         self.disconnect()
         self.startScanning()
+    }
+    
+    private func updateAncsStatus(_ peripheral: CBPeripheral) {
+        self.ancsAuthorized = peripheral.ancsAuthorized
     }
 }
 
@@ -347,6 +351,10 @@ extension BLEManager: CBPeripheralDelegate {
         for service in services {
             peripheral.discoverCharacteristics(nil, for: service)
         }
+    }
+    
+    func centralManager(_ central: CBCentralManager, didUpdateANCSAuthorizationFor peripheral: CBPeripheral) {
+        updateAncsStatus(peripheral)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didDiscoverCharacteristicsFor service: CBService, error: Error?) {
