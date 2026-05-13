@@ -8,7 +8,7 @@
 import SwiftUI
 import Charts
 
-struct HeartChartDataPoint: Identifiable {
+struct HeartChartDataPoint: Identifiable, Equatable {
     var id = UUID()
     let date: Date
     let min: Double
@@ -341,6 +341,10 @@ struct HeartChartView: View {
         // fixed graph
         .onChange(of: dayOffset) { _ in
             updateDisplayed()
+        }
+        .onChange(of: selectedViewHour) { newValue in
+            guard newValue != nil else { return }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
     }
 }
