@@ -106,7 +106,7 @@ struct HeartChartView: View {
     }
     
     @ChartContentBuilder
-    func chartContent(for point: HeartChartDataPoint) -> some ChartContent {
+    func chartContent(for point: HeartChartDataPoint, selected: HeartChartDataPoint?) -> some ChartContent {
         BarMark(
             x: .value("Time", point.date),
             yStart: .value("Min", point.min),
@@ -115,7 +115,7 @@ struct HeartChartView: View {
         )
         .foregroundStyle(darkHeartColor)
         .cornerRadius(4)
-        //.clipShape(Capsule())
+        .opacity(selected == nil || selected?.date == point.date ? 1 : 0.5)
         
         PointMark(
             x: .value("Time", point.date),
@@ -124,6 +124,7 @@ struct HeartChartView: View {
         .foregroundStyle(heartColor)
         .symbolSize(CGSize(width: 7, height: 7))
         .symbol(.circle)
+        .opacity(selected == nil || selected?.date == point.date ? 1 : 0.25)
     }
     
     // fixed graph
@@ -142,8 +143,13 @@ struct HeartChartView: View {
         let pageMax = Int(pagePoints.map({ $0.max }).max() ?? 0)
 
         return Chart {
+            if let selectedViewHour {
+                            RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
+                                .foregroundStyle(Color.gray)
+                        }
+            
             ForEach(pagePoints) { point in
-                chartContent(for: point)
+                chartContent(for: point, selected: selectedViewHour)
             }
         }
         .frame(height: 280)
@@ -162,6 +168,26 @@ struct HeartChartView: View {
                 AxisValueLabel()
             }
         }
+        .overlay(
+            GeometryReader { geo in
+                Color.clear
+                    .contentShape(Rectangle())
+                    .gesture(DragGesture(minimumDistance: 0)
+                        .onChanged { value in
+                            let leadingPadding: CGFloat = 8
+                            let yAxisWidth: CGFloat = 40
+                            let adjustedWidth = geo.size.width - yAxisWidth - leadingPadding
+                            let clampedX = min(max(value.location.x - leadingPadding, 0), adjustedWidth)
+                            let fraction = clampedX / adjustedWidth
+                            let totalSeconds: TimeInterval = 86400
+                            rawSelectedHour = start.addingTimeInterval(fraction * totalSeconds)
+                        }
+                        .onEnded { _ in
+                            rawSelectedHour = nil
+                        }
+                    )
+            }
+        )
     }
     
     var pagedChart: some View {
@@ -208,7 +234,7 @@ struct HeartChartView: View {
                         }
             
             ForEach(points) { point in
-                chartContent(for: point)
+                chartContent(for: point, selected: selectedViewHour)
             }
         }
         .frame(height: 280)
@@ -310,12 +336,10 @@ struct HeartChartView: View {
         }
         .onChange(of: bleManager.heartRate) { _ in
             let previousLatest = latestDate
-            let wasAtLatest = scrollPositionDate >= Date(timeInterval: -86400, since: previousLatest)
             points = heartPoints()
-            if Calendar.current.component(.hour, from: latestDate) > Calendar.current.component(.hour, from: previousLatest) {
-                if wasAtLatest {
-                    scrollPositionDate = Date(timeInterval: -86400, since: latestDate)
-                }
+            if !Calendar.current.isDate(latestDate, inSameDayAs: previousLatest) {
+                dayOffset = 0
+                scrollPositionDate = Calendar.current.startOfDay(for: latestDate)
             }
             updateDisplayed()
             updateYScale() // scrollable chart
