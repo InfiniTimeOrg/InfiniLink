@@ -85,7 +85,7 @@ extension NotificationManager {
         let currentTime = Date().timeIntervalSince1970
         let thirtyMinutes = TimeInterval(60 * 30)
         
-        let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone is has reached \(level)%", comment: ""))
+        let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
         
         switch state {
         case .full:
