@@ -24,7 +24,7 @@ class ExerciseViewModel: ObservableObject {
     @Published var exercisePaused = false
     @Published var timer: Timer?
     @Published var userExercises = [UserExercise]()
-    @Published var pinnedExercises = [String]()
+    @Published var pinnedExerciseIds = [String]()
     
     var appDidEnterBackgroundDate: Date?
     
@@ -75,20 +75,21 @@ class ExerciseViewModel: ObservableObject {
     }
     
     func setExercisePinned(_ exercise: Exercise) {
-        if pinnedExercises.contains(exercise.id) {
-            pinnedExercises.removeAll(where: { $0 == exercise.id })
+        if pinnedExerciseIds.contains(exercise.id) {
+            pinnedExerciseIds.removeAll(where: { $0 == exercise.id })
         } else {
-            pinnedExercises.append(exercise.id)
+            pinnedExerciseIds.append(exercise.id)
         }
+        setPinnedExercises()
     }
     
     func getPinnedExercises() {
         let pinnedExercises = userDefaults?.array(forKey: "pinnedExercises") as? [String] ?? []
-        self.pinnedExercises = pinnedExercises
+        self.pinnedExerciseIds = pinnedExercises
     }
     
     func setPinnedExercises() {
-        userDefaults?.set(self.pinnedExercises, forKey: "pinnedExercises")
+        userDefaults?.set(self.pinnedExerciseIds, forKey: "pinnedExercises")
     }
     
     func reset() {
