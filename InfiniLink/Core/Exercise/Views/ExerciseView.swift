@@ -37,22 +37,17 @@ struct ExerciseView: View {
                             Text("You don't have any saved exercises. You can start a new exercise by choosing one from the list below.")
                         }
                     }
-                    if !exerciseViewModel.pinnedExercises.isEmpty {
+                    if !exerciseViewModel.pinnedExerciseIds.isEmpty {
                         Section("Pinned") {
-                            ForEach(exerciseViewModel.pinnedExercises, id: \.self) { id in
-                                let exercise = exerciseViewModel.exercises.first(where: { $0.id == id })
-                                
-                                if let exercise {
-                                    ExerciseRowView(exercise, pinned: true)
-                                }
+                            let exerciseMap = Dictionary(uniqueKeysWithValues: exerciseViewModel.exercises.map { ($0.id, $0) })
+                            ForEach(exerciseViewModel.pinnedExerciseIds.compactMap { exerciseMap[$0] }) { exercise in
+                                ExerciseRowView(exercise, pinned: true)
                             }
                         }
                     }
                     Section {
-                        ForEach(exerciseViewModel.exercises, id: \.id) { exercise in
-                            if !exerciseViewModel.pinnedExercises.contains(exercise.id) {
-                                ExerciseRowView(exercise)
-                            }
+                        ForEach(exerciseViewModel.exercises.filter({ !exerciseViewModel.pinnedExerciseIds.contains($0.id) }), id: \.id) { exercise in
+                            ExerciseRowView(exercise)
                         }
                     } header: {
                         Text("All Exercises")

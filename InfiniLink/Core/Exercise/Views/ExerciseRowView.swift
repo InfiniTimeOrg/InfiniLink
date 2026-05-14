@@ -31,19 +31,14 @@ struct ExerciseRowView: View {
         .disabled(!bleManager.hasLoadedCharacteristics)
         .contextMenu {
             Button {
-                withAnimation {
-                    exerciseViewModel.setExercisePinned(exercise)
-                }
-                exerciseViewModel.setPinnedExercises()
+                exerciseViewModel.setExercisePinned(exercise)
             } label: {
                 pinLabel
             }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {
             Button {
-                withAnimation {
-                    exerciseViewModel.setExercisePinned(exercise)
-                }
+                exerciseViewModel.setExercisePinned(exercise)
             } label: {
                 pinLabel
             }

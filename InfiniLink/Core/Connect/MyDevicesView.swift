@@ -83,7 +83,6 @@ struct MyDevicesView: View {
                             AboutRowView("Software Version", value: selectedWatch.firmware ?? "Unknown")
                             AboutRowView("Manufacturer", value: selectedWatch.manufacturer ?? "Unknown")
                             AboutRowView("Model Name", value: selectedWatch.modelNumber ?? "Unknown")
-                            AboutRowView("UUID", value: selectedWatch.bleUUID ?? "Unknown")
                         }
                         Section {
                             AboutRowView("File System", value: selectedWatch.blefsVersion ?? "Unknown")

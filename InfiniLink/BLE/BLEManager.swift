@@ -114,7 +114,7 @@ class BLEManager: NSObject, ObservableObject {
         return deviceManager.firmware.components(separatedBy: ".").first == "0"
     }
     var isBusy: Bool {
-        return isConnecting || isScanning
+        return isConnecting || (isScanning && !isPairingNewDevice)
     }
     var connectionState: String {
         if isBusy {
@@ -249,17 +249,11 @@ class BLEManager: NSObject, ObservableObject {
 
 extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if let pairedDeviceID = pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
-            connect(peripheral: peripheral) {}
+        if let pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
+            connect(peripheral: peripheral)
         }
-        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier.uuidString == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
-            if isPairingNewDevice { // Only check if we know the device when pairing a new watch, because we don't one to show up
-                if !deviceManager.watches.compactMap({ $0.uuid }).contains(peripheral.identifier.uuidString) { // The discovered watch is not already paired
-                    newPeripherals.append(peripheral)
-                }
-            } else {
-                newPeripherals.append(peripheral)
-            }
+        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier == peripheral.identifier }) && !deviceManager.watches.contains(where: { $0.uuid! == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
+            newPeripherals.append(peripheral)
         }
     }
     

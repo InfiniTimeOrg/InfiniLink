@@ -1299,6 +1299,7 @@
 
     },
     "UUID" : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
