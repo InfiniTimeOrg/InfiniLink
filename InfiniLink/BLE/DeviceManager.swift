@@ -49,9 +49,6 @@ class DeviceManager: ObservableObject {
     var blefsVersion: String {
         return bleManager.pairedDevice?.blefsVersion ?? ""
     }
-    var bleUUID: String {
-        return bleManager.pairedDevice?.bleUUID ?? ""
-    }
     
     var hour24: Bool {
         return settings.clockType == .H24
@@ -59,6 +56,10 @@ class DeviceManager: ObservableObject {
     
     @Published var settings = Settings()
     @Published var watches = [Device]()
+    
+    init() {
+        fetchAllDevices()
+    }
     
     // Update persisted settings, before settings.dat has loaded
     func setSettings(_ device: Device? = nil) {
@@ -104,7 +105,6 @@ class DeviceManager: ObservableObject {
             let newDevice = Device(context: context)
             context.perform {
                 newDevice.uuid = id
-                newDevice.bleUUID = id
                 newDevice.blefsVersion = ""
                 newDevice.firmware = ""
                 newDevice.softwareRevision = ""
@@ -184,7 +184,7 @@ class DeviceManager: ObservableObject {
                     context.delete(deviceToDelete)
                     try context.save()
                     
-                    self.watches = try context.fetch(Device.fetchRequest())
+                    fetchAllDevices()
                     if watches.count > 0 {
                         let nextWatch = watches.first!
                         bleManager.pairedDeviceID = nextWatch.uuid // Switch to the user's next watch
@@ -224,8 +224,6 @@ extension DeviceManager {
         context.perform {
             do {
                 guard let device = try context.existingObject(with: objectID) as? Device else { return }
-                
-                device.bleUUID = characteristic.uuid.uuidString
 
                 switch characteristic.uuid {
                 case CharacteristicIdentifier.modelNumber:

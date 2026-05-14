@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="23788" systemVersion="24D70" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="24837" systemVersion="25F71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
     <entity name="BatteryDataPoint" representedClassName="BatteryDataPoint" syncable="YES" codeGenerationType="class">
         <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
@@ -9,7 +9,6 @@
     <entity name="Device" representedClassName="Device" syncable="YES" codeGenerationType="class">
         <attribute name="alwaysOnDisplay" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="blefsVersion" attributeType="String" defaultValueString=""/>
-        <attribute name="bleUUID" attributeType="String" defaultValueString=""/>
         <attribute name="brightLevel" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
         <attribute name="chimesOption" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="clockType" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
