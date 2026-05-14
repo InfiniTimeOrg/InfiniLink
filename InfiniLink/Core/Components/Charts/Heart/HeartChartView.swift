@@ -8,6 +8,9 @@
 import SwiftUI
 import Charts
 
+fileprivate let heartColor = Color.pink
+fileprivate let darkHeartColor = Color(red: 0.369, green: 0.090, blue: 0.145) // dark pink
+
 struct HeartChartDataPoint: Identifiable, Equatable {
     var id = UUID()
     let date: Date
@@ -25,46 +28,47 @@ struct HeartChartView: View {
     @AppStorage("maxHeartRange") private var maxHeartRange = 200
     
     @State private var points = [HeartChartDataPoint]()
-    @State private var dayOffset: Int = 0
     @State private var displayedDate: Date = Date()
-    @State private var displayedMin: Int = 0
-    @State private var displayedMax: Int = 0
     @State private var scrollPositionDate: Date = Date()
     @State private var rawSelectedHour: Date? = nil
     
-    var windowStart: Date {
-        Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: dayOffset, to: Date())!)
-    }
-    var windowEnd: Date {
-        Date(timeInterval: 86400, since: windowStart)
-    }
-    var windowPoints: [HeartChartDataPoint] {
-        points.filter { $0.date >= windowStart && $0.date <= windowEnd }
-    }
+    private let cal = Calendar.current
     
     var visiblePoints: [HeartChartDataPoint] {
         let visibleEnd = Date(timeInterval: 86400, since: scrollPositionDate)
         return points.filter { $0.date >= scrollPositionDate && $0.date <= visibleEnd }
     }
-    var visibleMin: Int {
-        Int(visiblePoints.map({ $0.min }).min() ?? 0)
+    var earliestDate: Date {
+        points.map({ $0.date }).min() ?? Date()
     }
-    var visibleMax: Int {
-        Int(visiblePoints.map({ $0.max }).max() ?? 0)
+    var latestDate: Date {
+        points.map({ $0.date }).max() ?? Date()
+    }
+    var displayedMin: Int {
+        Int(visiblePoints.map({ $0.min }).min() ?? 50)
+    }
+    var displayedMax: Int {
+        Int(visiblePoints.map({ $0.max }).max() ?? 100)
+    }
+    var selectedViewHour: HeartChartDataPoint? {
+        guard let rawSelectedHour else { return nil }
+        return points.first {
+            cal.isDate(rawSelectedHour, equalTo: $0.date, toGranularity: .hour)
+        }
     }
     
     func heartPoints() -> [HeartChartDataPoint] {
         let raw = ChartManager.shared.heartPoints()
         
         let grouped = Dictionary(grouping: raw) { sample -> Date in
-            let comps = Calendar.current.dateComponents([.year, .month, .day, .hour], from: sample.timestamp ?? Date())
-            return Calendar.current.date(from: comps) ?? Date()
+            let comps = cal.dateComponents([.year, .month, .day, .hour], from: sample.timestamp ?? Date())
+            return cal.date(from: comps) ?? Date()
         }
         
-        return grouped.map { (bucket, samples) in
+        return grouped.map { bucket, samples in
             let values = samples.map { $0.value }
             return HeartChartDataPoint(
-                date: Calendar.current.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
+                date: cal.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
                 min: values.min() ?? 0,
                 max: values.max() ?? 0,
                 median: {
@@ -79,30 +83,8 @@ struct HeartChartView: View {
         }.sorted { $0.date < $1.date }
     }
     
-    var earliestDate: Date {
-        points.map({ $0.date }).min() ?? Date()
-    }
-    var latestDate: Date {
-        points.map({ $0.date }).max() ?? Date()
-    }
-    
-    let heartColor = Color.pink
-    let darkHeartColor = Color(red: 0.369, green: 0.090, blue: 0.145) // darkened version of heartColor
-    
     func isSingleReading(_ point: HeartChartDataPoint) -> Bool {
         point.min == point.max
-    }
-    
-    func updateYScale() {
-        displayedMin = visibleMin
-        displayedMax = visibleMax
-    }
-    
-    var selectedViewHour: HeartChartDataPoint? {
-        guard let rawSelectedHour else { return nil }
-        return points.first {
-            Calendar.current.isDate(rawSelectedHour, equalTo: $0.date, toGranularity: .hour)
-        }
     }
     
     @ChartContentBuilder
@@ -127,163 +109,107 @@ struct HeartChartView: View {
         .opacity(selected == nil || selected?.date == point.date ? 1 : 0.25)
     }
     
-    // fixed graph
-    func updateDisplayed() {
-        displayedDate = windowStart
-        displayedMin = Int(windowPoints.map({ $0.min }).min() ?? 0)
-        displayedMax = Int(windowPoints.map({ $0.max }).max() ?? 0)
+    func scrollButton(_ dir: Int, disabled: Bool) -> some View {
+        Button {
+            scrollPositionDate = cal.date(byAdding: .day, value: dir, to: scrollPositionDate)!
+        } label: {
+            Image(systemName: dir == 1 ? "chevron.right" : "chevron.left")
+                .padding(12)
+                .foregroundStyle(Color.primary)
+                .fontWeight(.medium)
+                .background(Material.regular)
+                .clipShape(Circle())
+        }
+        .disabled(disabled)
+        .opacity(disabled ? 0.5 : 1)
     }
     
-    // MARK: iOS 16- fixed chart
-    func chartPage(for offset: Int) -> some View {
-        let xMin = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: offset, to: Date())!)
-        let xMax = Date(timeInterval: 86400, since: xMin)
-        let yMin = displayedMin - 20
-        let yMax = displayedMax + 20
-
-        return Chart {
-            if let selectedViewHour {
-                            RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
-                                .foregroundStyle(Color.gray)
-                        }
-            
-            ForEach(windowPoints) { point in
-                chartContent(for: point, selected: selectedViewHour)
-            }
-        }
-        .frame(height: 280)
-        .padding(.horizontal, 8)
-        .chartYScale(domain: (yMin...yMax))
-        .chartXScale(domain: xMin...xMax)
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .hour, count: 6)) { value in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
-                AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
-            }
-        }
-        .chartYAxis {
-            AxisMarks(position: .trailing) { value in
-                AxisGridLine()
-                AxisValueLabel()
-            }
-        }
-        .overlay(
-            GeometryReader { geo in
-                Color.clear
-                    .contentShape(Rectangle())
-                    .gesture(DragGesture(minimumDistance: 0)
-                        .onChanged { value in
-                            let adjustedWidth = geo.size.width - 48 // 40 y-axis + 8 horizontal padding
-                            let normalizedXPosition = min(max(value.location.x - 8, 0), adjustedWidth) / adjustedWidth
-                            rawSelectedHour = xMin.addingTimeInterval(normalizedXPosition * 86400)
-                        }
-                        .onEnded { _ in
-                            rawSelectedHour = nil
-                        }
-                    )
-            }
-        )
-    }
-    
-    var pagedChart: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Button {
-                    dayOffset -= 1
-                } label: {
-                    Image(systemName: "chevron.left")
-                }
-                .disabled(Calendar.current.isDate(windowStart, inSameDayAs: earliestDate))
-                
-                Spacer()
-                
-                Button {
-                    dayOffset += 1
-                } label: {
-                    Image(systemName: "chevron.right")
-                }
-                .disabled(dayOffset >= 0)
-            }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 8)
-            .background(Color(.secondarySystemGroupedBackground))
-            .clipShape(Capsule())
-            .padding(.bottom, 8)
-            
-            chartPage(for: dayOffset)
-        }
-    }
-    
-    // MARK: iOS 17+ scrollable chart
-    @available(iOS 17, *)
-    var scrollableChart: some View {
-        let xMin = Calendar.current.startOfDay(for: earliestDate)
-        let xMax = Calendar.current.startOfDay(for: latestDate) + 86400 + 3600 // + one day and an hour, fixes the snappy scrolling otherwise breaking sometimes
+    func chart() -> some View {
+        let xMin = cal.startOfDay(for: earliestDate)
+        let xMax = cal.startOfDay(for: latestDate) + 86400 + 3600 // + one day and an hour, fixes the snappy scrolling otherwise breaking sometimes
         let yMin = displayedMin - 20
         let yMax = displayedMax + 20
         
-        return Chart {
-            if let selectedViewHour {
-                            RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
-                                .foregroundStyle(Color.gray)
+        var chart: some View {
+            Chart {
+                if let selectedViewHour {
+                    RuleMark(x: .value("Selected Hour", selectedViewHour.date, unit: .hour))
+                        .foregroundStyle(Color.gray)
+                }
+                ForEach(points) { point in
+                    chartContent(for: point, selected: selectedViewHour)
+                }
+            }
+            .frame(minHeight: 280)
+            .padding(.horizontal, 8)
+            .chartYScale(domain: yMin...yMax)
+            .chartXScale(domain: xMin...xMax)
+            .chartXAxis {
+                AxisMarks(values: .stride(by: .hour, count: 6)) { value in
+                    AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
+                    AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
+                }
+            }
+            .chartYAxis {
+                AxisMarks(position: .trailing) { value in
+                    AxisGridLine()
+                    AxisValueLabel()
+                }
+            }
+        }
+        
+        return Group {
+            if #available(iOS 17, *) {
+                chart
+                    .chartScrollableAxes(.horizontal)
+                    .chartXVisibleDomain(length: 86400)
+                    .chartScrollPosition(x: $scrollPositionDate)
+                    .chartScrollTargetBehavior(
+                        .valueAligned(
+                            matching: DateComponents(timeZone: .current, minute: 0, second: 0),
+                            majorAlignment: .matching(DateComponents(timeZone: .current, hour: 0))
+                        )
+                    )
+                    .chartXSelection(value: $rawSelectedHour)
+            } else {
+                chart
+                    .overlay(
+                        GeometryReader { geo in
+                            Color.clear
+                                .contentShape(Rectangle())
+                                .gesture(DragGesture(minimumDistance: 0)
+                                    .onChanged { value in
+                                        let adjustedWidth = geo.size.width - 48 // 40 y-axis + 8 horizontal padding
+                                        let normalizedXPosition = min(max(value.location.x - 8, 0), adjustedWidth) / adjustedWidth
+                                        rawSelectedHour = xMin.addingTimeInterval(normalizedXPosition * 86400)
+                                    }
+                                    .onEnded { _ in
+                                        rawSelectedHour = nil
+                                    }
+                                )
                         }
-            
-            ForEach(points) { point in
-                chartContent(for: point, selected: selectedViewHour)
+                    )
             }
         }
-        .frame(height: 280)
-        .padding(.horizontal, 8)
-        .chartYScale(domain: (yMin...yMax))
-        .chartXAxis {
-            AxisMarks(values: .stride(by: .hour, count: 6)) { value in
-                AxisGridLine(stroke: StrokeStyle(lineWidth: 0.5, dash: [4]))
-                AxisValueLabel(format: .dateTime.hour(.defaultDigits(amPM: .omitted)))
-            }
-        }
-        .chartYAxis {
-            AxisMarks(position: .trailing) { value in
-                AxisGridLine()
-                AxisValueLabel()
-            }
-        }
-        .chartScrollableAxes(.horizontal)
-        .chartXVisibleDomain(length: 86400)
-        .chartXScale(domain: (xMin...xMax))
-        .chartScrollPosition(x: $scrollPositionDate)
-        .chartScrollTargetBehavior(
-            .valueAligned(
-                matching: DateComponents(timeZone: .current, minute: 0, second: 0),
-                majorAlignment: .matching(DateComponents(timeZone: .current, hour: 0))
-            )
-        )
-        .chartXSelection(value: $rawSelectedHour)
     }
     
     var body: some View {
         Group {
-            Group {
-                if points.flatMap({ $0.values }).count <= 1 {
-                    EmptyChartView(.heart)
-                } else {
-                    Section {
-                        VStack(spacing: 0) {
-                            if #available(iOS 17, *) {
-                                scrollableChart
-                            } else {
-                                pagedChart
-                            }
-                        }
-                        .buttonStyle(.plain)
-                    } header: {
-                        if let selectedViewHour {
-                            let rangeFirstHour = Calendar.current.dateInterval(of: .hour, for: selectedViewHour.date)?.start ?? selectedViewHour.date
-                            let rangeLastHour = Calendar.current.date(byAdding: .hour, value: 1, to: rangeFirstHour) ?? rangeFirstHour
-                            
-                            VStack(alignment: .leading) {
-                                Text("Range")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+            if points.flatMap({ $0.values }).count <= 1 {
+                EmptyChartView(.heart)
+            } else {
+                Section {
+                    chart()
+                } header: {
+                    HStack {
+                        VStack(alignment: .leading) {
+                            Text("Range")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            if let selectedViewHour {
+                                let rangeFirstHour = cal.dateInterval(of: .hour, for: selectedViewHour.date)?.start ?? selectedViewHour.date
+                                let rangeLastHour = cal.date(byAdding: .hour, value: 1, to: rangeFirstHour) ?? rangeFirstHour
+                                
                                 Text(isSingleReading(selectedViewHour) ? "\(Int(selectedViewHour.min)) " : "\(Int(selectedViewHour.min))–\(Int(selectedViewHour.max)) ")
                                     .font(.system(.title, design: .rounded))
                                     .foregroundColor(.primary)
@@ -293,67 +219,43 @@ struct HeartChartView: View {
                                 Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings")\(selectedViewHour.values.count > 1 ? " · \(Int(selectedViewHour.median)) BPM avg" : "")")
                                     .foregroundColor(.secondary)
                                     .font(.subheadline)
-                            }
-                            .fontWeight(.semibold)
-                        } else {
-                            VStack(alignment: .leading) {
-                                Text("Range")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
+                            } else {
                                 Text(displayedMax == 0 || displayedMin == 0 ? "0 " : "\(displayedMin)–\(displayedMax) ")
                                     .font(.system(.title, design: .rounded))
                                     .foregroundColor(.primary)
                                 + Text("BPM")
                                 let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
                                 let end = Date(timeInterval: 86400, since: rounded)
-                                let isFullDay = Calendar.current.component(.hour, from: rounded) == 0
+                                let isFullDay = cal.component(.hour, from: rounded) == 0
                                 Text(isFullDay
-                                    ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-                                    : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
+                                     ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                                     : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
                                 .foregroundColor(.secondary)
                                 .font(.subheadline)
                             }
-                            .fontWeight(.semibold)
+                        }
+                        .fontWeight(.semibold)
+                        if #unavailable(iOS 17), selectedViewHour == nil {
+                            Spacer()
+                            scrollButton(-1, disabled: cal.startOfDay(for: latestDate) <= cal.startOfDay(for: Date()))
+                            scrollButton(1, disabled: cal.startOfDay(for: earliestDate) >= cal.startOfDay(for: Date()))
                         }
                     }
-
-                    .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
                 }
+                .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
             }
-            .listRowBackground(Color.clear)
         }
+        .listRowBackground(Color.clear)
         .onAppear {
             points = heartPoints()
-            scrollPositionDate = Calendar.current.startOfDay(for: latestDate)
-            displayedDate = scrollPositionDate
-            updateDisplayed()
-            updateYScale()
+            scrollPositionDate = cal.startOfDay(for: latestDate)
         }
         .onChange(of: bleManager.heartRate) { _ in
-            let previousLatest = latestDate
             points = heartPoints()
-            if !Calendar.current.isDate(latestDate, inSameDayAs: previousLatest) {
-                dayOffset = 0
+            let previousLatest = latestDate
+            if !cal.isDate(latestDate, inSameDayAs: previousLatest) {
                 scrollPositionDate = Calendar.current.startOfDay(for: latestDate)
             }
-            updateDisplayed()
-            updateYScale() // scrollable chart
-        }
-        // scrollable graph
-        .onChange(of: scrollPositionDate) { newValue in
-            displayedDate = newValue
-        }
-        .onChange(of: scrollPositionDate) { newValue in
-            Task {
-                try? await Task.sleep(nanoseconds: 300_000_000)
-                if scrollPositionDate == newValue {
-                    updateYScale()
-                }
-            }
-        }
-        // fixed graph
-        .onChange(of: dayOffset) { _ in
-            updateDisplayed()
         }
         .onChange(of: selectedViewHour) { newValue in
             guard newValue != nil else { return }
@@ -361,4 +263,3 @@ struct HeartChartView: View {
         }
     }
 }
-

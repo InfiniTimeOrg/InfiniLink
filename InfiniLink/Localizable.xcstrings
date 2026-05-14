@@ -97,12 +97,12 @@
         }
       }
     },
-    "%@-%@" : {
+    "%@, %@–%@ · %lld %@%@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@-%2$@"
+            "value" : "%1$@, %2$@–%3$@ · %4$lld %5$@%6$@"
           }
         }
       }
@@ -175,18 +175,18 @@
         }
       }
     },
-    "%lld-%lld " : {
+    "%lld-day" : {
+
+    },
+    "%lld–%lld " : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$lld-%2$lld "
+            "value" : "%1$lld–%2$lld "
           }
         }
       }
-    },
-    "%lld-day" : {
-
     },
     "%lld%%" : {
 
@@ -820,6 +820,9 @@
         }
       }
     },
+    "Max" : {
+
+    },
     "Maximum" : {
       "localizations" : {
         "fr" : {
@@ -831,6 +834,9 @@
       }
     },
     "Metric" : {
+
+    },
+    "Min" : {
 
     },
     "Minimum" : {
@@ -868,9 +874,6 @@
 
     },
     "No" : {
-
-    },
-    "No Data" : {
 
     },
     "No Logs" : {
@@ -979,6 +982,9 @@
 
     },
     "Search for an address..." : {
+
+    },
+    "Selected Hour" : {
 
     },
     "Send" : {
@@ -1196,16 +1202,6 @@
     },
     "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
 
-    },
-    "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Today your heart rate reached a high of %1$lld, and dropped to a low of %2$lld BPM."
-          }
-        }
-      }
     },
     "Total" : {
 
