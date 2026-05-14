@@ -30,7 +30,6 @@ struct HeartChartView: View {
     @AppStorage("heartPointMarkMode") private var heartPointMarkMode = "average"
     
     @State private var points = [HeartChartDataPoint]()
-    @State private var displayedDate: Date = Date()
     @State private var scrollPositionDate: Date = Date()
     @State private var rawSelectedHour: Date? = nil
     @State private var displayedMin: Int = 40
@@ -67,7 +66,8 @@ struct HeartChartView: View {
     }
     
     func heartPoints() -> [HeartChartDataPoint] {
-        let raw = ChartManager.shared.heartPoints()
+        let predicate = NSPredicate(format: "deviceId == %@ AND timestamp >= %@ AND timestamp <= %@", bleManager.pairedDeviceID!, cal.startOfDay(for: earliestDate) as NSDate, latestDate as NSDate)
+        let raw = ChartManager.shared.heartPoints(predicate: predicate)
         
         let grouped = Dictionary(grouping: raw) { sample -> Date in
             let comps = cal.dateComponents([.year, .month, .day, .hour], from: sample.timestamp ?? Date())
@@ -264,6 +264,7 @@ struct HeartChartView: View {
             }
         }
         .onChange(of: scrollPositionDate) { newValue in
+            points = heartPoints()
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 if scrollPositionDate == newValue {
                     updateYScale()
