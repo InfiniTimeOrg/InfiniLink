@@ -10,6 +10,7 @@ import SwiftUI
 struct HeartSettingsView: View {
     @AppStorage("backgroundHRMMeasurements") var backgroundHRMMeasurements = false
     @AppStorage("filterHeartRateData") var filterHeartRateData = true
+    @AppStorage("heartPointMarkMode") var heartPointMarkMode = "average"
     
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
     
@@ -59,6 +60,13 @@ struct HeartSettingsView: View {
              */
             Section(footer: Text("Filter inconsistent data from your heart rate measurements.")) {
                 Toggle("Filter Values", isOn: $filterHeartRateData)
+            }
+            Section(footer: Text("Choose how the point mark on the heart rate chart is calculated.")) {
+                Picker("Point Mark", selection: $heartPointMarkMode) {
+                    Text("Average").tag("average")
+                    Text("Median").tag("median")
+                }
+                .pickerStyle(.menu)
             }
             Button {
                 exportCSV(generateCSV(from: Array(heartPoints)))

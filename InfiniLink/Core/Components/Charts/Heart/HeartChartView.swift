@@ -16,6 +16,7 @@ struct HeartChartDataPoint: Identifiable, Equatable {
     let date: Date
     let min: Double
     let max: Double
+    let average: Double
     let median: Double
     let values: [Double]
 }
@@ -26,6 +27,7 @@ struct HeartChartView: View {
     @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
     @AppStorage("minHeartRange") private var minHeartRange = 40
     @AppStorage("maxHeartRange") private var maxHeartRange = 200
+    @AppStorage("heartPointMarkMode") private var heartPointMarkMode = "average"
     
     @State private var points = [HeartChartDataPoint]()
     @State private var displayedDate: Date = Date()
@@ -56,6 +58,12 @@ struct HeartChartView: View {
             cal.isDate(rawSelectedHour, equalTo: $0.date, toGranularity: .hour)
         }
     }
+    var pointMarkLabel: String {
+        heartPointMarkMode == "average" ? "avg" : "mdn"
+    }
+    func pointMarkValue(for point: HeartChartDataPoint) -> Double {
+        heartPointMarkMode == "average" ? point.average : point.median
+    }
     
     func heartPoints() -> [HeartChartDataPoint] {
         let raw = ChartManager.shared.heartPoints()
@@ -71,12 +79,13 @@ struct HeartChartView: View {
                 date: cal.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
                 min: values.min() ?? 0,
                 max: values.max() ?? 0,
+                average: values.isEmpty ? 0 : values.reduce(0, +) / Double(values.count),
                 median: {
                     let sorted = values.sorted()
                     let mid = sorted.count / 2
                     return sorted.count % 2 == 0
-                        ? (sorted[mid - 1] + sorted[mid]) / 2
-                        : sorted[mid]
+                    ? (sorted[mid - 1] + sorted[mid]) / 2
+                    : sorted[mid]
                 }(),
                 values: values
             )
@@ -101,7 +110,7 @@ struct HeartChartView: View {
         
         PointMark(
             x: .value("Time", point.date),
-            y: .value("BPM", point.median)
+            y: .value("BPM", pointMarkValue(for: point))
         )
         .foregroundStyle(heartColor)
         .symbolSize(CGSize(width: 7, height: 7))
@@ -126,7 +135,7 @@ struct HeartChartView: View {
     
     func chart() -> some View {
         let xMin = cal.startOfDay(for: earliestDate)
-        let xMax = cal.startOfDay(for: latestDate) + 86400 + 3600 // + one day and an hour, fixes the snappy scrolling otherwise breaking sometimes
+        let xMax = cal.startOfDay(for: latestDate) + 86400 + 3600
         let yMin = displayedMin - 20
         let yMax = displayedMax + 20
         
@@ -179,7 +188,7 @@ struct HeartChartView: View {
                                 .contentShape(Rectangle())
                                 .gesture(DragGesture(minimumDistance: 0)
                                     .onChanged { value in
-                                        let adjustedWidth = geo.size.width - 48 // 40 y-axis + 8 horizontal padding
+                                        let adjustedWidth = geo.size.width - 48
                                         let normalizedXPosition = min(max(value.location.x - 8, 0), adjustedWidth) / adjustedWidth
                                         rawSelectedHour = xMin.addingTimeInterval(normalizedXPosition * 86400)
                                     }
@@ -216,7 +225,7 @@ struct HeartChartView: View {
                                 + Text("BPM")
                                 
                                 let style = Date.FormatStyle().hour(.defaultDigits(amPM: .abbreviated))
-                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings")\(selectedViewHour.values.count > 1 ? " · \(Int(selectedViewHour.median)) BPM avg" : "")")
+                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings")\(selectedViewHour.values.count > 1 ? " · \(Int(pointMarkValue(for: selectedViewHour))) BPM \(pointMarkLabel)" : "")")
                                     .foregroundColor(.secondary)
                                     .font(.subheadline)
                             } else {
@@ -237,8 +246,8 @@ struct HeartChartView: View {
                         .fontWeight(.semibold)
                         if #unavailable(iOS 17), selectedViewHour == nil {
                             Spacer()
-                            scrollButton(-1, disabled: cal.startOfDay(for: latestDate) <= cal.startOfDay(for: Date()))
-                            scrollButton(1, disabled: cal.startOfDay(for: earliestDate) >= cal.startOfDay(for: Date()))
+                            scrollButton(-1, disabled: cal.startOfDay(for: scrollPositionDate) <= cal.startOfDay(for: earliestDate))
+                            scrollButton(1, disabled: cal.startOfDay(for: scrollPositionDate) >= cal.startOfDay(for: latestDate))
                         }
                     }
                 }
@@ -251,8 +260,8 @@ struct HeartChartView: View {
             scrollPositionDate = cal.startOfDay(for: latestDate)
         }
         .onChange(of: bleManager.heartRate) { _ in
-            points = heartPoints()
             let previousLatest = latestDate
+            points = heartPoints()
             if !cal.isDate(latestDate, inSameDayAs: previousLatest) {
                 scrollPositionDate = Calendar.current.startOfDay(for: latestDate)
             }
