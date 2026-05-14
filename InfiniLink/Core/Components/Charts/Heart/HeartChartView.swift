@@ -33,6 +33,8 @@ struct HeartChartView: View {
     @State private var displayedDate: Date = Date()
     @State private var scrollPositionDate: Date = Date()
     @State private var rawSelectedHour: Date? = nil
+    @State private var displayedMin: Int = 40
+    @State private var displayedMax: Int = 220
     
     private let cal = Calendar.current
     
@@ -46,12 +48,6 @@ struct HeartChartView: View {
     var latestDate: Date {
         points.map({ $0.date }).max() ?? Date()
     }
-    var displayedMin: Int {
-        Int(visiblePoints.map({ $0.min }).min() ?? 50)
-    }
-    var displayedMax: Int {
-        Int(visiblePoints.map({ $0.max }).max() ?? 100)
-    }
     var selectedViewHour: HeartChartDataPoint? {
         guard let rawSelectedHour else { return nil }
         return points.first {
@@ -59,10 +55,15 @@ struct HeartChartView: View {
         }
     }
     var pointMarkLabel: String {
-        heartPointMarkMode == "average" ? "avg" : "mdn"
+        heartPointMarkMode == "average" ? NSLocalizedString("avg", comment: "") : NSLocalizedString("mdn", comment: "")
     }
     func pointMarkValue(for point: HeartChartDataPoint) -> Double {
         heartPointMarkMode == "average" ? point.average : point.median
+    }
+    
+    func updateYScale() {
+        displayedMin = Int(visiblePoints.map({ $0.min }).min() ?? 40)
+        displayedMax = Int(visiblePoints.map({ $0.max }).max() ?? 220)
     }
     
     func heartPoints() -> [HeartChartDataPoint] {
@@ -106,7 +107,7 @@ struct HeartChartView: View {
         )
         .foregroundStyle(darkHeartColor)
         .cornerRadius(4)
-        .opacity(selected == nil || selected?.date == point.date ? 1 : 0.5)
+        .opacity(selected == nil || selected?.date == point.date ? 1 : 0.35)
         
         PointMark(
             x: .value("Time", point.date),
@@ -115,7 +116,7 @@ struct HeartChartView: View {
         .foregroundStyle(heartColor)
         .symbolSize(CGSize(width: 7, height: 7))
         .symbol(.circle)
-        .opacity(selected == nil || selected?.date == point.date ? 1 : 0.25)
+        .opacity(selected == nil || selected?.date == point.date ? 1 : 0.1)
     }
     
     func scrollButton(_ dir: Int, disabled: Bool) -> some View {
@@ -256,17 +257,27 @@ struct HeartChartView: View {
         }
         .listRowBackground(Color.clear)
         .onAppear {
-            points = heartPoints()
-            scrollPositionDate = cal.startOfDay(for: latestDate)
+            if points.isEmpty {
+                points = heartPoints()
+                scrollPositionDate = cal.startOfDay(for: latestDate)
+                updateYScale()
+            }
+        }
+        .onChange(of: scrollPositionDate) { newValue in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                if scrollPositionDate == newValue {
+                    updateYScale()
+                }
+            }
         }
         .onChange(of: bleManager.heartRate) { _ in
             let previousLatest = latestDate
             points = heartPoints()
             if !cal.isDate(latestDate, inSameDayAs: previousLatest) {
-                scrollPositionDate = Calendar.current.startOfDay(for: latestDate)
+                scrollPositionDate = cal.startOfDay(for: latestDate)
             }
         }
-        .onChange(of: selectedViewHour) { newValue in
+        .onChange(of: selectedViewHour?.date) { newValue in
             guard newValue != nil else { return }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
