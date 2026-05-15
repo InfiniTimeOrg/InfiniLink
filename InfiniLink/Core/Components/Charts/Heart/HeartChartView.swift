@@ -30,12 +30,14 @@ struct HeartChartView: View {
     @AppStorage("heartPointMarkMode") private var heartPointMarkMode = "average"
     
     @State private var points = [HeartChartDataPoint]()
+    @State private var loadedRange: DateInterval?
     @State private var scrollPositionDate: Date = Date()
     @State private var rawSelectedHour: Date? = nil
     @State private var displayedMin: Int = 40
     @State private var displayedMax: Int = 220
     
     private let cal = Calendar.current
+    private let visibleDomain: TimeInterval = 86400
     
     var visiblePoints: [HeartChartDataPoint] {
         let visibleEnd = Date(timeInterval: 86400, since: scrollPositionDate)
@@ -65,32 +67,49 @@ struct HeartChartView: View {
         displayedMax = Int(visiblePoints.map({ $0.max }).max() ?? 220)
     }
     
-    func heartPoints() -> [HeartChartDataPoint] {
-        let predicate = NSPredicate(format: "deviceId == %@ AND timestamp >= %@ AND timestamp <= %@", bleManager.pairedDeviceID!, cal.startOfDay(for: earliestDate) as NSDate, latestDate as NSDate)
+    func fetchPoints(around date: Date) {
+        let start = cal.date(byAdding: .day, value: -1, to: date)!
+        let end = cal.date(byAdding: .day, value: 1, to: date)!
+        let predicate = NSPredicate(
+            format: "deviceId == %@ AND timestamp >= %@ AND timestamp < %@",
+            bleManager.pairedDeviceID!,
+            start as NSDate,
+            end as NSDate
+        )
+
         let raw = ChartManager.shared.heartPoints(predicate: predicate)
+        if raw.isEmpty { return }
         
+        points = process(raw)
+        loadedRange = DateInterval(start: start, end: end)
+    }
+    
+    func process(_ raw: [HeartDataPoint]) -> [HeartChartDataPoint] {
         let grouped = Dictionary(grouping: raw) { sample -> Date in
             let comps = cal.dateComponents([.year, .month, .day, .hour], from: sample.timestamp ?? Date())
             return cal.date(from: comps) ?? Date()
         }
         
-        return grouped.map { bucket, samples in
-            let values = samples.map { $0.value }
-            return HeartChartDataPoint(
-                date: cal.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
-                min: values.min() ?? 0,
-                max: values.max() ?? 0,
-                average: values.isEmpty ? 0 : values.reduce(0, +) / Double(values.count),
-                median: {
-                    let sorted = values.sorted()
-                    let mid = sorted.count / 2
-                    return sorted.count % 2 == 0
-                    ? (sorted[mid - 1] + sorted[mid]) / 2
-                    : sorted[mid]
-                }(),
-                values: values
-            )
-        }.sorted { $0.date < $1.date }
+        return grouped
+            .map { bucket, samples in
+                let values = samples.map(\.value)
+                
+                return HeartChartDataPoint(
+                    date: cal.date(byAdding: .minute, value: 30, to: bucket) ?? bucket,
+                    min: values.min() ?? 0,
+                    max: values.max() ?? 0,
+                    average: values.isEmpty ? 0 : values.reduce(0, +) / Double(values.count),
+                    median: {
+                        let sorted = values.sorted()
+                        let mid = sorted.count / 2
+                        return sorted.count % 2 == 0
+                        ? (sorted[mid - 1] + sorted[mid]) / 2
+                        : sorted[mid]
+                    }(),
+                    values: values
+                )
+            }
+            .sorted { $0.date < $1.date }
     }
     
     func isSingleReading(_ point: HeartChartDataPoint) -> Bool {
@@ -172,7 +191,7 @@ struct HeartChartView: View {
             if #available(iOS 17, *) {
                 chart
                     .chartScrollableAxes(.horizontal)
-                    .chartXVisibleDomain(length: 86400)
+                    .chartXVisibleDomain(length: visibleDomain)
                     .chartScrollPosition(x: $scrollPositionDate)
                     .chartScrollTargetBehavior(
                         .valueAligned(
@@ -257,14 +276,20 @@ struct HeartChartView: View {
         }
         .listRowBackground(Color.clear)
         .onAppear {
-            if points.isEmpty {
-                points = heartPoints()
-                scrollPositionDate = cal.startOfDay(for: latestDate)
-                updateYScale()
-            }
+            fetchPoints(around: Date())
+            scrollPositionDate = cal.startOfDay(for: latestDate)
+            updateYScale()
         }
         .onChange(of: scrollPositionDate) { newValue in
-            points = heartPoints()
+            guard let loadedRange else { return }
+
+            let threshold = visibleDomain / 2
+
+            if newValue.timeIntervalSince(loadedRange.start) <= threshold ||
+                newValue.timeIntervalSince(loadedRange.end) >= threshold {
+                fetchPoints(around: newValue)
+            }
+
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                 if scrollPositionDate == newValue {
                     updateYScale()
@@ -273,7 +298,7 @@ struct HeartChartView: View {
         }
         .onChange(of: bleManager.heartRate) { _ in
             let previousLatest = latestDate
-            points = heartPoints()
+            fetchPoints(around: Date())
             if !cal.isDate(latestDate, inSameDayAs: previousLatest) {
                 scrollPositionDate = cal.startOfDay(for: latestDate)
             }

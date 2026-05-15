@@ -273,6 +273,9 @@
         }
       }
     },
+    "avg" : {
+
+    },
     "Back" : {
 
     },
@@ -310,6 +313,9 @@
 
     },
     "Checking for updates..." : {
+
+    },
+    "Choose how the point mark on the heart rate chart is calculated." : {
 
     },
     "Clear All Exercises" : {
@@ -833,6 +839,12 @@
         }
       }
     },
+    "mdn" : {
+
+    },
+    "Median" : {
+
+    },
     "Metric" : {
 
     },
@@ -931,6 +943,9 @@
 
     },
     "Pinned" : {
+
+    },
+    "Point Mark" : {
 
     },
     "Poor" : {
