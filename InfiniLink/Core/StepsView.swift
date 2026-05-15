@@ -19,23 +19,20 @@ struct StepsView: View {
     
     let exerciseCalculator = FitnessCalculator()
     
+    var steps: Int {
+        return Int(chartManager.stepsToday()?.steps ?? 0)
+    }
+    
     func formattedSteps(_ steps: Int) -> String {
         Formatter.localizedDecimal.string(from: NSNumber(value: steps)) ?? "\(steps)"
-    }
-    func steps() -> Int {
-        let stepCount = chartManager.stepsToday()
-        if let stepCount = stepCount {
-            return Int(stepCount.steps)
-        }
-        return 0
     }
     
     var body: some View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: "\(formattedSteps(steps()))", subtitle: formattedSteps(Int(deviceManager.settings.stepsGoal)), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
-                        StepMenuItemView(steps: steps())
+                    DetailHeaderView(Header(title: "\(formattedSteps(steps))", subtitle: formattedSteps(Int(deviceManager.settings.stepsGoal)), units: "Steps", icon: "figure.walk", accent: .blue), width: geo.size.width) {
+                        StepMenuItemView(steps: steps)
                     }
                     .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                     .listRowBackground(Color.clear)

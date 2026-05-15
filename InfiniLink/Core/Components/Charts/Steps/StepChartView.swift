@@ -59,13 +59,16 @@ struct StepChartView: View {
     }
     
     var streak: Int {
-        return points.filter { $0.steps >= stepCountManager.stepGoal }.count
+        points.filter { $0.steps >= stepCountManager.stepGoal }.count
     }
     var earliestDate: Date {
         points.compactMap({ $0.date }).min() ?? Date()
     }
     var latestDate: Date {
         points.compactMap({ $0.date }).max() ?? Date()
+    }
+    var steps: Int {
+        Int(points.last?.steps ?? 0)
     }
     
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -164,8 +167,6 @@ struct StepChartView: View {
             .listRowBackground(Color.clear)
             .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
             Section {
-                let steps = Int(points.last?.steps ?? 0)
-                
                 if bleManager.stepCount >= stepCountManager.stepGoal {
                     Text("Great job, you reached your daily step goal today! You've walked \(String(format: "%.2f", fitnessCalculator.calculateDistance(steps: steps))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
                 } else {
