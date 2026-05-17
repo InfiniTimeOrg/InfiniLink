@@ -106,6 +106,7 @@ class BLEManager: NSObject, ObservableObject {
     
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
+    @AppStorage("forceAncs") var forceAncs = false
     
     var hasLoadedCharacteristics: Bool {
         return currentTimeService != nil && isConnectedToPinetime // Use currentTimeService because it's present in all firmware versions
@@ -179,7 +180,11 @@ class BLEManager: NSObject, ObservableObject {
         
         self.isConnecting = true
         self.peripheralToConnect = peripheral
-        self.manager?.connect(peripheralToConnect!, options: nil)
+        
+        let options: [String: Any] = [
+            CBConnectPeripheralOptionRequiresANCS: true
+        ]
+        self.manager?.connect(peripheralToConnect!, options: forceAncs ? options : nil)
         
         completion?()
     }
@@ -348,6 +353,7 @@ extension BLEManager: CBPeripheralDelegate {
     }
     
     func centralManager(_ central: CBCentralManager, didUpdateANCSAuthorizationFor peripheral: CBPeripheral) {
+        log("ANCS authorization status changed: \(peripheral.ancsAuthorized)", type: .info, target: .ble)
         updateAncsStatus(peripheral)
     }
     
