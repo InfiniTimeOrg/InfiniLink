@@ -41,6 +41,8 @@ class NotificationManager: ObservableObject {
     private var waterReminderEndHour: Int = 20
     private var waterReminderInterval: TimeInterval = 0
     
+    private let thirtyMinutes = TimeInterval(60 * 30)
+    
     init() {
         if !PersonalizationController.shared.showSetupSheet {
             // Don't request permissions if the user hasn't had the chance to manually enable them
@@ -83,7 +85,6 @@ extension NotificationManager {
         let state = UIDevice.current.batteryState
         let level = UIDevice.current.batteryLevel * 100
         let currentTime = Date().timeIntervalSince1970
-        let thirtyMinutes = TimeInterval(60 * 30)
         
         let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
         
@@ -103,7 +104,7 @@ extension NotificationManager {
         
         let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
         
-        if level < 20 && state != .charging {
+        if lastHostBatteryLevelNotified == -1 || (Date().timeIntervalSince1970 - lastTimeMinHeartRangeNotified) >= thirtyMinutes && level < 20 && state != .charging {
             sendNotifications(notif, batterySettings.lowBattery.iphone)
         }
     }
