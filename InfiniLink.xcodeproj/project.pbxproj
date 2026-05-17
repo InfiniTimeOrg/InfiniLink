@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 54;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -246,6 +246,10 @@
 		E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Formatter+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		75192A892FBA6E7D0069B428 /* Battery */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Battery; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		264BFE3B26BC51CE0050A223 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -429,6 +433,7 @@
 		E09696E12D2F806A00CCCBF8 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
+				75192A892FBA6E7D0069B428 /* Battery */,
 				E05D2E732D7EA249004A6CE0 /* Heart */,
 				E09990962D77684800B0FCAF /* Steps */,
 				E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */,
@@ -628,6 +633,9 @@
 			buildRules = (
 			);
 			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				75192A892FBA6E7D0069B428 /* Battery */,
 			);
 			name = InfiniLink;
 			packageProductDependencies = (

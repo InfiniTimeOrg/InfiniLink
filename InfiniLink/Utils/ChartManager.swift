@@ -28,6 +28,13 @@ class ChartManager: ObservableObject {
         
         return NSPredicate(format: predicateString, deviceId, startOfWeek as NSDate)
     }
+    var sevenDayPredicate: NSPredicate {
+        let deviceId = bleManager.pairedDeviceID ?? ""
+        // Get the days of the current week, not just -7 days from now
+        let start = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        
+        return NSPredicate(format: predicateString, deviceId, start as NSDate)
+    }
     var dayPredicate: NSPredicate {
         let deviceId = bleManager.pairedDeviceID ?? ""
         let startOfDay = calendar.startOfDay(for: Date())
@@ -172,15 +179,10 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func batteryPoints(for date: Date) -> [BatteryDataPoint] {
+    func batteryPoints(predicate: NSPredicate? = nil) -> [BatteryDataPoint] {
         guard let deviceId = bleManager.pairedDeviceID else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
-        
-        let calendar = Calendar.current
-        let startOfDay = calendar.startOfDay(for: date)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
-        
-        fetchRequest.predicate = NSPredicate(format: "deviceId == %@ AND time >= %@ AND time < %@", deviceId, startOfDay as NSDate, endOfDay as NSDate)
+        fetchRequest.predicate = predicate ?? sevenDayPredicate
         
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
