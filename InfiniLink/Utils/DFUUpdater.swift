@@ -46,7 +46,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             
             let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
             
-            initiator.packetReceiptNotificationParameter = 20 // default 12, this speeds up the transfer
+            initiator.packetReceiptNotificationParameter = 18 // default 12, this speeds up the transfer
             initiator.logger = self // to get log info
             initiator.delegate = self // to be informed about current state and errors
             initiator.progressDelegate = self // to show progress bar
