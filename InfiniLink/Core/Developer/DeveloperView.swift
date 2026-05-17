@@ -12,6 +12,7 @@ struct DeveloperView: View {
     
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
+    @AppStorage("forceAncs") var forceAncs = false
     
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
@@ -100,6 +101,7 @@ struct DeveloperView: View {
                     StepCountManager.shared.setStepCount(0)
                 }
             }
+            Toggle("Force ANCS", isOn: $forceAncs)
             Section {
                 Button(role: .destructive) {
                     StepCountManager.shared.clearCurrentDaySteps()
