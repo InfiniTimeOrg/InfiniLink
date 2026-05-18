@@ -30,7 +30,6 @@ class ChartManager: ObservableObject {
     }
     var sevenDayPredicate: NSPredicate {
         let deviceId = bleManager.pairedDeviceID ?? ""
-        // Get the days of the current week, not just -7 days from now
         let start = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         
         return NSPredicate(format: predicateString, deviceId, start as NSDate)
@@ -180,7 +179,7 @@ class ChartManager: ObservableObject {
     }
     
     func batteryPoints(predicate: NSPredicate? = nil) -> [BatteryDataPoint] {
-        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+        guard bleManager.pairedDeviceID != nil else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
         fetchRequest.predicate = predicate ?? sevenDayPredicate
         
