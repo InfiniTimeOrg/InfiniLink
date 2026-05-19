@@ -150,19 +150,20 @@ struct BatteryChartView: View {
                             Text((selectedPoint != nil ? String(format: "%.0f", selectedPoint!.value) : "\(visibleFirst)–\(visibleLast)") + "%")
                                 .font(.system(.title, design: .rounded))
                                 .foregroundColor(.primary)
-                            Text({
-                                let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
-                                let isFullDay = cal.component(.hour, from: rounded) == 0
-                                let end = Date(timeInterval: visibleDomain, since: rounded)
-                                
-                                if isFullDay {
-                                    return rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                            Group {
+                                if let selectedPoint {
+                                    Text(selectedPoint.date.addingTimeInterval(-1800).formatted(.dateTime.month(.abbreviated).day().hour().minute()))
                                 } else {
-                                    return "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))"
+                                    let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
+                                    let isFullDay = cal.component(.hour, from: rounded) == 0
+                                    let end = Date(timeInterval: visibleDomain, since: rounded)
+                                    Text(isFullDay
+                                         ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                                         : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
                                 }
-                            }())
-                                .foregroundColor(.secondary)
-                                .font(.subheadline)
+                            }
+                            .foregroundColor(.secondary)
+                            .font(.subheadline)
                         }
                         .fontWeight(.semibold)
                         if #unavailable(iOS 17) {
