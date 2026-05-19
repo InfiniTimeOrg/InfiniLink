@@ -118,6 +118,9 @@ class BLEManager: NSObject, ObservableObject {
         return isConnecting || (isScanning && !isPairingNewDevice)
     }
     var connectionState: String {
+        if hasDisconnectedForUpdate {
+            return NSLocalizedString("Installing update...", comment: "")
+        }
         if isBusy {
             return NSLocalizedString("Connecting...", comment: "")
         }
@@ -127,11 +130,7 @@ class BLEManager: NSObject, ObservableObject {
         case (true, false):
             return NSLocalizedString("Connecting...", comment: "")
         default:
-            if hasDisconnectedForUpdate {
-                return NSLocalizedString("Installing update...", comment: "")
-            } else {
-                return NSLocalizedString("Disconnected", comment: "")
-            }
+            return NSLocalizedString("Disconnected", comment: "")
         }
     }
     
