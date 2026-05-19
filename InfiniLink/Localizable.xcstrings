@@ -1009,10 +1009,10 @@
     "Search for an address..." : {
 
     },
-    "Selected Hour" : {
-    
-    },
     "Selected" : {
+
+    },
+    "Selected Hour" : {
 
     },
     "Send" : {
@@ -1189,6 +1189,9 @@
 
     },
     "There aren't any available releases." : {
+
+    },
+    "There isn't any %@ data to show" : {
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {

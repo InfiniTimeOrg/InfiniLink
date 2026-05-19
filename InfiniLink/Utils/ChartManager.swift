@@ -10,9 +10,6 @@ import SwiftUI
 import CoreData
 
 class ChartManager: ObservableObject {
-    @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
-    @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
-    
     static let shared = ChartManager()
     
     let persistenceController = PersistenceController.shared

@@ -20,7 +20,7 @@ enum ChartType: String {
         case .heart:
             return "heart.fill"
         case .battery:
-            return "battery.20.fill"
+            return "battery.50percent.fill"
         case .sleep:
             return "moon.fill"
         }

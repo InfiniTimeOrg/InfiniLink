@@ -24,7 +24,6 @@ struct HeartChartDataPoint: Identifiable, Equatable {
 struct HeartChartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
-    @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
     @AppStorage("minHeartRange") private var minHeartRange = 40
     @AppStorage("maxHeartRange") private var maxHeartRange = 200
     @AppStorage("heartPointMarkMode") private var heartPointMarkMode = "average"
