@@ -77,7 +77,7 @@ struct BatteryChartView: View {
                         x: .value("Time", point.date),
                         y: .value("Percent", point.value)
                     )
-                    .foregroundStyle(Color.green)
+                    .foregroundStyle(point.value.batteryColor)
                     .opacity(selectedPoint == nil || selectedPoint?.id == point.id ? 1 : 0.5)
                 }
             }

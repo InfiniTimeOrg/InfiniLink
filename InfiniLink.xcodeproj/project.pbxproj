@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 70;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -53,6 +53,8 @@
 		E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
+		E06C5D822FBBE26F0099F982 /* BatteryChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06C5D802FBBE26F0099F982 /* BatteryChartView.swift */; };
+		E06C5D842FBBF5C30099F982 /* Double+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06C5D832FBBF5C30099F982 /* Double+Extension.swift */; };
 		E076FEC82FB415AC00FF6A17 /* NotificationSettingsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */; };
 		E076FECA2FB4375300FF6A17 /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E076FEC92FB4375300FF6A17 /* BannerView.swift */; };
 		E078ECFB2D4E6D9800560364 /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E078ECFA2D4E6D9800560364 /* Zip */; };
@@ -185,6 +187,8 @@
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
+		E06C5D802FBBE26F0099F982 /* BatteryChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryChartView.swift; sourceTree = "<group>"; };
+		E06C5D832FBBF5C30099F982 /* Double+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extension.swift"; sourceTree = "<group>"; };
 		E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsManager.swift; sourceTree = "<group>"; };
 		E076FEC92FB4375300FF6A17 /* BannerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerView.swift; sourceTree = "<group>"; };
 		E07D8F172CBE2071005C1325 /* ActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionView.swift; sourceTree = "<group>"; };
@@ -245,10 +249,6 @@
 		E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonalizationController.swift; sourceTree = "<group>"; };
 		E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Formatter+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		75192A892FBA6E7D0069B428 /* Battery */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Battery; sourceTree = "<group>"; };
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		264BFE3B26BC51CE0050A223 /* Frameworks */ = {
@@ -313,6 +313,7 @@
 				E0B85D6E2CB8CDC700D85122 /* Date+Extension.swift */,
 				E09696E42D318AFB00CCCBF8 /* Data+Extension.swift */,
 				E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */,
+				E06C5D832FBBF5C30099F982 /* Double+Extension.swift */,
 				E0C7C8602CAF260A0043DA2D /* Localizable.xcstrings */,
 				E05999BD2CB419D300D64E0B /* InfiniLink.xcdatamodeld */,
 				E0DB931B2DEA54DB00BE9413 /* README.md */,
@@ -421,6 +422,14 @@
 			path = Heart;
 			sourceTree = "<group>";
 		};
+		E06C5D812FBBE26F0099F982 /* Battery */ = {
+			isa = PBXGroup;
+			children = (
+				E06C5D802FBBE26F0099F982 /* BatteryChartView.swift */,
+			);
+			path = Battery;
+			sourceTree = "<group>";
+		};
 		E08F2F312CC899D00094217A /* Weather */ = {
 			isa = PBXGroup;
 			children = (
@@ -433,7 +442,7 @@
 		E09696E12D2F806A00CCCBF8 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
-				75192A892FBA6E7D0069B428 /* Battery */,
+				E06C5D812FBBE26F0099F982 /* Battery */,
 				E05D2E732D7EA249004A6CE0 /* Heart */,
 				E09990962D77684800B0FCAF /* Steps */,
 				E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */,
@@ -634,9 +643,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				75192A892FBA6E7D0069B428 /* Battery */,
-			);
 			name = InfiniLink;
 			packageProductDependencies = (
 				E0A7C0812CB1B4990042A12D /* Zip */,
@@ -784,6 +790,7 @@
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				E06C5D822FBBE26F0099F982 /* BatteryChartView.swift in Sources */,
 				E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */,
 				E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */,
 				E0A7C07F2CB1B3300042A12D /* BLEFS.swift in Sources */,
@@ -860,6 +867,7 @@
 				E0C7C8472CAF01950043DA2D /* DeviceView.swift in Sources */,
 				E00A86312DEBF3C1001533E1 /* RSSI.swift in Sources */,
 				E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */,
+				E06C5D842FBBF5C30099F982 /* Double+Extension.swift in Sources */,
 				E07D8F222CC00AB0005C1325 /* UnitTemperature+Extension.swift in Sources */,
 				E08F2F352CC89A530094217A /* MapSearch.swift in Sources */,
 				E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */,
