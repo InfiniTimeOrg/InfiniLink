@@ -147,9 +147,13 @@ struct BatteryChartView: View {
                             Text(selectedPoint != nil ? "Value" : "Range")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            Text((selectedPoint != nil ? String(format: "%.0f", selectedPoint!.value) : "\(visibleFirst)–\(visibleLast)") + "%")
-                                .font(.system(.title, design: .rounded))
-                                .foregroundColor(.primary)
+                            Text((selectedPoint != nil ? String(format: "%.0f", selectedPoint!.value) : (visibleFirst == visibleLast ? "\(visibleFirst)" : "\(visibleFirst)–\(visibleLast)")) + "%")
+                                                                .font(.system(.title, design: .rounded))
+                                                                .foregroundColor(.primary)
+                                                                .contentTransition(.numericText())
+                                                                .animation(.default, value: selectedPoint?.id)
+                                                                .animation(.default, value: visibleFirst)
+                                                                .animation(.default, value: visibleLast)
                             Group {
                                 if let selectedPoint {
                                     Text(selectedPoint.date.addingTimeInterval(-1800).formatted(.dateTime.month(.abbreviated).day().hour().minute()))
