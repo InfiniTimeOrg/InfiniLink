@@ -30,7 +30,7 @@ struct HeartChartView: View {
     
     @State private var points = [HeartChartDataPoint]()
     @State private var loadedRange: DateInterval?
-    @State private var scrollPositionDate: Date = Date()
+    @State private var scrollPositionDate = Date()
     @State private var rawSelectedHour: Date? = nil
     @State private var displayedMin: Int = 40
     @State private var displayedMax: Int = 220
@@ -57,6 +57,50 @@ struct HeartChartView: View {
     var pointMarkLabel: String {
         heartPointMarkMode == "average" ? NSLocalizedString("avg", comment: "") : NSLocalizedString("mdn", comment: "")
     }
+    private var bpmText: String {
+        if let selectedViewHour {
+            return isSingleReading(selectedViewHour)
+                ? "\(Int(selectedViewHour.min))"
+                : "\(Int(selectedViewHour.min))–\(Int(selectedViewHour.max))"
+        }
+        
+        return displayedMax == 0 || displayedMin == 0 ? "0" : "\(displayedMin)–\(displayedMax)"
+    }
+
+    private var detailText: String {
+        if let selectedViewHour {
+            let rangeFirstHour =
+                cal.dateInterval(of: .hour, for: selectedViewHour.date)?.start
+                ?? selectedViewHour.date
+            
+            let rangeLastHour =
+                cal.date(byAdding: .hour, value: 1, to: rangeFirstHour)
+                ?? rangeFirstHour
+            
+            let style = Date.FormatStyle()
+                .hour(.defaultDigits(amPM: .abbreviated))
+            
+            return
+                "\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), " +
+                "\(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · " +
+                "\(selectedViewHour.values.count) " +
+                "\(selectedViewHour.values.count == 1 ? "reading" : "readings")" +
+                "\(selectedViewHour.values.count > 1  ? " · \(Int(pointMarkValue(for: selectedViewHour))) BPM \(pointMarkLabel)" : "")"
+        }
+        
+        let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
+        
+        let end = Date(timeInterval: 86400, since: rounded)
+        let isFullDay = cal.component(.hour, from: rounded) == 0
+        
+        return isFullDay
+            ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+            : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), " +
+              "\(rounded.formatted(.dateTime.hour().minute())) – " +
+              "\(end.formatted(.dateTime.month(.abbreviated).day())), " +
+              "\(end.formatted(.dateTime.hour().minute()))"
+    }
+    
     func pointMarkValue(for point: HeartChartDataPoint) -> Double {
         heartPointMarkMode == "average" ? point.average : point.median
     }
@@ -67,8 +111,8 @@ struct HeartChartView: View {
     }
     
     func fetchPoints(around date: Date) {
-        let start = cal.date(byAdding: .day, value: -1, to: date)!
-        let end = cal.date(byAdding: .day, value: 1, to: date)!
+        let start = cal.startOfDay(for: cal.date(byAdding: .day, value: -1, to: date)!)
+        let end = cal.startOfDay(for: cal.date(byAdding: .day, value: 2, to: date)!)
         let predicate = NSPredicate(
             format: "deviceId == %@ AND timestamp >= %@ AND timestamp < %@",
             bleManager.pairedDeviceID!,
@@ -77,9 +121,10 @@ struct HeartChartView: View {
         )
 
         let raw = ChartManager.shared.heartPoints(predicate: predicate)
-        if raw.isEmpty { return }
-        
-        points = process(raw)
+
+        if !raw.isEmpty {
+            points = process(raw)
+        }
         loadedRange = DateInterval(start: start, end: end)
     }
     
@@ -234,39 +279,22 @@ struct HeartChartView: View {
                             Text("Range")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            if let selectedViewHour {
-                                let rangeFirstHour = cal.dateInterval(of: .hour, for: selectedViewHour.date)?.start ?? selectedViewHour.date
-                                let rangeLastHour = cal.date(byAdding: .hour, value: 1, to: rangeFirstHour) ?? rangeFirstHour
-                                
-                                Text(isSingleReading(selectedViewHour) ? "\(Int(selectedViewHour.min)) " : "\(Int(selectedViewHour.min))–\(Int(selectedViewHour.max)) ")
+                            Group {
+                                Text("\(bpmText) ")
                                     .font(.system(.title, design: .rounded))
                                     .foregroundColor(.primary)
                                 + Text("BPM")
-                                
-                                let style = Date.FormatStyle().hour(.defaultDigits(amPM: .abbreviated))
-                                Text("\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), \(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · \(selectedViewHour.values.count) \(selectedViewHour.values.count == 1 ? "reading" : "readings")\(selectedViewHour.values.count > 1 ? " · \(Int(pointMarkValue(for: selectedViewHour))) BPM \(pointMarkLabel)" : "")")
-                                    .foregroundColor(.secondary)
-                                    .font(.subheadline)
-                            } else {
-                                Text(displayedMax == 0 || displayedMin == 0 ? "0 " : "\(displayedMin)–\(displayedMax) ")
-                                    .font(.system(.title, design: .rounded))
-                                    .foregroundColor(.primary)
-                                + Text("BPM")
-                                let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
-                                let end = Date(timeInterval: 86400, since: rounded)
-                                let isFullDay = cal.component(.hour, from: rounded) == 0
-                                Text(isFullDay
-                                     ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-                                     : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
+                            }
+                            .contentTransition(.numericText())
+                            Text(detailText)
                                 .foregroundColor(.secondary)
                                 .font(.subheadline)
-                            }
                         }
                         .fontWeight(.semibold)
                         if #unavailable(iOS 17), selectedViewHour == nil {
                             Spacer()
-                            scrollButton(-1, disabled: cal.startOfDay(for: scrollPositionDate) <= cal.startOfDay(for: earliestDate))
-                            scrollButton(1, disabled: cal.startOfDay(for: scrollPositionDate) >= cal.startOfDay(for: latestDate))
+                            scrollButton(-1, disabled: false)
+                            scrollButton(1, disabled: cal.startOfDay(for: scrollPositionDate) >= cal.startOfDay(for: Date()))
                         }
                     }
                 }
@@ -276,21 +304,24 @@ struct HeartChartView: View {
         .listRowBackground(Color.clear)
         .onAppear {
             fetchPoints(around: Date())
-            scrollPositionDate = cal.startOfDay(for: latestDate)
             updateYScale()
         }
         .onChange(of: scrollPositionDate) { newValue in
+            let maxScroll = cal.startOfDay(for: Date())
+            if newValue > maxScroll { // Don't allow overscroll into the next day
+                scrollPositionDate = maxScroll
+                return
+            }
+
             guard let loadedRange else { return }
-
-            let threshold = visibleDomain / 2
-
-            if newValue.timeIntervalSince(loadedRange.start) <= threshold ||
-                newValue.timeIntervalSince(loadedRange.end) >= threshold {
+            
+            if newValue < loadedRange.start.addingTimeInterval(visibleDomain) ||
+               newValue > loadedRange.end.addingTimeInterval(-visibleDomain) {
                 fetchPoints(around: newValue)
             }
 
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                if scrollPositionDate == newValue {
+                withAnimation {
                     updateYScale()
                 }
             }

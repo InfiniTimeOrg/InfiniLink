@@ -14,9 +14,39 @@ struct DeveloperView: View {
     @AppStorage("includeTestSongName") var includeTestSongName = true
     @AppStorage("forceAncs") var forceAncs = false
     
+    @State private var heartDay = ""
+    @State private var generatedDayOffset = 0
+    
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
     private let healthKitManager = HealthKitManager.shared
+    private let persistenceController = PersistenceController.shared
+
+    func generateRandomHeartPoints(dayOffset: Int) {
+        let context = persistenceController.container.viewContext
+        
+        let calendar = Calendar.current
+        let targetDay = calendar.date(byAdding: .day, value: dayOffset, to: Date())!
+        
+        let startOfDay = calendar.startOfDay(for: targetDay)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        
+        for _ in 0..<150 {
+            let randomTime = TimeInterval.random(in: 0..<endOfDay.timeIntervalSince(startOfDay))
+            let timestamp = startOfDay.addingTimeInterval(randomTime)
+            
+            let point = HeartDataPoint(context: context)
+            point.deviceId = bleManager.pairedDeviceID
+            point.timestamp = timestamp
+            point.value = Double(Int.random(in: 55...165))
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            log("Error generating heart points: \(error)", caller: "ChartManager")
+        }
+    }
     
     var body: some View {
         List {
@@ -102,6 +132,15 @@ struct DeveloperView: View {
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
+            Section("Test HRM") {
+                TextField("Days", text: $heartDay)
+                    .onSubmit {
+                        generatedDayOffset = Int(heartDay) ?? 0
+                    }
+                Button("Add a Day") {
+                    generateRandomHeartPoints(dayOffset: generatedDayOffset)
+                }
+            }
             Section {
                 Button(role: .destructive) {
                     StepCountManager.shared.clearCurrentDaySteps()
@@ -109,14 +148,14 @@ struct DeveloperView: View {
                     Text("Clear Step Data")
                 }
                 Button(role: .destructive) {
+                    ChartManager.shared.clearHrmData()
+                } label: {
+                    Text("Clear HRM Data")
+                }
+                Button(role: .destructive) {
                     ChartManager.shared.deleteAllUserExercises()
                 } label: {
                     Text("Clear All Exercises")
-                }
-                Button(role: .destructive) {
-                    ChartManager.shared.deleteAllDisconnectMapPoints()
-                } label: {
-                    Text("Clear Disconnect Pins")
                 }
             } header: {
                 Text("DANGER ZONE")

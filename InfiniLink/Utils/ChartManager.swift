@@ -203,19 +203,17 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func deleteAllDisconnectMapPoints(all: Bool = true) {
+    func clearHrmData() {
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = DisconnectMapPoint.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-            fetchRequest.fetchOffset = all ? 0 : 3
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = HeartDataPoint.fetchRequest()
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
             do {
                 try context.execute(batchDeleteRequest)
                 try context.save()
             } catch {
-                log("Failed to delete disconnect pins: \(error)", caller: "ChartManager")
+                log("Failed to delete hrm day: \(error)", caller: "ChartManager")
             }
         }
     }
