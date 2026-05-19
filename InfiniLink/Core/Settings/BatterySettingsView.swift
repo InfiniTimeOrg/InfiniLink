@@ -27,17 +27,7 @@ struct BatterySettingsView: View {
                         } else {
                             return "battery.25percent"
                         }
-                    }(), accent: {
-                        if bleManager.batteryLevel > 20 {
-                            return Color.green
-                        } else if bleManager.batteryLevel > 10 {
-                            return Color.orange
-                        } else if bleManager.batteryLevel == 0 {
-                            return Color.gray
-                        } else {
-                            return Color.red
-                        }
-                    }()), width: geo.size.width) {
+                    }(), accent: bleManager.batteryLevel.batteryColor), width: geo.size.width) {
                         Color.clear
                             .frame(height: 1)
                             .frame(maxWidth: .infinity)
@@ -45,6 +35,7 @@ struct BatterySettingsView: View {
                 }
                 .listRowBackground(Color.clear)
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                BatteryChartView()
                 Group {
                     if settingsManager.settings.watchNotificationsEnabled {
                         Section(footer: Text("Send a notification to your devices when they reach low battery.")) {
