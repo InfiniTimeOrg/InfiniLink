@@ -144,39 +144,25 @@ struct BatteryChartView: View {
                 } header: {
                     HStack {
                         VStack(alignment: .leading) {
-                            if selectedPoint != nil {
-                                Text("Value")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            } else {
-                                Text("Range")
-                                    .font(.caption)
-                                    .foregroundColor(.secondary)
-                            }
-                            if let selectedPoint {
-                                Text("\(Int(selectedPoint.value))")
-                                    .font(.system(.title, design: .rounded))
-                                    .foregroundColor(.primary)
-                                + Text("%")
-
-                                Text(selectedPoint.date.addingTimeInterval(-1800).formatted(.dateTime.month(.abbreviated).day().hour().minute()))
-                                    .foregroundColor(.secondary)
-                                    .font(.subheadline)
-                            } else {
-                                Text("\(visibleFirst)–\(visibleLast)")
-                                    .font(.system(.title, design: .rounded))
-                                    .foregroundColor(.primary)
-                                + Text("%")
-
+                            Text(selectedPoint != nil ? "Value" : "Range")
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                            Text((selectedPoint != nil ? String(format: "%.0f", selectedPoint!.value) : "\(visibleFirst)–\(visibleLast)") + "%")
+                                .font(.system(.title, design: .rounded))
+                                .foregroundColor(.primary)
+                            Text({
                                 let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
                                 let isFullDay = cal.component(.hour, from: rounded) == 0
                                 let end = Date(timeInterval: visibleDomain, since: rounded)
-                                Text(isFullDay
-                                     ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-                                     : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
-                                    .foregroundColor(.secondary)
-                                    .font(.subheadline)
-                            }
+                                
+                                if isFullDay {
+                                    return rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
+                                } else {
+                                    return "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))"
+                                }
+                            }())
+                                .foregroundColor(.secondary)
+                                .font(.subheadline)
                         }
                         .fontWeight(.semibold)
                         if #unavailable(iOS 17) {

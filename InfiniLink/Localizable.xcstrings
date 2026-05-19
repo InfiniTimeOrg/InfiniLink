@@ -188,6 +188,16 @@
     "%lld-day" : {
 
     },
+    "%lld–%lld%%" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld–%2$lld%%"
+          }
+        }
+      }
+    },
     "%lld%%" : {
 
     },
@@ -988,6 +998,9 @@
     "Search for an address..." : {
 
     },
+    "Selected" : {
+
+    },
     "Send" : {
 
     },
@@ -1319,6 +1332,9 @@
           }
         }
       }
+    },
+    "Value" : {
+
     },
     "WARNING: These actions are permanent and cannot be undone!" : {
 
