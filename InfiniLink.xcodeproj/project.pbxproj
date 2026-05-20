@@ -20,7 +20,6 @@
 		E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */; };
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
-		E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396142D28E59400A13B90 /* DirectionsView.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E055D2542DF229AC00AF19AD /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2532DF229AC00AF19AD /* CalendarDayView.swift */; };
 		E055D2562DF229BD00AF19AD /* CalendarDayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */; };
@@ -49,7 +48,6 @@
 		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
 		E05D2E722D7E8801004A6CE0 /* EmptyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */; };
 		E05D2E752D7EA95B004A6CE0 /* ChartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E742D7EA95B004A6CE0 /* ChartType.swift */; };
-		E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
 		E06C5D822FBBE26F0099F982 /* BatteryChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06C5D802FBBE26F0099F982 /* BatteryChartView.swift */; };
@@ -150,7 +148,6 @@
 		E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperView.swift; sourceTree = "<group>"; };
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
-		E04396142D28E59400A13B90 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E055D2532DF229AC00AF19AD /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
 		E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayDetailView.swift; sourceTree = "<group>"; };
@@ -179,7 +176,6 @@
 		E0599A102CB5553B00D64E0B /* FSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSFile.swift; sourceTree = "<group>"; };
 		E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChartView.swift; sourceTree = "<group>"; };
 		E05D2E742D7EA95B004A6CE0 /* ChartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartType.swift; sourceTree = "<group>"; };
-		E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsManager.swift; sourceTree = "<group>"; };
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
@@ -500,7 +496,6 @@
 				E08F2F342CC89A530094217A /* MapSearch.swift */,
 				E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */,
 				E05DA4C02D13752C00A49203 /* DebugLogManager.swift */,
-				E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */,
 				E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */,
 			);
 			path = Utils;
@@ -583,7 +578,6 @@
 				E03C30B62CC7417C00DD8363 /* WeatherView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
-				E04396142D28E59400A13B90 /* DirectionsView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -801,7 +795,6 @@
 				E0A7C0A52CB2527F0042A12D /* HeartSettingsView.swift in Sources */,
 				E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */,
 				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
-				E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */,
 				E05999BF2CB419D300D64E0B /* InfiniLink.xcdatamodeld in Sources */,
 				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,
 				E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */,
@@ -828,7 +821,6 @@
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
 				E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */,
-				E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */,
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
 				E09696E32D2F807700CCCBF8 /* HeartChartView.swift in Sources */,
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,

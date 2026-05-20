@@ -165,13 +165,6 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
                         }
-#if DEBUG
-                        NavigationLink {
-                            DirectionsView()
-                        } label: {
-                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
-                        }
-#endif
                         NavigationLink {
                             WeatherView()
                         } label: {
