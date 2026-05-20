@@ -94,9 +94,6 @@ struct BLECharacteristicHandler {
             bleManager.navigationDistanceCharacteristic = characteristic
         case bleManager.cbuuidList.navigationProgress:
             bleManager.navigationProgressCharacteristic = characteristic
-            
-        case bleManager.cbuuidList.sleep:
-            peripheral.setNotifyValue(true, for: characteristic)
         default:
             break
         }
@@ -180,20 +177,6 @@ struct BLECharacteristicHandler {
                 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
-        case bleManager.cbuuidList.sleep:
-            guard let data = characteristic.value else { break }
-            
-            let timestampBytes = data[0...3]
-            let minutesAsleepBytes = data[4...5]
-            let minutesAsleepByteArray = [UInt8](minutesAsleepBytes)
-            
-            let minutesAsleep = UInt16(minutesAsleepByteArray[0]) << 8 | UInt16(minutesAsleepByteArray[1])
-            let timestamp = Date(timeIntervalSince1970: TimeInterval(UInt32(timestampBytes[0]) << 24 |
-                                                     UInt32(timestampBytes[1]) << 16 |
-                                                     UInt32(timestampBytes[2]) << 8 |
-                                                     UInt32(timestampBytes[3])))
-            
-            SleepController.shared.sleep = SleepData(startDate: timestamp, endDate: timestamp.addingTimeInterval(Double(minutesAsleep * 60)))
         default:
             break
         }

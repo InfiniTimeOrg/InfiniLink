@@ -18,7 +18,6 @@ struct DeviceView: View {
     @ObservedObject var notificationManager = NotificationManager.shared
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     
-    @AppStorage("sleepGoal") var sleepGoal = 28800
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     
     @Environment(\.colorScheme) var colorScheme
@@ -148,11 +147,6 @@ struct DeviceView: View {
                             StepsView()
                         } label: {
                             ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
-                        }
-                        NavigationLink {
-                            SleepView()
-                        } label: {
-                            ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
                         }
                     }
                     Section {

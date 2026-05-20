@@ -1063,16 +1063,6 @@
     "Skip" : {
 
     },
-    "Sleep" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sommeil"
-          }
-        }
-      }
-    },
     "Software Update" : {
 
     },

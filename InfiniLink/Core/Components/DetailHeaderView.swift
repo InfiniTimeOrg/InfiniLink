@@ -84,7 +84,6 @@ struct DetailHeaderView<V: View>: View {
     
     enum DetailHeaderAnimation {
         case heart
-        case sleep
         case steps
     }
     
