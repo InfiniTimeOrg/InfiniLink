@@ -154,6 +154,7 @@ struct BLECharacteristicHandler {
                 
                 healthKitManager.writeSteps(stepsToAdd)
                 stepCountManager.setStepCount(stepCount)
+                checkForCompletedStepGoal()
             }
         case bleManager.cbuuidList.blefsTransfer:
             guard let value = characteristic.value else { break }
@@ -175,7 +176,7 @@ struct BLECharacteristicHandler {
                 
                 weatherController.checkForUpdate()
                 
-                checkForCompletedStepGoal()
+                notificationManager.checkHostBatteryState()
                 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
