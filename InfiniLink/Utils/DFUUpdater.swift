@@ -29,6 +29,17 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     @Published var resourceURL: URL!
     
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
+    
+    func fileSize(from fileUrl: URL) -> Int {
+        do {
+            let resource = try fileUrl.resourceValues(forKeys:[.fileSizeKey])
+            return resource.fileSize!
+        } catch {
+            log("Error getting file size: \(error.localizedDescription)", caller: "OtherUpdateVersions")
+        }
+        
+        return 0
+    }
 	
     func updateFirmware() {
         guard let infiniTime = bleManager.infiniTime else { return }

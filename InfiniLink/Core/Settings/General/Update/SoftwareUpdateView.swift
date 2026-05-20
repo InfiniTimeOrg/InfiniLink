@@ -97,19 +97,16 @@ struct SoftwareUpdateView: View {
                 }
                 Button {
                     dfuUpdater.percentComplete = 0
+                    downloadManager.updateStarted = true
                     if downloadManager.externalResources && !bleManager.isDeviceInRecoveryMode {
                         downloadManager.startTransfer = true
-                        downloadManager.updateStarted = true
                         downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
                     } else {
                         if dfuUpdater.local {
                             dfuUpdater.updateFirmware()
-                            downloadManager.updateStarted = true
                         } else {
                             downloadManager.startTransfer = true
                             downloadManager.startDownload(url: downloadManager.browserDownloadUrl)
-                            
-                            downloadManager.updateStarted = true
                         }
                     }
                 } label: {
@@ -151,17 +148,6 @@ struct OtherUpdateVersions: View {
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var bleManager = BLEManager.shared
     
-    func fileSize(from fileUrl: URL) -> Int {
-        do {
-            let resource = try fileUrl.resourceValues(forKeys:[.fileSizeKey])
-            return resource.fileSize!
-        } catch {
-            log("Error getting file size: \(error.localizedDescription)", caller: "OtherUpdateVersions")
-        }
-        
-        return 0
-    }
-    
     var body: some View {
         List {
             Section {
@@ -174,20 +160,16 @@ struct OtherUpdateVersions: View {
                     do {
                         let fileUrl = try result.get()
                         
-                        guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                        
                         dfuUpdater.local = true
                         dfuUpdater.firmwareSelected = true
                         dfuUpdater.resourceFilename = fileUrl.lastPathComponent
                         dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
                         dfuUpdater.firmwareURL = fileUrl.absoluteURL
                         downloadManager.updateBody = NSLocalizedString("This is a local firmware file and cannot be verified. Proceed at your own risk.", comment: "")
-                        downloadManager.updateSize = fileSize(from: fileUrl)
+                        downloadManager.updateSize = dfuUpdater.fileSize(from: fileUrl)
                         
                         downloadManager.externalResources = false
                         downloadManager.updateAvailable = true
-                        
-                        fileUrl.stopAccessingSecurityScopedResource()
                         
                         dismiss()
                     } catch {
@@ -204,17 +186,13 @@ struct OtherUpdateVersions: View {
                         do {
                             let fileUrl = try result.get()
                             
-                            guard fileUrl.startAccessingSecurityScopedResource() else { return }
-                            
                             dfuUpdater.firmwareSelected = true
                             dfuUpdater.resourceFilename = fileUrl.lastPathComponent
                             dfuUpdater.resourceURL = fileUrl.absoluteURL
                             downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
-                            downloadManager.updateSize = fileSize(from: fileUrl)
+                            downloadManager.updateSize = dfuUpdater.fileSize(from: fileUrl)
                             
                             downloadManager.externalResources = true
-                            
-                            fileUrl.stopAccessingSecurityScopedResource()
                             
                             dismiss()
                         } catch {

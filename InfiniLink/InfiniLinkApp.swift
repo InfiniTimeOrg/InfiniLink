@@ -25,18 +25,11 @@ struct InfiniLink: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .preferredColorScheme({
-                    switch colorScheme {
-                    case "light":
-                        return .light
-                    case "dark":
-                        return .dark
-                    default:
-                        return .none
-                    }
-                }())
+            NavigationStack {
+                ContentView()
+                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                    .preferredColorScheme(colorScheme == "light" ? .light : .dark)
+            }
         }
     }
 }
