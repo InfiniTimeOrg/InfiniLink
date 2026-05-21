@@ -87,7 +87,7 @@ extension NotificationManager {
         let fullNotif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
         let lowNotif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
         
-        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastTimeMinHeartRangeNotified) >= thirtyMinutes else { return } // Don't receive more than one notif in thirty minutes
+        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return } // Don't receive more than one notif in thirty minutes
         
         if state == .full {
             sendNotifications(fullNotif, batterySettings.fullBattery.iphone)
