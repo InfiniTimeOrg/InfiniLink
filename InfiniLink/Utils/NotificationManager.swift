@@ -20,9 +20,6 @@ class NotificationManager: ObservableObject {
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     @AppStorage("lastHostBatteryLevelNotified") var lastHostBatteryLevelNotified: Double = -1
     
-    @AppStorage("waterReminderAmount") var waterReminderAmount = 7
-    @AppStorage("waterReminder") var waterReminder = true
-    
     @AppStorage("minHeartRange") var minHeartRange = 40
     @AppStorage("maxHeartRange") var maxHeartRange = 150
     @AppStorage("heartRangeReminder") var heartRangeReminder = false
@@ -184,14 +181,14 @@ extension NotificationManager {
         
         let totalTimeInterval = endDate.timeIntervalSince(startDate)
         
-        waterReminderInterval = totalTimeInterval / Double(waterReminderAmount)
+        waterReminderInterval = totalTimeInterval / Double(settings.waterReminderAmount)
     }
     
     func checkAndNotifyForWaterReminders() {
         let currentTime = Date()
         
         if let nextReminderCheckDate, currentTime >= nextReminderCheckDate {
-            if waterReminder {
+            if settings.waterReminderEnabled {
                 bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Water Reminder", comment: ""), subtitle: NSLocalizedString("It's time to drink water", comment: "")))
             }
             
