@@ -102,9 +102,6 @@ class BLEManager: NSObject, ObservableObject {
     @Published var error: String = ""
     @Published var showError: Bool = false
     
-    @Published var pairedDevice: Device!
-    
-    @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     @AppStorage("forceAncs") var forceAncs = false
     
@@ -154,8 +151,8 @@ class BLEManager: NSObject, ObservableObject {
     func startScanning() {
         guard manager?.state == .poweredOn else { return }
         
-        if let pairedDeviceID = pairedDeviceID,
-           let uuid = UUID(uuidString: pairedDeviceID), !isPairingNewDevice { // The user has a paired device and they're not trying to pair a new one
+        if let id = deviceManager.pairedDeviceID,
+           let uuid = UUID(uuidString: id), !isPairingNewDevice { // The user has a paired device and they're not trying to pair a new one
             let peripherals = manager?.retrievePeripherals(withIdentifiers: [uuid])
             log("\(peripherals ?? [])", type: .info, caller: "BLEManager - startScanning")
             
@@ -191,13 +188,13 @@ class BLEManager: NSObject, ObservableObject {
     func onConnect(_ peripheral: CBPeripheral) {
         stopScanning()
         
-        if pairedDeviceID != peripheral.identifier.uuidString { // Only clear the update for a new device
+        if deviceManager.pairedDeviceID != peripheral.identifier.uuidString { // Only clear the update for a new device
             downloadManager.clearUpdate()
         }
         
         isConnecting = false
-        pairedDeviceID = peripheral.identifier.uuidString
-        pairedDevice = deviceManager.fetchDevice(with: peripheral.identifier.uuidString)
+        deviceManager.pairedDeviceID = peripheral.identifier.uuidString
+        deviceManager.pairedDevice = deviceManager.currentDevice()
         hasDisconnectedForUpdate = false
         
         infiniTime = peripheral
@@ -208,16 +205,16 @@ class BLEManager: NSObject, ObservableObject {
         
         updateAncsStatus(peripheral)
         
-        log("Connected to \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        log("Connected to \(deviceManager.pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
     func unpair(device: Device? = nil) {
         // We need to disconnect first because BLE updateInfo methods will be called when Core Data doesn't have an object to update
         disconnect()
         // Delete the device object we have said for this watch
-        deviceManager.removeDevice(device ?? pairedDevice!)
+        deviceManager.removeDevice(device ?? deviceManager.pairedDevice!)
         
-        log("Unpaired from \(pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        log("Unpaired from \(deviceManager.pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
     
     func disconnect() {
@@ -238,9 +235,9 @@ class BLEManager: NSObject, ObservableObject {
     
     func switchDevice(device: Device) {
         // We just switched devices, update the UI
-        self.pairedDeviceID = device.uuid
-        self.pairedDevice = device
-        self.deviceManager.setSettings()
+        self.deviceManager.pairedDeviceID = device.uuid
+        self.deviceManager.pairedDevice = device
+//        self.deviceManager.
         
         self.disconnect()
         self.startScanning()
@@ -253,10 +250,10 @@ class BLEManager: NSObject, ObservableObject {
 
 extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
-        if let pairedDeviceID, pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
+        if deviceManager.pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
             connect(peripheral: peripheral)
         }
-        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier == peripheral.identifier }) && !deviceManager.watches.contains(where: { $0.uuid! == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
+        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier == peripheral.identifier }) && !deviceManager.watches.contains(where: { $0.uuid ?? "" == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
             newPeripherals.append(peripheral)
         }
     }
@@ -277,13 +274,11 @@ extension BLEManager: CBCentralManagerDelegate {
             }
         }
         
-        // The connection was abruptly terminated, so we try connecting again
-        connect(peripheral: peripheral)
+        connect(peripheral: peripheral) // The connection was abruptly terminated, so we try connecting again
     }
     
     func centralManager(_ central: CBCentralManager, didConnect peripheral: CBPeripheral) {
-        // The connection was successfully, update state vars and start service discovery
-        onConnect(peripheral)
+        onConnect(peripheral) // The connection was successfully, update state vars and start service discovery
     }
     
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {

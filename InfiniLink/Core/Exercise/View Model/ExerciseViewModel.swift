@@ -130,7 +130,7 @@ class ExerciseViewModel: ObservableObject {
         newExercise.heartPoints = NSSet(array: heartPoints)
         newExercise.steps = Int32(stepsTaken)
         newExercise.caloriesBurned = Int32(calories)
-        newExercise.deviceId = BLEManager.shared.pairedDeviceID
+        newExercise.deviceId = deviceManager.pairedDeviceID
         
         let duration = endDate.timeIntervalSince(startDate)
         let hkCalories = HKQuantity(

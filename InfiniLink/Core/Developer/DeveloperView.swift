@@ -17,6 +17,9 @@ struct DeveloperView: View {
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
     private let healthKitManager = HealthKitManager.shared
+    private let deviceManager = DeviceManager.shared
+    private let chartManager = ChartManager.shared
+    private let stepCountManager = StepCountManager.shared
     
     var body: some View {
         List {
@@ -94,27 +97,34 @@ struct DeveloperView: View {
             }
             Section("Test Steps") {
                 Button("Add 2") {
-                    let todaySteps = ChartManager.shared.stepPoints().first?.steps ?? 0
-                    StepCountManager.shared.setStepCount(Int(todaySteps + 2))
+                    let todaySteps = chartManager.stepPoints().first?.steps ?? 0
+                    stepCountManager.setStepCount(Int(todaySteps + 2))
                 }
                 Button("Set to 0") {
-                    StepCountManager.shared.setStepCount(0)
+                    stepCountManager.setStepCount(0)
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
             Section {
                 Button(role: .destructive) {
-                    StepCountManager.shared.clearCurrentDaySteps()
+                    stepCountManager.clearCurrentDaySteps()
                 } label: {
                     Text("Clear Step Data")
                 }
                 Button(role: .destructive) {
-                    ChartManager.shared.deleteAllUserExercises()
+                    chartManager.deleteAllUserExercises()
                 } label: {
                     Text("Clear All Exercises")
                 }
                 Button(role: .destructive) {
-                    ChartManager.shared.deleteAllDisconnectMapPoints()
+                    bleManager.disconnect()
+                    deviceManager.pairedDeviceID = nil
+                    deviceManager.deleteAllDevices()
+                } label: {
+                    Text("Delete All Devices")
+                }
+                Button(role: .destructive) {
+                    chartManager.deleteAllDisconnectMapPoints()
                 } label: {
                     Text("Clear Disconnect Pins")
                 }

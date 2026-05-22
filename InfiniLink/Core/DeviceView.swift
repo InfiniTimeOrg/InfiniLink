@@ -49,7 +49,7 @@ struct DeviceView: View {
                     }
                     .frame(height: 0)
                     VStack(spacing: 4) {
-                        WatchFaceView(device: bleManager.pairedDevice)
+                        WatchFaceView(device: deviceManager.pairedDevice)
                             .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
                             .clipped(antialiased: true)
                         VStack(spacing: 5) {
@@ -203,14 +203,11 @@ struct DeviceView: View {
         .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
             if blefsTransfer != nil && scenePhase == .active {
                 BLEFSHandler.shared.readSettings { settings in
-                    deviceManager.updateSettings(settings: settings)
+                    DispatchQueue.main.async {
+                        self.deviceManager.updateSettings(settings)
+                    }
                 }
             }
-        }
-        .onAppear {
-            bleManager.pairedDevice = deviceManager.fetchDevice()
-            
-            notificationManager.setWaterRemindersPerDay()
         }
         .onChange(of: bleManager.weatherCharacteristic) { _ in
             WeatherController.shared.fetchWeatherData()
@@ -269,7 +266,7 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 #Preview {
     DeviceView()
         .onAppear {
-            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
+            DeviceManager.shared.pairedDevice?.firmware = "0.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
             DFUUpdater.shared.local = false
         }

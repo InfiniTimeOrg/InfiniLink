@@ -46,6 +46,8 @@ class NotificationManager: ObservableObject {
             requestNotificationAuthorization()
         }
         
+        setWaterRemindersPerDay()
+        
         UIDevice.current.isBatteryMonitoringEnabled = true
     }
     
