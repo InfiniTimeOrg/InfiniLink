@@ -20,11 +20,9 @@
 		E03A7DF82D0D4E95007A9209 /* DeveloperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */; };
 		E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */; };
 		E03C30B72CC7417D00DD8363 /* WeatherView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C30B62CC7417C00DD8363 /* WeatherView.swift */; };
-		E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E04396142D28E59400A13B90 /* DirectionsView.swift */; };
 		E05046892D136F1E00FE4BCD /* DebugLogsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05046882D136F1D00FE4BCD /* DebugLogsView.swift */; };
 		E055D2542DF229AC00AF19AD /* CalendarDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2532DF229AC00AF19AD /* CalendarDayView.swift */; };
 		E055D2562DF229BD00AF19AD /* CalendarDayDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */; };
-		E05999992CB25C5600D64E0B /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05999982CB25C5600D64E0B /* SleepView.swift */; };
 		E05999AC2CB2ED7100D64E0B /* repetitionscrolling.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A92CB2ED7100D64E0B /* repetitionscrolling.ttf */; };
 		E05999AD2CB2ED7100D64E0B /* open_sans_light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A82CB2ED7100D64E0B /* open_sans_light.ttf */; };
 		E05999AE2CB2ED7100D64E0B /* JetBrainsMono-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E05999A42CB2ED7100D64E0B /* JetBrainsMono-Light.ttf */; };
@@ -50,7 +48,6 @@
 		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
 		E05D2E722D7E8801004A6CE0 /* EmptyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */; };
 		E05D2E752D7EA95B004A6CE0 /* ChartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E742D7EA95B004A6CE0 /* ChartType.swift */; };
-		E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
 		E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = E064D4092D77F32F008500AE /* CalendarDay.swift */; };
 		E06C5D822FBBE26F0099F982 /* BatteryChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E06C5D802FBBE26F0099F982 /* BatteryChartView.swift */; };
@@ -63,9 +60,7 @@
 		E07D8F202CBF051A005C1325 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F1F2CBF051A005C1325 /* LocationManager.swift */; };
 		E07D8F222CC00AB0005C1325 /* UnitTemperature+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F212CC00AB0005C1325 /* UnitTemperature+Extension.swift */; };
 		E07D8F242CC012FC005C1325 /* DeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F232CC012FC005C1325 /* DeviceManager.swift */; };
-		E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E07D8F252CC0C0D2005C1325 /* SleepController.swift */; };
 		E08C4A2F2CC1551300013D15 /* MyDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */; };
-		E08C4A492CC4048900013D15 /* SleepData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08C4A482CC4048900013D15 /* SleepData.swift */; };
 		E08D0E8F2DF1FFBD0012175F /* ExerciseRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08D0E8E2DF1FFBD0012175F /* ExerciseRowView.swift */; };
 		E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */; };
 		E08F2F352CC89A530094217A /* MapSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08F2F342CC89A530094217A /* MapSearch.swift */; };
@@ -153,11 +148,9 @@
 		E03A7DF72D0D4E95007A9209 /* DeveloperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperView.swift; sourceTree = "<group>"; };
 		E03C30B42CC7032800DD8363 /* ArbitraryNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArbitraryNotificationView.swift; sourceTree = "<group>"; };
 		E03C30B62CC7417C00DD8363 /* WeatherView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherView.swift; sourceTree = "<group>"; };
-		E04396142D28E59400A13B90 /* DirectionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
 		E05046882D136F1D00FE4BCD /* DebugLogsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogsView.swift; sourceTree = "<group>"; };
 		E055D2532DF229AC00AF19AD /* CalendarDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayView.swift; sourceTree = "<group>"; };
 		E055D2552DF229BD00AF19AD /* CalendarDayDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDayDetailView.swift; sourceTree = "<group>"; };
-		E05999982CB25C5600D64E0B /* SleepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		E05999A02CB2ED7100D64E0B /* 7-Segment.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "7-Segment.ttf"; sourceTree = "<group>"; };
 		E05999A12CB2ED7100D64E0B /* BebasNeue-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "BebasNeue-Regular.ttf"; sourceTree = "<group>"; };
 		E05999A22CB2ED7100D64E0B /* JetBrainsMono-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "JetBrainsMono-Bold.ttf"; sourceTree = "<group>"; };
@@ -183,7 +176,6 @@
 		E0599A102CB5553B00D64E0B /* FSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSFile.swift; sourceTree = "<group>"; };
 		E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChartView.swift; sourceTree = "<group>"; };
 		E05D2E742D7EA95B004A6CE0 /* ChartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartType.swift; sourceTree = "<group>"; };
-		E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DirectionsManager.swift; sourceTree = "<group>"; };
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
 		E064D4092D77F32F008500AE /* CalendarDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDay.swift; sourceTree = "<group>"; };
 		E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = InfiniLink.entitlements; sourceTree = "<group>"; };
@@ -196,9 +188,7 @@
 		E07D8F1F2CBF051A005C1325 /* LocationManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		E07D8F212CC00AB0005C1325 /* UnitTemperature+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UnitTemperature+Extension.swift"; sourceTree = "<group>"; };
 		E07D8F232CC012FC005C1325 /* DeviceManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceManager.swift; sourceTree = "<group>"; };
-		E07D8F252CC0C0D2005C1325 /* SleepController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepController.swift; sourceTree = "<group>"; };
 		E08C4A2E2CC1551300013D15 /* MyDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyDevicesView.swift; sourceTree = "<group>"; };
-		E08C4A482CC4048900013D15 /* SleepData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SleepData.swift; sourceTree = "<group>"; };
 		E08D0E8E2DF1FFBD0012175F /* ExerciseRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseRowView.swift; sourceTree = "<group>"; };
 		E08F2F322CC899E30094217A /* SetWeatherLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetWeatherLocationView.swift; sourceTree = "<group>"; };
 		E08F2F342CC89A530094217A /* MapSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapSearch.swift; sourceTree = "<group>"; };
@@ -467,7 +457,6 @@
 				E0A7C06A2CB0DE4C0042A12D /* Weather.swift */,
 				E0599A102CB5553B00D64E0B /* FSFile.swift */,
 				E0B85D202CB625FE00D85122 /* Exercise.swift */,
-				E08C4A482CC4048900013D15 /* SleepData.swift */,
 				E064D4092D77F32F008500AE /* CalendarDay.swift */,
 				E05D2E742D7EA95B004A6CE0 /* ChartType.swift */,
 				E00A86302DEBF3C1001533E1 /* RSSI.swift */,
@@ -504,11 +493,9 @@
 				E0B85D5F2CB6D41700D85122 /* FitnessCalculator.swift */,
 				E07D8F1D2CBF03E6005C1325 /* WeatherController.swift */,
 				E07D8F1F2CBF051A005C1325 /* LocationManager.swift */,
-				E07D8F252CC0C0D2005C1325 /* SleepController.swift */,
 				E08F2F342CC89A530094217A /* MapSearch.swift */,
 				E0E772AE2CCD552100D60C24 /* NumbersOnly.swift */,
 				E05DA4C02D13752C00A49203 /* DebugLogManager.swift */,
-				E05D2E762D8093D7004A6CE0 /* DirectionsManager.swift */,
 				E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */,
 			);
 			path = Utils;
@@ -588,11 +575,9 @@
 				E0C7C8372CAEF70B0043DA2D /* Welcome */,
 				E05046872D136F0600FE4BCD /* Developer */,
 				E0A7C0972CB227060042A12D /* HeartView.swift */,
-				E05999982CB25C5600D64E0B /* SleepView.swift */,
 				E03C30B62CC7417C00DD8363 /* WeatherView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
-				E04396142D28E59400A13B90 /* DirectionsView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -809,9 +794,7 @@
 				E064D40A2D77F32F008500AE /* CalendarDay.swift in Sources */,
 				E0A7C0A52CB2527F0042A12D /* HeartSettingsView.swift in Sources */,
 				E07D8F1E2CBF03E6005C1325 /* WeatherController.swift in Sources */,
-				E05999992CB25C5600D64E0B /* SleepView.swift in Sources */,
 				E0C7C8562CAF14870043DA2D /* BLEWriteManager.swift in Sources */,
-				E04396152D28E59400A13B90 /* DirectionsView.swift in Sources */,
 				E05999BF2CB419D300D64E0B /* InfiniLink.xcdatamodeld in Sources */,
 				E0A7C09E2CB2454B0042A12D /* ExerciseView.swift in Sources */,
 				E0C7C8592CAF14870043DA2D /* BLECharacteristicHandler.swift in Sources */,
@@ -827,7 +810,6 @@
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
 				E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */,
-				E08C4A492CC4048900013D15 /* SleepData.swift in Sources */,
 				E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */,
 				E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */,
 				E055D2562DF229BD00AF19AD /* CalendarDayDetailView.swift in Sources */,
@@ -839,7 +821,6 @@
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
 				E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */,
-				E05D2E772D8093D7004A6CE0 /* DirectionsManager.swift in Sources */,
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
 				E09696E32D2F807700CCCBF8 /* HeartChartView.swift in Sources */,
 				E0B85D5E2CB628E200D85122 /* ExerciseDetailView.swift in Sources */,
@@ -851,7 +832,6 @@
 				E0B85D6F2CB8CDC700D85122 /* Date+Extension.swift in Sources */,
 				E0C7C85C2CAF14870043DA2D /* BLEManager.swift in Sources */,
 				E0A7C09C2CB234450042A12D /* AboutSettingsView.swift in Sources */,
-				E07D8F262CC0C0D2005C1325 /* SleepController.swift in Sources */,
 				E09696DF2D2EC7EC00CCCBF8 /* String+Extension.swift in Sources */,
 				E08C4A2F2CC1551300013D15 /* MyDevicesView.swift in Sources */,
 				E055D2542DF229AC00AF19AD /* CalendarDayView.swift in Sources */,

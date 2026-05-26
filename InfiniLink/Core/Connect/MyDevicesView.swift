@@ -36,7 +36,7 @@ struct MyDevicesView: View {
                                     Image(systemName: "checkmark")
                                         .foregroundStyle(.blue)
                                         .font(.body.weight(.semibold))
-                                        .opacity(bleManager.pairedDeviceID  == watch.uuid ? 1 : 0)
+                                        .opacity(deviceManager.pairedDeviceID  == watch.uuid ? 1 : 0)
                                     WatchFaceView(watchface: UInt8(watch.watchface), device: watch)
                                         .frame(width: 90, height: 90)
                                     VStack(alignment: .leading, spacing: 4) {
@@ -55,7 +55,7 @@ struct MyDevicesView: View {
                                     Spacer()
                                 }
                             }
-                            .disabled(bleManager.pairedDeviceID ?? "" == watch.uuid ?? "")
+                            .disabled(deviceManager.pairedDeviceID ?? "" == watch.uuid ?? "")
                             Image(systemName: "info.circle")
                                 .foregroundStyle(Color.accentColor)
                                 .onTapGesture {

@@ -20,9 +20,6 @@ class NotificationManager: ObservableObject {
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     @AppStorage("lastHostBatteryLevelNotified") var lastHostBatteryLevelNotified: Double = -1
     
-    @AppStorage("waterReminderAmount") var waterReminderAmount = 7
-    @AppStorage("waterReminder") var waterReminder = true
-    
     @AppStorage("minHeartRange") var minHeartRange = 40
     @AppStorage("maxHeartRange") var maxHeartRange = 150
     @AppStorage("heartRangeReminder") var heartRangeReminder = false
@@ -49,9 +46,9 @@ class NotificationManager: ObservableObject {
             requestNotificationAuthorization()
         }
         
+        setWaterRemindersPerDay()
+        
         UIDevice.current.isBatteryMonitoringEnabled = true
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onBatteryStateDidChange(_:)), name: UIDevice.batteryStateDidChangeNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.onBatteryLevelDidChange(_:)), name: UIDevice.batteryLevelDidChangeNotification, object: nil)
     }
     
     func requestNotificationAuthorization(completion: ((Bool, Error?) -> Void)? = nil) {
@@ -81,32 +78,22 @@ class NotificationManager: ObservableObject {
 
 // MARK: Battery
 extension NotificationManager {
-    @objc func onBatteryStateDidChange(_ notification: NSNotification) {
+    func checkHostBatteryState() {
         let state = UIDevice.current.batteryState
         let level = UIDevice.current.batteryLevel * 100
         let currentTime = Date().timeIntervalSince1970
         
-        let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
+        let fullNotif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
+        let lowNotif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
         
-        switch state {
-        case .full:
-            if lastHostBatteryLevelNotified == -1 || (currentTime - lastTimeMinHeartRangeNotified) >= thirtyMinutes { // Debounce this because if we're at full charge, and the phone is plugged out then in, this will fire
-                sendNotifications(notif, batterySettings.fullBattery.iphone)
-                lastHostBatteryLevelNotified = currentTime
-            }
-        default: break
+        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return } // Don't receive more than one notif in thirty minutes
+        
+        if state == .full {
+            sendNotifications(fullNotif, batterySettings.fullBattery.iphone)
+        } else if level == 20 && state != .charging {
+            sendNotifications(lowNotif, batterySettings.lowBattery.iphone)
         }
-    }
-    
-    @objc func onBatteryLevelDidChange(_ notification: NSNotification) {
-        let state = UIDevice.current.batteryState
-        let level = UIDevice.current.batteryLevel * 100
-        
-        let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
-        
-        if lastHostBatteryLevelNotified == -1 || (Date().timeIntervalSince1970 - lastTimeMinHeartRangeNotified) >= thirtyMinutes && level < 20 && state != .charging {
-            sendNotifications(notif, batterySettings.lowBattery.iphone)
-        }
+        lastHostBatteryLevelNotified = currentTime
     }
     
     private func sendNotifications(_ notif: AppNotification, _ settings: NotifySettings) {
@@ -196,14 +183,14 @@ extension NotificationManager {
         
         let totalTimeInterval = endDate.timeIntervalSince(startDate)
         
-        waterReminderInterval = totalTimeInterval / Double(waterReminderAmount)
+        waterReminderInterval = totalTimeInterval / Double(settings.waterReminderAmount)
     }
     
     func checkAndNotifyForWaterReminders() {
         let currentTime = Date()
         
         if let nextReminderCheckDate, currentTime >= nextReminderCheckDate {
-            if waterReminder {
+            if settings.waterReminderEnabled {
                 bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Water Reminder", comment: ""), subtitle: NSLocalizedString("It's time to drink water", comment: "")))
             }
             

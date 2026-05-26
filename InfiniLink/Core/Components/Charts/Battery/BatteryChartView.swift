@@ -24,23 +24,23 @@ struct BatteryChartView: View {
     private let cal = Calendar.current
     private let visibleDomain: TimeInterval = 86400
 
-    var visiblePoints: [BatteryChartDataPoint] {
+    private var visiblePoints: [BatteryChartDataPoint] {
         let visibleEnd = Date(timeInterval: visibleDomain, since: scrollPositionDate)
         return points.filter { $0.date >= scrollPositionDate && $0.date <= visibleEnd }
     }
-    var earliestDate: Date {
+    private var earliestDate: Date {
         points.map(\.date).min() ?? Date()
     }
-    var latestDate: Date {
+    private var latestDate: Date {
         points.map(\.date).max() ?? Date()
     }
-    var visibleFirst: Int {
+    private var visibleFirst: Int {
         Int(visiblePoints.first?.value ?? 0)
     }
-    var visibleLast: Int {
+    private var visibleLast: Int {
         Int(visiblePoints.last?.value ?? 100)
     }
-    var selectedPoint: BatteryChartDataPoint? {
+    private var selectedPoint: BatteryChartDataPoint? {
         guard let rawSelectedDate else { return nil }
         return points.min(by: {
             abs($0.date.timeIntervalSince(rawSelectedDate)) < abs($1.date.timeIntervalSince(rawSelectedDate))
@@ -147,9 +147,21 @@ struct BatteryChartView: View {
                             Text(selectedPoint != nil ? "Value" : "Range")
                                 .font(.caption)
                                 .foregroundColor(.secondary)
-                            Text((selectedPoint != nil ? String(format: "%.0f", selectedPoint!.value) : "\(visibleFirst)–\(visibleLast)") + "%")
-                                .font(.system(.title, design: .rounded))
-                                .foregroundColor(.primary)
+                            Group {
+                                if let selectedPoint {
+                                    Text(String(format: "%.0f", selectedPoint.value) + "%")
+                                        .animation(.default, value: selectedPoint.value)
+                                } else {
+                                    Text((visibleFirst == visibleLast
+                                          ? "\(visibleFirst)"
+                                          : "\(visibleFirst)–\(visibleLast)") + "%")
+                                    .animation(.default, value: visibleFirst)
+                                    .animation(.default, value: visibleLast)
+                                }
+                            }
+                            .font(.system(.title, design: .rounded))
+                            .foregroundColor(.primary)
+                            .contentTransition(.numericText())
                             Group {
                                 if let selectedPoint {
                                     Text(selectedPoint.date.addingTimeInterval(-1800).formatted(.dateTime.month(.abbreviated).day().hour().minute()))

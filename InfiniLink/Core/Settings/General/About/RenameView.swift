@@ -36,9 +36,7 @@ struct RenameView: View {
                             name = "InfiniTime"
                         }
                         
-                        guard let id = bleManager.pairedDeviceID else { return }
-                        
-                        deviceManager.updateName(name: name.trimmingCharacters(in: .whitespaces), for: id)
+                        deviceManager.updateName(name.trimmingCharacters(in: .whitespaces))
                     }
                 if !name.isEmpty {
                     Button {

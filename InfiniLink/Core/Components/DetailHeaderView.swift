@@ -84,7 +84,6 @@ struct DetailHeaderView<V: View>: View {
     
     enum DetailHeaderAnimation {
         case heart
-        case sleep
         case steps
     }
     
@@ -127,6 +126,8 @@ struct DetailHeaderView<V: View>: View {
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text(header.title)
                             .font(.system(size: 50).bold())
+                            .contentTransition(.numericText())
+                            .animation(.default, value: header.title)
                         if let units = header.units {
                             Text(units.uppercased())
                                 .foregroundStyle(.primary.opacity(0.8))

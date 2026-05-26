@@ -18,7 +18,6 @@ struct DeviceView: View {
     @ObservedObject var notificationManager = NotificationManager.shared
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     
-    @AppStorage("sleepGoal") var sleepGoal = 28800
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     
     @Environment(\.colorScheme) var colorScheme
@@ -41,202 +40,184 @@ struct DeviceView: View {
     }
     
     var content: some View {
-        NavigationView {
-            GeometryReader { geo in
-                List {
-                    VStack(spacing: 0) {
-                        GeometryReader { geo in
-                            Color.clear
-                                .preference(key: ScrollOffsetPreferenceKey.self, value: [geo.frame(in: .global).minY])
-                        }
-                        .frame(height: 0)
-                        VStack(spacing: 4) {
-                            WatchFaceView(device: bleManager.pairedDevice)
-                                .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
-                                .clipped(antialiased: true)
-                            VStack(spacing: 5) {
-                                Text(deviceManager.name)
-                                    .font(.title.weight(.bold))
-                                if bleManager.isBluetoothOn {
-                                    Group {
-                                        Text(bleManager.connectionState) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
-                                            .foregroundColor({
-                                                if bleManager.batteryLevel > 20 {
-                                                    return Color.gray
-                                                } else if bleManager.batteryLevel > 10 {
-                                                    return Color.orange
-                                                } else {
-                                                    return Color.red
-                                                }
-                                            }())
-                                    }
-                                    .foregroundStyle(Color.gray)
-                                }
-                            }
-                            .opacity(showNavigationTitle ? 0 : 1)
-                        }
+        GeometryReader { geo in
+            List {
+                VStack(spacing: 0) {
+                    GeometryReader { geo in
+                        Color.clear
+                            .preference(key: ScrollOffsetPreferenceKey.self, value: [geo.frame(in: .global).minY])
                     }
-                    .frame(maxWidth: .infinity)
-                    .listRowBackground(Color.clear)
-                    Section {
-                        let comparison = deviceManager.firmware.compare(downloadManager.updateVersion, options: .numeric)
-                        if !bleManager.isBluetoothOn {
-                            // We don't use a button because there's no App Store-safe way to deeplink to Settings without opening InfiniLink settings, which could confuse the user
-                            BannerView("Bluetooth Disabled", "To connect to your watch, you'll need to enable Bluetooth.") {
-                                Image("logo.bluetooth")
+                    .frame(height: 0)
+                    VStack(spacing: 4) {
+                        WatchFaceView(device: deviceManager.pairedDevice)
+                            .frame(width: min(geo.size.width / 2.5, 185), height: min(geo.size.width / 2.5, 185), alignment: .center)
+                            .clipped(antialiased: true)
+                        VStack(spacing: 5) {
+                            Text(deviceManager.name)
+                                .font(.title.weight(.bold))
+                            if bleManager.isBluetoothOn {
+                                Group {
+                                    Text(bleManager.connectionState) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
+                                        .foregroundColor({
+                                            if bleManager.batteryLevel > 20 {
+                                                return Color.gray
+                                            } else if bleManager.batteryLevel > 10 {
+                                                return Color.orange
+                                            } else {
+                                                return Color.red
+                                            }
+                                        }())
+                                }
+                                .foregroundStyle(Color.gray)
+                            }
+                        }
+                        .opacity(showNavigationTitle ? 0 : 1)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .listRowBackground(Color.clear)
+                Section {
+                    let comparison = deviceManager.firmware.compare(downloadManager.updateVersion, options: .numeric)
+                    if !bleManager.isBluetoothOn {
+                        // We don't use a button because there's no App Store-safe way to deeplink to Settings without opening InfiniLink settings, which could confuse the user
+                        BannerView("Bluetooth Disabled", "To connect to your watch, you'll need to enable Bluetooth.") {
+                            Image("logo.bluetooth")
+                                .resizable()
+                                .frame(width: 21, height: 35)
+                                .foregroundStyle(.blue)
+                        }
+                    } else if let exercise = exerciseViewModel.currentExercise {
+                        NavigationLink {
+                            ActiveExerciseView()
+                        } label: {
+                            BannerView("\(exercise.name)", "\(exerciseViewModel.timeString())", "Active Exercise") {
+                                Image(systemName: exercise.icon)
+                                    .font(.title2.weight(.medium))
+                            }
+                        }
+                    } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
+                        NavigationLink {
+                            SoftwareUpdateView()
+                        } label: {
+                            BannerView(
+                                "InfiniTime",
+                                "\(downloadManager.updateVersion)",
+                                "Update Available"
+                            ) {
+                                Image(.infiniTime)
                                     .resizable()
-                                    .frame(width: 21, height: 35)
-                                    .foregroundStyle(.blue)
-                            }
-                        } else if let exercise = exerciseViewModel.currentExercise {
-                            NavigationLink {
-                                ActiveExerciseView()
-                            } label: {
-                                BannerView("\(exercise.name)", "\(exerciseViewModel.timeString())", "Active Exercise") {
-                                    Image(systemName: exercise.icon)
-                                        .font(.title2.weight(.medium))
-                                }
-                            }
-                        } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
-                            NavigationLink {
-                                SoftwareUpdateView()
-                            } label: {
-                                BannerView(
-                                    "InfiniTime",
-                                    "\(downloadManager.updateVersion)",
-                                    "Update Available"
-                                ) {
-                                    Image(.infiniTime)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 50, height: 50)
-                                }
-                            }
-                        } else if let update = downloadManager.appUpdate {
-                            Button {
-                                guard let testFlight = URL(string: testFlightLink) else { return }
-                                guard let appStore = URL(string: appStoreLink) else { return }
-                                
-                                openURL(update.isBeta ? testFlight : appStore)
-                            } label: {
-                                BannerView(
-                                    "InfiniLink",
-                                    "\(update.version)",
-                                    "Update Available"
-                                ) {
-                                    Image((UIApplication.shared.alternateIconName ?? "AppIcon") + "-Rendered")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: 50, height: 50)
-                                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                                }
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 50, height: 50)
                             }
                         }
-                    }
-                    Section {
-                        NavigationLink {
-                            ExerciseView()
+                    } else if let update = downloadManager.appUpdate {
+                        Button {
+                            guard let testFlight = URL(string: testFlightLink) else { return }
+                            guard let appStore = URL(string: appStoreLink) else { return }
+                            
+                            openURL(update.isBeta ? testFlight : appStore)
                         } label: {
-                            ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
-                        }
-                        NavigationLink {
-                            HeartView()
-                        } label: {
-                            ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
-                        }
-                        NavigationLink {
-                            StepsView()
-                        } label: {
-                            ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
-                        }
-                        NavigationLink {
-                            SleepView()
-                        } label: {
-                            ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: Color(.systemPurple))
-                        }
-                    }
-                    Section {
-                        NavigationLink {
-                            GeneralSettingsView()
-                        } label: {
-                            ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
-                        }
-                        NavigationLink {
-                            BatterySettingsView()
-                        } label: {
-                            ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
-                        }
-                        NavigationLink {
-                            NotificationsSettingsView()
-                        } label: {
-                            ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
-                        }
-#if DEBUG
-                        NavigationLink {
-                            DirectionsView()
-                        } label: {
-                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
-                        }
-#endif
-                        NavigationLink {
-                            WeatherView()
-                        } label: {
-                            ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
-                        }
-                        NavigationLink {
-                            MusicSettingsView()
-                        } label: {
-                            ListRowView(title: "Music", icon: "music.note", iconColor: .red)
-                        }
-                    }
-                    if enableDeveloperMode {
-                        NavigationLink {
-                            DeveloperView()
-                        } label: {
-                            ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
+                            BannerView(
+                                "InfiniLink",
+                                "\(update.version)",
+                                "Update Available"
+                            ) {
+                                Image((UIApplication.shared.alternateIconName ?? "AppIcon") + "-Rendered")
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: 50, height: 50)
+                                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                            }
                         }
                     }
                 }
-            }
-            .navigationTitle(showNavigationTitle ? deviceManager.name : "")
-            .navigationBarTitleDisplayMode(.inline)
-            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { values in
-                guard let value = values.first else { return }
-                
-                self.showNavigationTitle = (value <= -135)
-            }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    Button {
-                        showMyDevicesSheet = true
+                Section {
+                    NavigationLink {
+                        ExerciseView()
                     } label: {
-                        Text("My Watches")
+                        ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
+                    }
+                    NavigationLink {
+                        HeartView()
+                    } label: {
+                        ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
+                    }
+                    NavigationLink {
+                        StepsView()
+                    } label: {
+                        ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
                     }
                 }
-            }
-            .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
-                if blefsTransfer != nil && scenePhase == .active {
-                    BLEFSHandler.shared.readSettings { settings in
-                        deviceManager.updateSettings(settings: settings)
+                Section {
+                    NavigationLink {
+                        GeneralSettingsView()
+                    } label: {
+                        ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
+                    }
+                    NavigationLink {
+                        BatterySettingsView()
+                    } label: {
+                        ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
+                    }
+                    NavigationLink {
+                        NotificationsSettingsView()
+                    } label: {
+                        ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
+                    }
+                    NavigationLink {
+                        WeatherView()
+                    } label: {
+                        ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
+                    }
+                    NavigationLink {
+                        MusicSettingsView()
+                    } label: {
+                        ListRowView(title: "Music", icon: "music.note", iconColor: .red)
                     }
                 }
-            }
-            .onAppear {
-                bleManager.pairedDevice = deviceManager.fetchDevice()
-                
-                notificationManager.setWaterRemindersPerDay()
-            }
-            .onChange(of: bleManager.weatherCharacteristic) { _ in
-                WeatherController.shared.fetchWeatherData()
-            }
-            .sheet(isPresented: $personalizationController.showSetupSheet) {
-                SetUpDetailsView()
-            }
-            .sheet(isPresented: $showMyDevicesSheet) {
-                MyDevicesView()
+                if enableDeveloperMode {
+                    NavigationLink {
+                        DeveloperView()
+                    } label: {
+                        ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
+                    }
+                }
             }
         }
-        .navigationViewStyle(.stack)
+        .navigationTitle(showNavigationTitle ? deviceManager.name : "")
+        .navigationBarTitleDisplayMode(.inline)
+        .onPreferenceChange(ScrollOffsetPreferenceKey.self) { values in
+            guard let value = values.first else { return }
+            
+            self.showNavigationTitle = (value <= -135)
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                Button {
+                    showMyDevicesSheet = true
+                } label: {
+                    Text("My Watches")
+                }
+            }
+        }
+        .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
+            if blefsTransfer != nil && scenePhase == .active {
+                BLEFSHandler.shared.readSettings { settings in
+                    DispatchQueue.main.async {
+                        self.deviceManager.updateSettings(settings)
+                    }
+                }
+            }
+        }
+        .onChange(of: bleManager.weatherCharacteristic) { _ in
+            WeatherController.shared.fetchWeatherData()
+        }
+        .sheet(isPresented: $personalizationController.showSetupSheet) {
+            SetUpDetailsView()
+        }
+        .sheet(isPresented: $showMyDevicesSheet) {
+            MyDevicesView()
+        }
     }
 }
 
@@ -285,7 +266,7 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
 #Preview {
     DeviceView()
         .onAppear {
-            BLEManager.shared.pairedDevice?.firmware = "0.14.1"
+            DeviceManager.shared.pairedDevice?.firmware = "0.14.1"
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
             DFUUpdater.shared.local = false
         }

@@ -14,31 +14,32 @@ class ChartManager: ObservableObject {
     
     let persistenceController = PersistenceController.shared
     let bleManager = BLEManager.shared
+    let deviceManager = DeviceManager.shared
     
     private let predicateString = "deviceId == %@ AND timestamp >= %@"
     private let calendar = Calendar.current
     
     var weekPredicate: NSPredicate {
-        let deviceId = bleManager.pairedDeviceID ?? ""
+        let deviceId = deviceManager.pairedDeviceID ?? ""
         // Get the days of the current week, not just -7 days from now
         let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: Date()))!
         
         return NSPredicate(format: predicateString, deviceId, startOfWeek as NSDate)
     }
     var sevenDayPredicate: NSPredicate {
-        let deviceId = bleManager.pairedDeviceID ?? ""
+        let deviceId = deviceManager.pairedDeviceID ?? ""
         let start = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
         
         return NSPredicate(format: predicateString, deviceId, start as NSDate)
     }
     var dayPredicate: NSPredicate {
-        let deviceId = bleManager.pairedDeviceID ?? ""
+        let deviceId = deviceManager.pairedDeviceID ?? ""
         let startOfDay = calendar.startOfDay(for: Date())
         
         return NSPredicate(format: predicateString, deviceId, startOfDay as NSDate)
     }
     func monthPredicate(offset: Int = 0) -> NSPredicate {
-        let deviceId = bleManager.pairedDeviceID ?? ""
+        let deviceId = deviceManager.pairedDeviceID ?? ""
         let calendar = Calendar.current
         let now = Date()
         
@@ -56,7 +57,7 @@ class ChartManager: ObservableObject {
         )
     }
     var allTimePredicate: NSPredicate {
-        let deviceId = bleManager.pairedDeviceID ?? ""
+        let deviceId = deviceManager.pairedDeviceID ?? ""
         return NSPredicate(format: "deviceId == %@", deviceId)
     }
     
@@ -67,7 +68,7 @@ class ChartManager: ObservableObject {
             stepCount.id = UUID()
             stepCount.steps = steps
             stepCount.timestamp = time
-            stepCount.deviceId = self.bleManager.pairedDeviceID
+            stepCount.deviceId = self.deviceManager.pairedDeviceID
             
             do {
                 try context.save()
@@ -83,7 +84,7 @@ class ChartManager: ObservableObject {
             let heartRateDataPoint = HeartDataPoint(context: context)
             heartRateDataPoint.value = heartRate
             heartRateDataPoint.timestamp = time
-            heartRateDataPoint.deviceId = self.bleManager.pairedDeviceID
+            heartRateDataPoint.deviceId = self.deviceManager.pairedDeviceID
             
             do {
                 try context.save()
@@ -99,7 +100,7 @@ class ChartManager: ObservableObject {
             let batteryDataPoint = BatteryDataPoint(context: context)
             batteryDataPoint.value = batteryLevel
             batteryDataPoint.timestamp = time
-            batteryDataPoint.deviceId = self.bleManager.pairedDeviceID
+            batteryDataPoint.deviceId = self.deviceManager.pairedDeviceID
             
             do {
                 try context.save()
@@ -138,7 +139,7 @@ class ChartManager: ObservableObject {
     }
     
     func userExercises() -> [UserExercise] {
-        guard let deviceId = bleManager.pairedDeviceID else { return [] }
+        guard let deviceId = deviceManager.pairedDeviceID else { return [] }
         
         let fetchRequest: NSFetchRequest<UserExercise> = UserExercise.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
@@ -152,7 +153,7 @@ class ChartManager: ObservableObject {
     }
     
     func disconnectMapPoint() -> DisconnectMapPoint? {
-        guard let deviceId = bleManager.pairedDeviceID else { return nil }
+        guard let deviceId = deviceManager.pairedDeviceID else { return nil }
         
         let context = persistenceController.container.viewContext
         
@@ -176,7 +177,7 @@ class ChartManager: ObservableObject {
     }
     
     func batteryPoints(predicate: NSPredicate? = nil) -> [BatteryDataPoint] {
-        guard bleManager.pairedDeviceID != nil else { return [] }
+        guard deviceManager.pairedDeviceID != nil else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
         fetchRequest.predicate = predicate ?? sevenDayPredicate
         

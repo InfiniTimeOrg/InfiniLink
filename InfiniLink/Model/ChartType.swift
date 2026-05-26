@@ -11,7 +11,6 @@ enum ChartType: String {
     case steps
     case heart
     case battery
-    case sleep
     
     var icon: String {
         switch self {

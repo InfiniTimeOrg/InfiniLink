@@ -66,15 +66,6 @@ class DownloadManager: NSObject, ObservableObject {
     private var isDownloadingResources = false
     private var hasDownloadedResources = false
     
-    var githubPAT: String? {
-        if let token = Bundle.main.infoDictionary?["pat"] as? String {
-            return token
-        } else {
-            log("Cannot find PAT", type: .error, caller: "DownloadManager - PAT")
-        }
-        return nil
-    }
-    
     struct Asset: Codable {
         let id: Int
         let name: String
@@ -309,14 +300,9 @@ class DownloadManager: NSObject, ObservableObject {
     }
     
     func startDownload(url: URL) {
-        guard let githubPAT else { return }
-        
         self.downloading = true
         
-        var request = URLRequest(url: url)
-        request.setValue("token \(githubPAT)", forHTTPHeaderField: "Authorization")
-        
-        self.downloadTask = urlSession.downloadTask(with: request)
+        self.downloadTask = urlSession.downloadTask(with: URLRequest(url: url))
         self.downloadTask.resume()
     }
     

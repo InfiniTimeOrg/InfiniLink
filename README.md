@@ -8,13 +8,12 @@
 ### Features:
 - Discover and connect to nearby InfiniTime devices
 - Set time and date immediately after connection
-- Retrieve battery level, heart rate, and step data
-- Chart persistence, with filters for the last hour, day, and week
+- Battery, heart rate, and step charts
 - Control Apple Music with InfiniTime's music controls
 - Integration with Apple HealthKit
 - Weather fetch (using WeatherKit) and push (using InfiniTime 1.14's [Simple Weather Service](https://github.com/InfiniTimeOrg/InfiniTime/blob/main/doc/SimpleWeatherService.md))
 - Uploading of [external resource packages](https://github.com/InfiniTimeOrg/InfiniTime/blob/develop/doc/gettingStarted/updating-software.md#updating-resources)
-- Download and install InfiniTime firmware updates from releases and GitHub Actions using the GitHub API (local file updates are supported)
+- Download and install InfiniTime firmware updates from GitHub releases and local files
 
 ### Partially implemented features:
 - System-wide notifications—implemented in [#2217](https://github.com/InfiniTimeOrg/InfiniTime/pull/2217), but not available in the main branch yet.
@@ -29,9 +28,6 @@
 ## Installation
 - **Version 1.0.2** is available on the [App Store](https://apps.apple.com/us/app/infinilink/id1582318814).
 - **Version 1.2** is available on [TestFlight](https://testflight.apple.com/join/B3PY5HUV).
-
-## Demo
-[Video Demo](https://hc-cdn.hel1.your-objectstorage.com/s/v3/20adb8c097303e5eef4d8d537c5ffc22003e4886_screenrecording_08-22-2025_14-42-13_1.mp4)
 
 ## License
 Released under [GPL-3.0](/LICENSE) by [@InfiniTimeOrg](https://github.com/InfiniTimeOrg).

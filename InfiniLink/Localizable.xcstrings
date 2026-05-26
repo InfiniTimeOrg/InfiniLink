@@ -17,17 +17,6 @@
     " • " : {
 
     },
-    " is due" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " est due"
-          }
-        }
-      }
-    },
     " Recovery" : {
 
     },
@@ -397,6 +386,9 @@
         }
       }
     },
+    "Delete All Devices" : {
+
+    },
     "Developer" : {
 
     },
@@ -407,9 +399,6 @@
 
     },
     "DFU" : {
-
-    },
-    "Directions" : {
 
     },
     "Disconnect" : {
@@ -443,17 +432,6 @@
     },
     "Enable Notifications" : {
 
-    },
-    "Enable Watch Notifications" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activer les notifications de la montre"
-          }
-        }
-      }
     },
     "End Exercise" : {
 
@@ -666,9 +644,6 @@
           }
         }
       }
-    },
-    "In %@ meters" : {
-
     },
     "Include Artist" : {
 
@@ -1073,16 +1048,6 @@
     "Skip" : {
 
     },
-    "Sleep" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sommeil"
-          }
-        }
-      }
-    },
     "Software Update" : {
 
     },
@@ -1223,6 +1188,16 @@
     "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
 
     },
+    "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Today your heart rate reached a high of %1$lld, and dropped to a low of %2$lld BPM."
+          }
+        }
+      }
+    },
     "Total" : {
 
     },
@@ -1317,17 +1292,6 @@
     },
     "user@watch:~ $ now" : {
 
-    },
-    "UUID" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "UUID"
-          }
-        }
-      }
     },
     "Value" : {
 

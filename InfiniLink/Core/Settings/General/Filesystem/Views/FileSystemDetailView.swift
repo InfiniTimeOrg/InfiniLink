@@ -127,7 +127,7 @@ struct FileSystemDetailView: View {
                         self.isLoadingFile = false
                         
                         // While we're already loading the settings, make sure we keep the vars updated
-                        DeviceManager.shared.updateSettings(settings: settings)
+//                        DeviceManager.shared.updateSettings(settings: settings)
                     }
                 } else {
                     bleFs.readFile(fileSystemViewModel.getDir(input: fileName)) { data in

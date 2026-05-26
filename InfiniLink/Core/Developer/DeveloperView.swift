@@ -124,11 +124,11 @@ struct DeveloperView: View {
             }
             Section("Test Steps") {
                 Button("Add 2") {
-                    let todaySteps = ChartManager.shared.stepPoints().first?.steps ?? 0
-                    StepCountManager.shared.setStepCount(Int(todaySteps + 2))
+                    let todaySteps = chartManager.stepPoints().first?.steps ?? 0
+                    stepCountManager.setStepCount(Int(todaySteps + 2))
                 }
                 Button("Set to 0") {
-                    StepCountManager.shared.setStepCount(0)
+                    stepCountManager.setStepCount(0)
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
@@ -143,7 +143,7 @@ struct DeveloperView: View {
             }
             Section {
                 Button(role: .destructive) {
-                    StepCountManager.shared.clearCurrentDaySteps()
+                    stepCountManager.clearCurrentDaySteps()
                 } label: {
                     Text("Clear Step Data")
                 }
