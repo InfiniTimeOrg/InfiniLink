@@ -131,20 +131,15 @@ struct StepChartView: View {
                 .frame(height: 280)
             } header: {
                 VStack(alignment: .leading) {
-                    Text(points.count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
-                        .fontWeight(.regular)
-                    Text({
-                        if showSelectionBar {
-                            return "\(selectedSteps) "
-                        } else if !points.isEmpty {
-                            return "\(points.reduce(0) { $0 + $1.steps } / points.count) "
-                        }
-                        return "0 "
-                    }())
-                    .font(.system(size: 28))
-                    .foregroundColor(.primary)
-                    .fontWeight(.bold)
-                    + Text("steps")
+                    if points.count > 1 {
+                        Text(showSelectionBar ? "Total" : "Average")
+                            .fontWeight(.regular)
+                    }
+                    Text(showSelectionBar ? selectedSteps : points.isEmpty ? 0 : points.reduce(0) { $0 + $1.steps } / points.count, format: .number)
+                        .font(.system(size: 28))
+                        .foregroundColor(.primary)
+                        .fontWeight(.bold)
+                    + Text(" steps")
                     Text(showSelectionBar ? "\(selectedDate.formatted(date: .abbreviated, time: .omitted))" : "\(earliestDate.formatted(date: .abbreviated, time: .omitted)) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
                     if streak > 0 {
                         HStack(spacing: 5) {
@@ -152,7 +147,7 @@ struct StepChartView: View {
                                 .imageScale(.large)
                                 .foregroundStyle(.orange)
                             Text("This week you have a ") +
-                            Text("\(streak)-day")
+                            (Text(streak, format: .number) + Text("-day"))
                                 .foregroundColor(.orange)
                                 .fontWeight(.bold) +
                             Text(" step goal streak!")

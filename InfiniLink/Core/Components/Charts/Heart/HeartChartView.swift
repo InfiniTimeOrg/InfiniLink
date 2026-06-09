@@ -59,16 +59,17 @@ struct HeartChartView: View {
                     } header: {
                         VStack(alignment: .leading) {
                             Text(points.count > 1 ? "Range" : "No Data")
-                            Text({
-                                if max == 0 || min == 0 {
-                                    return "0 "
-                                } else {
-                                    return "\(min)-\(max) "
-                                }
-                            }())
-                            .font(.system(.title, design: .rounded))
-                            .foregroundColor(.primary)
-                            + Text("BPM")
+                            if max == 0 || min == 0 {
+                                Text(0, format: .number)
+                                    .font(.system(.title, design: .rounded))
+                                    .foregroundColor(.primary)
+                                + Text(" BPM")
+                            } else {
+                                (Text(min, format: .number) + Text("-") + Text(max, format: .number))
+                                    .font(.system(.title, design: .rounded))
+                                    .foregroundColor(.primary)
+                                + Text(" BPM")
+                            }
                             Text("\(earliestDate.formatted(.dateTime.month(.abbreviated).day()))-\(latestDate.formatted(.dateTime.day()))")
                         }
                         .fontWeight(.semibold)

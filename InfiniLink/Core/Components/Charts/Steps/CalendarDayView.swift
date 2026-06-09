@@ -30,7 +30,7 @@ struct CalendarDayView: View {
                 .stroke(Color.gray.opacity(0.8), style: value.day == -1 ? StrokeStyle(lineWidth: 2.5, lineCap: .round, dash: [7]) : StrokeStyle(lineWidth: 0))
                 .background(value.day == -1 ? AnyShapeStyle(Color.clear) : background)
                 .clipShape(Circle())
-            let label = Text("\(value.day)")
+            let label = Text(value.day, format: .number)
                 .font(.system(size: 16).weight(.medium))
                 .opacity(value.day == -1 ? 0 : 1)
             if deviceManager.settings.stepsGoal > 0 && value.day != -1 {

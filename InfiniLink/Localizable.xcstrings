@@ -4,17 +4,10 @@
     "" : {
 
     },
-    " " : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " "
-          }
-        }
-      }
-    },
     " • " : {
+
+    },
+    " BPM" : {
 
     },
     " Recovery" : {
@@ -23,7 +16,19 @@
     " step goal streak!" : {
 
     },
+    " steps" : {
+
+    },
     " You can customize this in notification settings." : {
+
+    },
+    "-" : {
+
+    },
+    "-day" : {
+
+    },
+    "–" : {
 
     },
     "[BATT]" : {
@@ -76,6 +81,9 @@
     "%@ needs to be connected to update its software." : {
 
     },
+    "%@ times" : {
+
+    },
     "%@ was last seen %@." : {
       "localizations" : {
         "en" : {
@@ -119,26 +127,13 @@
     "%@!" : {
 
     },
-    "%@...%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@...%2$@"
-          }
-        }
-      }
+    "%@..." : {
+
     },
     "%@'s battery must be charged to at least 10%% to update its software." : {
 
     },
-    "%@%%" : {
-
-    },
     "%lld" : {
-
-    },
-    "%lld " : {
 
     },
     "%lld more device%@ found" : {
@@ -154,42 +149,13 @@
     "%lld steps" : {
 
     },
-    "%lld time%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld time%2$@"
-          }
-        }
-      }
-    },
-    "%lld-%lld " : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld-%2$lld "
-          }
-        }
-      }
-    },
-    "%lld-day" : {
-
-    },
     "%lld%%" : {
-
-    },
-    "0 " : {
-
-    },
-    "0%" : {
 
     },
     "1 device discovered" : {
 
     },
-    "95%" : {
+    "1 time" : {
 
     },
     "A new section will be added to your device overview." : {
@@ -1060,9 +1026,6 @@
         }
       }
     },
-    "steps" : {
-
-    },
     "Steps" : {
       "localizations" : {
         "fr" : {
@@ -1123,7 +1086,7 @@
     "Test Weather" : {
 
     },
-    "That's %@%% of your goal." : {
+    "That's %@ of your goal." : {
 
     },
     "The folder name cannot contain a period." : {
@@ -1354,7 +1317,7 @@
         }
       }
     },
-    "You will be notified when your watch's battery level reaches %lld%%." : {
+    "You will be notified when your watch's battery level reaches %@." : {
 
     },
     "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {

@@ -35,7 +35,7 @@ struct HeartView: View {
         return NSLocalizedString("Now", comment: "")
     }
     func timestamp(for heartPoint: HeartDataPoint?) -> String? {
-        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return " " }
+        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return nil }
         
         return units(for: Int(abs(timeInterval)))
     }

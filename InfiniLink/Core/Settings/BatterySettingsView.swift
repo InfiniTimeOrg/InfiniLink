@@ -65,13 +65,13 @@ struct BatterySettingsView: View {
                         }
                         if settingsManager.settings.batterySettings.customNotificationEnabled {
                             HStack {
-                                Text("0%").font(.caption).foregroundStyle(.secondary)
+                                Text(0, format: .percent).font(.caption).foregroundStyle(.secondary)
                                 Slider(value: $settingsManager.settings.batterySettings.customNotificationPercentage, in: 0...95, step: 5)
-                                Text("95%").font(.caption).foregroundStyle(.secondary)
+                                Text(0.95, format: .percent.precision(.fractionLength(0))).font(.caption).foregroundStyle(.secondary)
                             }
                         }
                         if settingsManager.settings.batterySettings.customNotificationEnabled {
-                            notificationSettings(nil, "You will be notified when your watch's battery level reaches \(Int(settingsManager.settings.batterySettings.customNotificationPercentage))%.", $settingsManager.settings.batterySettings.customNotificationSettings)
+                            notificationSettings(nil, "You will be notified when your watch's battery level reaches \(settingsManager.settings.batterySettings.customNotificationPercentage / 100, format: .percent.precision(.fractionLength(0))).", $settingsManager.settings.batterySettings.customNotificationSettings)
                         }
                     } else {
                         NavigationLink {

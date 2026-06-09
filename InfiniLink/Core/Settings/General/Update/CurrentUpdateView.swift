@@ -30,9 +30,14 @@ struct CurrentUpdateView: View {
                 .scaleEffect(backgroundScaled ? 1.4 : 1)
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...\(dfuUpdater.percentComplete == 0 ? "" : String(format: "%.0f", dfuUpdater.percentComplete) + "%")")
-                        .font(.system(size: 22))
-                        .foregroundStyle(.secondary)
+                    HStack(spacing: 0) {
+                        Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...")
+                        if dfuUpdater.percentComplete != 0 {
+                            Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
+                        }
+                    }
+                    .font(.system(size: 22))
+                    .foregroundStyle(.secondary)
                     Text(deviceManager.name)
                         .font(.title.weight(.bold))
                 }

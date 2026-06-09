@@ -39,7 +39,7 @@ struct NotificationsSettingsView: View {
                     if settingsManager.settings.waterReminderEnabled {
                         Picker("Interval", selection: $settingsManager.settings.waterReminderAmount) {
                             ForEach(0..<9, id: \.self) { amount in
-                                Text("\(amount + 1) time\(amount == 0 ? "" : "s")")
+                                Text(amount == 0 ? "1 time" : "\(amount + 1, format: .number) times")
                             }
                         }
                     }
@@ -50,7 +50,7 @@ struct NotificationsSettingsView: View {
                         HStack {
                             Text("Minimum")
                             Spacer()
-                            Text("\(settingsManager.settings.heartSettings.minRange)")
+                            Text(settingsManager.settings.heartSettings.minRange, format: .number)
                             Stepper("\(settingsManager.settings.heartSettings.minRange)", value: $settingsManager.settings.heartSettings.minRange, in: 40...(settingsManager.settings.heartSettings.maxRange - 1), step: 1)
                                 .fontWeight(.semibold)
                                 .labelsHidden()
@@ -58,7 +58,7 @@ struct NotificationsSettingsView: View {
                         HStack {
                             Text("Maximum")
                             Spacer()
-                            Text("\(settingsManager.settings.heartSettings.maxRange)")
+                            Text(settingsManager.settings.heartSettings.maxRange, format: .number)
                             Stepper("\(settingsManager.settings.heartSettings.maxRange)", value: $settingsManager.settings.heartSettings.maxRange, in: (settingsManager.settings.heartSettings.minRange + 1)...220, step: 1)
                                 .fontWeight(.semibold)
                                 .labelsHidden()
