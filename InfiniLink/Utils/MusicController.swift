@@ -13,6 +13,7 @@ import SwiftUI
 class MusicController {
     static let shared = MusicController()
     
+    private let session = AVAudioSession.sharedInstance()
     private let bleManager = BLEManager.shared
     private let bleWriteManager = BLEWriteManager()
     private let volumeNotch: Float = (1 / 15)
@@ -36,8 +37,7 @@ class MusicController {
         NotificationCenter.default.addObserver(self, selector: #selector(self.onPlaybackChange(_:)), name: .MPMusicPlayerControllerPlaybackStateDidChange, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(self.onNowPlayingChange(_:)), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
         
-        // Create the player instance
-        controlMusic(controlNumber: -1)
+        initSession()
     }
     
     @objc func onPlaybackChange(_ notification: NSNotification) {
@@ -48,53 +48,48 @@ class MusicController {
         updateMusicInformation()
     }
     
-    func controlMusic(controlNumber: Int) {
-        if allowMusicControl {
-            // When CoreBluetooth gets an update from the music control characteristic, parse that number and take an action, and in any case, make sure the track and artist are up-to-date
-            
-            let session = AVAudioSession.sharedInstance()
-            
+    func initSession() {
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
             do {
-                try session.setCategory(.playback, options: .mixWithOthers)
-                try session.setActive(true)
+                try self?.session.setCategory(.playback, options: .mixWithOthers)
+                try self?.session.setActive(true)
             } catch {
-                log("Unable to activate audio session: \(error.localizedDescription)", caller: "MusicController")
+                log("Unable to configure audio session: \(error.localizedDescription)", caller: "MusicController")
+                return
             }
-            
-            // Don't send anything if we're just starting the session
-            guard controlNumber != -1 else { return }
-            
-            musicPlaying = musicPlayer.playbackState.rawValue
-            
-            switch controlNumber {
-            case 0:
-                musicPlayer.play()
-                musicPlaying = 1
-            case 1:
-                pause()
-            case 3:
-                musicPlayer.skipToNextItem()
-            case 4:
-                musicPlayer.skipToPreviousItem()
-            case 5:
-                changeVolume(up: true)
-            case 6:
-                changeVolume(up: false)
-            default:
-                break
-            }
-            
-            updateMusicInformation()
         }
+    }
+    
+    func controlMusic(controlNumber: Int) {
+        guard allowMusicControl else { return }
+        
+        musicPlaying = musicPlayer.playbackState.rawValue
+        
+        switch controlNumber {
+        case 0:
+            musicPlayer.play()
+            musicPlaying = 1
+        case 1:
+            pause()
+        case 3:
+            musicPlayer.skipToNextItem()
+        case 4:
+            musicPlayer.skipToPreviousItem()
+        case 5:
+            changeVolume(up: true)
+        case 6:
+            changeVolume(up: false)
+        default:
+            break
+        }
+        
+        updateMusicInformation()
     }
     
     func changeVolume(up: Bool) {
         guard allowVolumeControl else { return }
         
-        let session = AVAudioSession.sharedInstance()
         let sessionVolume = session.outputVolume
-        
-        print(session.outputVolume)
         
         let volume = up ? min(sessionVolume + volumeNotch, 1.0) : max(sessionVolume - volumeNotch, 0.0)
         MPVolumeView.setVolume(volume)
