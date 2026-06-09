@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ExerciseDetailView: View {
     @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartDataPoints: FetchedResults<HeartDataPoint>

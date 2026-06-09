@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct AllExercisesView: View {
     @ObservedObject private var chartManager = ChartManager.shared

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct HeartSettingsView: View {
     @AppStorage("backgroundHRMMeasurements") var backgroundHRMMeasurements = false
