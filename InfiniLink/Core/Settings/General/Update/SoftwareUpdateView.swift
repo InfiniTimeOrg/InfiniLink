@@ -96,18 +96,12 @@ struct SoftwareUpdateView: View {
                     Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
                 }
                 Button {
-                    dfuUpdater.percentComplete = 0
-                    downloadManager.updateStarted = true
-                    if downloadManager.externalResources && !bleManager.isDeviceInRecoveryMode {
-                        downloadManager.startTransfer = true
-                        downloadManager.startDownload(url: downloadManager.browserDownloadResourcesUrl)
+                    if !dfuUpdater.local && downloadManager.externalResources && !bleManager.isDeviceInRecoveryMode {
+                        downloadManager.startSoftwareUpdate(externalResourcesOnly: true)
+                    } else if dfuUpdater.local {
+                        dfuUpdater.install()
                     } else {
-                        if dfuUpdater.local {
-                            dfuUpdater.updateFirmware()
-                        } else {
-                            downloadManager.startTransfer = true
-                            downloadManager.startDownload(url: downloadManager.browserDownloadUrl)
-                        }
+                        downloadManager.startSoftwareUpdate(externalResourcesOnly: false)
                     }
                 } label: {
                     Text("Update Now")

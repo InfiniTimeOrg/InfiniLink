@@ -12,17 +12,23 @@ import SwiftUI
 class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
     static let shared = DFUUpdater()
 
+    enum Stage: Equatable {
+        case idle
+        case downloading
+        case uploadingResources
+        case installing
+        case failed(String)
+    }
+
     let bleManager = BLEManager.shared
     let downloadManager = DownloadManager.shared
 
     private var dfuController: DFUServiceController?
     private var isAccessingScopedResource = false
 
-    @Published var dfuState = ""
+    @Published private(set) var stage: Stage = .idle
+    @Published var statusDetail = ""
     @Published var percentComplete: Double = 0
-    @Published var transferCompleted = false
-    @Published var isUpdatingResources = false
-    @Published var error: String?
 
     @Published var firmwareFilename = ""
     @Published var resourceFilename = ""
@@ -44,21 +50,60 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         return 0
     }
 
-    func downloadTransfer() {
-        if !local, resourceURL != nil {
-            isUpdatingResources = true
-            dfuState = NSLocalizedString("Updating resources", comment: "")
+    // DownloadManager calls this while it pulls the zip(s) from GitHub
+    func beginDownloading() {
+        downloadManager.updateStarted = true
+        stage = .downloading
+        statusDetail = ""
+        percentComplete = 0
+    }
 
-            BLEFSHandler.shared.uploadExternalResources { [self] in
-                isUpdatingResources = false
-                updateFirmware()
-            }
+    // Everything is on disk now (either downloaded or in a local file)
+    // push resources (if any) and then flash
+    func install() {
+        downloadManager.updateStarted = true
+
+        if firmwareURL == nil, resourceURL != nil {
+            installResourcesOnly()
+        } else if !local, resourceURL != nil {
+            uploadResources { [self] in installFirmware() }
         } else {
-            updateFirmware()
+            installFirmware()
         }
     }
 
-    func updateFirmware() {
+    // External-resources-only flow
+    // push resources over BLEFS, no firmware flash
+    func installResourcesOnly() {
+        downloadManager.updateStarted = true
+        uploadResources { [self] in finish(.completed) }
+    }
+
+    func cancel() {
+        downloadManager.cancelActiveDownload()
+        _ = dfuController?.abort()
+        finish(.cancelled)
+    }
+
+    func dismissError() {
+        finish(.cancelled)
+    }
+
+    func reportDownloadFailure() {
+        fail(NSLocalizedString("The update couldn't be downloaded.", comment: ""))
+    }
+
+    func reportResourceUploadFailure() {
+        fail(NSLocalizedString("The watch's resources couldn't be updated.", comment: ""))
+    }
+
+    private func uploadResources(then next: @escaping () -> Void) {
+        stage = .uploadingResources
+        statusDetail = ""
+        BLEFSHandler.shared.uploadExternalResources(completion: next)
+    }
+
+    private func installFirmware() {
         guard let firmwareURL else {
             fail(NSLocalizedString("The firmware file is missing.", comment: ""))
             return
@@ -80,36 +125,27 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             return
         }
 
+        stage = .installing
+        statusDetail = ""
+        percentComplete = 0
+
         let initiator = DFUServiceInitiator().with(firmware: firmware)
         initiator.logger = self
         initiator.delegate = self
         initiator.progressDelegate = self
 
-        error = nil
         bleManager.beginFirmwareUpdate()
         dfuController = initiator.start(target: target)
     }
 
-    func stopTransfer(abort: Bool) {
-        if abort {
-            _ = dfuController?.abort()
-        }
-
-        finish(success: false)
-    }
-
-    func dismissError() {
-        error = nil
-        downloadManager.updateStarted = false
-    }
+    private enum Outcome { case completed, cancelled, failed }
 
     private func fail(_ message: String) {
         log(message, caller: "DFUUpdater", target: .dfu)
-        error = message
-        finish(success: false)
+        finish(.failed, message: message)
     }
 
-    private func finish(success: Bool) {
+    private func finish(_ outcome: Outcome, message: String? = nil) {
         dfuController = nil
 
         if isAccessingScopedResource {
@@ -117,34 +153,36 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             isAccessingScopedResource = false
         }
 
-        dfuState = ""
+        statusDetail = ""
         percentComplete = 0
-        isUpdatingResources = false
-        transferCompleted = success
+        bleManager.endFirmwareUpdate(installed: outcome == .completed)
 
-        if success {
+        switch outcome {
+        case .failed:
+            stage = .failed(message ?? NSLocalizedString("The update failed.", comment: "")) // Keep the view up to show the error
+        case .completed:
             firmwareSelected = false
+            resourceFilename = ""
+            resourceURL = nil
             downloadManager.updateAvailable = false
-        }
-
-        // Keep the progress view up when there's an error to show; otherwise close it
-        if error == nil {
             downloadManager.updateStarted = false
+            stage = .idle
+        case .cancelled:
+            downloadManager.updateStarted = false
+            stage = .idle
         }
-
-        bleManager.endFirmwareUpdate()
     }
 
     func dfuStateDidChange(to state: DFUState) {
-        dfuState = state.description
+        statusDetail = state.description
 
         switch state {
         case .completed:
             log("Firmware update completed", type: .info, caller: "DFUUpdater", target: .dfu)
-            finish(success: true)
+            finish(.completed)
         case .aborted:
             log("Firmware update aborted", type: .info, caller: "DFUUpdater", target: .dfu)
-            finish(success: false)
+            finish(.cancelled)
         default:
             break
         }

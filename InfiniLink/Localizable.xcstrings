@@ -394,6 +394,9 @@
     "Done" : {
 
     },
+    "Downloading" : {
+
+    },
     "Enable Developer Mode" : {
       "localizations" : {
         "fr" : {
@@ -680,6 +683,9 @@
     "InfiniTime on GitHub" : {
 
     },
+    "Installing" : {
+
+    },
     "Installing update..." : {
       "localizations" : {
         "fr" : {
@@ -885,6 +891,9 @@
 
     },
     "Poor" : {
+
+    },
+    "Preparing" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -1102,6 +1111,15 @@
 
     },
     "The folder name cannot contain a period." : {
+
+    },
+    "The update couldn't be downloaded." : {
+
+    },
+    "The update failed." : {
+
+    },
+    "The watch's resources couldn't be updated." : {
 
     },
     "There aren't any available releases." : {

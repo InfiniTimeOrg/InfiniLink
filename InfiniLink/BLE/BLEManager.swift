@@ -20,6 +20,7 @@ class BLEManager: NSObject, ObservableObject {
     let persistenceController =  PersistenceController.shared
     
     var manager: CBCentralManager?
+    private var connectTimeoutWorkItem: DispatchWorkItem?
     var blefsTransfer: CBCharacteristic?
     var currentTimeService: CBCharacteristic?
     var notifyCharacteristic: CBCharacteristic?
@@ -86,6 +87,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
     @Published var isUpdatingFirmware = false
+    @Published var isReconnectingAfterUpdate = false // The install finished; keep showing "Installing update..." until the watch is back
     @Published var ancsAuthorized = false // We don't need to persist this, it only matters when we're connected
     
     @Published var newPeripherals: [CBPeripheral] = []
@@ -115,7 +117,7 @@ class BLEManager: NSObject, ObservableObject {
         return isConnecting || (isScanning && !isPairingNewDevice)
     }
     var connectionState: String {
-        if isUpdatingFirmware {
+        if isUpdatingFirmware || isReconnectingAfterUpdate {
             return NSLocalizedString("Installing update...", comment: "")
         }
         if isBusy {
@@ -182,10 +184,30 @@ class BLEManager: NSObject, ObservableObject {
         ]
         self.manager?.connect(peripheralToConnect!, options: forceAncs ? options : nil)
         
+        scheduleConnectTimeout(for: peripheral)
         completion?()
     }
     
+    // iOS never times out manager.connect(), so back it with our own deadline or the UI can hang on "Connecting..."
+    private func scheduleConnectTimeout(for peripheral: CBPeripheral) {
+        connectTimeoutWorkItem?.cancel()
+        
+        let work = DispatchWorkItem { [weak self] in
+            guard let self, self.isConnecting, !self.isConnectedToPinetime else { return }
+            
+            log("Connection attempt timed out, retrying", type: .info, caller: "BLEManager", target: .ble)
+            self.manager?.cancelPeripheralConnection(peripheral)
+            self.isConnecting = false
+            self.isReconnectingAfterUpdate = false
+            self.startScanning()
+        }
+        connectTimeoutWorkItem = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: work)
+    }
+    
     func onConnect(_ peripheral: CBPeripheral) {
+        connectTimeoutWorkItem?.cancel()
+        isReconnectingAfterUpdate = false
         stopScanning()
         
         if deviceManager.pairedDeviceID != peripheral.identifier.uuidString { // Only clear the update for a new device
@@ -217,6 +239,9 @@ class BLEManager: NSObject, ObservableObject {
     }
     
     func disconnect() {
+        connectTimeoutWorkItem?.cancel()
+        isReconnectingAfterUpdate = false
+
         if let infiniTime = infiniTime {
             self.manager?.cancelPeripheralConnection(infiniTime)
             
@@ -239,9 +264,17 @@ class BLEManager: NSObject, ObservableObject {
         disconnect()
     }
     
-    func endFirmwareUpdate() {
+    func endFirmwareUpdate(installed: Bool = false) {
         isUpdatingFirmware = false
+        isReconnectingAfterUpdate = installed
         startScanning()
+
+        if installed {
+            // Don't sit on "Installing update..." forever if the watch never comes back
+            DispatchQueue.main.asyncAfter(deadline: .now() + 90) { [weak self] in
+                self?.isReconnectingAfterUpdate = false
+            }
+        }
     }
     
     func switchDevice(device: Device) {
@@ -301,6 +334,10 @@ extension BLEManager: CBCentralManagerDelegate {
         notifyCharacteristic = nil
         
         guard !isUpdatingFirmware else { return }
+        
+        // Drop the stale peripheral so in-flight BLEFS loops become no-ops and state can't half-persist
+        infiniTime = nil
+        hasLoadedBatteryLevel = false
         
         if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)

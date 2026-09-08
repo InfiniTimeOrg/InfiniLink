@@ -11,14 +11,28 @@ struct CurrentUpdateView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var dfuUpdater = DFUUpdater.shared
-    @ObservedObject var downloadManager = DownloadManager.shared
     
     @State private var backgroundScaled = true
     @State private var showConfirmation = false
     
-    func cancelUpdate() {
-        dfuUpdater.stopTransfer(abort: true)
-        downloadManager.updateStarted = false
+    private var failureMessage: String? {
+        if case .failed(let message) = dfuUpdater.stage { return message }
+        return nil
+    }
+    
+    private var statusText: String {
+        switch dfuUpdater.stage {
+        case .idle:
+            return NSLocalizedString("Preparing", comment: "")
+        case .downloading:
+            return NSLocalizedString("Downloading", comment: "")
+        case .uploadingResources:
+            return dfuUpdater.statusDetail.isEmpty ? NSLocalizedString("Updating resources", comment: "") : dfuUpdater.statusDetail
+        case .installing:
+            return dfuUpdater.statusDetail.isEmpty ? NSLocalizedString("Installing", comment: "") : dfuUpdater.statusDetail
+        case .failed:
+            return ""
+        }
     }
     
     var body: some View {
@@ -30,15 +44,15 @@ struct CurrentUpdateView: View {
                 .scaleEffect(backgroundScaled ? 1.4 : 1)
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    if let error = dfuUpdater.error {
+                    if let failureMessage {
                         Text("Update Failed")
                             .font(.title.weight(.bold))
-                        Text(error)
+                        Text(failureMessage)
                             .font(.system(size: 18))
                             .foregroundStyle(.secondary)
                     } else {
                         HStack(spacing: 0) {
-                            Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...")
+                            Text("\(statusText)...")
                             if dfuUpdater.percentComplete != 0 {
                                 Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
                             }
@@ -49,7 +63,7 @@ struct CurrentUpdateView: View {
                             .font(.title.weight(.bold))
                     }
                 }
-                if dfuUpdater.error != nil {
+                if failureMessage != nil {
                     Button {
                         dfuUpdater.dismissError()
                     } label: {
@@ -62,12 +76,7 @@ struct CurrentUpdateView: View {
                     }
                 } else {
                     Button {
-                        // If we're only just starting the update, don't show a confirmation
-                        if dfuUpdater.dfuState != "Connecting" || dfuUpdater.dfuState != "Starting" {
-                            showConfirmation = true
-                        } else {
-                            cancelUpdate()
-                        }
+                        showConfirmation = true
                     } label: {
                         Text("Cancel Update")
                             .padding(14)
@@ -76,8 +85,8 @@ struct CurrentUpdateView: View {
                             .foregroundStyle(.white)
                             .clipShape(Capsule())
                     }
-                    .disabled(dfuUpdater.isUpdatingResources)
-                    .opacity(dfuUpdater.isUpdatingResources ? 0.5 : 1)
+                    .disabled(dfuUpdater.stage == .uploadingResources)
+                    .opacity(dfuUpdater.stage == .uploadingResources ? 0.5 : 1)
                 }
             }
             .frame(maxHeight: .infinity)
@@ -91,7 +100,7 @@ struct CurrentUpdateView: View {
         }
         .alert("Are you sure you want to stop this update?", isPresented: $showConfirmation) {
             Button(role: .destructive) {
-                cancelUpdate()
+                dfuUpdater.cancel()
             } label: {
                 Text("Stop Update")
             }
