@@ -16,6 +16,9 @@ struct BLEWriteManager {
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
         guard bleManager.infiniTime != nil else { return }
+
+        let message = settingsManager.settings.transliterationEnabled ? message.asciiSafe : message
+
         guard let writeData = message.data(using: .ascii) else {
             // There's no title/artst, so update it with a blank string
             bleManager.infiniTime?.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
