@@ -83,21 +83,24 @@ extension NotificationManager {
         let level = UIDevice.current.batteryLevel * 100
         let currentTime = Date().timeIntervalSince1970
         
-        let fullNotif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
-        let lowNotif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
-        
-        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return } // Don't receive more than one notif in thirty minutes
+        // At most one iPhone battery notification every thirty minutes
+        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
         
         if state == .full {
-            sendNotifications(fullNotif, batterySettings.fullBattery.iphone)
+            let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
+            sendNotifications(notif, batterySettings.fullBattery.iphone)
         } else if level == 20 && state != .charging {
-            sendNotifications(lowNotif, batterySettings.lowBattery.iphone)
+            let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
+            sendNotifications(notif, batterySettings.lowBattery.iphone)
         }
+        
         lastHostBatteryLevelNotified = currentTime
     }
     
     private func sendNotifications(_ notif: AppNotification, _ settings: NotifySettings) {
-        if (!settings.sendToiPhone || !bleManager.ancsAuthorized) && settings.sendToWatch { // Don't send a notif to the watch while ancs is enabled and we're already sending to the host because ancs will already forward it (causing a duplicate)
+        // Skip the direct-to-watch send when ANCS is already mirroring the iPhone notification to the watch
+        let ancsWillMirrorToWatch = settings.sendToiPhone && bleManager.ancsAuthorized
+        if settings.sendToWatch && !ancsWillMirrorToWatch {
             bleWriteManager.sendNotification(notif)
         }
         if settings.sendToiPhone {
@@ -108,17 +111,18 @@ extension NotificationManager {
     func checkToSendBatteryNotifications() {
         let bat = bleManager.batteryLevel
         
-        guard settings.watchNotificationsEnabled && (lastBatteryLevelNotified == -1 || lastBatteryLevelNotified != bat) else { return } // Don't send a notification if we've already sent one with the same battery level
+        // Skip if watch notifications are off, or we already notified at this level
+        guard settings.watchNotificationsEnabled, bat != lastBatteryLevelNotified else { return }
         
-        if batterySettings.customNotificationEnabled && bat == Double(batterySettings.customNotificationPercentage) {
-            self.sendBatteryNotification(custom: true)
+        if batterySettings.customNotificationEnabled && bat == batterySettings.customNotificationPercentage {
+            sendBatteryNotification(custom: true)
         } else if bat == 100 {
-            self.sendFullyChargedBatteryNotification()
+            sendFullyChargedBatteryNotification()
         } else if batterySettings.lowBattery.enabled && (bat == 20 || bat == 10 || bat == 5) {
-            self.sendBatteryNotification(custom: false)
+            sendBatteryNotification(custom: false)
         }
         
-        self.lastBatteryLevelNotified = bat
+        lastBatteryLevelNotified = bat
     }
     
     private func sendBatteryNotification(custom: Bool) {
