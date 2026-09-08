@@ -30,34 +30,55 @@ struct CurrentUpdateView: View {
                 .scaleEffect(backgroundScaled ? 1.4 : 1)
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    HStack(spacing: 0) {
-                        Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...")
-                        if dfuUpdater.percentComplete != 0 {
-                            Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
-                        }
-                    }
-                    .font(.system(size: 22))
-                    .foregroundStyle(.secondary)
-                    Text(deviceManager.name)
-                        .font(.title.weight(.bold))
-                }
-                Button {
-                    // If we're only just starting the update, don't show a confirmation
-                    if dfuUpdater.dfuState != "Connecting" || dfuUpdater.dfuState != "Starting" {
-                        showConfirmation = true
+                    if let error = dfuUpdater.error {
+                        Text("Update Failed")
+                            .font(.title.weight(.bold))
+                        Text(error)
+                            .font(.system(size: 18))
+                            .foregroundStyle(.secondary)
                     } else {
-                        cancelUpdate()
+                        HStack(spacing: 0) {
+                            Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...")
+                            if dfuUpdater.percentComplete != 0 {
+                                Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
+                            }
+                        }
+                        .font(.system(size: 22))
+                        .foregroundStyle(.secondary)
+                        Text(deviceManager.name)
+                            .font(.title.weight(.bold))
                     }
-                } label: {
-                    Text("Cancel Update")
-                        .padding(14)
-                        .font(.body.weight(.semibold))
-                        .background(Color.red)
-                        .foregroundStyle(.white)
-                        .clipShape(Capsule())
                 }
-                .disabled(dfuUpdater.isUpdatingResources)
-                .opacity(dfuUpdater.isUpdatingResources ? 0.5 : 1)
+                if dfuUpdater.error != nil {
+                    Button {
+                        dfuUpdater.dismissError()
+                    } label: {
+                        Text("Close")
+                            .padding(14)
+                            .font(.body.weight(.semibold))
+                            .background(Color.gray)
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                    }
+                } else {
+                    Button {
+                        // If we're only just starting the update, don't show a confirmation
+                        if dfuUpdater.dfuState != "Connecting" || dfuUpdater.dfuState != "Starting" {
+                            showConfirmation = true
+                        } else {
+                            cancelUpdate()
+                        }
+                    } label: {
+                        Text("Cancel Update")
+                            .padding(14)
+                            .font(.body.weight(.semibold))
+                            .background(Color.red)
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                    }
+                    .disabled(dfuUpdater.isUpdatingResources)
+                    .opacity(dfuUpdater.isUpdatingResources ? 0.5 : 1)
+                }
             }
             .frame(maxHeight: .infinity)
             .multilineTextAlignment(.center)

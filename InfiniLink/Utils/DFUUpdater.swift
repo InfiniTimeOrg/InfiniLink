@@ -10,69 +10,45 @@ import NordicDFU
 import SwiftUI
 
 class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
-	static let shared = DFUUpdater()
-	
-    var bleManager = BLEManager.shared
-	var downloadManager = DownloadManager.shared
-	var dfuController: DFUServiceController!
-	
-	@Published var dfuState: String = ""
+    static let shared = DFUUpdater()
+
+    let bleManager = BLEManager.shared
+    let downloadManager = DownloadManager.shared
+
+    private var dfuController: DFUServiceController?
+    private var isAccessingScopedResource = false
+
+    @Published var dfuState = ""
+    @Published var percentComplete: Double = 0
     @Published var transferCompleted = false
-	@Published var isUpdatingResources = false
-	@Published var percentComplete: Double = 0
-	
-	@Published var firmwareFilename = ""
+    @Published var isUpdatingResources = false
+    @Published var error: String?
+
+    @Published var firmwareFilename = ""
     @Published var resourceFilename = ""
-	@Published var firmwareSelected: Bool = false
+    @Published var firmwareSelected = false
     @Published var local = true
     @Published var firmwareURL: URL!
     @Published var resourceURL: URL!
-    
+
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
-    
+
     func fileSize(from fileUrl: URL) -> Int {
         do {
-            let resource = try fileUrl.resourceValues(forKeys:[.fileSizeKey])
-            return resource.fileSize!
+            let resource = try fileUrl.resourceValues(forKeys: [.fileSizeKey])
+            return resource.fileSize ?? 0
         } catch {
-            log("Error getting file size: \(error.localizedDescription)", caller: "OtherUpdateVersions")
+            log("Error getting file size: \(error.localizedDescription)", caller: "DFUUpdater", target: .dfu)
         }
-        
+
         return 0
     }
-	
-    func updateFirmware() {
-        guard let infiniTime = bleManager.infiniTime else { return }
-        guard let firmwareURL else {
-            log("Firmware URL is nil or invalid")
-            return
-        }
-        
-        let _ = firmwareURL.startAccessingSecurityScopedResource()
-        
-        print(firmwareURL)
-        
-        do {
-            let selectedFirmware = try DFUFirmware(urlToZipFile: firmwareURL.absoluteURL)
-            
-            let initiator = DFUServiceInitiator().with(firmware: selectedFirmware)
-            
-            initiator.packetReceiptNotificationParameter = 18 // default 12, this speeds up the transfer
-            initiator.logger = self // to get log info
-            initiator.delegate = self // to be informed about current state and errors
-            initiator.progressDelegate = self // to show progress bar
-            dfuController = initiator.start(target: infiniTime)
-        } catch {
-            print(error)
-        }
-        
-    }
-	
-	func downloadTransfer() {
-        if resourceURL != nil && !local {
+
+    func downloadTransfer() {
+        if !local, resourceURL != nil {
             isUpdatingResources = true
-            dfuState = "Updating resources"
-            
+            dfuState = NSLocalizedString("Updating resources", comment: "")
+
             BLEFSHandler.shared.uploadExternalResources { [self] in
                 isUpdatingResources = false
                 updateFirmware()
@@ -80,50 +56,109 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         } else {
             updateFirmware()
         }
-	}
-	
+    }
+
+    func updateFirmware() {
+        guard let firmwareURL else {
+            fail(NSLocalizedString("The firmware file is missing.", comment: ""))
+            return
+        }
+        guard let target = bleManager.infiniTime else {
+            fail(NSLocalizedString("InfiniLink isn't connected to a watch.", comment: ""))
+            return
+        }
+
+        if local {
+            isAccessingScopedResource = firmwareURL.startAccessingSecurityScopedResource()
+        }
+
+        let firmware: DFUFirmware
+        do {
+            firmware = try DFUFirmware(urlToZipFile: firmwareURL)
+        } catch {
+            fail(NSLocalizedString("The firmware file couldn't be read. Make sure it's a valid DFU zip.", comment: ""))
+            return
+        }
+
+        let initiator = DFUServiceInitiator().with(firmware: firmware)
+        initiator.logger = self
+        initiator.delegate = self
+        initiator.progressDelegate = self
+
+        error = nil
+        bleManager.beginFirmwareUpdate()
+        dfuController = initiator.start(target: target)
+    }
+
     func stopTransfer(abort: Bool) {
-		if abort {
-			_ = dfuController?.abort()
-		}
-        
-        firmwareURL?.stopAccessingSecurityScopedResource()
-        
-        dfuController = nil
-		dfuState = ""
-        
-		percentComplete = 0
-        
-        downloadManager.updateAvailable = false
+        if abort {
+            _ = dfuController?.abort()
+        }
+
+        finish(success: false)
+    }
+
+    func dismissError() {
+        error = nil
         downloadManager.updateStarted = false
-        firmwareSelected = false
-        transferCompleted = false
-	}
-	
-	func dfuStateDidChange(to state: DFUState) {
-		dfuState = state.description
-        
+    }
+
+    private func fail(_ message: String) {
+        log(message, caller: "DFUUpdater", target: .dfu)
+        error = message
+        finish(success: false)
+    }
+
+    private func finish(success: Bool) {
+        dfuController = nil
+
+        if isAccessingScopedResource {
+            firmwareURL?.stopAccessingSecurityScopedResource()
+            isAccessingScopedResource = false
+        }
+
+        dfuState = ""
+        percentComplete = 0
+        isUpdatingResources = false
+        transferCompleted = success
+
+        if success {
+            firmwareSelected = false
+            downloadManager.updateAvailable = false
+        }
+
+        // Keep the progress view up when there's an error to show; otherwise close it
+        if error == nil {
+            downloadManager.updateStarted = false
+        }
+
+        bleManager.endFirmwareUpdate()
+    }
+
+    func dfuStateDidChange(to state: DFUState) {
+        dfuState = state.description
+
         switch state {
         case .completed:
-            stopTransfer(abort: false)
-        case .disconnecting:
-            bleManager.hasDisconnectedForUpdate = true
+            log("Firmware update completed", type: .info, caller: "DFUUpdater", target: .dfu)
+            finish(success: true)
         case .aborted:
-            log("DFU upload successfully aborted", caller: "DFUUpdater", target: .dfu)
+            log("Firmware update aborted", type: .info, caller: "DFUUpdater", target: .dfu)
+            finish(success: false)
         default:
             break
         }
-	}
-	
-	func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-        stopTransfer(abort: false)
-	}
-	
-	func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
-		percentComplete = Double(progress)
-	}
-	
-	func logWith(_ level: LogLevel, message: String) {
+    }
+
+    func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
+        fail(message)
+    }
+
+    func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
+        percentComplete = Double(progress)
+    }
+
+    func logWith(_ level: LogLevel, message: String) {
         log("DFU log: \(message)", type: .info, caller: "DFUUpdater", target: .dfu)
-	}
+    }
 }

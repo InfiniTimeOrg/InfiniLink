@@ -27,14 +27,10 @@ struct DeviceView: View {
     
     var body: some View {
         Group {
-            if downloadManager.updateStarted {
-                CurrentUpdateView()
+            if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
+                RecoveryModeView()
             } else {
-                if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
-                    RecoveryModeView()
-                } else {
-                    content
-                }
+                content
             }
         }
     }

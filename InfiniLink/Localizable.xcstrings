@@ -276,6 +276,9 @@
     "Clear Step Data" : {
 
     },
+    "Close" : {
+
+    },
     "Color Scheme" : {
 
     },
@@ -644,6 +647,9 @@
           }
         }
       }
+    },
+    "InfiniLink isn't connected to a watch." : {
+
     },
     "InfiniLink on GitHub" : {
       "localizations" : {
@@ -1089,6 +1095,12 @@
     "That's %@ of your goal." : {
 
     },
+    "The firmware file couldn't be read. Make sure it's a valid DFU zip." : {
+
+    },
+    "The firmware file is missing." : {
+
+    },
     "The folder name cannot contain a period." : {
 
     },
@@ -1173,6 +1185,9 @@
     "Update External Resources" : {
 
     },
+    "Update Failed" : {
+
+    },
     "Update Now" : {
       "localizations" : {
         "fr" : {
@@ -1182,6 +1197,9 @@
           }
         }
       }
+    },
+    "Updating resources" : {
+
     },
     "Upload %lld File%@" : {
       "localizations" : {
