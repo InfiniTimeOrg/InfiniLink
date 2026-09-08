@@ -46,11 +46,26 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         } else {
             self.getCoordinateFrom(address: setLocation) { coordinate, error in
                 if let coordinate = coordinate {
-                    self.location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+                    let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
+                    self.location = location
+                    self.updateLocationName(for: location)
                     self.weatherController.fetchWeatherData(checkTimeInterval: manual)
                 } else if let error = error {
                     log("Error finding location for address \(self.setLocation): \(error.localizedDescription)", caller: "LocationManager")
                 }
+            }
+        }
+    }
+    
+    private func updateLocationName(for location: CLLocation) {
+        CLGeocoder().reverseGeocodeLocation(location) { [weak self] placemarks, error in
+            if let error {
+                log("Error reverse geocoding location name: \(error.localizedDescription)", caller: "LocationManager")
+            }
+            guard let name = placemarks?.first?.locality ?? placemarks?.first?.name ?? placemarks?.first?.administrativeArea else { return }
+            
+            DispatchQueue.main.async {
+                self?.locationName = name
             }
         }
     }
@@ -112,6 +127,7 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         if let location = locations.first, useCurrentLocation {
             self.location = location
+            updateLocationName(for: location)
         }
     }
     

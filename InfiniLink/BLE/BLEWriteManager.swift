@@ -94,17 +94,18 @@ struct BLEWriteManager {
         bytes.append(contentsOf: convertTemperature(value: Int(round(minimumTemperature)))) // Minimum temperature
         bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature)))) // Maximum temperature
         
-        if var locationData = location.data(using: .ascii), locationData.count <= 32 {
-            for _ in (1...32 - locationData.count) {
-                locationData.append(0)
+        let safeLocation = settingsManager.settings.transliterationEnabled ? location.asciiSafe : location
+        var locationBytes = [UInt8]()
+        if let asciiData = safeLocation.data(using: .ascii) {
+            locationBytes = Array(asciiData.prefix(32))
+            if asciiData.count > 32 {
+                log("Weather location too long, truncated to 32 bytes", caller: "BLEWriteManager", target: .ble)
             }
-            bytes.append(contentsOf: locationData)
         } else {
-            log("Weather location string is too big to send", caller: "BLEWriteManager", target: .ble)
-            for _ in 1...32 {
-                bytes.append(0)
-            }
+            log("Weather location has unsupported characters, sending without it", caller: "BLEWriteManager", target: .ble)
         }
+        locationBytes.append(contentsOf: Array(repeating: 0, count: 32 - locationBytes.count))
+        bytes.append(contentsOf: locationBytes)
         
         bytes.append(icon)
         
