@@ -181,30 +181,38 @@ class DownloadManager: NSObject, ObservableObject {
         return releaseComponents.count > currentComponents.count ? newVersion : nil
     }
     
-    func checkForUpdates(currentVersion: String) -> Bool {
+    func checkForFirmwareUpdate() {
         getUpdates()
+        evaluateFirmwareUpdate()
+    }
+    
+    // Re-run whenever the release list or the connected firmware changes, not just at launch
+    func evaluateFirmwareUpdate() {
+        guard !(dfuUpdater.local && dfuUpdater.firmwareSelected) else { return } // The user picked a local file; don't override it
         
-        for i in releases {
-            if i.tag_name.first != "v" {
-                let comparison = currentVersion.compare(i.tag_name, options: .numeric)
-                if comparison == .orderedAscending && comparison != .orderedSame {
-                    dfuUpdater.firmwareFilename = chooseAsset(response: i).name
-                    dfuUpdater.firmwareSelected = true
-                    dfuUpdater.local = false
-                    
-                    updateAvailable = true
-                    updateVersion = i.tag_name
-                    updateBody = i.body
-                    updateSize = chooseAsset(response: i).size
-                    autoUpgrade = i
-                    browserDownloadUrl = chooseAsset(response: i).browser_download_url
-                    browserDownloadResourcesUrl = chooseResources(response: i).browser_download_url
-                    
-                    return true
-                }
-            }
+        let installed = DeviceManager.shared.firmware
+        let latest = releases
+            .filter { $0.tag_name.first != "v" }
+            .max { $0.tag_name.compare($1.tag_name, options: .numeric) == .orderedAscending }
+        
+        guard let latest, installed.compare(latest.tag_name, options: .numeric) == .orderedAscending else {
+            updateAvailable = false
+            return
         }
-        return false
+        
+        let asset = chooseAsset(response: latest)
+        
+        dfuUpdater.firmwareFilename = asset.name
+        dfuUpdater.firmwareSelected = true
+        dfuUpdater.local = false
+        
+        updateAvailable = true
+        updateVersion = latest.tag_name
+        updateBody = latest.body
+        updateSize = asset.size
+        autoUpgrade = latest
+        browserDownloadUrl = asset.browser_download_url
+        browserDownloadResourcesUrl = chooseResources(response: latest).browser_download_url
     }
     
     func getUpdates() {
@@ -223,7 +231,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     func getInfiniLinkReleases() {
         self.loadingAppReleases = true
-        self.releases = []
         
         URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniLink/releases")!)) { data, response, error in
             if let data = data {
@@ -256,7 +263,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     func getInfiniTimeReleases() {
         self.loadingReleases = true
-        self.releases = []
         
         URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases")!)) { data, response, error in
             if let data = data {
@@ -264,11 +270,8 @@ class DownloadManager: NSObject, ObservableObject {
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
                     DispatchQueue.main.async {
-                        for release in result {
-                            if release.tag_name.first != "v" {
-                                self.releases.append(release)
-                            }
-                        }
+                        self.releases = result.filter { $0.tag_name.first != "v" }
+                        self.evaluateFirmwareUpdate()
                     }
                 } catch {
                     log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
