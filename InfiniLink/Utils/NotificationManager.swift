@@ -108,7 +108,7 @@ extension NotificationManager {
     func checkToSendBatteryNotifications() {
         let bat = bleManager.batteryLevel
         
-        guard settings.watchNotificationsEnabled && (lastBatteryLevelNotified == -1 || lastBatteryLevelNotified != bat) else { return } // Don't send a notification if we've already sent one with the same battery levelelse { return }
+        guard settings.watchNotificationsEnabled && (lastBatteryLevelNotified == -1 || lastBatteryLevelNotified != bat) else { return } // Don't send a notification if we've already sent one with the same battery level
         
         if batterySettings.customNotificationEnabled && bat == Double(batterySettings.customNotificationPercentage) {
             self.sendBatteryNotification(custom: true)
@@ -209,9 +209,11 @@ extension NotificationManager {
 // MARK: Goals
 extension NotificationManager {
     func sendStepGoalReachedNotification() {
-        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your steps goal", comment: ""))
+        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your step goal", comment: ""))
         
-        self.bleWriteManager.sendNotification(notif)
+        if !bleManager.ancsAuthorized {
+            self.bleWriteManager.sendNotification(notif)
+        }
         self.sendNotificationToHost(notif)
     }
 }

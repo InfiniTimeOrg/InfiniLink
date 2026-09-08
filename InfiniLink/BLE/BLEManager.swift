@@ -261,7 +261,7 @@ extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         self.isConnecting = false
         
-        if let error = error {
+        if let error {
             log("Failed to connect to peripheral: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
             
             // We can't do anything like check an error code, so this is sufficient for a "bond removed" message

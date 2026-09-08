@@ -1353,7 +1353,7 @@
     "You're so close! Just about a minute left and only %lld steps to reach your goal!" : {
 
     },
-    "You've reached your steps goal" : {
+    "You've reached your step goal" : {
 
     },
     "Your approximate height, in %@." : {

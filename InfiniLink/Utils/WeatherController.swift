@@ -25,7 +25,6 @@ class WeatherController: ObservableObject {
     @Published var weather: Weather?
     @Published var errorWhileFetching: Error?
     @Published var temperature = 0.0
-    @Published var forecastDays = [DayWeather]()
     @Published var lastTimeWeatherFetched: Date?
     
     private let service = WeatherService()
@@ -94,7 +93,6 @@ class WeatherController: ObservableObject {
                 
                 self.lastTimeWeatherFetched = Date()
                 self.weather = weather
-                self.forecastDays = Array(weather.dailyForecast.dropFirst().prefix(5))
                 
                 self.writeForecastToDevice()
             } catch {
@@ -104,10 +102,11 @@ class WeatherController: ObservableObject {
     }
     
     func writeForecastToDevice() {
-        if let weather = weather {
+        if let weather {
             guard let first = weather.dailyForecast.first else { return }
+            let forecastDays = weather.dailyForecast.dropFirst().prefix(5)
             
-            self.bleWriteManager.writeCurrentWeatherData(currentTemperature: weather.currentWeather.temperature.value, minimumTemperature: first.lowTemperature.value, maximumTemperature: first.highTemperature.value, location: locationManager.locationName, icon: getIcon(from: weather.currentWeather.symbolName))
+            self.bleWriteManager.writeCurrentWeatherData(currentTemperature: weather.currentWeather.temperature.value, minimumTemperature: first.lowTemperature.value, maximumTemperature: first.highTemperature.value, location: locationManager.locationName, icon: getIcon(from: weather.currentWeather.symbolName), sunrise: first.sun.sunrise, sunset: first.sun.sunset)
             self.bleWriteManager.writeForecastWeatherData(minimumTemperature: forecastDays.compactMap({ $0.lowTemperature.value }), maximumTemperature: forecastDays.compactMap({ $0.highTemperature.value }), icon: forecastDays.compactMap({ getIcon(from: $0.symbolName) }))
         }
     }
