@@ -13,6 +13,7 @@ struct DeveloperView: View {
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
     @AppStorage("forceAncs") var forceAncs = false
+    @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
     
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
@@ -27,6 +28,18 @@ struct DeveloperView: View {
                 NavigationLink("Debug Logs") {
                     DebugLogsView()
                 }
+            }
+            Toggle("Force ANCS", isOn: $forceAncs)
+            Section {
+                Picker("Packet Receipt Notification", selection: $packetReceiptNotification) {
+                    ForEach([0, 10, 12, 16, 18, 20, 24], id: \.self) { value in
+                        Text(value == 0 ? "Disabled" : "\(value)").tag(value)
+                    }
+                }
+            } header: {
+                Text("Software Update")
+            } footer: {
+                Text("Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update.")
             }
             Section("Test Data") {
                 Button("Test Weather") {
@@ -107,7 +120,6 @@ struct DeveloperView: View {
                     stepCountManager.setStepCount(0)
                 }
             }
-            Toggle("Force ANCS", isOn: $forceAncs)
             Section {
                 Button(role: .destructive) {
                     stepCountManager.clearCurrentDaySteps()

@@ -375,6 +375,9 @@
     "DFU" : {
 
     },
+    "Disabled" : {
+
+    },
     "Disconnect" : {
 
     },
@@ -491,6 +494,9 @@
       }
     },
     "Find Lost Watch" : {
+
+    },
+    "Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update." : {
 
     },
     "Force ANCS" : {
@@ -866,6 +872,9 @@
 
     },
     "Other Versions" : {
+
+    },
+    "Packet Receipt Notification" : {
 
     },
     "Pair New Device" : {

@@ -38,6 +38,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     @Published var resourceURL: URL!
 
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
+    @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 12
 
     func fileSize(from fileUrl: URL) -> Int {
         do {
@@ -130,6 +131,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         percentComplete = 0
 
         let initiator = DFUServiceInitiator().with(firmware: firmware)
+        initiator.packetReceiptNotificationParameter = UInt16(clamping: packetReceiptNotification)
         initiator.logger = self
         initiator.delegate = self
         initiator.progressDelegate = self
