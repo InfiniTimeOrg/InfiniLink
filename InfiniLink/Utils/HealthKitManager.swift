@@ -12,7 +12,11 @@ class HealthKitManager: ObservableObject {
     static let shared = HealthKitManager()
     
     @AppStorage("syncToAppleHealth") var syncToAppleHealth = true
-    
+    @AppStorage("syncStepsToAppleHealth") var syncSteps = true
+    @AppStorage("syncHeartRateToAppleHealth") var syncHeartRate = true
+    @AppStorage("syncCaloriesToAppleHealth") var syncCalories = true
+    @AppStorage("syncExerciseToAppleHealth") var syncExercise = true
+
     @Published var healthStore: HKHealthStore?
     
     private init() {
@@ -26,7 +30,7 @@ class HealthKitManager: ObservableObject {
         
         let stepsSample = HKQuantitySample(type: stepType, quantity: HKQuantity.init(unit: HKUnit.count(), doubleValue: Double(stepsToAdd)), start: date, end: date)
         
-        if let healthStore, healthStore.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth {
+        if let healthStore, healthStore.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth && syncSteps {
             healthStore.save(stepsSample, withCompletion: { success, error in
                 if success {
                     log("Steps successfully saved", type: .info, caller: "HealthKitManager")
@@ -42,7 +46,7 @@ class HealthKitManager: ObservableObject {
 
         let sample = HKQuantitySample(type: heartRateType, quantity: HKQuantity(unit: HKUnit.count().unitDivided(by: .minute()), doubleValue: dataToAdd), start: date, end: date)
 
-        if let healthStore, healthStore.authorizationStatus(for: heartRateType) == .sharingAuthorized && syncToAppleHealth {
+        if let healthStore, healthStore.authorizationStatus(for: heartRateType) == .sharingAuthorized && syncToAppleHealth && syncHeartRate {
             healthStore.save(sample, withCompletion: { success, error in
                 if success {
                     log("Heart rate successfully saved", type: .info, caller: "HealthKitManager")
@@ -55,7 +59,7 @@ class HealthKitManager: ObservableObject {
     
     func saveWorkout(_ workout: HKWorkout) {
         let workoutType = HKObjectType.workoutType()
-        if let healthStore, healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized && syncToAppleHealth {
+        if let healthStore, healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized && syncToAppleHealth && syncExercise {
             healthStore.save(workout) { success, error in
                 if success {
                     log("Exercise successfully saved", type: .info, caller: "HealthKitManager")
@@ -72,7 +76,7 @@ class HealthKitManager: ObservableObject {
         let caloriesQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: kcal)
         let sample = HKQuantitySample(type: caloriesType, quantity: caloriesQuantity, start: date, end: date)
 
-        if let healthStore, healthStore.authorizationStatus(for: caloriesType) == .sharingAuthorized && syncToAppleHealth {
+        if let healthStore, healthStore.authorizationStatus(for: caloriesType) == .sharingAuthorized && syncToAppleHealth && syncCalories {
             healthStore.save(sample) { success, error in
                 if success {
                     log("Calories successfully saved", type: .info, caller: "HealthKitManager")

@@ -258,6 +258,9 @@
     "Brightness Level" : {
 
     },
+    "Calories" : {
+
+    },
     "Cancel" : {
 
     },
@@ -411,6 +414,9 @@
       }
     },
     "Enable Notifications" : {
+
+    },
+    "Enabled" : {
 
     },
     "End Exercise" : {
@@ -1079,7 +1085,11 @@
     "Stop Update" : {
 
     },
+    "Sync activity data from your watch to Apple Health." : {
+
+    },
     "Sync step and heart rate data to Apple Health." : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -1088,6 +1098,9 @@
           }
         }
       }
+    },
+    "Synced Data" : {
+
     },
     "System" : {
 
@@ -1185,6 +1198,9 @@
 
     },
     "Transliterate to ASCII" : {
+
+    },
+    "Turn off any data you don't want written to Apple Health." : {
 
     },
     "Units" : {
