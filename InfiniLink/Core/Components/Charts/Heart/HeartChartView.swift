@@ -22,9 +22,9 @@ struct HeartChartView: View {
     @AppStorage("maxHeartRange") private var maxHeartRange = 200
     
     @State private var points = [HeartChartDataPoint]()
-    
-    func heartPoints() -> [HeartChartDataPoint] {
-        return ChartManager.shared.heartPoints().map { HeartChartDataPoint(date: $0.timestamp ?? Date(), value: $0.value) }
+
+    func load() async {
+        points = await ChartManager.shared.heartRateSamples().map { HeartChartDataPoint(date: $0.date, value: $0.value) }
     }
     var earliestDate: Date {
         return points.compactMap({ $0.date }).min() ?? Date()
@@ -85,11 +85,11 @@ struct HeartChartView: View {
                 }
             }
         }
-        .onAppear {
-            points = heartPoints()
+        .task {
+            await load()
         }
         .onChange(of: bleManager.heartRate) { _ in
-            points = heartPoints()
+            Task { await load() }
         }
     }
 }

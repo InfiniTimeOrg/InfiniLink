@@ -350,6 +350,9 @@
     "Date" : {
 
     },
+    "Day" : {
+
+    },
     "Debug Logs" : {
 
     },
@@ -437,15 +440,11 @@
     "Exercise" : {
 
     },
-    "Export All Data" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exporter toutes les données"
-          }
-        }
-      }
+    "Export" : {
+
+    },
+    "Export Selected Day" : {
+
     },
     "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
       "localizations" : {
@@ -911,6 +910,9 @@
     "Preparing" : {
 
     },
+    "Preparing export…" : {
+
+    },
     "Pull Request #2217 on GitHub" : {
       "localizations" : {
         "fr" : {
@@ -1148,6 +1150,9 @@
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {
+
+    },
+    "There's no heart rate data recorded for the selected day." : {
 
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {

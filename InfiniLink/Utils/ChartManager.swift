@@ -9,6 +9,11 @@ import Foundation
 import SwiftUI
 import CoreData
 
+struct HeartRateSample {
+    let date: Date
+    let value: Double
+}
+
 class ChartManager: ObservableObject {
     @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
     @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
@@ -116,12 +121,36 @@ class ChartManager: ObservableObject {
     func heartPoints(predicate: NSPredicate? = nil) -> [HeartDataPoint] {
         let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
         fetchRequest.predicate = predicate ?? dayPredicate
-        
+
         do {
             return try persistenceController.container.viewContext.fetch(fetchRequest)
         } catch {
             log("Error fetching heart points: \(error)", caller: "ChartManager")
             return []
+        }
+    }
+
+    // Fetches on a background context and hands back plain values so views don't block the main thread
+    func heartRateSamples(predicate: NSPredicate? = nil) async -> [HeartRateSample] {
+        nonisolated(unsafe) let predicate = predicate ?? dayPredicate
+        let context = persistenceController.container.newBackgroundContext()
+
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                let request: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: true)]
+
+                do {
+                    let samples = try context.fetch(request).map {
+                        HeartRateSample(date: $0.timestamp ?? Date(), value: $0.value)
+                    }
+                    continuation.resume(returning: samples)
+                } catch {
+                    log("Error fetching heart points: \(error)", caller: "ChartManager")
+                    continuation.resume(returning: [])
+                }
+            }
         }
     }
     
