@@ -29,6 +29,9 @@ struct BLECharacteristicHandler {
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
+
+    @AppStorage("healthKitLastRawStepCount") var healthKitLastRawStepCount = -1
+    @AppStorage("healthKitLastRawStepDay") var healthKitLastRawStepDay: Double = 0
     
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
@@ -146,10 +149,7 @@ struct BLECharacteristicHandler {
             
             bleManager.stepCount = stepCount
             if stepCount != 0 {
-                let stepsToday = chartManager.stepsToday()?.steps ?? 0
-                let stepsToAdd = max(stepCount - Int(stepsToday), 0)
-                
-                healthKitManager.writeSteps(stepsToAdd)
+                syncStepsToHealthKit(rawWatchCount: stepCount)
                 stepCountManager.setStepCount(stepCount)
                 checkForCompletedStepGoal()
             }
@@ -182,6 +182,22 @@ struct BLECharacteristicHandler {
         }
     }
     
+    // The watch reports a cumulative daily step total that resets at midnight
+    // Sync the increase since the last reading to healthkit, and rebase silently on a new day or a counter reset so a the whole day doesn't get sent to
+    // healthkit in one big value
+    private func syncStepsToHealthKit(rawWatchCount: Int) {
+        let startOfToday = Calendar.current.startOfDay(for: Date()).timeIntervalSince1970
+        let sameDay = healthKitLastRawStepDay == startOfToday
+        let previous = healthKitLastRawStepCount
+
+        if sameDay && previous >= 0 && rawWatchCount >= previous {
+            healthKitManager.writeSteps(rawWatchCount - previous)
+        }
+
+        healthKitLastRawStepCount = rawWatchCount
+        healthKitLastRawStepDay = startOfToday
+    }
+
     private func checkForCompletedStepGoal() {
         if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && remindOnStepGoalCompletion {
             let currentTime = Date().timeIntervalSince1970

@@ -26,8 +26,10 @@ class HealthKitManager: ObservableObject {
     }
     
     func writeSteps(_ stepsToAdd: Int, for date: Date = Date()) {
+        guard stepsToAdd > 0 else { return }
+
         let stepType = HKQuantityType.quantityType(forIdentifier: HKQuantityTypeIdentifier.stepCount)!
-        
+
         let stepsSample = HKQuantitySample(type: stepType, quantity: HKQuantity.init(unit: HKUnit.count(), doubleValue: Double(stepsToAdd)), start: date, end: date)
         
         if let healthStore, healthStore.authorizationStatus(for: stepType) == .sharingAuthorized && syncToAppleHealth && syncSteps {
