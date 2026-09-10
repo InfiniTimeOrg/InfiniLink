@@ -130,8 +130,15 @@
     "%@..." : {
 
     },
-    "%@'s battery must be charged to at least 10%% to update its software." : {
-
+    "%@'s battery must be charged to at least %@ to update its software." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@'s battery must be charged to at least %2$@ to update its software."
+          }
+        }
+      }
     },
     "%lld" : {
 
@@ -147,9 +154,6 @@
       }
     },
     "%lld steps" : {
-
-    },
-    "%lld%%" : {
 
     },
     "1 device discovered" : {
@@ -206,13 +210,28 @@
     "Apple Health" : {
 
     },
-    "Are you sure you want to end the exercise? %@" : {
+    "Are you sure you want to discard the active exercise?" : {
+
+    },
+    "Are you sure you want to end the exercise?" : {
+
+    },
+    "Are you sure you want to end the exercise? The duration of the exercise is too short to save." : {
 
     },
     "Are you sure you want to stop this update?" : {
 
     },
     "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Auto-Pause" : {
+
+    },
+    "Auto-Paused" : {
+
+    },
+    "Automatically pause running and walking workouts when you stop moving, and resume when you start again." : {
 
     },
     "Average" : {
@@ -384,6 +403,9 @@
     "Disabled" : {
 
     },
+    "Discard" : {
+
+    },
     "Disconnect" : {
 
     },
@@ -398,6 +420,9 @@
       }
     },
     "Display Timeout" : {
+
+    },
+    "Distance" : {
 
     },
     "Done" : {
@@ -423,6 +448,12 @@
 
     },
     "End Exercise" : {
+
+    },
+    "End Workout" : {
+
+    },
+    "Energy" : {
 
     },
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
@@ -560,18 +591,12 @@
     "Good morning" : {
 
     },
-    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %lld kcal." : {
+    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$lld kcal."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bravo, vous avez atteint votre objectif de pas quotidiens aujourd'hui ! Vous avez marché %1$@ %2$@ et brûlé environ %3$lld kcal."
+            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$@."
           }
         }
       }
@@ -726,6 +751,9 @@
         }
       }
     },
+    "Kilojoules" : {
+
+    },
     "Learn more" : {
       "localizations" : {
         "fr" : {
@@ -867,6 +895,9 @@
     "Notify on Low Battery" : {
 
     },
+    "Notify your watch when a workout starts, pauses, resumes, ends, and on each completed mile or kilometer." : {
+
+    },
     "Now" : {
 
     },
@@ -889,6 +920,12 @@
 
     },
     "Pause on Walk-Away" : {
+
+    },
+    "Pause Workout" : {
+
+    },
+    "Paused" : {
 
     },
     "Percent" : {
@@ -949,6 +986,12 @@
         }
       }
     },
+    "Resume Workout" : {
+
+    },
+    "Route" : {
+
+    },
     "Save 100 Steps" : {
 
     },
@@ -973,7 +1016,7 @@
     "Send a notification to your devices when they're fully charged." : {
 
     },
-    "Send a notification to your devices when your iPhone drops to 20% charge." : {
+    "Send a notification to your devices when your iPhone drops to %@ charge." : {
 
     },
     "Send a notification to your devices when your iPhone's battery level reaches full capacity." : {
@@ -1089,17 +1132,6 @@
     },
     "Sync activity data from your watch to Apple Health." : {
 
-    },
-    "Sync step and heart rate data to Apple Health." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Synchronisation des données relatives aux pas et à la fréquence cardiaque avec Apple Health."
-          }
-        }
-      }
     },
     "Synced Data" : {
 
@@ -1312,6 +1344,9 @@
     "Watch" : {
 
     },
+    "Watch Haptics" : {
+
+    },
     "Watch Notifications Disabled" : {
 
     },
@@ -1341,6 +1376,9 @@
     "Weight" : {
 
     },
+    "Workout" : {
+
+    },
     "Yes" : {
 
     },
@@ -1348,6 +1386,9 @@
 
     },
     "You can't disable watch notifications while iPhone notifications are on and ANCS is enabled." : {
+
+    },
+    "You covered %@." : {
 
     },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {
@@ -1386,12 +1427,12 @@
     "You will be notified when your watch's battery level reaches %@." : {
 
     },
-    "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
+    "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %@ and walked for about %@!" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "You're %1$lld steps away from your goal, which is about %2$@ %3$@. Once you complete your goal, you'll have burned %4$lld kcal and walked for about %5$@!"
+            "value" : "You're %1$lld steps away from your goal, which is about %2$@ %3$@. Once you complete your goal, you'll have burned %4$@ and walked for about %5$@!"
           }
         }
       }
@@ -1428,7 +1469,7 @@
     "Your approximate weight, in %@." : {
 
     },
-    "Your iPhone has less than 20% battery remaining." : {
+    "Your iPhone has less than %@ battery remaining." : {
 
     },
     "Your watch is estimated to be around %@ away." : {

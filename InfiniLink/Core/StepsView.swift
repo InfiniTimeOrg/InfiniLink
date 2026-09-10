@@ -72,8 +72,8 @@ struct StepMenuItemView: View {
                                     value: String(format: "%.2f", distance),
                                     unit: units,
                                     icon: ("ruler", Color.blue))
-            DetailHeaderSubItemView(title: "Kcal",
-                                    value: "\(exerciseCalculator.calculateCaloriesBurned(steps: steps))",
+            DetailHeaderSubItemView(title: personalizationController.energyUnit == .kilojoule ? "Kilojoules" : "Kcal",
+                                    value: "\(exerciseCalculator.energyValue(kcal: Double(exerciseCalculator.calculateCaloriesBurned(steps: steps))))",
                                     icon: ("flame", Color.orange))
             DetailHeaderSubItemView(title: "Total time",
                                     value: exerciseCalculator.secondsFormatted(seconds: exerciseCalculator.secondsForDistance(distance: distance)),

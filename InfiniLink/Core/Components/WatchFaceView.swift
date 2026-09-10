@@ -701,7 +701,7 @@ struct Terminal: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
             .position(x: geometry.size.width / 2.0, y: geometry.size.height / 3)
             Group {
-                Text("[BATT]").foregroundColor(.white) + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(Color(red: 0, green: 0.4, blue: 0.2))
+                Text("[BATT]").foregroundColor(.white) + Text(bleManager.batteryLevel / 100, format: .percent.precision(.fractionLength(0))).foregroundColor(Color(red: 0, green: 0.4, blue: 0.2))
             }
             .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)

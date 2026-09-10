@@ -56,6 +56,13 @@ struct ExerciseView: View {
                     }
                 }
                 .navigationTitle("Exercise")
+                .toolbar {
+                    NavigationLink {
+                        ExerciseSettingsView()
+                    } label: {
+                        Label("Settings", systemImage: "gear")
+                    }
+                }
             }
         }
         .onAppear {
@@ -64,8 +71,54 @@ struct ExerciseView: View {
     }
 }
 
+struct RecoverExerciseView: View {
+    @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
+
+    @State private var showConfirmation = false
+
+    let session: WorkoutSession
+
+    private var exerciseName: String {
+        return exerciseViewModel.exercise(for: session.exerciseId)?.name ?? "Workout"
+    }
+
+    var body: some View {
+        NavigationView {
+            ActionView(Action(title: "Exercise in progress", subtitle: "Started \(session.startDate.formatted(.relative(presentation: .named))). Resume where you left off, save it as-is, or discard it.", icon: exerciseViewModel.exercise(for: session.exerciseId)?.icon ?? "figure.run", accent: .blue, buttons: [
+                ActionButton("Resume", action: {
+                    exerciseViewModel.resumeRecoveredSession()
+                }),
+                ActionButton("Save & End", role: .cancel, action: {
+                    exerciseViewModel.saveAndEndRecoveredSession()
+                }),
+                ActionButton("Discard", role: .destructive, action: {
+                    showConfirmation = true
+                })
+            ]))
+            .interactiveDismissDisabled()
+            .toolbar {
+                Button(role: .cancel) {
+                    showConfirmation = true
+                } label: {
+                    Label("Cancel", systemImage: "xmark")
+                }
+            }
+        }
+        .confirmationDialog("Active Exercise", isPresented: $showConfirmation) {
+            Button(role: .destructive) {
+                exerciseViewModel.discardRecoveredSession()
+            } label: {
+                Text("Discard")
+            }
+            Button("Cancel", role: .cancel) { }
+        } message: {
+            Text("Are you sure you want to discard the active exercise?")
+        }
+    }
+}
+
 #Preview {
     NavigationView {
-        ExerciseView()
+        RecoverExerciseView(session: WorkoutSession(exerciseId: "test"))
     }
 }

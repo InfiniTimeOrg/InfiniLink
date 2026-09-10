@@ -7,30 +7,34 @@
 
 import SwiftUI
 
-struct ActionButton {
-    let action: () -> Void
+struct ActionButton: Identifiable {
+    let id = UUID()
     let label: String
+    let role: ButtonRole?
+    let action: () -> Void
+
+    init(_ label: String, role: ButtonRole? = nil, action: @escaping () -> Void) {
+        self.label = label
+        self.role = role
+        self.action = action
+    }
 }
 
 struct Action {
-    let title: String
-    let subtitle: String
-    let icon: String
-    let button: ActionButton?
-    let accent: Color
-    
-    init(title: String, subtitle: String, icon: String, button: ActionButton? = nil, accent: Color) {
-        self.title = title
-        self.subtitle = subtitle
-        self.icon = icon
-        self.button = button
-        self.accent = accent
-    }
+    var title: String
+    var subtitle: String
+    var icon: String
+    var accent: Color
+    var buttons: [ActionButton] = []
 }
 
 struct ActionView: View {
     let action: Action
-    
+
+    init(_ action: Action) {
+        self.action = action
+    }
+
     var body: some View {
         ZStack {
             Circle()
@@ -43,25 +47,27 @@ struct ActionView: View {
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 28, height: 28)
                     .padding(10)
-                    .font(.body.weight(.semibold))
                     .background(action.accent)
                     .foregroundStyle(.white)
                     .clipShape(RoundedRectangle(cornerRadius: 10))
                 Text(NSLocalizedString(action.title, comment: ""))
-                    .font(.system(size: 28).weight(.bold))
+                    .font(.title.weight(.bold))
                 Text(NSLocalizedString(action.subtitle, comment: ""))
                     .foregroundStyle(.primary.opacity(0.8))
-                if let button = action.button {
-                    Button {
-                        button.action()
-                    } label: {
-                        Text(NSLocalizedString(button.label, comment: ""))
-                            .padding(12)
-                            .padding(.horizontal, 6)
-                            .font(.body.weight(.semibold))
-                            .background(Color.blue)
-                            .foregroundStyle(.white)
-                            .clipShape(Capsule())
+                if !action.buttons.isEmpty {
+                    VStack(spacing: 10) {
+                        ForEach(action.buttons) { button in
+                            Button(role: button.role, action: button.action) {
+                                Text(NSLocalizedString(button.label, comment: ""))
+                                    .frame(maxWidth: .infinity)
+                                    .padding(.vertical, 12)
+                                    .padding(.horizontal, 18)
+                                    .font(.body.weight(.semibold))
+                                    .foregroundStyle(foreground(for: button.role))
+                                    .background(background(for: button.role))
+                                    .clipShape(Capsule())
+                            }
+                        }
                     }
                     .padding()
                 }
@@ -71,8 +77,27 @@ struct ActionView: View {
             .padding(24)
         }
     }
+
+    private func background(for role: ButtonRole?) -> Color {
+        if role == .destructive { return .red }
+        if role == .cancel { return Color.primary.opacity(0.08) }
+        return .blue
+    }
+
+    private func foreground(for role: ButtonRole?) -> Color {
+        return role == .cancel ? .primary : .white
+    }
 }
 
 #Preview {
-    ActionView(action: Action(title: "Reminders", subtitle: "We need access to your reminders to notify you about them on your watch.", icon: "list.bullet", button: .init(action: {}, label: "Open Settings..."), accent: .blue))
+    ActionView(Action(
+        title: "Reminders",
+        subtitle: "We need access to your reminders to notify you about them on your watch.",
+        icon: "list.bullet",
+        accent: .blue,
+        buttons: [
+            ActionButton("Open Settings...") {},
+            ActionButton("Not Now", role: .cancel) {}
+        ]
+    ))
 }

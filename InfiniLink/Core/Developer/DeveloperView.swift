@@ -12,7 +12,7 @@ struct DeveloperView: View {
     
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
-    @AppStorage("forceAncs") var forceAncs = false
+    @AppStorage("forceAncs") var forceAncs = true
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
     
     private let bleWriteManager = BLEWriteManager()

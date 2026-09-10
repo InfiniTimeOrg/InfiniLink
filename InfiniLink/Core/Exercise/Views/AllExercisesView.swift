@@ -35,11 +35,12 @@ struct AllExercisesView: View {
         exerciseViewModel.userExercises = chartManager.userExercises()
     }
     private func delete(at offsets: IndexSet) {
+        let context = persistenceController.container.viewContext
+
         for index in offsets {
-            let userExercise = filteredExercises[index]
-            viewContext.delete(userExercise)
+            context.delete(context.object(with: filteredExercises[index].objectID))
         }
-        
+
         persistenceController.save()
         updateUserExercises()
         

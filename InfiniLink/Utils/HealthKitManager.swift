@@ -59,20 +59,35 @@ class HealthKitManager: ObservableObject {
         }
     }
     
-    func saveWorkout(_ workout: HKWorkout) {
+    func saveWorkout(_ workout: HKWorkout, activeEnergyKcal: Double = 0, from start: Date? = nil, to end: Date? = nil) {
         let workoutType = HKObjectType.workoutType()
-        if let healthStore, healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized && syncToAppleHealth && syncExercise {
-            healthStore.save(workout) { success, error in
-                if success {
-                    log("Exercise successfully saved", type: .info, caller: "HealthKitManager")
-                } else if let error {
+        guard let healthStore, healthStore.authorizationStatus(for: workoutType) == .sharingAuthorized && syncToAppleHealth && syncExercise else { return }
+
+        healthStore.save(workout) { success, error in
+            guard success else {
+                if let error {
                     log("Error saving exercise: \(error.localizedDescription)", caller: "HealthKitManager")
+                }
+                return
+            }
+            log("Exercise successfully saved", type: .info, caller: "HealthKitManager")
+
+            // Add the workout's energy as a real sample so it counts toward the daily active energy total (not just the workout card)
+            guard activeEnergyKcal > 0, let start, let end, self.syncCalories,
+                  let energyType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned),
+                  healthStore.authorizationStatus(for: energyType) == .sharingAuthorized else { return }
+
+            let energySample = HKQuantitySample(type: energyType, quantity: HKQuantity(unit: .kilocalorie(), doubleValue: activeEnergyKcal), start: start, end: end)
+            healthStore.add([energySample], to: workout) { _, addError in
+                if let addError {
+                    log("Error attaching workout energy: \(addError.localizedDescription)", caller: "HealthKitManager")
                 }
             }
         }
     }
     
     func saveCalories(kcal: Double, date: Date = Date()) {
+        guard kcal > 0 else { return }
         guard let caloriesType = HKQuantityType.quantityType(forIdentifier: .activeEnergyBurned) else { return }
 
         let caloriesQuantity = HKQuantity(unit: HKUnit.kilocalorie(), doubleValue: kcal)

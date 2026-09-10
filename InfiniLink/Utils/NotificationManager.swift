@@ -90,7 +90,7 @@ extension NotificationManager {
             let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
             sendNotifications(notif, batterySettings.fullBattery.iphone)
         } else if level == 20 && state != .charging {
-            let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
+            let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: String(localized: "Your iPhone has less than \(0.2, format: .percent) battery remaining."))
             sendNotifications(notif, batterySettings.lowBattery.iphone)
         }
         

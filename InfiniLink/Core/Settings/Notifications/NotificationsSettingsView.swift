@@ -12,7 +12,7 @@ struct NotificationsSettingsView: View {
     @ObservedObject private var bleManager = BLEManager.shared
     @ObservedObject private var notificationManager = NotificationManager.shared
     @ObservedObject private var settingsManager = NotificationSettingsManager.shared
-    
+
     @State private var showSendNotificationSheet = false
     
     private let bleWriteManager = BLEWriteManager()
@@ -64,6 +64,9 @@ struct NotificationsSettingsView: View {
                                 .labelsHidden()
                         }
                     }
+                }
+                Section(header: Text("Exercise"), footer: Text("Notify your watch when a workout starts, pauses, resumes, ends, and on each completed mile or kilometer.")) {
+                    Toggle("Watch Haptics", isOn: $settingsManager.settings.exerciseSettings.watchHapticsEnabled)
                 }
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled)

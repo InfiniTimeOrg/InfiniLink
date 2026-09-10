@@ -42,7 +42,7 @@ struct BatterySettingsView: View {
                             NavigationLink {
                                 Form {
                                     notificationSettings("Watch", "Send a notification to your devices when your watch is low on battery.", $settingsManager.settings.batterySettings.lowBattery.watch)
-                                    notificationSettings("iPhone", "Send a notification to your devices when your iPhone drops to 20% charge.", $settingsManager.settings.batterySettings.lowBattery.iphone)
+                                    notificationSettings("iPhone", "Send a notification to your devices when your iPhone drops to \(0.2, format: .percent) charge.", $settingsManager.settings.batterySettings.lowBattery.iphone)
                                 }
                                 .navigationTitle("Low Battery Notifications")
                             } label: {

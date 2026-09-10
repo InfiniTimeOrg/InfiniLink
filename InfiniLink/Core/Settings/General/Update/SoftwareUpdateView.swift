@@ -108,7 +108,7 @@ struct SoftwareUpdateView: View {
                 }
             } footer: {
                 if updateDisabled {
-                    Text(!bleManager.hasLoadedCharacteristics ? "\(deviceManager.name) needs to be connected to update its software." : "\(deviceManager.name)'s battery must be charged to at least 10% to update its software.")
+                    Text(!bleManager.hasLoadedCharacteristics ? "\(deviceManager.name) needs to be connected to update its software." : "\(deviceManager.name)'s battery must be charged to at least \(0.1, format: .percent) to update its software.")
                 }
             }
             .disabled(updateDisabled)

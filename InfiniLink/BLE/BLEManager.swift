@@ -20,7 +20,6 @@ class BLEManager: NSObject, ObservableObject {
     let persistenceController =  PersistenceController.shared
     
     var manager: CBCentralManager?
-    private var connectTimeoutWorkItem: DispatchWorkItem?
     var blefsTransfer: CBCharacteristic?
     var currentTimeService: CBCharacteristic?
     var notifyCharacteristic: CBCharacteristic?
@@ -105,7 +104,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var showError: Bool = false
     
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
-    @AppStorage("forceAncs") var forceAncs = false
+    @AppStorage("forceAncs") var forceAncs = true
     
     var hasLoadedCharacteristics: Bool {
         return currentTimeService != nil && isConnectedToPinetime // Use currentTimeService because it's present in all firmware versions
@@ -183,30 +182,11 @@ class BLEManager: NSObject, ObservableObject {
             CBConnectPeripheralOptionRequiresANCS: true
         ]
         self.manager?.connect(peripheralToConnect!, options: forceAncs ? options : nil)
-        
-        scheduleConnectTimeout(for: peripheral)
+
         completion?()
     }
-    
-    // iOS never times out manager.connect(), so back it with our own deadline or the UI can hang on "Connecting..."
-    private func scheduleConnectTimeout(for peripheral: CBPeripheral) {
-        connectTimeoutWorkItem?.cancel()
-        
-        let work = DispatchWorkItem { [weak self] in
-            guard let self, self.isConnecting, !self.isConnectedToPinetime else { return }
-            
-            log("Connection attempt timed out, retrying", type: .info, caller: "BLEManager", target: .ble)
-            self.manager?.cancelPeripheralConnection(peripheral)
-            self.isConnecting = false
-            self.isReconnectingAfterUpdate = false
-            self.startScanning()
-        }
-        connectTimeoutWorkItem = work
-        DispatchQueue.main.asyncAfter(deadline: .now() + 15, execute: work)
-    }
-    
+
     func onConnect(_ peripheral: CBPeripheral) {
-        connectTimeoutWorkItem?.cancel()
         isReconnectingAfterUpdate = false
         stopScanning()
         
@@ -239,7 +219,6 @@ class BLEManager: NSObject, ObservableObject {
     }
     
     func disconnect() {
-        connectTimeoutWorkItem?.cancel()
         isReconnectingAfterUpdate = false
 
         if let infiniTime = infiniTime {

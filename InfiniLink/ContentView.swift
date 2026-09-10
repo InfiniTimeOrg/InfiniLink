@@ -11,6 +11,7 @@ import EventKit
 struct ContentView: View {
     @ObservedObject private var bleManager = BLEManager.shared
     @ObservedObject private var downloadManager = DownloadManager.shared
+    @ObservedObject private var exerciseViewModel = ExerciseViewModel.shared
 
     @AppStorage("pairedDeviceID") private var pairedDeviceID: String?
 
@@ -27,6 +28,9 @@ struct ContentView: View {
         }
         .fullScreenCover(isPresented: $downloadManager.updateStarted) {
             CurrentUpdateView()
+        }
+        .sheet(item: $exerciseViewModel.recoverableSession) { session in
+            RecoverExerciseView(session: session)
         }
     }
 }

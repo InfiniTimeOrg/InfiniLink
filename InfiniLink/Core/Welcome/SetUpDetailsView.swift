@@ -68,6 +68,10 @@ struct SetUpDetailsView: View {
                     .onChange(of: personalizationController.units) { _ in
                         resetFields()
                     }
+                    Picker("Energy", selection: $personalizationController.energyUnit) {
+                        Text("Calories").tag(PersonalizationController.EnergyUnit.kilocalorie)
+                        Text("Kilojoules").tag(PersonalizationController.EnergyUnit.kilojoule)
+                    }
                 }
                 Section {
                     Picker("Gender", selection: $personalizationController.gender) {
