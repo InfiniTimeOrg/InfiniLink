@@ -20,7 +20,7 @@ struct InfiniLink: App {
     init() {
         HealthKitManager.shared.requestAuthorization()
         
-        downloadManager.updateAvailable = downloadManager.checkForUpdates(currentVersion: deviceManager.firmware)
+        downloadManager.checkForFirmwareUpdate()
     }
     
     var body: some Scene {

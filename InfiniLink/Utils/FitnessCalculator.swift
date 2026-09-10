@@ -114,10 +114,33 @@ class FitnessCalculator {
         let weight = personalizationController.calculatedWeight
         let calculatedWeight = personalizationController.units == .metric ? weight : (weight * 0.453592)
         let durationInHours = Double(steps) / Double(spm) / 60.0
-        
+
         guard durationInHours > 0 else { return 0 }
-        
-        return Int(ceil(pace.metValue * calculatedWeight * durationInHours))
+
+        // Subtract 1 MET (resting) so this is active energy, matching HealthKit's activeEnergyBurned
+        return Int(ceil((pace.metValue - 1.0) * calculatedWeight * durationInHours))
+    }
+
+    // Heart-rate based active energy estimate (Keytel et al. 2005)
+    func calculateCaloriesBurned(heartRate: Double, durationSeconds: TimeInterval) -> Int {
+        guard heartRate > 0, durationSeconds > 0 else { return 0 }
+
+        let minutes = durationSeconds / 60.0
+        let weight = personalizationController.calculatedWeightKg
+        let age = personalizationController.calculatedAge
+
+        let grossKcalPerMinute: Double = {
+            if personalizationController.gender == .male {
+                return (-55.0969 + (0.6309 * heartRate) + (0.1988 * weight) + (0.2017 * age)) / 4.184
+            } else {
+                return (-20.4022 + (0.4472 * heartRate) - (0.1263 * weight) + (0.0740 * age)) / 4.184
+            }
+        }()
+
+        // Keytel predicts gross expenditure so subtract 1 MET (resting) because we want active energy
+        let restingKcalPerMinute = weight / 60.0
+
+        return Int(max(0, (grossKcalPerMinute - restingKcalPerMinute) * minutes).rounded())
     }
     
     /// - Parameter pace: the average pace the user is walking
@@ -134,6 +157,33 @@ class FitnessCalculator {
         return Int(ceil((distance / speed) * 60 * 60))
     }
     
+    func distanceString(meters: Double) -> String {
+        if personalizationController.units == .imperial {
+            return String(format: "%.2f mi", meters / 1609.344)
+        } else {
+            return String(format: "%.2f km", meters / 1000)
+        }
+    }
+
+    func energyValue(kcal: Double) -> Int {
+        switch personalizationController.energyUnit {
+        case .kilojoule: return Int((kcal * 4.184).rounded())
+        case .kilocalorie: return Int(kcal.rounded())
+        }
+    }
+
+    func energyUnitLabel(short: Bool = false) -> String {
+        switch personalizationController.energyUnit {
+        case .kilojoule: return "kJ"
+        case .kilocalorie: return short ? "cal" : "kcal"
+        }
+    }
+
+    // e.g. 190 kcal or 795 kJ
+    func energyString(kcal: Double) -> String {
+        return "\(energyValue(kcal: kcal)) \(energyUnitLabel())"
+    }
+
     func secondsFormatted(seconds: Int, full: Bool = false) -> String {
         let hours = Double(seconds) / 3600.0
         let minutes = (seconds % 3600) / 60

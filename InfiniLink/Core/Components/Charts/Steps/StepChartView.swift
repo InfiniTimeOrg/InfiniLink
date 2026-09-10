@@ -131,20 +131,15 @@ struct StepChartView: View {
                 .frame(height: 280)
             } header: {
                 VStack(alignment: .leading) {
-                    Text(points.count > 1 ? showSelectionBar ? "Total" : "Average" : " ")
-                        .fontWeight(.regular)
-                    Text({
-                        if showSelectionBar {
-                            return "\(selectedSteps) "
-                        } else if !points.isEmpty {
-                            return "\(points.reduce(0) { $0 + $1.steps } / points.count) "
-                        }
-                        return "0 "
-                    }())
-                    .font(.system(size: 28))
-                    .foregroundColor(.primary)
-                    .fontWeight(.bold)
-                    + Text("steps")
+                    if points.count > 1 {
+                        Text(showSelectionBar ? "Total" : "Average")
+                            .fontWeight(.regular)
+                    }
+                    Text(showSelectionBar ? selectedSteps : points.isEmpty ? 0 : points.reduce(0) { $0 + $1.steps } / points.count, format: .number)
+                        .font(.system(size: 28))
+                        .foregroundColor(.primary)
+                        .fontWeight(.bold)
+                    + Text(" steps")
                     Text(showSelectionBar ? "\(selectedDate.formatted(date: .abbreviated, time: .omitted))" : "\(earliestDate.formatted(date: .abbreviated, time: .omitted)) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
                     if streak > 0 {
                         HStack(spacing: 5) {
@@ -152,7 +147,7 @@ struct StepChartView: View {
                                 .imageScale(.large)
                                 .foregroundStyle(.orange)
                             Text("This week you have a ") +
-                            Text("\(streak)-day")
+                            (Text(streak, format: .number) + Text("-day"))
                                 .foregroundColor(.orange)
                                 .fontWeight(.bold) +
                             Text(" step goal streak!")
@@ -168,7 +163,7 @@ struct StepChartView: View {
             .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
             Section {
                 if bleManager.stepCount >= stepCountManager.stepGoal {
-                    Text("Great job, you reached your daily step goal today! You've walked \(String(format: "%.2f", fitnessCalculator.calculateDistance(steps: steps))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.calculateCaloriesBurned(steps: steps)) kcal.")
+                    Text("Great job, you reached your daily step goal today! You've walked \(fitnessCalculator.calculateDistance(steps: steps), format: .number.precision(.fractionLength(2))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.energyString(kcal: Double(fitnessCalculator.calculateCaloriesBurned(steps: steps)))).")
                 } else {
                     let stepsRemaining = stepCountManager.stepGoal - steps
                     let distanceRemaining = fitnessCalculator.calculateDistance(steps: stepsRemaining)
@@ -178,11 +173,11 @@ struct StepChartView: View {
                     if stepsRemaining <= 100 {
                         Text("You're so close! Just about a minute left and only \(stepsRemaining) steps to reach your goal!")
                     } else if stepsRemaining <= 1000 {
-                        Text("You're almost there! A quick \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "mile" : "km") walk should get you to your goal. It should only take you about \(timeRemaining).")
+                        Text("You're almost there! A quick \(distanceRemaining, format: .number.precision(.fractionLength(1))) \(personalizationController.units == .imperial ? "mile" : "km") walk should get you to your goal. It should only take you about \(timeRemaining).")
                     } else if stepsRemaining <= 2500 {
-                        Text("You're making great progress! You have about \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "miles" : "kilometers") to walk. At your current pace, you'll hit your goal in \(timeRemaining).")
+                        Text("You're making great progress! You have about \(distanceRemaining, format: .number.precision(.fractionLength(1))) \(personalizationController.units == .imperial ? "miles" : "kilometers") to walk. At your current pace, you'll hit your goal in \(timeRemaining).")
                     } else {
-                        Text("You're \(stepsRemaining) steps away from your goal, which is about \(String(format: "%.1f", distanceRemaining)) \(personalizationController.units == .imperial ? "miles" : "kilometers"). Once you complete your goal, you'll have burned \(caloriesRemaining) kcal and walked for about \(timeRemaining)!")
+                        Text("You're \(stepsRemaining) steps away from your goal, which is about \(distanceRemaining, format: .number.precision(.fractionLength(1))) \(personalizationController.units == .imperial ? "miles" : "kilometers"). Once you complete your goal, you'll have burned \(fitnessCalculator.energyString(kcal: Double(caloriesRemaining))) and walked for about \(timeRemaining)!")
                     }
                 }
             }

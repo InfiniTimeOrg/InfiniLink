@@ -9,30 +9,67 @@ import SwiftUI
 
 struct SetUpDetailsView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
-    
+
     @State private var nextViewActive = false
-    @State private var weight = ""
-    @State private var height = ""
-    
-    @FocusState var isWeightFocused: Bool
-    @FocusState var isHeightFocused: Bool
-    
+
     let list: Bool
-    
-    func resetFields() {
-        personalizationController.weight = nil
-        personalizationController.height = nil
-        weight = ""
-        height = ""
-    }
-    func filteredUnit(_ unit: Double) -> String {
-        String(unit).replacingOccurrences(of: ".0", with: "")
-    }
-    
+
     init(list: Bool = false) {
         self.list = list
     }
-    
+
+    private var isImperial: Bool {
+        personalizationController.units == .imperial
+    }
+
+    private var weightSelection: Binding<Int> { // store the weight in kg
+        Binding(
+            get: {
+                if let kg = personalizationController.weight, kg > 0 {
+                    return Int((isImperial ? kg * 2.205 : kg).rounded())
+                }
+                return isImperial ? 155 : 70
+            },
+            set: { personalizationController.weight = isImperial ? Double($0) / 2.205 : Double($0) }
+        )
+    }
+
+    private var storedInches: Int { // store the height in cm
+        if let cm = personalizationController.height, cm > 0 { return Int((cm / 2.54).rounded()) }
+        return 67
+    }
+
+    private var heightCMSelection: Binding<Int> {
+        Binding(
+            get: {
+                if let cm = personalizationController.height, cm > 0 { return Int(cm.rounded()) }
+                return 170
+            },
+            set: { personalizationController.height = Double($0) }
+        )
+    }
+
+    private var heightFeetSelection: Binding<Int> {
+        Binding(
+            get: { storedInches / 12 },
+            set: { personalizationController.height = Double($0 * 12 + storedInches % 12) * 2.54 }
+        )
+    }
+
+    private var heightInchesSelection: Binding<Int> {
+        Binding(
+            get: { storedInches % 12 },
+            set: { personalizationController.height = Double((storedInches / 12) * 12 + $0) * 2.54 }
+        )
+    }
+
+    private var ageSelection: Binding<Int> {
+        Binding(
+            get: { personalizationController.age ?? 25 },
+            set: { personalizationController.age = $0 }
+        )
+    }
+
     var body: some View {
         if list {
             content
@@ -42,7 +79,7 @@ struct SetUpDetailsView: View {
             }
         }
     }
-    
+
     var content: some View {
         Form {
             if !list {
@@ -59,57 +96,62 @@ struct SetUpDetailsView: View {
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
             }
-            Group {
-                Section {
-                    Picker("Units", selection: $personalizationController.units) {
-                        Text("Metric").tag(PersonalizationController.Unit.metric)
-                        Text("Imperial").tag(PersonalizationController.Unit.imperial)
-                    }
-                    .onChange(of: personalizationController.units) { _ in
-                        resetFields()
-                    }
+            Section {
+                Picker("Units", selection: $personalizationController.units) {
+                    Text("Metric").tag(PersonalizationController.Unit.metric)
+                    Text("Imperial").tag(PersonalizationController.Unit.imperial)
                 }
-                Section {
-                    Picker("Gender", selection: $personalizationController.gender) {
-                        Text("Male").tag(PersonalizationController.Gender.male)
-                        Text("Female").tag(PersonalizationController.Gender.female)
-                    }
-                }
-                Section {
-                    HStack(spacing: 12) {
-                        Text("Weight")
-                        TextField("Optional", text: $weight)
-                            .focused($isWeightFocused)
-                            .keyboardType(.decimalPad)
-                            .filterText(input: $weight)
-                    }
-                    .onTapGesture {
-                        isWeightFocused = true
-                    }
-                } footer: {
-                    Text("Your approximate weight, in \(personalizationController.units == .metric ? "kg" : "lbs").")
-                }
-                Section {
-                    HStack(spacing: 12) {
-                        Text("Height")
-                        TextField("Optional", text: $height)
-                            .focused($isHeightFocused)
-                            .keyboardType(.decimalPad)
-                            .filterText(input: $height)
-                    }
-                    .onTapGesture {
-                        isHeightFocused = true
-                    }
-                } footer: {
-                    Text("Your approximate height, in \(personalizationController.units == .metric ? "cm" : "inches").")
+                Picker("Energy", selection: $personalizationController.energyUnit) {
+                    Text("Calories").tag(PersonalizationController.EnergyUnit.kilocalorie)
+                    Text("Kilojoules").tag(PersonalizationController.EnergyUnit.kilojoule)
                 }
             }
-            .keyboardType(.decimalPad)
+            Section {
+                Picker("Gender", selection: $personalizationController.gender) {
+                    Text("Male").tag(PersonalizationController.Gender.male)
+                    Text("Female").tag(PersonalizationController.Gender.female)
+                }
+            }
+            Section("Weight") {
+                Picker("Weight", selection: weightSelection) {
+                    ForEach((isImperial ? 66...660 : 30...300), id: \.self) { value in
+                        Text("\(value) \(isImperial ? "lb" : "kg")").tag(value)
+                    }
+                }
+                .pickerStyle(.wheel)
+                .frame(maxHeight: 120)
+            }
+            Section("Height") {
+                if isImperial {
+                    HStack(spacing: 0) {
+                        Picker("Feet", selection: heightFeetSelection) {
+                            ForEach(3...8, id: \.self) { Text("\($0) ft").tag($0) }
+                        }
+                        .pickerStyle(.wheel)
+                        Picker("Inches", selection: heightInchesSelection) {
+                            ForEach(0...11, id: \.self) { Text("\($0) in").tag($0) }
+                        }
+                        .pickerStyle(.wheel)
+                    }
+                    .frame(maxHeight: 120)
+                } else {
+                    Picker("Height", selection: heightCMSelection) {
+                        ForEach(120...220, id: \.self) { Text("\($0) cm").tag($0) }
+                    }
+                    .pickerStyle(.wheel)
+                    .frame(maxHeight: 120)
+                }
+            }
+            Section("Age") {
+                Picker("Age", selection: ageSelection) {
+                    ForEach(13...100, id: \.self) { Text("\($0)").tag($0) }
+                }
+                .pickerStyle(.wheel)
+                .frame(maxHeight: 120)
+            }
             if !list {
                 Button {
                     nextViewActive = true
-                    
-                    // We don't need to assign any vars here because it's handled by the onDisappear
                 } label: {
                     Text("Next")
                         .padding()
@@ -128,44 +170,13 @@ struct SetUpDetailsView: View {
             NotificationsSetupView()
         }
         .interactiveDismissDisabled()
-        .toolbar {
-            ToolbarItem(placement: .confirmationAction) {
-                // Don't show the button if the user has edited anything
-                if !list && weight == filteredUnit(personalizationController.calculatedWeight) && height == filteredUnit(personalizationController.calculatedHeight) {
-                    Button("Skip") {
-                        nextViewActive = true
-                    }
-                }
-            }
-        }
-        .onAppear {
-            if let weight = personalizationController.weight, weight > 0 {
-                self.weight = filteredUnit(personalizationController.calculatedWeight)
-            }
-            if let height = personalizationController.height, height > 0 {
-                self.height = filteredUnit(personalizationController.calculatedHeight)
-            }
-        }
-        .onDisappear {
-            if personalizationController.units == .imperial {
-                personalizationController.height = (Double(height) ?? 0) * 2.54
-                personalizationController.weight = (Double(weight) ?? 0) / 2.205
-            } else {
-                personalizationController.height = Double(height)
-                personalizationController.weight = Double(weight)
-            }
-        }
     }
 }
 
 struct NotificationsSetupView: View {
-    @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var notificationManager = NotificationManager.shared
-    
-    @AppStorage("waterReminder") var waterReminder = true
-    @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
-    @AppStorage("heartRangeReminder") var heartRangeReminder = false
+    @ObservedObject var settingsManager = NotificationSettingsManager.shared
 
     var body: some View {
         Form {
@@ -182,17 +193,17 @@ struct NotificationsSetupView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
             Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.") + Text(" You can customize this in notification settings.")) {
-                Toggle("Water Reminder", isOn: $waterReminder)
+                Toggle("Water Reminder", isOn: $settingsManager.settings.waterReminderEnabled)
             }
             Section(footer: Text("Get a notification when your heart rate goes above or below the specified range.") + Text(" You can customize this in notification settings.")) {
-                Toggle("Heart Range Notifications", isOn: $heartRangeReminder)
+                Toggle("Heart Range Notifications", isOn: $settingsManager.settings.heartSettings.rangeReminderEnabled)
             }
             Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
-                Toggle("Steps", isOn: $remindOnStepGoalCompletion)
+                Toggle("Steps", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled)
             }
             Button {
                 notificationManager.requestNotificationAuthorization()
-                
+
                 personalizationController.showSetupSheet = false
             } label: {
                 Text("Continue")
@@ -206,31 +217,6 @@ struct NotificationsSetupView: View {
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
         }
-    }
-}
-
-struct FilteredText: ViewModifier {
-    @Binding var text: String
-    
-    func body(content: Content) -> some View {
-        content
-            .onChange(of: text) { newValue in
-                let filtered = newValue.filter { "0123456789.".contains($0) }
-                
-                if filtered != text {
-                    //The string contained bad characters
-                    text = ""
-                    return
-                }
-                
-                text = filtered
-            }
-    }
-}
-
-extension View {
-    func filterText(input: Binding<String>) -> some View {
-        modifier(FilteredText(text: input))
     }
 }
 

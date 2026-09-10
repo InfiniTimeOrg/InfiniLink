@@ -8,22 +8,36 @@
 import SwiftUI
 
 struct ActiveExerciseView: View {
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var stepCounts: FetchedResults<StepCounts>
-    
-    @Environment(\.managedObjectContext) var viewContext
-    
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject var bleManager = BLEManager.shared
-    
+    @ObservedObject var routeRecorder = WorkoutRouteRecorder.shared
+
+    @Environment(\.dismiss) private var dismiss
+
     @State private var showEndConfirmation = false
-    
-    @State private var previousHeartPoints: [HeartDataPoint] = []
-    @State private var newHeartPoints: [HeartDataPoint] = []
-    @State private var currentStepCount = 0
-    
+
     private let fitnessCalculator = FitnessCalculator()
-    
+
+    private var canSave: Bool {
+        return exerciseViewModel.elapsed >= 30
+    }
+
+    @ViewBuilder
+    private func metric(_ icon: String, _ tint: Color, _ value: String, _ label: String) -> some View {
+        VStack(spacing: 3) {
+            HStack(spacing: 5) {
+                Image(systemName: icon)
+                    .foregroundStyle(tint)
+                Text(value)
+                    .font(.title3.weight(.semibold))
+                    .monospacedDigit()
+            }
+            Text(label)
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+        }
+    }
+
     var body: some View {
         VStack(spacing: 16) {
             if let exercise = exerciseViewModel.currentExercise {
@@ -35,37 +49,41 @@ struct ActiveExerciseView: View {
                 .font(.title2.weight(.medium))
                 Text(exerciseViewModel.timeString())
                     .font(.system(size: 60).weight(.bold))
-                HStack(spacing: 30) {
-                    if exercise.components.contains(.heart) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "heart.fill")
-                                .foregroundStyle(.red)
-                            Text(String(format: "%.0f", previousHeartPoints.compactMap({ $0.value }).last ?? 0))
+                    .monospacedDigit()
+                Grid(horizontalSpacing: 24, verticalSpacing: 12) {
+                    GridRow {
+                        if exercise.components.contains(.heart) {
+                            metric("heart.fill", .red, String(format: "%.0f", bleManager.heartRate), "BPM")
+                        }
+                        metric("flame.fill", .orange, "\(fitnessCalculator.energyValue(kcal: Double(exerciseViewModel.liveCalorieEstimate(for: exercise))))", fitnessCalculator.energyUnitLabel(short: true).uppercased())
+                        if exercise.components.contains(.steps) {
+                            metric("shoeprints.fill", .blue, "\(exerciseViewModel.stepsTaken)", "STEPS")
+                        }
+                        if exercise.components.contains(.location) {
+                            metric("location.fill", .green, fitnessCalculator.distanceString(meters: routeRecorder.distance), "DIST")
                         }
                     }
-                    if exercise.components.contains(.steps) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "shoeprints.fill")
-                                .foregroundStyle(.blue)
-                            Text(String(exerciseViewModel.stepsTaken))
-                        }
-                        HStack(spacing: 6) {
-                            Image(systemName: "flame.fill")
-                                .foregroundStyle(.orange)
-                            Text("\(fitnessCalculator.calculateCaloriesBurned(steps: exerciseViewModel.stepsTaken))")
+                    if exercise.components.contains(.heart) && exerciseViewModel.averageHeartRate > 0 {
+                        GridRow {
+                            metric("heart", .red.opacity(0.7), String(format: "%.0f", exerciseViewModel.averageHeartRate), "AVG")
+                            metric("bolt.heart", .red.opacity(0.7), String(format: "%.0f", exerciseViewModel.maxHeartRate), "MAX")
                         }
                     }
+                }
+                if exerciseViewModel.exercisePaused {
+                    Text(exerciseViewModel.autoPaused ? "Auto-Paused" : "Paused")
+                        .font(.headline)
+                        .foregroundStyle(.orange)
                 }
                 Spacer()
                 HStack(spacing: 14) {
                     Spacer()
                     Button {
                         if exerciseViewModel.exercisePaused {
-                            exerciseViewModel.startTimer()
+                            exerciseViewModel.resumeExercise()
                         } else {
-                            exerciseViewModel.stopTimer()
+                            exerciseViewModel.pauseExercise()
                         }
-                        exerciseViewModel.exercisePaused.toggle()
                     } label: {
                         Image(systemName: exerciseViewModel.exercisePaused ? "play.fill" : "pause.fill")
                             .resizable()
@@ -87,8 +105,7 @@ struct ActiveExerciseView: View {
                             .foregroundStyle(Color.white)
                             .clipShape(Circle())
                     }
-                    // This centers the other elements
-                    Color.clear
+                    Color.clear // This centers the other elements
                         .frame(width: 45, height: 45)
                     Spacer()
                 }
@@ -96,39 +113,18 @@ struct ActiveExerciseView: View {
             }
         }
         .padding()
-        .alert("Are you sure you want to end the exercise? \(exerciseViewModel.exerciseTime >= 30 ? "" : "The duration of the exercise is too short to save.")", isPresented: $showEndConfirmation) {
+        .alert(canSave ? "Are you sure you want to end the exercise?" : "Are you sure you want to end the exercise? The duration of the exercise is too short to save.", isPresented: $showEndConfirmation) {
             Button(role: .destructive) {
-                guard let exercise = exerciseViewModel.currentExercise else { return }
-                
-                if exerciseViewModel.exerciseTime >= 30 {
-                    exerciseViewModel.saveExercise(exercise, startDate: Date().addingTimeInterval(-exerciseViewModel.exerciseTime), heartPoints: Array(heartPoints))
-                }
-                
-                exerciseViewModel.currentExercise = nil
-                exerciseViewModel.timer?.invalidate()
+                exerciseViewModel.endExercise(save: canSave)
             } label: {
                 Text("End Exercise")
             }
             Button("Cancel", role: .cancel) { }
         }
-        .onAppear {
-            currentStepCount = bleManager.stepCount
-        }
-        // Should these onChanges go in BLECharacteristicHandler?
-        .onChange(of: Array(heartPoints)) { newPoints in
-            let currentHeartPoints = Array(newPoints)
-            
-            newHeartPoints = currentHeartPoints.filter { !previousHeartPoints.contains($0) }
-            previousHeartPoints = currentHeartPoints
-        }
-        .onChange(of: bleManager.stepCount) { allSteps in
-            let steps = max(0, allSteps - currentStepCount)
-            
-            exerciseViewModel.stepsTaken = steps
+        .onChange(of: exerciseViewModel.currentExercise?.id) { id in
+            if id == nil {
+                dismiss()
+            }
         }
     }
-}
-
-#Preview {
-    ActiveExerciseView()
 }

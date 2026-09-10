@@ -19,6 +19,8 @@ class BLEFSHandler: ObservableObject {
     var informationTransfer: [InformationFS] = []
     var readFileFS: ReadFileFS = ReadFileFS()
     var writeFileFS: WriteFileFS = WriteFileFS()
+
+    private var pendingWriteResponse: DispatchSemaphore?
     
     struct WriteFileFS {
         var group = DispatchGroup()
@@ -112,7 +114,6 @@ class BLEFSHandler: ObservableObject {
                 let resources = try decoder.decode(ResourcesJSON.self, from: jsonData)
                 
                 var newExternalResourcesSize = 0
-                var fileIndex = 0
                 
                 // Loop over resources and calculate the size of each file
                 for resource in resources.resources {
@@ -127,37 +128,32 @@ class BLEFSHandler: ObservableObject {
                 }
                 
                 // Process each resource: create directory and write file
-                for resource in resources.resources {
+                for (index, resource) in resources.resources.enumerated() {
                     createDir(path: resource.path)
                     let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
                     let fileData = try Data(contentsOf: fileDataPath)
                     
                     DispatchQueue.main.async {
-                        fileIndex += 1
-                        self.dfuUpdater.dfuState = "Uploading file \(fileIndex)"
+                        self.dfuUpdater.statusDetail = "Uploading file \(index + 1) of \(resources.resources.count)"
                     }
                     
-                    let writeFileFS = writeFile(data: fileData, path: resource.path, offset: 0)
-                    writeFileFS?.group.notify(queue: .main) {
-                        if resources.resources.count < fileIndex {
-                            self.dfuUpdater.dfuState = "Starting file \(fileIndex + 1)"
-                        }
+                    guard writeFile(data: fileData, path: resource.path, offset: 0)?.valid == true else {
+                        DispatchQueue.main.async { self.dfuUpdater.reportResourceUploadFailure() }
+                        return
                     }
                 }
                 
                 DispatchQueue.main.async {
-                    if DownloadManager.shared.externalResources {
-                        self.dfuUpdater.transferCompleted = true
-                        self.dfuUpdater.firmwareSelected = false
-                        self.dfuUpdater.resourceFilename = ""
-                    }
-                    
-                    self.dfuUpdater.dfuState = "Completing uploads"
+                    self.dfuUpdater.statusDetail = "Completing uploads"
                     
                     completion()
                 }
             } catch {
                 log("Error parsing resources", caller: "BLEFSHandler", target: .ble)
+                
+                DispatchQueue.main.async {
+                    self.dfuUpdater.reportResourceUploadFailure()
+                }
             }
         }
     }
@@ -226,86 +222,78 @@ class BLEFSHandler: ObservableObject {
     }
 
     func writeFile(data: Data, path: String, offset: UInt32) -> WriteFileFS? {
-        guard let transferChar = BLEManager.shared.blefsTransfer else { return nil }
+        guard let transferChar = bleManager.blefsTransfer, bleManager.isConnectedToPinetime else { return nil }
         
         log("Write file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        var write = WriteFileFS()
-        write.group = DispatchGroup()
-        write.group.enter()
-        var writeData = Data()
-
-        writeData.append(Commands.write.rawValue)
-        writeData.append(Commands.padding.rawValue)
-
-        writeData.append(UInt8(path.count & 0x00FF))
-        writeData.append(UInt8((path.count & 0xFF00) >> 8))
+        let responseTimeout = DispatchTimeInterval.seconds(5)
+        let semaphore = DispatchSemaphore(value: 0)
+        pendingWriteResponse = semaphore
+        defer { pendingWriteResponse = nil }
         
-        writeData.append(contentsOf: convertUInt32ToUInt8Array(value: offset))
-        writeData.append(contentsOf: timeSince1970())
+        writeFileFS = WriteFileFS()
         
-        writeData.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(data.count)))
-
-        let pathData = path.data(using: .utf8)!
-        writeData.append(pathData)
-
-        writeFileFS = write
-        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
-//        writeFileFS.group.wait()
+        var header = Data()
+        header.append(Commands.write.rawValue)
+        header.append(Commands.padding.rawValue)
+        header.append(UInt8(path.count & 0x00FF))
+        header.append(UInt8((path.count & 0xFF00) >> 8))
+        header.append(contentsOf: convertUInt32ToUInt8Array(value: offset))
+        header.append(contentsOf: timeSince1970())
+        header.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(data.count)))
+        header.append(path.data(using: .utf8) ?? Data())
         
-        var dataQueue = data
-        var newOffset = 0
-        self.progress = 0 // This line needs to be removed if we're uploading multiple files and want to show the overall progress percentage
+        bleManager.infiniTime?.writeValue(header, for: transferChar, type: .withResponse)
+        guard semaphore.wait(timeout: .now() + responseTimeout) == .success, !writeFileFS.completed else {
+            writeFileFS.valid = false
+            return writeFileFS
+        }
         
-        while !writeFileFS.completed {
-            writeFileFS.group.enter()
-            writeData = Data()
-            
-            writeData.append(Commands.writeData.rawValue)
-            writeData.append(Responses.ok.rawValue)
-            
-            writeData.append(Commands.padding.rawValue)
-            writeData.append(Commands.padding.rawValue)
-            
-            var dataToSend : Data = Data()
-            for _ in 0...170-1 {
-                if dataQueue.count > 0 {
-                    dataToSend.append(dataQueue.removeFirst())
-                } else {
-                    break
-                }
+        DispatchQueue.main.async { self.progress = 0 }
+        
+        var sent = 0
+        let chunkSize = 170
+        
+        while sent < data.count {
+            // Stop the moment the link drops instead of blasting a dead peripheral
+            guard bleManager.isConnectedToPinetime, bleManager.blefsTransfer === transferChar else {
+                writeFileFS.valid = false
+                break
             }
             
-            //print("dataToSend: \(dataToSend.hexString)")
-            //print("chunkOffset: \(newOffset)")
+            let end = min(sent + chunkSize, data.count)
+            let chunk = data.subdata(in: sent..<end)
             
-            writeData.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(newOffset)))
-            writeData.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(dataToSend.count)))
-            writeData.append(contentsOf: dataToSend)
+            var packet = Data()
+            packet.append(Commands.writeData.rawValue)
+            packet.append(Responses.ok.rawValue)
+            packet.append(Commands.padding.rawValue)
+            packet.append(Commands.padding.rawValue)
+            packet.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(sent)))
+            packet.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(chunk.count)))
+            packet.append(contentsOf: chunk)
             
-            bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
-//            writeFileFS.group.wait()
+            bleManager.infiniTime?.writeValue(packet, for: transferChar, type: .withResponse)
             
-            newOffset += dataToSend.count
-            let newProgress = progress + dataToSend.count
-            DispatchQueue.main.async {
-                self.progress = newProgress
+            // Wait for the watch to acknowledge this chunk before sending the next one
+            guard semaphore.wait(timeout: .now() + responseTimeout) == .success, !writeFileFS.completed else {
+                writeFileFS.valid = false
+                break
             }
-            //writeFileFS.offset = writeFileFS.offset + dataToSend.count
-            //print("Count: \(data.count), Offset: \(newOffset)")
             
-            //print("progress: \((round(Double(progress)/Double(externalResourcesSize))*100))%")
-            
-            //print("Progress: \(progress), Size: \(externalResourcesSize)")
-            
-            if UInt32(data.count) == newOffset {
-                writeFileFS.completed = true
-            }
+            sent = end
+            let progressSoFar = sent
+            DispatchQueue.main.async { self.progress = progressSoFar }
+        }
+        
+        if sent >= data.count {
+            writeFileFS.completed = true
+            writeFileFS.valid = true
         }
         
         return writeFileFS
     }
-
+    
     func deleteFile(path: String) -> Bool {
         guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
         
@@ -515,7 +503,7 @@ class BLEFSHandler: ObservableObject {
                 writeFileFS.valid = false
                 log("Unknown error response from BLE FS", caller: "BLEFSHandler", target: .ble)
             }
-//            writeFileFS.group.leave()
+            pendingWriteResponse?.signal()
         } else if responseData[0] == Commands.mvResponse.rawValue || responseData[0] == Commands.mkdirResponse.rawValue || responseData[0] == Commands.deleteResponse.rawValue {
             switch responseData[1] {
             case Responses.ok.rawValue:

@@ -42,7 +42,7 @@ struct BatterySettingsView: View {
                             NavigationLink {
                                 Form {
                                     notificationSettings("Watch", "Send a notification to your devices when your watch is low on battery.", $settingsManager.settings.batterySettings.lowBattery.watch)
-                                    notificationSettings("iPhone", "Send a notification to your devices when your iPhone drops to 20% charge.", $settingsManager.settings.batterySettings.lowBattery.iphone)
+                                    notificationSettings("iPhone", "Send a notification to your devices when your iPhone drops to \(0.2, format: .percent) charge.", $settingsManager.settings.batterySettings.lowBattery.iphone)
                                 }
                                 .navigationTitle("Low Battery Notifications")
                             } label: {
@@ -65,13 +65,13 @@ struct BatterySettingsView: View {
                         }
                         if settingsManager.settings.batterySettings.customNotificationEnabled {
                             HStack {
-                                Text("0%").font(.caption).foregroundStyle(.secondary)
+                                Text(0, format: .percent).font(.caption).foregroundStyle(.secondary)
                                 Slider(value: $settingsManager.settings.batterySettings.customNotificationPercentage, in: 0...95, step: 5)
-                                Text("95%").font(.caption).foregroundStyle(.secondary)
+                                Text(0.95, format: .percent.precision(.fractionLength(0))).font(.caption).foregroundStyle(.secondary)
                             }
                         }
                         if settingsManager.settings.batterySettings.customNotificationEnabled {
-                            notificationSettings(nil, "You will be notified when your watch's battery level reaches \(Int(settingsManager.settings.batterySettings.customNotificationPercentage))%.", $settingsManager.settings.batterySettings.customNotificationSettings)
+                            notificationSettings(nil, "You will be notified when your watch's battery level reaches \(settingsManager.settings.batterySettings.customNotificationPercentage / 100, format: .percent.precision(.fractionLength(0))).", $settingsManager.settings.batterySettings.customNotificationSettings)
                         }
                     } else {
                         NavigationLink {

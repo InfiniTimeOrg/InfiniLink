@@ -11,11 +11,17 @@ import CoreData
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var chartManager = ChartManager.shared
-    
-    var heartPointValues: [Double] {
-        return chartManager.heartPoints().compactMap({ $0.value })
+
+    @State private var samples: [HeartRateSample] = []
+
+    var values: [Double] {
+        return samples.map { $0.value }
     }
-    
+
+    func load() async {
+        samples = await chartManager.heartRateSamples()
+    }
+
     func heartRate(for val: Double) -> String {
         return val > 0 ? String(format: "%.0f", val) : "--"
     }
@@ -34,17 +40,17 @@ struct HeartView: View {
         }
         return NSLocalizedString("Now", comment: "")
     }
-    func timestamp(for heartPoint: HeartDataPoint?) -> String? {
-        guard let timeInterval = heartPoint?.timestamp?.timeIntervalSinceNow else { return " " }
-        
+    func timestamp(for date: Date?) -> String? {
+        guard let timeInterval = date?.timeIntervalSinceNow else { return nil }
+
         return units(for: Int(abs(timeInterval)))
     }
-    
+
     var body: some View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(format: "%.0f", heartPointValues.last ?? 0), subtitle: timestamp(for: chartManager.heartPoints().last), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (chartManager.heartPoints().last?.timestamp?.timeIntervalSinceNow ?? 60) < 60) {
+                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60) {
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
@@ -53,6 +59,12 @@ struct HeartView: View {
             }
         }
         .navigationTitle("Heart Rate")
+        .task {
+            await load()
+        }
+        .onChange(of: bleManager.heartRate) { _ in
+            Task { await load() }
+        }
         .toolbar {
             NavigationLink {
                 HeartSettingsView()

@@ -27,8 +27,8 @@ struct CalendarDayDetailView: View {
     var progress: Double {
         return min(Double(stepPoint?.steps ?? 0) / Double(DeviceManager.shared.settings.stepsGoal), 1)
     }
-    var percentComplete: String {
-        return String(format: "%.0f", progress * 100)
+    var percentComplete: Int {
+        return Int((progress * 100).rounded())
     }
     
     init(_ selectedPoint: Binding<StepCounts?>, selectedDetent: Binding<PresentationDetent>, selectedDate date: Date) {
@@ -49,7 +49,7 @@ struct CalendarDayDetailView: View {
                                 .fontWeight(selectedDetent == .medium ? .semibold : .bold)
                                 .transition(.opacity.animation(.easeInOut))
                                 .fixedSize(horizontal: false, vertical: true)
-                            Text(percentComplete == "100" ? "You reached your goal, keep up the good work!" : "That's \(percentComplete)% of your goal.")
+                            Text(percentComplete == 100 ? "You reached your goal, keep up the good work!" : "That's \(progress, format: .percent.precision(.fractionLength(0))) of your goal.")
                                 .foregroundStyle(.secondary)
                                 .lineLimit(selectedDetent == .medium ? 1 : nil)
                         }
@@ -90,10 +90,10 @@ struct CalendarDayDetailView: View {
                 if let daySteps = stepPoint?.steps, daySteps > 0 {
                     PieSlice(progress: progress)
                         .foregroundStyle(.blue)
-                    Text("\(percentComplete)%")
+                    Text(progress, format: .percent.precision(.fractionLength(0)))
                         .shadow(color: .primary, radius: 25)
                 } else {
-                    Text("\(0)%")
+                    Text(0, format: .percent)
                 }
             }
             .font(.system(size: 42).weight(.semibold))

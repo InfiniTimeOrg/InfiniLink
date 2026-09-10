@@ -85,7 +85,8 @@ class BLEManager: NSObject, ObservableObject {
     @Published var setTimeError = false
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
-    @Published var hasDisconnectedForUpdate = false
+    @Published var isUpdatingFirmware = false
+    @Published var isReconnectingAfterUpdate = false // The install finished; keep showing "Installing update..." until the watch is back
     @Published var ancsAuthorized = false // We don't need to persist this, it only matters when we're connected
     
     @Published var newPeripherals: [CBPeripheral] = []
@@ -103,7 +104,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var showError: Bool = false
     
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
-    @AppStorage("forceAncs") var forceAncs = false
+    @AppStorage("forceAncs") var forceAncs = true
     
     var hasLoadedCharacteristics: Bool {
         return currentTimeService != nil && isConnectedToPinetime // Use currentTimeService because it's present in all firmware versions
@@ -115,7 +116,7 @@ class BLEManager: NSObject, ObservableObject {
         return isConnecting || (isScanning && !isPairingNewDevice)
     }
     var connectionState: String {
-        if hasDisconnectedForUpdate {
+        if isUpdatingFirmware || isReconnectingAfterUpdate {
             return NSLocalizedString("Installing update...", comment: "")
         }
         if isBusy {
@@ -181,11 +182,12 @@ class BLEManager: NSObject, ObservableObject {
             CBConnectPeripheralOptionRequiresANCS: true
         ]
         self.manager?.connect(peripheralToConnect!, options: forceAncs ? options : nil)
-        
+
         completion?()
     }
-    
+
     func onConnect(_ peripheral: CBPeripheral) {
+        isReconnectingAfterUpdate = false
         stopScanning()
         
         if deviceManager.pairedDeviceID != peripheral.identifier.uuidString { // Only clear the update for a new device
@@ -195,7 +197,6 @@ class BLEManager: NSObject, ObservableObject {
         isConnecting = false
         deviceManager.pairedDeviceID = peripheral.identifier.uuidString
         deviceManager.pairedDevice = deviceManager.currentDevice()
-        hasDisconnectedForUpdate = false
         
         infiniTime = peripheral
         infiniTime?.delegate = self
@@ -218,6 +219,8 @@ class BLEManager: NSObject, ObservableObject {
     }
     
     func disconnect() {
+        isReconnectingAfterUpdate = false
+
         if let infiniTime = infiniTime {
             self.manager?.cancelPeripheralConnection(infiniTime)
             
@@ -230,6 +233,26 @@ class BLEManager: NSObject, ObservableObject {
             self.isConnectedToPinetime = false
             
             log("Disconnected", type: .info, caller: "BLEManager", target: .ble)
+        }
+    }
+    
+    // The DFU library drives its own connection, so the app must not scan or reconnect while it runs
+    func beginFirmwareUpdate() {
+        isUpdatingFirmware = true
+        stopScanning()
+        disconnect()
+    }
+    
+    func endFirmwareUpdate(installed: Bool = false) {
+        isUpdatingFirmware = false
+        isReconnectingAfterUpdate = installed
+        startScanning()
+
+        if installed {
+            // Don't sit on "Installing update..." forever if the watch never comes back
+            DispatchQueue.main.asyncAfter(deadline: .now() + 90) { [weak self] in
+                self?.isReconnectingAfterUpdate = false
+            }
         }
     }
     
@@ -250,6 +273,8 @@ class BLEManager: NSObject, ObservableObject {
 
 extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDiscover peripheral: CBPeripheral, advertisementData: [String : Any], rssi RSSI: NSNumber) {
+        guard !isUpdatingFirmware else { return }
+        
         if deviceManager.pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
             connect(peripheral: peripheral)
         }
@@ -261,7 +286,9 @@ extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didFailToConnect peripheral: CBPeripheral, error: Error?) {
         self.isConnecting = false
         
-        if let error = error {
+        guard !isUpdatingFirmware else { return }
+        
+        if let error {
             log("Failed to connect to peripheral: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
             
             // We can't do anything like check an error code, so this is sufficient for a "bond removed" message
@@ -284,6 +311,12 @@ extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         isConnectedToPinetime = false
         notifyCharacteristic = nil
+        
+        guard !isUpdatingFirmware else { return }
+        
+        // Drop the stale peripheral so in-flight BLEFS loops become no-ops and state can't half-persist
+        infiniTime = nil
+        hasLoadedBatteryLevel = false
         
         if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
@@ -316,13 +349,15 @@ extension BLEManager: CBCentralManagerDelegate {
             disconnect()
         }
         
-        if isBluetoothOn && !isConnectedToPinetime {
+        if isBluetoothOn && !isConnectedToPinetime && !isUpdatingFirmware {
             startScanning()
         }
     }
     
     func centralManager(_ central: CBCentralManager,
                         willRestoreState dict: [String : Any]) {
+        guard !isUpdatingFirmware else { return }
+        
         if let peripherals = dict[CBCentralManagerRestoredStatePeripheralsKey] as? [CBPeripheral] {
             for peripheral in peripherals {
                 log("Restored peripheral: \(peripheral.identifier)", type: .info, caller: "willRestoreState")

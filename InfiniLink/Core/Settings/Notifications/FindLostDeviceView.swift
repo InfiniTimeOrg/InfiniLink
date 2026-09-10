@@ -7,6 +7,7 @@
 
 import SwiftUI
 import MapKit
+import Combine
 
 struct FindLostDeviceView: View {
     @Environment(\.dismiss) var dismiss

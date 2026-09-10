@@ -4,17 +4,10 @@
     "" : {
 
     },
-    " " : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : " "
-          }
-        }
-      }
-    },
     " • " : {
+
+    },
+    " BPM" : {
 
     },
     " Recovery" : {
@@ -23,7 +16,19 @@
     " step goal streak!" : {
 
     },
+    " steps" : {
+
+    },
     " You can customize this in notification settings." : {
+
+    },
+    "-" : {
+
+    },
+    "-day" : {
+
+    },
+    "–" : {
 
     },
     "[BATT]" : {
@@ -79,6 +84,9 @@
     "%@ needs to be connected to update its software." : {
 
     },
+    "%@ times" : {
+
+    },
     "%@ was last seen %@." : {
       "localizations" : {
         "en" : {
@@ -112,26 +120,39 @@
     "%@!" : {
 
     },
-    "%@...%@" : {
+    "%@..." : {
+
+    },
+    "%@'s battery must be charged to at least %@ to update its software." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@...%2$@"
+            "value" : "%1$@'s battery must be charged to at least %2$@ to update its software."
           }
         }
       }
     },
-    "%@'s battery must be charged to at least 10%% to update its software." : {
-
-    },
-    "%@%%" : {
-
-    },
     "%lld" : {
 
     },
-    "%lld " : {
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "%lld cm" : {
+
+    },
+    "%lld ft" : {
+
+    },
+    "%lld in" : {
 
     },
     "%lld more device%@ found" : {
@@ -172,7 +193,7 @@
     "1 device discovered" : {
 
     },
-    "95%" : {
+    "1 time" : {
 
     },
     "A new section will be added to your device overview." : {
@@ -191,6 +212,9 @@
 
     },
     "Add a Day" : {
+
+    },
+    "Age" : {
 
     },
     "All Exercises" : {
@@ -226,13 +250,28 @@
     "Apple Health" : {
 
     },
-    "Are you sure you want to end the exercise? %@" : {
+    "Are you sure you want to discard the active exercise?" : {
+
+    },
+    "Are you sure you want to end the exercise?" : {
+
+    },
+    "Are you sure you want to end the exercise? The duration of the exercise is too short to save." : {
 
     },
     "Are you sure you want to stop this update?" : {
 
     },
     "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Auto-Pause" : {
+
+    },
+    "Auto-Paused" : {
+
+    },
+    "Automatically pause running and walking workouts when you stop moving, and resume when you start again." : {
 
     },
     "Average" : {
@@ -281,6 +320,9 @@
     "Brightness Level" : {
 
     },
+    "Calories" : {
+
+    },
     "Cancel" : {
 
     },
@@ -300,6 +342,9 @@
 
     },
     "Clear Step Data" : {
+
+    },
+    "Close" : {
 
     },
     "Color Scheme" : {
@@ -370,6 +415,9 @@
     "Date" : {
 
     },
+    "Day" : {
+
+    },
     "Days" : {
 
     },
@@ -401,6 +449,12 @@
     "DFU" : {
 
     },
+    "Disabled" : {
+
+    },
+    "Discard" : {
+
+    },
     "Disconnect" : {
 
     },
@@ -417,7 +471,13 @@
     "Display Timeout" : {
 
     },
+    "Distance" : {
+
+    },
     "Done" : {
+
+    },
+    "Downloading" : {
 
     },
     "Enable Developer Mode" : {
@@ -433,7 +493,16 @@
     "Enable Notifications" : {
 
     },
+    "Enabled" : {
+
+    },
     "End Exercise" : {
+
+    },
+    "End Workout" : {
+
+    },
+    "Energy" : {
 
     },
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
@@ -451,15 +520,14 @@
     "Exercise" : {
 
     },
-    "Export All Data" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exporter toutes les données"
-          }
-        }
-      }
+    "Export" : {
+
+    },
+    "Export Selected Day" : {
+
+    },
+    "External Resources" : {
+
     },
     "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
       "localizations" : {
@@ -475,6 +543,9 @@
 
     },
     "Fair" : {
+
+    },
+    "Feet" : {
 
     },
     "Female" : {
@@ -514,6 +585,12 @@
       }
     },
     "Find Lost Watch" : {
+
+    },
+    "Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update." : {
+
+    },
+    "Firmware Update" : {
 
     },
     "Force ANCS" : {
@@ -572,18 +649,12 @@
     "Good morning" : {
 
     },
-    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %lld kcal." : {
+    "Great job, you reached your daily step goal today! You've walked %@ %@ and burned around %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$lld kcal."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Bravo, vous avez atteint votre objectif de pas quotidiens aujourd'hui ! Vous avez marché %1$@ %2$@ et brûlé environ %3$lld kcal."
+            "value" : "Great job, you reached your daily step goal today! You've walked %1$@ %2$@ and burned around %3$@."
           }
         }
       }
@@ -645,6 +716,12 @@
         }
       }
     },
+    "Import Zip File" : {
+
+    },
+    "Inches" : {
+
+    },
     "Include Artist" : {
 
     },
@@ -673,6 +750,9 @@
           }
         }
       }
+    },
+    "InfiniLink isn't connected to a watch." : {
+
     },
     "InfiniLink on GitHub" : {
       "localizations" : {
@@ -703,6 +783,9 @@
     "InfiniTime on GitHub" : {
 
     },
+    "Installing" : {
+
+    },
     "Installing update..." : {
       "localizations" : {
         "fr" : {
@@ -731,6 +814,9 @@
           }
         }
       }
+    },
+    "Kilojoules" : {
+
     },
     "Learn more" : {
       "localizations" : {
@@ -882,16 +968,19 @@
     "Notify on Low Battery" : {
 
     },
+    "Notify your watch when a workout starts, pauses, resumes, ends, and on each completed mile or kilometer." : {
+
+    },
     "Now" : {
 
     },
     "OK" : {
 
     },
-    "Optional" : {
+    "Other Versions" : {
 
     },
-    "Other Versions" : {
+    "Packet Receipt Notification" : {
 
     },
     "Pair New Device" : {
@@ -901,6 +990,12 @@
 
     },
     "Pause on Walk-Away" : {
+
+    },
+    "Pause Workout" : {
+
+    },
+    "Paused" : {
 
     },
     "Percent" : {
@@ -920,6 +1015,12 @@
 
     },
     "Poor" : {
+
+    },
+    "Preparing" : {
+
+    },
+    "Preparing export…" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -958,6 +1059,12 @@
         }
       }
     },
+    "Resume Workout" : {
+
+    },
+    "Route" : {
+
+    },
     "Save 100 Steps" : {
 
     },
@@ -985,7 +1092,7 @@
     "Send a notification to your devices when they're fully charged." : {
 
     },
-    "Send a notification to your devices when your iPhone drops to 20% charge." : {
+    "Send a notification to your devices when your iPhone drops to %@ charge." : {
 
     },
     "Send a notification to your devices when your iPhone's battery level reaches full capacity." : {
@@ -1045,9 +1152,6 @@
     "Several days ago" : {
 
     },
-    "Skip" : {
-
-    },
     "Software Update" : {
 
     },
@@ -1069,9 +1173,6 @@
           }
         }
       }
-    },
-    "steps" : {
-
     },
     "Steps" : {
       "localizations" : {
@@ -1102,15 +1203,11 @@
     "Stop Update" : {
 
     },
-    "Sync step and heart rate data to Apple Health." : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Synchronisation des données relatives aux pas et à la fréquence cardiaque avec Apple Health."
-          }
-        }
-      }
+    "Sync activity data from your watch to Apple Health." : {
+
+    },
+    "Synced Data" : {
+
     },
     "System" : {
 
@@ -1136,10 +1233,25 @@
     "Test Weather" : {
 
     },
-    "That's %@%% of your goal." : {
+    "That's %@ of your goal." : {
+
+    },
+    "The firmware file couldn't be read. Make sure it's a valid DFU zip." : {
+
+    },
+    "The firmware file is missing." : {
 
     },
     "The folder name cannot contain a period." : {
+
+    },
+    "The update couldn't be downloaded." : {
+
+    },
+    "The update failed." : {
+
+    },
+    "The watch's resources couldn't be updated." : {
 
     },
     "There aren't any available releases." : {
@@ -1149,6 +1261,9 @@
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {
+
+    },
+    "There's no heart rate data recorded for the selected day." : {
 
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
@@ -1204,6 +1319,9 @@
     "Transliterate to ASCII" : {
 
     },
+    "Turn off any data you don't want written to Apple Health." : {
+
+    },
     "Units" : {
 
     },
@@ -1229,6 +1347,9 @@
     "Update External Resources" : {
 
     },
+    "Update Failed" : {
+
+    },
     "Update Now" : {
       "localizations" : {
         "fr" : {
@@ -1238,6 +1359,9 @@
           }
         }
       }
+    },
+    "Updating resources" : {
+
     },
     "Upload %lld File%@" : {
       "localizations" : {
@@ -1302,6 +1426,9 @@
     "Watch" : {
 
     },
+    "Watch Haptics" : {
+
+    },
     "Watch Notifications Disabled" : {
 
     },
@@ -1331,6 +1458,12 @@
     "Weight" : {
 
     },
+    "What would you like to use \"%@\" for?" : {
+
+    },
+    "Workout" : {
+
+    },
     "Yes" : {
 
     },
@@ -1338,6 +1471,9 @@
 
     },
     "You can't disable watch notifications while iPhone notifications are on and ANCS is enabled." : {
+
+    },
+    "You covered %@." : {
 
     },
     "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {
@@ -1373,15 +1509,15 @@
         }
       }
     },
-    "You will be notified when your watch's battery level reaches %lld%%." : {
+    "You will be notified when your watch's battery level reaches %@." : {
 
     },
-    "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %lld kcal and walked for about %@!" : {
+    "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %@ and walked for about %@!" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "You're %1$lld steps away from your goal, which is about %2$@ %3$@. Once you complete your goal, you'll have burned %4$lld kcal and walked for about %5$@!"
+            "value" : "You're %1$lld steps away from your goal, which is about %2$@ %3$@. Once you complete your goal, you'll have burned %4$@ and walked for about %5$@!"
           }
         }
       }
@@ -1409,16 +1545,10 @@
     "You're so close! Just about a minute left and only %lld steps to reach your goal!" : {
 
     },
-    "You've reached your steps goal" : {
+    "You've reached your step goal" : {
 
     },
-    "Your approximate height, in %@." : {
-
-    },
-    "Your approximate weight, in %@." : {
-
-    },
-    "Your iPhone has less than 20% battery remaining." : {
+    "Your iPhone has less than %@ battery remaining." : {
 
     },
     "Your watch is estimated to be around %@ away." : {

@@ -11,10 +11,14 @@ import SwiftUI
 
 struct BLEWriteManager {
     let bleManager = BLEManager.shared
+    let deviceManager = DeviceManager.shared
     let settingsManager = NotificationSettingsManager.shared
     
     func writeToMusicApp(message: String, characteristic: CBCharacteristic) -> Void {
         guard bleManager.infiniTime != nil else { return }
+
+        let message = settingsManager.settings.transliterationEnabled ? message.asciiSafe : message
+
         guard let writeData = message.data(using: .ascii) else {
             // There's no title/artst, so update it with a blank string
             bleManager.infiniTime?.writeValue("".data(using: .ascii)!, for: characteristic, type: .withResponse)
@@ -84,45 +88,36 @@ struct BLEWriteManager {
         }
     }
     
-    func writeCurrentWeatherData(currentTemperature: Double, minimumTemperature: Double, maximumTemperature: Double, location: String, icon: UInt8)  {
-        guard let infiniTime = bleManager.infiniTime, let weatherChar = bleManager.weatherCharacteristic else { return }
+    func writeCurrentWeatherData(currentTemperature: Double, minimumTemperature: Double, maximumTemperature: Double, location: String, icon: UInt8, sunrise: Date?, sunset: Date?)  {
+        let sunTimesSupported = deviceManager.firmware.compare("1.16.0", options: .numeric) != .orderedAscending
         
-        var bytes: [UInt8] = [0, 0] // Message Type and Message Version
+        var bytes: [UInt8] = [0, sunTimesSupported ? 1 : 0] // Message Type and Message Version
         bytes.append(contentsOf: timeSince1970())
         bytes.append(contentsOf: convertTemperature(value: Int(round(currentTemperature)))) // Current temperature
         bytes.append(contentsOf: convertTemperature(value: Int(round(minimumTemperature)))) // Minimum temperature
         bytes.append(contentsOf: convertTemperature(value: Int(round(maximumTemperature)))) // Maximum temperature
         
-        guard var locationData = location.data(using: .ascii) else {
-            log("Error encoding location string", caller: "BLEWriteManager")
-            
-            for _ in 1...32 {
-                bytes.append(0)
-            }
-            
-            bytes.append(icon)
-            
-            let writeData = Data(bytes: bytes as [UInt8], count: 49)
-            if bleManager.weatherCharacteristic != nil {
-                infiniTime.writeValue(writeData, for: weatherChar, type: .withResponse)
-            }
-            return
-        }
-        
-        if locationData.count > 32 {
-            log("Weather location string is too big to send", caller: "BLEWriteManager", target: .ble)
-            for _ in 1...32 {
-                bytes.append(0)
+        let safeLocation = settingsManager.settings.transliterationEnabled ? location.asciiSafe : location
+        var locationBytes = [UInt8]()
+        if let asciiData = safeLocation.data(using: .ascii) {
+            locationBytes = Array(asciiData.prefix(32))
+            if asciiData.count > 32 {
+                log("Weather location too long, truncated to 32 bytes", caller: "BLEWriteManager", target: .ble)
             }
         } else {
-            for _ in (1...32 - locationData.count) {
-                locationData.append(0)
-            }
-            bytes.append(contentsOf: locationData)
+            log("Weather location has unsupported characters, sending without it", caller: "BLEWriteManager", target: .ble)
         }
+        locationBytes.append(contentsOf: Array(repeating: 0, count: 32 - locationBytes.count))
+        bytes.append(contentsOf: locationBytes)
+        
         bytes.append(icon)
         
-        let writeData = Data(bytes: bytes as [UInt8], count: 49)
+        if sunTimesSupported {
+            bytes.append(contentsOf: encodeSunTime(sunrise))
+            bytes.append(contentsOf: encodeSunTime(sunset))
+        }
+        
+        let writeData = Data(bytes: bytes as [UInt8], count: sunTimesSupported ? 53 : 49)
         if let weatherChar = bleManager.weatherCharacteristic, let infiniTime = bleManager.infiniTime {
             infiniTime.writeValue(writeData, for: weatherChar, type: .withResponse)
             log("Set watch current weather", type: .info, caller: "BLEWriteManager", target: .ble)
@@ -183,7 +178,7 @@ struct BLEWriteManager {
 }
 
 extension BLEWriteManager {
-    func timeSince1970() -> [UInt8] {
+    private func timeSince1970() -> [UInt8] {
         let timeInterval: UInt64 = UInt64(Date().timeIntervalSince1970)
         
         let byte1 = UInt8(timeInterval & 0x00000000000000FF)
@@ -198,9 +193,26 @@ extension BLEWriteManager {
         return [byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8]
     }
     
-    func convertTemperature(value: Int) -> [UInt8] {
+    private func convertTemperature(value: Int) -> [UInt8] {
         let byte1 = UInt8(value * 100 & 0x00FF)
         let byte2 = UInt8((value * 100 & 0xFF00) >> 8)
+        
+        return [byte1, byte2]
+    }
+    
+    private func encodeSunTime(_ date: Date?) -> [UInt8] {
+        var minutesSinceMidnight: Int16 = -1
+        
+        if let date {
+            let calendar = Calendar.current
+            let hour = calendar.component(.hour, from: date)
+            let minute = calendar.component(.minute, from: date)
+            minutesSinceMidnight = Int16(hour * 60 + minute)
+        }
+        
+        let value = UInt16(bitPattern: minutesSinceMidnight)
+        let byte1 = UInt8(value & 0x00FF)
+        let byte2 = UInt8((value & 0xFF00) >> 8)
         
         return [byte1, byte2]
     }

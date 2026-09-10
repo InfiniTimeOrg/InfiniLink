@@ -149,14 +149,17 @@ struct BatteryChartView: View {
                                 .foregroundColor(.secondary)
                             Group {
                                 if let selectedPoint {
-                                    Text(String(format: "%.0f", selectedPoint.value) + "%")
+                                    Text(selectedPoint.value / 100, format: .percent.precision(.fractionLength(0)))
                                         .animation(.default, value: selectedPoint.value)
+                                } else if visibleFirst == visibleLast {
+                                    Text(Double(visibleFirst) / 100, format: .percent.precision(.fractionLength(0)))
+                                        .animation(.default, value: visibleFirst)
                                 } else {
-                                    Text((visibleFirst == visibleLast
-                                          ? "\(visibleFirst)"
-                                          : "\(visibleFirst)–\(visibleLast)") + "%")
-                                    .animation(.default, value: visibleFirst)
-                                    .animation(.default, value: visibleLast)
+                                    (Text(Double(visibleFirst) / 100, format: .percent.precision(.fractionLength(0)))
+                                    + Text("–")
+                                    + Text(Double(visibleLast) / 100, format: .percent.precision(.fractionLength(0))))
+                                        .animation(.default, value: visibleFirst)
+                                        .animation(.default, value: visibleLast)
                                 }
                             }
                             .font(.system(.title, design: .rounded))

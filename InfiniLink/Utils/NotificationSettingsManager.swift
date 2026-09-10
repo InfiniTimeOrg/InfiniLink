@@ -9,19 +9,42 @@ import SwiftUI
 
 struct NotificationSettings: Codable {
     var watchNotificationsEnabled = true
-    
+
     var waterReminderEnabled = true
     var waterReminderAmount = 7
-    
+
     var transliterationEnabled = true
-    
+
     var batterySettings = BatterySettings()
     var heartSettings = HeartSettings()
     var goalSettings = GoalSettings()
+    var exerciseSettings = ExerciseSettings()
+
+    init() {}
+
+    // Fall back to defaults for missing keys so adding a setting doesn't wipe a user's saved config on upgrade
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        func value<T: Decodable>(_ key: CodingKeys, _ fallback: T) -> T {
+            (try? container.decode(T.self, forKey: key)) ?? fallback
+        }
+        watchNotificationsEnabled = value(.watchNotificationsEnabled, watchNotificationsEnabled)
+        waterReminderEnabled = value(.waterReminderEnabled, waterReminderEnabled)
+        waterReminderAmount = value(.waterReminderAmount, waterReminderAmount)
+        transliterationEnabled = value(.transliterationEnabled, transliterationEnabled)
+        batterySettings = value(.batterySettings, batterySettings)
+        heartSettings = value(.heartSettings, heartSettings)
+        goalSettings = value(.goalSettings, goalSettings)
+        exerciseSettings = value(.exerciseSettings, exerciseSettings)
+    }
 }
 
 struct GoalSettings: Codable {
     var stepReminderEnabled = true
+}
+
+struct ExerciseSettings: Codable {
+    var watchHapticsEnabled = true
 }
 
 struct HeartSettings: Codable {

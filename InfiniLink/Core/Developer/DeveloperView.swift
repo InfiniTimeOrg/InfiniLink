@@ -12,7 +12,8 @@ struct DeveloperView: View {
     
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
-    @AppStorage("forceAncs") var forceAncs = false
+    @AppStorage("forceAncs") var forceAncs = true
+    @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
     
     @State private var heartDay = ""
     @State private var generatedDayOffset = 0
@@ -55,6 +56,18 @@ struct DeveloperView: View {
                     DebugLogsView()
                 }
             }
+            Toggle("Force ANCS", isOn: $forceAncs)
+            Section {
+                Picker("Packet Receipt Notification", selection: $packetReceiptNotification) {
+                    ForEach([0, 10, 12, 16, 18, 20, 24], id: \.self) { value in
+                        Text(value == 0 ? "Disabled" : "\(value)").tag(value)
+                    }
+                }
+            } header: {
+                Text("Software Update")
+            } footer: {
+                Text("Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update.")
+            }
             Section("Test Data") {
                 Button("Test Weather") {
                     bleWriteManager.writeForecastWeatherData(minimumTemperature: {
@@ -82,7 +95,10 @@ struct DeveloperView: View {
                         
                         return icons
                     }())
-                    bleWriteManager.writeCurrentWeatherData(currentTemperature: Double.random(in: -2...50), minimumTemperature: Double.random(in: -2...50), maximumTemperature: Double.random(in: -2...50), location: "Location", icon: UInt8.random(in: 0...8))
+                    let daytime = Bool.random()
+                    let sunrise = Date().addingTimeInterval(daytime ? -Double.random(in: 3600...14400) : Double.random(in: 1800...5400))
+                    let sunset = Date().addingTimeInterval(daytime ? Double.random(in: 3600...14400) : Double.random(in: 7200...14400))
+                    bleWriteManager.writeCurrentWeatherData(currentTemperature: Double.random(in: -2...50), minimumTemperature: Double.random(in: -2...50), maximumTemperature: Double.random(in: -2...50), location: "Location", icon: UInt8.random(in: 0...8), sunrise: sunrise, sunset: sunset)
                 }
                 Button("Test Navigation") {
                     bleWriteManager.writeNavigationUpdate(
@@ -131,7 +147,6 @@ struct DeveloperView: View {
                     stepCountManager.setStepCount(0)
                 }
             }
-            Toggle("Force ANCS", isOn: $forceAncs)
             Section("Test HRM") {
                 TextField("Days", text: $heartDay)
                     .onSubmit {

@@ -27,14 +27,10 @@ struct DeviceView: View {
     
     var body: some View {
         Group {
-            if downloadManager.updateStarted {
-                CurrentUpdateView()
+            if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
+                RecoveryModeView()
             } else {
-                if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
-                    RecoveryModeView()
-                } else {
-                    content
-                }
+                content
             }
         }
     }
@@ -56,17 +52,21 @@ struct DeviceView: View {
                             Text(deviceManager.name)
                                 .font(.title.weight(.bold))
                             if bleManager.isBluetoothOn {
-                                Group {
-                                    Text(bleManager.connectionState) + Text(bleManager.hasLoadedBatteryLevel ? " • " : "") + Text(bleManager.hasLoadedBatteryLevel ? "\(String(format: "%.0f", bleManager.batteryLevel))%" : "")
-                                        .foregroundColor({
-                                            if bleManager.batteryLevel > 20 {
-                                                return Color.gray
-                                            } else if bleManager.batteryLevel > 10 {
-                                                return Color.orange
-                                            } else {
-                                                return Color.red
-                                            }
-                                        }())
+                                HStack(spacing: 0) {
+                                    Text(bleManager.connectionState)
+                                    if bleManager.hasLoadedBatteryLevel {
+                                        Text(" • ")
+                                        Text(bleManager.batteryLevel / 100, format: .percent.precision(.fractionLength(0)))
+                                            .foregroundColor({
+                                                if bleManager.batteryLevel > 20 {
+                                                    return Color.gray
+                                                } else if bleManager.batteryLevel > 10 {
+                                                    return Color.orange
+                                                } else {
+                                                    return Color.red
+                                                }
+                                            }())
+                                    }
                                 }
                                 .foregroundStyle(Color.gray)
                             }

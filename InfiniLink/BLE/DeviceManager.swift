@@ -234,6 +234,10 @@ extension DeviceManager {
             }
 
             try? context.save()
+
+            if characteristic.uuid == CharacteristicIdentifier.firmware {
+                DownloadManager.shared.evaluateFirmwareUpdate()
+            }
         }
     }
     

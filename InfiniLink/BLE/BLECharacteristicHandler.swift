@@ -23,12 +23,17 @@ struct BLECharacteristicHandler {
     let fitnessCalculator = FitnessCalculator()
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
-    @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
+
+    @AppStorage("healthKitLastRawStepCount") var healthKitLastRawStepCount = -1
+    @AppStorage("healthKitLastRawStepDay") var healthKitLastRawStepDay: Double = 0
+
+    @AppStorage("healthKitLastSyncedKcal") var healthKitLastSyncedKcal: Double = -1
+    @AppStorage("healthKitLastKcalDay") var healthKitLastKcalDay: Double = 0
     
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
@@ -146,11 +151,10 @@ struct BLECharacteristicHandler {
             
             bleManager.stepCount = stepCount
             if stepCount != 0 {
-                let stepsToday = chartManager.stepsToday()?.steps ?? 0
-                let stepsToAdd = max(stepCount - Int(stepsToday), 0)
-                
-                healthKitManager.writeSteps(stepsToAdd)
+                syncStepsToHealthKit(rawWatchCount: stepCount)
+                syncCaloriesToHealthKit(rawWatchCount: stepCount)
                 stepCountManager.setStepCount(stepCount)
+                ExerciseViewModel.shared.ingestWatchSteps(stepCount)
                 checkForCompletedStepGoal()
             }
         case bleManager.cbuuidList.blefsTransfer:
@@ -182,8 +186,38 @@ struct BLECharacteristicHandler {
         }
     }
     
+    // The watch reports a cumulative daily step total that resets at midnight so we sync the increase since the last reading to healthkit, and rebase silently on a new day or a counter reset so the whole day doesn't get sent to healthkit in one big value
+    private func syncStepsToHealthKit(rawWatchCount: Int) {
+        let startOfToday = Calendar.current.startOfDay(for: Date()).timeIntervalSince1970
+        let sameDay = healthKitLastRawStepDay == startOfToday
+        let previous = healthKitLastRawStepCount
+
+        if sameDay && previous >= 0 && rawWatchCount >= previous {
+            healthKitManager.writeSteps(rawWatchCount - previous)
+        }
+
+        healthKitLastRawStepCount = rawWatchCount
+        healthKitLastRawStepDay = startOfToday
+    }
+
+    // While a workout is running, its own hrm based energy covers that window so the write is skipped there, but keep the baseline advancing so nothing jumps forward
+    private func syncCaloriesToHealthKit(rawWatchCount: Int) {
+        let startOfToday = Calendar.current.startOfDay(for: Date()).timeIntervalSince1970
+        let sameDay = healthKitLastKcalDay == startOfToday
+        let totalKcal = Double(fitnessCalculator.calculateCaloriesBurned(steps: rawWatchCount))
+        let duringWorkout = ExerciseViewModel.shared.currentExercise != nil
+
+        if !duringWorkout && sameDay && healthKitLastSyncedKcal >= 0 && totalKcal >= healthKitLastSyncedKcal {
+            healthKitManager.saveCalories(kcal: totalKcal - healthKitLastSyncedKcal)
+        }
+
+        healthKitLastSyncedKcal = totalKcal
+        healthKitLastKcalDay = startOfToday
+    }
+
     private func checkForCompletedStepGoal() {
-        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && remindOnStepGoalCompletion {
+        let notifSettings = NotificationSettingsManager.shared.settings
+        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && notifSettings.watchNotificationsEnabled && notifSettings.goalSettings.stepReminderEnabled {
             let currentTime = Date().timeIntervalSince1970
             let twentyFourHours: TimeInterval = 86400
             
@@ -198,7 +232,8 @@ struct BLECharacteristicHandler {
         
         healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManager.heartRate)
         chartManager.addHeartRateDataPoint(heartRate: Double(bpm), time: Date())
-        
+        ExerciseViewModel.shared.ingestHeartRate(bpm)
+
         notificationManager.sendHeartRangeNotification(bpm)
     }
 }

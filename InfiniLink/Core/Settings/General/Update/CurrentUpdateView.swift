@@ -11,14 +11,28 @@ struct CurrentUpdateView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     @ObservedObject var dfuUpdater = DFUUpdater.shared
-    @ObservedObject var downloadManager = DownloadManager.shared
     
     @State private var backgroundScaled = true
     @State private var showConfirmation = false
     
-    func cancelUpdate() {
-        dfuUpdater.stopTransfer(abort: true)
-        downloadManager.updateStarted = false
+    private var failureMessage: String? {
+        if case .failed(let message) = dfuUpdater.stage { return message }
+        return nil
+    }
+    
+    private var statusText: String {
+        switch dfuUpdater.stage {
+        case .idle:
+            return NSLocalizedString("Preparing", comment: "")
+        case .downloading:
+            return NSLocalizedString("Downloading", comment: "")
+        case .uploadingResources:
+            return dfuUpdater.statusDetail.isEmpty ? NSLocalizedString("Updating resources", comment: "") : dfuUpdater.statusDetail
+        case .installing:
+            return dfuUpdater.statusDetail.isEmpty ? NSLocalizedString("Installing", comment: "") : dfuUpdater.statusDetail
+        case .failed:
+            return ""
+        }
     }
     
     var body: some View {
@@ -30,29 +44,50 @@ struct CurrentUpdateView: View {
                 .scaleEffect(backgroundScaled ? 1.4 : 1)
             VStack(spacing: 24) {
                 VStack(spacing: 8) {
-                    Text("\(dfuUpdater.dfuState.isEmpty ? "Preparing" : dfuUpdater.dfuState)...\(dfuUpdater.percentComplete == 0 ? "" : String(format: "%.0f", dfuUpdater.percentComplete) + "%")")
+                    if let failureMessage {
+                        Text("Update Failed")
+                            .font(.title.weight(.bold))
+                        Text(failureMessage)
+                            .font(.system(size: 18))
+                            .foregroundStyle(.secondary)
+                    } else {
+                        HStack(spacing: 0) {
+                            Text("\(statusText)...")
+                            if dfuUpdater.percentComplete != 0 {
+                                Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
+                            }
+                        }
                         .font(.system(size: 22))
                         .foregroundStyle(.secondary)
-                    Text(deviceManager.name)
-                        .font(.title.weight(.bold))
-                }
-                Button {
-                    // If we're only just starting the update, don't show a confirmation
-                    if dfuUpdater.dfuState != "Connecting" || dfuUpdater.dfuState != "Starting" {
-                        showConfirmation = true
-                    } else {
-                        cancelUpdate()
+                        Text(deviceManager.name)
+                            .font(.title.weight(.bold))
                     }
-                } label: {
-                    Text("Cancel Update")
-                        .padding(14)
-                        .font(.body.weight(.semibold))
-                        .background(Color.red)
-                        .foregroundStyle(.white)
-                        .clipShape(Capsule())
                 }
-                .disabled(dfuUpdater.isUpdatingResources)
-                .opacity(dfuUpdater.isUpdatingResources ? 0.5 : 1)
+                if failureMessage != nil {
+                    Button {
+                        dfuUpdater.dismissError()
+                    } label: {
+                        Text("Close")
+                            .padding(14)
+                            .font(.body.weight(.semibold))
+                            .background(Color.gray)
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                    }
+                } else {
+                    Button {
+                        showConfirmation = true
+                    } label: {
+                        Text("Cancel Update")
+                            .padding(14)
+                            .font(.body.weight(.semibold))
+                            .background(Color.red)
+                            .foregroundStyle(.white)
+                            .clipShape(Capsule())
+                    }
+                    .disabled(dfuUpdater.stage == .uploadingResources)
+                    .opacity(dfuUpdater.stage == .uploadingResources ? 0.5 : 1)
+                }
             }
             .frame(maxHeight: .infinity)
             .multilineTextAlignment(.center)
@@ -65,7 +100,7 @@ struct CurrentUpdateView: View {
         }
         .alert("Are you sure you want to stop this update?", isPresented: $showConfirmation) {
             Button(role: .destructive) {
-                cancelUpdate()
+                dfuUpdater.cancel()
             } label: {
                 Text("Stop Update")
             }

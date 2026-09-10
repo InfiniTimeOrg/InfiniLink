@@ -18,11 +18,17 @@ class PersonalizationController: ObservableObject {
         case male = 0
         case female = 1
     }
-    
+    enum EnergyUnit: Int {
+        case kilocalorie = 0
+        case kilojoule = 1
+    }
+
     @AppStorage("weight") var weight: Double?
     @AppStorage("height") var height: Double?
+    @AppStorage("age") var age: Int?
     @AppStorage("units") var units: Unit = .metric // TODO: change this to use system setting
     @AppStorage("gender") var gender: Gender = .male
+    @AppStorage("energyUnit") var energyUnit: EnergyUnit = .kilocalorie
     
     @AppStorage("showSetupSheet") var showSetupSheet = true
     
@@ -36,28 +42,26 @@ class PersonalizationController: ObservableObject {
     }
     
     var calculatedWeight: Double {
-        guard let weight = self.weight, weight > 0 else {
-            return gender == .male ? avgMaleWeight : avgFemaleWeight
-        }
-        
-        if units == .imperial {
-            // Convert from kg to lbs
-            return weight * 2.205
-        } else {
-            return weight
-        }
+        var kg = gender == .male ? avgMaleWeight : avgFemaleWeight
+        if let weight, weight > 0 { kg = weight }
+
+        return units == .imperial ? kg * 2.205 : kg
+    }
+
+    var calculatedAge: Double {
+        guard let age = self.age, age > 0 else { return 30 }
+
+        return Double(age)
+    }
+
+    var calculatedWeightKg: Double {
+        return units == .imperial ? calculatedWeight / 2.205 : calculatedWeight
     }
 
     var calculatedHeight: Double {
-        guard let height = self.height, height > 0 else {
-            return gender == .male ? avgMaleHeight : avgFemaleHeight
-        }
-        
-        if units == .imperial {
-            // Convert from cm to in
-            return height / 2.54
-        } else {
-            return height
-        }
+        var cm = gender == .male ? avgMaleHeight : avgFemaleHeight
+        if let height, height > 0 { cm = height }
+
+        return units == .imperial ? cm / 2.54 : cm
     }
 }

@@ -20,18 +20,17 @@ class NotificationManager: ObservableObject {
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     @AppStorage("lastHostBatteryLevelNotified") var lastHostBatteryLevelNotified: Double = -1
     
-    @AppStorage("minHeartRange") var minHeartRange = 40
-    @AppStorage("maxHeartRange") var maxHeartRange = 150
-    @AppStorage("heartRangeReminder") var heartRangeReminder = false
     @AppStorage("lastTimeMinHeartRangeNotified") var lastTimeMinHeartRangeNotified: Double = 0
     @AppStorage("lastTimeMaxHeartRangeNotified") var lastTimeMaxHeartRangeNotified: Double = 0
-    
+
     @Published var canSendHostNotifs = false
-    
+
     private let bleWriteManager = BLEWriteManager()
     private let bleManager = BLEManager.shared
-    private let settings = NotificationSettingsManager.shared.settings
-    private let batterySettings = NotificationSettingsManager.shared.settings.batterySettings
+
+    // Read live so a settings change mid session updates
+    private var settings: NotificationSettings { NotificationSettingsManager.shared.settings }
+    private var batterySettings: BatterySettings { settings.batterySettings }
     
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
@@ -83,21 +82,24 @@ extension NotificationManager {
         let level = UIDevice.current.batteryLevel * 100
         let currentTime = Date().timeIntervalSince1970
         
-        let fullNotif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
-        let lowNotif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: NSLocalizedString("Your iPhone has less than 20% battery remaining.", comment: ""))
-        
-        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return } // Don't receive more than one notif in thirty minutes
+        // At most one iPhone battery notification every thirty minutes
+        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
         
         if state == .full {
-            sendNotifications(fullNotif, batterySettings.fullBattery.iphone)
+            let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
+            sendNotifications(notif, batterySettings.fullBattery.iphone)
         } else if level == 20 && state != .charging {
-            sendNotifications(lowNotif, batterySettings.lowBattery.iphone)
+            let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: String(localized: "Your iPhone has less than \(0.2, format: .percent) battery remaining."))
+            sendNotifications(notif, batterySettings.lowBattery.iphone)
         }
+        
         lastHostBatteryLevelNotified = currentTime
     }
     
     private func sendNotifications(_ notif: AppNotification, _ settings: NotifySettings) {
-        if (!settings.sendToiPhone || !bleManager.ancsAuthorized) && settings.sendToWatch { // Don't send a notif to the watch while ancs is enabled and we're already sending to the host because ancs will already forward it (causing a duplicate)
+        // Skip the direct-to-watch send when ANCS is already mirroring the iPhone notification to the watch
+        let ancsWillMirrorToWatch = settings.sendToiPhone && bleManager.ancsAuthorized
+        if settings.sendToWatch && !ancsWillMirrorToWatch {
             bleWriteManager.sendNotification(notif)
         }
         if settings.sendToiPhone {
@@ -108,17 +110,18 @@ extension NotificationManager {
     func checkToSendBatteryNotifications() {
         let bat = bleManager.batteryLevel
         
-        guard settings.watchNotificationsEnabled && (lastBatteryLevelNotified == -1 || lastBatteryLevelNotified != bat) else { return } // Don't send a notification if we've already sent one with the same battery levelelse { return }
+        // Skip if watch notifications are off, or we already notified at this level
+        guard settings.watchNotificationsEnabled, bat != lastBatteryLevelNotified else { return }
         
-        if batterySettings.customNotificationEnabled && bat == Double(batterySettings.customNotificationPercentage) {
-            self.sendBatteryNotification(custom: true)
+        if batterySettings.customNotificationEnabled && bat == batterySettings.customNotificationPercentage {
+            sendBatteryNotification(custom: true)
         } else if bat == 100 {
-            self.sendFullyChargedBatteryNotification()
+            sendFullyChargedBatteryNotification()
         } else if batterySettings.lowBattery.enabled && (bat == 20 || bat == 10 || bat == 5) {
-            self.sendBatteryNotification(custom: false)
+            sendBatteryNotification(custom: false)
         }
         
-        self.lastBatteryLevelNotified = bat
+        lastBatteryLevelNotified = bat
     }
     
     private func sendBatteryNotification(custom: Bool) {
@@ -143,21 +146,22 @@ extension NotificationManager {
 // MARK: Health
 extension NotificationManager {
     func sendHeartRangeNotification(_ bpm: Int) {
-        guard heartRangeReminder else { return } // Disable this notification if the user has turned them off
-        
+        let heartSettings = settings.heartSettings
+        guard settings.watchNotificationsEnabled, heartSettings.rangeReminderEnabled else { return }
+
         let currentTime = Date().timeIntervalSince1970
         let tenMinutes = TimeInterval(60 * 10)
-        
+
         // Don't localize these notifications because InfiniTime doesn't (most) characters from other languages
-        if bpm < minHeartRange, (currentTime - lastTimeMinHeartRangeNotified) >= tenMinutes {
+        if bpm < heartSettings.minRange, (currentTime - lastTimeMinHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(minHeartRange) BPM", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(heartSettings.minRange) BPM", comment: ""))
             )
             self.lastTimeMinHeartRangeNotified = currentTime
         }
-        if bpm > maxHeartRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
+        if bpm > heartSettings.maxRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(maxHeartRange) BPM", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(heartSettings.maxRange) BPM", comment: ""))
             )
             self.lastTimeMaxHeartRangeNotified = currentTime
         }
@@ -209,9 +213,11 @@ extension NotificationManager {
 // MARK: Goals
 extension NotificationManager {
     func sendStepGoalReachedNotification() {
-        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your steps goal", comment: ""))
+        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your step goal", comment: ""))
         
-        self.bleWriteManager.sendNotification(notif)
+        if !bleManager.ancsAuthorized {
+            self.bleWriteManager.sendNotification(notif)
+        }
         self.sendNotificationToHost(notif)
     }
 }

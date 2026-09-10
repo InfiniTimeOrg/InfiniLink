@@ -37,7 +37,6 @@ class DownloadManager: NSObject, ObservableObject {
     lazy var dfuUpdater = DFUUpdater.shared
     
     @Published var tasks: [URLSessionTask] = []
-    @Published var downloading = false
     @Published var autoUpgrade: Result!
     @Published var lastCheck: Date!
     
@@ -55,16 +54,17 @@ class DownloadManager: NSObject, ObservableObject {
     @Published var hasCheckedForUpdatesBefore: Bool = false
     @Published var updateStarted: Bool = false
     @Published var updateAvailable: Bool = false
-    @Published var startTransfer: Bool = false
     @Published var loadingAppReleases: Bool = false
     @Published var loadingReleases: Bool = false
     @Published var externalResources: Bool = false
     @Published var appUpdate: AppVersion?
     
     private lazy var urlSession = URLSession(configuration: .default, delegate: self, delegateQueue: nil)
-    private var downloadTask: URLSessionDownloadTask!
-    private var isDownloadingResources = false
-    private var hasDownloadedResources = false
+    private var downloadTask: URLSessionDownloadTask?
+    
+    private enum DownloadItem { case firmware, resources }
+    private var downloadQueue: [DownloadItem] = []
+    private var activeDownload: DownloadItem?
     
     struct Asset: Codable {
         let id: Int
@@ -181,30 +181,38 @@ class DownloadManager: NSObject, ObservableObject {
         return releaseComponents.count > currentComponents.count ? newVersion : nil
     }
     
-    func checkForUpdates(currentVersion: String) -> Bool {
+    func checkForFirmwareUpdate() {
         getUpdates()
+        evaluateFirmwareUpdate()
+    }
+    
+    // Re-run whenever the release list or the connected firmware changes, not just at launch
+    func evaluateFirmwareUpdate() {
+        guard !(dfuUpdater.local && dfuUpdater.firmwareSelected) else { return } // The user picked a local file; don't override it
         
-        for i in releases {
-            if i.tag_name.first != "v" {
-                let comparison = currentVersion.compare(i.tag_name, options: .numeric)
-                if comparison == .orderedAscending && comparison != .orderedSame {
-                    dfuUpdater.firmwareFilename = chooseAsset(response: i).name
-                    dfuUpdater.firmwareSelected = true
-                    dfuUpdater.local = false
-                    
-                    updateAvailable = true
-                    updateVersion = i.tag_name
-                    updateBody = i.body
-                    updateSize = chooseAsset(response: i).size
-                    autoUpgrade = i
-                    browserDownloadUrl = chooseAsset(response: i).browser_download_url
-                    browserDownloadResourcesUrl = chooseResources(response: i).browser_download_url
-                    
-                    return true
-                }
-            }
+        let installed = DeviceManager.shared.firmware
+        let latest = releases
+            .filter { $0.tag_name.first != "v" }
+            .max { $0.tag_name.compare($1.tag_name, options: .numeric) == .orderedAscending }
+        
+        guard let latest, installed.compare(latest.tag_name, options: .numeric) == .orderedAscending else {
+            updateAvailable = false
+            return
         }
-        return false
+        
+        let asset = chooseAsset(response: latest)
+        
+        dfuUpdater.firmwareFilename = asset.name
+        dfuUpdater.firmwareSelected = true
+        dfuUpdater.local = false
+        
+        updateAvailable = true
+        updateVersion = latest.tag_name
+        updateBody = latest.body
+        updateSize = asset.size
+        autoUpgrade = latest
+        browserDownloadUrl = asset.browser_download_url
+        browserDownloadResourcesUrl = chooseResources(response: latest).browser_download_url
     }
     
     func getUpdates() {
@@ -223,7 +231,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     func getInfiniLinkReleases() {
         self.loadingAppReleases = true
-        self.releases = []
         
         URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniLink/releases")!)) { data, response, error in
             if let data = data {
@@ -256,7 +263,6 @@ class DownloadManager: NSObject, ObservableObject {
     
     func getInfiniTimeReleases() {
         self.loadingReleases = true
-        self.releases = []
         
         URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases")!)) { data, response, error in
             if let data = data {
@@ -264,11 +270,8 @@ class DownloadManager: NSObject, ObservableObject {
                     let result = try JSONDecoder().decode([Result].self, from: data)
                     
                     DispatchQueue.main.async {
-                        for release in result {
-                            if release.tag_name.first != "v" {
-                                self.releases.append(release)
-                            }
-                        }
+                        self.releases = result.filter { $0.tag_name.first != "v" }
+                        self.evaluateFirmwareUpdate()
                     }
                 } catch {
                     log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
@@ -299,11 +302,44 @@ class DownloadManager: NSObject, ObservableObject {
         return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
     }
     
-    func startDownload(url: URL) {
-        self.downloading = true
+    func startSoftwareUpdate(externalResourcesOnly: Bool) {
+        dfuUpdater.beginDownloading()
         
-        self.downloadTask = urlSession.downloadTask(with: URLRequest(url: url))
-        self.downloadTask.resume()
+        if externalResourcesOnly {
+            downloadQueue = [.resources]
+        } else if dfuUpdater.updateResourcesWithFirmware {
+            downloadQueue = [.firmware, .resources]
+        } else {
+            downloadQueue = [.firmware]
+        }
+        
+        downloadNext()
+    }
+    
+    func cancelActiveDownload() {
+        downloadTask?.cancel()
+        downloadTask = nil
+        downloadQueue = []
+        activeDownload = nil
+    }
+    
+    private func downloadNext() {
+        guard let item = downloadQueue.first else {
+            activeDownload = nil
+            if externalResources {
+                dfuUpdater.installResourcesOnly()
+            } else {
+                dfuUpdater.install()
+            }
+            return
+        }
+        
+        downloadQueue.removeFirst()
+        activeDownload = item
+        
+        let url = item == .resources ? browserDownloadResourcesUrl : browserDownloadUrl
+        downloadTask = urlSession.downloadTask(with: URLRequest(url: url))
+        downloadTask?.resume()
     }
     
     func clearUpdate() {
@@ -314,8 +350,8 @@ class DownloadManager: NSObject, ObservableObject {
         browserDownloadResourcesUrl = URL(fileURLWithPath: "")
         updateStarted = false
         updateAvailable = false
-        startTransfer = false
         externalResources = false
+        cancelActiveDownload()
     }
     
     private func updateTasks() {
@@ -332,53 +368,42 @@ extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
     }
     
     func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
+        guard let item = activeDownload else { return }
+        let filename = item == .resources ? "resources.zip" : "firmware.zip"
+        
         do {
             let documentsURL = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-            let savedURL = documentsURL.appendingPathComponent(
-                isDownloadingResources ? "resources.zip" : "firmware.zip")
+            let savedURL = documentsURL.appendingPathComponent(filename)
             
-            // check for existing file and delete it if there is anything.
             if FileManager.default.fileExists(atPath: savedURL.path) {
                 try? FileManager.default.removeItem(at: savedURL)
             }
-            
-            // move downloaded file out of ephemeral storage and tell DFU where to look
             try FileManager.default.moveItem(at: location, to: savedURL)
             
-            DispatchQueue.main.async { [self] in
-                if isDownloadingResources && dfuUpdater.resourceURL == nil {
-                    dfuUpdater.resourceURL = savedURL
-                    hasDownloadedResources = true
-                } else {
-                    dfuUpdater.firmwareURL = savedURL
+            DispatchQueue.main.async {
+                switch item {
+                case .firmware: self.dfuUpdater.firmwareURL = savedURL
+                case .resources: self.dfuUpdater.resourceURL = savedURL
                 }
+                self.downloadNext()
             }
         } catch {
-            log("Error downloading resource or firmware: \(error.localizedDescription)", caller: "DownloadManager")
-        }
-        
-        DispatchQueue.main.async { [self] in
-            if !hasDownloadedResources && dfuUpdater.updateResourcesWithFirmware {
-                isDownloadingResources = true
-                startDownload(url: browserDownloadResourcesUrl)
-            } else {
-                if startTransfer {
-                    startTransfer = false
-                    downloading = false
-                    
-                    if externalResources {
-                        BLEFSHandler.shared.uploadExternalResources {}
-                    } else {
-                        dfuUpdater.downloadTransfer()
-                    }
-                }
+            log("Error saving downloaded \(filename): \(error.localizedDescription)", caller: "DownloadManager")
+            DispatchQueue.main.async {
+                self.cancelActiveDownload()
+                self.dfuUpdater.reportDownloadFailure()
             }
         }
     }
     
     func urlSession(_: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
-        if let error = error {
-            log(error.localizedDescription, caller: "DownloadManager")
+        guard let error else { return }
+        log(error.localizedDescription, caller: "DownloadManager")
+        
+        DispatchQueue.main.async {
+            guard self.activeDownload != nil else { return }
+            self.cancelActiveDownload()
+            self.dfuUpdater.reportDownloadFailure()
         }
     }
 }

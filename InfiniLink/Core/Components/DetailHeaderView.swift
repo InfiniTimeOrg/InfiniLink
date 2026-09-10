@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct Header {
     let title: String
