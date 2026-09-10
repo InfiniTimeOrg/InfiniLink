@@ -20,18 +20,17 @@ class NotificationManager: ObservableObject {
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     @AppStorage("lastHostBatteryLevelNotified") var lastHostBatteryLevelNotified: Double = -1
     
-    @AppStorage("minHeartRange") var minHeartRange = 40
-    @AppStorage("maxHeartRange") var maxHeartRange = 150
-    @AppStorage("heartRangeReminder") var heartRangeReminder = false
     @AppStorage("lastTimeMinHeartRangeNotified") var lastTimeMinHeartRangeNotified: Double = 0
     @AppStorage("lastTimeMaxHeartRangeNotified") var lastTimeMaxHeartRangeNotified: Double = 0
-    
+
     @Published var canSendHostNotifs = false
-    
+
     private let bleWriteManager = BLEWriteManager()
     private let bleManager = BLEManager.shared
-    private let settings = NotificationSettingsManager.shared.settings
-    private let batterySettings = NotificationSettingsManager.shared.settings.batterySettings
+
+    // Read live so a settings change mid session updates
+    private var settings: NotificationSettings { NotificationSettingsManager.shared.settings }
+    private var batterySettings: BatterySettings { settings.batterySettings }
     
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
@@ -147,21 +146,22 @@ extension NotificationManager {
 // MARK: Health
 extension NotificationManager {
     func sendHeartRangeNotification(_ bpm: Int) {
-        guard heartRangeReminder else { return } // Disable this notification if the user has turned them off
-        
+        let heartSettings = settings.heartSettings
+        guard settings.watchNotificationsEnabled, heartSettings.rangeReminderEnabled else { return }
+
         let currentTime = Date().timeIntervalSince1970
         let tenMinutes = TimeInterval(60 * 10)
-        
+
         // Don't localize these notifications because InfiniTime doesn't (most) characters from other languages
-        if bpm < minHeartRange, (currentTime - lastTimeMinHeartRangeNotified) >= tenMinutes {
+        if bpm < heartSettings.minRange, (currentTime - lastTimeMinHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(minHeartRange) BPM", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(heartSettings.minRange) BPM", comment: ""))
             )
             self.lastTimeMinHeartRangeNotified = currentTime
         }
-        if bpm > maxHeartRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
+        if bpm > heartSettings.maxRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(maxHeartRange) BPM", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(heartSettings.maxRange) BPM", comment: ""))
             )
             self.lastTimeMaxHeartRangeNotified = currentTime
         }

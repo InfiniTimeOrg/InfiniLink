@@ -23,7 +23,6 @@ struct BLECharacteristicHandler {
     let fitnessCalculator = FitnessCalculator()
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
-    @AppStorage("remindOnStepGoalCompletion") var remindOnStepGoalCompletion = true
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
@@ -217,7 +216,8 @@ struct BLECharacteristicHandler {
     }
 
     private func checkForCompletedStepGoal() {
-        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && remindOnStepGoalCompletion {
+        let notifSettings = NotificationSettingsManager.shared.settings
+        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && notifSettings.watchNotificationsEnabled && notifSettings.goalSettings.stepReminderEnabled {
             let currentTime = Date().timeIntervalSince1970
             let twentyFourHours: TimeInterval = 86400
             

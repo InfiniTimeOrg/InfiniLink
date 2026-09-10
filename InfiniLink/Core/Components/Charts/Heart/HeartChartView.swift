@@ -16,12 +16,16 @@ struct HeartChartDataPoint: Identifiable {
 
 struct HeartChartView: View {
     @ObservedObject var bleManager = BLEManager.shared
-    
+    @ObservedObject private var notificationSettings = NotificationSettingsManager.shared
+
     @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
-    @AppStorage("minHeartRange") private var minHeartRange = 40
-    @AppStorage("maxHeartRange") private var maxHeartRange = 200
-    
+
     @State private var points = [HeartChartDataPoint]()
+
+    private var heartRange: ClosedRange<Int> {
+        let heart = notificationSettings.settings.heartSettings
+        return heart.minRange...Swift.max(heart.minRange + 1, heart.maxRange)
+    }
 
     func load() async {
         points = await ChartManager.shared.heartRateSamples().map { HeartChartDataPoint(date: $0.date, value: $0.value) }
@@ -55,7 +59,7 @@ struct HeartChartView: View {
                             .foregroundStyle(Color.red)
                         }
                         .frame(height: 280)
-                        .chartYScale(domain: minHeartRange...maxHeartRange)
+                        .chartYScale(domain: heartRange)
                     } header: {
                         VStack(alignment: .leading) {
                             Text(points.count > 1 ? "Range" : "No Data")

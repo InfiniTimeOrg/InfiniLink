@@ -143,6 +143,25 @@
     "%lld" : {
 
     },
+    "%lld %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld %2$@"
+          }
+        }
+      }
+    },
+    "%lld cm" : {
+
+    },
+    "%lld ft" : {
+
+    },
+    "%lld in" : {
+
+    },
     "%lld more device%@ found" : {
       "localizations" : {
         "en" : {
@@ -175,6 +194,9 @@
 
     },
     "Add 2" : {
+
+    },
+    "Age" : {
 
     },
     "All Exercises" : {
@@ -493,6 +515,9 @@
     "Fair" : {
 
     },
+    "Feet" : {
+
+    },
     "Female" : {
       "localizations" : {
         "fr" : {
@@ -657,6 +682,9 @@
           }
         }
       }
+    },
+    "Inches" : {
+
     },
     "Include Artist" : {
 
@@ -904,9 +932,6 @@
     "OK" : {
 
     },
-    "Optional" : {
-
-    },
     "Other Versions" : {
 
     },
@@ -1074,9 +1099,6 @@
 
     },
     "Several days ago" : {
-
-    },
-    "Skip" : {
 
     },
     "Software Update" : {
@@ -1461,12 +1483,6 @@
 
     },
     "You've reached your step goal" : {
-
-    },
-    "Your approximate height, in %@." : {
-
-    },
-    "Your approximate weight, in %@." : {
 
     },
     "Your iPhone has less than %@ battery remaining." : {
