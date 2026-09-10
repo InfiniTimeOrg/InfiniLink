@@ -499,6 +499,9 @@
     "Export Selected Day" : {
 
     },
+    "External Resources" : {
+
+    },
     "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
       "localizations" : {
         "fr" : {
@@ -558,6 +561,9 @@
 
     },
     "Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update." : {
+
+    },
+    "Firmware Update" : {
 
     },
     "Force ANCS" : {
@@ -682,6 +688,9 @@
           }
         }
       }
+    },
+    "Import Zip File" : {
+
     },
     "Inches" : {
 
@@ -1396,6 +1405,9 @@
       }
     },
     "Weight" : {
+
+    },
+    "What would you like to use \"%@\" for?" : {
 
     },
     "Workout" : {

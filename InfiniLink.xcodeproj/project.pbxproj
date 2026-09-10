@@ -84,6 +84,7 @@
 		E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */; };
 		E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */; };
 		E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */; };
+		E0C0DE00000000000000B002 /* ImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B001 /* ImportManager.swift */; };
 		E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */ = {isa = PBXBuildFile; productRef = E0A7C0952CB1EEB50042A12D /* NordicDFU */; };
 		E0A7C0982CB227060042A12D /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0972CB227060042A12D /* HeartView.swift */; };
 		E0A7C09A2CB2270D0042A12D /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0992CB2270D0042A12D /* StepsView.swift */; };
@@ -244,6 +245,7 @@
 		E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdateView.swift; sourceTree = "<group>"; };
 		E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUUpdater.swift; sourceTree = "<group>"; };
 		E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadManager.swift; sourceTree = "<group>"; };
+		E0C0DE00000000000000B001 /* ImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportManager.swift; sourceTree = "<group>"; };
 		E0A7C0972CB227060042A12D /* HeartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeartView.swift; sourceTree = "<group>"; };
 		E0A7C0992CB2270D0042A12D /* StepsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StepsView.swift; sourceTree = "<group>"; };
 		E0A7C09B2CB234450042A12D /* AboutSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutSettingsView.swift; sourceTree = "<group>"; };
@@ -542,6 +544,7 @@
 				E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */,
 				E05999FD2CB462BF00D64E0B /* ChartManager.swift */,
 				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
+				E0C0DE00000000000000B001 /* ImportManager.swift */,
 				E05999FF2CB46EB100D64E0B /* StepCountManager.swift */,
 				E0A7C07C2CB1AD370042A12D /* MusicController.swift */,
 				E05999BB2CB336AE00D64E0B /* HealthKitManager.swift */,
@@ -918,6 +921,7 @@
 				E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */,
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
+				E0C0DE00000000000000B002 /* ImportManager.swift in Sources */,
 				E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */,
 				E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */,
 				E05999BC2CB336AE00D64E0B /* HealthKitManager.swift in Sources */,
