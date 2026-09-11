@@ -25,6 +25,9 @@
     "-" : {
 
     },
+    "--" : {
+
+    },
     "-day" : {
 
     },
@@ -259,6 +262,12 @@
     "Average" : {
 
     },
+    "Average Charge Time" : {
+
+    },
+    "Average Discharge Time" : {
+
+    },
     "Averaging at %@ BPM, your heart rate ranged from %lld to %lld BPM." : {
       "localizations" : {
         "en" : {
@@ -276,6 +285,9 @@
 
     },
     "Battery Alert" : {
+
+    },
+    "Battery Health" : {
 
     },
     "Battery Low" : {
@@ -485,6 +497,12 @@
 
     },
     "Error fetching weather" : {
+
+    },
+    "Estimated Battery Uptime" : {
+
+    },
+    "Estimated from the last 90 days of charge and discharge history." : {
 
     },
     "Excellent" : {
@@ -906,6 +924,9 @@
 
     },
     "No Logs" : {
+
+    },
+    "Not enough charge history yet. Check back after a few charge cycles." : {
 
     },
     "Nothing matched your search. Ensure your spelling is correct and try again." : {

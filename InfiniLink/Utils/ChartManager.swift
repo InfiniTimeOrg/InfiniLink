@@ -37,7 +37,13 @@ class ChartManager: ObservableObject {
     var sevenDayPredicate: NSPredicate {
         let deviceId = deviceManager.pairedDeviceID ?? ""
         let start = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        
+
+        return NSPredicate(format: predicateString, deviceId, start as NSDate)
+    }
+    var ninetyDayPredicate: NSPredicate {
+        let deviceId = deviceManager.pairedDeviceID ?? ""
+        let start = Calendar.current.date(byAdding: .day, value: -90, to: Date())!
+
         return NSPredicate(format: predicateString, deviceId, start as NSDate)
     }
     var dayPredicate: NSPredicate {
@@ -104,12 +110,22 @@ class ChartManager: ObservableObject {
     
     func addBatteryDataPoint(batteryLevel: Double, time: Date) {
         let context = persistenceController.container.newBackgroundContext()
+        let deviceId = deviceManager.pairedDeviceID
         context.perform {
+            let lastRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
+            lastRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId ?? "")
+            lastRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+            lastRequest.fetchLimit = 1
+
+            if let last = try? context.fetch(lastRequest).first, last.value == batteryLevel {
+                return
+            }
+
             let batteryDataPoint = BatteryDataPoint(context: context)
             batteryDataPoint.value = batteryLevel
             batteryDataPoint.timestamp = time
-            batteryDataPoint.deviceId = self.deviceManager.pairedDeviceID
-            
+            batteryDataPoint.deviceId = deviceId
+
             do {
                 try context.save()
             } catch {
