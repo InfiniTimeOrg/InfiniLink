@@ -1161,6 +1161,15 @@
     "Stop Update" : {
 
     },
+    "Sunrise is at %@ tomorrow." : {
+
+    },
+    "Sunrise is at %@." : {
+
+    },
+    "Sunset is at %@ tonight." : {
+
+    },
     "Sync activity data from your watch to Apple Health." : {
 
     },
