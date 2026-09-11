@@ -130,7 +130,7 @@
     "%@!" : {
 
     },
-    "%@..." : {
+    "%@... " : {
 
     },
     "%@'s battery must be charged to at least %@ to update its software." : {
@@ -463,6 +463,9 @@
 
     },
     "Downloading" : {
+
+    },
+    "Dump Motion Activity" : {
 
     },
     "Enable Developer Mode" : {
