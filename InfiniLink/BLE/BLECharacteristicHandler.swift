@@ -29,6 +29,7 @@ struct BLECharacteristicHandler {
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
     @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
+    @AppStorage("lastStatsSyncTimestamp") var lastStatsSyncTimestamp: Double = 0
 
     @AppStorage("healthKitLastRawStepCount") var healthKitLastRawStepCount = -1
     @AppStorage("healthKitLastRawStepDay") var healthKitLastRawStepDay: Double = 0
@@ -143,7 +144,7 @@ struct BLECharacteristicHandler {
             bleManager.hasLoadedBatteryLevel = true
             
             chartManager.addBatteryDataPoint(batteryLevel: Double(batData[0]), time: Date())
-            
+
             notificationManager.checkToSendBatteryNotifications()
         case bleManager.cbuuidList.stepCount:
             guard let value = characteristic.value else { break }
@@ -158,6 +159,7 @@ struct BLECharacteristicHandler {
                 ExerciseViewModel.shared.ingestWatchSteps(stepCount)
                 checkForCompletedStepGoal()
             }
+            syncStatsIfNeeded()
         case bleManager.cbuuidList.blefsTransfer:
             guard let value = characteristic.value else { break }
             
@@ -184,13 +186,15 @@ struct BLECharacteristicHandler {
             // Only update every five seconds
             if timeDifference > 5 {
                 notificationManager.checkAndNotifyForWaterReminders()
-                
+
                 weatherController.checkForUpdate()
-                
+
                 notificationManager.checkHostBatteryState()
-                
+
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
+
+            syncStatsIfNeeded()
         default:
             break
         }
@@ -225,6 +229,15 @@ struct BLECharacteristicHandler {
         healthKitLastKcalDay = startOfToday
     }
 
+    // Keep these updates triggerable by both heart and accel updates
+    private func syncStatsIfNeeded() {
+        let currentTime = Date().timeIntervalSince1970
+        guard currentTime - lastStatsSyncTimestamp > 5 else { return }
+        lastStatsSyncTimestamp = currentTime
+
+        ExerciseViewModel.shared.refreshLiveActivityInBackground()
+    }
+
     private func checkForCompletedStepGoal() {
         let notifSettings = NotificationSettingsManager.shared.settings
         if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && notifSettings.watchNotificationsEnabled && notifSettings.goalSettings.stepReminderEnabled {
@@ -245,5 +258,6 @@ struct BLECharacteristicHandler {
         ExerciseViewModel.shared.ingestHeartRate(bpm)
 
         notificationManager.sendHeartRangeNotification(bpm)
+        syncStatsIfNeeded()
     }
 }

@@ -7,6 +7,7 @@
 
 import Foundation
 import ActivityKit
+import UIKit
 
 @available(iOS 16.2, *)
 final class WorkoutLiveActivityController {
@@ -43,7 +44,11 @@ final class WorkoutLiveActivityController {
     func update(_ state: WorkoutAttributes.ContentState) {
         guard let activity else { return }
 
-        Task {
+        // Without this, a BLE background wake can let iOS suspend the app again before the update reaches the widget, so schedule a background task to keep it alive
+        Task { @MainActor in
+            let task = UIApplication.shared.beginBackgroundTask()
+            defer { UIApplication.shared.endBackgroundTask(task) }
+
             await activity.update(.init(state: state, staleDate: Date().addingTimeInterval(staleAfter)))
         }
     }

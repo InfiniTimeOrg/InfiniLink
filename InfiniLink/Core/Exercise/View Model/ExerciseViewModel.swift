@@ -405,6 +405,11 @@ class ExerciseViewModel: ObservableObject {
         liveActivity = controller
     }
 
+    func refreshLiveActivityInBackground() {
+        guard currentExercise != nil, !exercisePaused else { return }
+        refreshLiveActivity()
+    }
+
     private func refreshLiveActivity() {
         guard #available(iOS 16.2, *), let controller = liveActivity as? WorkoutLiveActivityController else { return }
 
