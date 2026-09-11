@@ -20,6 +20,7 @@ struct BLECharacteristicHandler {
     let weatherController = WeatherController.shared
     let persistenceController = PersistenceController.shared
     let stepCountManager = StepCountManager.shared
+    let motionController = MotionController.shared
     let fitnessCalculator = FitnessCalculator()
     
     @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
@@ -162,10 +163,19 @@ struct BLECharacteristicHandler {
             
             bleFs.handleResponse(responseData: [UInt8](value))
         case bleManager.cbuuidList.motion:
-            // As of now, we don't need the motion data, but it constantly updates, so to work around iOS timer restrictions, we use this to fetch data in the background
+            // It also constantly updates, so to work around iOS timer restrictions, we use this to fetch data in the background
             let currentTime = Date().timeIntervalSince1970
             let timeDifference = currentTime - lastTimeCheckCompleted
-            
+
+            if let motionData = characteristic.value, motionData.count >= 6 {
+                let bytes = [UInt8](motionData)
+                let x = Int16(bitPattern: UInt16(bytes[0]) | (UInt16(bytes[1]) << 8))
+                let y = Int16(bitPattern: UInt16(bytes[2]) | (UInt16(bytes[3]) << 8))
+                let z = Int16(bitPattern: UInt16(bytes[4]) | (UInt16(bytes[5]) << 8))
+
+                motionController.ingest(x: x, y: y, z: z)
+            }
+
             // We only need to read the rssi here (in the background) for the pause on walkway feature
             if MusicController.shared.musicPlaying == 1 && pauseOnWalkaway {
                 peripheral.readRSSI()

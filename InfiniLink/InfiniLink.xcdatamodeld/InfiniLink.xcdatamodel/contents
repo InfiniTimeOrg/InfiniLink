@@ -48,6 +48,12 @@
         <attribute name="showSideCover" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="watchFaceInfineat" inverseEntity="Device"/>
     </entity>
+    <entity name="MotionActivityPoint" representedClassName="MotionActivityPoint" syncable="YES" codeGenerationType="class">
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="value" optional="YES" attributeType="Double" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
     <entity name="PineTimeStyleWatchface" representedClassName="PineTimeStyleWatchface" syncable="YES" codeGenerationType="class">
         <attribute name="colorBar" attributeType="Integer 16" defaultValueString="11" usesScalarValueType="YES"/>
         <attribute name="colorBG" attributeType="Integer 16" defaultValueString="3" usesScalarValueType="YES"/>

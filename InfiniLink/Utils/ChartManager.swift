@@ -108,6 +108,22 @@ class ChartManager: ObservableObject {
         }
     }
     
+    func addMotionActivityPoint(activity: Double, time: Date) {
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let point = MotionActivityPoint(context: context)
+            point.value = activity
+            point.timestamp = time
+            point.deviceId = self.deviceManager.pairedDeviceID
+
+            do {
+                try context.save()
+            } catch {
+                log("Error saving motion activity point: \(error.localizedDescription)")
+            }
+        }
+    }
+
     func addBatteryDataPoint(batteryLevel: Double, time: Date) {
         let context = persistenceController.container.newBackgroundContext()
         let deviceId = deviceManager.pairedDeviceID
@@ -224,6 +240,20 @@ class ChartManager: ObservableObject {
         }
     }
     
+    func motionActivityPoints(predicate: NSPredicate? = nil) -> [MotionActivityPoint] {
+        guard deviceManager.pairedDeviceID != nil else { return [] }
+        let fetchRequest: NSFetchRequest<MotionActivityPoint> = MotionActivityPoint.fetchRequest()
+        fetchRequest.predicate = predicate ?? sevenDayPredicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+        do {
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
+        } catch {
+            log("Failed to fetch motion activity points: \(error)", caller: "ChartManager")
+            return []
+        }
+    }
+
     func batteryPoints(predicate: NSPredicate? = nil) -> [BatteryDataPoint] {
         guard deviceManager.pairedDeviceID != nil else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()

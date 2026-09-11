@@ -111,6 +111,14 @@ struct DeveloperView: View {
                     healthKitManager.writeSteps(100)
                 }
             }
+            Button("Dump Motion Activity") {
+                let points = chartManager.motionActivityPoints(predicate: chartManager.sevenDayPredicate)
+                log("\(points.count) motion activity points in the last 7 days", type: .info, caller: "DeveloperView")
+                
+                for point in points.suffix(50) {
+                    log("\(point.timestamp?.formatted() ?? "?"): \(point.value)", type: .info, caller: "DeveloperView")
+                }
+            }
             Section("Test Steps") {
                 Button("Add 2") {
                     let todaySteps = chartManager.stepPoints().first?.steps ?? 0
