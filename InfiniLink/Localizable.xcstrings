@@ -55,6 +55,9 @@
     "%@" : {
 
     },
+    "%@ " : {
+
+    },
     "%@ - %@" : {
       "localizations" : {
         "en" : {
@@ -93,16 +96,6 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ was last seen %2$@."
-          }
-        }
-      }
-    },
-    "%@-%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@-%2$@"
           }
         }
       }
@@ -178,6 +171,28 @@
     "%lld steps" : {
 
     },
+    "%lld time%@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld time%2$@"
+          }
+        }
+      }
+    },
+    "%lld-day" : {
+
+    },
+    "%lld%%" : {
+
+    },
+    "0 " : {
+
+    },
+    "0%" : {
+
+    },
     "1 device discovered" : {
 
     },
@@ -197,6 +212,9 @@
 
     },
     "Add 2" : {
+
+    },
+    "Add a Day" : {
 
     },
     "Age" : {
@@ -278,6 +296,9 @@
         }
       }
     },
+    "avg" : {
+
+    },
     "Back" : {
 
     },
@@ -323,10 +344,13 @@
     "Checking for updates..." : {
 
     },
+    "Choose how the point mark on the heart rate chart is calculated." : {
+
+    },
     "Clear All Exercises" : {
 
     },
-    "Clear Disconnect Pins" : {
+    "Clear HRM Data" : {
 
     },
     "Clear Step Data" : {
@@ -404,6 +428,9 @@
 
     },
     "Day" : {
+
+    },
+    "Days" : {
 
     },
     "Debug Logs" : {
@@ -873,6 +900,9 @@
         }
       }
     },
+    "Max" : {
+
+    },
     "Maximum" : {
       "localizations" : {
         "fr" : {
@@ -883,7 +913,16 @@
         }
       }
     },
+    "mdn" : {
+
+    },
+    "Median" : {
+
+    },
     "Metric" : {
+
+    },
+    "Min" : {
 
     },
     "Minimum" : {
@@ -921,9 +960,6 @@
 
     },
     "No" : {
-
-    },
-    "No Data" : {
 
     },
     "No Logs" : {
@@ -999,6 +1035,9 @@
     "Pinned" : {
 
     },
+    "Point Mark" : {
+
+    },
     "Poor" : {
 
     },
@@ -1063,6 +1102,9 @@
 
     },
     "Selected" : {
+
+    },
+    "Selected Hour" : {
 
     },
     "Send" : {
@@ -1209,6 +1251,9 @@
     "Test HealthKit" : {
 
     },
+    "Test HRM" : {
+
+    },
     "Test Music" : {
 
     },
@@ -1243,6 +1288,9 @@
 
     },
     "There aren't any available releases." : {
+
+    },
+    "There isn't any %@ data to show" : {
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {
@@ -1283,6 +1331,9 @@
 
     },
     "To customize battery notifications, you need to allow notifications in notification settings." : {
+
+    },
+    "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
 
     },
     "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {

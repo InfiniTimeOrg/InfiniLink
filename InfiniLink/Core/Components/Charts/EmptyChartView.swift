@@ -20,27 +20,9 @@ struct Line: Shape {
 }
 
 struct EmptyChartView: View {
-    @AppStorage("heartRateChartDataSelection") private var dataSelection = 0
-    
     let chartType: ChartType
     
     private let backgroundColor = Color.primary.opacity(0.35)
-    private var detailString: String {
-        var base = "There isn't any \(chartType.rawValue) data to show "
-        
-        switch dataSelection {
-        case 1:
-            base += "for today"
-        case 2:
-            base += "for the week"
-        case 3:
-            base += "for the month"
-        default:
-            base += "for the current hour"
-        }
-        
-        return base
-    }
     
     init(_ chartType: ChartType) {
         self.chartType = chartType
@@ -64,7 +46,7 @@ struct EmptyChartView: View {
                 VStack {
                     Text("Nothing to see here")
                         .font(.title2.weight(.bold))
-                    Text(detailString)
+                    Text("There isn't any \(chartType.rawValue) data to show")
                         .foregroundStyle(.gray)
                 }
             }
