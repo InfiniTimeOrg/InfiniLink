@@ -12,19 +12,6 @@ struct BatteryStatsSectionView: View {
 
     @State private var points: [BatteryDataPoint] = []
 
-    private var chargeStats: BatteryCycleStats {
-        BatteryStats.chargeStats(from: points)
-    }
-    private var dischargeStats: BatteryCycleStats {
-        BatteryStats.dischargeStats(from: points)
-    }
-    private var remainingUptime: TimeInterval? {
-        BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel)
-    }
-    private var hasAnyData: Bool {
-        chargeStats.hasData || dischargeStats.hasData
-    }
-
     private func format(_ duration: TimeInterval?) -> String {
         guard let duration, duration.isFinite, duration > 0 else { return "--" }
 
@@ -52,8 +39,12 @@ struct BatteryStatsSectionView: View {
     }
 
     var body: some View {
+        let chargeStats = BatteryStats.chargeStats(from: points)
+        let dischargeStats = BatteryStats.dischargeStats(from: points)
+        let remainingUptime = dischargeStats.normalizedDuration.map { ($0 / 100) * bleManager.batteryLevel }
+
         Section {
-            if hasAnyData {
+            if chargeStats.hasData || dischargeStats.hasData {
                 row(
                     "Average Charge Time",
                     value: format(chargeStats.averageSessionDuration),
