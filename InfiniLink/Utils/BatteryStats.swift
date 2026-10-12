@@ -23,8 +23,11 @@ enum BatteryStats {
     private static let maxDischargeGap: TimeInterval = 24 * 3600
 
     private struct Session {
-        let duration: TimeInterval
+        let start: Date
+        let end: Date
         let percentDelta: Double
+
+        var duration: TimeInterval { end.timeIntervalSince(start) }
     }
 
     private static func sessions(from points: [BatteryDataPoint], charging: Bool) -> [Session] {
@@ -45,10 +48,9 @@ enum BatteryStats {
 
         func flush(at end: (date: Date, value: Double)) {
             let percentDelta = end.value - runStart.value
-            let duration = end.date.timeIntervalSince(runStart.date)
 
-            if abs(percentDelta) >= minSessionPercent, duration > 0 {
-                sessions.append(Session(duration: duration, percentDelta: percentDelta))
+            if abs(percentDelta) >= minSessionPercent, end.date > runStart.date {
+                sessions.append(Session(start: runStart.date, end: end.date, percentDelta: percentDelta))
             }
         }
 
@@ -95,5 +97,13 @@ enum BatteryStats {
     static func remainingUptime(from points: [BatteryDataPoint], currentLevel: Double) -> TimeInterval? {
         guard let fullCycle = dischargeStats(from: points).normalizedDuration else { return nil }
         return (fullCycle / 100) * currentLevel
+    }
+    
+    static func currentUptime(from points: [BatteryDataPoint]) -> TimeInterval? {
+        guard let latest = points.compactMap(\.timestamp).max(),
+              let session = sessions(from: points, charging: false).last,
+              session.end == latest else { return nil }
+
+        return session.duration
     }
 }

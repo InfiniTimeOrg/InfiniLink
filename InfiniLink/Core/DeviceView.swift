@@ -155,7 +155,7 @@ struct DeviceView: View {
                         ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                     }
                     NavigationLink {
-                        BatterySettingsView()
+                        BatteryView()
                     } label: {
                         ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
                     }

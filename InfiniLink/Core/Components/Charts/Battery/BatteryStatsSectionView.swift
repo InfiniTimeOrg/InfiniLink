@@ -21,6 +21,9 @@ struct BatteryStatsSectionView: View {
     private var remainingUptime: TimeInterval? {
         BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel)
     }
+    private var currentUptime: TimeInterval? {
+        BatteryStats.currentUptime(from: points)
+    }
     private var hasAnyData: Bool {
         chargeStats.hasData || dischargeStats.hasData
     }
@@ -55,6 +58,16 @@ struct BatteryStatsSectionView: View {
         Section {
             if hasAnyData {
                 row(
+                    "Estimated Battery Uptime",
+                    value: remainingUptime.map { "~\(format($0)) left" }!,
+                    secondary: nil
+                )
+                row(
+                    "Last charged",
+                    value: currentUptime.map { format($0) + " ago" } ?? "--",
+                    secondary: nil
+                )
+                row(
                     "Average Charge Time",
                     value: format(chargeStats.averageSessionDuration),
                     secondary: chargeStats.normalizedDuration.map { "~\(format($0)) to full" }
@@ -63,11 +76,6 @@ struct BatteryStatsSectionView: View {
                     "Average Discharge Time",
                     value: format(dischargeStats.averageSessionDuration),
                     secondary: dischargeStats.normalizedDuration.map { "~\(format($0)) full cycle" }
-                )
-                row(
-                    "Estimated Battery Uptime",
-                    value: format(dischargeStats.normalizedDuration),
-                    secondary: remainingUptime.map { "~\(format($0)) left at \(Int(bleManager.batteryLevel))%" }
                 )
             } else {
                 Text("Not enough charge history yet. Check back after a few charge cycles.")
@@ -79,6 +87,7 @@ struct BatteryStatsSectionView: View {
             Text("Estimated from the last 90 days of charge and discharge history.")
         }
         .onAppear {
+            UIDevice.current.isBatteryMonitoringEnabled = true
             fetch()
         }
         .onChange(of: bleManager.batteryLevel) { _ in
