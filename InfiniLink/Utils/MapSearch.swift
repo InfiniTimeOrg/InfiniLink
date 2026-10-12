@@ -28,13 +28,16 @@ class MapSearch: NSObject, ObservableObject {
         $searchTerm
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)
             .removeDuplicates()
-            .flatMap({ (currentSearchTerm) in
-                self.searchTermToResults(searchTerm: currentSearchTerm)
+            .flatMap({ [weak self] (currentSearchTerm) -> Future<[MKLocalSearchCompletion], Error> in
+                guard let self else {
+                    return Future { $0(.success([])) }
+                }
+                return self.searchTermToResults(searchTerm: currentSearchTerm)
             })
             .sink(receiveCompletion: { (completion) in
                 //handle error
-            }, receiveValue: { (results) in
-                self.locationResults = results
+            }, receiveValue: { [weak self] (results) in
+                self?.locationResults = results
             })
             .store(in: &cancellables)
     }
