@@ -63,6 +63,7 @@ struct BatteryChartView: View {
 
 
     func chart() -> some View {
+        let selectedPoint = self.selectedPoint
         let xMin = cal.startOfDay(for: earliestDate)
         let xMax = cal.startOfDay(for: latestDate) + visibleDomain
 
