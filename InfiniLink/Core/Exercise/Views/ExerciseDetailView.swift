@@ -74,9 +74,10 @@ struct ExerciseDetailView: View {
                     .frame(maxWidth: .infinity)
                 }
                 .listRowBackground(Color.clear)
-                if routeCoordinates.count > 1 {
+                let coordinates = routeCoordinates
+                if coordinates.count > 1 {
                     Section("Route") {
-                        RouteMapView(coordinates: routeCoordinates)
+                        RouteMapView(coordinates: coordinates)
                             .frame(height: 220)
                             .listRowInsets(EdgeInsets())
                     }
