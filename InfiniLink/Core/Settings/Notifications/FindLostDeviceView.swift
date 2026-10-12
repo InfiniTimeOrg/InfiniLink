@@ -39,6 +39,12 @@ struct FindLostDeviceView: View {
     @State private var address = ""
     @State private var pingTimer: Timer? = nil
     @State private var isPinging = false
+
+    private func stopPinging() {
+        pingTimer?.invalidate()
+        pingTimer = nil
+        isPinging = false
+    }
     
     private func openInMaps(to coordinate: CLLocationCoordinate2D) {
         let destination = MKMapItem(placemark: MKPlacemark(coordinate: coordinate))
@@ -110,8 +116,7 @@ struct FindLostDeviceView: View {
                                         bleWriteManager.sendLostNotification()
                                     }
                                 } else {
-                                    pingTimer?.invalidate()
-                                    pingTimer = nil
+                                    stopPinging()
                                 }
                             }
                             .disabled(bleManager.notifyCharacteristic == nil)
@@ -167,6 +172,9 @@ struct FindLostDeviceView: View {
         }
         .onReceive(rssiTimer) { _ in
             bleManager.infiniTime?.readRSSI()
+        }
+        .onDisappear {
+            stopPinging()
         }
     }
 }
