@@ -49,7 +49,6 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
                     let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
                     self.location = location
                     self.updateLocationName(for: location)
-                    self.weatherController.fetchWeatherData(checkTimeInterval: manual)
                 } else if let error = error {
                     log("Error finding location for address \(self.setLocation): \(error.localizedDescription)", caller: "LocationManager")
                 }
