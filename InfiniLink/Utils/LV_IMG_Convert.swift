@@ -51,17 +51,39 @@ func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPH
         }
     }
 
+    let bytesPerRow = imgWidth * 4
+    guard
+        let context = CGContext(data: nil, width: imgWidth, height: imgHeight, bitsPerComponent: 8, bytesPerRow: bytesPerRow, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue),
+        let data = context.data
+    else {
+        return nil
+    }
+    context.draw(fileImg, in: CGRect(x: 0, y: 0, width: imgWidth, height: imgHeight))
+    let pixelData = data.assumingMemoryBound(to: UInt8.self)
+    // The pixel pointer is owned by the context throughout encoding.
+    defer { withExtendedLifetime(context) {} }
+
+    func getPixel(x: Int, y: Int) -> (red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8) {
+        let i = y * bytesPerRow + x * 4
+        let factor = fade ? ((Double(y) + Double(imgHeight) * 0.25) / (Double(imgHeight) * 0.65)).clamped(to: 0...1) : 1.0
+        let red = UInt8(Double(pixelData[i]) * factor)
+        let green = UInt8(Double(pixelData[i + 1]) * factor)
+        let blue = UInt8(Double(pixelData[i + 2]) * factor)
+        let alpha = pixelData[i + 3]
+        return (red, green, blue, alpha)
+    }
+
     var buf : [UInt8] = []
     if colorFormat == .CF_TRUE_COLOR_ALPHA && binaryFormat == .ARGB8888  {
         buf = [UInt8](repeating: 0, count: imgHeight*imgWidth*4) // 4 bytes (24 bit) per pixel
         for y in 0..<imgHeight {
             for x in 0..<imgWidth {
                 let i = (y*imgWidth + x)*4 // buffer-index
-                let pixel = fileImg.getPixel(x: x, y: y, fade: fade, height: imgHeight)
-                let r = pixel!.red
-                let g = pixel!.green
-                let b = pixel!.blue
-                let a = pixel!.alpha
+                let pixel = getPixel(x: x, y: y)
+                let r = pixel.red
+                let g = pixel.green
+                let b = pixel.blue
+                let a = pixel.alpha
                 buf[i + 0] = r
                 buf[i + 1] = g
                 buf[i + 2] = b
@@ -73,11 +95,11 @@ func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPH
         for y in 0..<imgHeight {
             for x in 0..<imgWidth {
                 let i = (y*imgWidth + x)*3 // buffer-index
-                let pixel = fileImg.getPixel(x: x, y: y, fade: fade, height: imgHeight)
-                var r_act = classifyPixel(value: Double(pixel!.red), bits: 5)
-                var g_act = classifyPixel(value: Double(pixel!.green), bits: 6)
-                var b_act = classifyPixel(value: Double(pixel!.blue), bits: 5)
-                let a = pixel!.alpha
+                let pixel = getPixel(x: x, y: y)
+                var r_act = classifyPixel(value: Double(pixel.red), bits: 5)
+                var g_act = classifyPixel(value: Double(pixel.green), bits: 6)
+                var b_act = classifyPixel(value: Double(pixel.blue), bits: 5)
+                let a = pixel.alpha
                 r_act = min(r_act, 0xF8)
                 g_act = min(g_act, 0xFC)
                 b_act = min(b_act, 0xF8)
@@ -97,7 +119,7 @@ func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPH
 
         for y in 0..<imgHeight {
             for x in 0..<imgWidth {
-                let pixel = fileImg.getPixel(x: x, y: y, fade: fade, height: imgHeight)!
+                let pixel = getPixel(x: x, y: y)
                 let c = (pixel.red + pixel.blue + pixel.green) / 255
                 let p = w * y + (x >> 3) + 8  // +8 for the palette
                 buf[p] |= (c & 0x1) << (7 - (x & 0x7))
@@ -138,30 +160,6 @@ func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPH
     buf_out[4...] = Data(buf)
     
     return buf_out
-}
-
-extension CGImage {
-    func getPixel(x: Int, y: Int, fade: Bool, height: Int) -> (red: UInt8, green: UInt8, blue: UInt8, alpha: UInt8)? {
-        var pixelData: [UInt8] = [0, 0, 0, 0]
-        
-        guard
-            let context = CGContext(data: &pixelData, width: 1, height: 1, bitsPerComponent: 8, bytesPerRow: 4, space: CGColorSpaceCreateDeviceRGB(), bitmapInfo: CGBitmapInfo.byteOrder32Big.rawValue | CGImageAlphaInfo.premultipliedLast.rawValue),
-            let cgImage = self.cropping(to: CGRect(x: x, y: y, width: 1, height: 1))
-        else {
-            return nil
-        }
-        
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: 1, height: 1))
-        
-        let factor = fade ? ((Double(y) + Double(height) * 0.25) / (Double(height) * 0.65)).clamped(to: 0...1) : 1.0
-        
-        let red = UInt8(Double(pixelData[0]) * factor)
-        let green = UInt8(Double(pixelData[1]) * factor)
-        let blue = UInt8(Double(pixelData[2]) * factor)
-        let alpha = pixelData[3]
-        
-        return (red, green, blue, alpha)
-    }
 }
 
 extension Comparable {
