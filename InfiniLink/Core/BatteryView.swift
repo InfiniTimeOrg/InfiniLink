@@ -11,7 +11,7 @@ import SwiftUI
 struct BatteryView: View {
     @ObservedObject private var bleManager = BLEManager.shared
     
-    @State private var points = [BatteryDataPoint]()
+    @State private var points = ChartManager.shared.batteryPoints(predicate: ChartManager.shared.ninetyDayPredicate)
     
     var body: some View {
         GeometryReader { geo in
@@ -35,14 +35,15 @@ struct BatteryView: View {
                             .frame(maxWidth: .infinity)
                     }
                 } footer: {
-                    // does not work
-                    if let remaining = BatteryStats.currentUptime(from: points), remaining > 0 {
+                    if let remaining = BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel), remaining > 0 {
                         Text("~\(format(remaining)) left")
                             .frame(maxWidth: .infinity, alignment: .center)
+                            .padding(EdgeInsets(top: -40, leading: 0, bottom: 0, trailing: 15))
+                            .font(.system(size: 20))
                     }
                 }
                 .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowInsets(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                 BatteryChartView()
                 BatteryStatsSectionView()
                 .navigationTitle("Battery")

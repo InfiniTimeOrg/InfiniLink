@@ -57,11 +57,11 @@ struct BatteryStatsSectionView: View {
     var body: some View {
         Section {
             if hasAnyData {
-                row(
+                /*row(
                     "Estimated Battery Uptime",
                     value: remainingUptime.map { "~\(format($0)) left" }!,
                     secondary: nil
-                )
+                )*/
                 row(
                     "Last charged",
                     value: currentUptime.map { format($0) + " ago" } ?? "--",
