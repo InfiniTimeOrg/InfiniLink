@@ -126,6 +126,7 @@ struct WorkoutWidgetLiveActivity: Widget {
             } compactLeading: {
                 Image(systemName: context.attributes.exerciseIcon)
                     .foregroundStyle(.orange)
+                    .padding(.leading, 3)
             } compactTrailing: {
                 timerText(context.state)
                     .monospacedDigit()

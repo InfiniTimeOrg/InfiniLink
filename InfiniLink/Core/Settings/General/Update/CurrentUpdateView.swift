@@ -52,7 +52,7 @@ struct CurrentUpdateView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         HStack(spacing: 0) {
-                            Text("\(statusText)...")
+                            Text("\(statusText)... ")
                             if dfuUpdater.percentComplete != 0 {
                                 Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
                             }

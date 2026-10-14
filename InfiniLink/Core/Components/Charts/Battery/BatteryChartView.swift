@@ -34,11 +34,11 @@ struct BatteryChartView: View {
     private var latestDate: Date {
         points.map(\.date).max() ?? Date()
     }
-    private var visibleFirst: Int {
-        Int(visiblePoints.first?.value ?? 0)
+    private var visibleFirst: Int? {
+        visiblePoints.first.map { Int($0.value) }
     }
-    private var visibleLast: Int {
-        Int(visiblePoints.last?.value ?? 100)
+    private var visibleLast: Int? {
+        visiblePoints.last.map { Int($0.value) }
     }
     private var selectedPoint: BatteryChartDataPoint? {
         guard let rawSelectedDate else { return nil }
@@ -64,7 +64,7 @@ struct BatteryChartView: View {
 
     func chart() -> some View {
         let xMin = cal.startOfDay(for: earliestDate)
-        let xMax = cal.startOfDay(for: latestDate) + 86400 + 3600
+        let xMax = cal.startOfDay(for: latestDate) + visibleDomain
 
         var chart: some View {
             Chart {
@@ -151,15 +151,17 @@ struct BatteryChartView: View {
                                 if let selectedPoint {
                                     Text(selectedPoint.value / 100, format: .percent.precision(.fractionLength(0)))
                                         .animation(.default, value: selectedPoint.value)
-                                } else if visibleFirst == visibleLast {
+                                } else if let visibleFirst, let visibleLast, visibleFirst == visibleLast {
                                     Text(Double(visibleFirst) / 100, format: .percent.precision(.fractionLength(0)))
                                         .animation(.default, value: visibleFirst)
-                                } else {
+                                } else if let visibleFirst, let visibleLast {
                                     (Text(Double(visibleFirst) / 100, format: .percent.precision(.fractionLength(0)))
                                     + Text("–")
                                     + Text(Double(visibleLast) / 100, format: .percent.precision(.fractionLength(0))))
                                         .animation(.default, value: visibleFirst)
                                         .animation(.default, value: visibleLast)
+                                } else {
+                                    Text("--")
                                 }
                             }
                             .font(.system(.title, design: .rounded))

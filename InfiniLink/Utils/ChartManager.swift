@@ -34,7 +34,13 @@ class ChartManager: ObservableObject {
     var sevenDayPredicate: NSPredicate {
         let deviceId = deviceManager.pairedDeviceID ?? ""
         let start = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
-        
+
+        return NSPredicate(format: predicateString, deviceId, start as NSDate)
+    }
+    var ninetyDayPredicate: NSPredicate {
+        let deviceId = deviceManager.pairedDeviceID ?? ""
+        let start = Calendar.current.date(byAdding: .day, value: -90, to: Date())!
+
         return NSPredicate(format: predicateString, deviceId, start as NSDate)
     }
     var dayPredicate: NSPredicate {
@@ -99,14 +105,40 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func addBatteryDataPoint(batteryLevel: Double, time: Date) {
+    func addMotionActivityPoint(activity: Double, time: Date) {
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
+            let point = MotionActivityPoint(context: context)
+            point.value = activity
+            point.timestamp = time
+            point.deviceId = self.deviceManager.pairedDeviceID
+
+            do {
+                try context.save()
+            } catch {
+                log("Error saving motion activity point: \(error.localizedDescription)")
+            }
+        }
+    }
+
+    func addBatteryDataPoint(batteryLevel: Double, time: Date) {
+        let context = persistenceController.container.newBackgroundContext()
+        let deviceId = deviceManager.pairedDeviceID
+        context.perform {
+            let lastRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
+            lastRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId ?? "")
+            lastRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
+            lastRequest.fetchLimit = 1
+
+            if let last = try? context.fetch(lastRequest).first, last.value == batteryLevel {
+                return
+            }
+
             let batteryDataPoint = BatteryDataPoint(context: context)
             batteryDataPoint.value = batteryLevel
             batteryDataPoint.timestamp = time
-            batteryDataPoint.deviceId = self.deviceManager.pairedDeviceID
-            
+            batteryDataPoint.deviceId = deviceId
+
             do {
                 try context.save()
             } catch {
@@ -241,6 +273,20 @@ class ChartManager: ObservableObject {
         }
     }
     
+    func motionActivityPoints(predicate: NSPredicate? = nil) -> [MotionActivityPoint] {
+        guard deviceManager.pairedDeviceID != nil else { return [] }
+        let fetchRequest: NSFetchRequest<MotionActivityPoint> = MotionActivityPoint.fetchRequest()
+        fetchRequest.predicate = predicate ?? sevenDayPredicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: true)]
+
+        do {
+            return try persistenceController.container.viewContext.fetch(fetchRequest)
+        } catch {
+            log("Failed to fetch motion activity points: \(error)", caller: "ChartManager")
+            return []
+        }
+    }
+
     func batteryPoints(predicate: NSPredicate? = nil) -> [BatteryDataPoint] {
         guard deviceManager.pairedDeviceID != nil else { return [] }
         let fetchRequest: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()

@@ -6,10 +6,25 @@
 //
 
 import SwiftUI
+import WeatherKit
 
 struct WeatherView: View {
     @StateObject var weatherController = WeatherController.shared
-    
+
+    func sunEventText(for weather: Weather) -> LocalizedStringKey? {
+        guard let today = weather.dailyForecast.first else { return nil }
+
+        if let sunrise = today.sun.sunrise, Date() < sunrise {
+            return "Sunrise is at \(sunrise.formatted(.dateTime.hour().minute()))."
+        } else if let sunset = today.sun.sunset, Date() < sunset {
+            return "Sunset is at \(sunset.formatted(.dateTime.hour().minute())) tonight."
+        } else if let sunrise = weather.dailyForecast.forecast.dropFirst().first?.sun.sunrise {
+            return "Sunrise is at \(sunrise.formatted(.dateTime.hour().minute())) tomorrow."
+        }
+
+        return nil
+    }
+
     var body: some View {
         GeometryReader { geo in
             VStack {
@@ -46,19 +61,21 @@ struct WeatherView: View {
                                     Spacer()
                                     HStack(spacing: 6) {
                                         Text(String(format: "%.0f", weatherController.getTemperature(for: day.lowTemperature)) + weatherController.unit)
-                                            .foregroundStyle(.gray)
-                                        Rectangle()
+                                        Capsule()
                                             .frame(width: {
                                                 let temperatureRange = day.highTemperature.value - day.lowTemperature.value
                                                 let relativeWidth = CGFloat(temperatureRange) / 40.0 * 60
-                                                return relativeWidth
+                                                return max(relativeWidth, 0)
                                             }(), height: 3)
-                                            .cornerRadius(30)
-                                            .background(Color.gray)
                                         Text(String(format: "%.0f", weatherController.getTemperature(for: day.highTemperature)) + weatherController.unit)
-                                            .foregroundStyle(Color.gray)
                                     }
+                                    .foregroundStyle(.gray)
                                 }
+                            }
+                        }
+                        if let sunEventText = sunEventText(for: weather) {
+                            Section {
+                                Text(sunEventText)
                             }
                         }
                     }
