@@ -21,6 +21,9 @@ struct DeveloperView: View {
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
     private let healthKitManager = HealthKitManager.shared
+    private let deviceManager = DeviceManager.shared
+    private let chartManager = ChartManager.shared
+    private let stepCountManager = StepCountManager.shared
     private let persistenceController = PersistenceController.shared
 
     func generateRandomHeartPoints(dayOffset: Int) {
@@ -37,7 +40,7 @@ struct DeveloperView: View {
             let timestamp = startOfDay.addingTimeInterval(randomTime)
             
             let point = HeartDataPoint(context: context)
-            point.deviceId = bleManager.pairedDeviceID
+            point.deviceId = deviceManager.pairedDeviceID
             point.timestamp = timestamp
             point.value = Double(Int.random(in: 55...165))
         }
@@ -163,12 +166,12 @@ struct DeveloperView: View {
                     Text("Clear Step Data")
                 }
                 Button(role: .destructive) {
-                    ChartManager.shared.clearHrmData()
+                    chartManager.clearHrmData()
                 } label: {
                     Text("Clear HRM Data")
                 }
                 Button(role: .destructive) {
-                    ChartManager.shared.deleteAllUserExercises()
+                    chartManager.deleteAllUserExercises()
                 } label: {
                     Text("Clear All Exercises")
                 }

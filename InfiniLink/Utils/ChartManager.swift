@@ -127,6 +127,20 @@ class ChartManager: ObservableObject {
         }
     }
 
+    func latestHeartPoint() -> HeartDataPoint? {
+        let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+        fetchRequest.predicate = dayPredicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: false)]
+        fetchRequest.fetchLimit = 1
+
+        do {
+            return try persistenceController.container.viewContext.fetch(fetchRequest).first
+        } catch {
+            log("Error fetching latest heart point: \(error)", caller: "ChartManager")
+            return nil
+        }
+    }
+
     // Fetches on a background context and hands back plain values so views don't block the main thread
     func heartRateSamples(predicate: NSPredicate? = nil) async -> [HeartRateSample] {
         nonisolated(unsafe) let predicate = predicate ?? dayPredicate
@@ -146,6 +160,28 @@ class ChartManager: ObservableObject {
                 } catch {
                     log("Error fetching heart points: \(error)", caller: "ChartManager")
                     continuation.resume(returning: [])
+                }
+            }
+        }
+    }
+
+    // Oldest reading on record, without loading the whole history
+    func firstHeartRateDate() async -> Date? {
+        nonisolated(unsafe) let predicate = allTimePredicate
+        let context = persistenceController.container.newBackgroundContext()
+
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                let request: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: true)]
+                request.fetchLimit = 1
+
+                do {
+                    continuation.resume(returning: try context.fetch(request).first?.timestamp)
+                } catch {
+                    log("Error fetching first heart point: \(error)", caller: "ChartManager")
+                    continuation.resume(returning: nil)
                 }
             }
         }

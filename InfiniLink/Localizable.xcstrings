@@ -7,9 +7,6 @@
     " • " : {
 
     },
-    " BPM" : {
-
-    },
     " Recovery" : {
 
     },
@@ -20,9 +17,6 @@
 
     },
     " You can customize this in notification settings." : {
-
-    },
-    "-" : {
 
     },
     "-day" : {
@@ -166,28 +160,6 @@
       }
     },
     "%lld steps" : {
-
-    },
-    "%lld time%@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld time%2$@"
-          }
-        }
-      }
-    },
-    "%lld-day" : {
-
-    },
-    "%lld%%" : {
-
-    },
-    "0 " : {
-
-    },
-    "0%" : {
 
     },
     "1 device discovered" : {
@@ -433,9 +405,6 @@
           }
         }
       }
-    },
-    "Delete All Devices" : {
-
     },
     "Developer" : {
 
@@ -1299,19 +1268,6 @@
     },
     "To customize battery notifications, you need to allow notifications in notification settings." : {
 
-    },
-    "To start a route, you need to enable \"Always Allow\" location permissions for InfiniLink in Settings." : {
-
-    },
-    "Today your heart rate reached a high of %lld, and dropped to a low of %lld BPM." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Today your heart rate reached a high of %1$lld, and dropped to a low of %2$lld BPM."
-          }
-        }
-      }
     },
     "Total" : {
 
