@@ -46,7 +46,7 @@ struct EmptyChartView: View {
                 VStack {
                     Text("Nothing to see here")
                         .font(.title2.weight(.bold))
-                    Text("There isn't any \(chartType.rawValue) data to show")
+                    Text("There isn't any \(chartType.name) data to show")
                         .foregroundStyle(.gray)
                 }
             }

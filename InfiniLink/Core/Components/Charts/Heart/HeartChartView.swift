@@ -89,15 +89,11 @@ struct HeartChartView: View {
             cal.date(byAdding: .hour, value: 1, to: rangeFirstHour)
             ?? rangeFirstHour
             
-            let style = Date.FormatStyle()
-                .hour(.defaultDigits(amPM: .abbreviated))
+            let readings = selectedViewHour.values.count
+            let hours = (rangeFirstHour..<rangeLastHour).formatted(.interval.month(.abbreviated).day().hour())
+            let average = readings > 1 ? " · " + String(localized: "\(Int(pointMarkValue(for: selectedViewHour))) BPM \(pointMarkLabel)") : ""
             
-            return
-            "\(rangeFirstHour.formatted(.dateTime.month(.abbreviated).day())), " +
-            "\(rangeFirstHour.formatted(style))–\(rangeLastHour.formatted(style)) · " +
-            "\(selectedViewHour.values.count) " +
-            "\(selectedViewHour.values.count == 1 ? "reading" : "readings")" +
-            "\(selectedViewHour.values.count > 1  ? " · \(Int(pointMarkValue(for: selectedViewHour))) BPM \(pointMarkLabel)" : "")"
+            return "\(hours) · " + String(localized: "\(readings) readings") + average
         }
         
         let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
@@ -107,10 +103,7 @@ struct HeartChartView: View {
         
         return isFullDay
         ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-        : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), " +
-        "\(rounded.formatted(.dateTime.hour().minute())) – " +
-        "\(end.formatted(.dateTime.month(.abbreviated).day())), " +
-        "\(end.formatted(.dateTime.hour().minute()))"
+        : (rounded..<end).formatted(.interval.month(.abbreviated).day().hour().minute())
     }
     
     func pointMarkValue(for point: HeartChartDataPoint) -> Double {

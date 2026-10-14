@@ -19,9 +19,6 @@
     " You can customize this in notification settings." : {
 
     },
-    "-" : {
-
-    },
     "--" : {
 
     },
@@ -146,6 +143,9 @@
         }
       }
     },
+    "%lld BPM %@" : {
+
+    },
     "%lld cm" : {
 
     },
@@ -161,6 +161,28 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld more device%2$@ found"
+          }
+        }
+      }
+    },
+    "%lld readings" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld reading"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld readings"
+                }
+              }
+            }
           }
         }
       }
@@ -275,6 +297,9 @@
 
     },
     "Back" : {
+
+    },
+    "battery" : {
 
     },
     "Battery" : {
@@ -659,6 +684,9 @@
 
     },
     "Health Details" : {
+
+    },
+    "heart" : {
 
     },
     "Heart Range Notifications" : {
@@ -1169,6 +1197,9 @@
           }
         }
       }
+    },
+    "steps" : {
+
     },
     "Steps" : {
       "localizations" : {
