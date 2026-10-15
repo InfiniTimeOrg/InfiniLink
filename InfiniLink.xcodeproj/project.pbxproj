@@ -11,6 +11,9 @@
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
+		75048443307FA0EE0082E487 /* ExerciseNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */; };
+		75048445307FA1110082E487 /* HealthNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048444307FA10F0082E487 /* HealthNotificationsView.swift */; };
+		75048447307FA1230082E487 /* GoalsNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048446307FA1220082E487 /* GoalsNotificationsView.swift */; };
 		75BC303B30766EFB003EEC2D /* BatterySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */; };
 		E00A862A2DEB8383001533E1 /* FindLostDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */; };
 		E00A86312DEBF3C1001533E1 /* RSSI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A86302DEBF3C1001533E1 /* RSSI.swift */; };
@@ -178,6 +181,9 @@
 		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseNotificationsView.swift; sourceTree = "<group>"; };
+		75048444307FA10F0082E487 /* HealthNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNotificationsView.swift; sourceTree = "<group>"; };
+		75048446307FA1220082E487 /* GoalsNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsNotificationsView.swift; sourceTree = "<group>"; };
 		75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySettingsView.swift; sourceTree = "<group>"; };
 		E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLostDeviceView.swift; sourceTree = "<group>"; };
 		E00A86302DEBF3C1001533E1 /* RSSI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSI.swift; sourceTree = "<group>"; };
@@ -546,6 +552,9 @@
 				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
 				E0C0DE00000000000000B007 /* BatteryHealthView.swift */,
 				E0C0DE00000000000000A005 /* ExerciseSettingsView.swift */,
+				75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */,
+				75048444307FA10F0082E487 /* HealthNotificationsView.swift */,
+				75048446307FA1220082E487 /* GoalsNotificationsView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -902,6 +911,7 @@
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				75048445307FA1110082E487 /* HealthNotificationsView.swift in Sources */,
 				E06C5D822FBBE26F0099F982 /* BatteryChartView.swift in Sources */,
 				E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */,
 				E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */,
@@ -935,6 +945,7 @@
 				E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */,
 				E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */,
 				75BC303B30766EFB003EEC2D /* BatterySettingsView.swift in Sources */,
+				75048443307FA0EE0082E487 /* ExerciseNotificationsView.swift in Sources */,
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
 				E0C0DE00000000000000B002 /* ImportManager.swift in Sources */,
@@ -955,6 +966,7 @@
 				E0C0DE00000000000000A008 /* WorkoutShared.swift in Sources */,
 				E0C0DE00000000000000A00B /* WorkoutLiveActivityController.swift in Sources */,
 				E0599A002CB46EB200D64E0B /* StepCountManager.swift in Sources */,
+				75048447307FA1230082E487 /* GoalsNotificationsView.swift in Sources */,
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
 				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatteryView.swift in Sources */,

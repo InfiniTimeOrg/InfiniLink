@@ -48,13 +48,6 @@ struct BatteryView: View {
                 BatteryStatsSectionView()
                 .navigationTitle("Battery")
             }
-            .toolbar {
-                NavigationLink {
-                    BatterySettingsView()
-                } label: {
-                    Label("Settings", systemImage: "gear")
-                }
-            }
         }
     }
 }

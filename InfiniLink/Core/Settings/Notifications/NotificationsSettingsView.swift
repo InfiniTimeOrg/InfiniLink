@@ -34,6 +34,38 @@ struct NotificationsSettingsView: View {
                 Toggle("Enable Notifications", isOn: $settingsManager.settings.watchNotificationsEnabled)
             }
             if settingsManager.settings.watchNotificationsEnabled {
+                Section {
+                    NavigationLink {
+                        ExerciseNotificationsView()
+                    } label: {
+                        ListRowView(title: "Exercise Notifications", icon: "figure.run", iconColor: .orange)
+                    }
+                    NavigationLink {
+                        HealthNotificationsView()
+                    } label: {
+                        ListRowView(title: "Health Notifications", icon: "heart.fill", iconColor: .red)
+                    }
+                    NavigationLink {
+                        GoalsNotificationsView()
+                    } label: {
+                        ListRowView(title: "Daily Goals", icon: "shoeprints.fill", iconColor: .blue)
+                    }
+                }
+                Section {
+                    Toggle("Transliterate to ASCII", isOn: $settingsManager.settings.transliterationEnabled)
+                } footer: {
+                    Text("Convert accented characters to plain text so notifications display correctly.")
+                }
+                Button("Send Notification") {
+                    showSendNotificationSheet = true
+                }
+                .disabled(bleManager.notifyCharacteristic == nil)
+                .sheet(isPresented: $showSendNotificationSheet) {
+                    ArbitraryNotificationView()
+                }
+            }
+            /*
+            if settingsManager.settings.watchNotificationsEnabled {
                 Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.")) {
                     Toggle("Water Reminder", isOn: $settingsManager.settings.waterReminderEnabled)
                     if settingsManager.settings.waterReminderEnabled {
@@ -71,19 +103,7 @@ struct NotificationsSettingsView: View {
                 Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
                     Toggle("Steps", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled)
                 }
-                Section {
-                    Toggle("Transliterate to ASCII", isOn: $settingsManager.settings.transliterationEnabled)
-                } footer: {
-                    Text("Convert accented characters to plain text so notifications display correctly.")
-                }
-                Button("Send Notification") {
-                    showSendNotificationSheet = true
-                }
-                .disabled(bleManager.notifyCharacteristic == nil)
-                .sheet(isPresented: $showSendNotificationSheet) {
-                    ArbitraryNotificationView()
-                }
-            }
+            } */
         }
         .navigationTitle("Notifications")
         .onChange(of: settingsManager.settings.waterReminderAmount) { _ in
