@@ -16,6 +16,7 @@ private struct HeartExportRow: Sendable {
 struct HeartSettingsView: View {
     @AppStorage("backgroundHRMMeasurements") var backgroundHRMMeasurements = false
     @AppStorage("filterHeartRateData") var filterHeartRateData = true
+    @AppStorage("heartPointMarkMode") var heartPointMarkMode = "average"
 
     @State private var exportDate = Date()
     @State private var isExporting = false
@@ -94,6 +95,13 @@ struct HeartSettingsView: View {
         List {
             Section(footer: Text("Filter inconsistent data from your heart rate measurements.")) {
                 Toggle("Filter Values", isOn: $filterHeartRateData)
+            }
+            Section(footer: Text("Choose how the point mark on the heart rate chart is calculated.")) {
+                Picker("Point Mark", selection: $heartPointMarkMode) {
+                    Text("Average").tag("average")
+                    Text("Median").tag("median")
+                }
+                .pickerStyle(.menu)
             }
             Section {
                 DatePicker("Day", selection: $exportDate, in: ...Date(), displayedComponents: .date)

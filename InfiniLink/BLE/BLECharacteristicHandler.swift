@@ -122,7 +122,7 @@ struct BLECharacteristicHandler {
             let timeSinceLastUpdate = (currentTime - lastHeartRateUpdateTimestamp) / 60
 
             // Check if the last data point is available and if filtering is enabled
-            if let lastValue = chartManager.heartPoints().last?.value, filterHeartRateData {
+            if let lastValue = chartManager.latestHeartPoint()?.value, filterHeartRateData {
                 let isWithinRange = abs(lastValue - bleManager.heartRate) <= 25
 
                 // Update heart rate if within the valid range or recent enough

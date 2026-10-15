@@ -15,9 +15,6 @@ struct HeartRateSample {
 }
 
 class ChartManager: ObservableObject {
-    @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
-    @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
-    
     static let shared = ChartManager()
     
     let persistenceController = PersistenceController.shared
@@ -162,6 +159,20 @@ class ChartManager: ObservableObject {
         }
     }
 
+    func latestHeartPoint() -> HeartDataPoint? {
+        let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+        fetchRequest.predicate = dayPredicate
+        fetchRequest.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: false)]
+        fetchRequest.fetchLimit = 1
+
+        do {
+            return try persistenceController.container.viewContext.fetch(fetchRequest).first
+        } catch {
+            log("Error fetching latest heart point: \(error)", caller: "ChartManager")
+            return nil
+        }
+    }
+
     // Fetches on a background context and hands back plain values so views don't block the main thread
     func heartRateSamples(predicate: NSPredicate? = nil) async -> [HeartRateSample] {
         nonisolated(unsafe) let predicate = predicate ?? dayPredicate
@@ -181,6 +192,28 @@ class ChartManager: ObservableObject {
                 } catch {
                     log("Error fetching heart points: \(error)", caller: "ChartManager")
                     continuation.resume(returning: [])
+                }
+            }
+        }
+    }
+
+    // Oldest reading on record, without loading the whole history
+    func firstHeartRateDate() async -> Date? {
+        nonisolated(unsafe) let predicate = allTimePredicate
+        let context = persistenceController.container.newBackgroundContext()
+
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                let request: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: true)]
+                request.fetchLimit = 1
+
+                do {
+                    continuation.resume(returning: try context.fetch(request).first?.timestamp)
+                } catch {
+                    log("Error fetching first heart point: \(error)", caller: "ChartManager")
+                    continuation.resume(returning: nil)
                 }
             }
         }
@@ -282,19 +315,17 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func deleteAllDisconnectMapPoints(all: Bool = true) {
+    func clearHrmData() {
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = DisconnectMapPoint.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-            fetchRequest.fetchOffset = all ? 0 : 3
+            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = HeartDataPoint.fetchRequest()
             let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
             
             do {
                 try context.execute(batchDeleteRequest)
                 try context.save()
             } catch {
-                log("Failed to delete disconnect pins: \(error)", caller: "ChartManager")
+                log("Failed to delete hrm day: \(error)", caller: "ChartManager")
             }
         }
     }

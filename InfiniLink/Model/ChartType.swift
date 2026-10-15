@@ -12,6 +12,17 @@ enum ChartType: String {
     case heart
     case battery
     
+    var name: String {
+        switch self {
+        case .steps:
+            return NSLocalizedString("steps", comment: "")
+        case .heart:
+            return NSLocalizedString("heart", comment: "")
+        case .battery:
+            return NSLocalizedString("battery", comment: "")
+        }
+    }
+    
     var icon: String {
         switch self {
         case .steps:
