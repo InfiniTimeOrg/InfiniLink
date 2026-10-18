@@ -158,19 +158,16 @@ struct BLEWriteManager {
     
     func writeNavigationUpdate(icon: String, instructions: String, distance: String, progress: UInt8) {
         guard let infiniTime = bleManager.infiniTime else { return }
-        guard let _ = bleManager.navigationFlagsCharacteristic, let nar = bleManager.navigationNarrativeCharacteristic, let dis = bleManager.navigationDistanceCharacteristic, let prog = bleManager.navigationProgressCharacteristic, let flags = bleManager.navigationFlagsCharacteristic else { return }
+        guard let nar = bleManager.navigationNarrativeCharacteristic, let dis = bleManager.navigationDistanceCharacteristic, let prog = bleManager.navigationProgressCharacteristic, let flags = bleManager.navigationFlagsCharacteristic else { return }
         
         guard let icon = icon.data(using: .ascii) else { return }
         // The narrative may contain non-InfiniTime-readable characters, so transliterate if enabled
         guard let narrative = (settingsManager.settings.transliterationEnabled ? instructions.asciiSafe : instructions).data(using: .ascii) else { return }
         guard let distance = distance.data(using: .ascii) else { return }
         
-        var progress = Data()
-        progress.append(progress)
-        
         infiniTime.writeValue(narrative, for: nar, type: .withResponse)
         infiniTime.writeValue(distance, for: dis, type: .withResponse)
-        infiniTime.writeValue(progress, for: prog, type: .withResponse)
+        infiniTime.writeValue(Data([progress]), for: prog, type: .withResponse)
         infiniTime.writeValue(icon, for: flags, type: .withResponse)
         
         log("Wrote navigation update", type: .info, caller: "BLEWriteManager", target: .ble)

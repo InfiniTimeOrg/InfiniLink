@@ -75,21 +75,15 @@ class ChartManager: ObservableObject {
         return NSPredicate(format: "deviceId == %@", deviceId)
     }
     
+    // Insert on the view context so stepsToday() sees the new row right away and a quick second update can't create a duplicate
     func addStepDataPoint(steps: Int32, time: Date) {
-        let context = persistenceController.container.newBackgroundContext()
-        context.perform {
-            let stepCount = StepCounts(context: context)
-            stepCount.id = UUID()
-            stepCount.steps = steps
-            stepCount.timestamp = time
-            stepCount.deviceId = self.deviceManager.pairedDeviceID
-            
-            do {
-                try context.save()
-            } catch {
-                log("Error saving step point: \(error.localizedDescription)")
-            }
-        }
+        let stepCount = StepCounts(context: persistenceController.container.viewContext)
+        stepCount.id = UUID()
+        stepCount.steps = steps
+        stepCount.timestamp = time
+        stepCount.deviceId = deviceManager.pairedDeviceID
+        
+        persistenceController.save()
     }
     
     func addHeartRateDataPoint(heartRate: Double, time: Date) {

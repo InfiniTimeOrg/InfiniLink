@@ -32,6 +32,9 @@ class NotificationManager: ObservableObject {
     private var settings: NotificationSettings { NotificationSettingsManager.shared.settings }
     private var batterySettings: BatterySettings { settings.batterySettings }
     
+    private var hostFullNotified = false
+    private var hostLowNotified = false
+    
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
     private var waterReminderEndHour: Int = 20
@@ -53,8 +56,10 @@ class NotificationManager: ObservableObject {
     func requestNotificationAuthorization(completion: ((Bool, Error?) -> Void)? = nil) {
         let center = UNUserNotificationCenter.current()
         center.requestAuthorization(options: [.alert, .sound, .badge]) { granted, error in
-            self.canSendHostNotifs = granted
-            completion?(granted, error)
+            DispatchQueue.main.async {
+                self.canSendHostNotifs = granted
+                completion?(granted, error)
+            }
         }
     }
     
@@ -82,18 +87,30 @@ extension NotificationManager {
         let level = UIDevice.current.batteryLevel * 100
         let currentTime = Date().timeIntervalSince1970
         
-        // At most one iPhone battery notification every thirty minutes
-        guard lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
-        
-        if state == .full {
-            let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
-            sendNotifications(notif, batterySettings.fullBattery.iphone)
-        } else if level == 20 && state != .charging {
-            let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: String(localized: "Your iPhone has less than \(0.2, format: .percent) battery remaining."))
-            sendNotifications(notif, batterySettings.lowBattery.iphone)
+        // Re-arm each alert once the battery leaves the state it fired for
+        if state != .full {
+            hostFullNotified = false
+        }
+        if level > 20 || state != .unplugged {
+            hostLowNotified = false
         }
         
-        lastHostBatteryLevelNotified = currentTime
+        // At most one iPhone battery notification every thirty minutes
+        guard level >= 0, lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
+        
+        if state == .full && !hostFullNotified {
+            let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
+            sendNotifications(notif, batterySettings.fullBattery.iphone)
+            
+            hostFullNotified = true
+            lastHostBatteryLevelNotified = currentTime
+        } else if level <= 20 && state == .unplugged && !hostLowNotified {
+            let notif = AppNotification(title: NSLocalizedString("Low Battery", comment: ""), subtitle: String(localized: "Your iPhone has less than \(0.2, format: .percent) battery remaining."))
+            sendNotifications(notif, batterySettings.lowBattery.iphone)
+            
+            hostLowNotified = true
+            lastHostBatteryLevelNotified = currentTime
+        }
     }
     
     private func sendNotifications(_ notif: AppNotification, _ settings: NotifySettings) {
@@ -109,19 +126,22 @@ extension NotificationManager {
     
     func checkToSendBatteryNotifications() {
         let bat = bleManager.batteryLevel
+        let previous = lastBatteryLevelNotified
+        lastBatteryLevelNotified = bat
         
-        // Skip if watch notifications are off, or we already notified at this level
-        guard settings.watchNotificationsEnabled, bat != lastBatteryLevelNotified else { return }
+        // Skip if watch notifications are off, this is the first reading, or the level hasn't changed
+        guard settings.watchNotificationsEnabled, previous >= 0, bat != previous else { return }
         
-        if batterySettings.customNotificationEnabled && bat == batterySettings.customNotificationPercentage {
+        // Compare against the previous reading so a level that skips past a threshold still notifies
+        let crossedBelow = { (threshold: Double) in previous > threshold && bat <= threshold }
+        
+        if batterySettings.customNotificationEnabled && crossedBelow(batterySettings.customNotificationPercentage) {
             sendBatteryNotification(custom: true)
         } else if bat == 100 {
             sendFullyChargedBatteryNotification()
-        } else if batterySettings.lowBattery.enabled && (bat == 20 || bat == 10 || bat == 5) {
+        } else if batterySettings.lowBattery.enabled && [20, 10, 5].contains(where: crossedBelow) {
             sendBatteryNotification(custom: false)
         }
-        
-        lastBatteryLevelNotified = bat
     }
     
     private func sendBatteryNotification(custom: Bool) {
@@ -186,8 +206,7 @@ extension NotificationManager {
         }
         
         let totalTimeInterval = endDate.timeIntervalSince(startDate)
-        
-        waterReminderInterval = totalTimeInterval / Double(settings.waterReminderAmount)
+        waterReminderInterval = totalTimeInterval / Double(settings.waterReminderAmount + 1)
     }
     
     func checkAndNotifyForWaterReminders() {
@@ -204,9 +223,16 @@ extension NotificationManager {
     }
     
     private func getNextReminderDate() -> Date {
-        let currentDate = Date()
+        let calendar = Calendar.current
+        let next = Date().addingTimeInterval(waterReminderInterval)
+        let hour = calendar.component(.hour, from: next)
         
-        return currentDate.addingTimeInterval(waterReminderInterval)
+        guard hour < waterReminderStartHour || hour >= waterReminderEndHour else { return next }
+        
+        // Outside the reminder window, so wait until it next opens
+        guard let windowStart = calendar.date(bySettingHour: waterReminderStartHour, minute: 0, second: 0, of: next) else { return next }
+        
+        return hour < waterReminderStartHour ? windowStart : calendar.date(byAdding: .day, value: 1, to: windowStart) ?? next
     }
 }
 

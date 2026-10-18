@@ -137,7 +137,7 @@ class BLEManager: NSObject, ObservableObject {
         manager = CBCentralManager(delegate: self,
                                    queue: nil,
                                    options: [
-                                    CBPeripheralManagerOptionRestoreIdentifierKey: "com.alex-emry.Infini-iOS.central"
+                                    CBCentralManagerOptionRestoreIdentifierKey: "com.alex-emry.Infini-iOS.central"
                                    ])
     }
     
@@ -210,10 +210,12 @@ class BLEManager: NSObject, ObservableObject {
     }
     
     func unpair(device: Device? = nil) {
+        guard let device = device ?? deviceManager.pairedDevice else { return }
+        
         // We need to disconnect first because BLE updateInfo methods will be called when Core Data doesn't have an object to update
         disconnect()
         // Delete the device object we have said for this watch
-        deviceManager.removeDevice(device ?? deviceManager.pairedDevice!)
+        deviceManager.removeDevice(device)
         
         log("Unpaired from \(deviceManager.pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
     }
@@ -226,9 +228,7 @@ class BLEManager: NSObject, ObservableObject {
             
             // Update the rest of the app to reflect the disconnected state
             self.infiniTime = nil
-            self.blefsTransfer = nil
-            self.currentTimeService = nil
-            self.notifyCharacteristic = nil
+            self.clearCharacteristics()
             self.hasLoadedBatteryLevel = false
             self.isConnectedToPinetime = false
             
@@ -266,6 +266,21 @@ class BLEManager: NSObject, ObservableObject {
         self.startScanning()
     }
     
+    // Drop every characteristic from the old connection so nothing writes to a stale peripheral
+    private func clearCharacteristics() {
+        blefsTransfer = nil
+        currentTimeService = nil
+        notifyCharacteristic = nil
+        weatherCharacteristic = nil
+        dfuControlPointCharacteristic = nil
+        dfuPacketCharacteristic = nil
+        navigationFlagsCharacteristic = nil
+        navigationNarrativeCharacteristic = nil
+        navigationDistanceCharacteristic = nil
+        navigationProgressCharacteristic = nil
+        musicChars = MusicCharacteristics()
+    }
+    
     private func updateAncsStatus(_ peripheral: CBPeripheral) {
         self.ancsAuthorized = peripheral.ancsAuthorized
     }
@@ -291,9 +306,7 @@ extension BLEManager: CBCentralManagerDelegate {
         if let error {
             log("Failed to connect to peripheral: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
             
-            // We can't do anything like check an error code, so this is sufficient for a "bond removed" message
-            // Won't work when language is not English? (localizedDescription)
-            if error.localizedDescription.contains("removed pairing information") {
+            if (error as? CBError)?.code == .peerRemovedPairingInformation {
                 self.error = NSLocalizedString("InfiniLink could not connect to your device because the bond is no longer present. Please remove the watch from Bluetooth settings to reconnect.", comment: "")
                 self.showError = true
                 
@@ -316,6 +329,7 @@ extension BLEManager: CBCentralManagerDelegate {
         
         // Drop the stale peripheral so in-flight BLEFS loops become no-ops and state can't half-persist
         infiniTime = nil
+        clearCharacteristics()
         hasLoadedBatteryLevel = false
         
         if let error {
@@ -393,7 +407,7 @@ extension BLEManager: CBPeripheralDelegate {
         
         for characteristic in characteristics {
             deviceManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
-            BLECharacteristicHandler().handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
+            BLECharacteristicHandler.shared.handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
         }
     }
     
@@ -404,7 +418,7 @@ extension BLEManager: CBPeripheralDelegate {
         }
         
         deviceManager.updateInfo(characteristic: characteristic)
-        BLECharacteristicHandler().handleUpdates(characteristic: characteristic, peripheral: peripheral)
+        BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic, peripheral: peripheral)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {

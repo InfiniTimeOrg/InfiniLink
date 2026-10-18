@@ -11,6 +11,8 @@ import CoreData
 import SwiftUI
 
 struct BLECharacteristicHandler {
+    static let shared = BLECharacteristicHandler()
+    
     let bleFs = BLEFSHandler.shared
     let bleManager = BLEManager.shared
     let healthKitManager = HealthKitManager.shared
@@ -40,14 +42,16 @@ struct BLECharacteristicHandler {
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
         let byteArray = [UInt8](characteristicData)
+        guard byteArray.count >= 2 else { return -1 }
         
         let firstBitValue = byteArray[0] & 0x01
         if firstBitValue == 0 {
             // Heart Rate Value Format is in the 2nd byte
             return Int(byteArray[1])
         } else {
-            // Heart Rate Value Format is in the 2nd and 3rd bytes
-            return (Int(byteArray[1]) << 8) + Int(byteArray[2])
+            // Heart Rate Value Format is little-endian in the 2nd and 3rd bytes
+            guard byteArray.count >= 3 else { return -1 }
+            return Int(byteArray[1]) + (Int(byteArray[2]) << 8)
         }
     }
     
@@ -109,9 +113,9 @@ struct BLECharacteristicHandler {
     func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
         switch characteristic.uuid {
         case bleManager.cbuuidList.musicControl:
-            let musicControl = [UInt8](characteristic.value!)
+            guard let value = characteristic.value, let control = value.first else { break }
             
-            MusicController.shared.controlMusic(controlNumber: Int(musicControl[0]))
+            MusicController.shared.controlMusic(controlNumber: Int(control))
         case bleManager.cbuuidList.hrm:
             let bpm = heartRate(from: characteristic)
             bleManager.heartRate = Double(bpm)
@@ -135,7 +139,7 @@ struct BLECharacteristicHandler {
                 updateHeartRate(bpm: bpm)
             }
         case bleManager.cbuuidList.bat:
-            guard let value = characteristic.value else { break }
+            guard let value = characteristic.value, !value.isEmpty else { break }
             let batData = [UInt8](value)
             
             log("Received battery value", type: .info, caller: "BLECharacteristicHandler")
@@ -147,7 +151,7 @@ struct BLECharacteristicHandler {
 
             notificationManager.checkToSendBatteryNotifications()
         case bleManager.cbuuidList.stepCount:
-            guard let value = characteristic.value else { break }
+            guard let value = characteristic.value, value.count >= 4 else { break }
             let stepData = [UInt8](value)
             let stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
             
