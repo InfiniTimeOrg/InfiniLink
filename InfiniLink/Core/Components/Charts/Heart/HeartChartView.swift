@@ -35,6 +35,7 @@ struct HeartChartView: View {
     @State private var displayedMax = NotificationSettingsManager.shared.settings.heartSettings.maxRange
     @State private var yDomain = NotificationSettingsManager.shared.settings.heartSettings.minRange...NotificationSettingsManager.shared.settings.heartSettings.maxRange
     @State private var pendingYScaleUpdate: DispatchWorkItem?
+    @State private var snapAnimation: Task<Void, Never>?
     @State private var scrollFetch: Task<Void, Never>?
     
     private let cal = Calendar.current
@@ -122,13 +123,43 @@ struct HeartChartView: View {
             : (displayedMin - 5) / 25 * 25...((displayedMax + 5 + 24) / 25 * 25)
     }
     
-    // Wait for scrolling to settle before re-fitting the Y axis so it doesn't jitter mid-scroll
+    func nearestHour(to date: Date) -> Date {
+        let hourStart = cal.dateInterval(of: .hour, for: date)?.start ?? date
+        
+        return date.timeIntervalSince(hourStart) < 1800 ? hourStart : hourStart.addingTimeInterval(3600)
+    }
+    
+    // The chart ignores withAnimation for scroll position changes, so step it manually
+    // Is there a less hacky way to do this?
+    func animateScroll(to target: Date) {
+        let start = scrollPositionDate
+        let distance = target.timeIntervalSince(start)
+        let frames = 20
+        
+        snapAnimation?.cancel()
+        snapAnimation = Task {
+            for frame in 1...frames {
+                try? await Task.sleep(nanoseconds: 16_000_000)
+                guard !Task.isCancelled else { return }
+                
+                let progress = Double(frame) / Double(frames)
+                scrollPositionDate = start.addingTimeInterval(distance * (1 - pow(1 - progress, 3)))
+            }
+        }
+    }
+    
     func scheduleYScaleUpdate() {
         pendingYScaleUpdate?.cancel()
         
         let update = DispatchWorkItem {
-            withAnimation {
-                updateYScale()
+            let alignedDate = nearestHour(to: scrollPositionDate)
+            
+            if alignedDate != scrollPositionDate {
+                animateScroll(to: alignedDate) // Re-fits the Y axis once the snap settles
+            } else {
+                withAnimation {
+                    updateYScale()
+                }
             }
         }
         pendingYScaleUpdate = update
