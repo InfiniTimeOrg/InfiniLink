@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import EventKit
 
 struct ContentView: View {
     @ObservedObject private var bleManager = BLEManager.shared

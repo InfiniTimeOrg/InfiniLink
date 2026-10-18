@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import EventKit
 
 struct NotificationsSettingsView: View {
     @ObservedObject private var bleManager = BLEManager.shared

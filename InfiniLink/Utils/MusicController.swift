@@ -97,7 +97,7 @@ class MusicController {
     
     func getCurrentSongInfo() -> SongInfo {
         let currentTrack = self.musicPlayer.nowPlayingItem
-        return SongInfo(trackName: currentTrack?.title ?? "Not Playing", artistName: currentTrack?.artist ?? "")
+        return SongInfo(trackName: currentTrack?.title ?? NSLocalizedString("Not Playing", comment: ""), artistName: currentTrack?.artist ?? "")
     }
     
     func updateMusicInformation() {

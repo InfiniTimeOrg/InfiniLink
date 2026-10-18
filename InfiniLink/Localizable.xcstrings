@@ -226,9 +226,6 @@
     "ANCS" : {
 
     },
-    "ANCS Enabled" : {
-
-    },
     "App" : {
 
     },
@@ -947,9 +944,6 @@
     "Next" : {
 
     },
-    "No" : {
-
-    },
     "No Data" : {
 
     },
@@ -960,6 +954,9 @@
 
     },
     "Not enough charge history yet. Check back after a few charge cycles." : {
+
+    },
+    "Not Playing" : {
 
     },
     "Nothing matched your search. Ensure your spelling is correct and try again." : {
@@ -1486,9 +1483,6 @@
 
     },
     "Workout" : {
-
-    },
-    "Yes" : {
 
     },
     "You can pin an exercise by long pressing the exercise you want to pin." : {

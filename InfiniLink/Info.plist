@@ -51,8 +51,6 @@
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
 	<key>NSBluetoothPeripheralUsageDescription</key>
 	<string>This app uses bluetooth to communicate with your PineTime.</string>
-	<key>NSCalendarsUsageDescription</key>
-	<string>This app needs access to your calendars to receive event reminders on your watch.</string>
 	<key>NSHealthShareUsageDescription</key>
 	<string>This app optionally uses Apple Health to write your heart rate and step count data.</string>
 	<key>NSHealthUpdateUsageDescription</key>
@@ -63,8 +61,6 @@
 	<string>This app needs your location to receive local weather information when the app is in the background.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>This app needs your location to receive local weather information.</string>
-	<key>NSRemindersUsageDescription</key>
-	<string>This app needs access to your reminders to receive them on your watch.</string>
 	<key>NSSupportsLiveActivities</key>
 	<true/>
 	<key>UIAppFonts</key>

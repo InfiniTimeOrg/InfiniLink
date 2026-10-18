@@ -7,7 +7,6 @@
 
 import SwiftUI
 import UserNotifications
-import EventKit
 
 struct AppNotification {
     let title: String
