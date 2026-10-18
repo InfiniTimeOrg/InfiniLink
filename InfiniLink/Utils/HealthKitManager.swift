@@ -19,10 +19,15 @@ class HealthKitManager: ObservableObject {
 
     @Published var healthStore: HKHealthStore?
     
+    private var pendingHeartRateSamples = [HKQuantitySample]()
+    
     private init() {
         if HKHealthStore.isHealthDataAvailable() {
             healthStore = HKHealthStore()
         }
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(flushHeartRateSamples), name: UIApplication.didEnterBackgroundNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(flushHeartRateSamples), name: UIApplication.willTerminateNotification, object: nil)
     }
     
     func writeSteps(_ stepsToAdd: Int, for date: Date = Date()) {
@@ -49,13 +54,27 @@ class HealthKitManager: ObservableObject {
         let sample = HKQuantitySample(type: heartRateType, quantity: HKQuantity(unit: HKUnit.count().unitDivided(by: .minute()), doubleValue: dataToAdd), start: date, end: date)
 
         if let healthStore, healthStore.authorizationStatus(for: heartRateType) == .sharingAuthorized && syncToAppleHealth && syncHeartRate {
-            healthStore.save(sample, withCompletion: { success, error in
-                if success {
-                    log("Heart rate successfully saved", type: .info, caller: "HealthKitManager")
-                } else if let error {
-                    log("Error saving heart rate: \(error.localizedDescription)", caller: "HealthKitManager")
-                }
-            })
+            pendingHeartRateSamples.append(sample)
+            
+            // Save in batches instead of one write per reading
+            if let first = pendingHeartRateSamples.first, pendingHeartRateSamples.count >= 10 || date.timeIntervalSince(first.startDate) >= 60 {
+                flushHeartRateSamples()
+            }
+        }
+    }
+    
+    @objc func flushHeartRateSamples() {
+        guard let healthStore, !pendingHeartRateSamples.isEmpty else { return }
+        
+        let samples = pendingHeartRateSamples
+        pendingHeartRateSamples = []
+        
+        healthStore.save(samples) { success, error in
+            if success {
+                log("Saved \(samples.count) heart rate samples", type: .info, caller: "HealthKitManager")
+            } else if let error {
+                log("Error saving heart rate: \(error.localizedDescription)", caller: "HealthKitManager")
+            }
         }
     }
     

@@ -159,6 +159,9 @@
     "%lld cm" : {
 
     },
+    "%lld dBm" : {
+
+    },
     "%lld ft" : {
 
     },
@@ -220,6 +223,9 @@
     "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
+    "ANCS" : {
+
+    },
     "ANCS Enabled" : {
 
     },
@@ -248,6 +254,9 @@
 
     },
     "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Authorized" : {
 
     },
     "Auto-Pause" : {
@@ -345,6 +354,9 @@
 
     },
     "Connecting..." : {
+
+    },
+    "Connection Diagnostics" : {
 
     },
     "Connection strength: " : {
@@ -452,6 +464,12 @@
           }
         }
       }
+    },
+    "Disconnected by InfiniLink" : {
+
+    },
+    "Disconnects This Session" : {
+
     },
     "Display Timeout" : {
 
@@ -812,6 +830,15 @@
     "Kilojoules" : {
 
     },
+    "Last connected %@" : {
+
+    },
+    "Last Data Received" : {
+
+    },
+    "Last Disconnect" : {
+
+    },
     "Learn more" : {
       "localizations" : {
         "fr" : {
@@ -929,6 +956,9 @@
     "No Logs" : {
 
     },
+    "Not Authorized" : {
+
+    },
     "Not enough charge history yet. Check back after a few charge cycles." : {
 
     },
@@ -1019,6 +1049,9 @@
       }
     },
     "Range" : {
+
+    },
+    "Reason" : {
 
     },
     "Receive a reminder to drink water for the set amount of times a day." : {
@@ -1134,6 +1167,12 @@
     "Several days ago" : {
 
     },
+    "Signal" : {
+
+    },
+    "Signal: " : {
+
+    },
     "Software Update" : {
 
     },
@@ -1155,6 +1194,9 @@
           }
         }
       }
+    },
+    "Status" : {
+
     },
     "Steps" : {
       "localizations" : {

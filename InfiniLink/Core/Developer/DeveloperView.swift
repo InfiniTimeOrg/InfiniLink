@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct DeveloperView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -27,6 +28,9 @@ struct DeveloperView: View {
             Section {
                 NavigationLink("Debug Logs") {
                     DebugLogsView()
+                }
+                NavigationLink("Connection Diagnostics") {
+                    ConnectionDiagnosticsView()
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
@@ -158,6 +162,59 @@ struct DeveloperView: View {
             }
         }
         .navigationTitle("Developer")
+    }
+}
+
+struct ConnectionDiagnosticsView: View {
+    @ObservedObject var bleManager = BLEManager.shared
+    
+    private let rssiTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
+    var body: some View {
+        List {
+            Section {
+                AboutRowView("Status", value: bleManager.connectionState)
+                if bleManager.isConnectedToPinetime, let rssi = bleManager.rssi {
+                    HStack {
+                        Text("Signal")
+                        Spacer()
+                        Text("\(rssi) dBm")
+                            .foregroundStyle(.gray)
+                        Text(RSSI.from(rssi: rssi).connectionStrength)
+                            .foregroundStyle(RSSI.from(rssi: rssi).color)
+                    }
+                }
+                AboutRowView("ANCS", value: bleManager.ancsAuthorized ? NSLocalizedString("Authorized", comment: "") : NSLocalizedString("Not Authorized", comment: ""))
+            }
+            Section {
+                AboutRowView("Disconnects This Session", value: "\(bleManager.disconnectCount)")
+                if let date = bleManager.lastDisconnectDate {
+                    HStack {
+                        Text("Last Disconnect")
+                        Spacer()
+                        Text(date, format: .relative(presentation: .named))
+                            .foregroundStyle(.gray)
+                    }
+                    AboutRowView("Reason", value: bleManager.lastDisconnectReason ?? NSLocalizedString("Disconnected by InfiniLink", comment: ""))
+                }
+                if let date = bleManager.lastDataReceivedDate {
+                    HStack {
+                        Text("Last Data Received")
+                        Spacer()
+                        Text(date, format: .relative(presentation: .named))
+                            .foregroundStyle(.gray)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Connection Diagnostics")
+        .onAppear {
+            bleManager.infiniTime?.readRSSI()
+        }
+        .onReceive(rssiTimer) { _ in
+            // Reading the RSSI also re-renders the relative dates above
+            bleManager.infiniTime?.readRSSI()
+        }
     }
 }
 

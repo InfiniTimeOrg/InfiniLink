@@ -51,6 +51,11 @@ struct MyDevicesView: View {
                                             }
                                         }())
                                         .foregroundStyle(.gray)
+                                        if bleManager.infiniTime?.identifier.uuidString != watch.uuid, let lastSeen = bleManager.lastSeenDate(for: watch.uuid) {
+                                            Text("Last connected \(lastSeen, format: .relative(presentation: .named))")
+                                                .font(.footnote)
+                                                .foregroundStyle(.gray)
+                                        }
                                     }
                                     Spacer()
                                 }

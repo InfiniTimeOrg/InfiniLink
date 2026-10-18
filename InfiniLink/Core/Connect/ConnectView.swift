@@ -73,8 +73,11 @@ struct ConnectView: View {
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(height: 150)
-                                        Text("InfiniTime")
+                                        Text(infiniTime.name ?? "InfiniTime")
                                             .font(.title.weight(.bold))
+                                        if let rssi = bleManager.discoveredRSSI[infiniTime.identifier] {
+                                            SignalStrengthView(rssi: rssi)
+                                        }
                                     }
                                     Spacer()
                                     Button {
@@ -130,9 +133,13 @@ struct ConnectView: View {
                                                             .resizable()
                                                             .aspectRatio(contentMode: .fit)
                                                             .frame(height: 70)
-                                                        Text("InfiniTime")
+                                                        Text(device.name ?? "InfiniTime")
                                                             .font(.system(size: 19).weight(.semibold))
                                                             .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                        if let rssi = bleManager.discoveredRSSI[device.identifier] {
+                                                            SignalStrengthView(rssi: rssi)
+                                                                .font(.subheadline)
+                                                        }
                                                     }
                                                 }
                                                 .padding()
@@ -182,6 +189,21 @@ struct ConnectView: View {
                     bleManager.stopScanning()
                 }
             }
+        }
+    }
+}
+
+struct SignalStrengthView: View {
+    let rssi: Int
+    
+    var body: some View {
+        let strength = RSSI.from(rssi: rssi)
+        
+        HStack(spacing: 0) {
+            Text("Signal: ")
+                .foregroundStyle(.gray)
+            Text(strength.connectionStrength)
+                .foregroundStyle(strength.color)
         }
     }
 }

@@ -57,6 +57,7 @@ class BLEManager: NSObject, ObservableObject {
         let motion = CBUUID(string: "00030002-78fc-48fe-8e23-433b3a1942d0")
         let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
         
+        let dfuService = CBUUID(string: "00001530-1212-efde-1523-785feabcd123")
         let dfuControlPoint = CBUUID(string: "00001531-1212-efde-1523-785feabcd123")
         let dfuPacket = CBUUID(string: "00001532-1212-efde-1523-785feabcd123")
         
@@ -90,6 +91,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var ancsAuthorized = false // We don't need to persist this, it only matters when we're connected
     
     @Published var newPeripherals: [CBPeripheral] = []
+    @Published var discoveredRSSI: [UUID: Int] = [:]
     @Published var infiniTime: CBPeripheral?
     @Published var peripheralToConnect: CBPeripheral?
     
@@ -102,6 +104,12 @@ class BLEManager: NSObject, ObservableObject {
     
     @Published var error: String = ""
     @Published var showError: Bool = false
+    
+    @Published var disconnectCount = 0
+    @Published var lastDisconnectReason: String?
+    @Published var lastDisconnectDate: Date?
+    var lastDataReceivedDate: Date?
+    private var lastSeenSavedDate: Date?
     
     @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     @AppStorage("forceAncs") var forceAncs = true
@@ -146,6 +154,7 @@ class BLEManager: NSObject, ObservableObject {
         
         manager?.scanForPeripherals(withServices: nil, options: nil)
         newPeripherals = []
+        discoveredRSSI = [:]
         isScanning = true
     }
     
@@ -203,6 +212,7 @@ class BLEManager: NSObject, ObservableObject {
         infiniTime?.discoverServices(nil)
         isConnectedToPinetime = true
         peripheralToConnect = nil // We're done using this, so set it to nil
+        saveLastSeen(peripheral)
         
         updateAncsStatus(peripheral)
         
@@ -281,6 +291,20 @@ class BLEManager: NSObject, ObservableObject {
         musicChars = MusicCharacteristics()
     }
     
+    func lastSeenDate(for uuid: String?) -> Date? {
+        guard let uuid, let dates = UserDefaults.standard.dictionary(forKey: "lastSeenDates") as? [String: Double], let timestamp = dates[uuid] else { return nil }
+        
+        return Date(timeIntervalSince1970: timestamp)
+    }
+    
+    private func saveLastSeen(_ peripheral: CBPeripheral) {
+        var dates = UserDefaults.standard.dictionary(forKey: "lastSeenDates") as? [String: Double] ?? [:]
+        dates[peripheral.identifier.uuidString] = Date().timeIntervalSince1970
+        UserDefaults.standard.set(dates, forKey: "lastSeenDates")
+        
+        lastSeenSavedDate = Date()
+    }
+    
     private func updateAncsStatus(_ peripheral: CBPeripheral) {
         self.ancsAuthorized = peripheral.ancsAuthorized
     }
@@ -293,7 +317,15 @@ extension BLEManager: CBCentralManagerDelegate {
         if deviceManager.pairedDeviceID == peripheral.identifier.uuidString && !isPairingNewDevice {
             connect(peripheral: peripheral)
         }
-        if peripheral.name == "InfiniTime" && !newPeripherals.contains(where: { $0.identifier == peripheral.identifier }) && !deviceManager.watches.contains(where: { $0.uuid ?? "" == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
+        // InfiniTime always advertises the name "InfiniTime" along with its DFU service, so require both
+        let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String ?? peripheral.name
+        let advertisedServices = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
+        guard name == "InfiniTime" && advertisedServices.contains(cbuuidList.dfuService) else { return }
+        
+        if RSSI.intValue != 127 { // 127 means the value is unavailable
+            discoveredRSSI[peripheral.identifier] = RSSI.intValue
+        }
+        if !newPeripherals.contains(where: { $0.identifier == peripheral.identifier }) && !deviceManager.watches.contains(where: { $0.uuid ?? "" == peripheral.identifier.uuidString }) { // The peripheral has not already been discovered
             newPeripherals.append(peripheral)
         }
     }
@@ -324,6 +356,12 @@ extension BLEManager: CBCentralManagerDelegate {
     func centralManager(_ central: CBCentralManager, didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
         isConnectedToPinetime = false
         notifyCharacteristic = nil
+        
+        disconnectCount += 1
+        lastDisconnectDate = Date()
+        lastDisconnectReason = error?.localizedDescription
+        saveLastSeen(peripheral)
+        HealthKitManager.shared.flushHeartRateSamples()
         
         guard !isUpdatingFirmware else { return }
         
@@ -415,6 +453,12 @@ extension BLEManager: CBPeripheralDelegate {
         guard error == nil else {
             log(error!.localizedDescription, caller: "didUpdateValueFor characteristic", target: .ble)
             return
+        }
+        
+        lastDataReceivedDate = Date()
+        // Keep the last seen date current without writing it on every update
+        if Date().timeIntervalSince(lastSeenSavedDate ?? .distantPast) > 60 {
+            saveLastSeen(peripheral)
         }
         
         deviceManager.updateInfo(characteristic: characteristic)

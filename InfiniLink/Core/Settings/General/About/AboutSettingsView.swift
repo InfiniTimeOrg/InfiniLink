@@ -29,7 +29,6 @@ struct AboutSettingsView: View {
                     AboutRowView("Manufacturer", value: deviceManager.manufacturer)
                     AboutRowView("Model Name", value: deviceManager.modelNumber)
                 }
-                AboutRowView("ANCS Enabled", value: bleManager.ancsAuthorized ? NSLocalizedString("Yes", comment: "") : NSLocalizedString("No", comment: ""))
                 Section {
                     AboutRowView("File System", value: deviceManager.blefsVersion)
                     AboutRowView("Hardware Revision", value: deviceManager.hardwareRevision)
