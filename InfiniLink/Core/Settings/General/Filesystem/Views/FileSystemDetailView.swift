@@ -8,26 +8,23 @@
 import SwiftUI
 
 struct FileSystemDetailView: View {
-    @Environment(\.dismiss) var dismiss
-    
-    @ObservedObject var bleFs = BLEFSHandler.shared
-    @ObservedObject var fileSystemViewModel = FileSystemViewModel.shared
-    
-    @State var settings: Settings? = nil
-    
-    @State var textData: String? = nil
-    @State var imageData: UIImage? = nil
-    @State var csvData: [[String]]? = nil
+    @State private var settings: Settings?
+    @State private var textData: String?
+    @State private var csvData: [[String]]?
     
     @State private var isLoadingFile = true
+    @State private var hasLoaded = false
     
-    let fileName: String
+    let path: String
     
-    var isSettings: Bool {
-        return fileName == "settings.dat"
+    private var fileName: String {
+        (path as NSString).lastPathComponent
+    }
+    private var isSettings: Bool {
+        path == "/settings.dat"
     }
     
-    func row(key: String, value: String) -> some View {
+    func row(key: LocalizedStringKey, value: LocalizedStringKey) -> some View {
         HStack {
             Text(key)
             Spacer()
@@ -37,122 +34,100 @@ struct FileSystemDetailView: View {
     }
     
     var body: some View {
-        NavigationView {
-            VStack {
-                if isLoadingFile {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, maxHeight: .infinity)
-                } else {
-                    if let settings = settings {
-                        List {
-                            row(key: NSLocalizedString("Display Timeout", comment: ""), value: "\(settings.screenTimeOut / 1000) Seconds")
-                            row(key: NSLocalizedString("Brightness Level", comment: ""), value: {
-                                switch settings.brightLevel {
-                                case .Low:
-                                    return "Low"
-                                case .Mid:
-                                    return "Mid"
-                                case .High:
-                                    return "High"
-                                }
-                            }())
-                            row(key: NSLocalizedString("Time Format", comment: ""), value: {
-                                switch settings.clockType {
-                                case .H12:
-                                    return "12 Hour"
-                                case .H24:
-                                    return "24 Hour"
-                                }
-                            }())
-                            row(key: NSLocalizedString("Steps Goal", comment: ""), value: String(settings.stepsGoal))
-                            row(key: NSLocalizedString("Weather Format", comment: ""), value: {
-                                switch settings.weatherFormat {
-                                case .Imperial:
-                                    return "Imperial"
-                                case .Metric:
-                                    return "Metric"
-                                }
-                            }())
-                            row(key: NSLocalizedString("Hourly Chimes", comment: ""), value: {
-                                switch settings.chimesOption {
-                                case .None:
-                                    return "None"
-                                case .Hours:
-                                    return "Hour"
-                                case .HalfHours:
-                                    return "Half Hour"
-                                }
-                            }())
+        Group {
+            if isLoadingFile {
+                ProgressView()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+            } else if let settings {
+                List {
+                    row(key: "Display Timeout", value: "\(settings.screenTimeOut / 1000) Seconds")
+                    row(key: "Brightness Level", value: {
+                        switch settings.brightLevel {
+                        case .Low:
+                            return "Low"
+                        case .Mid:
+                            return "Mid"
+                        case .High:
+                            return "High"
                         }
-                    } else {
-                        ScrollView {
-                            VStack {
-                                if let textData {
-                                    Text(textData)
-                                } else if let csvData {
-                                    VStack(spacing: 0) {
-                                        ForEach(csvData, id: \.self) { rows in
-                                            HStack(spacing: 0) {
-                                                ForEach(rows, id: \.self) { field in
-                                                    Text(field)
-                                                        .padding(6)
-                                                    Divider()
-                                                }
-                                            }
-                                            .padding(6)
+                    }())
+                    row(key: "Time Format", value: settings.clockType == .H12 ? "12 Hour" : "24 Hour")
+                    row(key: "Steps Goal", value: "\(settings.stepsGoal)")
+                    row(key: "Weather Format", value: settings.weatherFormat == .Imperial ? "Imperial" : "Metric")
+                    row(key: "Hourly Chimes", value: {
+                        switch settings.chimesOption {
+                        case .None:
+                            return "None"
+                        case .Hours:
+                            return "Hour"
+                        case .HalfHours:
+                            return "Half Hour"
+                        }
+                    }())
+                }
+            } else {
+                ScrollView {
+                    VStack {
+                        if let csvData {
+                            VStack(spacing: 0) {
+                                ForEach(Array(csvData.enumerated()), id: \.offset) { _, fields in
+                                    HStack(spacing: 0) {
+                                        ForEach(Array(fields.enumerated()), id: \.offset) { _, field in
+                                            Text(field)
+                                                .padding(6)
                                             Divider()
                                         }
                                     }
-                                } else if let imageData {
-                                    Image(uiImage: imageData)
+                                    .padding(6)
+                                    Divider()
                                 }
                             }
-                            .padding()
-                            .frame(maxWidth: .infinity, alignment: .leading)
+                        } else {
+                            Text(textData ?? NSLocalizedString("This file couldn't be read.", comment: ""))
+                                .textSelection(.enabled)
                         }
                     }
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .toolbar {
-                Button("Done", role: .cancel) {
-                    dismiss()
-                }
-            }
-            .onAppear {
-                self.settings = nil
-                
-                if isSettings {
-                    bleFs.readSettings { settings in
-                        self.settings = settings
-                        self.isLoadingFile = false
-                        
-                        // While we're already loading the settings, make sure we keep the vars updated
-//                        DeviceManager.shared.updateSettings(settings: settings)
-                    }
-                } else {
-                    bleFs.readFile(fileSystemViewModel.getDir(input: fileName)) { data in
-                        let `extension` = fileName.components(separatedBy: ".").last!
-                        
-                        guard let info = try? bleFs.convertDataToReadableFile(data: data, fileExtension: `extension`) else { return }
-                        
-                        switch `extension` {
-                        case "txt":
-                            self.textData = info as? String
-                        case "json":
-                            self.textData = bleFs.jsonToMultilineString(info as! Data)
-                        case "csv":
-                            self.csvData = info as? [[String]]
-                        default:
-                            self.textData = "This file is not currently supported."
-                        }
-                        
-                        self.isLoadingFile = false
-                    }
-                }
-            }
-            .navigationTitle(isSettings ? "Settings" : fileName)
-            .navigationBarTitleDisplayMode(.inline)
         }
-        .navigationViewStyle(.stack)
+        .onAppear {
+            guard !hasLoaded else { return }
+            hasLoaded = true
+            
+            if isSettings {
+                BLEFSHandler.shared.readSettings { settings in
+                    self.settings = settings
+                    isLoadingFile = false
+                }
+            } else {
+                BLEFSHandler.shared.readFile(path) { data in
+                    show(data)
+                    isLoadingFile = false
+                }
+            }
+        }
+        .navigationTitle(isSettings ? "Settings" : fileName)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    private func show(_ data: Data) {
+        switch (fileName as NSString).pathExtension.lowercased() {
+        case "txt":
+            textData = String(data: data, encoding: .utf8)
+        case "json":
+            if let object = try? JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed),
+               let pretty = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted, .sortedKeys, .fragmentsAllowed]) {
+                textData = String(decoding: pretty, as: UTF8.self)
+            }
+        case "csv":
+            csvData = String(data: data, encoding: .utf8)?
+                .components(separatedBy: .newlines)
+                .filter { !$0.isEmpty }
+                .map { $0.components(separatedBy: ",") }
+        default:
+            textData = NSLocalizedString("This file is not currently supported.", comment: "")
+        }
     }
 }

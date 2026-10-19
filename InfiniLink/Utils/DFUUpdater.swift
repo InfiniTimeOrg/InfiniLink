@@ -34,8 +34,8 @@ class DFUUpdater: ObservableObject {
     @Published var resourceFilename = ""
     @Published var firmwareSelected = false
     @Published var local = true
-    @Published var firmwareURL: URL!
-    @Published var resourceURL: URL!
+    @Published var firmwareURL: URL?
+    @Published var resourceURL: URL?
 
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
@@ -56,6 +56,9 @@ class DFUUpdater: ObservableObject {
     }
 
     func fileSize(from fileUrl: URL) -> Int {
+        let isAccessing = fileUrl.startAccessingSecurityScopedResource()
+        defer { if isAccessing { fileUrl.stopAccessingSecurityScopedResource() } }
+        
         do {
             let resource = try fileUrl.resourceValues(forKeys: [.fileSizeKey])
             return resource.fileSize ?? 0
@@ -74,25 +77,21 @@ class DFUUpdater: ObservableObject {
         percentComplete = 0
     }
 
-    // Everything is on disk now (either downloaded or in a local file)
-    // push resources (if any) and then flash
+    // Everything is on disk now (either downloaded or in a local file), so push resources (if any) and then flash
     func install() {
         downloadManager.updateStarted = true
 
-        if firmwareURL == nil, resourceURL != nil {
-            installResourcesOnly()
-        } else if !local, resourceURL != nil {
-            uploadResources { [self] in installFirmware() }
+        if let resourceURL {
+            uploadResources(from: resourceURL) { [self] in
+                if firmwareURL == nil {
+                    finish(.completed)
+                } else {
+                    installFirmware()
+                }
+            }
         } else {
             installFirmware()
         }
-    }
-
-    // External-resources-only flow
-    // push resources over BLEFS, no firmware flash
-    func installResourcesOnly() {
-        downloadManager.updateStarted = true
-        uploadResources { [self] in finish(.completed) }
     }
 
     func cancel() {
@@ -113,10 +112,10 @@ class DFUUpdater: ObservableObject {
         fail(NSLocalizedString("The watch's resources couldn't be updated.", comment: ""))
     }
 
-    private func uploadResources(then next: @escaping () -> Void) {
+    private func uploadResources(from url: URL, then next: @escaping () -> Void) {
         stage = .uploadingResources
         statusDetail = ""
-        BLEFSHandler.shared.uploadExternalResources(completion: next)
+        BLEFSHandler.shared.uploadExternalResources(from: url, completion: next)
     }
 
     private func installFirmware() {

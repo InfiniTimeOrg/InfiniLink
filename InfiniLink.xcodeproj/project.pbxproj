@@ -64,7 +64,6 @@
 		E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A082CB4C77300D64E0B /* FileSystemViewModel.swift */; };
 		E0599A0D2CB4DF0800D64E0B /* FileSystemDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */; };
 		E0599A0F2CB4E62800D64E0B /* SetUpDetailsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */; };
-		E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0599A102CB5553B00D64E0B /* FSFile.swift */; };
 		E05D2E722D7E8801004A6CE0 /* EmptyChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */; };
 		E05D2E752D7EA95B004A6CE0 /* ChartType.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05D2E742D7EA95B004A6CE0 /* ChartType.swift */; };
 		E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E05DA4C02D13752C00A49203 /* DebugLogManager.swift */; };
@@ -252,7 +251,6 @@
 		E0599A082CB4C77300D64E0B /* FileSystemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemViewModel.swift; sourceTree = "<group>"; };
 		E0599A0C2CB4DF0800D64E0B /* FileSystemDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileSystemDetailView.swift; sourceTree = "<group>"; };
 		E0599A0E2CB4E62800D64E0B /* SetUpDetailsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SetUpDetailsView.swift; sourceTree = "<group>"; };
-		E0599A102CB5553B00D64E0B /* FSFile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSFile.swift; sourceTree = "<group>"; };
 		E05D2E712D7E8801004A6CE0 /* EmptyChartView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyChartView.swift; sourceTree = "<group>"; };
 		E05D2E742D7EA95B004A6CE0 /* ChartType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartType.swift; sourceTree = "<group>"; };
 		E05DA4C02D13752C00A49203 /* DebugLogManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLogManager.swift; sourceTree = "<group>"; };
@@ -563,7 +561,6 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C06A2CB0DE4C0042A12D /* Weather.swift */,
-				E0599A102CB5553B00D64E0B /* FSFile.swift */,
 				E0B85D202CB625FE00D85122 /* Exercise.swift */,
 				E064D4092D77F32F008500AE /* CalendarDay.swift */,
 				E05D2E742D7EA95B004A6CE0 /* ChartType.swift */,
@@ -1010,7 +1007,6 @@
 				E0C0DE00000000000000A00B /* WorkoutLiveActivityController.swift in Sources */,
 				E0599A002CB46EB200D64E0B /* StepCountManager.swift in Sources */,
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
-				E0599A112CB5553B00D64E0B /* FSFile.swift in Sources */,
 				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
 				E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */,
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,

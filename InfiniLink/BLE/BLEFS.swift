@@ -11,47 +11,15 @@ import Zip
 import SwiftUI
 
 class BLEFSHandler: ObservableObject {
-    static var shared = BLEFSHandler()
+    static let shared = BLEFSHandler()
     
     let bleManager = BLEManager.shared
     let dfuUpdater = DFUUpdater.shared
     
-    var informationTransfer: [InformationFS] = []
-    var readFileFS: ReadFileFS = ReadFileFS()
-    var writeFileFS: WriteFileFS = WriteFileFS()
-
-    private var pendingWriteResponse: DispatchSemaphore?
-    
-    struct WriteFileFS {
-        var group = DispatchGroup()
-        var offset: Int = 0
-        var freeSpace: UInt32  = 0
-        var data = Data()
-        var completed: Bool = false
-        var valid: Bool = false
-    }
-    
     struct ReadFileFS {
-        var group = DispatchGroup()
-        var chunkOffset: UInt32 = 0
-        var totalLength: UInt32  = 0
-        var chunkLength: UInt32  = 0
         var data = Data()
-        var completed : Bool = false
-        var valid : Bool = false
+        var valid = false
         var missing = false
-    }
-    
-    struct InformationFS {
-        var group = DispatchGroup()
-        var dirList: DirList = DirList()
-        var valid: Bool = false
-    }
-    
-    struct DirList {
-        var parentPath = ""
-        var ls: [Dir] = []
-        var valid: Bool = false
     }
     
     struct Dir {
@@ -59,6 +27,8 @@ class BLEFSHandler: ObservableObject {
         var fileSize: Int = 0
         var flags: Int = 0
         var pathNames: String = ""
+        
+        var isDirectory: Bool { flags & 1 == 1 }
     }
     
     enum Commands : UInt8 {
@@ -81,9 +51,6 @@ class BLEFSHandler: ObservableObject {
         
         case ls = 0x50
         case lsResponse = 0x51
-        
-        case mv = 0x60
-        case mvResponse = 0x61
     }
 
     enum Responses: UInt8 {
@@ -97,48 +64,53 @@ class BLEFSHandler: ObservableObject {
         
         // Extended status
         case dirNotEmptyError = 0x0A
+        
+        var description: String {
+            switch self {
+            case .ok: return "OK"
+            case .error: return "error"
+            case .noFile: return "no file"
+            case .protocolError: return "protocol error"
+            case .readOnly: return "read only"
+            case .dirNotEmptyError: return "directory not empty"
+            }
+        }
     }
     
     @Published var progress: Int = 0
-    @Published var externalResourcesSize: Int = 0
     
-    func uploadExternalResources(completion: @escaping() -> Void) {
+    private let responseTimeout = DispatchTimeInterval.seconds(5)
+    private let maxReadChunkSize: UInt32 = 490
+    private let writeChunkSize = 170
+    
+    // Responses arrive on the main queue while requests wait for them on a background one
+    private let responseLock = NSLock()
+    private let responseSignal = DispatchSemaphore(value: 0)
+    private var responses: [[UInt8]] = []
+    // The watch handles one request at a time
+    private let requestLock = NSLock()
+    
+    func uploadExternalResources(from url: URL, completion: @escaping() -> Void) {
         log("External resource upload requested", type: .info, caller: "BLEFSHandler", target: .ble)
         
         DispatchQueue.global(qos: .default).async { [self] in
             do {
-                let unzipDirectory = try Zip.quickUnzipFile(dfuUpdater.resourceURL)
-                let jsonFilePath = unzipDirectory.appendingPathComponent("resources.json")
-                let jsonData = try Data(contentsOf: jsonFilePath)
+                let isAccessing = url.startAccessingSecurityScopedResource()
+                defer { if isAccessing { url.stopAccessingSecurityScopedResource() } }
                 
-                let decoder = JSONDecoder()
-                let resources = try decoder.decode(ResourcesJSON.self, from: jsonData)
+                let unzipDirectory = try Zip.quickUnzipFile(url)
+                let jsonData = try Data(contentsOf: unzipDirectory.appendingPathComponent("resources.json"))
+                let resources = try JSONDecoder().decode(ResourcesJSON.self, from: jsonData).resources
                 
-                var newExternalResourcesSize = 0
-                
-                // Loop over resources and calculate the size of each file
-                for resource in resources.resources {
-                    let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
-                    let fileData = try Data(contentsOf: fileDataPath)
-                    
-                    newExternalResourcesSize += fileData.count
-                }
-                
-                DispatchQueue.main.async {
-                    self.externalResourcesSize = newExternalResourcesSize
-                }
-                
-                // Process each resource: create directory and write file
-                for (index, resource) in resources.resources.enumerated() {
+                for (index, resource) in resources.enumerated() {
                     createDir(path: resource.path)
-                    let fileDataPath = unzipDirectory.appendingPathComponent(resource.filename)
-                    let fileData = try Data(contentsOf: fileDataPath)
+                    let fileData = try Data(contentsOf: unzipDirectory.appendingPathComponent(resource.filename))
                     
                     DispatchQueue.main.async {
-                        self.dfuUpdater.statusDetail = "Uploading file \(index + 1) of \(resources.resources.count)"
+                        self.dfuUpdater.statusDetail = "Uploading file \(index + 1) of \(resources.count)"
                     }
                     
-                    guard writeFile(data: fileData, path: resource.path, offset: 0)?.valid == true else {
+                    guard writeFile(data: fileData, path: resource.path) else {
                         DispatchQueue.main.async { self.dfuUpdater.reportResourceUploadFailure() }
                         return
                     }
@@ -159,444 +131,202 @@ class BLEFSHandler: ObservableObject {
         }
     }
     
+    // Make each parent directory of the path, ignoring ones that already exist
     private func createDir(path: String) {
-        log("Create directory called", type: .info, caller: "BLEFSHandler", target: .ble)
+        let components = path.split(separator: "/").dropLast()
         
-        let dir = path.components(separatedBy: "/").filter { $0 != "" }
-        
-        if dir.count > 1 {
-            var dirList : [String] = []
-            var newDir = ""
-            for idx in 0...dir.count-2 {
-                newDir = newDir + "/" + dir[idx]
-                dirList.append(newDir)
-            }
-            
-            for makePath in dirList {
-                let _ = makeDir(path: makePath)
-            }
+        for index in components.indices {
+            _ = makeDir(path: "/" + components[...index].joined(separator: "/"))
         }
     }
-
-    func readFile(path: String, offset: UInt32) -> ReadFileFS {
+    
+    func handleResponse(responseData: [UInt8]) {
+        responseLock.withLock { responses.append(responseData) }
+        responseSignal.signal()
+    }
+    
+    private func nextResponse(_ command: Commands) -> [UInt8]? {
+        while responseSignal.wait(timeout: .now() + responseTimeout) == .success {
+            let response = responseLock.withLock { responses.removeFirst() }
+            if response.count >= 2 && response[0] == command.rawValue {
+                return response
+            }
+        }
+        
+        log("Timed out waiting for a BLE FS response", caller: "BLEFSHandler", target: .ble)
+        return nil
+    }
+    
+    private func send(_ packet: Data, expecting command: Commands) -> [UInt8]? {
+        // Responses arrive on the main queue, so waiting for them there would always time out
+        assert(!Thread.isMainThread, "BLE FS requests must run off the main thread")
+        guard bleManager.isConnectedToPinetime, let infiniTime = bleManager.infiniTime, let transfer = bleManager.blefsTransfer else { return nil }
+        
+        // Drop anything left over from a request that timed out
+        while responseSignal.wait(timeout: .now()) == .success {
+            _ = responseLock.withLock { responses.removeFirst() }
+        }
+        
+        infiniTime.writeValue(packet, for: transfer, type: .withResponse)
+        return nextResponse(command)
+    }
+    
+    private func isOK(_ response: [UInt8]?, _ request: String, logFailure: Bool = true) -> Bool {
+        guard let response else { return false }
+        guard response[1] == Responses.ok.rawValue else {
+            if logFailure {
+                log("\(request) failed: \(Responses(rawValue: response[1])?.description ?? "unknown response \(response[1])")", caller: "BLEFSHandler", target: .ble)
+            }
+            return false
+        }
+        
+        return true
+    }
+    
+    // Command, padding, then the path's length in bytes
+    private func header(_ command: Commands, path: String) -> Data {
+        var data = Data([command.rawValue, Commands.padding.rawValue])
+        data.append(contentsOf: UInt16(path.utf8.count).littleEndianBytes)
+        return data
+    }
+    
+    func readFile(path: String) -> ReadFileFS {
         log("Read file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        var writeData = Data()
-        
-        readFileFS = ReadFileFS()
-        readFileFS.group = DispatchGroup()
-        readFileFS.group.enter()
-
-        writeData.append(Commands.readInit.rawValue)
-        writeData.append(Commands.padding.rawValue)
-
-        writeData.append(UInt8(path.count & 0x00FF))
-        writeData.append(UInt8((path.count & 0xFF00) >> 8))
-        
-        writeData.append(contentsOf: convertUInt32ToUInt8Array(value: offset))
-        writeData.append(contentsOf: convertUInt32ToUInt8Array(value: 490))
-
-        let pathData = path.data(using: .utf8)!
-        writeData.append(pathData)
-
-        bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
-        readFileFS.group.wait()
-        
-        while !readFileFS.completed {
-            readFileFS.group.enter()
-            writeData = Data()
+        return requestLock.withLock {
+            var result = ReadFileFS()
             
-            writeData.append(Commands.readData.rawValue)
-            writeData.append(Responses.ok.rawValue)
+            var packet = header(.readInit, path: path)
+            packet.append(contentsOf: UInt32(0).littleEndianBytes)
+            packet.append(contentsOf: maxReadChunkSize.littleEndianBytes)
+            packet.append(Data(path.utf8))
             
-            writeData.append(Commands.padding.rawValue)
-            writeData.append(Commands.padding.rawValue)
+            while let response = send(packet, expecting: .readResponse) {
+                guard isOK(response, "Read \(path)", logFailure: response[1] != Responses.noFile.rawValue), response.count >= 16 else {
+                    result.missing = response[1] == Responses.noFile.rawValue
+                    return result
+                }
+                
+                let chunkOffset: UInt32 = response.littleEndianValue(at: 4)
+                let totalLength: UInt32 = response.littleEndianValue(at: 8)
+                let chunkLength: UInt32 = response.littleEndianValue(at: 12)
+                result.data.append(contentsOf: response.dropFirst(16))
+                
+                let nextOffset = chunkOffset + chunkLength
+                if nextOffset >= totalLength {
+                    result.valid = true
+                    return result
+                }
+                guard chunkLength > 0 else { return result }
+                
+                packet = Data([Commands.readData.rawValue, Responses.ok.rawValue, Commands.padding.rawValue, Commands.padding.rawValue])
+                packet.append(contentsOf: nextOffset.littleEndianBytes)
+                packet.append(contentsOf: maxReadChunkSize.littleEndianBytes)
+            }
             
-            writeData.append(contentsOf: convertUInt32ToUInt8Array(value: readFileFS.chunkOffset + readFileFS.chunkLength))
-            writeData.append(contentsOf: convertUInt32ToUInt8Array(value: 490))
-            
-            bleManager.infiniTime?.writeValue(writeData, for: BLEManager.shared.blefsTransfer!, type: .withResponse)
-            readFileFS.group.wait()
+            return result
         }
-        
-        return readFileFS
     }
 
-    func writeFile(data: Data, path: String, offset: UInt32) -> WriteFileFS? {
-        guard let transferChar = bleManager.blefsTransfer, bleManager.isConnectedToPinetime else { return nil }
-        
+    func writeFile(data: Data, path: String) -> Bool {
         log("Write file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        let responseTimeout = DispatchTimeInterval.seconds(5)
-        let semaphore = DispatchSemaphore(value: 0)
-        pendingWriteResponse = semaphore
-        defer { pendingWriteResponse = nil }
-        
-        writeFileFS = WriteFileFS()
-        
-        var header = Data()
-        header.append(Commands.write.rawValue)
-        header.append(Commands.padding.rawValue)
-        header.append(UInt8(path.count & 0x00FF))
-        header.append(UInt8((path.count & 0xFF00) >> 8))
-        header.append(contentsOf: convertUInt32ToUInt8Array(value: offset))
-        header.append(contentsOf: timeSince1970())
-        header.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(data.count)))
-        header.append(path.data(using: .utf8) ?? Data())
-        
-        bleManager.infiniTime?.writeValue(header, for: transferChar, type: .withResponse)
-        guard semaphore.wait(timeout: .now() + responseTimeout) == .success, !writeFileFS.completed else {
-            writeFileFS.valid = false
-            return writeFileFS
-        }
-        
-        DispatchQueue.main.async { self.progress = 0 }
-        
-        var sent = 0
-        let chunkSize = 170
-        
-        while sent < data.count {
-            // Stop the moment the link drops instead of blasting a dead peripheral
-            guard bleManager.isConnectedToPinetime, bleManager.blefsTransfer === transferChar else {
-                writeFileFS.valid = false
-                break
+        return requestLock.withLock {
+            var packet = header(.write, path: path)
+            packet.append(contentsOf: UInt32(0).littleEndianBytes)
+            packet.append(contentsOf: UInt64(Date().timeIntervalSince1970).littleEndianBytes)
+            packet.append(contentsOf: UInt32(data.count).littleEndianBytes)
+            packet.append(Data(path.utf8))
+            
+            guard isOK(send(packet, expecting: .writeResponse), "Write \(path)") else { return false }
+            
+            DispatchQueue.main.async { self.progress = 0 }
+            
+            var sent = 0
+            while sent < data.count {
+                let end = min(sent + writeChunkSize, data.count)
+                
+                packet = Data([Commands.writeData.rawValue, Responses.ok.rawValue, Commands.padding.rawValue, Commands.padding.rawValue])
+                packet.append(contentsOf: UInt32(sent).littleEndianBytes)
+                packet.append(contentsOf: UInt32(end - sent).littleEndianBytes)
+                packet.append(data.subdata(in: sent..<end))
+                
+                // Wait for the watch to acknowledge this chunk before sending the next one
+                guard isOK(send(packet, expecting: .writeResponse), "Write \(path)") else { return false }
+                
+                sent = end
+                DispatchQueue.main.async { self.progress = end }
             }
             
-            let end = min(sent + chunkSize, data.count)
-            let chunk = data.subdata(in: sent..<end)
-            
-            var packet = Data()
-            packet.append(Commands.writeData.rawValue)
-            packet.append(Responses.ok.rawValue)
-            packet.append(Commands.padding.rawValue)
-            packet.append(Commands.padding.rawValue)
-            packet.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(sent)))
-            packet.append(contentsOf: convertUInt32ToUInt8Array(value: UInt32(chunk.count)))
-            packet.append(contentsOf: chunk)
-            
-            bleManager.infiniTime?.writeValue(packet, for: transferChar, type: .withResponse)
-            
-            // Wait for the watch to acknowledge this chunk before sending the next one
-            guard semaphore.wait(timeout: .now() + responseTimeout) == .success, !writeFileFS.completed else {
-                writeFileFS.valid = false
-                break
-            }
-            
-            sent = end
-            let progressSoFar = sent
-            DispatchQueue.main.async { self.progress = progressSoFar }
+            return true
         }
-        
-        if sent >= data.count {
-            writeFileFS.completed = true
-            writeFileFS.valid = true
-        }
-        
-        return writeFileFS
     }
     
     func deleteFile(path: String) -> Bool {
-        guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
-        
         log("Delete file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        var rm = InformationFS()
-        rm.group = DispatchGroup()
-        rm.group.enter()
-        var writeData = Data()
-
-        writeData.append(Commands.delete.rawValue)
-        writeData.append(Commands.padding.rawValue)
-
-        writeData.append(UInt8(path.count & 0x00FF))
-        writeData.append(UInt8((path.count & 0xFF00) >> 8))
-        
-        let pathData = path.data(using: .utf8)!
-        writeData.append(pathData)
-
-        informationTransfer.append(rm)
-        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
-        
-        informationTransfer[0].group.wait()
-        let isValid = informationTransfer[0].valid
-        informationTransfer.removeFirst()
-        return isValid
-    }
-    
-    func makeDir(path: String) -> Bool {
-        guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
-        
-        log("Make directory called", type: .info, caller: "BLEFSHandler", target: .ble)
-        
-        var mk = InformationFS()
-        mk.group = DispatchGroup()
-        mk.group.enter()
-        var writeData = Data()
-
-        writeData.append(Commands.mkdir.rawValue)
-        writeData.append(Commands.padding.rawValue)
-
-        writeData.append(UInt8(path.count & 0x00FF))
-        writeData.append(UInt8((path.count & 0xFF00) >> 8))
-
-        writeData.append(Commands.padding.rawValue)
-        writeData.append(Commands.padding.rawValue)
-        writeData.append(Commands.padding.rawValue)
-        writeData.append(Commands.padding.rawValue)
-        writeData.append(contentsOf: timeSince1970())
-
-        
-        let pathData = path.data(using: .utf8)!
-        writeData.append(pathData)
-        
-        informationTransfer.append(mk)
-        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
-        
-        informationTransfer[0].group.wait()
-        let isValid = informationTransfer[0].valid
-        informationTransfer.removeFirst()
-        return isValid
-    }
-
-    func listDir(path: String) -> DirList? {
-        guard let transferChar = BLEManager.shared.blefsTransfer else { return nil }
-        
-        log("List directory called", type: .info, caller: "BLEFSHandler", target: .ble)
-        
-        var ls = InformationFS()
-        ls.group = DispatchGroup()
-        ls.group.enter()
-        var writeData = Data()
-
-        writeData.append(Commands.ls.rawValue)
-        writeData.append(Commands.padding.rawValue)
-
-        writeData.append(UInt8(path.count & 0x00FF))
-        writeData.append(UInt8((path.count & 0xFF00) >> 8))
-
-        let pathData = path.data(using: .utf8)!
-        writeData.append(pathData)
-        
-        ls.dirList.parentPath = path
-        informationTransfer.append(ls)
-        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
-        
-        informationTransfer[0].group.wait()
-        ls = informationTransfer[0]
-        informationTransfer.removeFirst()
-        return ls.dirList
-    }
-
-    func moveFileOrDir(oldPath: String, newPath: String) -> Bool {
-        guard let transferChar = BLEManager.shared.blefsTransfer else { return false }
-        
-        log("Move file/directory called", type: .info, caller: "BLEFSHandler", target: .ble)
-        
-        var mv = InformationFS()
-        mv.group = DispatchGroup()
-        mv.group.enter()
-        var writeData = Data()
-
-        writeData.append(Commands.mv.rawValue)
-        writeData.append(Commands.padding.rawValue)
-
-        writeData.append(UInt8(oldPath.count & 0x00FF))
-        writeData.append(UInt8((oldPath.count & 0xFF00) >> 8))
-        
-        writeData.append(UInt8(newPath.count & 0x00FF))
-        writeData.append(UInt8((newPath.count & 0xFF00) >> 8))
-        
-        let oldPathData = oldPath.data(using: .utf8)!
-        let newPathData = newPath.data(using: .utf8)!
-        
-        writeData.append(oldPathData)
-        writeData.append(Commands.padding.rawValue)
-        writeData.append(newPathData)
-
-        informationTransfer.append(mv)
-        bleManager.infiniTime?.writeValue(writeData, for: transferChar, type: .withResponse)
-        
-        informationTransfer[0].group.wait()
-        let isValid = informationTransfer[0].valid
-        informationTransfer.removeFirst()
-        return isValid
-    }
-
-    func handleResponse(responseData: [UInt8] ) {
-        if responseData[0] == Commands.readResponse.rawValue {
-            switch responseData[1] {
-            case Responses.ok.rawValue:
-                let chunkOffset: UInt32 = UInt32(responseData[7]) << 24 | UInt32(responseData[6]) << 16 | UInt32(responseData[5]) << 8 | UInt32(responseData[4])
-                let totalLength: UInt32 = UInt32(responseData[11]) << 24 | UInt32(responseData[10]) << 16 | UInt32(responseData[9]) << 8 | UInt32(responseData[8])
-                let chunkLength: UInt32 = UInt32(responseData[15]) << 24 | UInt32(responseData[14]) << 16 | UInt32(responseData[13]) << 8 | UInt32(responseData[12])
-                
-                readFileFS.chunkOffset = chunkOffset
-                readFileFS.totalLength = totalLength
-                readFileFS.chunkLength = chunkLength
-                
-                if responseData.count > 16 {
-                    for idx in 16...responseData.count - 1 {
-                        readFileFS.data.append(responseData[idx])
-                    }
-                } else {
-                    log("Error reading response--chunkOffset: \(chunkOffset), chunkLength: \(chunkLength), totalLength: \(totalLength)", caller: "BLEFSHandler", target: .ble)
-                    readFileFS.valid = false
-                    readFileFS.completed = true
-                    return
-                }
-                
-                if chunkOffset + chunkLength == totalLength {
-                    readFileFS.completed = true
-                    readFileFS.valid = true
-                }
-            case Responses.error.rawValue:
-                readFileFS.completed = true
-                log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.noFile.rawValue:
-                readFileFS.completed = true
-                readFileFS.missing = true
-                log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.protocolError.rawValue:
-                readFileFS.completed = true
-                log("Protocol error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.readOnly.rawValue:
-                readFileFS.completed = true
-                log("Read only response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.dirNotEmptyError.rawValue:
-                readFileFS.completed = true
-                log("Directory not empty response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            default:
-                readFileFS.completed = true
-                log("Unknown response from BLE FS with code: \(responseData[1])", caller: "BLEFSHandler", target: .ble)
-            }
-            readFileFS.group.leave()
-        } else if responseData[0] == Commands.writeResponse.rawValue {
-            switch responseData[1] {
-            case Responses.ok.rawValue:
-//                let offset: UInt32 = UInt32(responseData[7]) << 24 | UInt32(responseData[6]) << 16 | UInt32(responseData[5]) << 8 | UInt32(responseData[4])
-                let freeSpace: UInt32 = UInt32(responseData[18]) << 24 | UInt32(responseData[17]) << 16 | UInt32(responseData[16]) << 8 | UInt32(responseData[15])
-                
-                //writeFileFS.offset = offset
-                writeFileFS.freeSpace = freeSpace
-
-                writeFileFS.valid = true
-            case Responses.error.rawValue:
-                writeFileFS.completed = true
-                writeFileFS.valid = false
-                log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.noFile.rawValue:
-                writeFileFS.completed = true
-                writeFileFS.valid = false
-                log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.protocolError.rawValue:
-                writeFileFS.completed = true
-                writeFileFS.valid = false
-                log("Protocol error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.readOnly.rawValue:
-                writeFileFS.completed = true
-                writeFileFS.valid = false
-                log("Read only response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            case Responses.dirNotEmptyError.rawValue:
-                writeFileFS.completed = true
-                writeFileFS.valid = false
-                log("Directory not empty response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            default:
-                writeFileFS.completed = true
-                writeFileFS.valid = false
-                log("Unknown error response from BLE FS", caller: "BLEFSHandler", target: .ble)
-            }
-            pendingWriteResponse?.signal()
-        } else if responseData[0] == Commands.mvResponse.rawValue || responseData[0] == Commands.mkdirResponse.rawValue || responseData[0] == Commands.deleteResponse.rawValue {
-            switch responseData[1] {
-            case Responses.ok.rawValue:
-                informationTransfer[0].valid = true
-            default:
-                break
-                //print("error response code \(responseData[1])")
-            }
-            informationTransfer[0].group.leave()
-        } else if responseData[0] == Commands.lsResponse.rawValue {
-            switch responseData[1] {
-            case Responses.ok.rawValue:
-                let filePathLength: UInt16 = (UInt16(responseData[3]) << 8) | UInt16(responseData[2])
-                let entryNumber: UInt32 = UInt32(responseData[7]) << 24 | UInt32(responseData[6]) << 16 | UInt32(responseData[5]) << 8 | UInt32(responseData[4])
-                let totalEntryNumber: UInt32 = UInt32(responseData[11]) << 24 | UInt32(responseData[10]) << 16 | UInt32(responseData[9]) << 8 | UInt32(responseData[8])
-                let flags: UInt32 = UInt32(responseData[15]) << 24 | UInt32(responseData[14]) << 16 | UInt32(responseData[13]) << 8 | UInt32(responseData[12])
-                let modificationTime: UInt64 = UInt64(responseData[23]) << 56 | UInt64(responseData[22]) << 48 | UInt64(responseData[21]) << 40 | UInt64(responseData[20]) << 32 | UInt64(responseData[19]) << 24 | UInt64(responseData[18]) << 16 | UInt64(responseData[17]) << 8 | UInt64(responseData[16])
-                let fileSize: UInt32 = UInt32(responseData[27]) << 24 | UInt32(responseData[26]) << 16 | UInt32(responseData[25]) << 8 | UInt32(responseData[24])
-
-                if entryNumber == 0 {
-                    informationTransfer[0].dirList.ls = []
-                } else if entryNumber == totalEntryNumber {
-                    informationTransfer[0].dirList.valid = true
-                    informationTransfer[0].group.leave()
-                    return
-                }
-                let filePath = responseData.suffix(Int(filePathLength))
-                    
-                if let decodedString = String(data: Data(filePath), encoding: .utf8) {
-                    var dir = Dir()
-                    dir.modificationTime = Int(modificationTime)
-                    dir.fileSize = Int(fileSize)
-                    dir.flags = Int(flags)
-                    dir.pathNames = decodedString
-                    informationTransfer[0].dirList.ls.append(dir)
-                } else {
-                    print("Decoding failed.")
-                }
-                
-            case Responses.error.rawValue:
-                informationTransfer[0].group.leave()
-                log("Error response from BLE FS", caller: "BLEFSHandler")
-            case Responses.noFile.rawValue:
-                informationTransfer[0].group.leave()
-                log("No file response from BLE FS", caller: "BLEFSHandler")
-            case Responses.protocolError.rawValue:
-                informationTransfer[0].group.leave()
-                log("Protocol error response from BLE FS", caller: "BLEFSHandler")
-            case Responses.readOnly.rawValue:
-                informationTransfer[0].group.leave()
-                log("Read only response from BLE FS", caller: "BLEFSHandler")
-            case Responses.dirNotEmptyError.rawValue:
-                informationTransfer[0].group.leave()
-                log("Directory not empty response from BLE FS", caller: "BLEFSHandler")
-            default:
-                informationTransfer[0].group.leave()
-                log("Unknown error response from BLE FS with response code: \(responseData[1])", caller: "BLEFSHandler")
-            }
+        return requestLock.withLock {
+            var packet = header(.delete, path: path)
+            packet.append(Data(path.utf8))
+            
+            return isOK(send(packet, expecting: .deleteResponse), "Delete \(path)")
         }
     }
     
-    func timeSince1970() -> [UInt8] {
-        let timeInterval = NSDate().timeIntervalSince1970
-        let val64 : UInt64 = UInt64(round(timeInterval))
-
-        let byte1 = UInt8(val64 & 0x00000000000000FF)
-        let byte2 = UInt8((val64 & 0x000000000000FF00) >> 8)
-        let byte3 = UInt8((val64 & 0x0000000000FF0000) >> 16)
-        let byte4 = UInt8((val64 & 0x00000000FF000000) >> 24)
-        let byte5 = UInt8((val64 & 0x000000FF00000000) >> 32)
-        let byte6 = UInt8((val64 & 0x0000FF0000000000) >> 40)
-        let byte7 = UInt8((val64 & 0x00FF000000000000) >> 48)
-        let byte8 = UInt8((val64 & 0xFF00000000000000) >> 56)
+    // Fails if the directory already exists, so callers that don't care can ignore the result
+    func makeDir(path: String) -> Bool {
+        log("Make directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        return [byte1, byte2, byte3, byte4, byte5, byte6, byte7, byte8]
+        return requestLock.withLock {
+            var packet = header(.mkdir, path: path)
+            packet.append(contentsOf: [UInt8](repeating: 0, count: 4))
+            packet.append(contentsOf: UInt64(Date().timeIntervalSince1970).littleEndianBytes)
+            packet.append(Data(path.utf8))
+            
+            return isOK(send(packet, expecting: .mkdirResponse), "Make directory \(path)", logFailure: false)
+        }
     }
-    
-    func convertUInt32ToUInt8Array(value: UInt32) -> [UInt8] {
-        let byte1 = UInt8(value & 0x000000FF)
-        let byte2 = UInt8((value & 0x0000FF00) >> 8)
-        let byte3 = UInt8((value & 0x00FF0000) >> 16)
-        let byte4 = UInt8((value & 0xFF000000) >> 24)
-        return [byte1, byte2, byte3, byte4]
+
+    func listDir(path: String) -> [Dir]? {
+        log("List directory called", type: .info, caller: "BLEFSHandler", target: .ble)
+        
+        return requestLock.withLock {
+            var packet = header(.ls, path: path)
+            packet.append(Data(path.utf8))
+            
+            var entries: [Dir] = []
+            var response = send(packet, expecting: .lsResponse)
+            
+            // The watch sends one response per entry, then one with the entry number equal to the total
+            while let entry = response {
+                guard isOK(entry, "List \(path)"), entry.count >= 12 else { return nil }
+                
+                let entryNumber: UInt32 = entry.littleEndianValue(at: 4)
+                let totalEntries: UInt32 = entry.littleEndianValue(at: 8)
+                if entryNumber >= totalEntries {
+                    return entries
+                }
+                guard entry.count >= 28 else { return nil }
+                
+                let pathLength: UInt16 = entry.littleEndianValue(at: 2)
+                let modificationTime: UInt64 = entry.littleEndianValue(at: 16)
+                let fileSize: UInt32 = entry.littleEndianValue(at: 24)
+                let flags: UInt32 = entry.littleEndianValue(at: 12)
+                entries.append(Dir(modificationTime: Int(truncatingIfNeeded: modificationTime), fileSize: Int(fileSize), flags: Int(flags), pathNames: String(decoding: entry.dropFirst(28).prefix(Int(pathLength)), as: UTF8.self)))
+                
+                response = nextResponse(.lsResponse)
+            }
+            
+            return nil
+        }
     }
     
     func readFile(_ filePath: String, completion: @escaping(Data) -> Void) {
         DispatchQueue.global(qos: .default).async {
-            let readFile = self.readFile(path: filePath, offset: 0)
+            let data = self.readFile(path: filePath).data
             
-            readFile.group.notify(queue: .main) {
-                completion(readFile.data)
+            DispatchQueue.main.async {
+                completion(data)
             }
         }
     }
@@ -605,22 +335,24 @@ class BLEFSHandler: ObservableObject {
         log("Settings requested", type: .info, caller: "BLEFSHandler", target: .ble)
         
         DispatchQueue.global(qos: .default).async {
-            let readFile = self.readFile(path: "/settings.dat", offset: 0)
+            let readFile = self.readFile(path: "/settings.dat")
             
             guard let file = WatchSettingsFile(data: readFile.data) else {
                 log("Settings file not readable: \(readFile.data.count) bytes, version \(WatchSettingsFile.version(of: readFile.data).map { String(format: "0x%02x", $0) } ?? "none")", caller: "BLEFSHandler", target: .ble)
-                completion(nil)
+                DispatchQueue.main.async { completion(nil) }
                 return
             }
             
-            DeviceManager.shared.updateHeartRateBackgroundPeriod(from: file)
-            completion(file.settings)
+            DispatchQueue.main.async {
+                DeviceManager.shared.updateHeartRateBackgroundPeriod(from: file)
+                completion(file.settings)
+            }
         }
     }
     
     func readSettingsFile(completion: @escaping(WatchSettingsFile?, Bool, String?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let readFile = self.readFile(path: "/settings.dat", offset: 0)
+            let readFile = self.readFile(path: "/settings.dat")
             let firmware = DeviceManager.shared.firmware
             let expected = WatchSettingsFile.expectedVersion(forFirmware: firmware)
             let fileVersion = WatchSettingsFile.version(of: readFile.data)
@@ -657,8 +389,7 @@ class BLEFSHandler: ObservableObject {
 
     func writeSettingsFile(_ file: WatchSettingsFile, completion: @escaping(Bool) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let result = self.writeFile(data: file.data, path: "/settings.dat", offset: 0)
-            let success = result?.valid ?? false
+            let success = self.writeFile(data: file.data, path: "/settings.dat")
 
             DispatchQueue.main.async {
                 if success {
@@ -672,7 +403,7 @@ class BLEFSHandler: ObservableObject {
 
     func readAlarmFile(completion: @escaping(WatchAlarmFile?, Bool, String?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let readFile = self.readFile(path: WatchAlarmFile.path, offset: 0)
+            let readFile = self.readFile(path: WatchAlarmFile.path)
             let version = readFile.data.first
 
             var file = WatchAlarmFile(data: readFile.data)
@@ -697,112 +428,12 @@ class BLEFSHandler: ObservableObject {
         DispatchQueue.global(qos: .userInitiated).async {
             // /.system might not exist yet. If it does this just errors and we keep going
             _ = self.makeDir(path: WatchAlarmFile.directory)
-            let result = self.writeFile(data: file.data, path: WatchAlarmFile.path, offset: 0)
-            let success = result?.valid ?? false
+            let success = self.writeFile(data: file.data, path: WatchAlarmFile.path)
 
             DispatchQueue.main.async {
                 completion(success)
             }
         }
-    }
-
-    func convertDataToReadableFile(data: Data, fileExtension: String) throws -> Any {
-        switch fileExtension.lowercased() {
-        case "txt":
-            if let text = String(data: data, encoding: .utf8) {
-                return text
-            } else {
-                throw FileConversionError.dataConversionFailed
-            }
-        case "csv":
-            if let csvString = String(data: data, encoding: .utf8) {
-                let rows = csvString.components(separatedBy: "\n").filter { !$0.isEmpty }
-                let csvData = rows.map { $0.components(separatedBy: ",") }
-                
-                return csvData
-            } else {
-                throw FileConversionError.dataConversionFailed
-            }
-        default:
-            return data
-        }
-    }
-    
-    func jsonToMultilineString(_ data: Data) -> String? {
-        do {
-            if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                return formatDictionaryAsMultilineString(jsonObject)
-            } else if let jsonArray = try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any] ] {
-                return formatArrayAsMultilineString(jsonArray)
-            } else {
-                return "Invalid JSON format."
-            }
-        } catch {
-            log("Error deserializing JSON", caller: "BLEFSHandler")
-            print("Error deserializing JSON: \(error)")
-            return nil
-        }
-    }
-    
-    func formatDictionaryAsMultilineString(_ dict: [String: Any], indent: String = "") -> String {
-        var result = ""
-        for (key, value) in dict {
-            result += "\(indent)\(key): "
-            
-            if let nestedDict = value as? [String: Any] {
-                result += "\n" + formatDictionaryAsMultilineString(nestedDict, indent: indent + "    ")
-            } else if let array = value as? [[String: Any]] {
-                result += "\n" + formatArrayAsMultilineString(array, indent: indent + "    ")
-            } else {
-                result += "\(value)\n"
-            }
-        }
-        return result
-    }
-    
-    func formatArrayAsMultilineString(_ array: [[String: Any]], indent: String = "") -> String {
-        var result = ""
-        for item in array {
-            result += "\(indent)- "
-            result += "\n" + formatDictionaryAsMultilineString(item, indent: indent + "  ")
-        }
-        return result
-    }
-    
-    private func serializeSettings(_ settings: Settings) -> Data {
-        var data = Data()
-        
-        data.append(contentsOf: convertUInt32ToUInt8Array(value: settings.version))
-        data.append(contentsOf: convertUInt32ToUInt8Array(value: settings.stepsGoal))
-        data.append(contentsOf: convertUInt32ToUInt8Array(value: settings.screenTimeOut))
-        
-        data.append(settings.clockType.rawValue)
-        data.append(settings.weatherFormat.rawValue)
-        data.append(settings.notificationStatus.rawValue)
-        data.append(settings.watchFace)
-        data.append(settings.chimesOption.rawValue)
-        
-        data.append(settings.pineTimeStyle.ColorTime.rawValue)
-        data.append(settings.pineTimeStyle.ColorBar.rawValue)
-        data.append(settings.pineTimeStyle.ColorBG.rawValue)
-        data.append(settings.pineTimeStyle.gaugeStyle.rawValue)
-        data.append(settings.pineTimeStyle.weatherEnable.rawValue)
-        
-        data.append(settings.watchFaceInfineat.showSideCover ? 1 : 0)
-        data.append(settings.watchFaceInfineat.colorIndex)
-        
-        data.append(settings.wakeUpMode.rawValue)
-        data.append(contentsOf: convertUInt16ToUInt8Array(value: settings.shakeWakeThreshold))
-        data.append(settings.brightLevel.rawValue)
-        
-        return data
-    }
-    
-    private func convertUInt16ToUInt8Array(value: UInt16) -> [UInt8] {
-        return [
-            UInt8((value & 0xFF00) >> 8),
-            UInt8(value & 0x00FF)
-        ]
     }
 }
 
@@ -912,9 +543,4 @@ struct Settings {
     var shakeWakeThreshold: UInt16 = 150
     var brightLevel: BrightLevel = .Mid
     var prideFlag: UInt8 = 0
-}
-
-enum FileConversionError: Error {
-    case unsupportedFileType
-    case dataConversionFailed
 }
