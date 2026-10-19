@@ -37,6 +37,7 @@ struct HeartChartView: View {
     @State private var pendingYScaleUpdate: DispatchWorkItem?
     @State private var snapAnimation: Task<Void, Never>?
     @State private var scrollFetch: Task<Void, Never>?
+    @State private var lastSnapWrite: Date?
     
     private let cal = Calendar.current
     private let visibleDomain: TimeInterval = 86400
@@ -91,7 +92,10 @@ struct HeartChartView: View {
             ?? rangeFirstHour
             
             let readings = selectedViewHour.values.count
-            let hours = (rangeFirstHour..<rangeLastHour).formatted(.interval.month(.abbreviated).day().hour())
+            // Keep 23–00 on the same day instead of showing the next date for midnight to avoid a line break
+            let hours = cal.isDate(rangeFirstHour, inSameDayAs: rangeLastHour)
+            ? (rangeFirstHour..<rangeLastHour).formatted(.interval.month(.abbreviated).day().hour())
+            : rangeFirstHour.formatted(.dateTime.month(.abbreviated).day()) + ", " + rangeFirstHour.formatted(.dateTime.hour()) + " – " + rangeLastHour.formatted(.dateTime.hour())
             let average = readings > 1 ? " · " + String(localized: "\(Int(pointMarkValue(for: selectedViewHour))) BPM \(pointMarkLabel)") : ""
             
             return "\(hours) · " + String(localized: "\(readings) readings") + average
@@ -134,17 +138,20 @@ struct HeartChartView: View {
     func animateScroll(to target: Date) {
         let start = scrollPositionDate
         let distance = target.timeIntervalSince(start)
-        let frames = 20
-        
+        let frames = 12
+
         snapAnimation?.cancel()
         snapAnimation = Task {
             for frame in 1...frames {
                 try? await Task.sleep(nanoseconds: 16_000_000)
                 guard !Task.isCancelled else { return }
-                
+
                 let progress = Double(frame) / Double(frames)
-                scrollPositionDate = start.addingTimeInterval(distance * (1 - pow(1 - progress, 3)))
+                let next = start.addingTimeInterval(distance * (1 - pow(1 - progress, 3)))
+                lastSnapWrite = next
+                scrollPositionDate = next
             }
+            lastSnapWrite = nil
         }
     }
     
@@ -163,7 +170,7 @@ struct HeartChartView: View {
             }
         }
         pendingYScaleUpdate = update
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: update)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.12, execute: update)
     }
     
     // Load a few days either side of the date so neighbouring days are already populated when scrolled into
@@ -383,6 +390,12 @@ struct HeartChartView: View {
             await refresh()
         }
         .onChange(of: scrollPositionDate) { newValue in
+            // Any change the snap didn't write is the user scrolling, so stop the snap
+            if let lastSnapWrite, abs(newValue.timeIntervalSince(lastSnapWrite)) > 1 {
+                snapAnimation?.cancel()
+                self.lastSnapWrite = nil
+            }
+            
             // Reload once the visible day reaches the outermost loaded day on either side
             if let loadedRange,
                newValue < loadedRange.start.addingTimeInterval(visibleDomain) ||
