@@ -336,17 +336,6 @@ class ExerciseViewModel: ObservableObject {
         userDefaults?.set(pinnedExerciseIds, forKey: "pinnedExercises")
     }
 
-    func isDateDuringExercise(_ date: Date) -> Bool {
-        let exercises = ChartManager.shared.userExercises().filter { exercise in
-            guard let endDate = exercise.endDate else { return true }
-
-            // Use end date because it will be present in the day for the longest
-            return Calendar.current.isDate(date, equalTo: endDate, toGranularity: .day)
-        }
-
-        return !exercises.isEmpty
-    }
-
     private func detectRecoverableSession() {
         guard let saved = WorkoutSessionStore.load() else { return }
 
@@ -435,11 +424,16 @@ class ExerciseViewModel: ObservableObject {
     }
 
     func liveCalorieEstimate(for exercise: Exercise) -> Int {
+        Self.calories(for: exercise, averageHeartRate: averageHeartRate, duration: elapsed, steps: stepsTaken)
+    }
+
+    // Shared by the live estimate and the saved workout so they agree
+    private static func calories(for exercise: Exercise, averageHeartRate: Double, duration: TimeInterval, steps: Int) -> Int {
         let calculator = FitnessCalculator()
-        if exercise.components.contains(.steps) {
-            return calculator.calculateCaloriesBurned(steps: stepsTaken)
+        if averageHeartRate > 0 {
+            return calculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: duration)
         }
-        return calculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: elapsed)
+        return calculator.calculateCaloriesBurned(steps: steps, pace: exercise.pace)
     }
 
     private func startLiveActivity() {
@@ -529,25 +523,19 @@ class ExerciseViewModel: ObservableObject {
         let startDate = session.startDate
         let steps = session.accumulatedSteps
         let deviceId = deviceManager.pairedDeviceID
-        let fitnessCalculator = FitnessCalculator()
         let routeJSON = route.count > 1 ? (try? JSONEncoder().encode(route)).flatMap { String(data: $0, encoding: .utf8) } : nil
         let device = HKDevice(name: deviceManager.name, manufacturer: deviceManager.manufacturer, model: deviceManager.modelNumber, hardwareVersion: deviceManager.hardwareRevision, firmwareVersion: deviceManager.firmware, softwareVersion: deviceManager.softwareRevision, localIdentifier: session.id.uuidString, udiDeviceIdentifier: nil)
         let context = persistenceController.container.newBackgroundContext()
 
         context.perform { [weak self] in
             let request: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
-            request.predicate = NSPredicate(format: "timestamp >= %@ AND timestamp <= %@", startDate as NSDate, endDate as NSDate)
+            request.predicate = NSPredicate(format: "deviceId == %@ AND timestamp >= %@ AND timestamp <= %@", deviceId ?? "", startDate as NSDate, endDate as NSDate)
             request.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: true)]
             let heartPoints = (try? context.fetch(request)) ?? []
 
             let averageHeartRate = Self.timeWeightedAverage(of: heartPoints)
             let duration = endDate.timeIntervalSince(startDate)
-            let calories: Double = {
-                if averageHeartRate > 0 {
-                    return Double(fitnessCalculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: duration))
-                }
-                return Double(fitnessCalculator.calculateCaloriesBurned(steps: steps, pace: exercise.pace))
-            }()
+            let calories = Double(Self.calories(for: exercise, averageHeartRate: averageHeartRate, duration: duration, steps: steps))
 
             let userExercise = UserExercise(context: context)
             userExercise.id = session.id

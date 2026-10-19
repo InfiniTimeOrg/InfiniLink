@@ -71,7 +71,7 @@ struct StepMenuItemView: View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
             let units = personalizationController.units == .imperial ? "mi" : "km"
             let distance = exerciseCalculator.calculateDistance(steps: steps)
-            let stepsPerMinute = exerciseCalculator.stepsPerMinute(steps: steps)
+            let stepsPerMinute = steps > 0 ? exerciseCalculator.stepsPerMinute() : 0
             
             DetailHeaderSubItemView(title: "Distance",
                                     value: String(format: "%.2f", distance),

@@ -30,19 +30,6 @@ enum Pace: Int {
         }
     }
     
-    var milesPerHour: Double {
-        switch self {
-        case .verySlowWalk: return 1.0
-        case .slowWalk: return 2.0
-        case .avgWalk: return 3.0
-        case .briskWalk: return 4.0
-        case .jog: return 5.0
-        case .run: return 6.0
-        case .fastRun: return 7.5
-        case .veryFastRun: return 10.0
-        }
-    }
-    
     var kmPerHour: Double {
         switch self {
         case .verySlowWalk: return 1.6
@@ -59,15 +46,10 @@ enum Pace: Int {
 
 class FitnessCalculator {
     let personalizationController = PersonalizationController.shared
-    let bleManager = BLEManager.shared
     
+    // In meters
     func strideLength(pace: Pace = .avgWalk) -> Double {
         let avgStrideRatio = personalizationController.gender == .male ? 0.415 : 0.413
-        let calculatedHeight = personalizationController.calculatedHeight
-        let height = personalizationController.units == .metric ? (calculatedHeight / 2.54) : (calculatedHeight) // Convert to inches
-        let baseStrideLength = height * avgStrideRatio
-        
-        // Adjust stride length based on pace
         let strideMultiplier: Double = {
             switch pace {
             case .verySlowWalk: return 0.85
@@ -81,44 +63,24 @@ class FitnessCalculator {
             }
         }()
         
-        let strideLength = baseStrideLength * strideMultiplier
-        return strideLength
+        return personalizationController.calculatedHeightCm / 100 * avgStrideRatio * strideMultiplier
     }
     
+    // In miles or kilometers, depending on the user's units
     func calculateDistance(steps: Int, pace: Pace = .avgWalk) -> Double {
-        var distance = strideLength(pace: pace) * Double(steps)
-
-        if personalizationController.units == .imperial {
-            distance /= 63360 // Convert inches to miles
-        } else {
-            distance /= 39370 // Convert inches to kilometers
-        }
-        
-        return distance
+        let meters = strideLength(pace: pace) * Double(steps)
+        return personalizationController.units == .imperial ? meters / 1609.344 : meters / 1000
     }
     
-    func stepsPerMinute(steps: Int, pace: Pace = .avgWalk) -> Int {
-        let distance = calculateDistance(steps: steps, pace: pace)
-        let speed = personalizationController.units == .metric ? pace.kmPerHour : pace.milesPerHour
-        let timeMinutes = (distance / speed) * 60.0
-
-        guard steps > 0, timeMinutes > 0 else { return 0 }
-        
-        let spm = Double(steps) / timeMinutes
-        return Int(ceil(spm))
+    func stepsPerMinute(pace: Pace = .avgWalk) -> Int {
+        Int(ceil(pace.kmPerHour * 1000 / 60 / strideLength(pace: pace)))
     }
     
     func calculateCaloriesBurned(steps: Int, pace: Pace = .avgWalk) -> Int {
-        // TODO: support custom duration
-        let spm = stepsPerMinute(steps: steps, pace: pace)
-        let weight = personalizationController.calculatedWeight
-        let calculatedWeight = personalizationController.units == .metric ? weight : (weight * 0.453592)
-        let durationInHours = Double(steps) / Double(spm) / 60.0
-
-        guard durationInHours > 0 else { return 0 }
-
+        let hours = strideLength(pace: pace) * Double(steps) / 1000 / pace.kmPerHour
+        
         // Subtract 1 MET (resting) so this is active energy, matching HealthKit's activeEnergyBurned
-        return Int(ceil((pace.metValue - 1.0) * calculatedWeight * durationInHours))
+        return Int(ceil((pace.metValue - 1.0) * personalizationController.calculatedWeightKg * hours))
     }
 
     // Heart-rate based active energy estimate (Keytel et al. 2005)
@@ -143,18 +105,10 @@ class FitnessCalculator {
         return Int(max(0, (grossKcalPerMinute - restingKcalPerMinute) * minutes).rounded())
     }
     
-    /// - Parameter pace: the average pace the user is walking
-    /// - Returns: the numbers the user takes per mile or kilometer
-    func stepsPerUnit(pace: Pace = .avgWalk) -> Int {
-        let unitInInches = personalizationController.units == .imperial ? 63360 : 39370.1
-        return Int(ceil(unitInInches / strideLength()))
-    }
-    
+    // Distance is in miles or kilometers, depending on the user's units
     func secondsForDistance(distance: Double, pace: Pace = .avgWalk) -> Int {
-        // Convert kph to mph if needed
-        let speed: Double = personalizationController.units == .imperial ? pace.milesPerHour : (pace.kmPerHour / 1.609)
-        
-        return Int(ceil((distance / speed) * 60 * 60))
+        let km = personalizationController.units == .imperial ? distance * 1.609344 : distance
+        return Int(ceil(km / pace.kmPerHour * 3600))
     }
     
     func distanceString(meters: Double) -> String {
