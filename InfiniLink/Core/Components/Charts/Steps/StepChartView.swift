@@ -152,7 +152,7 @@ struct StepChartView: View {
                 .fontWeight(.semibold)
             }
             .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
+            .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 6, trailing: 0))
             Section {
                 if steps >= stepCountManager.stepGoal {
                     Text("Great job, you reached your daily step goal today! You've walked \(fitnessCalculator.calculateDistance(steps: steps), format: .number.precision(.fractionLength(2))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.energyString(kcal: Double(fitnessCalculator.calculateCaloriesBurned(steps: steps)))).")
