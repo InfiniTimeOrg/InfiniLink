@@ -37,6 +37,7 @@ struct BannerView<V: View>: View {
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
+        .accessibilityElement(children: .combine)
     }
 }
 

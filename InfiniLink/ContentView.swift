@@ -15,12 +15,26 @@ struct ContentView: View {
 
     @AppStorage("pairedDeviceID") private var pairedDeviceID: String?
 
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+
     var body: some View {
         Group {
-            if pairedDeviceID != nil {
-                DeviceView()
+            if pairedDeviceID != nil && horizontalSizeClass == .regular {
+                NavigationSplitView {
+                    DeviceView(isSidebar: true)
+                } detail: {
+                    NavigationStack {
+                        HeartView()
+                    }
+                }
             } else {
-                WelcomeView()
+                NavigationStack {
+                    if pairedDeviceID != nil {
+                        DeviceView()
+                    } else {
+                        WelcomeView()
+                    }
+                }
             }
         }
         .alert(isPresented: $bleManager.showError) {

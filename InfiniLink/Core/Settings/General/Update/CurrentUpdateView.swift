@@ -13,6 +13,8 @@ struct CurrentUpdateView: View {
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     
     @State private var backgroundScaled = true
+    
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showConfirmation = false
     
     private var failureMessage: String? {
@@ -94,6 +96,8 @@ struct CurrentUpdateView: View {
             .padding()
         }
         .onAppear {
+            guard !reduceMotion else { return }
+            
             withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
                 backgroundScaled.toggle()
             }

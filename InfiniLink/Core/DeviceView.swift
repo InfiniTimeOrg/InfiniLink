@@ -24,6 +24,20 @@ struct DeviceView: View {
     
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
+
+    // Used as the sidebar on iPad
+    var isSidebar = false
+    
+    @ViewBuilder
+    private func column<V: View>(_ view: V) -> some View {
+        if isSidebar {
+            NavigationStack {
+                view
+            }
+        } else {
+            view
+        }
+    }
     
     var body: some View {
         Group {
@@ -88,7 +102,7 @@ struct DeviceView: View {
                         }
                     } else if let exercise = exerciseViewModel.currentExercise {
                         NavigationLink {
-                            ActiveExerciseView()
+                            column(ActiveExerciseView())
                         } label: {
                             BannerView("\(exercise.name)", "\(exerciseViewModel.timeString())", "Active Exercise") {
                                 Image(systemName: exercise.icon)
@@ -97,7 +111,7 @@ struct DeviceView: View {
                         }
                     } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
                         NavigationLink {
-                            SoftwareUpdateView()
+                            column(SoftwareUpdateView())
                         } label: {
                             BannerView(
                                 "InfiniTime",
@@ -133,51 +147,75 @@ struct DeviceView: View {
                 }
                 Section {
                     NavigationLink {
-                        ExerciseView()
+                        column(ExerciseView())
                     } label: {
                         ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
                     }
                     NavigationLink {
-                        HeartView()
+                        column(HeartView())
                     } label: {
                         ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
                     }
                     NavigationLink {
-                        StepsView()
+                        column(StepsView())
                     } label: {
                         ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
+                    }
+                    if SleepManager.shared.isSupported {
+                        NavigationLink {
+                            column(SleepView())
+                        } label: {
+                            ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: .indigo)
+                        }
                     }
                 }
                 Section {
                     NavigationLink {
-                        GeneralSettingsView()
+                        column(GeneralSettingsView())
                     } label: {
                         ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                     }
                     NavigationLink {
-                        BatterySettingsView()
+                        column(WatchSettingsView())
+                    } label: {
+                        ListRowView(title: "Customization", icon: "wrench.fill", iconColor: .gray)
+                    }
+                    NavigationLink {
+                        column(BatterySettingsView())
                     } label: {
                         ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
                     }
                     NavigationLink {
-                        NotificationsSettingsView()
+                        column(NotificationsSettingsView())
                     } label: {
                         ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
                     }
+                    if WatchAlarmFile.supported(onFirmware: deviceManager.firmware) {
+                        NavigationLink {
+                            column(WatchAlarmView())
+                        } label: {
+                            ListRowView(title: "Alarm", icon: "alarm.fill", iconColor: .orange)
+                        }
+                    }
                     NavigationLink {
-                        WeatherView()
+                        column(WeatherView())
                     } label: {
                         ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
                     }
                     NavigationLink {
-                        MusicSettingsView()
+                        column(DirectionsView())
+                    } label: {
+                        ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue, isBeta: true)
+                    }
+                    NavigationLink {
+                        column(MusicSettingsView())
                     } label: {
                         ListRowView(title: "Music", icon: "music.note", iconColor: .red)
                     }
                 }
                 if enableDeveloperMode {
                     NavigationLink {
-                        DeveloperView()
+                        column(DeveloperView())
                     } label: {
                         ListRowView(title: "Developer", icon: "hammer.fill", iconColor: .gray)
                     }
@@ -197,6 +235,7 @@ struct DeviceView: View {
                     showMyDevicesSheet = true
                 } label: {
                     Text("My Watches")
+                        .fontWeight(.regular)
                 }
             }
         }
@@ -229,17 +268,30 @@ struct ListRowView: View {
     let title: String
     let icon: String
     let iconColor: Color
+    let isBeta: Bool
     
-    init(title: String, icon: String, iconColor: Color? = nil) {
+    init(title: String, icon: String, iconColor: Color? = nil, isBeta: Bool = false) {
         self.title = title
         self.icon = icon
         self.iconColor = iconColor ?? .blue
+        self.isBeta = isBeta
     }
     
     var body: some View {
         Label {
-            Text(NSLocalizedString(title, comment: ""))
-                .foregroundStyle(colorScheme == .dark ? .white : .black)
+            HStack(spacing: 6) {
+                Text(NSLocalizedString(title, comment: ""))
+                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                if isBeta {
+                    Text("Beta")
+                        .font(.caption2.weight(.semibold))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .foregroundStyle(.blue)
+                        .background(Color.blue.opacity(0.15))
+                        .clipShape(Capsule())
+                }
+            }
         } icon: {
             Image(systemName: icon)
                 .font(.system(size: 14).weight(.medium))

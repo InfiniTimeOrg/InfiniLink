@@ -55,8 +55,13 @@ struct StepCalendarView: View {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: weekdays.count), spacing: 14) {
                         ForEach(fetchedDates, id: \.id) { day in
                             let point = stepPoints.first(where: { Calendar.current.isDate(day.date, equalTo: $0.timestamp!, toGranularity: .day)})
-                            CalendarDayView(day, point: point)
-                                .onTapGesture(perform: { showPointPopover(day, point) })
+                            Button {
+                                showPointPopover(day, point)
+                            } label: {
+                                CalendarDayView(day, point: point)
+                            }
+                            .buttonStyle(.plain)
+                            .accessibilityLabel(Text("\(day.date.formatted(date: .complete, time: .omitted)), \(Int(point?.steps ?? 0)) steps"))
                         }
                     }
                 }

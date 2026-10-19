@@ -19,6 +19,7 @@ struct FindLostDeviceView: View {
     
     private let bleWriteManager = BLEWriteManager()
     private let rssiTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private let hapticTimer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
 
     private func focusMap(on point: DisconnectMapPoint) {
         let coordinate = CLLocationCoordinate2D(
@@ -39,6 +40,30 @@ struct FindLostDeviceView: View {
     @State private var address = ""
     @State private var pingTimer: Timer? = nil
     @State private var isPinging = false
+    @State private var smoothedRSSI: Double?
+    @State private var lastHaptic = Date.distantPast
+    
+    private let hapticGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    
+    private func updateSmoothedRSSI() {
+        guard let rssi = bleManager.rssi, bleManager.isConnectedToPinetime else {
+            smoothedRSSI = nil
+            return
+        }
+        
+        smoothedRSSI = (smoothedRSSI ?? Double(rssi)) * 0.6 + Double(rssi) * 0.4
+    }
+    
+    private func playProximityHaptic() {
+        guard let smoothedRSSI else { return }
+        
+        let closeness = min(max((smoothedRSSI + 100) / 40, 0), 1)
+        guard Date().timeIntervalSince(lastHaptic) >= 1 - closeness * 0.85 else { return }
+        
+        lastHaptic = Date()
+        hapticGenerator.impactOccurred(intensity: 0.5 + closeness * 0.5)
+        hapticGenerator.prepare()
+    }
 
     private func stopPinging() {
         pingTimer?.invalidate()
@@ -172,6 +197,10 @@ struct FindLostDeviceView: View {
         }
         .onReceive(rssiTimer) { _ in
             bleManager.infiniTime?.readRSSI()
+            updateSmoothedRSSI()
+        }
+        .onReceive(hapticTimer) { _ in
+            playProximityHaptic()
         }
         .onDisappear {
             stopPinging()

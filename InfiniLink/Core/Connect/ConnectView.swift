@@ -14,6 +14,9 @@ struct ConnectView: View {
     
     @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
+    @AppStorage("forceAncs") var forceAncs = true
     
     @State private var showHelpAlert = false
     @State private var showAllDevices = false
@@ -37,6 +40,8 @@ struct ConnectView: View {
     }
     
     func startCircleAnimation(geo: CGSize) {
+        guard !reduceMotion else { return }
+        
         animateCircle(geo: geo)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             resetCircle()
@@ -80,6 +85,9 @@ struct ConnectView: View {
                                         }
                                     }
                                     Spacer()
+                                    if forceAncs {
+                                        PairingInfoView()
+                                    }
                                     Button {
                                         connect(infiniTime)
                                     } label: {
@@ -120,6 +128,10 @@ struct ConnectView: View {
                                 }
                             } else {
                                 ScrollView {
+                                    if forceAncs {
+                                        PairingInfoView()
+                                            .padding(.bottom, 8)
+                                    }
                                     LazyVGrid(columns: columns, spacing: 10) {
                                         ForEach(bleManager.newPeripherals, id: \.identifier) { device in
                                             Button {
@@ -190,6 +202,20 @@ struct ConnectView: View {
                 }
             }
         }
+    }
+}
+
+struct PairingInfoView: View {
+    var body: some View {
+        Label {
+            Text("Your iPhone will ask to pair with your watch. Tap Pair so your iPhone's notifications can show on your watch.")
+        } icon: {
+            Image(systemName: "bell.badge")
+                .foregroundStyle(.blue)
+        }
+        .font(.footnote)
+        .foregroundStyle(.gray)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 }
 
