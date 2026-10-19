@@ -17,6 +17,7 @@ struct DeviceView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var notificationManager = NotificationManager.shared
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
+    @ObservedObject var dfuUpdater = DFUUpdater.shared
     
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     
@@ -24,6 +25,7 @@ struct DeviceView: View {
     
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
+    @State private var showCancelUpdateConfirmation = false
 
     // Used as the sidebar on iPad
     var isSidebar = false
@@ -40,16 +42,6 @@ struct DeviceView: View {
     }
     
     var body: some View {
-        Group {
-            if bleManager.isDeviceInRecoveryMode && bleManager.hasLoadedCharacteristics {
-                RecoveryModeView()
-            } else {
-                content
-            }
-        }
-    }
-    
-    var content: some View {
         GeometryReader { geo in
             List {
                 VStack(spacing: 0) {
@@ -68,7 +60,11 @@ struct DeviceView: View {
                             if bleManager.isBluetoothOn {
                                 HStack(spacing: 0) {
                                     Text(bleManager.connectionState)
-                                    if bleManager.hasLoadedBatteryLevel {
+                                    if bleManager.isDeviceInRecoveryMode {
+                                        Text(" • ")
+                                        Text("Recovery mode")
+                                            .foregroundStyle(.red)
+                                    } else if bleManager.hasLoadedBatteryLevel {
                                         Text(" • ")
                                         Text(bleManager.batteryLevel / 100, format: .percent.precision(.fractionLength(0)))
                                             .foregroundColor({
@@ -99,6 +95,21 @@ struct DeviceView: View {
                                 .resizable()
                                 .frame(width: 21, height: 35)
                                 .foregroundStyle(.blue)
+                        }
+                    } else if bleManager.isDeviceInRecoveryMode {
+                        if downloadManager.updateStarted || bleManager.isReconnectingAfterUpdate {
+                            recoveryUpdateRow
+                        } else {
+                            NavigationLink {
+                                column(SoftwareUpdateView())
+                            } label: {
+                                BannerView("Recovery Mode", "Reboot \(deviceManager.name) or update it to exit recovery mode.") {
+                                    Image(.infiniTime)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: 50, height: 50)
+                                }
+                            }
                         }
                     } else if let exercise = exerciseViewModel.currentExercise {
                         NavigationLink {
@@ -145,27 +156,29 @@ struct DeviceView: View {
                         }
                     }
                 }
-                Section {
-                    NavigationLink {
-                        column(ExerciseView())
-                    } label: {
-                        ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
-                    }
-                    NavigationLink {
-                        column(HeartView())
-                    } label: {
-                        ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
-                    }
-                    NavigationLink {
-                        column(StepsView())
-                    } label: {
-                        ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
-                    }
-                    if SleepManager.shared.isSupported {
+                if !bleManager.isDeviceInRecoveryMode {
+                    Section {
                         NavigationLink {
-                            column(SleepView())
+                            column(ExerciseView())
                         } label: {
-                            ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: .indigo)
+                            ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
+                        }
+                        NavigationLink {
+                            column(HeartView())
+                        } label: {
+                            ListRowView(title: "Heart", icon: "heart.fill", iconColor: .red)
+                        }
+                        NavigationLink {
+                            column(StepsView())
+                        } label: {
+                            ListRowView(title: "Steps", icon: "shoeprints.fill", iconColor: .blue)
+                        }
+                        if SleepManager.shared.isSupported {
+                            NavigationLink {
+                                column(SleepView())
+                            } label: {
+                                ListRowView(title: "Sleep", icon: "bed.double.fill", iconColor: .indigo)
+                            }
                         }
                     }
                 }
@@ -175,42 +188,44 @@ struct DeviceView: View {
                     } label: {
                         ListRowView(title: "General", icon: "gear", iconColor: .gray.opacity(0.9))
                     }
-                    NavigationLink {
-                        column(WatchSettingsView())
-                    } label: {
-                        ListRowView(title: "Customization", icon: "wrench.fill", iconColor: .gray)
-                    }
-                    NavigationLink {
-                        column(BatterySettingsView())
-                    } label: {
-                        ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
-                    }
-                    NavigationLink {
-                        column(NotificationsSettingsView())
-                    } label: {
-                        ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
-                    }
-                    if WatchAlarmFile.supported(onFirmware: deviceManager.firmware) {
+                    if !bleManager.isDeviceInRecoveryMode {
                         NavigationLink {
-                            column(WatchAlarmView())
+                            column(WatchSettingsView())
                         } label: {
-                            ListRowView(title: "Alarm", icon: "alarm.fill", iconColor: .orange)
+                            ListRowView(title: "Customization", icon: "wrench.fill", iconColor: .gray)
                         }
-                    }
-                    NavigationLink {
-                        column(WeatherView())
-                    } label: {
-                        ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
-                    }
-                    NavigationLink {
-                        column(DirectionsView())
-                    } label: {
-                        ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue, isBeta: true)
-                    }
-                    NavigationLink {
-                        column(MusicSettingsView())
-                    } label: {
-                        ListRowView(title: "Music", icon: "music.note", iconColor: .red)
+                        NavigationLink {
+                            column(BatterySettingsView())
+                        } label: {
+                            ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
+                        }
+                        NavigationLink {
+                            column(NotificationsSettingsView())
+                        } label: {
+                            ListRowView(title: "Notifications", icon: "bell.badge.fill", iconColor: .red)
+                        }
+                        if WatchAlarmFile.supported(onFirmware: deviceManager.firmware) {
+                            NavigationLink {
+                                column(WatchAlarmView())
+                            } label: {
+                                ListRowView(title: "Alarm", icon: "alarm.fill", iconColor: .orange)
+                            }
+                        }
+                        NavigationLink {
+                            column(WeatherView())
+                        } label: {
+                            ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
+                        }
+                        NavigationLink {
+                            column(DirectionsView())
+                        } label: {
+                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue, isBeta: true)
+                        }
+                        NavigationLink {
+                            column(MusicSettingsView())
+                        } label: {
+                            ListRowView(title: "Music", icon: "music.note", iconColor: .red)
+                        }
                     }
                 }
                 if enableDeveloperMode {
@@ -259,6 +274,56 @@ struct DeviceView: View {
         .sheet(isPresented: $showMyDevicesSheet) {
             MyDevicesView()
         }
+        .alert("Are you sure you want to stop this update?", isPresented: $showCancelUpdateConfirmation) {
+            Button("Stop Update", role: .destructive) {
+                dfuUpdater.cancel()
+            }
+            Button("Cancel", role: .cancel) { }
+        }
+    }
+    
+    var recoveryUpdateRow: some View {
+        HStack(spacing: 14) {
+            Image(.infiniTime)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 50, height: 50)
+            VStack(alignment: .leading, spacing: 6) {
+                if case .failed(let message) = dfuUpdater.stage {
+                    Text("Update Failed")
+                        .fontWeight(.semibold)
+                    Text(message)
+                        .foregroundStyle(.gray)
+                } else if bleManager.isReconnectingAfterUpdate {
+                    Text(bleManager.isInstallingUpdate ? "Installing..." : "Updating...")
+                        .fontWeight(.semibold)
+                    Text("\(deviceManager.name) is installing the update.")
+                        .foregroundStyle(.gray)
+                } else {
+                    HStack(spacing: 0) {
+                        Text("\(dfuUpdater.statusText)... ")
+                        if dfuUpdater.percentComplete != 0 {
+                            Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
+                        }
+                    }
+                    .fontWeight(.semibold)
+                    ProgressView(value: dfuUpdater.percentComplete, total: 100)
+                }
+            }
+            Spacer()
+            if case .failed = dfuUpdater.stage {
+                Button("Close") {
+                    dfuUpdater.dismissError()
+                }
+            } else if bleManager.isReconnectingAfterUpdate {
+                ProgressView()
+            } else {
+                Button("Cancel", role: .destructive) {
+                    showCancelUpdateConfirmation = true
+                }
+            }
+        }
+        .buttonStyle(.borderless)
     }
 }
 
@@ -293,17 +358,28 @@ struct ListRowView: View {
                 }
             }
         } icon: {
-            Image(systemName: icon)
-                .font(.system(size: 14).weight(.medium))
-                .frame(width: 31, height: 31)
-                .background(colorScheme == .dark ? AnyShapeStyle(Gradient(colors: [Color(.darkGray), Color.black.opacity(0.6)])) : AnyShapeStyle(iconColor))
-                .clipShape(.rect(cornerRadius: 8))
-                .foregroundStyle(colorScheme == .dark ? iconColor : .white)
-                .overlay {
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.primary.opacity(0.3), lineWidth: 0.3)
-                }
+            ListRowIconView(icon: icon, color: iconColor)
         }
+    }
+}
+
+struct ListRowIconView: View {
+    @Environment(\.colorScheme) var colorScheme
+    
+    let icon: String
+    let color: Color
+    
+    var body: some View {
+        Image(systemName: icon)
+            .font(.system(size: 14).weight(.medium))
+            .frame(width: 31, height: 31)
+            .background(colorScheme == .dark ? AnyShapeStyle(Gradient(colors: [Color(.darkGray), Color.black.opacity(0.6)])) : AnyShapeStyle(color))
+            .clipShape(.rect(cornerRadius: 8))
+            .foregroundStyle(colorScheme == .dark ? color : .white)
+            .overlay {
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.primary.opacity(0.3), lineWidth: 0.3)
+            }
     }
 }
 

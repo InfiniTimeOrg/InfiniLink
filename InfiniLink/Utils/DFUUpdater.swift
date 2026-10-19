@@ -40,6 +40,21 @@ class DFUUpdater: ObservableObject {
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
 
+    var statusText: String {
+        switch stage {
+        case .idle:
+            return NSLocalizedString("Preparing", comment: "")
+        case .downloading:
+            return NSLocalizedString("Downloading", comment: "")
+        case .uploadingResources:
+            return statusDetail.isEmpty ? NSLocalizedString("Updating resources", comment: "") : statusDetail
+        case .installing:
+            return statusDetail.isEmpty ? NSLocalizedString("Installing", comment: "") : statusDetail
+        case .failed:
+            return ""
+        }
+    }
+
     func fileSize(from fileUrl: URL) -> Int {
         do {
             let resource = try fileUrl.resourceValues(forKeys: [.fileSizeKey])

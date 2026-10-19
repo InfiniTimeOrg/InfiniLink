@@ -87,7 +87,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
     @Published var isUpdatingFirmware = false
-    @Published var isReconnectingAfterUpdate = false // The install finished; keep showing "Installing update..." until the watch is back
+    @Published var isReconnectingAfterUpdate = false // The transfer finished; the watch reboots to install it
     @Published var ancsAuthorized = false // We don't need to persist this, it only matters when we're connected
     
     @Published var newPeripherals: [CBPeripheral] = []
@@ -96,6 +96,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var peripheralToConnect: CBPeripheral?
     
     @Published var hasLoadedBatteryLevel = false
+    @Published var fakeRecoveryMode = false // Developer toggle
     
     @Published var heartRate: Double = 0
     @Published var batteryLevel: Double = 0
@@ -118,14 +119,21 @@ class BLEManager: NSObject, ObservableObject {
         return currentTimeService != nil && isConnectedToPinetime // Use currentTimeService because it's present in all firmware versions
     }
     var isDeviceInRecoveryMode: Bool {
-        return deviceManager.firmware.components(separatedBy: ".").first == "0"
+        return fakeRecoveryMode || deviceManager.firmware.components(separatedBy: ".").first == "0"
+    }
+    // Only while the watch is disconnected and rebooting to install
+    var isInstallingUpdate: Bool {
+        return isReconnectingAfterUpdate && !isConnectedToPinetime
     }
     var isBusy: Bool {
         return isConnecting || (isScanning && !isPairingNewDevice)
     }
     var connectionState: String {
-        if isUpdatingFirmware || isReconnectingAfterUpdate {
+        if isInstallingUpdate {
             return NSLocalizedString("Installing update...", comment: "")
+        }
+        if (isUpdatingFirmware || isReconnectingAfterUpdate) && !isDeviceInRecoveryMode { // Recovery shows progress in its banner
+            return NSLocalizedString("Updating...", comment: "")
         }
         if isBusy {
             return NSLocalizedString("Connecting...", comment: "")

@@ -34,6 +34,7 @@ struct DeveloperView: View {
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
+            Toggle("Fake Recovery Mode", isOn: $bleManager.fakeRecoveryMode)
             Section {
                 Picker("Packet Receipt Notification", selection: $packetReceiptNotification) {
                     ForEach([0, 10, 12, 16, 18, 20, 24], id: \.self) { value in

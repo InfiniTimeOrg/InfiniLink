@@ -11,6 +11,7 @@ import Combine
 
 struct WatchFaceView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var catalog = WatchFaceCatalog.shared
     
     @Environment(\.colorScheme) var colorScheme
@@ -71,25 +72,31 @@ struct WatchFaceView: View {
         let entry = catalog.face(at: settings.watchFace, firmware: firmware)
         
         return ZStack {
-            switch entry?.id {
-            case "digital":
-                Digital(date: $date, settings: settings)
-            case "analog":
-                Analog(date: $date)
-            case "pineTimeStyle":
-                PineTimeStyle(date: $date, settings: settings)
-            case "terminal":
-                Terminal(date: $date, settings: settings, firmware: firmware)
-            case "infineat":
-                Infineat(date: $date, settings: settings)
-            case "casio":
-                Casio(date: $date, settings: settings)
-            case "numerals":
-                Numerals(date: $date, settings: settings)
-            case "prideFlag":
-                PrideFlag(date: $date, flag: settings.prideFlag)
-            default:
-                CustomWatchFace(face: entry, index: settings.watchFace)
+            if firmware.components(separatedBy: ".").first == "0" || (bleManager.fakeRecoveryMode && (device == nil || device == deviceManager.pairedDevice)) {
+                Image(.infiniTimeLogo)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } else {
+                switch entry?.id {
+                case "digital":
+                    Digital(date: $date, settings: settings)
+                case "analog":
+                    Analog(date: $date)
+                case "pineTimeStyle":
+                    PineTimeStyle(date: $date, settings: settings)
+                case "terminal":
+                    Terminal(date: $date, settings: settings, firmware: firmware)
+                case "infineat":
+                    Infineat(date: $date, settings: settings)
+                case "casio":
+                    Casio(date: $date, settings: settings)
+                case "numerals":
+                    Numerals(date: $date, settings: settings)
+                case "prideFlag":
+                    PrideFlag(date: $date, flag: settings.prideFlag)
+                default:
+                    CustomWatchFace(face: entry, index: settings.watchFace)
+                }
             }
         }
     }

@@ -15,6 +15,8 @@ struct ContentView: View {
 
     @AppStorage("pairedDeviceID") private var pairedDeviceID: String?
 
+    @State private var navigationID = UUID()
+
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
 
     var body: some View {
@@ -35,12 +37,17 @@ struct ContentView: View {
                         WelcomeView()
                     }
                 }
+                .id(navigationID)
             }
         }
         .alert(isPresented: $bleManager.showError) {
             Alert(title: Text("Error"), message: Text(bleManager.error), dismissButton: .default(Text("OK")))
         }
-        .fullScreenCover(isPresented: $downloadManager.updateStarted) {
+        // Recovery mode shows the update inline on DeviceView
+        .fullScreenCover(isPresented: Binding(
+            get: { downloadManager.updateStarted && !bleManager.isDeviceInRecoveryMode },
+            set: { downloadManager.updateStarted = $0 }
+        )) {
             CurrentUpdateView()
         }
         .sheet(item: $exerciseViewModel.recoverableSession) { session in
@@ -84,6 +91,9 @@ struct ContentView: View {
         .onChange(of: downloadManager.updateStarted) { started in
             if started { // Dismiss after the install starts
                 importManager.showUpdateFlow = false
+                if bleManager.isDeviceInRecoveryMode { // Pop to root to show the inline progress
+                    navigationID = UUID()
+                }
             }
         }
     }
