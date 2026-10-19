@@ -8,35 +8,41 @@
 import SwiftUI
 
 struct WatchFaceEntry: Codable, Hashable, Identifiable {
-    var id: UInt8 { index }
-    var index: UInt8 // The watch face's value in InfiniTime's WatchFace enum
+    let id: String
     let name: String
     var isCustom = false
     var imageFile: String? // An optional photo of the face used as its preview
+    var minimumFirmware: String?
+    var index: UInt8 = 0 // Value in InfiniTime's WatchFace enum
 }
 
 class WatchFaceCatalog: ObservableObject {
     static let shared = WatchFaceCatalog()
 
+    // InfiniTime's default order
     static let builtIn = [
-        WatchFaceEntry(index: 0, name: "Digital"),
-        WatchFaceEntry(index: 1, name: "Analog"),
-        WatchFaceEntry(index: 2, name: "PineTimeStyle"),
-        WatchFaceEntry(index: 3, name: "Terminal"),
-        WatchFaceEntry(index: 4, name: "Infineat"),
-        WatchFaceEntry(index: 5, name: "Casio G7710"),
-        WatchFaceEntry(index: 6, name: "Pride Flag")
+        WatchFaceEntry(id: "digital", name: "Digital"),
+        WatchFaceEntry(id: "analog", name: "Analog"),
+        WatchFaceEntry(id: "pineTimeStyle", name: "PineTimeStyle"),
+        WatchFaceEntry(id: "terminal", name: "Terminal"),
+        WatchFaceEntry(id: "infineat", name: "Infineat"),
+        WatchFaceEntry(id: "casio", name: "Casio G7710"),
+        WatchFaceEntry(id: "numerals", name: "Numerals", minimumFirmware: "1.17.0"),
+        WatchFaceEntry(id: "prideFlag", name: "Pride Flag", minimumFirmware: "1.16.0")
     ]
 
-    @Published var customFaces: [WatchFaceEntry] = [] {
+    @Published private var customFaces: [WatchFaceEntry] = [] {
         didSet { save() }
     }
-    @Published var hiddenIndices: Set<UInt8> = [] {
+    @Published private var order: [String] = [] {
         didSet { save() }
     }
-
-    var visibleFaces: [WatchFaceEntry] {
-        (Self.builtIn + customFaces).filter { !hiddenIndices.contains($0.index) }
+    @Published private var hiddenIds: Set<String> = [] {
+        didSet { save() }
+    }
+    // Newer firmware faces the user turned on
+    @Published private var shownIds: Set<String> = [] {
+        didSet { save() }
     }
 
     init() {
@@ -44,45 +50,94 @@ class WatchFaceCatalog: ObservableObject {
         if let data = defaults.data(forKey: "customWatchFaces"), let faces = try? JSONDecoder().decode([WatchFaceEntry].self, from: data) {
             customFaces = faces
         }
-        if let hidden = defaults.array(forKey: "hiddenWatchFaces") as? [Int] {
-            hiddenIndices = Set(hidden.map { UInt8($0) })
+        order = defaults.stringArray(forKey: "watchFaceOrder") ?? []
+        hiddenIds = Set(defaults.stringArray(forKey: "hiddenWatchFaceIds") ?? [])
+        shownIds = Set(defaults.stringArray(forKey: "shownWatchFaceIds") ?? [])
+    }
+
+    private func isOnFirmware(_ face: WatchFaceEntry, _ firmware: String) -> Bool {
+        face.minimumFirmware.map { firmware.compare($0, options: .numeric) != .orderedAscending } ?? true
+    }
+
+    func isShown(_ face: WatchFaceEntry, firmware: String = DeviceManager.shared.firmware) -> Bool {
+        isOnFirmware(face, firmware) ? !hiddenIds.contains(face.id) : shownIds.contains(face.id)
+    }
+
+    func setShown(_ shown: Bool, for face: WatchFaceEntry) {
+        if isOnFirmware(face, DeviceManager.shared.firmware) {
+            if shown {
+                hiddenIds.remove(face.id)
+            } else {
+                hiddenIds.insert(face.id)
+            }
+        } else if shown {
+            shownIds.insert(face.id)
+        } else {
+            shownIds.remove(face.id)
         }
     }
 
-    func name(for index: UInt8) -> String {
-        (Self.builtIn + customFaces).first { $0.index == index }?.name ?? String(format: NSLocalizedString("Watch Face %d", comment: ""), Int(index))
+    var allFaces: [WatchFaceEntry] {
+        ordered(Self.builtIn + customFaces)
     }
 
-    // Custom faces come after the built in ones, so the index is just the position
-    private func reindex(_ faces: [WatchFaceEntry]) -> [WatchFaceEntry] {
-        faces.enumerated().map { offset, face in
+    // Hidden faces still take up a value
+    func faces(firmware: String = DeviceManager.shared.firmware) -> [WatchFaceEntry] {
+        let available = ordered(Self.builtIn + customFaces).filter { isOnFirmware($0, firmware) || shownIds.contains($0.id) }
+
+        return available.enumerated().map { position, face in
             var face = face
-            face.index = UInt8(clamping: Self.builtIn.count + offset)
+            face.index = UInt8(clamping: position)
             return face
         }
     }
 
+    private func ordered(_ available: [WatchFaceEntry]) -> [WatchFaceEntry] {
+        var ordered = order.compactMap { id in available.first { $0.id == id } }
+        // New faces go in their default spot
+        for (position, face) in available.enumerated() where !ordered.contains(where: { $0.id == face.id }) {
+            ordered.insert(face, at: min(position, ordered.count))
+        }
+        return ordered
+    }
+
+    var visibleFaces: [WatchFaceEntry] {
+        faces().filter { isShown($0) }
+    }
+
+    func face(at index: UInt8, firmware: String = DeviceManager.shared.firmware) -> WatchFaceEntry? {
+        faces(firmware: firmware).first { $0.index == index }
+    }
+
+    func name(for index: UInt8) -> String {
+        face(at: index)?.name ?? String(format: NSLocalizedString("Watch Face %d", comment: ""), Int(index))
+    }
+
     func addCustomFace(name: String) {
-        customFaces = reindex(customFaces + [WatchFaceEntry(index: 0, name: name, isCustom: true)])
+        customFaces.append(WatchFaceEntry(id: "custom-" + UUID().uuidString, name: name, isCustom: true))
     }
 
-    func moveCustomFaces(from source: IndexSet, to destination: Int) {
-        var faces = customFaces
-        faces.move(fromOffsets: source, toOffset: destination)
-        customFaces = reindex(faces)
+    func moveFaces(from source: IndexSet, to destination: Int) {
+        var ids = allFaces.map { $0.id }
+        ids.move(fromOffsets: source, toOffset: destination)
+        order = ids
     }
 
-    func removeCustomFaces(at offsets: IndexSet) {
-        offsets.forEach { deleteImage(customFaces[$0].imageFile) }
-        var faces = customFaces
-        faces.remove(atOffsets: offsets)
-        customFaces = reindex(faces)
+    func removeFaces(at offsets: IndexSet) {
+        let ids = offsets.map { allFaces[$0] }.filter { $0.isCustom }.map { $0.id }
+
+        customFaces.filter { ids.contains($0.id) }.forEach { deleteImage($0.imageFile) }
+        customFaces.removeAll { ids.contains($0.id) }
+        order.removeAll { ids.contains($0) }
+        hiddenIds.subtract(ids)
     }
 
     func resetToDefaults() {
         customFaces.forEach { deleteImage($0.imageFile) }
         customFaces = []
-        hiddenIndices = []
+        order = []
+        hiddenIds = []
+        shownIds = []
     }
 
     private static var imageDirectory: URL {
@@ -96,8 +151,8 @@ class WatchFaceCatalog: ObservableObject {
         try? FileManager.default.removeItem(at: Self.imageDirectory.appendingPathComponent(file))
     }
 
-    func setImage(_ image: UIImage?, for index: UInt8) {
-        guard let position = customFaces.firstIndex(where: { $0.index == index }) else { return }
+    func setImage(_ image: UIImage?, for face: WatchFaceEntry) {
+        guard let position = customFaces.firstIndex(where: { $0.id == face.id }) else { return }
 
         deleteImage(customFaces[position].imageFile)
         customFaces[position].imageFile = nil
@@ -112,8 +167,8 @@ class WatchFaceCatalog: ObservableObject {
     // Previews redraw every second, so cache the photos
     private var imageCache = [String: UIImage]()
 
-    func image(for index: UInt8) -> UIImage? {
-        guard let file = customFaces.first(where: { $0.index == index })?.imageFile else { return nil }
+    func image(for face: WatchFaceEntry) -> UIImage? {
+        guard let file = face.imageFile else { return nil }
         if let cached = imageCache[file] {
             return cached
         }
@@ -125,6 +180,8 @@ class WatchFaceCatalog: ObservableObject {
     private func save() {
         let defaults = UserDefaults.standard
         defaults.set(try? JSONEncoder().encode(customFaces), forKey: "customWatchFaces")
-        defaults.set(hiddenIndices.map { Int($0) }, forKey: "hiddenWatchFaces")
+        defaults.set(order, forKey: "watchFaceOrder")
+        defaults.set(Array(hiddenIds), forKey: "hiddenWatchFaceIds")
+        defaults.set(Array(shownIds), forKey: "shownWatchFaceIds")
     }
 }

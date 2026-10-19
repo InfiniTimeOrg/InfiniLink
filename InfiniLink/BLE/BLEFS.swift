@@ -39,6 +39,7 @@ class BLEFSHandler: ObservableObject {
         var data = Data()
         var completed : Bool = false
         var valid : Bool = false
+        var missing = false
     }
     
     struct InformationFS {
@@ -453,6 +454,7 @@ class BLEFSHandler: ObservableObject {
                 log("Error response from BLE FS", caller: "BLEFSHandler", target: .ble)
             case Responses.noFile.rawValue:
                 readFileFS.completed = true
+                readFileFS.missing = true
                 log("No file response from BLE FS", caller: "BLEFSHandler", target: .ble)
             case Responses.protocolError.rawValue:
                 readFileFS.completed = true
@@ -599,47 +601,111 @@ class BLEFSHandler: ObservableObject {
         }
     }
     
-    func readSettings(completion: @escaping(Settings) -> Void) {
+    func readSettings(completion: @escaping(Settings?) -> Void) {
         log("Settings requested", type: .info, caller: "BLEFSHandler", target: .ble)
         
         DispatchQueue.global(qos: .default).async {
             let readFile = self.readFile(path: "/settings.dat", offset: 0)
-            let firmwareVersion = DeviceManager.shared.firmware
             
-            let settings = readFile.data.withUnsafeBytes { ptr -> Settings in
-                guard let baseAddress = ptr.baseAddress else {
-                    return Settings()
-                }
-                
-                switch firmwareVersion {
-                case "1.14.0":
-                    let settings = baseAddress.load(as: Settings14.self)
-                    
-                    return Settings(
-                        version: settings.version,
-                        stepsGoal: settings.stepsGoal,
-                        screenTimeOut: settings.screenTimeOut,
-                        alwaysOnDisplay: false,
-                        clockType: settings.clockType,
-                        weatherFormat: settings.weatherFormat,
-                        notificationStatus: settings.notificationStatus,
-                        watchFace: settings.watchFace,
-                        chimesOption: settings.chimesOption,
-                        pineTimeStyle: settings.pineTimeStyle,
-                        watchFaceInfineat: settings.watchFaceInfineat,
-                        wakeUpMode: settings.wakeUpMode,
-                        shakeWakeThreshold: settings.shakeWakeThreshold,
-                        brightLevel: settings.brightLevel
-                    )
-                default:
-                    return baseAddress.load(as: Settings.self)
-                }
+            guard let file = WatchSettingsFile(data: readFile.data) else {
+                log("Settings file not readable: \(readFile.data.count) bytes, version \(WatchSettingsFile.version(of: readFile.data).map { String(format: "0x%02x", $0) } ?? "none")", caller: "BLEFSHandler", target: .ble)
+                completion(nil)
+                return
             }
             
-            completion(settings)
+            DeviceManager.shared.updateHeartRateBackgroundPeriod(from: file)
+            completion(file.settings)
         }
     }
     
+    func readSettingsFile(completion: @escaping(WatchSettingsFile?, Bool, String?) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let readFile = self.readFile(path: "/settings.dat", offset: 0)
+            let firmware = DeviceManager.shared.firmware
+            let expected = WatchSettingsFile.expectedVersion(forFirmware: firmware)
+            let fileVersion = WatchSettingsFile.version(of: readFile.data)
+
+            var file = WatchSettingsFile(data: readFile.data)
+            var usingDefaults = false
+            var detail: String?
+
+            // The watch only loads settings.dat if the version matches, so if it's missing or from older firmware it's on defaults. Anything else we leave alone
+            let isOlder = readFile.valid && fileVersion.map { $0 < (expected ?? 0) } ?? false
+            if let expected, readFile.missing || isOlder {
+                file = WatchSettingsFile.defaults(version: expected)
+                usingDefaults = file != nil
+            } else if let expected, file?.version != expected {
+                file = nil
+            }
+
+            if file == nil {
+                detail = readFile.valid || readFile.missing ? nil : "read failed, "
+                detail = (detail ?? "") + "firmware \(firmware), file version \(fileVersion.map { String(format: "0x%02x", $0) } ?? "none"), \(readFile.data.count) bytes"
+            }
+            if file == nil || usingDefaults {
+                log("Settings file not used as is: firmware \(firmware), file version \(fileVersion.map { String(format: "0x%02x", $0) } ?? "none"), \(readFile.data.count) bytes", caller: "BLEFSHandler", target: .ble)
+            }
+            if let file {
+                DeviceManager.shared.updateHeartRateBackgroundPeriod(from: file)
+            }
+
+            DispatchQueue.main.async {
+                completion(file, usingDefaults, detail)
+            }
+        }
+    }
+
+    func writeSettingsFile(_ file: WatchSettingsFile, completion: @escaping(Bool) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let result = self.writeFile(data: file.data, path: "/settings.dat", offset: 0)
+            let success = result?.valid ?? false
+
+            DispatchQueue.main.async {
+                if success {
+                    DeviceManager.shared.updateSettings(file.settings)
+                    DeviceManager.shared.updateHeartRateBackgroundPeriod(from: file)
+                }
+                completion(success)
+            }
+        }
+    }
+
+    func readAlarmFile(completion: @escaping(WatchAlarmFile?, Bool, String?) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let readFile = self.readFile(path: WatchAlarmFile.path, offset: 0)
+            let version = readFile.data.first
+
+            var file = WatchAlarmFile(data: readFile.data)
+            var usingDefaults = false
+            var detail: String?
+
+            if file == nil && (readFile.missing || (readFile.valid && (version ?? 0) < WatchAlarmFile.currentVersion)) {
+                file = WatchAlarmFile.defaults
+                usingDefaults = true
+            } else if file == nil {
+                detail = "\(readFile.valid ? "" : "read failed, ")alarm version \(version.map { String($0) } ?? "none"), \(readFile.data.count) bytes"
+                log("Alarm file not usable: \(detail ?? "")", caller: "BLEFSHandler", target: .ble)
+            }
+
+            DispatchQueue.main.async {
+                completion(file, usingDefaults, detail)
+            }
+        }
+    }
+
+    func writeAlarmFile(_ file: WatchAlarmFile, completion: @escaping(Bool) -> Void) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            // /.system might not exist yet. If it does this just errors and we keep going
+            _ = self.makeDir(path: WatchAlarmFile.directory)
+            let result = self.writeFile(data: file.data, path: WatchAlarmFile.path, offset: 0)
+            let success = result?.valid ?? false
+
+            DispatchQueue.main.async {
+                completion(success)
+            }
+        }
+    }
+
     func convertDataToReadableFile(data: Data, fileExtension: String) throws -> Any {
         switch fileExtension.lowercased() {
         case "txt":
@@ -830,22 +896,6 @@ struct WatchFaceInfineat {
     var colorIndex: UInt8 = 0
 }
 
-struct Settings14 {
-    var version: UInt32 = 4
-    var stepsGoal: UInt32 = 10000
-    var screenTimeOut: UInt32 = 15000
-    var clockType: ClockType = .H24
-    var weatherFormat: WeatherFormat = .Metric
-    var notificationStatus: Notification = .On
-    var watchFace: UInt8 = 0
-    var chimesOption: ChimesOption = .None
-    var pineTimeStyle: PineTimeStyleData = PineTimeStyleData()
-    var watchFaceInfineat: WatchFaceInfineat = WatchFaceInfineat()
-    var wakeUpMode: WakeUpMode = .RaiseWrist
-    var shakeWakeThreshold: UInt16 = 150
-    var brightLevel: BrightLevel = .Mid
-}
-
 struct Settings {
     var version: UInt32 = 4
     var stepsGoal: UInt32 = 10000
@@ -861,6 +911,7 @@ struct Settings {
     var wakeUpMode: WakeUpMode = .RaiseWrist
     var shakeWakeThreshold: UInt16 = 150
     var brightLevel: BrightLevel = .Mid
+    var prideFlag: UInt8 = 0
 }
 
 enum FileConversionError: Error {

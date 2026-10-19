@@ -18,6 +18,7 @@
         <attribute name="modelNumber" attributeType="String" defaultValueString=""/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <attribute name="notificationStatus" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="prideFlag" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="screenTimeout" attributeType="Integer 32" defaultValueString="15000" usesScalarValueType="YES"/>
         <attribute name="serial" attributeType="String" defaultValueString=""/>
         <attribute name="settingsVersion" attributeType="Integer 32" defaultValueString="4" usesScalarValueType="YES"/>

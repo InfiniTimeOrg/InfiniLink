@@ -6,118 +6,48 @@
 //
 
 import SwiftUI
-import CoreData
-
-private struct HeartExportRow: Sendable {
-    let timestamp: Date?
-    let value: Double
-}
 
 struct HeartSettingsView: View {
+    @ObservedObject var deviceManager = DeviceManager.shared
+
     @AppStorage("backgroundHRMMeasurements") var backgroundHRMMeasurements = false
     @AppStorage("filterHeartRateData") var filterHeartRateData = true
 
-    @State private var exportDate = Date()
-    @State private var isExporting = false
+    @StateObject private var editor = WatchSettingsEditor()
 
-    @FetchRequest(sortDescriptors: [SortDescriptor(\.timestamp)]) var heartPoints: FetchedResults<HeartDataPoint>
-
-    private var dayPoints: [HeartDataPoint] {
-        let start = Calendar.current.startOfDay(for: exportDate)
-        let end = Calendar.current.date(byAdding: .day, value: 1, to: start) ?? start
-
-        return heartPoints.filter {
-            guard let timestamp = $0.timestamp else { return false }
-            return timestamp >= start && timestamp < end
-        }
-    }
-
-    nonisolated private static func generateCSV(from rows: [HeartExportRow]) -> String {
-        var csvString = "Timestamp,Value\n"
-
-        for row in rows {
-            let timestamp = row.timestamp?.formatted() ?? "Unknown"
-            csvString += "\(escapeField(timestamp)),\(String(format: "%.0f", row.value))\n"
-        }
-
-        return csvString
-    }
-
-    nonisolated private static func escapeField(_ field: String) -> String {
-        if field.contains(",") || field.contains("\n") || field.contains("\"") {
-            return "\"\(field.replacingOccurrences(of: "\"", with: "\"\""))\""
-        }
-        return field
-    }
-
-    private func fileDateString(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter.string(from: date)
-    }
-
-    private func export(_ points: [HeartDataPoint], fileName: String) {
-        let rows = points.map { HeartExportRow(timestamp: $0.timestamp, value: $0.value) }
-        isExporting = true
-
-        Task {
-            let csv = await Task.detached(priority: .userInitiated) {
-                Self.generateCSV(from: rows)
-            }.value
-
-            await MainActor.run {
-                self.presentShareSheet(csv, fileName: fileName)
-                self.isExporting = false
-            }
-        }
-    }
-
-    private func presentShareSheet(_ csvString: String, fileName: String) {
-        let fileURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
-
-        do {
-            try csvString.write(to: fileURL, atomically: true, encoding: .utf8)
-
-            let activity = UIActivityViewController(activityItems: [fileURL], applicationActivities: nil)
-
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let keyWindow = windowScene.windows.first,
-               let root = keyWindow.rootViewController {
-                root.present(activity, animated: true, completion: nil)
-            }
-        } catch {
-            log("Error writing heart data CSV file: \(error.localizedDescription)", caller: "HeartSettingsView")
-        }
-    }
+    private let intervals: [(LocalizedStringKey, UInt16?)] = [
+        ("Off", nil), ("Continuous", 0), ("30 seconds", 30), ("1 minute", 60), ("5 minutes", 300), ("10 minutes", 600), ("30 minutes", 1800)
+    ]
 
     var body: some View {
         List {
             Section(footer: Text("Filter inconsistent data from your heart rate measurements.")) {
                 Toggle("Filter Values", isOn: $filterHeartRateData)
             }
-            Section {
-                DatePicker("Day", selection: $exportDate, in: ...Date(), displayedComponents: .date)
-                if isExporting {
-                    HStack {
-                        ProgressView()
-                        Text("Preparing export…")
-                            .foregroundStyle(.secondary)
+            // Saving defaults replaces everything, so only allow that from Customization
+            if let file = editor.file, file.supportsBackgroundHeartRate, !editor.usingDefaults {
+                Section {
+                    Picker("Background Measurements", selection: Binding(
+                        get: { file.heartRateBackgroundPeriod },
+                        set: { editor.file?.heartRateBackgroundPeriod = $0 }
+                    )) {
+                        ForEach(intervals, id: \.1) { interval in
+                            Text(interval.0).tag(interval.1)
+                        }
                     }
-                } else {
-                    Button("Export Selected Day") {
-                        export(dayPoints, fileName: "HeartData-\(fileDateString(exportDate)).csv")
-                    }
-                    .disabled(dayPoints.isEmpty)
-                }
-            } header: {
-                Text("Export")
-            } footer: {
-                if dayPoints.isEmpty && !isExporting {
-                    Text("There's no heart rate data recorded for the selected day.")
+                    WatchSettingsSaveButton(editor: editor)
+                } footer: {
+                    Text("How often \(deviceManager.name) measures your heart rate in the background. More frequent measurements use more battery and improve sleep tracking.")
                 }
             }
         }
         .navigationTitle("Settings")
+        .onAppear {
+            if editor.file == nil {
+                editor.load()
+            }
+        }
+        .modifier(WatchSettingsAlerts(editor: editor, deviceName: deviceManager.name))
     }
 }
 

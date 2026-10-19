@@ -203,6 +203,8 @@ struct DeviceView: View {
         .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
             if blefsTransfer != nil && scenePhase == .active {
                 BLEFSHandler.shared.readSettings { settings in
+                    guard let settings else { return }
+                    
                     DispatchQueue.main.async {
                         self.deviceManager.updateSettings(settings)
                     }

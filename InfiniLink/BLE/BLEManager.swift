@@ -20,8 +20,8 @@ class BLEManager: NSObject, ObservableObject {
     let persistenceController =  PersistenceController.shared
     
     var manager: CBCentralManager?
-    var blefsTransfer: CBCharacteristic?
-    var currentTimeService: CBCharacteristic?
+    @Published var blefsTransfer: CBCharacteristic?
+    @Published var currentTimeService: CBCharacteristic?
     var notifyCharacteristic: CBCharacteristic?
     var weatherCharacteristic: CBCharacteristic?
     

@@ -59,6 +59,23 @@ class DeviceManager: ObservableObject {
     }
     
     @Published var settings = Settings()
+    
+    var heartRateBackgroundPeriod: Int? {
+        get { UserDefaults.standard.object(forKey: "heartRateBackgroundPeriod-\(pairedDeviceID ?? "")") as? Int }
+        set {
+            objectWillChange.send()
+            UserDefaults.standard.set(newValue, forKey: "heartRateBackgroundPeriod-\(pairedDeviceID ?? "")")
+        }
+    }
+    
+    func updateHeartRateBackgroundPeriod(from file: WatchSettingsFile) {
+        guard file.supportsBackgroundHeartRate else { return }
+        
+        DispatchQueue.main.async {
+            self.heartRateBackgroundPeriod = file.heartRateBackgroundPeriod.map { Int($0) } ?? -1
+        }
+    }
+    
     @Published var watches = [Device]()
     
     init() {
@@ -80,7 +97,7 @@ class DeviceManager: ObservableObject {
             device.chimesOption = Int16(settings.chimesOption.rawValue)
             device.clockType = Int16(settings.clockType.rawValue)
             device.notificationStatus = Int16(settings.notificationStatus.rawValue)
-            device.shakeWakeThreshold = Int16(settings.watchFace)
+            device.shakeWakeThreshold = Int16(clamping: settings.shakeWakeThreshold)
             device.watchface = Int16(settings.watchFace)
             device.weatherFormat = Int16(settings.weatherFormat.rawValue)
             device.stepsGoal = Int32(settings.stepsGoal)
@@ -94,6 +111,7 @@ class DeviceManager: ObservableObject {
             
             device.watchFaceInfineat?.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
             device.watchFaceInfineat?.showSideCover = settings.watchFaceInfineat.showSideCover
+            device.prideFlag = Int16(settings.prideFlag)
 
             try? context.save()
             
@@ -236,6 +254,9 @@ extension DeviceManager {
             try? context.save()
 
             if characteristic.uuid == CharacteristicIdentifier.firmware {
+                // Faces depend on the firmware version
+                self.objectWillChange.send()
+                WatchFaceCatalog.shared.objectWillChange.send()
                 DownloadManager.shared.evaluateFirmwareUpdate()
             }
         }

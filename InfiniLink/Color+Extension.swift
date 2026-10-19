@@ -8,12 +8,6 @@
 import SwiftUI
 
 extension Color {
-    static let maroon = Color(red: 0x6f / 255.0, green: 0x10 / 255.0, blue: 0x00 / 255.0)
-    static let navy = Color(red: 0, green: 0, blue: 0.5)
-    static let olive = Color(red: 0.5, green: 0.5, blue: 0)
-    static let silver = Color(red: 0.75, green: 0.75, blue: 0.75)
-    static let lime = Color(red: 0.75, green: 1.0, blue: 0.0)
-
     static func rgb(_ red: Int, _ green: Int, _ blue: Int) -> Color {
         Color(red: Double(red) / 255, green: Double(green) / 255, blue: Double(blue) / 255)
     }

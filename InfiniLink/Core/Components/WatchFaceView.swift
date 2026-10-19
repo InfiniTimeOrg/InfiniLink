@@ -11,29 +11,52 @@ import Combine
 
 struct WatchFaceView: View {
     @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var catalog = WatchFaceCatalog.shared
     
     @Environment(\.colorScheme) var colorScheme
     
     @State private var date = Date()
     
-    let watchface: UInt8?
+    let settings: Settings?
     let device: Device?
-    let prideFlag: UInt8?
     
-    init(watchface: UInt8? = nil, device: Device? = nil, prideFlag: UInt8? = nil) {
-        self.watchface = watchface
+    init(settings: Settings? = nil, device: Device? = nil) {
+        self.settings = settings
         self.device = device
-        self.prideFlag = prideFlag
     }
     
-    // The faces are laid out at 185 and scaled, since all their offsets were tuned at that size
-    private static let designSize: CGFloat = 185
+    private var faceSettings: Settings {
+        settings ?? device.map { Settings(device: $0) } ?? deviceManager.settings
+    }
+    private var firmware: String {
+        device?.firmware ?? deviceManager.firmware
+    }
+    
+    // Share of the watch image taken up by the screen
+    private static let screenFraction: CGFloat = 0.53
     
     var body: some View {
         GeometryReader { geometry in
-            face
-                .frame(width: Self.designSize, height: Self.designSize)
-                .scaleEffect(min(geometry.size.width, geometry.size.height) / Self.designSize, anchor: .topLeading)
+            let size = min(geometry.size.width, geometry.size.height)
+            let screenSize = size * Self.screenFraction
+            
+            ZStack {
+                Image(.watchScreen)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                screen
+                    .frame(width: 240, height: 240)
+                    .clipped()
+                    .scaleEffect(screenSize / 240)
+                    .frame(width: screenSize, height: screenSize)
+                    .offset(y: -size * 0.011)
+                    .brightness(colorScheme == .dark ? 0.015 : 0.125)
+                Image(.watchBorder)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .brightness(colorScheme == .dark ? 0.0 : 0.04)
+            }
+            .frame(width: size, height: size)
         }
         .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { newDate in
             self.date = newDate
@@ -42,257 +65,152 @@ struct WatchFaceView: View {
         .accessibilityLabel(Text("Watch face preview"))
     }
     
-    private var face: some View {
-        GeometryReader { geometry in
-            ZStack {
-                Image(.watchScreen)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                ZStack {
-                    ZStack {
-                        switch watchface ?? deviceManager.settings.watchFace {
-                        case 0:
-                            Digital(geometry: .constant(geometry), date: $date, device: device)
-                        case 1:
-                            Analog(geometry: .constant(geometry), date: $date)
-                        case 2:
-                            PineTimeStyle(geometry: .constant(geometry), date: $date, device: device)
-                        case 3:
-                            Terminal(geometry: .constant(geometry), date: $date, device: device)
-                        case 4:
-                            Infineat(geometry: .constant(geometry), date: $date, device: device)
-                        case 5:
-                            Casio(geometry: .constant(geometry), date: $date, device: device)
-                        case 6:
-                            PrideFlag(geometry: .constant(geometry), date: $date, flag: prideFlag ?? UInt8(UserDefaults.standard.integer(forKey: "prideFlag")))
-                        default:
-                            CustomWatchFace(index: watchface ?? deviceManager.settings.watchFace)
-                                .frame(width: geometry.size.width, height: geometry.size.height)
-                        }
-                    }
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
-                    .scaleEffect(0.53, anchor: .center)
-                    .frame(width: geometry.size.width, height: geometry.size.width, alignment: .center)
-                    .position(x: geometry.size.width / 2, y: geometry.size.width / 2 - 2)
-                    .brightness(colorScheme == .dark ? 0.015 : 0.125)
-                    .clipped()
-                }
-                .frame(width: geometry.size.width, height: geometry.size.width, alignment: .center)
-                .clipped()
-                Image(.watchBorder)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .brightness(colorScheme == .dark ? 0.0 : 0.04)
+    // Drawn at the watch's 240x240 resolution
+    private var screen: some View {
+        let settings = faceSettings
+        let entry = catalog.face(at: settings.watchFace, firmware: firmware)
+        
+        return ZStack {
+            switch entry?.id {
+            case "digital":
+                Digital(date: $date, settings: settings)
+            case "analog":
+                Analog(date: $date)
+            case "pineTimeStyle":
+                PineTimeStyle(date: $date, settings: settings)
+            case "terminal":
+                Terminal(date: $date, settings: settings, firmware: firmware)
+            case "infineat":
+                Infineat(date: $date, settings: settings)
+            case "casio":
+                Casio(date: $date, settings: settings)
+            case "numerals":
+                Numerals(date: $date, settings: settings)
+            case "prideFlag":
+                PrideFlag(date: $date, flag: settings.prideFlag)
+            default:
+                CustomWatchFace(face: entry, index: settings.watchFace)
             }
         }
+    }
+}
+
+extension Settings {
+    init(device: Device) {
+        self.init()
+        
+        clockType = ClockType(rawValue: UInt8(clamping: device.clockType)) ?? .H24
+        watchFace = UInt8(clamping: device.watchface)
+        if let pts = device.pineTimeStyle {
+            pineTimeStyle = PineTimeStyleData(
+                ColorTime: Colors(rawValue: UInt8(clamping: pts.colorTime)) ?? .Teal,
+                ColorBar: Colors(rawValue: UInt8(clamping: pts.colorBar)) ?? .Teal,
+                ColorBG: Colors(rawValue: UInt8(clamping: pts.colorBG)) ?? .Black,
+                gaugeStyle: PTSGaugeStyle(rawValue: UInt8(clamping: pts.guageStyle)) ?? .Full,
+                weatherEnable: PTSWeather(rawValue: UInt8(clamping: pts.weatherEnable)) ?? .Off
+            )
+        }
+        if let infineat = device.watchFaceInfineat {
+            watchFaceInfineat = WatchFaceInfineat(showSideCover: infineat.showSideCover, colorIndex: UInt8(clamping: infineat.colorIndex))
+        }
+        prideFlag = UInt8(clamping: device.prideFlag)
     }
 }
 
 struct CustomWatchFace: View {
     @ObservedObject var catalog = WatchFaceCatalog.shared
     
+    let face: WatchFaceEntry?
     let index: UInt8
     
     var body: some View {
-        if let image = catalog.image(for: index) {
+        if let face, let image = catalog.image(for: face) {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFill()
                 .clipped()
         } else {
-            Text(catalog.name(for: index))
-                .font(.system(size: 30, weight: .bold))
+            Text(face?.name ?? catalog.name(for: index))
+                .font(.system(size: 39, weight: .bold))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-                .padding()
+                .padding(21)
         }
     }
 }
 
 struct PineTimeStyle: View {
-    @ObservedObject var deviceManager = DeviceManager.shared
-    
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
-    let device: Device?
+    let settings: Settings
     
-    func hour24() -> Bool {
-        if let device {
-            return device.clockType == 0
-        } else {
-            return deviceManager.hour24
+    private func color(_ color: Colors) -> Color {
+        switch color {
+        case .White:
+            return .white
+        case .Silver:
+            return .rgb(0xc0, 0xc0, 0xc0)
+        case .Gray:
+            return .rgb(0x80, 0x80, 0x80)
+        case .Black:
+            return .black
+        case .Red:
+            return .rgb(0xff, 0x00, 0x00)
+        case .Maroon:
+            return .rgb(0xb0, 0x00, 0x00)
+        case .Yellow:
+            return .rgb(0xff, 0xff, 0x00)
+        case .Olive:
+            return .rgb(0xb0, 0xb0, 0x00)
+        case .Lime:
+            return .rgb(0x00, 0xff, 0x00)
+        case .Green:
+            return .rgb(0x00, 0xb0, 0x00)
+        case .Cyan:
+            return .rgb(0x00, 0xff, 0xff)
+        case .Teal:
+            return .rgb(0x00, 0xb0, 0xb0)
+        case .Blue:
+            return .rgb(0x00, 0x00, 0xff)
+        case .Navy:
+            return .rgb(0x00, 0x00, 0xb0)
+        case .Magenta:
+            return .rgb(0xff, 0x00, 0xff)
+        case .Purple:
+            return .rgb(0xb0, 0x00, 0xb0)
+        case .Orange:
+            return .rgb(0xff, 0xa5, 0x00)
+        case .Pink:
+            return .rgb(0xff, 0xae, 0xc9)
         }
-    }
-    func getColor(for pts: PineTimeStyleColor) -> Color {
-        switch pts {
-        case .time:
-            switch deviceManager.settings.pineTimeStyle.ColorTime {
-            case .White:
-                return .white
-            case .Silver:
-                return .silver
-            case .Gray:
-                return .gray
-            case .Black:
-                return .black
-            case .Red:
-                return .red
-            case .Maroon:
-                return .maroon
-            case .Yellow:
-                return .yellow
-            case .Olive:
-                return .olive
-            case .Lime:
-                return .lime
-            case .Green:
-                return .green
-            case .Cyan:
-                return .cyan
-            case .Teal:
-                return .teal
-            case .Blue:
-                return .blue
-            case .Navy:
-                return .navy
-            case .Magenta:
-                return Color(.magenta)
-            case .Purple:
-                return .white
-            case .Orange:
-                return .orange
-            case .Pink:
-                return .pink
-            }
-        case .background:
-            switch deviceManager.settings.pineTimeStyle.ColorBG {
-            case .White:
-                return .white
-            case .Silver:
-                return .silver
-            case .Gray:
-                return .gray
-            case .Black:
-                return .black
-            case .Red:
-                return .red
-            case .Maroon:
-                return .maroon
-            case .Yellow:
-                return .yellow
-            case .Olive:
-                return .olive
-            case .Lime:
-                return .lime
-            case .Green:
-                return .green
-            case .Cyan:
-                return .cyan
-            case .Teal:
-                return .teal
-            case .Blue:
-                return .blue
-            case .Navy:
-                return .navy
-            case .Magenta:
-                return Color(.magenta)
-            case .Purple:
-                return .white
-            case .Orange:
-                return .orange
-            case .Pink:
-                return .pink
-            }
-        case .sidebar:
-            switch deviceManager.settings.pineTimeStyle.ColorBar {
-            case .White:
-                return .white
-            case .Silver:
-                return .silver
-            case .Gray:
-                return .gray
-            case .Black:
-                return .black
-            case .Red:
-                return .red
-            case .Maroon:
-                return .maroon
-            case .Yellow:
-                return .yellow
-            case .Olive:
-                return .olive
-            case .Lime:
-                return .lime
-            case .Green:
-                return .green
-            case .Cyan:
-                return .cyan
-            case .Teal:
-                return .teal
-            case .Blue:
-                return .blue
-            case .Navy:
-                return .navy
-            case .Magenta:
-                return Color(.magenta)
-            case .Purple:
-                return .white
-            case .Orange:
-                return .orange
-            case .Pink:
-                return .pink
-            }
-        }
-    }
-    
-    enum PineTimeStyleColor {
-        case time
-        case background
-        case sidebar
     }
     
     var body: some View {
+        let hour = Calendar.current.component(.hour, from: date)
+        let is24Hour = settings.clockType == .H24
+        let displayHour = is24Hour ? hour : (hour % 12 == 0 ? 12 : hour % 12)
+        let timeColor = color(settings.pineTimeStyle.ColorTime)
+        
         ZStack {
-            getColor(for: .background)
-            if !hour24() {
-                CustomTextView(text: Calendar.current.component(.hour, from: date) >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.075), lineSpacing: -4)
-                    .foregroundColor(getColor(for: .time))
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
+            color(settings.pineTimeStyle.ColorBG)
+            if !is24Hour {
+                CustomTextView(text: hour >= 12 ? "P\nM" : "A\nM", font: .custom("JetBrainsMono-Bold", size: 20), lineSpacing: -5)
+                    .foregroundColor(timeColor)
+                    .frame(width: 240, height: 240, alignment: .bottomLeading)
             }
-            if !hour24() {
-                let currentHour = Calendar.current.component(.hour, from: date)
-                let hour24 = currentHour > 12 ? currentHour - 12 : (currentHour == 0 ? 12 : currentHour)
-                let hourString = String(format: "%02d", hour24)
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
-                
-                CustomTextView(text: "\(hourString)\n\(minuteString)", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
-                    .foregroundColor(getColor(for: .time))
-                    .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
-            } else {
-                let hourString = String(format: "%02d", Calendar.current.component(.hour, from: date))
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
-                
-                CustomTextView(text: "\(hourString)\n\(minuteString)", font: .custom("OpenSans-light", size: geometry.size.width * 0.62), lineSpacing: -geometry.size.width * 0.35)
-                    .foregroundColor(getColor(for: .time))
-                    .position(x: geometry.size.width / 2.3, y: geometry.size.height / 2.0)
-            }
-            GeometryReader { geometry in
-                Rectangle()
-                    .foregroundColor(getColor(for: .sidebar))
-                    .position(x: geometry.size.width - ((geometry.size.width / 6.0) / 2), y: geometry.size.height / 2 - 2)
-                    .frame(width: geometry.size.width / 6.0, height: geometry.size.height + 4, alignment: .center)
-            }
+            CustomTextView(text: "\(String(format: "%02d", displayHour))\n\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("OpenSans-light", size: 140), lineSpacing: -78)
+                .foregroundColor(timeColor)
+                .position(x: 110, y: 120)
+            Rectangle()
+                .foregroundColor(color(settings.pineTimeStyle.ColorBar))
+                .frame(width: 40, height: 240)
+                .position(x: 220, y: 120)
         }
+        .frame(width: 240, height: 240)
     }
 }
 
 struct Analog: View {
-    @ObservedObject var deviceManager = DeviceManager.shared
-    
-    @Environment(\.colorScheme) var colorScheme
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
     var minute: Double {
@@ -321,12 +239,11 @@ struct Analog: View {
                 .aspectRatio(contentMode: .fit)
                 .rotationEffect(Angle(degrees: Double(Calendar.current.component(.second, from: date)) * 6))
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: 240, height: 240)
     }
 }
 
 struct PrideFlag: View {
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
     let flag: UInt8
@@ -338,93 +255,74 @@ struct PrideFlag: View {
         case 2:
             return [.rgb(0xd6, 0x02, 0x70), .rgb(0xd6, 0x02, 0x70), .rgb(0x9b, 0x4f, 0x96), .rgb(0x00, 0x38, 0xa8), .rgb(0x00, 0x38, 0xa8)]
         case 3:
-            return [.red, .rgb(0xef, 0x76, 0x27), .rgb(0xff, 0x9b, 0x55), .white, .rgb(0xd4, 0x61, 0xa6), .rgb(0xb5, 0x56, 0x90), .rgb(0xa5, 0x00, 0x62)]
+            return [.rgb(0xff, 0x00, 0x00), .rgb(0xef, 0x76, 0x27), .rgb(0xff, 0x9b, 0x55), .white, .rgb(0xd4, 0x61, 0xa6), .rgb(0xb5, 0x56, 0x90), .rgb(0xa5, 0x00, 0x62)]
         default:
             return [.rgb(0x07, 0x8d, 0x70), .rgb(0x26, 0xce, 0xaa), .rgb(0x98, 0xe8, 0xc1), .white, .rgb(0x00, 0xbf, 0xf3), .rgb(0x50, 0x49, 0xcc), .rgb(0x3d, 0x1a, 0x78)]
         }
     }
-    private var timeColor: Color {
-        flag == 2 ? .white : .black
-    }
     
     var body: some View {
+        let stripes = stripes
+        let calendar = Calendar.current
+        
         ZStack {
-            VStack(spacing: 0) {
-                ForEach(stripes.indices, id: \.self) { index in
-                    stripes[index]
-                }
+            ForEach(stripes.indices, id: \.self) { index in
+                stripes[index]
+                    .frame(width: 240, height: CGFloat(240 / stripes.count + 1))
+                    .lvAlign(.topLeading, y: CGFloat(index * 240 / stripes.count))
             }
-            CustomTextView(text: String(format: "%02d:%02d", Calendar.current.component(.hour, from: date), Calendar.current.component(.minute, from: date)), font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.175), lineSpacing: 0)
-                .foregroundColor(timeColor)
+            Text(String(format: "%02d:%02d:%02d", calendar.component(.hour, from: date), calendar.component(.minute, from: date), calendar.component(.second, from: date)))
+                .font(.custom("JetBrainsMono-Regular", size: 42))
+                .foregroundColor(flag == 2 ? .white : .black)
+                .lvAlign(.center, y: -1)
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: 240, height: 240)
     }
 }
 
 struct Digital: View {
-    @ObservedObject var deviceManager = DeviceManager.shared
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
-    let device: Device?
-    
-    var twelveHour: Int {
-        let hour = Calendar.current.component(.hour, from: date)
-        return hour == 0 ? 12 : (hour > 12 ? hour - 12 : hour)
-    }
-    
-    func hour24() -> Bool {
-        if let device {
-            return device.clockType == 0
-        } else {
-            return deviceManager.hour24
-        }
-    }
+    let settings: Settings
     
     var body: some View {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let is24Hour = settings.clockType == .H24
+        
         ZStack {
-            if !hour24() {
-                CustomTextView(text: Calendar.current.component(.hour, from: date) > 12 ? "PM" : "AM", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
-                    .foregroundColor(.white)
-                    .frame(width: geometry.size.width, height: geometry.size.height / 3.95, alignment: .topTrailing)
-            }
-            if !hour24() {
-                CustomTextView(text: "\(twelveHour):\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
+            if is24Hour {
+                Text(String(format: "%02d:%02d", hour, minute))
+                    .font(.custom("JetBrainsMono-ExtraBold", size: 80))
+                    .lvAlign(.center)
             } else {
-                CustomTextView(text: "\(String(format: "%02d", Calendar.current.component(.hour, from: date))):\(String(format: "%02d", Calendar.current.component(.minute, from: date)))", font: .custom("JetBrainsMono-ExtraBold", size: geometry.size.width * 0.33), lineSpacing: 0)
-                    .foregroundColor(.white)
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-                    .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
+                Text(String(format: "%2d:%02d", hour % 12 == 0 ? 12 : hour % 12, minute))
+                    .font(.custom("JetBrainsMono-ExtraBold", size: 80))
+                    .lvAlign(.trailing)
+                // Aligned while empty, so the text starts at its right edge
+                Text(hour >= 12 ? "PM" : "AM")
+                    .font(.custom("JetBrainsMono-Bold", size: 20))
+                    .fixedSize()
+                    .frame(width: 0, alignment: .leading)
+                    .lvAlign(.trailing, x: -30, y: -55)
             }
-            CustomTextView(text: {
-                let current = date
-                let formatter = DateFormatter()
-                
-                formatter.dateFormat = "EEE MMM d yyyy"
-                
-                return formatter.string(from: current).uppercased()
-            }(), font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085), lineSpacing: 0)
-            .foregroundColor(Color(.lightGray))
-            .frame(width: geometry.size.width, height: geometry.size.height / 1.6, alignment: .bottom)
+            Text(watchString(date, is24Hour ? "EEE d MMM yyyy" : "EEE MMM d yyyy").uppercased())
+                .font(.custom("JetBrainsMono-Bold", size: 20))
+                .foregroundColor(.rgb(0x99, 0x99, 0x99))
+                .lvAlign(.center, y: 60)
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .foregroundColor(.white)
+        .frame(width: 240, height: 240)
     }
 }
 
 struct Infineat: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceManager = DeviceManager.shared
     
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
-    let device: Device?
+    let settings: Settings
     
     // Values from the firmware, in watch pixels
     private static let lines: [(CGPoint, CGPoint)] = [
@@ -450,21 +348,9 @@ struct Infineat: View {
     ]
     private static let gray = Color.rgb(0x99, 0x99, 0x99)
     
-    private var scale: CGFloat {
-        geometry.size.width / 240
-    }
     private var colors: [Color] {
-        let index = Int(device?.watchFaceInfineat?.colorIndex ?? Int16(deviceManager.settings.watchFaceInfineat.colorIndex))
+        let index = Int(settings.watchFaceInfineat.colorIndex)
         return Self.colorSchemes[Self.colorSchemes.indices.contains(index) ? index : 0]
-    }
-    private var showSideCover: Bool {
-        device?.watchFaceInfineat?.showSideCover ?? deviceManager.settings.watchFaceInfineat.showSideCover
-    }
-    private var is24Hour: Bool {
-        if let device {
-            return device.clockType == 0
-        }
-        return deviceManager.hour24
     }
     
     // Overlay so the text doesn't push the layout around
@@ -473,18 +359,19 @@ struct Infineat: View {
             .frame(width: 0, height: 0)
             .overlay(alignment: Alignment(horizontal: leading ? .leading : .center, vertical: .firstTextBaseline)) {
                 Text(text)
-                    .font(.custom(font, size: size * scale))
+                    .font(.custom(font, size: size))
                     .foregroundColor(color)
                     .fixedSize()
             }
-            .offset(x: centerX * scale, y: baseline * scale)
+            .offset(x: centerX, y: baseline)
     }
     
     var body: some View {
         let calendar = Calendar.current
         let hour = calendar.component(.hour, from: date)
-        let displayHour = is24Hour ? hour : (hour % 12 == 0 ? 12 : hour % 12)
-        let battery = bleManager.hasLoadedBatteryLevel ? bleManager.batteryLevel : 100
+        let is24Hour = settings.clockType == .H24
+        let showSideCover = settings.watchFaceInfineat.showSideCover
+        let battery = bleManager.hasLoadedBatteryLevel ? Int(bleManager.batteryLevel) : 100
         
         ZStack(alignment: .topLeading) {
             Color.clear
@@ -492,9 +379,9 @@ struct Infineat: View {
                 Canvas { context, _ in
                     for (index, line) in Self.lines.enumerated() {
                         var path = Path()
-                        path.move(to: CGPoint(x: line.0.x * scale, y: line.0.y * scale))
-                        path.addLine(to: CGPoint(x: line.1.x * scale, y: line.1.y * scale))
-                        context.stroke(path, with: .color(colors[index]), style: StrokeStyle(lineWidth: Self.lineWidths[index] * scale, lineCap: .butt))
+                        path.move(to: line.0)
+                        path.addLine(to: line.1)
+                        context.stroke(path, with: .color(colors[index]), style: StrokeStyle(lineWidth: Self.lineWidths[index], lineCap: .butt))
                     }
                 }
             }
@@ -502,202 +389,159 @@ struct Infineat: View {
                 .resizable()
                 .renderingMode(showSideCover ? .original : .template)
                 .foregroundColor(.white)
-                .frame(width: 23 * scale, height: 31 * scale)
-                .offset(x: 15 * scale, y: 106 * scale)
-            Rectangle()
-                .fill(colors[4].opacity(190 / 255))
-                .frame(width: 24 * scale, height: max(1, 32 * (100 - battery) / 100) * scale)
-                .offset(x: 15 * scale, y: 105 * scale)
-            // Same as the firmware, hours and minutes are at the top and bottom of a 185px box 10px above center
-            label(String(format: "%02d", displayHour), font: "BebasNeue-Regular", size: 120, color: .white, centerX: 120, baseline: is24Hour ? 103 : 108)
+                .frame(width: 23, height: 31)
+                .lvAlign(.topLeading, x: 15, y: 106)
+            (showSideCover ? colors[4] : .white)
+                .opacity(190 / 255)
+                .frame(width: 24, height: CGFloat(max(1, 32 * (100 - battery) / 100)))
+                .lvAlign(.topLeading, x: 15, y: 105)
+            label(String(format: "%02d", is24Hour ? hour : (hour % 12 == 0 ? 12 : hour % 12)), font: "BebasNeue-Regular", size: 120, color: .white, centerX: 120, baseline: is24Hour ? 103 : 108)
             label(String(format: "%02d", calendar.component(.minute, from: date)), font: "BebasNeue-Regular", size: 120, color: .white, centerX: 120, baseline: 202)
             if !is24Hour {
                 label(hour >= 12 ? "PM" : "AM", font: "Teko-Light", size: 28, color: .white, centerX: 212, baseline: 46, leading: true)
             }
-            label({
-                let formatter = DateFormatter()
-                formatter.dateFormat = "E dd"
-                return formatter.string(from: date)
-            }(), font: "Teko-Light", size: 28, color: Self.gray, centerX: 210, baseline: 129)
-            Color.clear
-                .frame(width: 0, height: 0)
-                .overlay(alignment: Alignment(horizontal: .center, vertical: .firstTextBaseline)) {
-                    Text("\(bleManager.stepCount)")
-                        .font(.custom("Teko-Light", size: 28 * scale))
-                        .foregroundColor(Self.gray)
-                        .fixedSize()
-                        .overlay(alignment: .leading) {
-                            Image(systemName: "shoeprints.fill")
-                                .rotationEffect(Angle(degrees: 90))
-                                .font(.system(size: 16 * scale))
-                                .foregroundColor(Self.gray)
-                                .fixedSize()
-                                .alignmentGuide(HorizontalAlignment.leading) { $0[.trailing] + 5 * scale }
-                        }
-                }
-                .offset(x: 130 * scale, y: 238 * scale)
+            Text(watchString(date, "EEE dd"))
+                .font(.custom("Teko-Light", size: 28))
+                .foregroundColor(Self.gray)
+                .lvAlign(.top, x: 90, y: 110)
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
+        .foregroundColor(.white)
+        .frame(width: 240, height: 240)
         .clipped()
     }
 }
 
 struct Terminal: View {
     @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceManager = DeviceManager.shared
     
-    @Environment(\.colorScheme) var colorScheme
-    
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
-    let device: Device?
-    
-    func hour24() -> Bool {
-        if let device {
-            return device.clockType == 0
-        } else {
-            return deviceManager.hour24
-        }
-    }
-    
-    private func row(_ index: Int) -> CGFloat {
-        return (36.9 + CGFloat(index) * 21.5) * geometry.size.width / 240
-    }
+    let settings: Settings
+    let firmware: String
     
     private var batteryColor: Color {
         let hue = (1 - exp(-4 * bleManager.batteryLevel / 100)) * 120
         return Color(hue: hue / 360, saturation: 1, brightness: 1)
     }
     
+    private func row(_ index: Int) -> CGFloat {
+        return 36.9 + CGFloat(index) * 21.5
+    }
+    
     private func line(_ text: Text, at index: Int) -> some View {
         text
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .font(.custom("JetBrainsMono-Bold", size: 20.4))
+            .foregroundColor(.white)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: row(index))
+            .position(x: 120, y: row(index))
     }
     
     var body: some View {
-        let currentHour = Calendar.current.component(.hour, from: date)
-        let currentMinute = Calendar.current.component(.minute, from: date)
-        let currentSecond = Calendar.current.component(.second, from: date)
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let second = calendar.component(.second, from: date)
         let lightGray = Color.rgb(0xb0, 0xb0, 0xb0)
         // Weather row was added in 1.16
-        let showsWeather = (device?.firmware ?? deviceManager.firmware).compare("1.16.0", options: .numeric) != .orderedAscending
-        let time = hour24() ? String(format: "%02d:%02d:%02d", currentHour, currentMinute, currentSecond) : String(format: "%02d:%02d:%02d %@", currentHour % 12 == 0 ? 12 : currentHour % 12, currentMinute, currentSecond, currentHour >= 12 ? "PM" : "AM")
+        let showsWeather = firmware.compare("1.16.0", options: .numeric) != .orderedAscending
+        let time = settings.clockType == .H24 ? String(format: "%02d:%02d:%02d", hour, minute, second) : String(format: "%02d:%02d:%02d %@", hour % 12 == 0 ? 12 : hour % 12, minute, second, hour >= 12 ? "PM" : "AM")
         
         ZStack {
             line(Text("user@watch:~ $ now").foregroundColor(lightGray), at: 0)
-            line(Text("[TIME] ").foregroundColor(.white) + Text(time).foregroundColor(.rgb(0x11, 0xcc, 0x55)), at: 1)
-            line(Text("[DATE] ").foregroundColor(.white) + Text(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: date), Calendar.current.component(.month, from: date), Calendar.current.component(.day, from: date))).foregroundColor(.rgb(0x00, 0x7f, 0xff)), at: 2)
-            line(Text("[BATT] ").foregroundColor(.white) + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(batteryColor), at: 3)
-            line(Text("[STEP] ").foregroundColor(.white) + Text("\(bleManager.stepCount) steps").foregroundColor(.rgb(0xff, 0xb0, 0x00)), at: 4)
-            line(Text("[L_HR] ").foregroundColor(.white) + Text(bleManager.heartRate == 0 ? "---" : "\(Int(bleManager.heartRate)) bpm").foregroundColor(.white), at: 5)
+            line(Text("[TIME] ") + Text(time).foregroundColor(.rgb(0x11, 0xcc, 0x55)), at: 1)
+            line(Text("[DATE] ") + Text(String(format: "%04d-%02d-%02d", calendar.component(.year, from: date), calendar.component(.month, from: date), calendar.component(.day, from: date))).foregroundColor(.rgb(0x00, 0x7f, 0xff)), at: 2)
+            line(Text("[BATT] ") + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(batteryColor), at: 3)
+            line(Text("[STEP] ") + Text("\(bleManager.stepCount) steps").foregroundColor(.rgb(0xff, 0xb0, 0x00)), at: 4)
+            line(Text("[L_HR] ") + (bleManager.heartRate == 0 ? Text("---").foregroundColor(.rgb(0x50, 0x50, 0x50)) : Text("\(Int(bleManager.heartRate)) bpm").foregroundColor(.rgb(0xff, 0x40, 0x00))), at: 5)
             if showsWeather {
-                line(Text("[WTHR] ").foregroundColor(.white) + Text("---").foregroundColor(.rgb(0xff, 0xdd, 0x00)), at: 6)
+                line(Text("[WTHR] ") + Text("---").foregroundColor(.rgb(0xff, 0xdd, 0x00)), at: 6)
             }
-            line(Text("[STAT] ").foregroundColor(.white) + Text("Connected").foregroundColor(.white), at: showsWeather ? 7 : 6)
+            line(Text("[STAT] ") + Text("Connected").foregroundColor(.rgb(0x00, 0x50, 0xff)), at: showsWeather ? 7 : 6)
             line(Text("user@watch:~ $").foregroundColor(lightGray), at: showsWeather ? 8 : 7)
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: 240, height: 240)
     }
 }
 
 struct Casio: View {
-    @ObservedObject var bleManager = BLEManager.shared
-    @ObservedObject var deviceManager = DeviceManager.shared
-    
-    @Environment(\.colorScheme) var colorScheme
-    
-    @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
-    let device: Device?
+    let settings: Settings
     
-    func hour24() -> Bool {
-        if let device {
-            return device.clockType == 0
-        } else {
-            return deviceManager.hour24
-        }
-    }
-    
-    let colorText: Color = Color(red: 152 / 255.0, green: 182 / 255.0, blue: 154 / 255.0)
+    private let colorText = Color.rgb(0x98, 0xb6, 0x9a)
     
     var body: some View {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let minute = calendar.component(.minute, from: date)
+        let month = calendar.component(.month, from: date)
+        let day = calendar.component(.day, from: date)
+        let is24Hour = settings.clockType == .H24
+        let dayOfYear = calendar.ordinality(of: .day, in: .year, for: date) ?? 1
+        let daysInYear = calendar.range(of: .day, in: .year, for: date)?.count ?? 365
+        let weekday = calendar.component(.weekday, from: date) - 1
+        // Same as strftime's %V in 24 hour mode and %U in 12 hour mode
+        let weekNumber = is24Hour ? Calendar(identifier: .iso8601).component(.weekOfYear, from: date) : (dayOfYear - 1 + 7 - weekday) / 7
+        
         ZStack {
             Image(.casio)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-            CustomTextView(
-                text: {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "E"
-                    
-                    let weekOfYear = Calendar.current.component(.weekOfYear, from: date)
-                    
-                    return "WK\(weekOfYear)\n\(dateFormatter.string(from: date).uppercased())"
-                }(),
-                font: .custom("repetitionscrolling", size: geometry.size.width * 0.16),
-                lineSpacing: 0
-            )
-            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.15, alignment: .topLeading)
-            CustomTextView(
-                text: {
-                    let calendar = Calendar.current
-                    let now = date
-                    
-                    let startOfYear = calendar.startOfDay(for: calendar.date(from: DateComponents(year: calendar.component(.year, from: now)))!)
-                    let endOfYear = calendar.startOfDay(for: calendar.date(byAdding: DateComponents(year: 1, day: -1), to: calendar.date(from: DateComponents(year: calendar.component(.year, from: now)))!)!)
-                    
-                    let daysIn = calendar.dateComponents([.day], from: startOfYear, to: now).day! + 1
-                    let daysLeft = calendar.dateComponents([.day], from: now, to: endOfYear).day! + 1
-                    
-                    return "\(daysIn)-\(daysLeft)"
-                }(),
-                font: .custom("7-Segment", size: geometry.size.width * 0.16),
-                lineSpacing: 0
-            )
-            .frame(width: geometry.size.width / 1.04, height: geometry.size.height / 1.25, alignment: .topTrailing)
-            CustomTextView(
-                text: {
-                    let calendar = Calendar.current
-                    let now = date
-                    
-                    let month = calendar.component(.month, from: now)
-                    let day = calendar.component(.day, from: now)
-                    
-                    return "\(month)-\(day)"
-                }(),
-                font: .custom("7-Segment", size: geometry.size.width * 0.16),
-                lineSpacing: 0
-            )
-            .frame(width: geometry.size.width / 1.08, height: geometry.size.height / 2.25, alignment: .topTrailing)
-            CustomTextView(text: {
-                let currentHour = Calendar.current.component(.hour, from: date)
-                var hourString = ""
-                
-                if hour24() {
-                    hourString = String(format: "%d", currentHour)
-                } else {
-                    let hour24 = currentHour % 12 == 0 ? 12 : currentHour
-                    hourString = "\(hour24)"
-                }
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
-                
-                return "\(hourString):\(minuteString)"
-            }(), font: .custom("7-Segment", size: geometry.size.width * 0.44), lineSpacing: 0)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
-            .position(x: geometry.size.width / 2.1, y: geometry.size.height / 1.4)
-            if !hour24() {
-                CustomTextView(text: "\(Calendar.current.component(.hour, from: date) >= 12 ? "P" : "A")", font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.08), lineSpacing: 0)
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
-                    .padding(.leading, 6)
-                    .padding(.top, -5)
+            CustomTextView(text: String(format: "WK%02d\n%@", weekNumber, watchString(date, "EEE").uppercased()), font: .custom("repetitionscrolling", size: 38.4), lineSpacing: 0)
+                .frame(width: 230.8, height: 208.7, alignment: .topLeading)
+            CustomTextView(text: String(format: "%3d-%3d", dayOfYear, daysInYear - dayOfYear), font: .custom("7-Segment", size: 38.4), lineSpacing: 0)
+                .frame(width: 230.8, height: 192, alignment: .topTrailing)
+            CustomTextView(text: String(format: "%3d-%2d", is24Hour ? day : month, is24Hour ? month : day), font: .custom("7-Segment", size: 38.4), lineSpacing: 0)
+                .frame(width: 222.2, height: 106.7, alignment: .topTrailing)
+            CustomTextView(text: String(format: is24Hour ? "%02d:%02d" : "%2d:%02d", is24Hour ? hour : (hour % 12 == 0 ? 12 : hour % 12), minute), font: .custom("7-Segment", size: 105.6), lineSpacing: 0)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .trailing)
+                .position(x: 114.3, y: 171.4)
+            if !is24Hour {
+                CustomTextView(text: hour >= 12 ? "P" : "A", font: .custom("JetBrainsMono-Bold", size: 19.2), lineSpacing: 0)
+                    .frame(width: 240, height: 240, alignment: .leading)
+                    .padding(.leading, 8)
+                    .padding(.top, -6)
             }
         }
         .foregroundColor(colorText)
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: 240, height: 240)
+    }
+}
+
+struct Numerals: View {
+    @Binding var date: Date
+    
+    let settings: Settings
+    
+    private func label(_ text: String, size: CGFloat, color: Color, x: CGFloat, y: CGFloat, width: CGFloat? = nil, height: CGFloat? = nil) -> some View {
+        Text(text)
+            .font(.custom("BloggerSans-Bold", size: size))
+            .foregroundColor(color)
+            .lineLimit(1)
+            .minimumScaleFactor(0.5)
+            .frame(width: width, height: height, alignment: .leading)
+            .offset(x: x, y: y)
+    }
+    
+    var body: some View {
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let is24Hour = settings.clockType == .H24
+        let ampmColor = Color.rgb(0x99, 0x99, 0x99)
+        
+        ZStack(alignment: .topLeading) {
+            Color.black
+            label(String(format: "%02d", is24Hour ? hour : (hour % 12 == 0 ? 12 : hour % 12)), size: 140, color: .rgb(0x80, 0x80, 0x80), x: 90, y: -5, width: 165, height: 155)
+            label(String(format: "%02d", calendar.component(.minute, from: date)), size: 140, color: .rgb(0x00, 0xff, 0xff), x: 90, y: 115, width: 165, height: 155)
+            label(watchString(date, "EEE").uppercased(), size: 30, color: .white, x: 0, y: 0)
+            label("\(calendar.component(.day, from: date))", size: 30, color: .white, x: 0, y: 36)
+            if !is24Hour {
+                label(hour >= 12 ? "P" : "A", size: 30, color: ampmColor, x: 2, y: 176)
+                label("M", size: 30, color: ampmColor, x: 0, y: 210)
+            }
+        }
+        .frame(width: 240, height: 240, alignment: .topLeading)
+        .clipped()
     }
 }
 
@@ -716,7 +560,80 @@ struct CustomTextView: View {
     }
 }
 
+extension View {
+    // Matches lv_obj_align
+    func lvAlign(_ alignment: Alignment, x: CGFloat = 0, y: CGFloat = 0) -> some View {
+        fixedSize()
+            .frame(width: 240, height: 240, alignment: alignment)
+            .offset(x: x, y: y)
+    }
+}
+
+// The watch only shows English names
+fileprivate func watchString(_ date: Date, _ format: String) -> String {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.dateFormat = format
+    return formatter.string(from: date)
+}
+
+fileprivate struct PreviewRow<V: View>: View {
+    let face: () -> V
+    
+    var body: some View {
+        face()
+            .frame(width: 240, height: 240)
+            .background(Color.black)
+    }
+}
+
 #Preview {
-    WatchFaceView(watchface: 2)
-        .frame(width: 300, height: 300)
+    let settings = Settings(
+        version: 4,
+        stepsGoal: 10000,
+        screenTimeOut: 15000,
+        alwaysOnDisplay: false,
+        clockType: .H12,
+        weatherFormat: .Metric,
+        notificationStatus: .On,
+        watchFace: 0,
+        chimesOption: .None,
+        pineTimeStyle: PineTimeStyleData(ColorTime: .Teal, ColorBar: .Teal, ColorBG: .Black, gaugeStyle: .Full, weatherEnable: .Off),
+        watchFaceInfineat: WatchFaceInfineat(showSideCover: true, colorIndex: 0),
+        wakeUpMode: .RaiseWrist,
+        shakeWakeThreshold: 150,
+        brightLevel: .Mid,
+        prideFlag: 0
+    )
+    
+    ScrollView {
+        VStack(spacing: 24) {
+            PreviewRow {
+                PineTimeStyle(date: .constant(Date()), settings: settings)
+            }
+            PreviewRow {
+                Digital(date: .constant(Date()), settings: settings)
+            }
+            PreviewRow {
+                Analog(date: .constant(Date()))
+            }
+            
+            PreviewRow {
+                Terminal(date: .constant(Date()), settings: settings, firmware: "1.16.0")
+            }
+            PreviewRow {
+                Infineat(date: .constant(Date()), settings: settings)
+            }
+            PreviewRow {
+                Casio(date: .constant(Date()), settings: settings)
+            }
+            PreviewRow {
+                Numerals(date: .constant(Date()), settings: settings)
+            }
+            PreviewRow {
+                PrideFlag(date: .constant(Date()), flag: 0)
+            }
+        }
+        .frame(maxWidth: .infinity)
+    }
 }

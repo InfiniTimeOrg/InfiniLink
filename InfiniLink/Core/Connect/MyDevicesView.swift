@@ -37,7 +37,7 @@ struct MyDevicesView: View {
                                         .foregroundStyle(.blue)
                                         .font(.body.weight(.semibold))
                                         .opacity(deviceManager.pairedDeviceID  == watch.uuid ? 1 : 0)
-                                    WatchFaceView(watchface: UInt8(watch.watchface), device: watch)
+                                    WatchFaceView(device: watch)
                                         .frame(width: 90, height: 90)
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(watch.name ?? "InfiniTime")
