@@ -8,7 +8,6 @@
     
 
 import Foundation
-import NordicDFU
 import SwiftUI
 
 extension Array: @retroactive RawRepresentable where Element: Codable {

@@ -11,6 +11,7 @@
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
+		B2A43E6C777F4BEEDB5EF777 /* DFUTransfer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65951364E9934C88913616D0 /* DFUTransfer.swift */; };
 		E00A862A2DEB8383001533E1 /* FindLostDeviceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */; };
 		E00A86312DEBF3C1001533E1 /* RSSI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00A86302DEBF3C1001533E1 /* RSSI.swift */; };
 		E02C620F2CD022A200C4D19B /* RecoveryModeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */; };
@@ -84,7 +85,6 @@
 		E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */; };
 		E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */; };
 		E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */; };
-		E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */ = {isa = PBXBuildFile; productRef = E0A7C0952CB1EEB50042A12D /* NordicDFU */; };
 		E0A7C0982CB227060042A12D /* HeartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0972CB227060042A12D /* HeartView.swift */; };
 		E0A7C09A2CB2270D0042A12D /* StepsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0992CB2270D0042A12D /* StepsView.swift */; };
 		E0A7C09C2CB234450042A12D /* AboutSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C09B2CB234450042A12D /* AboutSettingsView.swift */; };
@@ -177,6 +177,7 @@
 		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		65951364E9934C88913616D0 /* DFUTransfer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DFUTransfer.swift; sourceTree = "<group>"; };
 		E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLostDeviceView.swift; sourceTree = "<group>"; };
 		E00A86302DEBF3C1001533E1 /* RSSI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSI.swift; sourceTree = "<group>"; };
 		E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModeView.swift; sourceTree = "<group>"; };
@@ -303,7 +304,6 @@
 			files = (
 				E0A7C0822CB1B4990042A12D /* Zip in Frameworks */,
 				E078ECFB2D4E6D9800560364 /* Zip in Frameworks */,
-				E0A7C0962CB1EEB50042A12D /* NordicDFU in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -679,6 +679,7 @@
 				E0A7C07E2CB1B3300042A12D /* BLEFS.swift */,
 				E0C7C8512CAF14870043DA2D /* SetTime.swift */,
 				E07D8F232CC012FC005C1325 /* DeviceManager.swift */,
+				65951364E9934C88913616D0 /* DFUTransfer.swift */,
 			);
 			path = BLE;
 			sourceTree = "<group>";
@@ -724,7 +725,6 @@
 			name = InfiniLink;
 			packageProductDependencies = (
 				E0A7C0812CB1B4990042A12D /* Zip */,
-				E0A7C0952CB1EEB50042A12D /* NordicDFU */,
 				E078ECFA2D4E6D9800560364 /* Zip */,
 			);
 			productName = "Infini-iOS";
@@ -780,8 +780,6 @@
 			dependencies = (
 			);
 			name = WorkoutWidgetExtension;
-			packageProductDependencies = (
-			);
 			productName = WorkoutWidgetExtension;
 			productReference = E0C9D90C3051A7730070B1A1 /* WorkoutWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -826,7 +824,6 @@
 			);
 			mainGroup = 264BFE3526BC51CE0050A223;
 			packageReferences = (
-				E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */,
 				E078ECF92D4E6D9800560364 /* XCRemoteSwiftPackageReference "Zip" */,
 			);
 			productRefGroup = 264BFE3F26BC51CE0050A223 /* Products */;
@@ -989,6 +986,7 @@
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,
 				E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */,
+				B2A43E6C777F4BEEDB5EF777 /* DFUTransfer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1441,14 +1439,6 @@
 				minimumVersion = 2.1.2;
 			};
 		};
-		E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/NordicSemiconductor/IOS-DFU-Library";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 4.15.3;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1460,11 +1450,6 @@
 		E0A7C0812CB1B4990042A12D /* Zip */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Zip;
-		};
-		E0A7C0952CB1EEB50042A12D /* NordicDFU */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = E0A7C0942CB1EEB50042A12D /* XCRemoteSwiftPackageReference "IOS-DFU-Library" */;
-			productName = NordicDFU;
 		};
 /* End XCSwiftPackageProductDependency section */
 

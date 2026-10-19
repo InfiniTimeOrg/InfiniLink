@@ -246,17 +246,17 @@ class BLEManager: NSObject, ObservableObject {
         }
     }
     
-    // The DFU library drives its own connection, so the app must not scan or reconnect while it runs
     func beginFirmwareUpdate() {
         isUpdatingFirmware = true
-        stopScanning()
-        disconnect()
     }
     
     func endFirmwareUpdate(installed: Bool = false) {
         isUpdatingFirmware = false
         isReconnectingAfterUpdate = installed
-        startScanning()
+        // If we're still connected, the watch restarting disconnects and we reconnect on our own
+        if !isConnectedToPinetime {
+            startScanning()
+        }
 
         if installed {
             // Don't sit on "Installing update..." forever if the watch never comes back
@@ -362,8 +362,7 @@ extension BLEManager: CBCentralManagerDelegate {
         lastDisconnectReason = error?.localizedDescription
         saveLastSeen(peripheral)
         HealthKitManager.shared.flushHeartRateSamples()
-        
-        guard !isUpdatingFirmware else { return }
+        DFUUpdater.shared.transfer?.connectionLost()
         
         // Drop the stale peripheral so in-flight BLEFS loops become no-ops and state can't half-persist
         infiniTime = nil
@@ -455,6 +454,11 @@ extension BLEManager: CBPeripheralDelegate {
             return
         }
         
+        if characteristic.uuid == cbuuidList.dfuControlPoint, let value = characteristic.value {
+            DFUUpdater.shared.transfer?.didReceiveControlPoint(value)
+            return
+        }
+        
         lastDataReceivedDate = Date()
         // Keep the last seen date current without writing it on every update
         if Date().timeIntervalSince(lastSeenSavedDate ?? .distantPast) > 60 {
@@ -463,6 +467,16 @@ extension BLEManager: CBPeripheralDelegate {
         
         deviceManager.updateInfo(characteristic: characteristic)
         BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic, peripheral: peripheral)
+    }
+    
+    func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
+        if characteristic.uuid == cbuuidList.dfuControlPoint {
+            DFUUpdater.shared.transfer?.didWriteControlPoint(error: error)
+        }
+    }
+    
+    func peripheralIsReady(toSendWriteWithoutResponse peripheral: CBPeripheral) {
+        DFUUpdater.shared.transfer?.peripheralIsReady()
     }
     
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
