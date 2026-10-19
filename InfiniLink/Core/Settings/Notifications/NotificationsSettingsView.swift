@@ -50,6 +50,11 @@ struct NotificationsSettingsView: View {
                     } label: {
                         ListRowView(title: "Daily Goals", icon: "shoeprints.fill", iconColor: .blue)
                     }
+                    NavigationLink {
+                        BatterySettingsView()
+                    } label: {
+                        ListRowView(title: "Battery Notifications", icon: "battery.100percent", iconColor: .green)
+                    }
                 }
                 Section {
                     Toggle("Transliterate to ASCII", isOn: $settingsManager.settings.transliterationEnabled)

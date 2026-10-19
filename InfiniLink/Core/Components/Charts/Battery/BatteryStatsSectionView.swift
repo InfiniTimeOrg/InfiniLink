@@ -63,7 +63,7 @@ struct BatteryStatsSectionView: View {
                     secondary: nil
                 )*/
                 row(
-                    "Last charged",
+                    "Last Charged",
                     value: currentUptime.map { format($0) + " ago" } ?? "--",
                     secondary: nil
                 )
