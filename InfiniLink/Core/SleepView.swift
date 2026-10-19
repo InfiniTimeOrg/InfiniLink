@@ -1,0 +1,230 @@
+//
+//  SleepView.swift
+//  InfiniLink
+//
+//  Created by Liam Willey on 10/18/26.
+//
+
+import SwiftUI
+import Charts
+
+struct SleepRun: Identifiable {
+    let id = UUID()
+    let state: SleepState
+    let start: Date
+    let end: Date
+
+    var label: String {
+        switch state {
+        case .asleep:
+            return NSLocalizedString("Asleep", comment: "")
+        case .awake:
+            return NSLocalizedString("Awake", comment: "")
+        case .noData:
+            return NSLocalizedString("No Data", comment: "")
+        }
+    }
+    var color: Color {
+        switch state {
+        case .asleep:
+            return .indigo
+        case .awake:
+            return .orange
+        case .noData:
+            return .gray.opacity(0.4)
+        }
+    }
+}
+
+struct SleepNight: Identifiable {
+    let id = UUID()
+    let date: Date
+    let asleepMinutes: Int
+}
+
+struct SleepView: View {
+    @ObservedObject var sleepManager = SleepManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
+
+    @StateObject private var editor = WatchSettingsEditor()
+
+    @State private var sessions = [SleepSession]()
+
+    private var lastNight: [SleepSession] {
+        guard let window = SleepAnalyzer.latestWindow() else { return [] }
+        return sessions.filter { window.contains($0.start ?? .distantPast) }
+    }
+
+    private var lastNightAsleep: Int {
+        lastNight.reduce(0) { $0 + Int($1.asleepMinutes) }
+    }
+    private var lastNightAwake: Int {
+        lastNight.reduce(0) { $0 + Int($1.awakeMinutes) }
+    }
+
+    private var runs: [SleepRun] {
+        lastNight.flatMap { session -> [SleepRun] in
+            let states = sleepManager.states(for: session)
+            guard let start = session.start, !states.isEmpty else { return [] }
+
+            var runs = [SleepRun]()
+            var runStart = 0
+            for index in 1...states.count where index == states.count || states[index] != states[runStart] {
+                runs.append(SleepRun(state: states[runStart], start: start.addingTimeInterval(Double(runStart) * 60), end: start.addingTimeInterval(Double(index) * 60)))
+                runStart = index
+            }
+            return runs
+        }
+    }
+
+    // Group by the morning they ended
+    private var nights: [SleepNight] {
+        let calendar = Calendar.current
+        let grouped = Dictionary(grouping: sessions) { calendar.startOfDay(for: $0.end ?? Date()) }
+
+        return (0..<7).compactMap { offset in
+            guard let day = calendar.date(byAdding: .day, value: -offset, to: calendar.startOfDay(for: Date())) else { return nil }
+            let minutes = grouped[day]?.reduce(0) { $0 + Int($1.asleepMinutes) } ?? 0
+
+            return SleepNight(date: day, asleepMinutes: minutes)
+        }
+        .reversed()
+    }
+
+    private func duration(_ minutes: Int) -> String {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.hour, .minute]
+        formatter.unitsStyle = .abbreviated
+
+        return formatter.string(from: TimeInterval(minutes * 60)) ?? "\(minutes)m"
+    }
+
+    private func load() {
+        sessions = sleepManager.recentSessions()
+    }
+
+    var body: some View {
+        GeometryReader { geo in
+            List {
+                Section {
+                    DetailHeaderView(Header(title: duration(lastNightAsleep), subtitle: lastNight.isEmpty ? NSLocalizedString("No sleep recorded last night", comment: "") : NSLocalizedString("Last night", comment: ""), icon: "bed.double.fill", accent: .indigo), width: geo.size.width) {
+                        let recorded = nights.filter { $0.asleepMinutes > 0 }
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                            if let bedtime = lastNight.first?.start, let wake = lastNight.last?.end {
+                                DetailHeaderSubItemView(title: "Bedtime", value: bedtime.formatted(date: .omitted, time: .shortened), icon: ("moon.fill", .indigo))
+                                DetailHeaderSubItemView(title: "Wake", value: wake.formatted(date: .omitted, time: .shortened), icon: ("sun.max.fill", .orange))
+                                DetailHeaderSubItemView(title: "Awake", value: duration(lastNightAwake), icon: ("eye.fill", .orange))
+                            }
+                            if !recorded.isEmpty {
+                                DetailHeaderSubItemView(title: "Avg (7 days)", value: duration(recorded.reduce(0) { $0 + $1.asleepMinutes } / recorded.count), icon: ("chart.bar.fill", .indigo))
+                            }
+                        }
+                    }
+                }
+                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                .listRowBackground(Color.clear)
+                if !sleepManager.hasRequiredMeasurements {
+                    Section {
+                        Label("Sleep tracking needs \(deviceManager.name) to measure your heart rate in the background every 5 or 10 minutes.", systemImage: "heart.text.square.fill")
+                        if let file = editor.file, !editor.usingDefaults {
+                            Picker("Background Measurements", selection: Binding(
+                                get: { file.heartRateBackgroundPeriod.flatMap { SleepManager.backgroundPeriods.contains($0) ? $0 : nil } ?? SleepManager.backgroundPeriods[0] },
+                                set: { editor.file?.heartRateBackgroundPeriod = $0 }
+                            )) {
+                                Text("5 minutes").tag(UInt16(300))
+                                Text("10 minutes").tag(UInt16(600))
+                            }
+                            Button {
+                                // The picker shows 5 min by default, so make sure that's actually what gets saved
+                                if !SleepManager.backgroundPeriods.contains(editor.file?.heartRateBackgroundPeriod ?? 0) {
+                                    editor.file?.heartRateBackgroundPeriod = SleepManager.backgroundPeriods[0]
+                                }
+                                editor.requestSave()
+                            } label: {
+                                HStack {
+                                    Text("Save to Watch")
+                                    if editor.isSaving {
+                                        Spacer()
+                                        ProgressView()
+                                    }
+                                }
+                            }
+                            .disabled(editor.isSaving)
+                        } else if editor.file != nil {
+                            Text("\(deviceManager.name) is using its default settings. Save them in Customization first, then turn this on.")
+                                .foregroundStyle(.gray)
+                        } else if !editor.isLoading {
+                            Text("Connect \(deviceManager.name) to turn on background measurements.")
+                                .foregroundStyle(.gray)
+                        }
+                    }
+                }
+                if !runs.isEmpty {
+                    Section("Last Night") {
+                        Chart(runs) { run in
+                            BarMark(
+                                xStart: .value("Start", run.start),
+                                xEnd: .value("End", run.end),
+                                y: .value("State", run.label)
+                            )
+                            .foregroundStyle(run.color)
+                        }
+                        .chartXAxis {
+                            AxisMarks(values: .automatic(desiredCount: 4)) {
+                                AxisGridLine()
+                                AxisValueLabel(format: .dateTime.hour())
+                            }
+                        }
+                        .frame(height: 140)
+                        .padding(.vertical, 8)
+                        .accessibilityLabel(Text("Sleep timeline for last night"))
+                    }
+                }
+                if nights.allSatisfy({ $0.asleepMinutes == 0 }) {
+                    Section {
+                        EmptyChartView(.sleep)
+                    }
+                } else {
+                    Section("Past Week") {
+                        Chart(nights) { night in
+                            BarMark(
+                                x: .value("Night", night.date, unit: .day),
+                                y: .value("Hours Asleep", Double(night.asleepMinutes) / 60)
+                            )
+                            .foregroundStyle(.indigo)
+                            .accessibilityValue(Text(duration(night.asleepMinutes)))
+                        }
+                        .chartXAxis {
+                            AxisMarks(values: nights.map { $0.date }) {
+                                AxisGridLine()
+                                AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+                            }
+                        }
+                        .chartYAxisLabel("Hours")
+                        .frame(height: 220)
+                        .padding(.vertical, 8)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Sleep")
+        .navigationBarTitleDisplayMode(.inline)
+        .onAppear {
+            load()
+            if sleepManager.hasRequiredMeasurements {
+                sleepManager.process {
+                    load()
+                }
+            } else if editor.file == nil {
+                editor.load()
+            }
+        }
+        .modifier(WatchSettingsAlerts(editor: editor, deviceName: deviceManager.name))
+    }
+}
+
+#Preview {
+    NavigationStack {
+        SleepView()
+    }
+}

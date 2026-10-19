@@ -7,101 +7,92 @@
 
 import Foundation
 import UIKit
+import UniformTypeIdentifiers
 
 class FileSystemViewModel: ObservableObject {
-    static let shared = FileSystemViewModel()
+    let path: String
     
-    @Published var directory = "/"
-    @Published var commandHistory: [String] = []
+    @Published var entries: [BLEFSHandler.Dir] = []
+    @Published var isLoading = false
+    @Published var pendingFiles: [URL] = []
+    @Published var isUploading = false
+    @Published var uploadSize = 0
     
-    @Published var loadingFs = false
-    @Published var showUploadSheet = false
-    @Published var fileUploading = false
-    @Published var fileConverting = false
-    @Published var showNewFolderView = false
-    @Published var fileSelected = false
+    private let bleFs = BLEFSHandler.shared
     
-    @Published var fileSize = 0
-    
-    @Published var files = [FSFile]()
-    
-    func clearList() {
-        DispatchQueue.main.async {
-            self.commandHistory = []
-        }
+    init(path: String) {
+        self.path = path
     }
     
-    func getDir(input: String) -> String {
-        return input.first == "/" ? input : directory.last == "/" ? "\(directory)\(input)" : "\(directory)/\(input)"
+    func path(for name: String) -> String {
+        (path == "/" ? "" : path) + "/" + name
     }
     
-    func removeLastPathComponent(_ path: String) -> String {
-        let url = URL(fileURLWithPath: path)
-        let updatedURL = url.deletingLastPathComponent()
-        return updatedURL.path
-    }
-    
-    func cdAndLs(dir: String) {
-        loadingFs = true
+    func load() {
+        isLoading = true
         
-        DispatchQueue.main.async {
-            let newDir = self.getDir(input: dir)
+        DispatchQueue.global(qos: .userInitiated).async {
+            let entries = self.bleFs.listDir(path: self.path)
             
-            self.clearList()
-            self.directory = newDir
-            self.lsDir(dir: dir)
-            self.loadingFs = false
+            DispatchQueue.main.async {
+                self.entries = (entries ?? []).filter { $0.pathNames != "." && $0.pathNames != ".." }
+                self.isLoading = false
+            }
         }
     }
     
-    func lsDir(dir: String) {
-        DispatchQueue.main.async {
-            self.loadingFs = true
-        }
+    func createFolder(named name: String) {
+        perform { _ = self.bleFs.makeDir(path: self.path(for: name)) }
+    }
+    
+    func delete(_ entry: BLEFSHandler.Dir) {
+        perform { _ = self.bleFs.deleteFile(path: self.path(for: entry.pathNames)) }
+    }
+    
+    func uploadPendingFiles() {
+        let files = pendingFiles
+        isUploading = true
         
-        DispatchQueue.global(qos: .default).async {
-            let lsDir = BLEFSHandler.shared.listDir(path: self.directory)
-            if let dir = lsDir, dir.valid {
-                self.clearList()
+        DispatchQueue.global(qos: .userInitiated).async {
+            for url in files {
+                let isAccessing = url.startAccessingSecurityScopedResource()
+                defer { if isAccessing { url.stopAccessingSecurityScopedResource() } }
                 
-                DispatchQueue.main.async {
-                    self.commandHistory.append(contentsOf: dir.ls.compactMap({ $0.pathNames }))
-                    self.loadingFs = false
+                guard let upload = self.uploadData(for: url) else {
+                    log("Couldn't read \(url.lastPathComponent) for upload", caller: "FileSystemViewModel", target: .ble)
+                    continue
                 }
-            } else {
-                print("ERROR: dir '\(self.directory)' is not valid.")
-            }
-        }
-    }
-    
-    func createDir(name: String) {
-        loadingFs = true
-        
-        DispatchQueue.global(qos: .default).async {
-            let mkDir = BLEFSHandler.shared.makeDir(path: self.directory + "/" + name)
-            if !mkDir {
-                print("ERROR: failed to create folder with name: '\(name)'.")
-            }
-            self.lsDir(dir: self.directory)
-            self.loadingFs = false
-        }
-    }
-    
-    func deleteFile(fileName: String) {
-        loadingFs = true
-        
-        DispatchQueue.global(qos: .default).async {
-            let path = self.getDir(input: fileName)
-            let rmDir = BLEFSHandler.shared.deleteFile(path: path)
-            
-            if !rmDir {
-                log("Failed to remove file with path: \(path)", caller: "FileSystemViewModel", target: .ble)
+                
+                DispatchQueue.main.async { self.uploadSize = upload.data.count }
+                _ = self.bleFs.writeFile(data: upload.data, path: self.path(for: upload.name))
             }
             
             DispatchQueue.main.async {
-                self.loadingFs = false
+                self.isUploading = false
+                self.pendingFiles = []
+                self.load()
             }
-            self.lsDir(dir: self.removeLastPathComponent(path))
         }
+    }
+    
+    // Runs a change on the watch, then reloads the list
+    private func perform(_ change: @escaping () -> Void) {
+        isLoading = true
+        
+        DispatchQueue.global(qos: .userInitiated).async {
+            change()
+            DispatchQueue.main.async { self.load() }
+        }
+    }
+    
+    // Images are converted to LVGL's format so the watch can show them
+    private func uploadData(for url: URL) -> (data: Data, name: String)? {
+        guard UTType(filenameExtension: url.pathExtension)?.conforms(to: .image) == true else {
+            return (try? Data(contentsOf: url)).map { ($0, url.lastPathComponent) }
+        }
+        guard let image = UIImage(contentsOfFile: url.path)?.cgImage, let data = lvImageConvert(img: image) else { return nil }
+        
+        let name = url.deletingPathExtension().lastPathComponent.prefix(26).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)
+        return (data, name + ".bin")
     }
 }

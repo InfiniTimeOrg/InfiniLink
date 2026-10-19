@@ -13,14 +13,10 @@ import Combine
 class WeatherController: ObservableObject {
     static let shared = WeatherController()
     
-    @ObservedObject var deviceManager = DeviceManager.shared
+    let deviceManager = DeviceManager.shared
     
     @AppStorage("latitude") var latitude: Double = 0.0
     @AppStorage("longitude") var longitude: Double = 0.0
-    
-    @AppStorage("setLocation") var setLocation = "Cupertino"
-    
-    @AppStorage("useCurrentLocation") var useCurrentLocation = true
     
     @Published var weather: Weather?
     @Published var errorWhileFetching: Error?
@@ -28,8 +24,10 @@ class WeatherController: ObservableObject {
     @Published var lastTimeWeatherFetched: Date?
     
     private let service = WeatherService()
-    private var locationManager = LocationManager.shared
-    private var bleWriteManager = BLEWriteManager()
+    private let locationManager = LocationManager.shared
+    private let bleWriteManager = BLEWriteManager()
+    // Failed fetches count too, so checkForUpdate doesn't retry every five seconds
+    private var lastFetchAttempt: Date?
     
     var unitTemperature: UnitTemperature {
         switch deviceManager.settings.weatherFormat {
@@ -61,8 +59,8 @@ class WeatherController: ObservableObject {
                 self?.latitude = location.coordinate.latitude
                 self?.longitude = location.coordinate.longitude
                 
-                // Bypass the check function, this one will already ensure we're not calling multiple times a minute
-                self?.fetchWeatherData()
+                // Location only changes when requested, so always fetch
+                self?.fetchWeatherData(checkTimeInterval: false)
             }
             .store(in: &cancellables)
     }
@@ -73,9 +71,14 @@ class WeatherController: ObservableObject {
         
         let guardInterval: TimeInterval = 900 // 15 mins
         
-        if abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? 0) >= guardInterval {
+        if Date().timeIntervalSince(lastFetchAttempt ?? .distantPast) >= guardInterval {
             // The weather hasn't been fetched (location hasn't been updated) in the past 15 minutes, so fetch it now
-            fetchWeatherData(checkTimeInterval: false)
+            if locationManager.useCurrentLocation && locationManager.canGetUserLocation() {
+                // The new location triggers the fetch
+                locationManager.requestLocation()
+            } else {
+                fetchWeatherData(checkTimeInterval: false)
+            }
         }
     }
     
@@ -86,8 +89,9 @@ class WeatherController: ObservableObject {
         guard !checkTimeInterval || abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? guardInterval) >= guardInterval else { return }
         
         let currentLocation = CLLocation(latitude: latitude, longitude: longitude)
+        lastFetchAttempt = Date()
         
-        Task {
+        Task { @MainActor in
             do {
                 let weather = try await service.weather(for: currentLocation)
                 
@@ -107,7 +111,7 @@ class WeatherController: ObservableObject {
             let forecastDays = weather.dailyForecast.dropFirst().prefix(5)
             
             self.bleWriteManager.writeCurrentWeatherData(currentTemperature: weather.currentWeather.temperature.value, minimumTemperature: first.lowTemperature.value, maximumTemperature: first.highTemperature.value, location: locationManager.locationName, icon: getIcon(from: weather.currentWeather.symbolName), sunrise: first.sun.sunrise, sunset: first.sun.sunset)
-            self.bleWriteManager.writeForecastWeatherData(minimumTemperature: forecastDays.compactMap({ $0.lowTemperature.value }), maximumTemperature: forecastDays.compactMap({ $0.highTemperature.value }), icon: forecastDays.compactMap({ getIcon(from: $0.symbolName) }))
+            self.bleWriteManager.writeForecastWeatherData(minimumTemperature: forecastDays.map { $0.lowTemperature.value }, maximumTemperature: forecastDays.map { $0.highTemperature.value }, icon: forecastDays.map { getIcon(from: $0.symbolName) })
         }
     }
     

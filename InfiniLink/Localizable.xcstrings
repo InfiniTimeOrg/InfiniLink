@@ -7,9 +7,6 @@
     " • " : {
 
     },
-    " Recovery" : {
-
-    },
     " step goal streak!" : {
 
     },
@@ -19,7 +16,7 @@
     " You can customize this in notification settings." : {
 
     },
-    "--" : {
+    "---" : {
 
     },
     "-day" : {
@@ -28,28 +25,38 @@
     "–" : {
 
     },
-    "[BATT]" : {
+    "[BATT] " : {
 
     },
-    "[DATE]" : {
+    "[DATE] " : {
 
     },
-    "[L_HR]" : {
+    "[L_HR] " : {
 
     },
-    "[STAT]" : {
+    "[STAT] " : {
 
     },
-    "[STEP]" : {
+    "[STEP] " : {
 
     },
-    "[TIME]" : {
+    "[TIME] " : {
 
+    },
+    "[WTHR] " : {
+
+    },
+    "#%lld • %@ • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$lld • %2$@ • %3$@"
+          }
+        }
+      }
     },
     "%@" : {
-
-    },
-    "%@ " : {
 
     },
     "%@ - %@" : {
@@ -62,15 +69,36 @@
         }
       }
     },
-    "%@ is %@" : {
+    "%@ • %@" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ is %2$@"
+            "value" : "%1$@ • %2$@"
           }
         }
       }
+    },
+    "%@ battery remaining" : {
+
+    },
+    "%@ is connected" : {
+
+    },
+    "%@ is disconnected" : {
+
+    },
+    "%@ is fully charged" : {
+
+    },
+    "%@ is installing the update." : {
+
+    },
+    "%@ is using its default settings. Save them in Customization first, then change your step goal." : {
+
+    },
+    "%@ is using its default settings. Save them in Customization first, then turn this on." : {
+
     },
     "%@ Logs" : {
 
@@ -84,32 +112,32 @@
     "%@ times" : {
 
     },
-    "%@ was last seen %@." : {
+    "%@ was last seen at %@, at %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ was last seen %2$@."
+            "value" : "%1$@ was last seen at %2$@, at %3$@."
           }
         }
       }
     },
-    "%@:%@:%@" : {
+    "%@ was last seen at %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@:%2$@:%3$@"
+            "value" : "%1$@ was last seen at %2$@."
           }
         }
       }
     },
-    "%@:%@:%@ %@" : {
+    "%@, %lld steps" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@:%2$@:%3$@ %4$@"
+            "value" : "%1$@, %2$lld steps"
           }
         }
       }
@@ -130,6 +158,21 @@
         }
       }
     },
+    "%@'s saved settings are from an older version of InfiniTime, so it's using its default settings. Saving writes a new settings file." : {
+
+    },
+    "%d Day Streak" : {
+
+    },
+    "%d Months" : {
+
+    },
+    "%d records are from watches that are no longer paired. They come back if you pair the same watch again on this iPhone." : {
+
+    },
+    "%d Years" : {
+
+    },
     "%lld" : {
 
     },
@@ -143,10 +186,13 @@
         }
       }
     },
-    "%lld BPM %@" : {
+    "%lld bpm" : {
 
     },
     "%lld cm" : {
+
+    },
+    "%lld dBm" : {
 
     },
     "%lld ft" : {
@@ -165,35 +211,68 @@
         }
       }
     },
-    "%lld readings" : {
+    "%lld steps" : {
+
+    },
+    "%lld–%lld BPM" : {
       "localizations" : {
         "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld reading"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld readings"
-                }
-              }
-            }
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld–%2$lld BPM"
           }
         }
       }
     },
-    "%lld steps" : {
+    "%lld*" : {
+
+    },
+    "%lld%%" : {
+
+    },
+    "%u" : {
+
+    },
+    "%u Seconds" : {
+
+    },
+    "•" : {
 
     },
     "1 device discovered" : {
 
     },
+    "1 minute" : {
+
+    },
     "1 time" : {
+
+    },
+    "1 Year" : {
+
+    },
+    "5 minutes" : {
+
+    },
+    "10 minutes" : {
+
+    },
+    "12 Hour" : {
+
+    },
+    "12-Hour" : {
+
+    },
+    "24 Hour" : {
+
+    },
+    "24-Hour" : {
+
+    },
+    "30 minutes" : {
+
+    },
+    "30 seconds" : {
 
     },
     "A new section will be added to your device overview." : {
@@ -208,16 +287,34 @@
     "Active Exercise" : {
 
     },
+    "Add" : {
+
+    },
     "Add 2" : {
 
     },
-    "Add a Day" : {
+    "Add Location" : {
+
+    },
+    "Add Photo" : {
+
+    },
+    "Add watch faces from custom firmware builds, then move them to where they are in the firmware. You can add a photo of each one to use as its preview." : {
 
     },
     "Age" : {
 
     },
+    "Alarm" : {
+
+    },
+    "All data from watches that are no longer paired, including their exercises, will be deleted from InfiniLink. Data saved to Apple Health isn't affected." : {
+
+    },
     "All Exercises" : {
+
+    },
+    "All Time" : {
 
     },
     "Allow Music Control" : {
@@ -235,7 +332,13 @@
     "Always allowed location access is required to fetch weather data while the app is not active." : {
 
     },
-    "ANCS Enabled" : {
+    "Always On Display" : {
+
+    },
+    "AM" : {
+
+    },
+    "ANCS" : {
 
     },
     "App" : {
@@ -263,6 +366,12 @@
 
     },
     "Are you sure you want to unpair from %@?" : {
+
+    },
+    "Asleep" : {
+
+    },
+    "Authorized" : {
 
     },
     "Auto-Pause" : {
@@ -293,13 +402,16 @@
         }
       }
     },
-    "avg" : {
+    "Awake" : {
 
     },
-    "Back" : {
+    "Background" : {
 
     },
-    "battery" : {
+    "Background Measurements" : {
+
+    },
+    "Bar" : {
 
     },
     "Battery" : {
@@ -314,7 +426,7 @@
     "Battery Low" : {
 
     },
-    "battery remaining" : {
+    "Beta" : {
 
     },
     "BLE" : {
@@ -329,6 +441,9 @@
     "BPM" : {
 
     },
+    "Brightness" : {
+
+    },
     "Brightness Level" : {
 
     },
@@ -341,16 +456,19 @@
     "Cancel Update" : {
 
     },
+    "Change Photo" : {
+
+    },
     "Checking for updates..." : {
 
     },
-    "Choose how the point mark on the heart rate chart is calculated." : {
+    "Chimes" : {
+
+    },
+    "Choose which saved location your watch shows weather for." : {
 
     },
     "Clear All Exercises" : {
-
-    },
-    "Clear HRM Data" : {
 
     },
     "Clear Step Data" : {
@@ -362,7 +480,16 @@
     "Color Scheme" : {
 
     },
+    "Colors" : {
+
+    },
     "Connect" : {
+
+    },
+    "Connect %@ in General to use this." : {
+
+    },
+    "Connect %@ to turn on background measurements." : {
 
     },
     "Connected" : {
@@ -371,28 +498,37 @@
     "Connecting..." : {
 
     },
+    "Connection Diagnostics" : {
+
+    },
     "Connection strength: " : {
 
     },
     "Continue" : {
 
     },
-    "Continue to Update" : {
+    "Continuous" : {
 
     },
     "Convert accented characters to plain text so notifications display correctly." : {
 
     },
-    "Converting..." : {
+    "Copy" : {
 
     },
-    "Copy" : {
+    "Couldn't Save Alarm" : {
+
+    },
+    "Couldn't Save Settings" : {
+
+    },
+    "Count Steps" : {
 
     },
     "Create" : {
 
     },
-    "Custom Location" : {
+    "Customization" : {
 
     },
     "Daily Goal" : {
@@ -421,6 +557,15 @@
     "Dark" : {
 
     },
+    "Data" : {
+
+    },
+    "Data is exported as CSV files in a zip for %@." : {
+
+    },
+    "Data older than %@ will be deleted from InfiniLink. Data saved to Apple Health isn't affected." : {
+
+    },
     "Data Sync" : {
 
     },
@@ -428,9 +573,6 @@
 
     },
     "Day" : {
-
-    },
-    "Days" : {
 
     },
     "Debug Logs" : {
@@ -445,6 +587,30 @@
           }
         }
       }
+    },
+    "Delete Data" : {
+
+    },
+    "Delete Data from Unpaired Watches" : {
+
+    },
+    "Delete Exercise" : {
+
+    },
+    "Delete Old Data" : {
+
+    },
+    "Delete Older Data" : {
+
+    },
+    "Delete Unpaired Watch Data" : {
+
+    },
+    "Destination" : {
+
+    },
+    "Details for %@" : {
+
     },
     "Developer" : {
 
@@ -477,6 +643,15 @@
         }
       }
     },
+    "Disconnected by InfiniLink" : {
+
+    },
+    "Disconnects This Session" : {
+
+    },
+    "Display" : {
+
+    },
     "Display Timeout" : {
 
     },
@@ -486,10 +661,22 @@
     "Done" : {
 
     },
+    "Double Tap" : {
+
+    },
+    "Download" : {
+
+    },
     "Downloading" : {
 
     },
+    "Driving" : {
+
+    },
     "Dump Motion Activity" : {
+
+    },
+    "Enable Alarm" : {
 
     },
     "Enable Developer Mode" : {
@@ -506,6 +693,12 @@
 
     },
     "Enabled" : {
+
+    },
+    "End" : {
+
+    },
+    "End Directions" : {
 
     },
     "End Exercise" : {
@@ -532,6 +725,15 @@
     "Estimated from the last 90 days of charge and discharge history." : {
 
     },
+    "Every Day" : {
+
+    },
+    "Every Half Hour" : {
+
+    },
+    "Every Hour" : {
+
+    },
     "Excellent" : {
 
     },
@@ -541,7 +743,13 @@
     "Export" : {
 
     },
-    "Export Selected Day" : {
+    "Export Data" : {
+
+    },
+    "Export Failed" : {
+
+    },
+    "Export Route" : {
 
     },
     "External Resources" : {
@@ -561,6 +769,9 @@
 
     },
     "Fair" : {
+
+    },
+    "Fake Recovery Mode" : {
 
     },
     "Feet" : {
@@ -586,6 +797,9 @@
         }
       }
     },
+    "Fill Missing Step Days" : {
+
+    },
     "Filter inconsistent data from your heart rate measurements." : {
 
     },
@@ -605,19 +819,37 @@
     "Find Lost Watch" : {
 
     },
+    "Finding a route..." : {
+
+    },
     "Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update." : {
 
     },
     "Firmware Update" : {
 
     },
+    "Flag" : {
+
+    },
     "Force ANCS" : {
+
+    },
+    "Forever" : {
+
+    },
+    "From" : {
+
+    },
+    "Full" : {
 
     },
     "Full Battery Notifications" : {
 
     },
     "Fully Charged" : {
+
+    },
+    "Gauge" : {
 
     },
     "Gender" : {
@@ -643,13 +875,16 @@
         }
       }
     },
+    "Get a reminder to move when you haven't walked for a while during the set hours." : {
+
+    },
     "Get Directions" : {
 
     },
     "Get notifications on your watch when you reach goals, when it's time to drink water, and more." : {
 
     },
-    "Get notified when you reach your daily fitness goals." : {
+    "Get notified when you reach your step goal, keep a streak going, or take more steps than ever before." : {
 
     },
     "Goal Reached" : {
@@ -677,6 +912,18 @@
         }
       }
     },
+    "Half" : {
+
+    },
+    "Half Hour" : {
+
+    },
+    "Halfway There" : {
+
+    },
+    "Halfway to Goal" : {
+
+    },
     "Hardware Revision" : {
 
     },
@@ -684,9 +931,6 @@
 
     },
     "Health Details" : {
-
-    },
-    "heart" : {
 
     },
     "Heart Range Notifications" : {
@@ -699,6 +943,12 @@
 
     },
     "Heart Rate Low" : {
+
+    },
+    "Heart Rate Zones" : {
+
+    },
+    "Heart rate, steps, battery, motion, sleep, and disconnect locations older than this are deleted. Exercises are always kept." : {
 
     },
     "Height" : {
@@ -714,7 +964,28 @@
     "Hello" : {
 
     },
+    "high" : {
+
+    },
+    "High" : {
+
+    },
+    "Hour" : {
+
+    },
     "Hourly Chimes" : {
+
+    },
+    "Hours" : {
+
+    },
+    "Hours Asleep" : {
+
+    },
+    "How often %@ measures your heart rate in the background. More frequent measurements use more battery and improve sleep tracking." : {
+
+    },
+    "Icon" : {
 
     },
     "If you have an InfiniTime device, you can pair it here." : {
@@ -740,6 +1011,9 @@
     "Import Zip File" : {
 
     },
+    "Inactivity Reminder" : {
+
+    },
     "Inches" : {
 
     },
@@ -747,6 +1021,9 @@
 
     },
     "Include Song Name" : {
+
+    },
+    "Infineat" : {
 
     },
     "InfiniLink" : {
@@ -761,6 +1038,21 @@
           }
         }
       }
+    },
+    "InfiniLink couldn't create the export. Please try again." : {
+
+    },
+    "InfiniLink couldn't read the alarm from %@." : {
+
+    },
+    "InfiniLink couldn't read the settings from %@." : {
+
+    },
+    "InfiniLink couldn't read the settings from %@. Watch face settings need InfiniTime 1.14 or later." : {
+
+    },
+    "InfiniLink couldn't read the settings from %@. Watch settings need InfiniTime 1.14 or later." : {
+
     },
     "InfiniLink is the official iOS companion app for InfiniTime. To submit a bug report or request a feature, open an issue on InfiniLink's GitHub repository, or send feedback in TestFlight.\n\nReceiving notifications on your InfiniTime device requires the Apple Notification Center Service, implemented in pull request #2217, linked below.\n\nMusic control from InfiniTime is available when using the Apple Music app, but system-wide media control will require the Apple Media Service to be implemented InfiniTime.\n\nFor more information on InfiniLink or InfiniTime, visit their GitHub repositories." : {
       "localizations" : {
@@ -786,6 +1078,9 @@
       }
     },
     "InfiniLink on TestFlight" : {
+
+    },
+    "InfiniLink will connect to %@ when it's nearby. This will load once it connects." : {
 
     },
     "InfiniTime" : {
@@ -817,13 +1112,13 @@
         }
       }
     },
+    "Installing..." : {
+
+    },
     "Interval" : {
 
     },
     "iPhone" : {
-
-    },
-    "It looks like your watch is in recovery mode. You'll need to update it to continue." : {
 
     },
     "It's time to drink water" : {
@@ -836,7 +1131,28 @@
         }
       }
     },
+    "Its data stays in InfiniLink and comes back if you pair it again on this iPhone. You can delete data from unpaired watches in General > Stored Data." : {
+
+    },
+    "Keep Data" : {
+
+    },
     "Kilojoules" : {
+
+    },
+    "Last connected %@" : {
+
+    },
+    "Last Data Received" : {
+
+    },
+    "Last Disconnect" : {
+
+    },
+    "Last night" : {
+
+    },
+    "Last Night" : {
 
     },
     "Learn more" : {
@@ -848,6 +1164,9 @@
           }
         }
       }
+    },
+    "Less" : {
+
     },
     "Let's get you set up." : {
 
@@ -871,6 +1190,9 @@
     "Loading..." : {
 
     },
+    "Locations" : {
+
+    },
     "Looking for your watch..." : {
       "localizations" : {
         "fr" : {
@@ -881,13 +1203,28 @@
         }
       }
     },
+    "low" : {
+
+    },
+    "Low" : {
+
+    },
     "Low Battery" : {
 
     },
     "Low Battery Notifications" : {
 
     },
+    "Lower Wrist to Sleep" : {
+
+    },
+    "Make sure your watch is connected and try again." : {
+
+    },
     "Male" : {
+
+    },
+    "Manage Watch Faces" : {
 
     },
     "Manufacturer" : {
@@ -900,9 +1237,6 @@
         }
       }
     },
-    "Max" : {
-
-    },
     "Maximum" : {
       "localizations" : {
         "fr" : {
@@ -913,25 +1247,31 @@
         }
       }
     },
-    "mdn" : {
-
-    },
-    "Median" : {
+    "Medium" : {
 
     },
     "Metric" : {
 
     },
-    "Min" : {
+    "Mid" : {
 
     },
     "Minimum" : {
+
+    },
+    "Minutes" : {
 
     },
     "Model Name" : {
 
     },
     "Monthly Overview" : {
+
+    },
+    "More" : {
+
+    },
+    "More Info" : {
 
     },
     "Music" : {
@@ -946,6 +1286,18 @@
     "Name" : {
 
     },
+    "Navigation" : {
+
+    },
+    "Navigation ended" : {
+
+    },
+    "Never" : {
+
+    },
+    "New Exercise" : {
+
+    },
     "New Folder" : {
       "localizations" : {
         "fr" : {
@@ -956,16 +1308,37 @@
         }
       }
     },
+    "New Record" : {
+
+    },
+    "New Records" : {
+
+    },
     "Next" : {
 
     },
-    "No" : {
+    "Night" : {
 
     },
     "No Logs" : {
 
     },
+    "No sleep recorded last night" : {
+
+    },
+    "None" : {
+
+    },
+    "Not Authorized" : {
+
+    },
     "Not enough charge history yet. Check back after a few charge cycles." : {
+
+    },
+    "Not enough heart rate data yet. Resting heart rate is estimated from readings taken while you're still during the day." : {
+
+    },
+    "Not Playing" : {
 
     },
     "Nothing matched your search. Ensure your spelling is correct and try again." : {
@@ -998,10 +1371,22 @@
     "Now" : {
 
     },
+    "Numeric" : {
+
+    },
+    "Off" : {
+
+    },
     "OK" : {
 
     },
+    "Open the Navigation app on %@ to see your directions." : {
+
+    },
     "Other Versions" : {
+
+    },
+    "Pace" : {
 
     },
     "Packet Receipt Notification" : {
@@ -1010,10 +1395,10 @@
     "Pair New Device" : {
 
     },
-    "Pause any currently playing music when %@ goes out of range of your phone." : {
+    "Past Month" : {
 
     },
-    "Pause on Walk-Away" : {
+    "Past Week" : {
 
     },
     "Pause Workout" : {
@@ -1029,13 +1414,16 @@
     "Pin" : {
 
     },
+    "PineTimeStyle" : {
+
+    },
     "Ping %@" : {
 
     },
     "Pinned" : {
 
     },
-    "Point Mark" : {
+    "PM" : {
 
     },
     "Poor" : {
@@ -1044,7 +1432,10 @@
     "Preparing" : {
 
     },
-    "Preparing export…" : {
+    "Preview of %@" : {
+
+    },
+    "Pride Flag" : {
 
     },
     "Pull Request #2217 on GitHub" : {
@@ -1057,7 +1448,19 @@
         }
       }
     },
+    "Put these in the same order as the watch faces in your watch's firmware. Turn off faces that aren't included so they don't show up. Faces from newer versions of InfiniTime start off." : {
+
+    },
+    "Raise Wrist" : {
+
+    },
     "Range" : {
+
+    },
+    "Reason" : {
+
+    },
+    "Reboot %@ or update it to exit recovery mode." : {
 
     },
     "Receive a reminder to drink water for the set amount of times a day." : {
@@ -1069,6 +1472,18 @@
           }
         }
       }
+    },
+    "Recent" : {
+
+    },
+    "Record Route" : {
+
+    },
+    "Recovery mode" : {
+
+    },
+    "Recovery Mode" : {
+
     },
     "Refresh" : {
 
@@ -1083,10 +1498,43 @@
         }
       }
     },
+    "Remind After" : {
+
+    },
+    "Remove Photo" : {
+
+    },
+    "Repeat" : {
+
+    },
+    "Replace" : {
+
+    },
+    "Replace Watch Settings?" : {
+
+    },
+    "Reset to Defaults" : {
+
+    },
+    "Reset Watch Faces" : {
+
+    },
+    "Restarting" : {
+
+    },
+    "Resting Heart Rate" : {
+
+    },
+    "Results" : {
+
+    },
     "Resume Workout" : {
 
     },
     "Route" : {
+
+    },
+    "Save" : {
 
     },
     "Save 100 Steps" : {
@@ -1095,16 +1543,25 @@
     "Save 300 Calories" : {
 
     },
+    "Save to %@?" : {
+
+    },
+    "Save to Watch" : {
+
+    },
+    "Screen Timeout" : {
+
+    },
     "Search by name or date" : {
+
+    },
+    "Search for a place or address" : {
 
     },
     "Search for an address..." : {
 
     },
     "Selected" : {
-
-    },
-    "Selected Hour" : {
 
     },
     "Send" : {
@@ -1155,6 +1612,7 @@
       }
     },
     "Set a fixed location to use to fetch weather." : {
+      "extractionState" : "stale",
       "localizations" : {
         "fr" : {
           "stringUnit" : {
@@ -1167,6 +1625,9 @@
     "Set to 0" : {
 
     },
+    "Setting the alarm from InfiniLink needs InfiniTime 1.15 or later." : {
+
+    },
     "Settings" : {
 
     },
@@ -1176,16 +1637,73 @@
     "Several days ago" : {
 
     },
+    "Shake" : {
+
+    },
+    "Shake Sensitivity" : {
+
+    },
+    "Show %@" : {
+
+    },
+    "Show Side Cover" : {
+
+    },
+    "Show Weather" : {
+
+    },
+    "Signal" : {
+
+    },
+    "Signal: " : {
+
+    },
+    "Single Tap" : {
+
+    },
+    "Single tap and double tap can't both be on." : {
+
+    },
+    "Sleep" : {
+
+    },
+    "Sleep timeline for last night" : {
+
+    },
+    "Sleep tracking needs %@ to measure your heart rate in the background every 5 or 10 minutes." : {
+
+    },
     "Software Update" : {
 
     },
     "Software Version" : {
 
     },
+    "Split" : {
+
+    },
+    "Splits (km)" : {
+
+    },
+    "Splits (mi)" : {
+
+    },
     "SPM stands for steps per minute and measures how many steps you take for each minute of walking." : {
 
     },
+    "Start" : {
+
+    },
+    "Start Directions" : {
+
+    },
+    "Start Exercise" : {
+
+    },
     "Start Pairing" : {
+
+    },
+    "Starting" : {
 
     },
     "Starting on %@ at %@, the exercise lasted %@." : {
@@ -1198,7 +1716,13 @@
         }
       }
     },
-    "steps" : {
+    "State" : {
+
+    },
+    "Status" : {
+
+    },
+    "Step Goal" : {
 
     },
     "Steps" : {
@@ -1230,6 +1754,12 @@
     "Stop Update" : {
 
     },
+    "Stored Data" : {
+
+    },
+    "Streaks" : {
+
+    },
     "Sunrise is at %@ tomorrow." : {
 
     },
@@ -1252,9 +1782,6 @@
 
     },
     "Test HealthKit" : {
-
-    },
-    "Test HRM" : {
 
     },
     "Test Music" : {
@@ -1287,19 +1814,44 @@
     "The update failed." : {
 
     },
+    "The watch disconnected during the update." : {
+
+    },
+    "The watch isn't ready for updates. Make sure file access and updates are allowed on it." : {
+
+    },
+    "The watch rejected the update at step %d (error %d)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "The watch rejected the update at step %1$d (error %2$d)."
+          }
+        }
+      }
+    },
+    "The watch stopped responding." : {
+
+    },
     "The watch's resources couldn't be updated." : {
+
+    },
+    "The workout type is used when saving to Apple Health. Heart rate is always recorded." : {
 
     },
     "There aren't any available releases." : {
 
     },
-    "There isn't any %@ data to show" : {
-
-    },
     "There wasn't any heart rate data recorded for this exercise." : {
 
     },
-    "There's no heart rate data recorded for the selected day." : {
+    "This exercise will be deleted from InfiniLink." : {
+
+    },
+    "This file couldn't be read." : {
+
+    },
+    "This file is not currently supported." : {
 
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
@@ -1308,7 +1860,10 @@
     "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
 
     },
-    "This week you have a " : {
+    "This Week" : {
+
+    },
+    "This writes a new settings file to %@. Every setting on it, like the step goal, wake modes, and brightness, is set to what InfiniLink shows or InfiniTime's defaults. Changes apply after you restart your watch by pressing and holding the side button." : {
 
     },
     "Time" : {
@@ -1323,6 +1878,9 @@
           }
         }
       }
+    },
+    "Time to Move" : {
+
     },
     "Title" : {
 
@@ -1342,16 +1900,31 @@
     "Transliterate to ASCII" : {
 
     },
+    "Travel By" : {
+
+    },
     "Turn off any data you don't want written to Apple Health." : {
 
     },
+    "Turn on Bluetooth to connect to your watch." : {
+
+    },
     "Units" : {
+
+    },
+    "Units on Watch" : {
+
+    },
+    "Unknown date" : {
 
     },
     "Unpair" : {
 
     },
     "Unpin" : {
+
+    },
+    "Until" : {
 
     },
     "Update Available" : {
@@ -1386,7 +1959,11 @@
     "Updating resources" : {
 
     },
+    "Updating..." : {
+
+    },
     "Upload %lld File%@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1402,16 +1979,25 @@
         }
       }
     },
+    "Upload ^[%lld File](inflect: true)" : {
+
+    },
     "Upload Files" : {
 
     },
     "Uploading..." : {
 
     },
+    "Uploading... %lld%%" : {
+
+    },
     "Use Current Location" : {
 
     },
     "Use Local File" : {
+
+    },
+    "Use steps from your iPhone and other sources in Apple Health for days your watch wasn't connected." : {
 
     },
     "Use the search bar to find a location." : {
@@ -1443,10 +2029,37 @@
     "Value" : {
 
     },
+    "Verifying" : {
+
+    },
+    "View All" : {
+
+    },
+    "Wake Up" : {
+
+    },
+    "Walking" : {
+
+    },
     "WARNING: These actions are permanent and cannot be undone!" : {
 
     },
     "Watch" : {
+
+    },
+    "Watch Face" : {
+
+    },
+    "Watch Face %d" : {
+
+    },
+    "Watch face preview" : {
+
+    },
+    "Watch Faces" : {
+
+    },
+    "Watch faces will go back to InfiniTime's order, all of them will be shown, and your custom watch faces will be removed." : {
 
     },
     "Watch Haptics" : {
@@ -1478,6 +2091,9 @@
         }
       }
     },
+    "Weekdays" : {
+
+    },
     "Weight" : {
 
     },
@@ -1487,7 +2103,7 @@
     "Workout" : {
 
     },
-    "Yes" : {
+    "Workout Type" : {
 
     },
     "You can pin an exercise by long pressing the exercise you want to pin." : {
@@ -1499,7 +2115,10 @@
     "You covered %@." : {
 
     },
-    "You don't have any saved exercises. You can start a new exercise by choosing one from the list below." : {
+    "You have arrived" : {
+
+    },
+    "You haven't recorded any exercises yet. Tap %@ to start one." : {
 
     },
     "You reached your goal, keep up the good work!" : {
@@ -1555,6 +2174,9 @@
         }
       }
     },
+    "You're halfway to your step goal" : {
+
+    },
     "You're making great progress! You have about %@ %@ to walk. At your current pace, you'll hit your goal in %@." : {
       "localizations" : {
         "en" : {
@@ -1565,16 +2187,131 @@
         }
       }
     },
+    "You're on a " : {
+
+    },
     "You're so close! Just about a minute left and only %lld steps to reach your goal!" : {
+
+    },
+    "You've been inactive for a while. Get up and take a short walk." : {
 
     },
     "You've reached your step goal" : {
 
     },
+    "You've reached your step goal %d days in a row" : {
+
+    },
+    "You've taken more steps today than on any other day" : {
+
+    },
+    "Your heart rate fell below %lld BPM" : {
+
+    },
+    "Your heart rate rose above %lld BPM" : {
+
+    },
     "Your iPhone has less than %@ battery remaining." : {
 
     },
+    "Your iPhone has reached %@" : {
+
+    },
+    "Your iPhone will ask to pair with your watch. Tap Pair so your iPhone's notifications can show on your watch." : {
+
+    },
+    "Your resting heart rate has averaged %lld BPM this past week." : {
+
+    },
     "Your watch is estimated to be around %@ away." : {
+
+    },
+    "Your watch only loads its settings when it starts, so changes apply after you restart it by pressing and holding the side button. Changing settings on the watch before then will undo these changes." : {
+
+    },
+    "Your watch only loads the alarm when it starts, so it applies after you restart it by pressing and holding the side button. Changing the alarm on the watch before then will undo this." : {
+
+    },
+    "Zone %d" : {
+
+    },
+    "Zones are based on an estimated maximum heart rate of %lld BPM from the age in your health details." : {
+
+    },
+    "%@ " : {
+
+    },
+    "%lld BPM %@" : {
+
+    },
+    "%lld readings" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld reading"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld readings"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Add a Day" : {
+
+    },
+    "avg" : {
+
+    },
+    "battery" : {
+
+    },
+    "Choose how the point mark on the heart rate chart is calculated." : {
+
+    },
+    "Clear HRM Data" : {
+
+    },
+    "Days" : {
+
+    },
+    "heart" : {
+
+    },
+    "Max" : {
+
+    },
+    "mdn" : {
+
+    },
+    "Median" : {
+
+    },
+    "Min" : {
+
+    },
+    "Point Mark" : {
+
+    },
+    "Selected Hour" : {
+
+    },
+    "steps" : {
+
+    },
+    "Test HRM" : {
+
+    },
+    "There isn't any %@ data to show" : {
 
     }
   },

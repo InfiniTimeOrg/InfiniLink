@@ -41,27 +41,20 @@ class PersonalizationController: ObservableObject {
         !showSetupSheet && (weight != nil || height != nil)
     }
     
-    var calculatedWeight: Double {
-        var kg = gender == .male ? avgMaleWeight : avgFemaleWeight
-        if let weight, weight > 0 { kg = weight }
+    // Weight and height are always stored in kg and cm
+    var calculatedWeightKg: Double {
+        if let weight, weight > 0 { return weight }
+        return gender == .male ? avgMaleWeight : avgFemaleWeight
+    }
 
-        return units == .imperial ? kg * 2.205 : kg
+    var calculatedHeightCm: Double {
+        if let height, height > 0 { return height }
+        return gender == .male ? avgMaleHeight : avgFemaleHeight
     }
 
     var calculatedAge: Double {
         guard let age = self.age, age > 0 else { return 30 }
 
         return Double(age)
-    }
-
-    var calculatedWeightKg: Double {
-        return units == .imperial ? calculatedWeight / 2.205 : calculatedWeight
-    }
-
-    var calculatedHeight: Double {
-        var cm = gender == .male ? avgMaleHeight : avgFemaleHeight
-        if let height, height > 0 { cm = height }
-
-        return units == .imperial ? cm / 2.54 : cm
     }
 }

@@ -27,7 +27,6 @@ class ImportManager: ObservableObject {
     @Published var showUpdateFlow = false
 
     private let downloadManager = DownloadManager.shared
-    private let dfuUpdater = DFUUpdater.shared
 
     // Called from `.onOpenURL` when a file is opened into the app
     func handleIncomingFile(_ url: URL) {
@@ -70,30 +69,14 @@ class ImportManager: ObservableObject {
     }
 
     func chooseFirmware(_ zip: PendingZip) {
-        dfuUpdater.local = true
-        dfuUpdater.firmwareSelected = true
-        dfuUpdater.resourceFilename = zip.filename
-        dfuUpdater.firmwareFilename = zip.filename
-        dfuUpdater.firmwareURL = zip.url
-        dfuUpdater.resourceURL = nil
-        downloadManager.updateBody = NSLocalizedString("This is a local firmware file and cannot be verified. Proceed at your own risk.", comment: "")
-        downloadManager.updateSize = dfuUpdater.fileSize(from: zip.url)
-        downloadManager.externalResources = false
-        downloadManager.updateAvailable = true
+        downloadManager.selectLocalFirmware(zip.url)
 
         pendingZip = nil
         showUpdateFlow = true
     }
 
     func chooseExternalResources(_ zip: PendingZip) {
-        dfuUpdater.local = true
-        dfuUpdater.firmwareSelected = true
-        dfuUpdater.firmwareURL = nil
-        dfuUpdater.resourceFilename = zip.filename
-        dfuUpdater.resourceURL = zip.url
-        downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
-        downloadManager.updateSize = dfuUpdater.fileSize(from: zip.url)
-        downloadManager.externalResources = true
+        downloadManager.selectLocalResources(zip.url)
 
         pendingZip = nil
         showUpdateFlow = true

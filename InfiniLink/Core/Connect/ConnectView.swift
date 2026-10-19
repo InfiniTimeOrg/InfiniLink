@@ -12,8 +12,10 @@ struct ConnectView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
+    @AppStorage("forceAncs") var forceAncs = true
     
     @State private var showHelpAlert = false
     @State private var showAllDevices = false
@@ -29,14 +31,15 @@ struct ConnectView: View {
     
     func connect(_ device: CBPeripheral) {
         deviceWithPendingConnectionID = device.identifier
-        bleManager.connect(peripheral: device) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                dismiss()
-            }
+        bleManager.connect(peripheral: device)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            dismiss()
         }
     }
     
     func startCircleAnimation(geo: CGSize) {
+        guard !reduceMotion else { return }
+        
         animateCircle(geo: geo)
         DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             resetCircle()
@@ -73,10 +76,16 @@ struct ConnectView: View {
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(height: 150)
-                                        Text("InfiniTime")
+                                        Text(infiniTime.name ?? "InfiniTime")
                                             .font(.title.weight(.bold))
+                                        if let rssi = bleManager.discoveredRSSI[infiniTime.identifier] {
+                                            SignalStrengthView(rssi: rssi)
+                                        }
                                     }
                                     Spacer()
+                                    if forceAncs {
+                                        PairingInfoView()
+                                    }
                                     Button {
                                         connect(infiniTime)
                                     } label: {
@@ -117,6 +126,10 @@ struct ConnectView: View {
                                 }
                             } else {
                                 ScrollView {
+                                    if forceAncs {
+                                        PairingInfoView()
+                                            .padding(.bottom, 8)
+                                    }
                                     LazyVGrid(columns: columns, spacing: 10) {
                                         ForEach(bleManager.newPeripherals, id: \.identifier) { device in
                                             Button {
@@ -130,9 +143,13 @@ struct ConnectView: View {
                                                             .resizable()
                                                             .aspectRatio(contentMode: .fit)
                                                             .frame(height: 70)
-                                                        Text("InfiniTime")
+                                                        Text(device.name ?? "InfiniTime")
                                                             .font(.system(size: 19).weight(.semibold))
-                                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                            .foregroundStyle(.primary)
+                                                        if let rssi = bleManager.discoveredRSSI[device.identifier] {
+                                                            SignalStrengthView(rssi: rssi)
+                                                                .font(.subheadline)
+                                                        }
                                                     }
                                                 }
                                                 .padding()
@@ -182,6 +199,35 @@ struct ConnectView: View {
                     bleManager.stopScanning()
                 }
             }
+        }
+    }
+}
+
+struct PairingInfoView: View {
+    var body: some View {
+        Label {
+            Text("Your iPhone will ask to pair with your watch. Tap Pair so your iPhone's notifications can show on your watch.")
+        } icon: {
+            Image(systemName: "bell.badge")
+                .foregroundStyle(.blue)
+        }
+        .font(.footnote)
+        .foregroundStyle(.gray)
+        .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+struct SignalStrengthView: View {
+    let rssi: Int
+    
+    var body: some View {
+        let strength = RSSI.from(rssi: rssi)
+        
+        HStack(spacing: 0) {
+            Text("Signal: ")
+                .foregroundStyle(.gray)
+            Text(strength.connectionStrength)
+                .foregroundStyle(strength.color)
         }
     }
 }

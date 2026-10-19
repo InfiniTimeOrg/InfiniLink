@@ -11,6 +11,7 @@ enum ChartType: String {
     case steps
     case heart
     case battery
+    case sleep
     
     var name: String {
         switch self {
@@ -20,6 +21,8 @@ enum ChartType: String {
             return NSLocalizedString("heart", comment: "")
         case .battery:
             return NSLocalizedString("battery", comment: "")
+        case .sleep:
+            return NSLocalizedString("sleep", comment: "")
         }
     }
     
@@ -31,6 +34,8 @@ enum ChartType: String {
             return "heart.fill"
         case .battery:
             return "battery.25.fill"
+        case .sleep:
+            return "bed.double.fill"
         }
     }
 }

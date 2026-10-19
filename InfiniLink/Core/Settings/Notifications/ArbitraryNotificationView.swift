@@ -18,7 +18,7 @@ struct ArbitraryNotificationView: View {
     @FocusState var isFocused: Bool
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             Form {
                 TextField("Title", text: $title)
                     .autocapitalization(.none)
@@ -44,7 +44,6 @@ struct ArbitraryNotificationView: View {
                 }
             }
         }
-        .navigationViewStyle(.stack)
         .onChange(of: bleManager.notifyCharacteristic) { characteristic in
             if characteristic == nil {
                 // Dismiss the sheet if we disconnect/can't send a notification

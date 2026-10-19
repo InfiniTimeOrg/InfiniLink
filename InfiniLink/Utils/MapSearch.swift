@@ -19,11 +19,11 @@ class MapSearch: NSObject, ObservableObject {
     private var searchCompleter = MKLocalSearchCompleter()
     private var currentPromise : ((Result<[MKLocalSearchCompletion], Error>) -> Void)?
     
-    override init() {
+    init(resultTypes: MKLocalSearchCompleter.ResultType = .address) {
         super.init()
         searchCompleter.delegate = self
         searchCompleter.region = MKCoordinateRegion(.world)
-        searchCompleter.resultTypes = MKLocalSearchCompleter.ResultType([.address])
+        searchCompleter.resultTypes = resultTypes
         
         $searchTerm
             .debounce(for: .seconds(0.5), scheduler: RunLoop.main)

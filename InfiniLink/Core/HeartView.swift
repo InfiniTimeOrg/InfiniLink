@@ -7,12 +7,14 @@
 
 import SwiftUI
 import CoreData
+import Charts
 
 struct HeartView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var chartManager = ChartManager.shared
 
     @State private var samples: [HeartRateSample] = []
+    @State private var hasLoaded = false
 
     var values: [Double] {
         return samples.map { $0.value }
@@ -20,11 +22,14 @@ struct HeartView: View {
 
     func load() async {
         samples = await chartManager.heartRateSamples()
+        // Wait until the first value shows so it doesn't animate on appear
+        if !hasLoaded {
+            DispatchQueue.main.async {
+                hasLoaded = true
+            }
+        }
     }
 
-    func heartRate(for val: Double) -> String {
-        return val > 0 ? String(format: "%.0f", val) : "--"
-    }
     func units(for seconds: Int) -> String {
         if seconds >= 172800 {
             return NSLocalizedString("Several days ago", comment: "")
@@ -50,12 +55,13 @@ struct HeartView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60) {
+                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60, animateTitle: hasLoaded) {
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
                 HeartChartView()
+                RestingHeartRateView()
             }
         }
         .navigationTitle("Heart Rate")
@@ -75,8 +81,51 @@ struct HeartView: View {
     }
 }
 
+struct RestingHeartRateView: View {
+    @State private var days = [RestingHeartRateDay]()
+    
+    var body: some View {
+        Section("Resting Heart Rate") {
+            if days.count > 1 {
+                Chart(days) { day in
+                    LineMark(
+                        x: .value("Day", day.date, unit: .day),
+                        y: .value("BPM", day.bpm)
+                    )
+                    .foregroundStyle(.red)
+                    PointMark(
+                        x: .value("Day", day.date, unit: .day),
+                        y: .value("BPM", day.bpm)
+                    )
+                    .foregroundStyle(.red)
+                }
+                .chartYScale(domain: .automatic(includesZero: false))
+                .chartXAxis {
+                    AxisMarks(values: .stride(by: .day)) {
+                        AxisGridLine()
+                        AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+                    }
+                }
+                .frame(height: 180)
+                .padding(.vertical, 8)
+                Text("Your resting heart rate has averaged \(Int((days.reduce(0) { $0 + $1.bpm } / Double(days.count)).rounded())) BPM this past week.")
+            } else {
+                Text("Not enough heart rate data yet. Resting heart rate is estimated from readings taken while you're still during the day.")
+                    .foregroundStyle(.gray)
+            }
+        }
+        .onAppear {
+            guard let deviceId = DeviceManager.shared.pairedDeviceID else { return }
+            
+            HealthTrends().restingHeartRates(days: 7, deviceId: deviceId) { days in
+                self.days = days
+            }
+        }
+    }
+}
+
 #Preview {
-    NavigationView {
+    NavigationStack {
         HeartView()
             .onAppear {
                 BLEManager.shared.heartRate = 76

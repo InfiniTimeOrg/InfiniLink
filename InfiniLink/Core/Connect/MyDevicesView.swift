@@ -37,7 +37,7 @@ struct MyDevicesView: View {
                                         .foregroundStyle(.blue)
                                         .font(.body.weight(.semibold))
                                         .opacity(deviceManager.pairedDeviceID  == watch.uuid ? 1 : 0)
-                                    WatchFaceView(watchface: UInt8(watch.watchface), device: watch)
+                                    WatchFaceView(device: watch)
                                         .frame(width: 90, height: 90)
                                     VStack(alignment: .leading, spacing: 4) {
                                         Text(watch.name ?? "InfiniTime")
@@ -51,17 +51,25 @@ struct MyDevicesView: View {
                                             }
                                         }())
                                         .foregroundStyle(.gray)
+                                        if bleManager.infiniTime?.identifier.uuidString != watch.uuid, let lastSeen = bleManager.lastSeenDate(for: watch.uuid) {
+                                            Text("Last connected \(lastSeen, format: .relative(presentation: .named))")
+                                                .font(.footnote)
+                                                .foregroundStyle(.gray)
+                                        }
                                     }
                                     Spacer()
                                 }
                             }
                             .disabled(deviceManager.pairedDeviceID ?? "" == watch.uuid ?? "")
-                            Image(systemName: "info.circle")
-                                .foregroundStyle(Color.accentColor)
-                                .onTapGesture {
-                                    selectedWatch = watch
-                                    showDetailsView = true
-                                }
+                            Button {
+                                selectedWatch = watch
+                                showDetailsView = true
+                            } label: {
+                                Image(systemName: "info.circle")
+                                    .foregroundStyle(Color.accentColor)
+                            }
+                            .buttonStyle(.borderless)
+                            .accessibilityLabel(Text("Details for \(watch.name ?? "InfiniTime")"))
                         }
                         .imageScale(.large)
                     }
@@ -100,6 +108,8 @@ struct MyDevicesView: View {
                                 } label: {
                                     Text("Unpair")
                                 }
+                            } message: {
+                                Text("Its data stays in InfiniLink and comes back if you pair it again on this iPhone. You can delete data from unpaired watches in General > Stored Data.")
                             }
                         }
                     }

@@ -22,11 +22,9 @@ struct StepChartView: View {
     
     @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
     
-    @State private var showSelectionBar = false
-    @State private var offset = 0.0
-    @State private var selectedDate = Date()
-    @State private var selectedSteps = 0
+    @State private var rawSelectedDate: Date?
     @State private var points = [StepChartDataPoint]()
+    @State private var streak = 0
     
     let fitnessCalculator = FitnessCalculator()
     
@@ -58,9 +56,14 @@ struct StepChartView: View {
         return filledData
     }
     
-    var streak: Int {
-        points.filter { $0.steps >= stepCountManager.stepGoal }.count
+    private func loadStreak() {
+        guard let deviceId = DeviceManager.shared.pairedDeviceID else { return }
+        
+        HealthTrends().stepGoalStreak(deviceId: deviceId, goal: stepCountManager.stepGoal) { streak in
+            self.streak = streak
+        }
     }
+    
     var earliestDate: Date {
         points.compactMap({ $0.date }).min() ?? Date()
     }
@@ -68,85 +71,74 @@ struct StepChartView: View {
         points.compactMap({ $0.date }).max() ?? Date()
     }
     var steps: Int {
-        Int(points.last?.steps ?? 0)
+        Int(chartManager.stepsToday()?.steps ?? 0)
     }
     
-    let columns = Array(repeating: GridItem(.flexible()), count: 7)
+    private var selectedPoint: StepChartDataPoint? {
+        guard let rawSelectedDate else { return nil }
+        return points.first { Calendar.current.isDate($0.date, inSameDayAs: rawSelectedDate) }
+    }
+    
+    func chart() -> some View {
+        var chart: some View {
+            Chart {
+                RuleMark(y: .value("Daily Goal", stepCountManager.stepGoal))
+                    .foregroundStyle(.green)
+                    .lineStyle(StrokeStyle(lineWidth: 2, dash: [4]))
+                if let selectedPoint {
+                    RuleMark(x: .value("Selected", selectedPoint.date, unit: .weekday))
+                        .foregroundStyle(Color.gray)
+                }
+                ForEach(points, id: \.date) { point in
+                    BarMark(
+                        x: .value("Date", point.date, unit: .weekday),
+                        y: .value("Steps", point.steps)
+                    )
+                    .foregroundStyle(.blue)
+                    .opacity(selectedPoint == nil || selectedPoint?.id == point.id ? 1 : 0.5)
+                }
+            }
+            .chartXAxis {
+                AxisMarks(values: points.map({ $0.date })) {
+                    AxisGridLine()
+                    AxisValueLabel(format: .dateTime.weekday(.abbreviated))
+                }
+            }
+        }
+        
+        return Group {
+            if #available(iOS 17, *) {
+                chart
+                    .chartXSelection(value: $rawSelectedDate)
+            } else {
+                chart
+            }
+        }
+    }
     
     var body: some View {
         Group {
             Section {
-                Chart {
-                    RuleMark(y: .value("Daily Goal", stepCountManager.stepGoal))
-                        .foregroundStyle(.green)
-                        .lineStyle(StrokeStyle(lineWidth: 2, dash: [4]))
-                    ForEach(points, id: \.date) {
-                        BarMark(
-                            x: .value("Date", $0.date, unit: .weekday),
-                            y: .value("Steps", $0.steps)
-                        )
-                        .foregroundStyle(.blue)
-                        .opacity(!showSelectionBar || selectedDate.comparable() == $0.date.comparable() ? 1 : 0.5)
-                    }
-                }
-                .chartOverlay { proxy in
-                    GeometryReader { geo in
-                        Rectangle()
-                            .foregroundStyle(Color.gray)
-                            .frame(width: 2, height: geo.size.height * 0.925)
-                            .opacity(showSelectionBar ? 1 : 0)
-                            .offset(x: offset)
-                        Rectangle().fill(.clear).contentShape(Rectangle())
-                            .gesture(
-                                DragGesture()
-                                    .onChanged { value in
-                                        showSelectionBar = true
-                                        
-                                        let origin = geo[proxy.plotAreaFrame].origin
-                                        let location = CGPoint(
-                                            x: value.location.x - origin.x,
-                                            y: value.location.y - origin.y
-                                        )
-                                        offset = location.x
-                                        
-                                        let (day, _) = proxy.value(at: location, as: (Date, Int).self) ?? (Date(), 0)
-                                        // We compare the formatted dates because the dates are too specific otherwise
-                                        let steps = points.first(where: { $0.date.comparable() == day.comparable() })?.steps ?? 0
-                                        
-                                        selectedDate = day
-                                        selectedSteps = steps
-                                    }
-                                    .onEnded { _ in
-                                        showSelectionBar = false
-                                    }
-                            )
-                    }
-                }
-                .chartXAxis {
-                    AxisMarks(values: points.map({ $0.date })) {
-                        AxisGridLine()
-                        AxisValueLabel(format: .dateTime.weekday(.abbreviated))
-                    }
-                }
-                .frame(height: 280)
+                chart()
+                    .frame(height: 280)
             } header: {
                 VStack(alignment: .leading) {
                     if points.count > 1 {
-                        Text(showSelectionBar ? "Total" : "Average")
+                        Text(selectedPoint != nil ? "Total" : "Average")
                             .fontWeight(.regular)
                     }
-                    Text(showSelectionBar ? selectedSteps : points.isEmpty ? 0 : points.reduce(0) { $0 + $1.steps } / points.count, format: .number)
+                    Text(selectedPoint?.steps ?? (points.isEmpty ? 0 : points.reduce(0) { $0 + $1.steps } / points.count), format: .number)
                         .font(.system(size: 28))
                         .foregroundColor(.primary)
                         .fontWeight(.bold)
                     + Text(" steps")
-                    Text(showSelectionBar ? "\(selectedDate.formatted(date: .abbreviated, time: .omitted))" : "\(earliestDate.formatted(date: .abbreviated, time: .omitted)) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
+                    Text(selectedPoint.map { "\($0.date.formatted(date: .abbreviated, time: .omitted))" } ?? "\(earliestDate.formatted(date: .abbreviated, time: .omitted)) - \(latestDate.formatted(date: .abbreviated, time: .omitted))")
                     if streak > 0 {
                         HStack(spacing: 5) {
                             Image(systemName: "flame.fill")
                                 .imageScale(.large)
                                 .foregroundStyle(.orange)
-                            Text("This week you have a ") +
+                            Text("You're on a ") +
                             (Text(streak, format: .number) + Text("-day"))
                                 .foregroundColor(.orange)
                                 .fontWeight(.bold) +
@@ -160,9 +152,9 @@ struct StepChartView: View {
                 .fontWeight(.semibold)
             }
             .listRowBackground(Color.clear)
-            .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 0, trailing: 0))
+            .listRowInsets(EdgeInsets(top: 18, leading: 0, bottom: 6, trailing: 0))
             Section {
-                if bleManager.stepCount >= stepCountManager.stepGoal {
+                if steps >= stepCountManager.stepGoal {
                     Text("Great job, you reached your daily step goal today! You've walked \(fitnessCalculator.calculateDistance(steps: steps), format: .number.precision(.fractionLength(2))) \(personalizationController.units == .imperial ? "miles" : "kilometers") and burned around \(fitnessCalculator.energyString(kcal: Double(fitnessCalculator.calculateCaloriesBurned(steps: steps)))).")
                 } else {
                     let stepsRemaining = stepCountManager.stepGoal - steps
@@ -184,9 +176,17 @@ struct StepChartView: View {
         }
         .onAppear {
             points = stepChartPoints()
+            loadStreak()
+        }
+        .onChange(of: steps >= stepCountManager.stepGoal) { _ in
+            loadStreak()
         }
         .onChange(of: bleManager.stepCount) { _ in
             points = stepChartPoints()
+        }
+        .onChange(of: selectedPoint?.date) { newValue in
+            guard newValue != nil else { return }
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
         }
     }
 }

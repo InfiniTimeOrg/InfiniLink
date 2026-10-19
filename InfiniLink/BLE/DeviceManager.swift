@@ -9,23 +9,16 @@ import SwiftUI
 import CoreData
 import CoreBluetooth
 
-struct CharacteristicIdentifier {
-    static let modelNumber = CBUUID(string: "2A24")
-    static let serial = CBUUID(string: "2A25")
-    static let firmware = CBUUID(string: "2A26")
-    static let hardwareRevision = CBUUID(string: "2A27")
-    static let softwareRevision = CBUUID(string: "2A28")
-    static let manufacturer = CBUUID(string: "2A29")
-    static let blefsVersion = CBUUID(string: "adaf0100-4669-6c65-5472-616e73666572")
-}
-
 class DeviceManager: ObservableObject {
     static let shared = DeviceManager()
     
     let persistenceController = PersistenceController.shared
-    let bleManager = BLEManager.shared
     
-    @Published var pairedDevice: Device?
+    @Published var pairedDevice: Device? {
+        didSet {
+            settings = pairedDevice.map { Settings(device: $0) } ?? Settings()
+        }
+    }
     
     @AppStorage("pairedDeviceID") var pairedDeviceID: String?
     
@@ -59,15 +52,30 @@ class DeviceManager: ObservableObject {
     }
     
     @Published var settings = Settings()
+    
+    var heartRateBackgroundPeriod: Int? {
+        get { UserDefaults.standard.object(forKey: "heartRateBackgroundPeriod-\(pairedDeviceID ?? "")") as? Int }
+        set {
+            objectWillChange.send()
+            UserDefaults.standard.set(newValue, forKey: "heartRateBackgroundPeriod-\(pairedDeviceID ?? "")")
+        }
+    }
+    
+    func updateHeartRateBackgroundPeriod(from file: WatchSettingsFile) {
+        guard file.supportsBackgroundHeartRate else { return }
+        
+        DispatchQueue.main.async {
+            self.heartRateBackgroundPeriod = file.heartRateBackgroundPeriod.map { Int($0) } ?? -1
+        }
+    }
+    
     @Published var watches = [Device]()
     
     init() {
-        self.fetchAllDevices()
-        self.pairedDevice = currentDevice()
-
-        if let settings = pairedDevice?.settings() {
-            self.settings = settings
-        }
+        fetchAllDevices()
+        pairedDevice = currentDevice()
+        // didSet doesn't run during init
+        settings = pairedDevice.map { Settings(device: $0) } ?? Settings()
     }
     
     func updateSettings(_ settings: Settings) {
@@ -80,20 +88,26 @@ class DeviceManager: ObservableObject {
             device.chimesOption = Int16(settings.chimesOption.rawValue)
             device.clockType = Int16(settings.clockType.rawValue)
             device.notificationStatus = Int16(settings.notificationStatus.rawValue)
-            device.shakeWakeThreshold = Int16(settings.watchFace)
+            device.shakeWakeThreshold = Int16(clamping: settings.shakeWakeThreshold)
             device.watchface = Int16(settings.watchFace)
             device.weatherFormat = Int16(settings.weatherFormat.rawValue)
             device.stepsGoal = Int32(settings.stepsGoal)
             device.screenTimeout = Int32(settings.screenTimeOut)
+            device.alwaysOnDisplay = settings.alwaysOnDisplay
+            device.prideFlag = Int16(settings.prideFlag)
             
-            device.pineTimeStyle?.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
-            device.pineTimeStyle?.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
-            device.pineTimeStyle?.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
-            device.pineTimeStyle?.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
-            device.pineTimeStyle?.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
+            let pineTimeStyle = device.pineTimeStyle ?? PineTimeStyleWatchface(context: context)
+            pineTimeStyle.colorBG = Int16(settings.pineTimeStyle.ColorBG.rawValue)
+            pineTimeStyle.colorBar = Int16(settings.pineTimeStyle.ColorBar.rawValue)
+            pineTimeStyle.colorTime = Int16(settings.pineTimeStyle.ColorTime.rawValue)
+            pineTimeStyle.guageStyle = Int16(settings.pineTimeStyle.gaugeStyle.rawValue)
+            pineTimeStyle.weatherEnable = Int16(settings.pineTimeStyle.weatherEnable.rawValue)
+            device.pineTimeStyle = pineTimeStyle
             
-            device.watchFaceInfineat?.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
-            device.watchFaceInfineat?.showSideCover = settings.watchFaceInfineat.showSideCover
+            let infineat = device.watchFaceInfineat ?? InfineatWatchface(context: context)
+            infineat.colorIndex = Int16(settings.watchFaceInfineat.colorIndex)
+            infineat.showSideCover = settings.watchFaceInfineat.showSideCover
+            device.watchFaceInfineat = infineat
 
             try? context.save()
             
@@ -109,94 +123,67 @@ class DeviceManager: ObservableObject {
         persistenceController.save()
     }
     
-    func device(for uuid: String, in context: NSManagedObjectContext) -> Device {
-        let request: NSFetchRequest<Device> = Device.fetchRequest()
-        request.predicate = NSPredicate(format: "uuid == %@", uuid)
-        request.fetchLimit = 1
-
-        if let existing = try? context.fetch(request).first {
-            return existing
-        }
-
-        let newDevice = Device(context: context)
-        newDevice.uuid = uuid
-        return newDevice
-    }
-    
     func currentDevice(in context: NSManagedObjectContext? = nil) -> Device? {
         guard let id = pairedDeviceID else { return nil }
-        return device(for: id, in: context ?? persistenceController.container.viewContext)
+        
+        let request: NSFetchRequest<Device> = Device.fetchRequest()
+        request.predicate = NSPredicate(format: "uuid == %@", id)
+        request.fetchLimit = 1
+        
+        return try? (context ?? persistenceController.container.viewContext).fetch(request).first
+    }
+    
+    func addDevice(uuid: String) -> Device {
+        let device = Device(context: persistenceController.container.viewContext)
+        device.uuid = uuid
+        
+        persistenceController.save()
+        fetchAllDevices()
+        return device
     }
     
     func removeDevice(_ device: Device) {
-        let objectID = device.objectID
         let context = persistenceController.container.viewContext
+        context.delete(device)
         
-        context.perform { [self] in
-            do {
-                if let deviceToDelete = context.object(with: objectID) as? Device {
-                    context.delete(deviceToDelete)
-                    try context.save()
-                    
-                    fetchAllDevices()
-                    if watches.count > 0 {
-                        let nextWatch = watches.first!
-                        pairedDeviceID = nextWatch.uuid // Switch to the user's next watch
-                        pairedDevice = nextWatch
-                    } else {
-                        pairedDeviceID = nil // The user doesn't have another watch, this will show the welcome view
-                        // This only disconnects and removes the watch from the recognized device list in the app. If using secure pairing, iOS will still keep the bond
-                        // and we have no way to remove it
-                    }
-                    bleManager.startScanning()
-                    log("Successfully removed device", caller: "DeviceManager")
-                }
-            } catch {
-                log("Error removing device: \(error.localizedDescription)", caller: "DeviceManager")
-            }
+        do {
+            try context.save()
+        } catch {
+            log("Error removing device: \(error.localizedDescription)", caller: "DeviceManager")
+            return
         }
+        
+        fetchAllDevices()
+        // Switch to the user's next watch, or show the welcome view if there isn't one. If using secure pairing, iOS will still keep the bond and we have no way to remove it
+        pairedDeviceID = watches.first?.uuid
+        pairedDevice = watches.first
+        
+        log("Successfully removed device", type: .info, caller: "DeviceManager")
     }
     
     func fetchAllDevices() {
-        let context = persistenceController.container.viewContext
-
-        context.perform {
-            let request: NSFetchRequest<Device> = Device.fetchRequest()
-            request.returnsObjectsAsFaults = false
-
-            do {
-                let results = try context.fetch(request)
-                DispatchQueue.main.async {
-                    self.watches = results
-                }
-            } catch {
-                print(error)
-            }
+        do {
+            watches = try persistenceController.container.viewContext.fetch(Device.fetchRequest())
+        } catch {
+            log("Error fetching devices: \(error.localizedDescription)", caller: "DeviceManager")
         }
     }
     
     func deleteAllDevices() {
         let context = persistenceController.container.viewContext
-
-        context.perform {
-            let request: NSFetchRequest<NSFetchRequestResult> = Device.fetchRequest()
-            let delete = NSBatchDeleteRequest(fetchRequest: request)
-            delete.resultType = .resultTypeObjectIDs
-
-            do {
-                let result = try context.execute(delete) as? NSBatchDeleteResult
-                let ids = result?.result as? [NSManagedObjectID] ?? []
-
-                NSManagedObjectContext.mergeChanges(
-                    fromRemoteContextSave: [NSDeletedObjectsKey: ids],
-                    into: [context]
-                )
-
-                try context.save()
-            } catch {
-                print(error)
-            }
+        let delete = NSBatchDeleteRequest(fetchRequest: Device.fetchRequest())
+        delete.resultType = .resultTypeObjectIDs
+        
+        do {
+            let result = try context.execute(delete) as? NSBatchDeleteResult
+            let ids = result?.result as? [NSManagedObjectID] ?? []
+            NSManagedObjectContext.mergeChanges(fromRemoteContextSave: [NSDeletedObjectsKey: ids], into: [context])
+        } catch {
+            log("Error deleting devices: \(error.localizedDescription)", caller: "DeviceManager")
         }
+        
+        pairedDevice = nil
+        fetchAllDevices()
     }
 }
 
@@ -210,19 +197,19 @@ extension DeviceManager {
             guard let device = self.currentDevice(in: context) else { return }
 
             switch characteristic.uuid {
-            case CharacteristicIdentifier.modelNumber:
+            case BLEUUID.modelNumber:
                 device.modelNumber = String(data: value, encoding: .utf8) ?? ""
-            case CharacteristicIdentifier.serial:
+            case BLEUUID.serial:
                 device.serial = String(data: value, encoding: .utf8) ?? ""
-            case CharacteristicIdentifier.firmware:
+            case BLEUUID.firmware:
                 device.firmware = String(data: value, encoding: .utf8) ?? ""
-            case CharacteristicIdentifier.hardwareRevision:
+            case BLEUUID.hardwareRevision:
                 device.hardwareRevision = String(data: value, encoding: .utf8) ?? ""
-            case CharacteristicIdentifier.softwareRevision:
+            case BLEUUID.softwareRevision:
                 device.softwareRevision = String(data: value, encoding: .utf8) ?? ""
-            case CharacteristicIdentifier.manufacturer:
+            case BLEUUID.manufacturer:
                 device.manufacturer = String(data: value, encoding: .utf8) ?? ""
-            case CharacteristicIdentifier.blefsVersion:
+            case BLEUUID.blefsVersion:
                 let byteArray = [UInt8](value)
                 if byteArray.count >= 2 {
                     device.blefsVersion = "\(Int(byteArray[1]))\(Int(byteArray[0]))"
@@ -235,7 +222,10 @@ extension DeviceManager {
 
             try? context.save()
 
-            if characteristic.uuid == CharacteristicIdentifier.firmware {
+            if characteristic.uuid == BLEUUID.firmware {
+                // Faces depend on the firmware version
+                self.objectWillChange.send()
+                WatchFaceCatalog.shared.objectWillChange.send()
                 DownloadManager.shared.evaluateFirmwareUpdate()
             }
         }
@@ -243,30 +233,41 @@ extension DeviceManager {
     
     func readInfoCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
         switch characteristic.uuid {
-        case CharacteristicIdentifier.modelNumber, CharacteristicIdentifier.serial, CharacteristicIdentifier.firmware, CharacteristicIdentifier.hardwareRevision, CharacteristicIdentifier.softwareRevision, CharacteristicIdentifier.manufacturer, CharacteristicIdentifier.blefsVersion: peripheral.readValue(for: characteristic)
+        case BLEUUID.modelNumber, BLEUUID.serial, BLEUUID.firmware, BLEUUID.hardwareRevision, BLEUUID.softwareRevision, BLEUUID.manufacturer, BLEUUID.blefsVersion: peripheral.readValue(for: characteristic)
         default:
             break
         }
     }
 }
 
-extension Device {
-    func settings() -> Settings {
-        return Settings(
-            version: UInt32(self.settingsVersion),
-            stepsGoal: UInt32(self.stepsGoal),
-            screenTimeOut: UInt32(self.screenTimeout),
-            alwaysOnDisplay: self.alwaysOnDisplay,
-            clockType: ClockType(rawValue: UInt8(self.clockType)) ?? .H24,
-            weatherFormat: WeatherFormat(rawValue: UInt8(self.weatherFormat)) ?? .Metric,
-            notificationStatus: Notification(rawValue: UInt8(self.notificationStatus)) ?? .On,
-            watchFace: UInt8(self.watchface),
-            chimesOption: ChimesOption(rawValue: UInt8(self.chimesOption)) ?? .None,
-            pineTimeStyle: PineTimeStyleData(),
-            watchFaceInfineat: WatchFaceInfineat(),
-            wakeUpMode: .RaiseWrist,
-            shakeWakeThreshold: UInt16(self.shakeWakeThreshold),
-            brightLevel: BrightLevel(rawValue: UInt8(self.brightLevel)) ?? .Mid
-        )
+extension Settings {
+    init(device: Device) {
+        self.init()
+        
+        version = UInt32(clamping: device.settingsVersion)
+        stepsGoal = UInt32(clamping: device.stepsGoal)
+        screenTimeOut = UInt32(clamping: device.screenTimeout)
+        alwaysOnDisplay = device.alwaysOnDisplay
+        clockType = ClockType(rawValue: UInt8(clamping: device.clockType)) ?? .H24
+        weatherFormat = WeatherFormat(rawValue: UInt8(clamping: device.weatherFormat)) ?? .Metric
+        notificationStatus = Notification(rawValue: UInt8(clamping: device.notificationStatus)) ?? .On
+        watchFace = UInt8(clamping: device.watchface)
+        chimesOption = ChimesOption(rawValue: UInt8(clamping: device.chimesOption)) ?? .None
+        shakeWakeThreshold = UInt16(clamping: device.shakeWakeThreshold)
+        brightLevel = BrightLevel(rawValue: UInt8(clamping: device.brightLevel)) ?? .Mid
+        prideFlag = UInt8(clamping: device.prideFlag)
+        
+        if let pts = device.pineTimeStyle {
+            pineTimeStyle = PineTimeStyleData(
+                ColorTime: Colors(rawValue: UInt8(clamping: pts.colorTime)) ?? .Teal,
+                ColorBar: Colors(rawValue: UInt8(clamping: pts.colorBar)) ?? .Teal,
+                ColorBG: Colors(rawValue: UInt8(clamping: pts.colorBG)) ?? .Black,
+                gaugeStyle: PTSGaugeStyle(rawValue: UInt8(clamping: pts.guageStyle)) ?? .Full,
+                weatherEnable: PTSWeather(rawValue: UInt8(clamping: pts.weatherEnable)) ?? .Off
+            )
+        }
+        if let infineat = device.watchFaceInfineat {
+            watchFaceInfineat = WatchFaceInfineat(showSideCover: infineat.showSideCover, colorIndex: UInt8(clamping: infineat.colorIndex))
+        }
     }
 }

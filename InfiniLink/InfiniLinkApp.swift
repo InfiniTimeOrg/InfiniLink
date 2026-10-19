@@ -21,15 +21,14 @@ struct InfiniLink: App {
         HealthKitManager.shared.requestAuthorization()
         
         downloadManager.checkForFirmwareUpdate()
+        DataRetention.shared.deleteOldData()
     }
     
     var body: some Scene {
         WindowGroup {
-            NavigationStack {
-                ContentView()
-                    .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .preferredColorScheme(colorScheme == "light" ? .light : .dark)
-            }
+            ContentView()
+                .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .preferredColorScheme(colorScheme == "light" ? .light : colorScheme == "dark" ? .dark : nil)
         }
     }
 }

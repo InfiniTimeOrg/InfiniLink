@@ -11,25 +11,35 @@ struct SoftwareUpdateView: View {
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
-    @ObservedObject var bleFs = BLEFSHandler.shared
     @ObservedObject var bleManager = BLEManager.shared
-    
-    @State private var showLocalFileSheet = false
-    @State private var showResourcePickerSheet = false
-    
-    @Environment(\.dismiss) var dismiss
     
     var body: some View {
         GeometryReader { geo in
             List {
-                Section {
-                    NavigationLink {
-                        OtherUpdateVersions()
-                    } label: {
-                        Text("Other Versions")
+                if !bleManager.isReconnectingAfterUpdate {
+                    Section {
+                        NavigationLink {
+                            OtherUpdateVersions()
+                        } label: {
+                            Text("Other Versions")
+                        }
                     }
                 }
-                if downloadManager.externalResources {
+                if bleManager.isReconnectingAfterUpdate {
+                    Section {
+                        HStack(spacing: 10) {
+                            ListRowIconView(icon: "gear.badge", color: .gray)
+                            VStack(alignment: .leading, spacing: 3) {
+                                Text(bleManager.isInstallingUpdate ? "Installing..." : "Updating...")
+                                    .fontWeight(.bold)
+                                Text("\(deviceManager.name) is installing the update.")
+                                    .foregroundStyle(.secondary)
+                            }
+                            Spacer()
+                            ProgressView()
+                        }
+                    }
+                } else if downloadManager.externalResources {
                     newUpdate
                 } else {
                     if downloadManager.updateAvailable {
@@ -83,7 +93,7 @@ struct SoftwareUpdateView: View {
                         }
                     }
                     ScrollView {
-                        Text(downloadManager.updateBody)
+                        ReleaseNotesView(markdown: downloadManager.updateBody)
                             .frame(maxWidth: .infinity, alignment: .leading)
                     }
                     .frame(height: dfuUpdater.local ? 50 : 300)
@@ -96,12 +106,10 @@ struct SoftwareUpdateView: View {
                     Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
                 }
                 Button {
-                    if !dfuUpdater.local && downloadManager.externalResources && !bleManager.isDeviceInRecoveryMode {
-                        downloadManager.startSoftwareUpdate(externalResourcesOnly: true)
-                    } else if dfuUpdater.local {
+                    if dfuUpdater.local {
                         dfuUpdater.install()
                     } else {
-                        downloadManager.startSoftwareUpdate(externalResourcesOnly: false)
+                        downloadManager.startSoftwareUpdate()
                     }
                 } label: {
                     Text("Update Now")
@@ -132,6 +140,52 @@ struct SoftwareUpdateView: View {
     }
 }
 
+struct ReleaseNotesView: View {
+    let markdown: String
+    
+    private func inline(_ text: String) -> AttributedString {
+        (try? AttributedString(markdown: text, options: .init(interpretedSyntax: .inlineOnlyPreservingWhitespace))) ?? AttributedString(text)
+    }
+
+    private func imageURL(_ line: String) -> URL? {
+        if let match = line.wholeMatch(of: #/!\[[^\]]*\]\((\S+?)(?:\s+"[^"]*")?\)/#) {
+            return URL(string: String(match.1))
+        }
+        if let match = line.wholeMatch(of: #/<img\s[^>]*src="([^"]+)"[^>]*>/#) {
+            return URL(string: String(match.1))
+        }
+        return nil
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            ForEach(Array(markdown.components(separatedBy: .newlines).enumerated()), id: \.offset) { _, line in
+                let trimmed = line.trimmingCharacters(in: .whitespaces)
+                if trimmed.hasPrefix("#") {
+                    Text(inline(trimmed.drop(while: { $0 == "#" }).trimmingCharacters(in: .whitespaces)))
+                        .font(.title3.bold())
+                } else if trimmed.hasPrefix("- ") || trimmed.hasPrefix("* ") {
+                    HStack(alignment: .firstTextBaseline, spacing: 6) {
+                        Text("•")
+                        Text(inline(String(trimmed.dropFirst(2))))
+                    }
+                } else if let url = imageURL(trimmed) {
+                    AsyncImage(url: url) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                    } placeholder: {
+                        ProgressView()
+                            .frame(maxWidth: .infinity)
+                    }
+                } else if !trimmed.isEmpty {
+                    Text(inline(trimmed))
+                }
+            }
+        }
+    }
+}
+
 struct OtherUpdateVersions: View {
     @Environment(\.dismiss) var dismiss
     
@@ -152,19 +206,7 @@ struct OtherUpdateVersions: View {
                 }
                 .fileImporter(isPresented: $showLocalFileSheet, allowedContentTypes: [.zip]) { result in
                     do {
-                        let fileUrl = try result.get()
-                        
-                        dfuUpdater.local = true
-                        dfuUpdater.firmwareSelected = true
-                        dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                        dfuUpdater.firmwareFilename = fileUrl.lastPathComponent
-                        dfuUpdater.firmwareURL = fileUrl.absoluteURL
-                        downloadManager.updateBody = NSLocalizedString("This is a local firmware file and cannot be verified. Proceed at your own risk.", comment: "")
-                        downloadManager.updateSize = dfuUpdater.fileSize(from: fileUrl)
-                        
-                        downloadManager.externalResources = false
-                        downloadManager.updateAvailable = true
-                        
+                        downloadManager.selectLocalFirmware(try result.get())
                         dismiss()
                     } catch {
                         log("Error getting firmware file: \(error.localizedDescription)", caller: "OtherUpdateVersions")
@@ -178,16 +220,7 @@ struct OtherUpdateVersions: View {
                     }
                     .fileImporter(isPresented: $showResourcePickerSheet, allowedContentTypes: [.zip]) { result in
                         do {
-                            let fileUrl = try result.get()
-                            
-                            dfuUpdater.firmwareSelected = true
-                            dfuUpdater.resourceFilename = fileUrl.lastPathComponent
-                            dfuUpdater.resourceURL = fileUrl.absoluteURL
-                            downloadManager.updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
-                            downloadManager.updateSize = dfuUpdater.fileSize(from: fileUrl)
-                            
-                            downloadManager.externalResources = true
-                            
+                            downloadManager.selectLocalResources(try result.get())
                             dismiss()
                         } catch {
                             log("Error getting resource file: \(error.localizedDescription)", caller: "OtherUpdateVersions")
@@ -205,19 +238,7 @@ struct OtherUpdateVersions: View {
                 } else {
                     ForEach(downloadManager.releases, id: \.tag_name) { release in
                         Button {
-                            let asset = downloadManager.chooseAsset(response: release)
-                            
-                            dfuUpdater.firmwareFilename = asset.name
-                            dfuUpdater.firmwareSelected = true
-                            dfuUpdater.local = false
-                            downloadManager.updateAvailable = true
-                            downloadManager.updateVersion = release.tag_name
-                            downloadManager.updateBody = release.body
-                            downloadManager.updateSize = asset.size
-                            downloadManager.browserDownloadUrl = asset.browser_download_url
-                            
-                            downloadManager.externalResources = false
-                            
+                            downloadManager.selectRelease(release)
                             dismiss()
                         } label: {
                             Text(release.tag_name)
@@ -244,7 +265,7 @@ struct OtherUpdateVersions: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         SoftwareUpdateView()
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {

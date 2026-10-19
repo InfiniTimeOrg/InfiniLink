@@ -8,39 +8,14 @@
     
 
 import Foundation
-import NordicDFU
 import SwiftUI
 
-extension Array: @retroactive RawRepresentable where Element: Codable {
-    public init?(rawValue: String) {
-        guard let data = rawValue.data(using: .utf8),
-              let result = try? JSONDecoder().decode([Element].self, from: data)
-        else {
-            return nil
-        }
-        self = result
-    }
-
-    public var rawValue: String {
-        guard let data = try? JSONEncoder().encode(self),
-              let result = String(data: data, encoding: .utf8)
-        else {
-            return "[]"
-        }
-        return result
-    }
-}
-
 class DownloadManager: NSObject, ObservableObject {
-    static var shared = DownloadManager()
+    static let shared = DownloadManager()
     
     lazy var dfuUpdater = DFUUpdater.shared
     
-    @Published var tasks: [URLSessionTask] = []
-    @Published var autoUpgrade: Result!
-    @Published var lastCheck: Date!
-    
-    @AppStorage("releases") var releases: [Result] = []
+    @Published var releases: [Release] = DownloadManager.cachedReleases(repo: "InfiniTime")?.filter { $0.tag_name.first != "v" } ?? []
     @AppStorage("lastTimeReleasesFetched") var lastTimeReleasesFetched: Double = 0
     
     @Published var updateVersion: String = "0.0.0"
@@ -48,13 +23,12 @@ class DownloadManager: NSObject, ObservableObject {
     
     @Published var updateSize: Int = 0
     
-    @Published var browserDownloadUrl: URL = URL(fileURLWithPath: "")
-    @Published var browserDownloadResourcesUrl: URL = URL(fileURLWithPath: "")
+    @Published var browserDownloadUrl: URL?
+    @Published var browserDownloadResourcesUrl: URL?
     
     @Published var hasCheckedForUpdatesBefore: Bool = false
     @Published var updateStarted: Bool = false
     @Published var updateAvailable: Bool = false
-    @Published var loadingAppReleases: Bool = false
     @Published var loadingReleases: Bool = false
     @Published var externalResources: Bool = false
     @Published var appUpdate: AppVersion?
@@ -79,89 +53,10 @@ class DownloadManager: NSObject, ObservableObject {
         let isBeta: Bool
     }
     
-    struct Result: Codable {
+    struct Release: Codable {
         let tag_name: String
-        let body: String
+        let body: String?
         let assets: [Asset]
-        var zipAsset: Asset!
-        
-        private enum CodingKeys: String, CodingKey {
-            case tag_name, body, assets
-        }
-    }
-    
-    struct WorkflowRunResponse: Codable {
-        let total_count: Int
-        let workflow_runs: [WorkflowRun]
-    }
-    
-    struct WorkflowRun: Codable {
-        let id: Int
-        let name: String
-        let head_branch: String
-        let head_sha: String
-        let display_title: String
-        let run_number: Int
-        let event: String
-        let status: String
-        let conclusion: String
-        let workflow_id: Int
-        let url: String
-        let created_at: String
-        let updated_at: String
-        let run_attempt: Int
-        let run_started_at: String
-        let artifacts_url: String
-        let workflow_url: String
-    }
-    
-    struct ArtifactsResponse: Codable {
-        let total_count: Int
-        let artifacts: [Artifact]
-    }
-    
-    struct Artifact: Codable {
-        let id: Int
-        let nodeID: String
-        let name: String
-        let sizeInBytes: Int
-        let url: String
-        let archiveDownloadURL: String
-        let expired: Bool
-        let createdAt: String
-        let updatedAt: String
-        let expiresAt: String
-        let workflowRun: ArtifactWorkflowRun
-        
-        enum CodingKeys: String, CodingKey {
-            case id
-            case nodeID = "node_id"
-            case name
-            case sizeInBytes = "size_in_bytes"
-            case url
-            case archiveDownloadURL = "archive_download_url"
-            case expired
-            case createdAt = "created_at"
-            case updatedAt = "updated_at"
-            case expiresAt = "expires_at"
-            case workflowRun = "workflow_run"
-        }
-    }
-    
-    struct ArtifactWorkflowRun: Codable {
-        let id: Int
-        let repositoryID: Int
-        let headRepositoryID: Int
-        let headBranch: String
-        let headSHA: String
-        
-        enum CodingKeys: String, CodingKey {
-            case id
-            case repositoryID = "repository_id"
-            case headRepositoryID = "head_repository_id"
-            case headBranch = "head_branch"
-            case headSHA = "head_sha"
-        }
     }
     
     func newVersion(_ releaseVersion: String, than currentVersion: String) -> AppVersion? {
@@ -188,7 +83,7 @@ class DownloadManager: NSObject, ObservableObject {
     
     // Re-run whenever the release list or the connected firmware changes, not just at launch
     func evaluateFirmwareUpdate() {
-        guard !(dfuUpdater.local && dfuUpdater.firmwareSelected) else { return } // The user picked a local file; don't override it
+        guard !(dfuUpdater.local && dfuUpdater.firmwareSelected), !updateStarted else { return } // The user picked a local file; don't override it
         
         let installed = DeviceManager.shared.firmware
         let latest = releases
@@ -200,119 +95,152 @@ class DownloadManager: NSObject, ObservableObject {
             return
         }
         
-        let asset = chooseAsset(response: latest)
+        selectRelease(latest)
+    }
+    
+    // Each of these replaces whatever update was selected before
+    func selectRelease(_ release: Release) {
+        let asset = chooseAsset(response: release)
         
-        dfuUpdater.firmwareFilename = asset.name
-        dfuUpdater.firmwareSelected = true
         dfuUpdater.local = false
+        dfuUpdater.firmwareSelected = true
+        dfuUpdater.firmwareFilename = asset?.name ?? ""
+        dfuUpdater.firmwareURL = nil
+        dfuUpdater.resourceURL = nil
         
+        updateVersion = release.tag_name
+        updateBody = release.body ?? ""
+        updateSize = asset?.size ?? 0
+        browserDownloadUrl = asset?.browser_download_url
+        browserDownloadResourcesUrl = chooseResources(response: release)?.browser_download_url
+        externalResources = false
         updateAvailable = true
-        updateVersion = latest.tag_name
-        updateBody = latest.body
-        updateSize = asset.size
-        autoUpgrade = latest
-        browserDownloadUrl = asset.browser_download_url
-        browserDownloadResourcesUrl = chooseResources(response: latest).browser_download_url
+    }
+    
+    func selectLocalFirmware(_ url: URL, notes: String = NSLocalizedString("This is a local firmware file and cannot be verified. Proceed at your own risk.", comment: "")) {
+        dfuUpdater.local = true
+        dfuUpdater.firmwareSelected = true
+        dfuUpdater.firmwareFilename = url.lastPathComponent
+        dfuUpdater.firmwareURL = url
+        dfuUpdater.resourceURL = nil
+        
+        updateBody = notes
+        updateSize = dfuUpdater.fileSize(from: url)
+        externalResources = false
+        updateAvailable = true
+    }
+    
+    func selectLocalResources(_ url: URL) {
+        dfuUpdater.local = true
+        dfuUpdater.firmwareSelected = true
+        dfuUpdater.firmwareURL = nil
+        dfuUpdater.resourceFilename = url.lastPathComponent
+        dfuUpdater.resourceURL = url
+        
+        updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
+        updateSize = dfuUpdater.fileSize(from: url)
+        externalResources = true
     }
     
     func getUpdates() {
-        let now = Date()
+        let now = Date().timeIntervalSince1970
         
-        // Make sure we haven't checked for updates in the past 30 minutes
-        if (now.timeIntervalSince1970 - lastTimeReleasesFetched) > (30 * 20) {
-            log("Fetching releases", type: .info, caller: "DownloadManager")
-            
-            getInfiniTimeReleases()
-            getInfiniLinkReleases()
-            
-            lastTimeReleasesFetched = now.timeIntervalSince1970
-        }
+        // Make sure we haven't checked for updates in the past 10 minutes
+        guard now - lastTimeReleasesFetched > 60 * 10 else { return }
+        
+        log("Fetching releases", type: .info, caller: "DownloadManager")
+        getInfiniTimeReleases()
+        getInfiniLinkReleases()
     }
     
     func getInfiniLinkReleases() {
-        self.loadingAppReleases = true
-        
-        URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniLink/releases")!)) { data, response, error in
-            if let data = data {
-                do {
-                    let result = try JSONDecoder().decode([Result].self, from: data)
-                    
-                    DispatchQueue.main.async { [self] in
-                        guard let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
-                            log("Could not retrieve app version", caller: "DownloadManager")
-                            return
-                        }
-                        
-                        for release in result {
-                            if let update = newVersion(release.tag_name.replacingOccurrences(of: "v", with: ""), than: appVersion), Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" ? true : !update.isBeta {
-                                appUpdate = update
-                                return
-                            }
-                        }
-                    }
-                } catch {
-                    log("Error decoding InfiniLink releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
-                }
-                
-                DispatchQueue.main.async {
-                    self.loadingAppReleases = false
-                }
+        fetchReleases(repo: "InfiniLink") { [self] result in
+            guard let result else { return }
+            guard let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {
+                log("Could not retrieve app version", caller: "DownloadManager")
+                return
             }
-        }.resume()
+            let isTestFlight = Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+            
+            appUpdate = result.lazy
+                .compactMap { self.newVersion($0.tag_name.replacingOccurrences(of: "v", with: ""), than: appVersion) }
+                .first { isTestFlight || !$0.isBeta }
+        }
     }
     
     func getInfiniTimeReleases() {
-        self.loadingReleases = true
+        loadingReleases = true
         
-        URLSession.shared.dataTask(with: URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/InfiniTime/releases")!)) { data, response, error in
-            if let data = data {
+        fetchReleases(repo: "InfiniTime") { [self] result in
+            loadingReleases = false
+            guard let result else { return }
+            
+            lastTimeReleasesFetched = Date().timeIntervalSince1970
+            releases = result.filter { $0.tag_name.first != "v" }
+            evaluateFirmwareUpdate()
+        }
+    }
+    
+    // Send the last ETag so unchanged lists come back as 304s, which don't count against GitHub's rate limit
+    private func fetchReleases(repo: String, completion: @escaping ([Release]?) -> Void) {
+        let cacheURL = Self.cacheURL(repo: repo)
+        let etagKey = "\(repo)ReleasesETag"
+        
+        var request = URLRequest(url: URL(string: "https://api.github.com/repos/InfiniTimeOrg/\(repo)/releases")!, cachePolicy: .reloadIgnoringLocalCacheData)
+        if let etag = UserDefaults.standard.string(forKey: etagKey), FileManager.default.fileExists(atPath: cacheURL.path) {
+            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            let http = response as? HTTPURLResponse
+            var body: Data?
+            
+            switch http?.statusCode {
+            case 200:
+                body = data
+                try? data?.write(to: cacheURL)
+                UserDefaults.standard.set(http?.value(forHTTPHeaderField: "ETag"), forKey: etagKey)
+            case 304:
+                body = try? Data(contentsOf: cacheURL)
+            default:
+                log("Error fetching \(repo) releases: \(error?.localizedDescription ?? "status \(http?.statusCode ?? 0)")", caller: "DownloadManager")
+            }
+            
+            var releases: [Release]?
+            if let body {
                 do {
-                    let result = try JSONDecoder().decode([Result].self, from: data)
-                    
-                    DispatchQueue.main.async {
-                        self.releases = result.filter { $0.tag_name.first != "v" }
-                        self.evaluateFirmwareUpdate()
-                    }
+                    releases = try JSONDecoder().decode([Release].self, from: body)
                 } catch {
-                    log("Error decoding InfiniTime releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
+                    log("Error decoding \(repo) releases JSON: \(error.localizedDescription)", caller: "DownloadManager")
                 }
-                
-                DispatchQueue.main.async {
-                    self.loadingReleases = false
-                }
+            }
+            
+            DispatchQueue.main.async {
+                completion(releases)
             }
         }.resume()
     }
     
-    func chooseAsset(response: Result) -> Asset {
-        for x in response.assets {
-            if x.name.suffix(4) == ".zip" && x.name.contains("pinetime-mcuboot-app-dfu") {
-                return x
-            }
-        }
-        return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
+    private static func cacheURL(repo: String) -> URL {
+        FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask)[0].appendingPathComponent("\(repo)-releases.json")
     }
     
-    func chooseResources(response: Result) -> Asset {
-        for x in response.assets {
-            if x.name.suffix(4) == ".zip" && x.name.contains("infinitime-resources") {
-                return x
-            }
-        }
-        return Asset(id: Int(), name: String(), browser_download_url: URL(fileURLWithPath: ""), size: 0)
+    private static func cachedReleases(repo: String) -> [Release]? {
+        guard let data = try? Data(contentsOf: cacheURL(repo: repo)) else { return nil }
+        return try? JSONDecoder().decode([Release].self, from: data)
     }
     
-    func startSoftwareUpdate(externalResourcesOnly: Bool) {
+    func chooseAsset(response: Release) -> Asset? {
+        response.assets.first { $0.name.hasSuffix(".zip") && $0.name.contains("pinetime-mcuboot-app-dfu") }
+    }
+    
+    func chooseResources(response: Release) -> Asset? {
+        response.assets.first { $0.name.hasSuffix(".zip") && $0.name.contains("infinitime-resources") }
+    }
+    
+    func startSoftwareUpdate() {
         dfuUpdater.beginDownloading()
-        
-        if externalResourcesOnly {
-            downloadQueue = [.resources]
-        } else if dfuUpdater.updateResourcesWithFirmware {
-            downloadQueue = [.firmware, .resources]
-        } else {
-            downloadQueue = [.firmware]
-        }
-        
+        downloadQueue = dfuUpdater.updateResourcesWithFirmware && browserDownloadResourcesUrl != nil ? [.firmware, .resources] : [.firmware]
         downloadNext()
     }
     
@@ -326,18 +254,18 @@ class DownloadManager: NSObject, ObservableObject {
     private func downloadNext() {
         guard let item = downloadQueue.first else {
             activeDownload = nil
-            if externalResources {
-                dfuUpdater.installResourcesOnly()
-            } else {
-                dfuUpdater.install()
-            }
+            dfuUpdater.install()
             return
         }
         
         downloadQueue.removeFirst()
         activeDownload = item
         
-        let url = item == .resources ? browserDownloadResourcesUrl : browserDownloadUrl
+        guard let url = item == .resources ? browserDownloadResourcesUrl : browserDownloadUrl else {
+            cancelActiveDownload()
+            dfuUpdater.reportDownloadFailure()
+            return
+        }
         downloadTask = urlSession.downloadTask(with: URLRequest(url: url))
         downloadTask?.resume()
     }
@@ -346,27 +274,16 @@ class DownloadManager: NSObject, ObservableObject {
         updateVersion = "0.0.0"
         updateBody = ""
         updateSize = 0
-        browserDownloadUrl = URL(fileURLWithPath: "")
-        browserDownloadResourcesUrl = URL(fileURLWithPath: "")
+        browserDownloadUrl = nil
+        browserDownloadResourcesUrl = nil
         updateStarted = false
         updateAvailable = false
         externalResources = false
         cancelActiveDownload()
     }
-    
-    private func updateTasks() {
-        urlSession.getAllTasks { tasks in
-            DispatchQueue.main.async {
-                self.tasks = tasks
-            }
-        }
-    }
 }
 
 extension DownloadManager: URLSessionDelegate, URLSessionDownloadDelegate {
-    func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didWriteData _: Int64, totalBytesWritten _: Int64, totalBytesExpectedToWrite _: Int64) {
-    }
-    
     func urlSession(_: URLSession, downloadTask: URLSessionDownloadTask, didFinishDownloadingTo location: URL) {
         guard let item = activeDownload else { return }
         let filename = item == .resources ? "resources.zip" : "firmware.zip"

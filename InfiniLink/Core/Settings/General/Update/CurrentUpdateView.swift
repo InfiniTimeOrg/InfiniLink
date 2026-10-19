@@ -13,26 +13,13 @@ struct CurrentUpdateView: View {
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     
     @State private var backgroundScaled = true
+    
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var showConfirmation = false
     
     private var failureMessage: String? {
         if case .failed(let message) = dfuUpdater.stage { return message }
         return nil
-    }
-    
-    private var statusText: String {
-        switch dfuUpdater.stage {
-        case .idle:
-            return NSLocalizedString("Preparing", comment: "")
-        case .downloading:
-            return NSLocalizedString("Downloading", comment: "")
-        case .uploadingResources:
-            return dfuUpdater.statusDetail.isEmpty ? NSLocalizedString("Updating resources", comment: "") : dfuUpdater.statusDetail
-        case .installing:
-            return dfuUpdater.statusDetail.isEmpty ? NSLocalizedString("Installing", comment: "") : dfuUpdater.statusDetail
-        case .failed:
-            return ""
-        }
     }
     
     var body: some View {
@@ -52,7 +39,7 @@ struct CurrentUpdateView: View {
                             .foregroundStyle(.secondary)
                     } else {
                         HStack(spacing: 0) {
-                            Text("\(statusText)... ")
+                            Text("\(dfuUpdater.statusText)... ")
                             if dfuUpdater.percentComplete != 0 {
                                 Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
                             }
@@ -94,6 +81,8 @@ struct CurrentUpdateView: View {
             .padding()
         }
         .onAppear {
+            guard !reduceMotion else { return }
+            
             withAnimation(.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
                 backgroundScaled.toggle()
             }

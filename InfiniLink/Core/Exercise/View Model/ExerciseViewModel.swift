@@ -39,6 +39,7 @@ class ExerciseViewModel: ObservableObject {
     @Published var recoverableSession: WorkoutSession?
     @Published var userExercises = [UserExercise]()
     @Published var pinnedExerciseIds = [String]()
+    @Published private(set) var customExercises = [Exercise]()
 
     private var session: WorkoutSession?
     private var displayTimer: Timer?
@@ -54,7 +55,11 @@ class ExerciseViewModel: ObservableObject {
     // Recovered sessions older than this are assumed abandoned and discarded on launch
     private let recoveryWindow: TimeInterval = 60 * 60 * 12
 
-    let exercises = [
+    var exercises: [Exercise] {
+        return builtInExercises + customExercises
+    }
+
+    let builtInExercises = [
         Exercise(id: "outdoor-run", name: "Outdoor Run", icon: "figure.run", components: [.heart, .steps, .location], pace: .jog),
         Exercise(id: "outdoor-cycle", name: "Outdoor Cycle", icon: "figure.outdoor.cycle", components: [.heart, .location], activityType: .cycling),
         Exercise(id: "indoor-run", name: "Indoor Run", icon: "figure.run.treadmill", components: [.heart, .steps], pace: .jog),
@@ -78,12 +83,18 @@ class ExerciseViewModel: ObservableObject {
         NotificationCenter.default.addObserver(self, selector: #selector(handleLiveActivityCommand), name: .workoutLiveActivityCommand, object: nil)
 
         getPinnedExercises()
+        getCustomExercises()
         detectRecoverableSession()
         drainLiveActivityCommand()
     }
 
     func exercise(for id: String) -> Exercise? {
         return exercises.first(where: { $0.id == id })
+    }
+
+    // Saved workouts can outlive a deleted custom exercise
+    func exerciseOrPlaceholder(for id: String?) -> Exercise {
+        return exercises.first(where: { $0.id == id }) ?? Exercise(id: id ?? "", name: NSLocalizedString("Exercise", comment: ""), icon: "figure.mixed.cardio", components: [.heart], activityType: .other)
     }
 
     func timeString() -> String {
@@ -283,23 +294,46 @@ class ExerciseViewModel: ObservableObject {
         setPinnedExercises()
     }
 
+    func getCustomExercises() {
+        guard let data = userDefaults?.data(forKey: "customExercises"),
+              let definitions = try? JSONDecoder().decode([CustomExerciseDefinition].self, from: data) else { return }
+
+        customExercises = definitions.map { $0.exercise }
+    }
+
+    func addCustomExercise(_ definition: CustomExerciseDefinition) {
+        customExercises.append(definition.exercise)
+        saveCustomExercises()
+    }
+
+    func deleteCustomExercise(_ exercise: Exercise) {
+        customExercises.removeAll { $0.id == exercise.id }
+        pinnedExerciseIds.removeAll { $0 == exercise.id }
+        setPinnedExercises()
+        saveCustomExercises()
+    }
+
+    func deleteUserExercise(_ userExercise: UserExercise) {
+        let context = persistenceController.container.viewContext
+        
+        context.delete(context.object(with: userExercise.objectID))
+        persistenceController.save()
+        userExercises = ChartManager.shared.userExercises()
+    }
+
+    private func saveCustomExercises() {
+        let definitions = customExercises.map { CustomExerciseDefinition(from: $0) }
+        guard let data = try? JSONEncoder().encode(definitions) else { return }
+
+        userDefaults?.set(data, forKey: "customExercises")
+    }
+
     func getPinnedExercises() {
         pinnedExerciseIds = userDefaults?.array(forKey: "pinnedExercises") as? [String] ?? []
     }
 
     func setPinnedExercises() {
         userDefaults?.set(pinnedExerciseIds, forKey: "pinnedExercises")
-    }
-
-    func isDateDuringExercise(_ date: Date) -> Bool {
-        let exercises = ChartManager.shared.userExercises().filter { exercise in
-            guard let endDate = exercise.endDate else { return true }
-
-            // Use end date because it will be present in the day for the longest
-            return Calendar.current.isDate(date, equalTo: endDate, toGranularity: .day)
-        }
-
-        return !exercises.isEmpty
     }
 
     private func detectRecoverableSession() {
@@ -390,11 +424,16 @@ class ExerciseViewModel: ObservableObject {
     }
 
     func liveCalorieEstimate(for exercise: Exercise) -> Int {
+        Self.calories(for: exercise, averageHeartRate: averageHeartRate, duration: elapsed, steps: stepsTaken)
+    }
+
+    // Shared by the live estimate and the saved workout so they agree
+    private static func calories(for exercise: Exercise, averageHeartRate: Double, duration: TimeInterval, steps: Int) -> Int {
         let calculator = FitnessCalculator()
-        if exercise.components.contains(.steps) {
-            return calculator.calculateCaloriesBurned(steps: stepsTaken)
+        if averageHeartRate > 0 {
+            return calculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: duration)
         }
-        return calculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: elapsed)
+        return calculator.calculateCaloriesBurned(steps: steps, pace: exercise.pace)
     }
 
     private func startLiveActivity() {
@@ -484,25 +523,19 @@ class ExerciseViewModel: ObservableObject {
         let startDate = session.startDate
         let steps = session.accumulatedSteps
         let deviceId = deviceManager.pairedDeviceID
-        let fitnessCalculator = FitnessCalculator()
         let routeJSON = route.count > 1 ? (try? JSONEncoder().encode(route)).flatMap { String(data: $0, encoding: .utf8) } : nil
         let device = HKDevice(name: deviceManager.name, manufacturer: deviceManager.manufacturer, model: deviceManager.modelNumber, hardwareVersion: deviceManager.hardwareRevision, firmwareVersion: deviceManager.firmware, softwareVersion: deviceManager.softwareRevision, localIdentifier: session.id.uuidString, udiDeviceIdentifier: nil)
         let context = persistenceController.container.newBackgroundContext()
 
         context.perform { [weak self] in
             let request: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
-            request.predicate = NSPredicate(format: "timestamp >= %@ AND timestamp <= %@", startDate as NSDate, endDate as NSDate)
+            request.predicate = NSPredicate(format: "deviceId == %@ AND timestamp >= %@ AND timestamp <= %@", deviceId ?? "", startDate as NSDate, endDate as NSDate)
             request.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: true)]
             let heartPoints = (try? context.fetch(request)) ?? []
 
             let averageHeartRate = Self.timeWeightedAverage(of: heartPoints)
             let duration = endDate.timeIntervalSince(startDate)
-            let calories: Double = {
-                if averageHeartRate > 0 {
-                    return Double(fitnessCalculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: duration))
-                }
-                return Double(fitnessCalculator.calculateCaloriesBurned(steps: steps, pace: exercise.pace))
-            }()
+            let calories = Double(Self.calories(for: exercise, averageHeartRate: averageHeartRate, duration: duration, steps: steps))
 
             let userExercise = UserExercise(context: context)
             userExercise.id = session.id

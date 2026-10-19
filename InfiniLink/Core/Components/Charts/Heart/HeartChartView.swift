@@ -348,6 +348,30 @@ struct HeartChartView: View {
         }
     }
     
+    private var notificationSummary: String? {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .spellOut
+        
+        let parts: [(count: String, times: String, isSingle: Bool)] = [true, false].compactMap { low in
+            let dates = NotificationManager.shared.heartRangeNotificationsToday(low: low)
+            guard !dates.isEmpty else { return nil }
+            
+            let kind = low ? NSLocalizedString("low", comment: "") : NSLocalizedString("high", comment: "")
+            let count = "\(formatter.string(from: NSNumber(value: dates.count)) ?? "\(dates.count)") \(kind)"
+            let times = dates.map { $0.formatted(date: .omitted, time: .shortened) }
+            return (count, dates.count <= 2 ? ", at " + times.joined(separator: " and ") : "", dates.count == 1)
+        }
+        guard let first = parts.first else { return nil }
+        
+        let firstCount = first.count.prefix(1).uppercased() + first.count.dropFirst()
+        let noun = first.isSingle ? "heart rate notification was sent" : "heart rate notifications were sent"
+        var summary = "\(firstCount) \(noun)\(first.times)"
+        if parts.count > 1 {
+            summary += ", and \(parts[1].count)\(parts[1].times)"
+        }
+        return summary + "."
+    }
+    
     var body: some View {
         Group {
             if firstReadingDate == nil {
@@ -419,6 +443,11 @@ struct HeartChartView: View {
         .onChange(of: selectedViewHour?.date) { newValue in
             guard newValue != nil else { return }
             UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        }
+        if let notificationSummary {
+            Section {
+                Text(notificationSummary)
+            }
         }
     }
 }

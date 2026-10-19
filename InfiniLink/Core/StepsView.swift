@@ -43,13 +43,18 @@ struct StepsView: View {
         }
         .navigationTitle("Steps")
         .navigationBarTitleDisplayMode(.inline)
-//        .toolbar {
-//            NavigationLink {
-//                StepSettingsView()
-//            } label: {
-//                Label("Settings", systemImage: "gear")
-//            }
-//        }
+        .onAppear {
+            if let deviceId = deviceManager.pairedDeviceID {
+                HealthKitManager.shared.fillMissingStepDays(deviceId: deviceId)
+            }
+        }
+        .toolbar {
+            NavigationLink {
+                StepSettingsView()
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+        }
     }
 }
 
@@ -66,7 +71,7 @@ struct StepMenuItemView: View {
         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
             let units = personalizationController.units == .imperial ? "mi" : "km"
             let distance = exerciseCalculator.calculateDistance(steps: steps)
-            let stepsPerMinute = exerciseCalculator.stepsPerMinute(steps: steps)
+            let stepsPerMinute = steps > 0 ? exerciseCalculator.stepsPerMinute() : 0
             
             DetailHeaderSubItemView(title: "Distance",
                                     value: String(format: "%.2f", distance),

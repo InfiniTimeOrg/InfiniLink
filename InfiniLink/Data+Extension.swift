@@ -7,10 +7,14 @@
 
 import Foundation
 
-extension Data {
-    var hexString : String {
-        return self.reduce("") { (a : String, v : UInt8) -> String in
-            return a + String(format: "%02x", v)
-        }
+extension FixedWidthInteger {
+    var littleEndianBytes: [UInt8] {
+        withUnsafeBytes(of: littleEndian, Array.init)
+    }
+}
+
+extension Array where Element == UInt8 {
+    func littleEndianValue<T: FixedWidthInteger>(at offset: Int) -> T {
+        self[offset..<offset + MemoryLayout<T>.size].reversed().reduce(0) { $0 << 8 | T($1) }
     }
 }
