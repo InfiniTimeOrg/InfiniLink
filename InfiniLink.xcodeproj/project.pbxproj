@@ -18,6 +18,7 @@
 		4CB10164409F57E965D053EF /* WatchSettingsFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A51F367FDB07F7C5D7AD97 /* WatchSettingsFile.swift */; };
 		53917E8707F202244D35066E /* WatchAlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA45644E8C5F284E96F2890 /* WatchAlarmView.swift */; };
 		5C571CD0D814F6A6CEAF73B9 /* SleepAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE53937C332FA6148886C50 /* SleepAnalyzer.swift */; };
+		7722E50F844979AAEF96B05F /* HealthTrends.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E2639060097BBFC1CC1D73F /* HealthTrends.swift */; };
 		7B669746175A133D23D35962 /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8F02D3812A1EC8E2D5AFD2 /* WatchSettingsView.swift */; };
 		8AE0BBEFA52E176ABC580B30 /* WatchSettingsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08CDEF696462C6EA84DBD2 /* WatchSettingsEditor.swift */; };
 		9578D6AE6A4F9948164C9AAF /* StartExerciseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86D17289B2D92AC68FB9291D /* StartExerciseView.swift */; };
@@ -187,6 +188,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		0E2639060097BBFC1CC1D73F /* HealthTrends.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthTrends.swift; sourceTree = "<group>"; };
 		1AFC0382BEC8406837173344 /* SleepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* InfiniLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkApp.swift; sourceTree = "<group>"; };
@@ -616,6 +618,7 @@
 				3CE53937C332FA6148886C50 /* SleepAnalyzer.swift */,
 				29D557AFE18F6E0D6C8040F6 /* SleepManager.swift */,
 				C3C2E310B92D23E5E3E385E6 /* WorkoutAnalysis.swift */,
+				0E2639060097BBFC1CC1D73F /* HealthTrends.swift */,
 				6A5E75B738B443D712B510B0 /* NavigationController.swift */,
 			);
 			path = Utils;
@@ -1047,6 +1050,7 @@
 				36E613FC638D4ED50F76C145 /* SleepView.swift in Sources */,
 				DB8F27EC680BFDE879286301 /* CustomExerciseView.swift in Sources */,
 				2BD49B4A5D560BFC08CBA8E8 /* WorkoutAnalysis.swift in Sources */,
+				7722E50F844979AAEF96B05F /* HealthTrends.swift in Sources */,
 				4673257DE1BF6B628CCB24AC /* NavigationController.swift in Sources */,
 				009D471D8A6DF109A3C6B9BD /* DirectionsView.swift in Sources */,
 				4CB10164409F57E965D053EF /* WatchSettingsFile.swift in Sources */,

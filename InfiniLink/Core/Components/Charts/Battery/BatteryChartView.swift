@@ -161,7 +161,7 @@ struct BatteryChartView: View {
                                         .animation(.default, value: visibleFirst)
                                         .animation(.default, value: visibleLast)
                                 } else {
-                                    Text("--")
+                                    Text("No Data")
                                 }
                             }
                             .font(.system(.title, design: .rounded))
