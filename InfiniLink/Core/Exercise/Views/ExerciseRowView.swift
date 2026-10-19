@@ -13,18 +13,21 @@ struct ExerciseRowView: View {
     
     let exercise: Exercise
     let pinned: Bool
+    let onStart: (() -> Void)?
     var pinLabel: some View {
         Label(pinned ? "Unpin" : "Pin", systemImage: pinned ? "pin.slash" : "pin")
     }
     
-    init(_ exercise: Exercise, pinned: Bool = false) {
+    init(_ exercise: Exercise, pinned: Bool = false, onStart: (() -> Void)? = nil) {
         self.exercise = exercise
         self.pinned = pinned
+        self.onStart = onStart
     }
     
     var body: some View {
         Button {
             exerciseViewModel.startExercise(exercise)
+            onStart?()
         } label: {
             Label(exercise.name, systemImage: exercise.icon)
         }
@@ -34,6 +37,13 @@ struct ExerciseRowView: View {
                 exerciseViewModel.setExercisePinned(exercise)
             } label: {
                 pinLabel
+            }
+            if exercise.isCustom {
+                Button(role: .destructive) {
+                    exerciseViewModel.deleteCustomExercise(exercise)
+                } label: {
+                    Label("Delete", systemImage: "trash")
+                }
             }
         }
         .swipeActions(edge: .leading, allowsFullSwipe: true) {

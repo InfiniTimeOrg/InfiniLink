@@ -17,15 +17,15 @@ struct AllExercisesView: View {
     @Environment(\.managedObjectContext) var viewContext
     @Environment(\.dismiss) var dismiss
     
-    private let persistenceController = PersistenceController.shared
-    
     private var filteredExercises: [UserExercise] {
         let query = searchText.trimmingCharacters(in: .whitespaces).lowercased()
+        let sorted = exerciseViewModel.userExercises.sorted { ($0.startDate ?? Date()) > ($1.startDate ?? Date()) }
         if query.isEmpty {
-            return exerciseViewModel.userExercises
+            return sorted
         }
-        return exerciseViewModel.userExercises.filter { userExercise in
-            guard let startDate = userExercise.startDate, let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId! }) else { return false }
+        return sorted.filter { userExercise in
+            guard let startDate = userExercise.startDate else { return false }
+            let exercise = exerciseViewModel.exerciseOrPlaceholder(for: userExercise.exerciseId)
             
             return exercise.name.lowercased().contains(query) || startDate.formatted().lowercased().contains(query)
         }
@@ -35,14 +35,10 @@ struct AllExercisesView: View {
         exerciseViewModel.userExercises = chartManager.userExercises()
     }
     private func delete(at offsets: IndexSet) {
-        let context = persistenceController.container.viewContext
-
+        let exercises = filteredExercises
         for index in offsets {
-            context.delete(context.object(with: filteredExercises[index].objectID))
+            exerciseViewModel.deleteUserExercise(exercises[index])
         }
-
-        persistenceController.save()
-        updateUserExercises()
         
         if exerciseViewModel.userExercises.isEmpty {
             dismiss()
@@ -55,7 +51,7 @@ struct AllExercisesView: View {
                 if filteredExercises.isEmpty && !searchText.trimmingCharacters(in: .whitespaces).isEmpty {
                     Text("Nothing matched your search. Ensure your spelling is correct and try again.")
                 } else {
-                    ForEach(filteredExercises.sorted(by: { $0.startDate ?? Date() > $1.startDate ?? Date() })) { userExercise in
+                    ForEach(filteredExercises) { userExercise in
                         let exerciseButton = {
                             Button(role: .destructive) {
                                 guard let index = filteredExercises.firstIndex(where: { $0.id == userExercise.id }) else { return }
@@ -64,21 +60,12 @@ struct AllExercisesView: View {
                                 Label("Delete", systemImage: "trash")
                             }
                         }()
-                        if let exercise = exerciseViewModel.exercises.first(where: { $0.id == userExercise.exerciseId }) {
+                        let exercise = exerciseViewModel.exerciseOrPlaceholder(for: userExercise.exerciseId)
+                        Group {
                             NavigationLink {
                                 ExerciseDetailView(userExercise: userExercise)
                             } label: {
-                                HStack {
-                                    Image(systemName: exercise.icon)
-                                        .font(.system(size: 24).weight(.medium))
-                                        .frame(minWidth: 40)
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(exercise.name)
-                                            .font(.body.weight(.medium))
-                                        Text(userExercise.startDate?.formatted() ?? "Unknown date")
-                                            .foregroundStyle(Color.gray)
-                                    }
-                                }
+                                ExerciseHistoryRowView(userExercise: userExercise, exercise: exercise)
                             }
                             .contextMenu {
                                 exerciseButton
@@ -101,5 +88,37 @@ struct AllExercisesView: View {
         .onAppear {
             updateUserExercises()
         }
+    }
+}
+
+struct ExerciseHistoryRowView: View {
+    let userExercise: UserExercise
+    let exercise: Exercise
+    
+    private var duration: String? {
+        guard let start = userExercise.startDate, let end = userExercise.endDate else { return nil }
+        return Duration.seconds(end.timeIntervalSince(start)).formatted(.units(allowed: [.hours, .minutes], width: .abbreviated))
+    }
+    
+    var body: some View {
+        HStack {
+            Image(systemName: exercise.icon)
+                .font(.system(size: 24).weight(.medium))
+                .foregroundStyle(.orange)
+                .frame(minWidth: 40)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 4) {
+                Text(exercise.name)
+                    .font(.body.weight(.medium))
+                Text(userExercise.startDate?.formatted(date: .abbreviated, time: .shortened) ?? NSLocalizedString("Unknown date", comment: ""))
+                    .foregroundStyle(Color.gray)
+            }
+            Spacer()
+            if let duration {
+                Text(duration)
+                    .foregroundStyle(.gray)
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 }
