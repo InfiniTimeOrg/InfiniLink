@@ -362,6 +362,7 @@ extension BLEManager: CBCentralManagerDelegate {
         lastDisconnectReason = error?.localizedDescription
         saveLastSeen(peripheral)
         HealthKitManager.shared.flushHeartRateSamples()
+        NotificationManager.shared.resetActivityCheck()
         DFUUpdater.shared.transfer?.connectionLost()
         
         // Drop the stale peripheral so in-flight BLEFS loops become no-ops and state can't half-persist

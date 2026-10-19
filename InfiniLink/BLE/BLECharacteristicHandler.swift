@@ -30,7 +30,6 @@ struct BLECharacteristicHandler {
     
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
-    @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
     @AppStorage("lastStatsSyncTimestamp") var lastStatsSyncTimestamp: Double = 0
 
     @AppStorage("healthKitLastRawStepCount") var healthKitLastRawStepCount = -1
@@ -156,6 +155,8 @@ struct BLECharacteristicHandler {
             let stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
             
             bleManager.stepCount = stepCount
+            // Also on 0 so inactivity checks start after connecting
+            notificationManager.updateActivity(steps: stepCount)
             if stepCount != 0 {
                 syncStepsToHealthKit(rawWatchCount: stepCount)
                 syncCaloriesToHealthKit(rawWatchCount: stepCount)
@@ -190,10 +191,13 @@ struct BLECharacteristicHandler {
             // Only update every five seconds
             if timeDifference > 5 {
                 notificationManager.checkAndNotifyForWaterReminders()
+                notificationManager.checkForInactivity()
 
                 weatherController.checkForUpdate()
 
                 notificationManager.checkHostBatteryState()
+
+                SleepManager.shared.processIfNeeded()
 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
@@ -243,16 +247,7 @@ struct BLECharacteristicHandler {
     }
 
     private func checkForCompletedStepGoal() {
-        let notifSettings = NotificationSettingsManager.shared.settings
-        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && notifSettings.watchNotificationsEnabled && notifSettings.goalSettings.stepReminderEnabled {
-            let currentTime = Date().timeIntervalSince1970
-            let twentyFourHours: TimeInterval = 86400
-            
-            if (currentTime - lastTimeStepGoalNotified) >= twentyFourHours {
-                notificationManager.sendStepGoalReachedNotification()
-                lastTimeStepGoalNotified = currentTime
-            }
-        }
+        notificationManager.checkStepGoals(steps: bleManager.stepCount, goal: Int(deviceManager.settings.stepsGoal))
     }
     private func updateHeartRate(bpm: Int) {
         lastHeartRateUpdateTimestamp = Date().timeIntervalSince1970

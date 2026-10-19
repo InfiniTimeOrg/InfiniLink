@@ -31,6 +31,12 @@ class NotificationManager: ObservableObject {
     private var settings: NotificationSettings { NotificationSettingsManager.shared.settings }
     private var batterySettings: BatterySettings { settings.batterySettings }
     
+    private var lastActiveDate = Date()
+    private var inactivityBaselineSteps: Int?
+    private var hasStepsSinceConnect = false
+    
+    private var previousStepsCache: (key: String, steps: [Date: Int])?
+    
     private var hostFullNotified = false
     private var hostLowNotified = false
     
@@ -177,13 +183,29 @@ extension NotificationManager {
                 AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(heartSettings.minRange) BPM", comment: ""))
             )
             self.lastTimeMinHeartRangeNotified = currentTime
+            recordHeartRangeNotification(low: true)
         }
         if bpm > heartSettings.maxRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
                 AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(heartSettings.maxRange) BPM", comment: ""))
             )
             self.lastTimeMaxHeartRangeNotified = currentTime
+            recordHeartRangeNotification(low: false)
         }
+    }
+    
+    private func heartRangeKey(low: Bool) -> String {
+        low ? "lowHeartRangeNotificationDates" : "highHeartRangeNotificationDates"
+    }
+    
+    private func recordHeartRangeNotification(low: Bool) {
+        let dates = heartRangeNotificationsToday(low: low) + [Date()]
+        UserDefaults.standard.set(dates.map { $0.timeIntervalSince1970 }, forKey: heartRangeKey(low: low))
+    }
+    
+    func heartRangeNotificationsToday(low: Bool) -> [Date] {
+        let timestamps = UserDefaults.standard.array(forKey: heartRangeKey(low: low)) as? [Double] ?? []
+        return timestamps.map { Date(timeIntervalSince1970: $0) }.filter { Calendar.current.isDateInToday($0) }
     }
     
     func setWaterRemindersPerDay() {
@@ -235,14 +257,117 @@ extension NotificationManager {
     }
 }
 
+// MARK: Inactivity
+extension NotificationManager {
+    private var activeStepThreshold: Int { 50 }
+    
+    func updateActivity(steps: Int) {
+        hasStepsSinceConnect = true
+        
+        // Steps reset at midnight, so reset the baseline
+        guard let baseline = inactivityBaselineSteps, steps >= baseline else {
+            inactivityBaselineSteps = steps
+            return
+        }
+        
+        if steps - baseline >= activeStepThreshold {
+            inactivityBaselineSteps = steps
+            lastActiveDate = Date()
+        }
+    }
+    
+    func resetActivityCheck() {
+        hasStepsSinceConnect = false
+    }
+    
+    func checkForInactivity() {
+        let inactivity = settings.inactivitySettings
+        guard settings.watchNotificationsEnabled, inactivity.enabled, hasStepsSinceConnect, ExerciseViewModel.shared.currentExercise == nil else { return }
+        
+        let hour = Calendar.current.component(.hour, from: Date())
+        guard hour >= inactivity.startHour && hour < inactivity.endHour else {
+            lastActiveDate = Date()
+            return
+        }
+        
+        if Date().timeIntervalSince(lastActiveDate) >= TimeInterval(inactivity.minutes * 60) {
+            bleWriteManager.sendNotification(AppNotification(title: NSLocalizedString("Time to Move", comment: ""), subtitle: NSLocalizedString("You've been inactive for a while. Get up and take a short walk.", comment: "")))
+            
+            lastActiveDate = Date()
+        }
+    }
+}
+
 // MARK: Goals
 extension NotificationManager {
-    func sendStepGoalReachedNotification() {
-        let notif = AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your step goal", comment: ""))
-        
+    private func notifiedToday(_ key: String) -> Bool {
+        Calendar.current.isDateInToday(Date(timeIntervalSince1970: UserDefaults.standard.double(forKey: key)))
+    }
+    private func markNotifiedToday(_ key: String) {
+        UserDefaults.standard.set(Date().timeIntervalSince1970, forKey: key)
+    }
+    
+    private func sendGoalNotification(_ notif: AppNotification) {
         if !bleManager.ancsAuthorized {
-            self.bleWriteManager.sendNotification(notif)
+            bleWriteManager.sendNotification(notif)
         }
-        self.sendNotificationToHost(notif)
+        sendNotificationToHost(notif)
+    }
+    
+    private func previousDailySteps() -> [Date: Int] {
+        guard let deviceId = DeviceManager.shared.pairedDeviceID else { return [:] }
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        
+        let key = "\(deviceId)-\(today.timeIntervalSince1970)"
+        if let previousStepsCache, previousStepsCache.key == key {
+            return previousStepsCache.steps
+        }
+        
+        var steps = [Date: Int]()
+        for point in ChartManager.shared.stepPoints(predicate: NSPredicate(format: "deviceId == %@ AND timestamp < %@", deviceId, today as NSDate)) {
+            guard let timestamp = point.timestamp else { continue }
+            steps[calendar.startOfDay(for: timestamp), default: 0] += Int(point.steps)
+        }
+        previousStepsCache = (key, steps)
+        return steps
+    }
+    
+    func checkStepGoals(steps: Int, goal: Int) {
+        let goalSettings = settings.goalSettings
+        guard settings.watchNotificationsEnabled, goal > 0 else { return }
+        
+        if goalSettings.halfwayReminderEnabled && steps >= goal / 2 && steps < goal && !notifiedToday("lastStepHalfwayNotified") {
+            sendGoalNotification(AppNotification(title: NSLocalizedString("Halfway There", comment: ""), subtitle: NSLocalizedString("You're halfway to your step goal", comment: "")))
+            markNotifiedToday("lastStepHalfwayNotified")
+        }
+        
+        let needsGoal = goalSettings.stepReminderEnabled && !notifiedToday("lastStepGoalNotified")
+        let needsRecord = goalSettings.recordReminderEnabled && !notifiedToday("lastStepRecordNotified")
+        guard steps >= goal, needsGoal || needsRecord else { return }
+        let previous = previousDailySteps()
+        
+        if needsGoal {
+            let calendar = Calendar.current
+            var streak = 1
+            var day = calendar.date(byAdding: .day, value: -1, to: calendar.startOfDay(for: Date()))!
+            while (previous[day] ?? 0) >= goal {
+                streak += 1
+                day = calendar.date(byAdding: .day, value: -1, to: day)!
+            }
+            
+            if goalSettings.streakReminderEnabled && streak >= 2 {
+                sendGoalNotification(AppNotification(title: String(format: NSLocalizedString("%d Day Streak", comment: ""), streak), subtitle: String(format: NSLocalizedString("You've reached your step goal %d days in a row", comment: ""), streak)))
+            } else {
+                sendGoalNotification(AppNotification(title: NSLocalizedString("Goal Reached", comment: ""), subtitle: NSLocalizedString("You've reached your step goal", comment: "")))
+            }
+            markNotifiedToday("lastStepGoalNotified")
+        }
+        
+        // Need a week of history, otherwise every early day is a record
+        if needsRecord, previous.count >= 7, let record = previous.values.max(), steps > record {
+            sendGoalNotification(AppNotification(title: NSLocalizedString("New Record", comment: ""), subtitle: NSLocalizedString("You've taken more steps today than on any other day", comment: "")))
+            markNotifiedToday("lastStepRecordNotified")
+        }
     }
 }
