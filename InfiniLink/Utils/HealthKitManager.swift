@@ -20,16 +20,12 @@ class HealthKitManager: ObservableObject {
     @AppStorage("syncSleepToAppleHealth") var syncSleep = true
     @AppStorage("fillStepsFromAppleHealth") var fillStepsFromAppleHealth = true
 
-    @Published var healthStore: HKHealthStore?
+    let healthStore: HKHealthStore? = HKHealthStore.isHealthDataAvailable() ? HKHealthStore() : nil
     
     private var pendingHeartRateSamples = [HKQuantitySample]()
     private var lastStepFillDate: Date?
     
     private init() {
-        if HKHealthStore.isHealthDataAvailable() {
-            healthStore = HKHealthStore()
-        }
-        
         NotificationCenter.default.addObserver(self, selector: #selector(flushHeartRateSamples), name: UIApplication.didEnterBackgroundNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(flushHeartRateSamples), name: UIApplication.willTerminateNotification, object: nil)
     }

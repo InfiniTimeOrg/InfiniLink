@@ -7,9 +7,40 @@
 
 import SwiftUI
 
-class WatchSettingsEditor: ObservableObject {
-    @Published var file: WatchSettingsFile?
-    @Published private(set) var original: WatchSettingsFile?
+// A file on the watch that's read, edited, then written back whole
+protocol WatchFile {
+    var data: Data { get }
+    
+    static func read(completion: @escaping (Self?, _ usingDefaults: Bool, _ detail: String?) -> Void)
+    func write(completion: @escaping (Bool) -> Void)
+}
+
+extension WatchSettingsFile: WatchFile {
+    static func read(completion: @escaping (WatchSettingsFile?, Bool, String?) -> Void) {
+        BLEFSHandler.shared.readSettingsFile(completion: completion)
+    }
+    
+    func write(completion: @escaping (Bool) -> Void) {
+        BLEFSHandler.shared.writeSettingsFile(self, completion: completion)
+    }
+}
+
+extension WatchAlarmFile: WatchFile {
+    static func read(completion: @escaping (WatchAlarmFile?, Bool, String?) -> Void) {
+        BLEFSHandler.shared.readAlarmFile(completion: completion)
+    }
+    
+    func write(completion: @escaping (Bool) -> Void) {
+        BLEFSHandler.shared.writeAlarmFile(self, completion: completion)
+    }
+}
+
+typealias WatchSettingsEditor = WatchFileEditor<WatchSettingsFile>
+typealias WatchAlarmEditor = WatchFileEditor<WatchAlarmFile>
+
+class WatchFileEditor<File: WatchFile>: ObservableObject {
+    @Published var file: File?
+    @Published private(set) var original: File?
     @Published private(set) var isLoading = false
     @Published private(set) var isSaving = false
     @Published private(set) var loadFailed = false
@@ -26,7 +57,7 @@ class WatchSettingsEditor: ObservableObject {
         guard BLEManager.shared.blefsTransfer != nil, !isLoading else { return }
 
         isLoading = true
-        BLEFSHandler.shared.readSettingsFile { file, usingDefaults, detail in
+        File.read { file, usingDefaults, detail in
             self.isLoading = false
             self.file = file
             self.original = usingDefaults ? nil : file
@@ -44,7 +75,7 @@ class WatchSettingsEditor: ObservableObject {
         guard let file, !isSaving else { return }
 
         isSaving = true
-        BLEFSHandler.shared.writeSettingsFile(file) { success in
+        file.write { success in
             self.isSaving = false
             if success {
                 self.original = file
@@ -112,48 +143,6 @@ struct WatchSettingsDefaultsSection: View {
             Section {
                 Label("\(deviceName)'s saved settings are from an older version of InfiniTime, so it's using its default settings. Saving writes a new settings file.", systemImage: "exclamationmark.triangle.fill")
                     .foregroundStyle(.orange)
-            }
-        }
-    }
-}
-
-class WatchAlarmEditor: ObservableObject {
-    @Published var file: WatchAlarmFile?
-    @Published private(set) var original: WatchAlarmFile?
-    @Published private(set) var isLoading = false
-    @Published private(set) var isSaving = false
-    @Published private(set) var loadFailed = false
-    @Published private(set) var failureDetail: String?
-    @Published var showSaveConfirmation = false
-    @Published var showSaveError = false
-    
-    var hasChanges: Bool {
-        file?.data != original?.data
-    }
-    
-    func load() {
-        guard BLEManager.shared.blefsTransfer != nil, !isLoading else { return }
-        
-        isLoading = true
-        BLEFSHandler.shared.readAlarmFile { file, usingDefaults, detail in
-            self.isLoading = false
-            self.file = file
-            self.original = usingDefaults ? nil : file
-            self.loadFailed = file == nil
-            self.failureDetail = detail
-        }
-    }
-    
-    func save() {
-        guard let file, !isSaving else { return }
-        
-        isSaving = true
-        BLEFSHandler.shared.writeAlarmFile(file) { success in
-            self.isSaving = false
-            if success {
-                self.original = file
-            } else {
-                self.showSaveError = true
             }
         }
     }

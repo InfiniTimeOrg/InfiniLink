@@ -82,7 +82,7 @@ struct AboutRowView: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         AboutSettingsView()
             .navigationBarTitleDisplayMode(.inline)
     }

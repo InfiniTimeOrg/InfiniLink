@@ -12,7 +12,7 @@ struct AppDetailsView: View {
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             List {
                 Section {
                     Text("""

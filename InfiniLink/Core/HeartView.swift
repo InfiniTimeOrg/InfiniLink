@@ -151,7 +151,7 @@ struct RestingHeartRateView: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         HeartView()
             .onAppear {
                 BLEManager.shared.heartRate = 76

@@ -169,7 +169,7 @@ struct DeveloperView: View {
 struct ConnectionDiagnosticsView: View {
     @ObservedObject var bleManager = BLEManager.shared
     
-    private let rssiTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    @State private var rssiTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
     
     var body: some View {
         List {

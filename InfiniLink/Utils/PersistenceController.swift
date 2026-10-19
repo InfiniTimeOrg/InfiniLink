@@ -6,7 +6,6 @@
 //
 
 import CoreData
-import CloudKit
 
 struct PersistenceController {
     static let shared = PersistenceController()
@@ -24,7 +23,6 @@ struct PersistenceController {
         description.shouldMigrateStoreAutomatically = true
         description.shouldInferMappingModelAutomatically = true
         description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
-//        description.cloudKitContainerOptions = NSPersistentCloudKitContainerOptions(containerIdentifier: "iCloud.com.alexemry.Infini-iOS")
         
         container.loadPersistentStores { storeDescription, error in
             if let error = error as NSError? {
@@ -45,8 +43,6 @@ extension PersistenceController {
             do {
                 try self.container.viewContext.save()
             } catch {
-                // Handle the error appropriately. However, it's useful to use
-                // `fatalError(_:file:line:)` during development.
                 log("Failed to save view context: \(error.localizedDescription)", caller: "PersistenceController")
             }
         }

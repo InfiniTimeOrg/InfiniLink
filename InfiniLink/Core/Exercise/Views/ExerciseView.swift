@@ -165,7 +165,7 @@ struct RecoverExerciseView: View {
     }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ActionView(Action(title: "Exercise in progress", subtitle: "Started \(session.startDate.formatted(.relative(presentation: .named))). Resume where you left off, save it as-is, or discard it.", icon: exerciseViewModel.exercise(for: session.exerciseId)?.icon ?? "figure.run", accent: .blue, buttons: [
                 ActionButton("Resume", action: {
                     exerciseViewModel.resumeRecoveredSession()
@@ -200,7 +200,7 @@ struct RecoverExerciseView: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         RecoverExerciseView(session: WorkoutSession(exerciseId: "test"))
     }
 }
