@@ -38,7 +38,7 @@ struct BatteryView: View {
                     if let remaining = BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel), remaining > 0 {
                         Text("~\(format(remaining)) left")
                             .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(EdgeInsets(top: -40, leading: 0, bottom: 0, trailing: 15))
+                            .padding(EdgeInsets(top: -40, leading: 0, bottom: 0, trailing: 14))
                             .font(.system(size: 20))
                     }
                 }
