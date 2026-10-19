@@ -61,12 +61,15 @@ struct MyDevicesView: View {
                                 }
                             }
                             .disabled(deviceManager.pairedDeviceID ?? "" == watch.uuid ?? "")
-                            Image(systemName: "info.circle")
-                                .foregroundStyle(Color.accentColor)
-                                .onTapGesture {
-                                    selectedWatch = watch
-                                    showDetailsView = true
-                                }
+                            Button {
+                                selectedWatch = watch
+                                showDetailsView = true
+                            } label: {
+                                Image(systemName: "info.circle")
+                                    .foregroundStyle(Color.accentColor)
+                            }
+                            .buttonStyle(.borderless)
+                            .accessibilityLabel(Text("Details for \(watch.name ?? "InfiniTime")"))
                         }
                         .imageScale(.large)
                     }
@@ -105,6 +108,8 @@ struct MyDevicesView: View {
                                 } label: {
                                     Text("Unpair")
                                 }
+                            } message: {
+                                Text("Its data stays in InfiniLink and comes back if you pair it again on this iPhone. You can delete data from unpaired watches in General > Stored Data.")
                             }
                         }
                     }
