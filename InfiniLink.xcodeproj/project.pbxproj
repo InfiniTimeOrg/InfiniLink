@@ -128,6 +128,7 @@
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
 		E0F366012DD6331700DAB5A4 /* Formatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */; };
+		EB433FECF2241E07C0DAC20C /* WatchFaceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A015B3F1C7F138C5E5C9DACA /* WatchFaceCatalog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +179,7 @@
 		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		65951364E9934C88913616D0 /* DFUTransfer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DFUTransfer.swift; sourceTree = "<group>"; };
+		A015B3F1C7F138C5E5C9DACA /* WatchFaceCatalog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceCatalog.swift; sourceTree = "<group>"; };
 		E00A86292DEB8383001533E1 /* FindLostDeviceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindLostDeviceView.swift; sourceTree = "<group>"; };
 		E00A86302DEBF3C1001533E1 /* RSSI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RSSI.swift; sourceTree = "<group>"; };
 		E02C620E2CD022A200C4D19B /* RecoveryModeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecoveryModeView.swift; sourceTree = "<group>"; };
@@ -529,6 +531,7 @@
 				E05D2E742D7EA95B004A6CE0 /* ChartType.swift */,
 				E00A86302DEBF3C1001533E1 /* RSSI.swift */,
 				E0C0DE00000000000000A007 /* WorkoutShared.swift */,
+				A015B3F1C7F138C5E5C9DACA /* WatchFaceCatalog.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -986,6 +989,7 @@
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,
 				E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */,
+				EB433FECF2241E07C0DAC20C /* WatchFaceCatalog.swift in Sources */,
 				B2A43E6C777F4BEEDB5EF777 /* DFUTransfer.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

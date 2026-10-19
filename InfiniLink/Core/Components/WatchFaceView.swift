@@ -18,13 +18,31 @@ struct WatchFaceView: View {
     
     let watchface: UInt8?
     let device: Device?
+    let prideFlag: UInt8?
     
-    init(watchface: UInt8? = nil, device: Device? = nil) {
+    init(watchface: UInt8? = nil, device: Device? = nil, prideFlag: UInt8? = nil) {
         self.watchface = watchface
         self.device = device
+        self.prideFlag = prideFlag
     }
     
+    // The faces are laid out at 185 and scaled, since all their offsets were tuned at that size
+    private static let designSize: CGFloat = 185
+    
     var body: some View {
+        GeometryReader { geometry in
+            face
+                .frame(width: Self.designSize, height: Self.designSize)
+                .scaleEffect(min(geometry.size.width, geometry.size.height) / Self.designSize, anchor: .topLeading)
+        }
+        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { newDate in
+            self.date = newDate
+        }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(Text("Watch face preview"))
+    }
+    
+    private var face: some View {
         GeometryReader { geometry in
             ZStack {
                 Image(.watchScreen)
@@ -45,9 +63,11 @@ struct WatchFaceView: View {
                             Infineat(geometry: .constant(geometry), date: $date, device: device)
                         case 5:
                             Casio(geometry: .constant(geometry), date: $date, device: device)
+                        case 6:
+                            PrideFlag(geometry: .constant(geometry), date: $date, flag: prideFlag ?? UInt8(UserDefaults.standard.integer(forKey: "prideFlag")))
                         default:
-                            ProgressView()
-                                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                            CustomWatchFace(index: watchface ?? deviceManager.settings.watchFace)
+                                .frame(width: geometry.size.width, height: geometry.size.height)
                         }
                     }
                     .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottomLeading)
@@ -65,8 +85,26 @@ struct WatchFaceView: View {
                     .brightness(colorScheme == .dark ? 0.0 : 0.04)
             }
         }
-        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { newDate in
-            self.date = newDate
+    }
+}
+
+struct CustomWatchFace: View {
+    @ObservedObject var catalog = WatchFaceCatalog.shared
+    
+    let index: UInt8
+    
+    var body: some View {
+        if let image = catalog.image(for: index) {
+            Image(uiImage: image)
+                .resizable()
+                .scaledToFill()
+                .clipped()
+        } else {
+            Text(catalog.name(for: index))
+                .font(.system(size: 30, weight: .bold))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .padding()
         }
     }
 }
@@ -287,6 +325,42 @@ struct Analog: View {
     }
 }
 
+struct PrideFlag: View {
+    @Binding var geometry: GeometryProxy
+    @Binding var date: Date
+    
+    let flag: UInt8
+    
+    private var stripes: [Color] {
+        switch flag {
+        case 1:
+            return [.rgb(0x00, 0xbf, 0xf3), .rgb(0xf4, 0x9a, 0xc1), .white, .rgb(0xf4, 0x9a, 0xc1), .rgb(0x00, 0xbf, 0xf3)]
+        case 2:
+            return [.rgb(0xd6, 0x02, 0x70), .rgb(0xd6, 0x02, 0x70), .rgb(0x9b, 0x4f, 0x96), .rgb(0x00, 0x38, 0xa8), .rgb(0x00, 0x38, 0xa8)]
+        case 3:
+            return [.red, .rgb(0xef, 0x76, 0x27), .rgb(0xff, 0x9b, 0x55), .white, .rgb(0xd4, 0x61, 0xa6), .rgb(0xb5, 0x56, 0x90), .rgb(0xa5, 0x00, 0x62)]
+        default:
+            return [.rgb(0x07, 0x8d, 0x70), .rgb(0x26, 0xce, 0xaa), .rgb(0x98, 0xe8, 0xc1), .white, .rgb(0x00, 0xbf, 0xf3), .rgb(0x50, 0x49, 0xcc), .rgb(0x3d, 0x1a, 0x78)]
+        }
+    }
+    private var timeColor: Color {
+        flag == 2 ? .white : .black
+    }
+    
+    var body: some View {
+        ZStack {
+            VStack(spacing: 0) {
+                ForEach(stripes.indices, id: \.self) { index in
+                    stripes[index]
+                }
+            }
+            CustomTextView(text: String(format: "%02d:%02d", Calendar.current.component(.hour, from: date), Calendar.current.component(.minute, from: date)), font: .custom("JetBrainsMono-Bold", size: geometry.size.width * 0.175), lineSpacing: 0)
+                .foregroundColor(timeColor)
+        }
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+    }
+}
+
 struct Digital: View {
     @ObservedObject var deviceManager = DeviceManager.shared
     
@@ -347,308 +421,123 @@ struct Infineat: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     
-    @Environment(\.colorScheme) var colorScheme
-    
     @Binding var geometry: GeometryProxy
     @Binding var date: Date
     
     let device: Device?
     
-    let orangeColors: [Color] = [
-        Color(red: 0xfd / 255.0, green: 0x87 / 255.0, blue: 0x2b / 255.0),
-        Color(red: 0xf0 / 255.0, green: 0x59 / 255.0, blue: 0x3b / 255.0),
-        Color.maroon,
-        Color(red: 0xfd / 255.0, green: 0x7a / 255.0, blue: 0x0a / 255.0),
-        Color(red: 0xe8 / 255.0, green: 0x51 / 255.0, blue: 0x02 / 255.0),
-        Color(red: 0xea / 255.0, green: 0x1c / 255.0, blue: 0x00 / 255.0)
+    // Values from the firmware, in watch pixels
+    private static let lines: [(CGPoint, CGPoint)] = [
+        (CGPoint(x: 30, y: 25), CGPoint(x: 68, y: -8)),
+        (CGPoint(x: 26, y: 167), CGPoint(x: 43, y: 216)),
+        (CGPoint(x: 27, y: 40), CGPoint(x: 27, y: 196)),
+        (CGPoint(x: 12, y: 182), CGPoint(x: 65, y: 249)),
+        (CGPoint(x: 17, y: 99), CGPoint(x: 17, y: 144)),
+        (CGPoint(x: 14, y: 81), CGPoint(x: 40, y: 127)),
+        (CGPoint(x: 14, y: 163), CGPoint(x: 40, y: 118)),
+        (CGPoint(x: -20, y: 124), CGPoint(x: 25, y: -11)),
+        (CGPoint(x: -29, y: 89), CGPoint(x: 27, y: 254))
     ]
-    let blueColors: [Color] = [
-        Color(red: 0xe7 / 255.0, green: 0xf8 / 255.0, blue: 0xff / 255.0),
-        Color(red: 0x16 / 255.0, green: 0x36 / 255.0, blue: 0xff / 255.0),
-        Color(red: 0x18 / 255.0, green: 0x2a / 255.0, blue: 0x8b / 255.0),
-        Color(red: 0xe7 / 255.0, green: 0xf8 / 255.0, blue: 0xff / 255.0),
-        Color(red: 0x59 / 255.0, green: 0x91 / 255.0, blue: 0xff / 255.0),
-        Color(red: 0x16 / 255.0, green: 0x36 / 255.0, blue: 0xff / 255.0)
+    private static let lineWidths: [CGFloat] = [18, 15, 14, 22, 20, 18, 18, 52, 48]
+    private static let colorSchemes: [[Color]] = [
+        [.rgb(0xfd, 0x87, 0x2b), .rgb(0xdb, 0x33, 0x16), .rgb(0x6f, 0x10, 0x00), .rgb(0xfd, 0x7a, 0x0a), .white, .white, .white, .rgb(0xe8, 0x51, 0x02), .rgb(0xea, 0x1c, 0x00)],
+        [.rgb(0xe7, 0xf8, 0xff), .rgb(0x22, 0x32, 0xd0), .rgb(0x18, 0x2a, 0x8b), .rgb(0xe7, 0xf8, 0xff), .white, .white, .white, .rgb(0x59, 0x91, 0xff), .rgb(0x16, 0x36, 0xff)],
+        [.rgb(0xb8, 0xff, 0x9b), .rgb(0x08, 0x86, 0x08), .rgb(0x00, 0x4a, 0x00), .rgb(0xb8, 0xff, 0x9b), .white, .white, .white, .rgb(0x62, 0xd5, 0x15), .rgb(0x00, 0x74, 0x00)],
+        [.rgb(0x2d, 0xa4, 0x00), .rgb(0xac, 0x09, 0xc4), .rgb(0xfe, 0x03, 0x03), .rgb(0x0d, 0x57, 0xff), .white, .white, .white, .rgb(0xe0, 0xb9, 0x00), .rgb(0xe8, 0x51, 0x02)],
+        [.rgb(0xee, 0xee, 0xee), .rgb(0x98, 0x95, 0x9b), .rgb(0x19, 0x19, 0x19), .rgb(0xee, 0xee, 0xee), .white, .white, .white, .rgb(0x91, 0x91, 0x91), .rgb(0x3a, 0x3a, 0x3a)],
+        [.rgb(0xc3, 0xda, 0xf2), .rgb(0x4d, 0x78, 0xce), .rgb(0x15, 0x34, 0x51), .rgb(0xc3, 0xda, 0xf2), .white, .white, .white, .rgb(0x5d, 0x8a, 0xd2), .rgb(0x21, 0x51, 0x8a)],
+        [.rgb(0xd5, 0xf0, 0xe9), .rgb(0x23, 0x83, 0x73), .rgb(0x1d, 0x41, 0x3f), .rgb(0xd5, 0xf0, 0xe9), .white, .white, .white, .rgb(0x2f, 0xb8, 0xa2), .rgb(0x11, 0x70, 0x5a)]
     ]
-    let greenColors: [Color] = [
-        Color(red: 0xb8 / 255.0, green: 0xff / 255.0, blue: 0x9b / 255.0),
-        Color(red: 0x08 / 255.0, green: 0x86 / 255.0, blue: 0x08 / 255.0),
-        Color(red: 0x00 / 255.0, green: 0x4a / 255.0, blue: 0x00 / 255.0),
-        Color(red: 0xb8 / 255.0, green: 0xff / 255.0, blue: 0x9b / 255.0),
-        Color(red: 0x62 / 255.0, green: 0xd5 / 255.0, blue: 0x15 / 255.0),
-        Color(red: 0x00 / 255.0, green: 0x74 / 255.0, blue: 0x00 / 255.0)
-    ]
-    let rainbowColors: [Color] = [
-        Color(red: 0x2d / 255.0, green: 0xa4 / 255.0, blue: 0x00 / 255.0),
-        Color(red: 0xac / 255.0, green: 0x09 / 255.0, blue: 0xc4 / 255.0),
-        Color(red: 0xfe / 255.0, green: 0x03 / 255.0, blue: 0x03 / 255.0),
-        Color(red: 0x0d / 255.0, green: 0x57 / 255.0, blue: 0xff / 255.0),
-        Color(red: 0xe0 / 255.0, green: 0xb9 / 255.0, blue: 0x00 / 255.0),
-        Color(red: 0xe8 / 255.0, green: 0x51 / 255.0, blue: 0x02 / 255.0)
-    ]
-    let grayColors: [Color] = [
-        Color(red: 0xee / 255.0, green: 0xee / 255.0, blue: 0xee / 255.0),
-        Color(red: 0x98 / 255.0, green: 0x95 / 255.0, blue: 0x9b / 255.0),
-        Color(red: 0x19 / 255.0, green: 0x19 / 255.0, blue: 0x19 / 255.0),
-        Color(red: 0xee / 255.0, green: 0xee / 255.0, blue: 0xee / 255.0),
-        Color(red: 0x91 / 255.0, green: 0x91 / 255.0, blue: 0x91 / 255.0),
-        Color(red: 0x3a / 255.0, green: 0x3a / 255.0, blue: 0x3a / 255.0)
-    ]
+    private static let gray = Color.rgb(0x99, 0x99, 0x99)
     
-    let nordBlueColors: [Color] = [
-        Color(red: 0xc3 / 255.0, green: 0xda / 255.0, blue: 0xf2 / 255.0),
-        Color(red: 0x4d / 255.0, green: 0x78 / 255.0, blue: 0xce / 255.0),
-        Color(red: 0x15 / 255.0, green: 0x34 / 255.0, blue: 0x51 / 255.0),
-        Color(red: 0xc3 / 255.0, green: 0xda / 255.0, blue: 0xf2 / 255.0),
-        Color(red: 0x5d / 255.0, green: 0x8a / 255.0, blue: 0xd2 / 255.0),
-        Color(red: 0x21 / 255.0, green: 0x51 / 255.0, blue: 0x8a / 255.0)
-    ]
-    let nordGreenColors: [Color] = [
-        Color(red: 0xd5 / 255.0, green: 0xf0 / 255.0, blue: 0xe9 / 255.0),
-        Color(red: 0x23 / 255.0, green: 0x83 / 255.0, blue: 0x73 / 255.0),
-        Color(red: 0x1d / 255.0, green: 0x41 / 255.0, blue: 0x3f / 255.0),
-        Color(red: 0xd5 / 255.0, green: 0xf0 / 255.0, blue: 0xe9 / 255.0),
-        Color(red: 0x2f / 255.0, green: 0xb8 / 255.0, blue: 0xa2 / 255.0),
-        Color(red: 0x11 / 255.0, green: 0x70 / 255.0, blue: 0x5a / 255.0)
-    ]
-    
-    func hour24() -> Bool {
+    private var scale: CGFloat {
+        geometry.size.width / 240
+    }
+    private var colors: [Color] {
+        let index = Int(device?.watchFaceInfineat?.colorIndex ?? Int16(deviceManager.settings.watchFaceInfineat.colorIndex))
+        return Self.colorSchemes[Self.colorSchemes.indices.contains(index) ? index : 0]
+    }
+    private var showSideCover: Bool {
+        device?.watchFaceInfineat?.showSideCover ?? deviceManager.settings.watchFaceInfineat.showSideCover
+    }
+    private var is24Hour: Bool {
         if let device {
             return device.clockType == 0
-        } else {
-            return deviceManager.hour24
         }
+        return deviceManager.hour24
     }
-    func infineatColor(for item: InfineatItem) -> Color {
-        let colorIndex = deviceManager.settings.watchFaceInfineat.colorIndex
-        
-        switch item {
-        case .base:
-            switch colorIndex {
-            case 0:
-                return orangeColors[2]
-            case 1:
-                return blueColors[2]
-            case 2:
-                return greenColors[2]
-            case 3:
-                return rainbowColors[2]
-            case 4:
-                return grayColors[2]
-            case 5:
-                return nordBlueColors[2]
-            case 6:
-                return nordGreenColors[2]
-            default:
-                return orangeColors[2]
+    
+    // Overlay so the text doesn't push the layout around
+    private func label(_ text: String, font: String, size: CGFloat, color: Color, centerX: CGFloat, baseline: CGFloat, leading: Bool = false) -> some View {
+        Color.clear
+            .frame(width: 0, height: 0)
+            .overlay(alignment: Alignment(horizontal: leading ? .leading : .center, vertical: .firstTextBaseline)) {
+                Text(text)
+                    .font(.custom(font, size: size * scale))
+                    .foregroundColor(color)
+                    .fixedSize()
             }
-        case .bottom:
-            switch colorIndex {
-            case 0:
-                return orangeColors[1]
-            case 1:
-                return blueColors[1]
-            case 2:
-                return greenColors[1]
-            case 3:
-                return rainbowColors[1]
-            case 4:
-                return grayColors[1]
-            case 5:
-                return nordBlueColors[1]
-            case 6:
-                return nordGreenColors[1]
-            default:
-                return orangeColors[1]
-            }
-        case .topTop:
-            switch colorIndex {
-            case 0:
-                return orangeColors[4]
-            case 1:
-                return blueColors[4]
-            case 2:
-                return greenColors[4]
-            case 3:
-                return rainbowColors[4]
-            case 4:
-                return grayColors[4]
-            case 5:
-                return nordBlueColors[4]
-            case 6:
-                return nordGreenColors[4]
-            default:
-                return orangeColors[4]
-            }
-        case .topBottom:
-            switch colorIndex {
-            case 0:
-                return orangeColors[5]
-            case 1:
-                return blueColors[5]
-            case 2:
-                return greenColors[5]
-            case 3:
-                return rainbowColors[5]
-            case 4:
-                return grayColors[5]
-            case 5:
-                return nordBlueColors[5]
-            case 6:
-                return nordGreenColors[5]
-            default:
-                return orangeColors[5]
-            }
-        case .midBottom:
-            switch colorIndex {
-            case 0:
-                return orangeColors[3]
-            case 1:
-                return blueColors[3]
-            case 2:
-                return greenColors[3]
-            case 3:
-                return rainbowColors[3]
-            case 4:
-                return grayColors[3]
-            case 5:
-                return nordBlueColors[3]
-            case 6:
-                return nordGreenColors[3]
-            default:
-                return orangeColors[3]
-            }
-        case .midTop:
-            switch colorIndex {
-            case 0:
-                return orangeColors[0]
-            case 1:
-                return blueColors[0]
-            case 2:
-                return greenColors[0]
-            case 3:
-                return rainbowColors[0]
-            case 4:
-                return grayColors[0]
-            case 5:
-                return nordBlueColors[0]
-            case 6:
-                return nordGreenColors[0]
-            default:
-                return orangeColors[0]
-            }
-        }
+            .offset(x: centerX * scale, y: baseline * scale)
     }
     
     var body: some View {
-        ZStack {
-            if !hour24() {
-                CustomTextView(text: Calendar.current.component(.hour, from: date) >= 12 ? "PM" : "AM", font: .custom("Teko-Light", size: geometry.size.width * 0.125), lineSpacing: 0)
-                    .foregroundColor(.white)
-                    .frame(width: geometry.size.width, height: geometry.size.height / 1.35, alignment: .topTrailing)
-            }
-            if !hour24() {
-                let currentHour = Calendar.current.component(.hour, from: date)
-                let hour24 = currentHour % 12 == 0 ? 12 : currentHour
-                let hourString = String(format: "%02d", hour24)
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
-                
-                VStack(alignment: .center, spacing: -28) {
-                    Text(hourString)
-                    Text(minuteString)
+        let calendar = Calendar.current
+        let hour = calendar.component(.hour, from: date)
+        let displayHour = is24Hour ? hour : (hour % 12 == 0 ? 12 : hour % 12)
+        let battery = bleManager.hasLoadedBatteryLevel ? bleManager.batteryLevel : 100
+        
+        ZStack(alignment: .topLeading) {
+            Color.clear
+            if showSideCover {
+                Canvas { context, _ in
+                    for (index, line) in Self.lines.enumerated() {
+                        var path = Path()
+                        path.move(to: CGPoint(x: line.0.x * scale, y: line.0.y * scale))
+                        path.addLine(to: CGPoint(x: line.1.x * scale, y: line.1.y * scale))
+                        context.stroke(path, with: .color(colors[index]), style: StrokeStyle(lineWidth: Self.lineWidths[index] * scale, lineCap: .butt))
+                    }
                 }
-                .font(.custom("BebasNeue-Regular", size: geometry.size.width * 0.44))
+            }
+            Image(.pineLogo)
+                .resizable()
+                .renderingMode(showSideCover ? .original : .template)
                 .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
-            } else {
-                let hourString = String(format: "%02d", Calendar.current.component(.hour, from: date))
-                let minuteString = String(format: "%02d", Calendar.current.component(.minute, from: date))
-                
-                VStack(alignment: .center, spacing: -28) {
-                    Text(hourString)
-                    Text(minuteString)
+                .frame(width: 23 * scale, height: 31 * scale)
+                .offset(x: 15 * scale, y: 106 * scale)
+            Rectangle()
+                .fill(colors[4].opacity(190 / 255))
+                .frame(width: 24 * scale, height: max(1, 32 * (100 - battery) / 100) * scale)
+                .offset(x: 15 * scale, y: 105 * scale)
+            // Same as the firmware, hours and minutes are at the top and bottom of a 185px box 10px above center
+            label(String(format: "%02d", displayHour), font: "BebasNeue-Regular", size: 120, color: .white, centerX: 120, baseline: is24Hour ? 103 : 108)
+            label(String(format: "%02d", calendar.component(.minute, from: date)), font: "BebasNeue-Regular", size: 120, color: .white, centerX: 120, baseline: 202)
+            if !is24Hour {
+                label(hour >= 12 ? "PM" : "AM", font: "Teko-Light", size: 28, color: .white, centerX: 212, baseline: 46, leading: true)
+            }
+            label({
+                let formatter = DateFormatter()
+                formatter.dateFormat = "E dd"
+                return formatter.string(from: date)
+            }(), font: "Teko-Light", size: 28, color: Self.gray, centerX: 210, baseline: 129)
+            Color.clear
+                .frame(width: 0, height: 0)
+                .overlay(alignment: Alignment(horizontal: .center, vertical: .firstTextBaseline)) {
+                    Text("\(bleManager.stepCount)")
+                        .font(.custom("Teko-Light", size: 28 * scale))
+                        .foregroundColor(Self.gray)
+                        .fixedSize()
+                        .overlay(alignment: .leading) {
+                            Image(systemName: "shoeprints.fill")
+                                .rotationEffect(Angle(degrees: 90))
+                                .font(.system(size: 16 * scale))
+                                .foregroundColor(Self.gray)
+                                .fixedSize()
+                                .alignmentGuide(HorizontalAlignment.leading) { $0[.trailing] + 5 * scale }
+                        }
                 }
-                .font(.custom("BebasNeue-Regular", size: geometry.size.width * 0.44))
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.9)
-            }
-            CustomTextView(
-                text: {
-                    let dateFormatter = DateFormatter()
-                    dateFormatter.dateFormat = "E dd"
-                    return dateFormatter.string(from: date)
-                }(),
-                font: .custom("Teko-Light", size: geometry.size.width * 0.118),
-                lineSpacing: 0
-            )
-            .foregroundColor(.gray)
-            .frame(width: geometry.size.width, height: geometry.size.height / 2.2, alignment: .trailing)
-            HStack(spacing: 4) {
-                Image(systemName: "shoeprints.fill")
-                    .rotationEffect(Angle(degrees: 90))
-                    .font(.system(size: geometry.size.width * 0.08))
-                CustomTextView(text: "\(bleManager.stepCount)", font: .custom("Teko-Light", size: geometry.size.width * 0.118), lineSpacing: 0)
-            }
-            .foregroundColor(.gray)
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .bottom)
-            .padding(.bottom, -16)
-            ZStack {
-                Rectangle()
-                    .frame(width: 19)
-                    .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .topLeading)
-                    .foregroundColor(infineatColor(for: .midTop))
-                    .rotationEffect(Angle(degrees: 49))
-                    .offset(x: -36, y: -48)
-                Rectangle()
-                    .frame(width: 19)
-                    .frame(height: geometry.size.height / 1.5, alignment: .bottomLeading)
-                    .frame(maxHeight: .infinity, alignment: .bottomLeading)
-                    .foregroundColor(infineatColor(for: .bottom))
-                    .opacity(0.8)
-                    .rotationEffect(Angle(degrees: -22))
-                    .offset(x: -16, y: 14)
-                Rectangle()
-                    .frame(width: 26, alignment: .leading)
-                    .offset(x: -9)
-                    .foregroundColor(infineatColor(for: .base))
-                Rectangle()
-                    .frame(width: 26)
-                    .frame(height: geometry.size.height / 1.5, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .bottomLeading)
-                    .foregroundColor(infineatColor(for: .midBottom))
-                    .rotationEffect(Angle(degrees: -42))
-                    .offset(x: -31, y: 38)
-                ZStack {
-                    DiamondShape()
-                    // .fill(bleManager.infineatWatchFace?.showSideCover ?? true ? Color.white : Color.clear)
-                        .fill(Color.white)
-                        .frame(width: 50, height: 75)
-                        .offset(x: -5)
-                    Image(.pineLogo)
-                        .resizable()
-                        .frame(width: 19, height: 25)
-                }
-                Rectangle()
-                    .frame(width: 38)
-                    .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .topLeading)
-                    .foregroundColor(infineatColor(for: .topTop))
-                    .rotationEffect(Angle(degrees: 18))
-                    .offset(x: -32, y: -16)
-                Rectangle()
-                    .frame(width: 38)
-                    .frame(height: geometry.size.height / 1.3, alignment: .topLeading)
-                    .frame(maxHeight: .infinity, alignment: .bottomLeading)
-                    .foregroundColor(infineatColor(for: .topBottom))
-                    .rotationEffect(Angle(degrees: -18))
-                    .offset(x: -32, y: 16)
-            }
-            .frame(width: geometry.size.width, height: geometry.size.height, alignment: .leading)
+                .offset(x: 130 * scale, y: 238 * scale)
         }
-        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .topLeading)
         .clipped()
     }
 }
@@ -672,63 +561,43 @@ struct Terminal: View {
         }
     }
     
+    private func row(_ index: Int) -> CGFloat {
+        return (36.9 + CGFloat(index) * 21.5) * geometry.size.width / 240
+    }
+    
+    private var batteryColor: Color {
+        let hue = (1 - exp(-4 * bleManager.batteryLevel / 100)) * 120
+        return Color(hue: hue / 360, saturation: 1, brightness: 1)
+    }
+    
+    private func line(_ text: Text, at index: Int) -> some View {
+        text
+            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
+            .position(x: geometry.size.width / 2.0, y: row(index))
+    }
+    
     var body: some View {
         let currentHour = Calendar.current.component(.hour, from: date)
         let currentMinute = Calendar.current.component(.minute, from: date)
         let currentSecond = Calendar.current.component(.second, from: date)
+        let lightGray = Color.rgb(0xb0, 0xb0, 0xb0)
+        // Weather row was added in 1.16
+        let showsWeather = (device?.firmware ?? deviceManager.firmware).compare("1.16.0", options: .numeric) != .orderedAscending
+        let time = hour24() ? String(format: "%02d:%02d:%02d", currentHour, currentMinute, currentSecond) : String(format: "%02d:%02d:%02d %@", currentHour % 12 == 0 ? 12 : currentHour % 12, currentMinute, currentSecond, currentHour >= 12 ? "PM" : "AM")
         
         ZStack {
-            Text("user@watch:~ $ now")
-                .foregroundColor(.white)
-                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 6.5)
-            Group {
-                if !hour24() {
-                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour % 12 == 0 ? 12 : currentHour % 12)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond)) \(currentHour >= 12 ? "PM" : "AM")")
-                } else {
-                    Text("[TIME]").foregroundColor(.white) + Text("\(String(format: "%02d", currentHour)):\(String(format: "%02d", currentMinute)):\(String(format: "%02d", currentSecond))")
-                }
+            line(Text("user@watch:~ $ now").foregroundColor(lightGray), at: 0)
+            line(Text("[TIME] ").foregroundColor(.white) + Text(time).foregroundColor(.rgb(0x11, 0xcc, 0x55)), at: 1)
+            line(Text("[DATE] ").foregroundColor(.white) + Text(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: date), Calendar.current.component(.month, from: date), Calendar.current.component(.day, from: date))).foregroundColor(.rgb(0x00, 0x7f, 0xff)), at: 2)
+            line(Text("[BATT] ").foregroundColor(.white) + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(batteryColor), at: 3)
+            line(Text("[STEP] ").foregroundColor(.white) + Text("\(bleManager.stepCount) steps").foregroundColor(.rgb(0xff, 0xb0, 0x00)), at: 4)
+            line(Text("[L_HR] ").foregroundColor(.white) + Text(bleManager.heartRate == 0 ? "---" : "\(Int(bleManager.heartRate)) bpm").foregroundColor(.white), at: 5)
+            if showsWeather {
+                line(Text("[WTHR] ").foregroundColor(.white) + Text("---").foregroundColor(.rgb(0xff, 0xdd, 0x00)), at: 6)
             }
-            .foregroundColor(.green)
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 4.1)
-            Group {
-                Text("[DATE]").foregroundColor(.white) + Text("\(String(format: "%04d-%02d-%02d", Calendar.current.component(.year, from: date), Calendar.current.component(.month, from: date), Calendar.current.component(.day, from: date)))").foregroundColor(.blue)
-            }
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 3)
-            Group {
-                Text("[BATT]").foregroundColor(.white) + Text(bleManager.batteryLevel / 100, format: .percent.precision(.fractionLength(0))).foregroundColor(Color(red: 0, green: 0.4, blue: 0.2))
-            }
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 2.36)
-            Group {
-                Text("[STEP]").foregroundColor(.white) + Text("\(bleManager.stepCount) steps").foregroundColor(Color(red: 1, green: 0.2, blue: 0.5))
-            }
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.95)
-            Group {
-                Text("[L_HR]").foregroundColor(.white) + Text("\(bleManager.heartRate == 0 ? "---" : "\(bleManager.heartRate)")").foregroundColor(.red)
-            }
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.655)
-            Group {
-                Text("[STAT]").foregroundColor(.white) + Text("Connected").foregroundColor(.blue)
-            }
-            .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-            .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.445)
-            Text("user@watch:~ $")
-                .foregroundColor(.white)
-                .font(.custom("JetBrainsMono-Bold", size: geometry.size.width * 0.085))
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .leading)
-                .position(x: geometry.size.width / 2.0, y: geometry.size.height / 1.28)
+            line(Text("[STAT] ").foregroundColor(.white) + Text("Connected").foregroundColor(.white), at: showsWeather ? 7 : 6)
+            line(Text("user@watch:~ $").foregroundColor(lightGray), at: showsWeather ? 8 : 7)
         }
         .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
     }
@@ -845,35 +714,6 @@ struct CustomTextView: View {
             }
         }
     }
-}
-
-struct DiamondShape: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        
-        let topPoint = CGPoint(x: rect.midX, y: rect.minY)
-        let rightPoint = CGPoint(x: rect.maxX, y: rect.midY)
-        let bottomPoint = CGPoint(x: rect.midX, y: rect.maxY)
-        let leftPoint = CGPoint(x: rect.minX, y: rect.midY)
-        
-        path.move(to: topPoint)
-        
-        path.addLine(to: rightPoint)
-        path.addLine(to: bottomPoint)
-        path.addLine(to: leftPoint)
-        path.closeSubpath()
-        
-        return path
-    }
-}
-
-enum InfineatItem {
-    case base
-    case bottom
-    case topTop
-    case topBottom
-    case midBottom
-    case midTop
 }
 
 #Preview {
