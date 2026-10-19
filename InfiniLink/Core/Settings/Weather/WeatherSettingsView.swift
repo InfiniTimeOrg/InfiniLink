@@ -13,7 +13,8 @@ struct WeatherSettingsView: View {
     
     @AppStorage("useCurrentLocation") var useCurrentLocation = true
     @AppStorage("setLocation") var setLocation = "Cupertino"
-    @AppStorage("displayLocation") var displayLocation = "Cupertino"
+    
+    @StateObject private var editor = WatchSettingsEditor()
     
     var body: some View {
         List {
@@ -21,17 +22,45 @@ struct WeatherSettingsView: View {
                 Toggle("Use Current Location", isOn: $useCurrentLocation)
             }
             if !useCurrentLocation {
-                Section(footer: Text("Set a fixed location to use to fetch weather.")) {
-                    NavigationLink {
-                        SetWeatherLocationView()
-                    } label: {
-                        HStack {
-                            Text("Custom Location")
-                            Spacer()
-                            Text(displayLocation)
-                                .foregroundStyle(.gray)
+                Section {
+                    ForEach(locationManager.savedLocations, id: \.self) { location in
+                        Button {
+                            locationManager.selectLocation(location)
+                        } label: {
+                            HStack {
+                                Text(location.name)
+                                    .foregroundStyle(Color.primary)
+                                Spacer()
+                                if location.address == setLocation {
+                                    Image(systemName: "checkmark")
+                                        .foregroundStyle(.blue)
+                                        .fontWeight(.semibold)
+                                }
+                            }
                         }
                     }
+                    .onDelete { offsets in
+                        locationManager.removeLocations(at: offsets)
+                    }
+                    NavigationLink("Add Location") {
+                        SetWeatherLocationView()
+                    }
+                } header: {
+                    Text("Locations")
+                } footer: {
+                    Text("Choose which saved location your watch shows weather for.")
+                }
+            }
+            if let file = editor.file, !editor.usingDefaults {
+                Section {
+                    Picker("Units on Watch", selection: Binding(
+                        get: { file.weatherFormat },
+                        set: { editor.file?.weatherFormat = $0 }
+                    )) {
+                        Text("Metric").tag(WeatherFormat.Metric.rawValue)
+                        Text("Imperial").tag(WeatherFormat.Imperial.rawValue)
+                    }
+                    WatchSettingsSaveButton(editor: editor)
                 }
             }
             if useCurrentLocation && locationManager.locationManager.authorizationStatus != .authorizedAlways {
@@ -43,10 +72,14 @@ struct WeatherSettingsView: View {
             }
         }
         .navigationTitle("Settings")
-        .onChange(of: useCurrentLocation) { useCurrent in
-            if !useCurrent {
-                locationManager.setLocation(setLocation, manual: true)
+        .onAppear {
+            if editor.file == nil {
+                editor.load()
             }
+        }
+        .modifier(WatchSettingsAlerts(editor: editor, deviceName: DeviceManager.shared.name))
+        .onChange(of: useCurrentLocation) { _ in
+            locationManager.getLocation()
         }
     }
 }

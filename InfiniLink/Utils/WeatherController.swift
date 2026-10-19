@@ -61,8 +61,8 @@ class WeatherController: ObservableObject {
                 self?.latitude = location.coordinate.latitude
                 self?.longitude = location.coordinate.longitude
                 
-                // Bypass the check function, this one will already ensure we're not calling multiple times a minute
-                self?.fetchWeatherData()
+                // Location only changes when requested, so always fetch
+                self?.fetchWeatherData(checkTimeInterval: false)
             }
             .store(in: &cancellables)
     }
@@ -75,7 +75,12 @@ class WeatherController: ObservableObject {
         
         if abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? 0) >= guardInterval {
             // The weather hasn't been fetched (location hasn't been updated) in the past 15 minutes, so fetch it now
-            fetchWeatherData(checkTimeInterval: false)
+            if useCurrentLocation && locationManager.canGetUserLocation() {
+                // The new location triggers the fetch
+                locationManager.requestLocation()
+            } else {
+                fetchWeatherData(checkTimeInterval: false)
+            }
         }
     }
     
