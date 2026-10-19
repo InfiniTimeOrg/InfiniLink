@@ -12,12 +12,10 @@ DerivedData
 .DS_Store
 .idea/
 *.xccheckout
-*.moved-aside
 xcuserdata/
 *.hmap
 *.ipa
 *.xcworkspace
-*.xcuserstate // <--- Here
+*.xcuserstate
 !default.xcworkspace
 *.swp
-.DS_Store
