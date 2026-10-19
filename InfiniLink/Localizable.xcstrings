@@ -85,15 +85,17 @@
         }
       }
     },
-    "%@ is %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ is %2$@"
-          }
-        }
-      }
+    "%@ battery remaining" : {
+
+    },
+    "%@ is connected" : {
+
+    },
+    "%@ is disconnected" : {
+
+    },
+    "%@ is fully charged" : {
+
     },
     "%@ is installing the update." : {
 
@@ -116,12 +118,22 @@
     "%@ times" : {
 
     },
-    "%@ was last seen %@." : {
+    "%@ was last seen at %@, at %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "new",
-            "value" : "%1$@ was last seen %2$@."
+            "value" : "%1$@ was last seen at %2$@, at %3$@."
+          }
+        }
+      }
+    },
+    "%@ was last seen at %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ was last seen at %2$@."
           }
         }
       }
@@ -234,6 +246,12 @@
     "%lld%%" : {
 
     },
+    "%u" : {
+
+    },
+    "%u Seconds" : {
+
+    },
     "•" : {
 
     },
@@ -255,7 +273,13 @@
     "10 minutes" : {
 
     },
+    "12 Hour" : {
+
+    },
     "12-Hour" : {
+
+    },
+    "24 Hour" : {
 
     },
     "24-Hour" : {
@@ -397,9 +421,6 @@
     "Awake" : {
 
     },
-    "Back" : {
-
-    },
     "Background" : {
 
     },
@@ -419,9 +440,6 @@
 
     },
     "Battery Low" : {
-
-    },
-    "battery remaining" : {
 
     },
     "Beta" : {
@@ -512,9 +530,6 @@
 
     },
     "Convert accented characters to plain text so notifications display correctly." : {
-
-    },
-    "Converting..." : {
 
     },
     "Copy" : {
@@ -922,6 +937,9 @@
     "Half" : {
 
     },
+    "Half Hour" : {
+
+    },
     "Halfway There" : {
 
     },
@@ -972,6 +990,9 @@
 
     },
     "High" : {
+
+    },
+    "Hour" : {
 
     },
     "Hourly Chimes" : {
@@ -1254,6 +1275,9 @@
     "Metric" : {
 
     },
+    "Mid" : {
+
+    },
     "Minimum" : {
 
     },
@@ -1327,6 +1351,9 @@
     "No sleep recorded last night" : {
 
     },
+    "None" : {
+
+    },
     "Not Authorized" : {
 
     },
@@ -1397,12 +1424,6 @@
 
     },
     "Past Week" : {
-
-    },
-    "Pause any currently playing music when %@ goes out of range of your phone." : {
-
-    },
-    "Pause on Walk-Away" : {
 
     },
     "Pause Workout" : {
@@ -1852,6 +1873,12 @@
     "This exercise will be deleted from InfiniLink." : {
 
     },
+    "This file couldn't be read." : {
+
+    },
+    "This file is not currently supported." : {
+
+    },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
 
     },
@@ -1971,6 +1998,7 @@
 
     },
     "Upload %lld File%@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -1986,10 +2014,16 @@
         }
       }
     },
+    "Upload ^[%lld File](inflect: true)" : {
+
+    },
     "Upload Files" : {
 
     },
     "Uploading..." : {
+
+    },
+    "Uploading... %lld%%" : {
 
     },
     "Use Current Location" : {
@@ -2206,7 +2240,16 @@
     "You've taken more steps today than on any other day" : {
 
     },
+    "Your heart rate fell below %lld BPM" : {
+
+    },
+    "Your heart rate rose above %lld BPM" : {
+
+    },
     "Your iPhone has less than %@ battery remaining." : {
+
+    },
+    "Your iPhone has reached %@" : {
 
     },
     "Your iPhone will ask to pair with your watch. Tap Pair so your iPhone's notifications can show on your watch." : {
