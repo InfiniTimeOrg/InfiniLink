@@ -63,6 +63,16 @@
         <attribute name="weatherEnable" attributeType="Integer 16" defaultValueString="1" usesScalarValueType="YES"/>
         <relationship name="device" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Device" inverseName="pineTimeStyle" inverseEntity="Device"/>
     </entity>
+    <entity name="SleepSession" representedClassName="SleepSession" syncable="YES" codeGenerationType="class">
+        <attribute name="asleepMinutes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="awakeMinutes" optional="YES" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="deviceId" optional="YES" attributeType="String"/>
+        <attribute name="end" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="minutes" optional="YES" attributeType="Binary"/>
+        <attribute name="start" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="syncedToHealth" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+    </entity>
     <entity name="StepCounts" representedClassName="StepCounts" syncable="YES" codeGenerationType="class">
         <attribute name="deviceId" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>

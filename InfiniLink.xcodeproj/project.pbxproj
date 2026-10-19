@@ -11,8 +11,10 @@
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
+		36E613FC638D4ED50F76C145 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFC0382BEC8406837173344 /* SleepView.swift */; };
 		4CB10164409F57E965D053EF /* WatchSettingsFile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 48A51F367FDB07F7C5D7AD97 /* WatchSettingsFile.swift */; };
 		53917E8707F202244D35066E /* WatchAlarmView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCA45644E8C5F284E96F2890 /* WatchAlarmView.swift */; };
+		5C571CD0D814F6A6CEAF73B9 /* SleepAnalyzer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3CE53937C332FA6148886C50 /* SleepAnalyzer.swift */; };
 		7B669746175A133D23D35962 /* WatchSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF8F02D3812A1EC8E2D5AFD2 /* WatchSettingsView.swift */; };
 		8AE0BBEFA52E176ABC580B30 /* WatchSettingsEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD08CDEF696462C6EA84DBD2 /* WatchSettingsEditor.swift */; };
 		B180E5A78417EBD55BD67E3B /* WatchFaceSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 38940757BE9CAEB4E614B70F /* WatchFaceSettingsView.swift */; };
@@ -137,6 +139,7 @@
 		E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760F2CB5CA8A00BC7E44 /* PersonalizationController.swift */; };
 		E0F366012DD6331700DAB5A4 /* Formatter+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F366002DD6331700DAB5A4 /* Formatter+Extension.swift */; };
 		E26C0921DC4E9AE1D40D31A2 /* StepSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF55D05523CC229A1C615270 /* StepSettingsView.swift */; };
+		E422AAE47C59548FE166805A /* SleepManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29D557AFE18F6E0D6C8040F6 /* SleepManager.swift */; };
 		EB433FECF2241E07C0DAC20C /* WatchFaceCatalog.swift in Sources */ = {isa = PBXBuildFile; fileRef = A015B3F1C7F138C5E5C9DACA /* WatchFaceCatalog.swift */; };
 /* End PBXBuildFile section */
 
@@ -179,6 +182,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1AFC0382BEC8406837173344 /* SleepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* InfiniLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkApp.swift; sourceTree = "<group>"; };
 		264BFE4326BC51CE0050A223 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -187,7 +191,9 @@
 		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		29D557AFE18F6E0D6C8040F6 /* SleepManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		38940757BE9CAEB4E614B70F /* WatchFaceSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceSettingsView.swift; sourceTree = "<group>"; };
+		3CE53937C332FA6148886C50 /* SleepAnalyzer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepAnalyzer.swift; sourceTree = "<group>"; };
 		48A51F367FDB07F7C5D7AD97 /* WatchSettingsFile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchSettingsFile.swift; sourceTree = "<group>"; };
 		65951364E9934C88913616D0 /* DFUTransfer.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DFUTransfer.swift; sourceTree = "<group>"; };
 		A015B3F1C7F138C5E5C9DACA /* WatchFaceCatalog.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceCatalog.swift; sourceTree = "<group>"; };
@@ -597,6 +603,8 @@
 				E076FEC72FB415AC00FF6A17 /* NotificationSettingsManager.swift */,
 				E0C0DE00000000000000A001 /* WorkoutRouteRecorder.swift */,
 				E0C0DE00000000000000A00A /* WorkoutLiveActivityController.swift */,
+				3CE53937C332FA6148886C50 /* SleepAnalyzer.swift */,
+				29D557AFE18F6E0D6C8040F6 /* SleepManager.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -685,6 +693,7 @@
 				E03C30B62CC7417C00DD8363 /* WeatherView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
+				1AFC0382BEC8406837173344 /* SleepView.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -1018,6 +1027,9 @@
 				E05999C12CB419EB00D64E0B /* PersistenceController.swift in Sources */,
 				E0599A092CB4C77300D64E0B /* FileSystemViewModel.swift in Sources */,
 				E0B85D602CB6D41700D85122 /* FitnessCalculator.swift in Sources */,
+				5C571CD0D814F6A6CEAF73B9 /* SleepAnalyzer.swift in Sources */,
+				E422AAE47C59548FE166805A /* SleepManager.swift in Sources */,
+				36E613FC638D4ED50F76C145 /* SleepView.swift in Sources */,
 				4CB10164409F57E965D053EF /* WatchSettingsFile.swift in Sources */,
 				EB433FECF2241E07C0DAC20C /* WatchFaceCatalog.swift in Sources */,
 				8AE0BBEFA52E176ABC580B30 /* WatchSettingsEditor.swift in Sources */,

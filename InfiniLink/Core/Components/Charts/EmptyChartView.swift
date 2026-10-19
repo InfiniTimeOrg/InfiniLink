@@ -28,6 +28,10 @@ struct EmptyChartView: View {
     private var detailString: String {
         var base = "There isn't any \(chartType.rawValue) data to show "
         
+        if chartType == .sleep {
+            return base + "for the past week"
+        }
+        
         switch dataSelection {
         case 1:
             base += "for today"

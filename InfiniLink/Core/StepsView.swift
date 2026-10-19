@@ -43,13 +43,18 @@ struct StepsView: View {
         }
         .navigationTitle("Steps")
         .navigationBarTitleDisplayMode(.inline)
-//        .toolbar {
-//            NavigationLink {
-//                StepSettingsView()
-//            } label: {
-//                Label("Settings", systemImage: "gear")
-//            }
-//        }
+        .onAppear {
+            if let deviceId = deviceManager.pairedDeviceID {
+                HealthKitManager.shared.fillMissingStepDays(deviceId: deviceId)
+            }
+        }
+        .toolbar {
+            NavigationLink {
+                StepSettingsView()
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+        }
     }
 }
 
