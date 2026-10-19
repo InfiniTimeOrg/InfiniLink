@@ -28,10 +28,10 @@ class BLEManager: NSObject, ObservableObject {
     var dfuControlPointCharacteristic: CBCharacteristic?
     var dfuPacketCharacteristic: CBCharacteristic?
     
-    var navigationFlagsCharacteristic: CBCharacteristic?
-    var navigationNarrativeCharacteristic: CBCharacteristic?
-    var navigationDistanceCharacteristic: CBCharacteristic?
-    var navigationProgressCharacteristic: CBCharacteristic?
+    @Published var navigationFlagsCharacteristic: CBCharacteristic?
+    @Published var navigationNarrativeCharacteristic: CBCharacteristic?
+    @Published var navigationDistanceCharacteristic: CBCharacteristic?
+    @Published var navigationProgressCharacteristic: CBCharacteristic?
     
     struct MusicCharacteristics {
         var control: CBCharacteristic?
