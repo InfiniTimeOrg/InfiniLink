@@ -9,7 +9,6 @@ import SwiftUI
 
 struct DeviceView: View {
     @Environment(\.openURL) var openURL
-    @Environment(\.scenePhase) private var scenePhase
     
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
@@ -20,8 +19,6 @@ struct DeviceView: View {
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
-    
-    @Environment(\.colorScheme) var colorScheme
     
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
@@ -254,20 +251,6 @@ struct DeviceView: View {
                 }
             }
         }
-        .onChange(of: bleManager.blefsTransfer) { blefsTransfer in
-            if blefsTransfer != nil && scenePhase == .active {
-                BLEFSHandler.shared.readSettings { settings in
-                    guard let settings else { return }
-                    
-                    DispatchQueue.main.async {
-                        self.deviceManager.updateSettings(settings)
-                    }
-                }
-            }
-        }
-        .onChange(of: bleManager.weatherCharacteristic) { _ in
-            WeatherController.shared.fetchWeatherData()
-        }
         .sheet(isPresented: $personalizationController.showSetupSheet) {
             SetUpDetailsView()
         }
@@ -328,8 +311,6 @@ struct DeviceView: View {
 }
 
 struct ListRowView: View {
-    @Environment(\.colorScheme) var colorScheme
-    
     let title: String
     let icon: String
     let iconColor: Color
@@ -346,7 +327,7 @@ struct ListRowView: View {
         Label {
             HStack(spacing: 6) {
                 Text(NSLocalizedString(title, comment: ""))
-                    .foregroundStyle(colorScheme == .dark ? .white : .black)
+                    .foregroundStyle(.primary)
                 if isBeta {
                     Text("Beta")
                         .font(.caption2.weight(.semibold))

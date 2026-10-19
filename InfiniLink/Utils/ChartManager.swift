@@ -21,7 +21,6 @@ class ChartManager: ObservableObject {
     static let shared = ChartManager()
     
     let persistenceController = PersistenceController.shared
-    let bleManager = BLEManager.shared
     let deviceManager = DeviceManager.shared
     
     private let predicateString = "deviceId == %@ AND timestamp >= %@"
@@ -70,11 +69,6 @@ class ChartManager: ObservableObject {
             startOfNextMonth as NSDate
         )
     }
-    var allTimePredicate: NSPredicate {
-        let deviceId = deviceManager.pairedDeviceID ?? ""
-        return NSPredicate(format: "deviceId == %@", deviceId)
-    }
-    
     // Insert on the view context so stepsToday() sees the new row right away and a quick second update can't create a duplicate
     func addStepDataPoint(steps: Int32, time: Date) {
         let stepCount = StepCounts(context: persistenceController.container.viewContext)
@@ -144,18 +138,6 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func heartPoints(predicate: NSPredicate? = nil) -> [HeartDataPoint] {
-        let fetchRequest: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
-        fetchRequest.predicate = predicate ?? dayPredicate
-
-        do {
-            return try persistenceController.container.viewContext.fetch(fetchRequest)
-        } catch {
-            log("Error fetching heart points: \(error)", caller: "ChartManager")
-            return []
-        }
-    }
-
     // Fetches on a background context and hands back plain values so views don't block the main thread
     func heartRateSamples(predicate: NSPredicate? = nil) async -> [HeartRateSample] {
         nonisolated(unsafe) let predicate = predicate ?? dayPredicate
@@ -210,24 +192,16 @@ class ChartManager: ObservableObject {
         }
     }
     
-    func disconnectMapPoint() -> DisconnectMapPoint? {
-        guard let deviceId = deviceManager.pairedDeviceID else { return nil }
-        
-        let context = persistenceController.container.viewContext
+    func disconnectMapPoint(for deviceId: String? = nil) -> DisconnectMapPoint? {
+        guard let deviceId = deviceId ?? deviceManager.pairedDeviceID else { return nil }
         
         let fetchRequest: NSFetchRequest<DisconnectMapPoint> = DisconnectMapPoint.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "deviceId == %@", deviceId)
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
         fetchRequest.fetchLimit = 1
         
         do {
-            if let existing = try context.fetch(fetchRequest).first {
-                return existing
-            }
-            
-            let point = DisconnectMapPoint(context: context)
-            point.deviceId = deviceId
-            
-            return point
+            return try persistenceController.container.viewContext.fetch(fetchRequest).first
         } catch {
             log("Error fetching disconnect point: \(error)", caller: "ChartManager")
             return nil
@@ -262,33 +236,28 @@ class ChartManager: ObservableObject {
     }
     
     func deleteAllUserExercises() {
-        let context = persistenceController.container.newBackgroundContext()
-        context.perform {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = UserExercise.fetchRequest()
-            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-            
-            do {
-                try context.execute(batchDeleteRequest)
-                try context.save()
-            } catch {
-                log("Failed to delete user exercises: \(error)", caller: "ChartManager")
-            }
-        }
+        batchDelete(UserExercise.fetchRequest())
     }
     
-    func deleteAllDisconnectMapPoints(all: Bool = true) {
+    func deleteAllDisconnectMapPoints() {
+        batchDelete(DisconnectMapPoint.fetchRequest())
+    }
+    
+    // Batch deletes skip the contexts, so merge them into the view context to update what's on screen
+    private func batchDelete(_ fetchRequest: NSFetchRequest<NSFetchRequestResult>) {
         let context = persistenceController.container.newBackgroundContext()
+        let viewContext = persistenceController.container.viewContext
+        
         context.perform {
-            let fetchRequest: NSFetchRequest<NSFetchRequestResult> = DisconnectMapPoint.fetchRequest()
-            fetchRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
-            fetchRequest.fetchOffset = all ? 0 : 3
-            let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            let delete = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+            delete.resultType = .resultTypeObjectIDs
             
             do {
-                try context.execute(batchDeleteRequest)
-                try context.save()
+                let result = try context.execute(delete) as? NSBatchDeleteResult
+                let ids = result?.result as? [NSManagedObjectID] ?? []
+                NSManagedObjectContext.mergeChanges(fromRemoteContextSave: [NSDeletedObjectsKey: ids], into: [viewContext])
             } catch {
-                log("Failed to delete disconnect pins: \(error)", caller: "ChartManager")
+                log("Batch delete failed: \(error)", caller: "ChartManager")
             }
         }
     }

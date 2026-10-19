@@ -17,6 +17,7 @@ struct WatchFaceView: View {
     @Environment(\.colorScheme) var colorScheme
     
     @State private var date = Date()
+    @State private var clock = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     let settings: Settings?
     let device: Device?
@@ -59,7 +60,7 @@ struct WatchFaceView: View {
             }
             .frame(width: size, height: size)
         }
-        .onReceive(Timer.publish(every: 1, on: .main, in: .common).autoconnect()) { newDate in
+        .onReceive(clock) { newDate in
             self.date = newDate
         }
         .accessibilityElement(children: .ignore)
@@ -99,28 +100,6 @@ struct WatchFaceView: View {
                 }
             }
         }
-    }
-}
-
-extension Settings {
-    init(device: Device) {
-        self.init()
-        
-        clockType = ClockType(rawValue: UInt8(clamping: device.clockType)) ?? .H24
-        watchFace = UInt8(clamping: device.watchface)
-        if let pts = device.pineTimeStyle {
-            pineTimeStyle = PineTimeStyleData(
-                ColorTime: Colors(rawValue: UInt8(clamping: pts.colorTime)) ?? .Teal,
-                ColorBar: Colors(rawValue: UInt8(clamping: pts.colorBar)) ?? .Teal,
-                ColorBG: Colors(rawValue: UInt8(clamping: pts.colorBG)) ?? .Black,
-                gaugeStyle: PTSGaugeStyle(rawValue: UInt8(clamping: pts.guageStyle)) ?? .Full,
-                weatherEnable: PTSWeather(rawValue: UInt8(clamping: pts.weatherEnable)) ?? .Off
-            )
-        }
-        if let infineat = device.watchFaceInfineat {
-            watchFaceInfineat = WatchFaceInfineat(showSideCover: infineat.showSideCover, colorIndex: UInt8(clamping: infineat.colorIndex))
-        }
-        prideFlag = UInt8(clamping: device.prideFlag)
     }
 }
 

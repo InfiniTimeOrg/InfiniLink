@@ -7,7 +7,6 @@
 
 import Foundation
 import MediaPlayer
-import NotificationCenter
 import SwiftUI
 
 class MusicController {
@@ -18,15 +17,11 @@ class MusicController {
     private let bleWriteManager = BLEWriteManager()
     private let volumeNotch: Float = (1 / 15)
     private var musicPlayer = MPMusicPlayerController.systemMusicPlayer
-    var musicPlaying = 0
+    private(set) var isPlaying = false
     
     struct SongInfo {
         var trackName: String = ""
         var artistName: String = ""
-    }
-    
-    enum MusicState {
-        case play, pause, nextTrack, prevTrack
     }
     
     @AppStorage("allowMusicControl") var allowMusicControl = true
@@ -41,7 +36,7 @@ class MusicController {
     }
     
     @objc func onPlaybackChange(_ notification: NSNotification) {
-        musicPlaying = musicPlayer.playbackState.rawValue
+        isPlaying = musicPlayer.playbackState == .playing
         updateMusicInformation()
     }
     @objc func onNowPlayingChange(_ notification: NSNotification) {
@@ -63,12 +58,12 @@ class MusicController {
     func controlMusic(controlNumber: Int) {
         guard allowMusicControl else { return }
         
-        musicPlaying = musicPlayer.playbackState.rawValue
+        isPlaying = musicPlayer.playbackState == .playing
         
         switch controlNumber {
         case 0:
             musicPlayer.play()
-            musicPlaying = 1
+            isPlaying = true
         case 1:
             pause()
         case 3:
@@ -114,7 +109,7 @@ class MusicController {
             return
         }
         
-        bleWriteManager.writeHexToMusicApp(message: musicPlaying == 1 ? [0x01] : [0x00],
+        bleWriteManager.writeHexToMusicApp(message: isPlaying ? [0x01] : [0x00],
                                            characteristic: statusChar)
         bleWriteManager.writeToMusicApp(message: songInfo.trackName, characteristic: trackChar)
         bleWriteManager.writeToMusicApp(message: songInfo.artistName, characteristic: artistChar)
@@ -136,7 +131,7 @@ class MusicController {
         guard musicPlayer.playbackState != .paused  else { return }
         
         musicPlayer.pause()
-        musicPlaying = 2
+        isPlaying = false
     }
     
     func convertTime(value: Double) -> [UInt8] {
@@ -144,14 +139,8 @@ class MusicController {
             return [0, 0, 0, 0]
         }
         
-        let val32: UInt32 = UInt32(floor(value))
-        
-        let byte1 = UInt8(val32 & 0x000000FF)
-        let byte2 = UInt8((val32 & 0x0000FF00) >> 8)
-        let byte3 = UInt8((val32 & 0x00FF0000) >> 16)
-        let byte4 = UInt8((val32 & 0xFF000000) >> 24)
-        
-        return [byte4, byte3, byte2, byte1]
+        // InfiniTime reads these big-endian
+        return UInt32(clamping: Int(value)).littleEndianBytes.reversed()
     }
 }
 

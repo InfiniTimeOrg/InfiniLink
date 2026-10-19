@@ -12,7 +12,6 @@ struct ConnectView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var deviceManager = DeviceManager.shared
     
-    @Environment(\.colorScheme) var colorScheme
     @Environment(\.dismiss) var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
@@ -32,10 +31,9 @@ struct ConnectView: View {
     
     func connect(_ device: CBPeripheral) {
         deviceWithPendingConnectionID = device.identifier
-        bleManager.connect(peripheral: device) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                dismiss()
-            }
+        bleManager.connect(peripheral: device)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            dismiss()
         }
     }
     
@@ -147,7 +145,7 @@ struct ConnectView: View {
                                                             .frame(height: 70)
                                                         Text(device.name ?? "InfiniTime")
                                                             .font(.system(size: 19).weight(.semibold))
-                                                            .foregroundStyle(colorScheme == .dark ? .white : .black)
+                                                            .foregroundStyle(.primary)
                                                         if let rssi = bleManager.discoveredRSSI[device.identifier] {
                                                             SignalStrengthView(rssi: rssi)
                                                                 .font(.subheadline)

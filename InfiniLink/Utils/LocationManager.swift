@@ -37,9 +37,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @Published var location: CLLocation?
     @Published var locationName: String = ""
-    @Published var locationManager = CLLocationManager()
+    let locationManager = CLLocationManager()
     
-    private lazy var weatherController = WeatherController.shared
+    private var deviceLocationRequests: [(CLLocation?) -> Void] = []
     
     func canGetUserLocation() -> Bool {
         return locationManager.authorizationStatus != .restricted && locationManager.authorizationStatus != .denied && locationManager.authorizationStatus != .notDetermined
@@ -155,6 +155,22 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    // The phone's own location, even when weather uses a saved city
+    func requestDeviceLocation(completion: @escaping (CLLocation?) -> Void) {
+        guard canGetUserLocation() else {
+            completion(nil)
+            return
+        }
+        
+        deviceLocationRequests.append(completion)
+        locationManager.requestLocation()
+    }
+    
+    private func finishDeviceLocationRequests(with location: CLLocation?) {
+        deviceLocationRequests.forEach { $0(location) }
+        deviceLocationRequests = []
+    }
+    
     func requestLocation() {
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -169,13 +185,17 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first, useCurrentLocation {
+        finishDeviceLocationRequests(with: locations.last)
+        
+        if let location = locations.last, useCurrentLocation {
             self.location = location
             updateLocationName(for: location)
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        finishDeviceLocationRequests(with: manager.location)
+        
         if useCurrentLocation {
             DispatchQueue.main.async {
                 WeatherController.shared.errorWhileFetching = error

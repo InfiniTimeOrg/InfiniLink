@@ -10,10 +10,44 @@ import CoreBluetooth
 import SwiftUI
 import CoreLocation
 
+enum BLEUUID {
+    static let hrm = CBUUID(string: "2A37")
+    static let bat = CBUUID(string: "2A19")
+    static let time = CBUUID(string: "2A2B")
+    static let notify = CBUUID(string: "2A46")
+    static let modelNumber = CBUUID(string: "2A24")
+    static let serial = CBUUID(string: "2A25")
+    static let firmware = CBUUID(string: "2A26")
+    static let hardwareRevision = CBUUID(string: "2A27")
+    static let softwareRevision = CBUUID(string: "2A28")
+    static let manufacturer = CBUUID(string: "2A29")
+    static let blefsVersion = CBUUID(string: "adaf0100-4669-6c65-5472-616e73666572")
+    static let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
+    static let motion = CBUUID(string: "00030002-78fc-48fe-8e23-433b3a1942d0")
+    static let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
+    
+    static let dfuService = CBUUID(string: "00001530-1212-efde-1523-785feabcd123")
+    static let dfuControlPoint = CBUUID(string: "00001531-1212-efde-1523-785feabcd123")
+    static let dfuPacket = CBUUID(string: "00001532-1212-efde-1523-785feabcd123")
+    
+    static let navigationFlags = CBUUID(string: "00010001-78fc-48fe-8e23-433b3a1942d0")
+    static let navigationNarrative = CBUUID(string: "00010002-78fc-48fe-8e23-433b3a1942d0")
+    static let navigationDistance = CBUUID(string: "00010003-78fc-48fe-8e23-433b3a1942d0")
+    static let navigationProgress = CBUUID(string: "00010004-78fc-48fe-8e23-433b3a1942d0")
+    
+    static let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
+    static let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
+    static let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
+    static let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
+    static let stepCount = CBUUID(string: "00030001-78FC-48FE-8E23-433B3A1942D0")
+    static let positionTrack = CBUUID(string: "00000006-78FC-48FE-8E23-433B3A1942D0")
+    static let lengthTrack = CBUUID(string: "00000007-78FC-48FE-8E23-433B3A1942D0")
+}
+
 class BLEManager: NSObject, ObservableObject {
     static let shared = BLEManager()
     
-    lazy var deviceManager = DeviceManager.shared // This references BLEManager so it needs to be lazy to avoid a crash
+    let deviceManager = DeviceManager.shared
     
     let locationManager = LocationManager.shared
     let downloadManager = DownloadManager.shared
@@ -41,49 +75,11 @@ class BLEManager: NSObject, ObservableObject {
         var position: CBCharacteristic?
         var length: CBCharacteristic?
     }
-    struct CBUUIDList {
-        let hrm = CBUUID(string: "2A37")
-        let bat = CBUUID(string: "2A19")
-        let time = CBUUID(string: "2A2B")
-        let notify = CBUUID(string: "2A46")
-        let modelNumber = CBUUID(string: "2A24")
-        let serial = CBUUID(string: "2A25")
-        let firmware = CBUUID(string: "2A26")
-        let hardwareRevision = CBUUID(string: "2A27")
-        let softwareRevision = CBUUID(string: "2A28")
-        let manufacturer = CBUUID(string: "2A29")
-//        let sleep = CBUUID(string: "2037")
-        let blefsTransfer = CBUUID(string: "adaf0200-4669-6c65-5472-616e73666572")
-        let motion = CBUUID(string: "00030002-78fc-48fe-8e23-433b3a1942d0")
-        let weather = CBUUID(string: "00050001-78FC-48FE-8E23-433B3A1942D0")
-        
-        let dfuService = CBUUID(string: "00001530-1212-efde-1523-785feabcd123")
-        let dfuControlPoint = CBUUID(string: "00001531-1212-efde-1523-785feabcd123")
-        let dfuPacket = CBUUID(string: "00001532-1212-efde-1523-785feabcd123")
-        
-        // We don't need the navigation service UUID, just its characteristics
-        // let navigation = CBUUID(string: "00010000-78fc-48fe-8e23-433b3a1942d0")
-        let navigationFlags = CBUUID(string: "00010001-78fc-48fe-8e23-433b3a1942d0")
-        let navigationNarrative = CBUUID(string: "00010002-78fc-48fe-8e23-433b3a1942d0")
-        let navigationDistance = CBUUID(string: "00010003-78fc-48fe-8e23-433b3a1942d0")
-        let navigationProgress = CBUUID(string: "00010004-78fc-48fe-8e23-433b3a1942d0")
-        
-        let musicControl = CBUUID(string: "00000001-78FC-48FE-8E23-433B3A1942D0")
-        let statusControl = CBUUID(string: "00000002-78FC-48FE-8E23-433B3A1942D0")
-        let musicTrack = CBUUID(string: "00000004-78FC-48FE-8E23-433B3A1942D0")
-        let musicArtist = CBUUID(string: "00000003-78FC-48FE-8E23-433B3A1942D0")
-        let stepCount = CBUUID(string: "00030001-78FC-48FE-8E23-433B3A1942D0")
-        let positionTrack = CBUUID(string: "00000006-78FC-48FE-8E23-433B3A1942D0")
-        let lengthTrack = CBUUID(string: "00000007-78FC-48FE-8E23-433B3A1942D0")
-    }
-    
-    let cbuuidList = CBUUIDList()
     var musicChars = MusicCharacteristics()
     
     @Published var isBluetoothOn = true // Keep this variable initally true because otherwise it could quickly flash the "Bluetooth Disabled" message
     @Published var isScanning = false
     @Published var isConnecting = false
-    @Published var setTimeError = false
     @Published var isConnectedToPinetime = false
     @Published var isPairingNewDevice = false
     @Published var isUpdatingFirmware = false
@@ -93,7 +89,6 @@ class BLEManager: NSObject, ObservableObject {
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var discoveredRSSI: [UUID: Int] = [:]
     @Published var infiniTime: CBPeripheral?
-    @Published var peripheralToConnect: CBPeripheral?
     
     @Published var hasLoadedBatteryLevel = false
     @Published var fakeRecoveryMode = false // Developer toggle
@@ -112,7 +107,6 @@ class BLEManager: NSObject, ObservableObject {
     var lastDataReceivedDate: Date?
     private var lastSeenSavedDate: Date?
     
-    @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
     @AppStorage("forceAncs") var forceAncs = true
     
     var hasLoadedCharacteristics: Bool {
@@ -189,18 +183,11 @@ class BLEManager: NSObject, ObservableObject {
         isScanning = false
     }
     
-    func connect(peripheral: CBPeripheral, completion: (() -> Void)? = nil) {
+    func connect(peripheral: CBPeripheral) {
         guard isBluetoothOn else { return }
         
-        self.isConnecting = true
-        self.peripheralToConnect = peripheral
-        
-        let options: [String: Any] = [
-            CBConnectPeripheralOptionRequiresANCS: true
-        ]
-        self.manager?.connect(peripheralToConnect!, options: forceAncs ? options : nil)
-
-        completion?()
+        isConnecting = true
+        manager?.connect(peripheral, options: forceAncs ? [CBConnectPeripheralOptionRequiresANCS: true] : nil)
     }
 
     func onConnect(_ peripheral: CBPeripheral) {
@@ -213,13 +200,12 @@ class BLEManager: NSObject, ObservableObject {
         
         isConnecting = false
         deviceManager.pairedDeviceID = peripheral.identifier.uuidString
-        deviceManager.pairedDevice = deviceManager.currentDevice()
+        deviceManager.pairedDevice = deviceManager.currentDevice() ?? deviceManager.addDevice(uuid: peripheral.identifier.uuidString)
         
         infiniTime = peripheral
         infiniTime?.delegate = self
         infiniTime?.discoverServices(nil)
         isConnectedToPinetime = true
-        peripheralToConnect = nil // We're done using this, so set it to nil
         saveLastSeen(peripheral)
         
         updateAncsStatus(peripheral)
@@ -232,10 +218,10 @@ class BLEManager: NSObject, ObservableObject {
         
         // We need to disconnect first because BLE updateInfo methods will be called when Core Data doesn't have an object to update
         disconnect()
-        // Delete the device object we have said for this watch
+        log("Unpaired from \(device.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        // Delete the device object we have saved for this watch
         deviceManager.removeDevice(device)
-        
-        log("Unpaired from \(deviceManager.pairedDevice?.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
+        startScanning()
     }
     
     func disconnect() {
@@ -278,7 +264,6 @@ class BLEManager: NSObject, ObservableObject {
         // We just switched devices, update the UI
         self.deviceManager.pairedDeviceID = device.uuid
         self.deviceManager.pairedDevice = device
-//        self.deviceManager.
         
         self.disconnect()
         self.startScanning()
@@ -313,6 +298,23 @@ class BLEManager: NSObject, ObservableObject {
         lastSeenSavedDate = Date()
     }
     
+    // Remember where the watch was last connected so Find Lost Device can show it
+    private func saveDisconnectLocation() {
+        guard let deviceId = deviceManager.pairedDeviceID else { return }
+        
+        locationManager.requestDeviceLocation { [self] location in
+            guard let location else { return }
+            
+            let point = ChartManager.shared.disconnectMapPoint(for: deviceId) ?? DisconnectMapPoint(context: persistenceController.container.viewContext)
+            point.deviceId = deviceId
+            point.latitude = location.coordinate.latitude
+            point.longitude = location.coordinate.longitude
+            point.timestamp = Date()
+            
+            persistenceController.save()
+        }
+    }
+    
     private func updateAncsStatus(_ peripheral: CBPeripheral) {
         self.ancsAuthorized = peripheral.ancsAuthorized
     }
@@ -328,7 +330,7 @@ extension BLEManager: CBCentralManagerDelegate {
         // InfiniTime always advertises the name "InfiniTime" along with its DFU service, so require both
         let name = advertisementData[CBAdvertisementDataLocalNameKey] as? String ?? peripheral.name
         let advertisedServices = advertisementData[CBAdvertisementDataServiceUUIDsKey] as? [CBUUID] ?? []
-        guard name == "InfiniTime" && advertisedServices.contains(cbuuidList.dfuService) else { return }
+        guard name == "InfiniTime" && advertisedServices.contains(BLEUUID.dfuService) else { return }
         
         if RSSI.intValue != 127 { // 127 means the value is unavailable
             discoveredRSSI[peripheral.identifier] = RSSI.intValue
@@ -381,23 +383,12 @@ extension BLEManager: CBCentralManagerDelegate {
         if let error {
             log(error.localizedDescription, caller: "didDisconnectPeripheral", target: .ble)
             
-            if let rssi, RSSI.from(rssi: rssi) == RSSI.poor { // Make sure the disconnect was a range issue
-                if pauseOnWalkaway { // The watch went out of range, pause any currently playing music
-                    MusicController.shared.pause()
-                }
-                
-                if let point = ChartManager.shared.disconnectMapPoint(), let lon = locationManager.location?.coordinate.longitude, let lat = locationManager.location?.coordinate.latitude {
-                    point.latitude = lat
-                    point.longitude = lon
-                    point.timestamp = Date()
-                    
-                    persistenceController.save()
-                }
-            }
+            saveDisconnectLocation()
             
             // Try reconnecting to the watch
             connect(peripheral: peripheral)
         }
+        rssi = nil
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
@@ -463,7 +454,7 @@ extension BLEManager: CBPeripheralDelegate {
             return
         }
         
-        if characteristic.uuid == cbuuidList.dfuControlPoint, let value = characteristic.value {
+        if characteristic.uuid == BLEUUID.dfuControlPoint, let value = characteristic.value {
             DFUUpdater.shared.transfer?.didReceiveControlPoint(value)
             return
         }
@@ -479,7 +470,7 @@ extension BLEManager: CBPeripheralDelegate {
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
-        if characteristic.uuid == cbuuidList.dfuControlPoint {
+        if characteristic.uuid == BLEUUID.dfuControlPoint {
             DFUUpdater.shared.transfer?.didWriteControlPoint(error: error)
         }
     }
@@ -490,7 +481,7 @@ extension BLEManager: CBPeripheralDelegate {
     
     func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
         if let error {
-            print(error.localizedDescription)
+            log("Error reading RSSI: \(error.localizedDescription)", caller: "BLEManager", target: .ble)
         }
         
         self.rssi = RSSI.intValue
