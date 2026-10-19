@@ -49,6 +49,12 @@ struct NotificationsSettingsView: View {
             }
         }
         .navigationTitle("Notifications")
+        .onAppear {
+            notificationManager.refreshAuthorizationStatus()
+        }
+        .onReceive(NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)) { _ in
+            notificationManager.refreshAuthorizationStatus()
+        }
         .onChange(of: settingsManager.settings.waterReminderAmount) { _ in
             notificationManager.setWaterRemindersPerDay()
         }

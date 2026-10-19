@@ -51,6 +51,8 @@ class NotificationManager: ObservableObject {
         if !PersonalizationController.shared.showSetupSheet {
             // Don't request permissions if the user hasn't had the chance to manually enable them
             requestNotificationAuthorization()
+        } else {
+            refreshAuthorizationStatus()
         }
         
         setWaterRemindersPerDay()
@@ -64,6 +66,14 @@ class NotificationManager: ObservableObject {
             DispatchQueue.main.async {
                 self.canSendHostNotifs = granted
                 completion?(granted, error)
+            }
+        }
+    }
+    
+    func refreshAuthorizationStatus() {
+        UNUserNotificationCenter.current().getNotificationSettings { settings in
+            DispatchQueue.main.async {
+                self.canSendHostNotifs = settings.authorizationStatus == .authorized
             }
         }
     }
@@ -104,7 +114,7 @@ extension NotificationManager {
         guard level >= 0, lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
         
         if state == .full && !hostFullNotified {
-            let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("Your iPhone has reached \(String(format: "%.0f", level))%", comment: ""))
+            let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: String(localized: "Your iPhone has reached \(level / 100, format: .percent.precision(.fractionLength(0)))"))
             sendNotifications(notif, batterySettings.fullBattery.iphone)
             
             hostFullNotified = true
@@ -151,7 +161,7 @@ extension NotificationManager {
     
     private func sendBatteryNotification(custom: Bool) {
         let bat = bleManager.batteryLevel
-        let subtitle = "\(String(format: "%.0f", bat))% " + NSLocalizedString("battery remaining", comment: "")
+        let subtitle = String(localized: "\(bat / 100, format: .percent.precision(.fractionLength(0))) battery remaining")
         
         if custom {
             let notif = AppNotification(title: NSLocalizedString("Battery Alert", comment: ""), subtitle: subtitle)
@@ -163,7 +173,7 @@ extension NotificationManager {
     }
     
     private func sendFullyChargedBatteryNotification() {
-        let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: NSLocalizedString("\(DeviceManager.shared.name) is fully charged", comment: ""))
+        let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: String(localized: "\(DeviceManager.shared.name) is fully charged"))
         sendNotifications(notif, batterySettings.fullBattery.watch)
     }
 }
@@ -177,17 +187,16 @@ extension NotificationManager {
         let currentTime = Date().timeIntervalSince1970
         let tenMinutes = TimeInterval(60 * 10)
 
-        // Don't localize these notifications because InfiniTime doesn't (most) characters from other languages
         if bpm < heartSettings.minRange, (currentTime - lastTimeMinHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: NSLocalizedString("Your heart rate fell below \(heartSettings.minRange) BPM", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate Low", comment: ""), subtitle: String(localized: "Your heart rate fell below \(heartSettings.minRange) BPM"))
             )
             self.lastTimeMinHeartRangeNotified = currentTime
             recordHeartRangeNotification(low: true)
         }
         if bpm > heartSettings.maxRange, (currentTime - lastTimeMaxHeartRangeNotified) >= tenMinutes {
             self.bleWriteManager.sendNotification(
-                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: NSLocalizedString("Your heart rate rose above \(heartSettings.maxRange) BPM", comment: ""))
+                AppNotification(title: NSLocalizedString("Heart Rate High", comment: ""), subtitle: String(localized: "Your heart rate rose above \(heartSettings.maxRange) BPM"))
             )
             self.lastTimeMaxHeartRangeNotified = currentTime
             recordHeartRangeNotification(low: false)
