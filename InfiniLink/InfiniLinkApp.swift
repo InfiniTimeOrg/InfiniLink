@@ -28,7 +28,7 @@ struct InfiniLink: App {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                .preferredColorScheme(colorScheme == "light" ? .light : .dark)
+                .preferredColorScheme(colorScheme == "light" ? .light : colorScheme == "dark" ? .dark : nil)
         }
     }
 }
