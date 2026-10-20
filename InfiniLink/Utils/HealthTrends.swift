@@ -13,10 +13,16 @@ struct RestingHeartRateDay: Identifiable {
     let bpm: Double
 }
 
+struct HeartRateAverages {
+    var awake: Double?
+    var sleep: Double?
+    var workout: Double?
+}
+
 struct HealthTrends {
     let persistenceController = PersistenceController.shared
 
-    private let minimumRestingSamples = 5
+    private let minimumSamples = 5
 
     func restingHeartRates(days: Int, deviceId: String, completion: @escaping ([RestingHeartRateDay]) -> Void) {
         let calendar = Calendar.current
@@ -32,10 +38,7 @@ struct HealthTrends {
             let activity = self.points(MotionActivityPoint.self, in: range, deviceId: deviceId, context: context).compactMap { point in
                 point.timestamp.map { (date: $0, value: point.value) }
             }
-            let sleepIntervals = self.sleepSessions(in: range, deviceId: deviceId, context: context).compactMap { session -> DateInterval? in
-                guard let start = session.start, let end = session.end, end > start else { return nil }
-                return DateInterval(start: start, end: end)
-            }
+            let sleepIntervals = self.sleepIntervals(in: range, deviceId: deviceId, context: context)
 
             let stillThreshold = SleepAnalyzer.stillThreshold(daytimeMedian: SleepAnalyzer.daytimeMedian(of: activity))
             var activityByMinute = [Int: Double]()
@@ -68,12 +71,53 @@ struct HealthTrends {
                 .map { $0.value }
                 .sorted()
 
-                guard restingSamples.count >= minimumRestingSamples else { return nil }
+                guard restingSamples.count >= minimumSamples else { return nil }
                 return RestingHeartRateDay(date: day, bpm: restingSamples[restingSamples.count / 10])
             }
 
             DispatchQueue.main.async {
                 completion(result)
+            }
+        }
+    }
+
+    // Today's averages
+    // Last night's sleep counted even if it started yesterday
+    func heartRateAverages(deviceId: String, activeWorkoutStart: Date?, completion: @escaping (HeartRateAverages) -> Void) {
+        let start = Calendar.current.startOfDay(for: Date())
+
+        let context = persistenceController.container.newBackgroundContext()
+        context.perform {
+            let now = Date()
+            let sleep = self.sleepIntervals(in: DateInterval(start: start, end: now), deviceId: deviceId, context: context)
+
+            let request: NSFetchRequest<UserExercise> = UserExercise.fetchRequest()
+            request.predicate = NSPredicate(format: "deviceId == %@ AND endDate >= %@", deviceId, start as NSDate)
+            let workouts = ((try? context.fetch(request)) ?? []).compactMap { workout -> DateInterval? in
+                guard let start = workout.startDate, let end = workout.endDate, end > start else { return nil }
+                return DateInterval(start: start, end: end)
+            } + [activeWorkoutStart.map { DateInterval(start: $0, end: now) }].compactMap { $0 }
+
+            let fetchStart = sleep.map { $0.start }.min().map { Swift.min($0, start) } ?? start
+            let samples = self.points(HeartDataPoint.self, in: DateInterval(start: fetchStart, end: now), deviceId: deviceId, context: context).compactMap { point -> (date: Date, value: Double)? in
+                guard let timestamp = point.timestamp, point.value > 0 else { return nil }
+                return (timestamp, point.value)
+            }
+
+            let isAsleep = { (date: Date) in sleep.contains { $0.contains(date) } }
+            let isWorkingOut = { (date: Date) in workouts.contains { $0.contains(date) } }
+            let average = { (values: [Double]) -> Double? in
+                values.count >= self.minimumSamples ? values.reduce(0, +) / Double(values.count) : nil
+            }
+
+            let averages = HeartRateAverages(
+                awake: average(samples.filter { $0.date >= start && !isAsleep($0.date) && !isWorkingOut($0.date) }.map { $0.value }),
+                sleep: average(samples.filter { isAsleep($0.date) }.map { $0.value }),
+                workout: average(samples.filter { $0.date >= start && isWorkingOut($0.date) }.map { $0.value })
+            )
+
+            DispatchQueue.main.async {
+                completion(averages)
             }
         }
     }
@@ -116,11 +160,14 @@ struct HealthTrends {
         return (try? context.fetch(request)) ?? []
     }
 
-    private func sleepSessions(in range: DateInterval, deviceId: String, context: NSManagedObjectContext) -> [SleepSession] {
+    private func sleepIntervals(in range: DateInterval, deviceId: String, context: NSManagedObjectContext) -> [DateInterval] {
         let request: NSFetchRequest<SleepSession> = SleepSession.fetchRequest()
         // Include the night before so the first morning has its sleep
         request.predicate = NSPredicate(format: "deviceId == %@ AND end >= %@", deviceId, range.start as NSDate)
 
-        return (try? context.fetch(request)) ?? []
+        return ((try? context.fetch(request)) ?? []).compactMap { session in
+            guard let start = session.start, let end = session.end, end > start else { return nil }
+            return DateInterval(start: start, end: end)
+        }
     }
 }

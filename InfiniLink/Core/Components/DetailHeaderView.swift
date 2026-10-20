@@ -100,7 +100,6 @@ struct DetailHeaderView<V: View>: View {
     let header: Header
     let width: CGFloat
     let animate: Bool
-    let animateTitle: Bool
     let headerItems: V
     
     @State private var isHeartAnimating = false
@@ -120,12 +119,10 @@ struct DetailHeaderView<V: View>: View {
     init(_ header: Header,
          width: CGFloat,
          animate: Bool = false,
-         animateTitle: Bool = true,
          @ViewBuilder headerItems: () -> V) {
         self.header = header
         self.width = width
         self.animate = animate
-        self.animateTitle = animateTitle
         self.headerItems = headerItems()
     }
     
@@ -147,7 +144,7 @@ struct DetailHeaderView<V: View>: View {
                         Text(header.title)
                             .font(.system(size: titleSize).bold())
                             .contentTransition(.numericText())
-                            .animation(animateTitle ? .default : nil, value: header.title)
+                            .animation(.default, value: header.title)
                         if let units = header.units {
                             Text(units.uppercased())
                                 .foregroundStyle(.primary.opacity(0.8))

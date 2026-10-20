@@ -42,6 +42,7 @@ class ExerciseViewModel: ObservableObject {
     @Published private(set) var customExercises = [Exercise]()
 
     private var session: WorkoutSession?
+    var sessionStartDate: Date? { session?.startDate }
     private var displayTimer: Timer?
     private var tickCount = 0
     private var liveActivity: Any?

@@ -15,9 +15,6 @@ struct HeartRateSample {
 }
 
 class ChartManager: ObservableObject {
-    @AppStorage("heartRateChartDataSelection") var heartRateChartDataSelection = 0
-    @AppStorage("stepChartDataSelection") var stepChartDataSelection = 0
-    
     static let shared = ChartManager()
     
     let persistenceController = PersistenceController.shared
@@ -69,6 +66,11 @@ class ChartManager: ObservableObject {
             startOfNextMonth as NSDate
         )
     }
+    var allTimePredicate: NSPredicate {
+        let deviceId = deviceManager.pairedDeviceID ?? ""
+        return NSPredicate(format: "deviceId == %@", deviceId)
+    }
+    
     // Insert on the view context so stepsToday() sees the new row right away and a quick second update can't create a duplicate
     func addStepDataPoint(steps: Int32, time: Date) {
         let stepCount = StepCounts(context: persistenceController.container.viewContext)
@@ -161,6 +163,28 @@ class ChartManager: ObservableObject {
             }
         }
     }
+
+    // Oldest reading on record, without loading the whole history
+    func firstHeartRateDate() async -> Date? {
+        nonisolated(unsafe) let predicate = allTimePredicate
+        let context = persistenceController.container.newBackgroundContext()
+
+        return await withCheckedContinuation { continuation in
+            context.perform {
+                let request: NSFetchRequest<HeartDataPoint> = HeartDataPoint.fetchRequest()
+                request.predicate = predicate
+                request.sortDescriptors = [NSSortDescriptor(keyPath: \HeartDataPoint.timestamp, ascending: true)]
+                request.fetchLimit = 1
+
+                do {
+                    continuation.resume(returning: try context.fetch(request).first?.timestamp)
+                } catch {
+                    log("Error fetching first heart point: \(error)", caller: "ChartManager")
+                    continuation.resume(returning: nil)
+                }
+            }
+        }
+    }
     
     func stepsToday() -> StepCounts? {
         return stepPoints().first
@@ -241,6 +265,10 @@ class ChartManager: ObservableObject {
     
     func deleteAllDisconnectMapPoints() {
         batchDelete(DisconnectMapPoint.fetchRequest())
+    }
+    
+    func clearHrmData() {
+        batchDelete(HeartDataPoint.fetchRequest())
     }
     
     // Batch deletes skip the contexts, so merge them into the view context to update what's on screen

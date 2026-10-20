@@ -12,6 +12,7 @@ struct HeartSettingsView: View {
 
     @AppStorage("backgroundHRMMeasurements") var backgroundHRMMeasurements = false
     @AppStorage("filterHeartRateData") var filterHeartRateData = true
+    @AppStorage("heartPointMarkMode") var heartPointMarkMode = "average"
 
     @StateObject private var editor = WatchSettingsEditor()
 
@@ -23,6 +24,13 @@ struct HeartSettingsView: View {
         List {
             Section(footer: Text("Filter inconsistent data from your heart rate measurements.")) {
                 Toggle("Filter Values", isOn: $filterHeartRateData)
+            }
+            Section(footer: Text("Choose how the point mark on the heart rate chart is calculated.")) {
+                Picker("Point Mark", selection: $heartPointMarkMode) {
+                    Text("Average").tag("average")
+                    Text("Median").tag("median")
+                }
+                .pickerStyle(.menu)
             }
             // Saving defaults replaces everything, so only allow that from Customization
             if let file = editor.file, file.supportsBackgroundHeartRate, !editor.usingDefaults {

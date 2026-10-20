@@ -14,25 +14,35 @@ struct HeartView: View {
     @ObservedObject var chartManager = ChartManager.shared
 
     @State private var samples: [HeartRateSample] = []
-    @State private var hasLoaded = false
+    @State private var averages = HeartRateAverages()
+    @State private var resting: Double?
 
     var values: [Double] {
         return samples.map { $0.value }
     }
 
     func load() async {
-        samples = await chartManager.heartRateSamples()
-        // Wait until the first value shows so it doesn't animate on appear
-        if !hasLoaded {
-            DispatchQueue.main.async {
-                hasLoaded = true
+        let samples = await chartManager.heartRateSamples()
+        // Skip the count-up animation for the first value
+        var transaction = Transaction()
+        transaction.disablesAnimations = self.samples.isEmpty
+        withTransaction(transaction) {
+            self.samples = samples
+        }
+        if let deviceId = DeviceManager.shared.pairedDeviceID {
+            HealthTrends().heartRateAverages(deviceId: deviceId, activeWorkoutStart: ExerciseViewModel.shared.sessionStartDate) { averages in
+                self.averages = averages
+            }
+            HealthTrends().restingHeartRates(days: 1, deviceId: deviceId) { days in
+                resting = days.first?.bpm
             }
         }
     }
 
-    func heartRate(for val: Double) -> String {
-        return String(format: "%.0f", max(val, 0))
+    func averageItem(_ title: String, _ value: Double?, icon: String) -> some View {
+        DetailHeaderSubItemView(title: title, value: value.map { String(format: "%.0f", $0) } ?? "--", icon: (icon, .red.opacity(0.7)))
     }
+
     func units(for seconds: Int) -> String {
         if seconds >= 172800 {
             return NSLocalizedString("Several days ago", comment: "")
@@ -58,29 +68,12 @@ struct HeartView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60, animateTitle: hasLoaded) {
-                        if !values.isEmpty {
-                            HStack {
-                                DetailHeaderSubItemView(
-                                    title: "Min",
-                                    value: heartRate(for: values.min() ?? 0),
-                                    icon: ("arrow.down.heart", .red.opacity(0.7))
-                                )
-                                DetailHeaderSubItemView(
-                                    title: "Avg",
-                                    value: heartRate(for: {
-                                        let ints = values.compactMap { Int($0) }
-                                        guard ints.count > 0 else { return 0.0 }
-                                        return Double(ints.reduce(0, +)) / Double(ints.count)
-                                    }()),
-                                    icon: ("heart", .red.opacity(0.7))
-                                )
-                                DetailHeaderSubItemView(
-                                    title: "Max",
-                                    value: heartRate(for: values.max() ?? 0),
-                                    icon: ("bolt.heart", .red.opacity(0.7))
-                                )
-                            }
+                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                            averageItem(NSLocalizedString("Resting", comment: ""), resting, icon: "bed.double.fill")
+                            averageItem(NSLocalizedString("Awake Avg", comment: ""), averages.awake, icon: "sun.max.fill")
+                            averageItem(NSLocalizedString("Sleep Avg", comment: ""), averages.sleep, icon: "moon.fill")
+                            averageItem(NSLocalizedString("Workout Avg", comment: ""), averages.workout, icon: "figure.run")
                         }
                     }
                 }
