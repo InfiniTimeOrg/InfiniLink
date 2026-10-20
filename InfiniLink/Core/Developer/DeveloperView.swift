@@ -14,6 +14,7 @@ struct DeveloperView: View {
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
     @AppStorage("forceAncs") var forceAncs = true
+    @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
     
     @State private var heartDay = ""
@@ -65,6 +66,9 @@ struct DeveloperView: View {
             }
             Toggle("Force ANCS", isOn: $forceAncs)
             Toggle("Fake Recovery Mode", isOn: $bleManager.fakeRecoveryMode)
+            Section {
+                Toggle("Enable Navigation (beta)", isOn: $enableBetaNavigation)
+            }
             Section {
                 Picker("Packet Receipt Notification", selection: $packetReceiptNotification) {
                     ForEach([0, 10, 12, 16, 18, 20, 24], id: \.self) { value in

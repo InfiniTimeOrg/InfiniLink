@@ -456,9 +456,6 @@
     "Battery Low" : {
 
     },
-    "Beta" : {
-
-    },
     "BLE" : {
 
     },
@@ -730,6 +727,9 @@
           }
         }
       }
+    },
+    "Enable Navigation (beta)" : {
+
     },
     "Enable Notifications" : {
 
