@@ -46,17 +46,10 @@
     "[WTHR] " : {
 
     },
-    "#%lld • %@ • %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "#%1$lld • %2$@ • %3$@"
-          }
-        }
-      }
-    },
     "%@" : {
+
+    },
+    "%@ " : {
 
     },
     "%@ - %@" : {
@@ -189,6 +182,9 @@
     "%lld bpm" : {
 
     },
+    "%lld BPM %@" : {
+
+    },
     "%lld cm" : {
 
     },
@@ -207,6 +203,28 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$lld more device%2$@ found"
+          }
+        }
+      }
+    },
+    "%lld readings" : {
+      "localizations" : {
+        "en" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld reading"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld readings"
+                }
+              }
+            }
           }
         }
       }
@@ -291,6 +309,9 @@
 
     },
     "Add 2" : {
+
+    },
+    "Add a Day" : {
 
     },
     "Add Location" : {
@@ -402,7 +423,13 @@
         }
       }
     },
+    "avg" : {
+
+    },
     "Awake" : {
+
+    },
+    "Awake Avg" : {
 
     },
     "Background" : {
@@ -412,6 +439,9 @@
 
     },
     "Bar" : {
+
+    },
+    "battery" : {
 
     },
     "Battery" : {
@@ -465,10 +495,19 @@
     "Chimes" : {
 
     },
+    "Choose how the point mark on the heart rate chart is calculated." : {
+
+    },
     "Choose which saved location your watch shows weather for." : {
 
     },
     "Clear All Exercises" : {
+
+    },
+    "Clear Disconnect Pins" : {
+
+    },
+    "Clear HRM Data" : {
 
     },
     "Clear Step Data" : {
@@ -575,6 +614,9 @@
     "Day" : {
 
     },
+    "Days" : {
+
+    },
     "Debug Logs" : {
 
     },
@@ -587,6 +629,9 @@
           }
         }
       }
+    },
+    "Delete All Devices" : {
+
     },
     "Delete Data" : {
 
@@ -662,9 +707,6 @@
 
     },
     "Double Tap" : {
-
-    },
-    "Download" : {
 
     },
     "Downloading" : {
@@ -931,6 +973,9 @@
 
     },
     "Health Details" : {
+
+    },
+    "heart" : {
 
     },
     "Heart Range Notifications" : {
@@ -1237,6 +1282,9 @@
         }
       }
     },
+    "Max" : {
+
+    },
     "Maximum" : {
       "localizations" : {
         "fr" : {
@@ -1247,6 +1295,12 @@
         }
       }
     },
+    "mdn" : {
+
+    },
+    "Median" : {
+
+    },
     "Medium" : {
 
     },
@@ -1254,6 +1308,9 @@
 
     },
     "Mid" : {
+
+    },
+    "Min" : {
 
     },
     "Minimum" : {
@@ -1318,6 +1375,9 @@
 
     },
     "Night" : {
+
+    },
+    "No Data" : {
 
     },
     "No Logs" : {
@@ -1426,6 +1486,9 @@
     "PM" : {
 
     },
+    "Point Mark" : {
+
+    },
     "Poor" : {
 
     },
@@ -1522,6 +1585,9 @@
     "Restarting" : {
 
     },
+    "Resting" : {
+
+    },
     "Resting Heart Rate" : {
 
     },
@@ -1562,6 +1628,9 @@
 
     },
     "Selected" : {
+
+    },
+    "Selected Hour" : {
 
     },
     "Send" : {
@@ -1611,17 +1680,6 @@
         }
       }
     },
-    "Set a fixed location to use to fetch weather." : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Définir un emplacement fixe à utiliser pour récupérer les données météorologiques."
-          }
-        }
-      }
-    },
     "Set to 0" : {
 
     },
@@ -1664,7 +1722,13 @@
     "Single tap and double tap can't both be on." : {
 
     },
+    "sleep" : {
+
+    },
     "Sleep" : {
+
+    },
+    "Sleep Avg" : {
 
     },
     "Sleep timeline for last night" : {
@@ -1723,6 +1787,9 @@
 
     },
     "Step Goal" : {
+
+    },
+    "steps" : {
 
     },
     "Steps" : {
@@ -1784,6 +1851,9 @@
     "Test HealthKit" : {
 
     },
+    "Test HRM" : {
+
+    },
     "Test Music" : {
 
     },
@@ -1840,6 +1910,9 @@
 
     },
     "There aren't any available releases." : {
+
+    },
+    "There isn't any %@ data to show" : {
 
     },
     "There wasn't any heart rate data recorded for this exercise." : {
@@ -1961,23 +2034,6 @@
     },
     "Updating..." : {
 
-    },
-    "Upload %lld File%@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "Upload %1$lld File%2$@"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Télécharger %1$lld Fichier%2$@"
-          }
-        }
-      }
     },
     "Upload ^[%lld File](inflect: true)" : {
 
@@ -2101,6 +2157,9 @@
 
     },
     "Workout" : {
+
+    },
+    "Workout Avg" : {
 
     },
     "Workout Type" : {
@@ -2236,82 +2295,6 @@
 
     },
     "Zones are based on an estimated maximum heart rate of %lld BPM from the age in your health details." : {
-
-    },
-    "%@ " : {
-
-    },
-    "%lld BPM %@" : {
-
-    },
-    "%lld readings" : {
-      "localizations" : {
-        "en" : {
-          "variations" : {
-            "plural" : {
-              "one" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld reading"
-                }
-              },
-              "other" : {
-                "stringUnit" : {
-                  "state" : "translated",
-                  "value" : "%lld readings"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "Add a Day" : {
-
-    },
-    "avg" : {
-
-    },
-    "battery" : {
-
-    },
-    "Choose how the point mark on the heart rate chart is calculated." : {
-
-    },
-    "Clear HRM Data" : {
-
-    },
-    "Days" : {
-
-    },
-    "heart" : {
-
-    },
-    "Max" : {
-
-    },
-    "mdn" : {
-
-    },
-    "Median" : {
-
-    },
-    "Min" : {
-
-    },
-    "Point Mark" : {
-
-    },
-    "Selected Hour" : {
-
-    },
-    "steps" : {
-
-    },
-    "Test HRM" : {
-
-    },
-    "There isn't any %@ data to show" : {
 
     }
   },

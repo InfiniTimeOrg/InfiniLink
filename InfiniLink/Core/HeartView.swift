@@ -14,20 +14,33 @@ struct HeartView: View {
     @ObservedObject var chartManager = ChartManager.shared
 
     @State private var samples: [HeartRateSample] = []
-    @State private var hasLoaded = false
+    @State private var averages = HeartRateAverages()
+    @State private var resting: Double?
 
     var values: [Double] {
         return samples.map { $0.value }
     }
 
     func load() async {
-        samples = await chartManager.heartRateSamples()
-        // Wait until the first value shows so it doesn't animate on appear
-        if !hasLoaded {
-            DispatchQueue.main.async {
-                hasLoaded = true
+        let samples = await chartManager.heartRateSamples()
+        // Skip the count-up animation for the first value
+        var transaction = Transaction()
+        transaction.disablesAnimations = self.samples.isEmpty
+        withTransaction(transaction) {
+            self.samples = samples
+        }
+        if let deviceId = DeviceManager.shared.pairedDeviceID {
+            HealthTrends().heartRateAverages(deviceId: deviceId, activeWorkoutStart: ExerciseViewModel.shared.sessionStartDate) { averages in
+                self.averages = averages
+            }
+            HealthTrends().restingHeartRates(days: 1, deviceId: deviceId) { days in
+                resting = days.first?.bpm
             }
         }
+    }
+
+    func averageItem(_ title: String, _ value: Double?, icon: String) -> some View {
+        DetailHeaderSubItemView(title: title, value: value.map { String(format: "%.0f", $0) } ?? "--", icon: (icon, .red.opacity(0.7)))
     }
 
     func units(for seconds: Int) -> String {
@@ -55,7 +68,13 @@ struct HeartView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60, animateTitle: hasLoaded) {
+                    DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60) {
+                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                            averageItem(NSLocalizedString("Resting", comment: ""), resting, icon: "bed.double.fill")
+                            averageItem(NSLocalizedString("Awake Avg", comment: ""), averages.awake, icon: "sun.max.fill")
+                            averageItem(NSLocalizedString("Sleep Avg", comment: ""), averages.sleep, icon: "moon.fill")
+                            averageItem(NSLocalizedString("Workout Avg", comment: ""), averages.workout, icon: "figure.run")
+                        }
                     }
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
