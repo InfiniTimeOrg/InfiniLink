@@ -89,6 +89,7 @@ class BLEManager: NSObject, ObservableObject {
     @Published var newPeripherals: [CBPeripheral] = []
     @Published var discoveredRSSI: [UUID: Int] = [:]
     @Published var infiniTime: CBPeripheral?
+    var peripheralToConnect: CBPeripheral? // CoreBluetooth cancels a pending connection if the peripheral isn't retained
     
     @Published var hasLoadedBatteryLevel = false
     @Published var fakeRecoveryMode = false // Developer toggle
@@ -187,6 +188,7 @@ class BLEManager: NSObject, ObservableObject {
         guard isBluetoothOn else { return }
         
         isConnecting = true
+        peripheralToConnect = peripheral
         manager?.connect(peripheral, options: forceAncs ? [CBConnectPeripheralOptionRequiresANCS: true] : nil)
     }
 
@@ -203,6 +205,7 @@ class BLEManager: NSObject, ObservableObject {
         deviceManager.pairedDevice = deviceManager.currentDevice() ?? deviceManager.addDevice(uuid: peripheral.identifier.uuidString)
         
         infiniTime = peripheral
+        peripheralToConnect = nil
         infiniTime?.delegate = self
         infiniTime?.discoverServices(nil)
         isConnectedToPinetime = true
