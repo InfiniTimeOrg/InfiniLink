@@ -11,15 +11,15 @@ import WeatherKit
 struct WeatherView: View {
     @ObservedObject var weatherController = WeatherController.shared
 
-    func sunEventText(for weather: Weather) -> LocalizedStringKey? {
+    func sunEvent(for weather: Weather) -> (title: String, time: String)? {
         guard let today = weather.dailyForecast.first else { return nil }
 
         if let sunrise = today.sun.sunrise, Date() < sunrise {
-            return "Sunrise is at \(sunrise.formatted(.dateTime.hour().minute()))."
+            return ("Sunrise", sunrise.formatted(.dateTime.hour().minute()))
         } else if let sunset = today.sun.sunset, Date() < sunset {
-            return "Sunset is at \(sunset.formatted(.dateTime.hour().minute())) tonight."
+            return ("Sunset", sunset.formatted(.dateTime.hour().minute()))
         } else if let sunrise = weather.dailyForecast.forecast.dropFirst().first?.sun.sunrise {
-            return "Sunrise is at \(sunrise.formatted(.dateTime.hour().minute())) tomorrow."
+            return ("Sunrise", sunrise.formatted(.dateTime.hour().minute()))
         }
 
         return nil
@@ -35,12 +35,23 @@ struct WeatherView: View {
                                 Header(title: String(format: "%.0f", weatherController.getTemperature(for: weather.currentWeather.temperature)) + weatherController.unit,
                                        subtitle: weather.currentWeather.condition.description,
                                        icon: weather.currentWeather.symbolName,
-                                       accent: Color.yellow),
+                                       accent: weatherController.getColor(for: weather.currentWeather.temperature)),
                                 width: geo.size.width) {
-                                    HStack {
+                                    LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                                         DetailHeaderSubItemView(title: "Min",
-                                                                value: String(format: "%.0f", weatherController.getTemperature(for: weather.dailyForecast.first?.lowTemperature)) + weatherController.unit)
-                                        DetailHeaderSubItemView(title: "Max", value: String(format: "%.0f", weatherController.getTemperature(for: weather.dailyForecast.first?.highTemperature)) + weatherController.unit)
+                                                                value: String(format: "%.0f", weatherController.getTemperature(for: weather.dailyForecast.first?.lowTemperature)) + weatherController.unit,
+                                                                icon: ("sun.min.fill", weatherController.getColor(for: weather.dailyForecast.first?.lowTemperature)))
+                                        DetailHeaderSubItemView(title: "Max",
+                                                                value: String(format: "%.0f", weatherController.getTemperature(for: weather.dailyForecast.first?.highTemperature)) + weatherController.unit,
+                                                                icon: ("sun.max.fill", weatherController.getColor(for: weather.dailyForecast.first?.highTemperature)))
+                                        DetailHeaderSubItemView(title: "Feels Like",
+                                                                value: String(format: "%.0f", weatherController.getTemperature(for: weather.currentWeather.apparentTemperature)) + weatherController.unit,
+                                                                icon: ("thermometer.medium", weatherController.getColor(for: weather.currentWeather.apparentTemperature)))
+                                        if let sunEvent = sunEvent(for: weather) {
+                                            DetailHeaderSubItemView(title: sunEvent.title,
+                                                                    value: sunEvent.time,
+                                                                    icon: ("sun.and.horizon.fill", .yellow))
+                                        }
                                     }
                                 }
                         }
@@ -61,6 +72,7 @@ struct WeatherView: View {
                                     Spacer()
                                     HStack(spacing: 6) {
                                         Text(String(format: "%.0f", weatherController.getTemperature(for: day.lowTemperature)) + weatherController.unit)
+                                            .foregroundStyle(weatherController.getColor(for: day.lowTemperature))
                                         Capsule()
                                             .frame(width: {
                                                 let temperatureRange = day.highTemperature.value - day.lowTemperature.value
@@ -68,14 +80,10 @@ struct WeatherView: View {
                                                 return max(relativeWidth, 0)
                                             }(), height: 3)
                                         Text(String(format: "%.0f", weatherController.getTemperature(for: day.highTemperature)) + weatherController.unit)
+                                            .foregroundStyle(weatherController.getColor(for: day.highTemperature))
                                     }
                                     .foregroundStyle(.gray)
                                 }
-                            }
-                        }
-                        if let sunEventText = sunEventText(for: weather) {
-                            Section {
-                                Text(sunEventText)
                             }
                         }
                     }

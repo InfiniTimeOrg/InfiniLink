@@ -118,6 +118,19 @@ class WeatherController: ObservableObject {
     func getTemperature(for value: Measurement<UnitTemperature>?) -> Double {
         return value?.converted(to: unitTemperature).value ?? 0
     }
+
+    func getColor(for value: Measurement<UnitTemperature>?) -> Color {
+        let celsius = (value?.converted(to: .celsius).value ?? 0).rounded()
+
+        if celsius <= 0 { // Same thresholds as the infinitime weather app
+            return .blue
+        } else if celsius <= 4 {
+            return .cyan
+        } else if celsius >= 27 {
+            return .red
+        }
+        return .orange
+    }
     
     func getIcon(from icon: String) -> UInt8 {
         // WeatherKit icons don't contain .fill, but we're keeping this here as a safeguard just in case that changes
