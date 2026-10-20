@@ -9,7 +9,7 @@ import SwiftUI
 import WeatherKit
 
 struct WeatherView: View {
-    @StateObject var weatherController = WeatherController.shared
+    @ObservedObject var weatherController = WeatherController.shared
 
     func sunEventText(for weather: Weather) -> LocalizedStringKey? {
         guard let today = weather.dailyForecast.first else { return nil }

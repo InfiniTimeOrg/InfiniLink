@@ -176,7 +176,6 @@ struct SetUpDetailsView: View {
 struct NotificationsSetupView: View {
     @ObservedObject var personalizationController = PersonalizationController.shared
     @ObservedObject var notificationManager = NotificationManager.shared
-    @ObservedObject var settingsManager = NotificationSettingsManager.shared
 
     var body: some View {
         Form {
@@ -192,15 +191,9 @@ struct NotificationsSetupView: View {
             .multilineTextAlignment(.center)
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
-            Section(header: Text("Health"), footer: Text("Receive a reminder to drink water for the set amount of times a day.") + Text(" You can customize this in notification settings.")) {
-                Toggle("Water Reminder", isOn: $settingsManager.settings.waterReminderEnabled)
-            }
-            Section(footer: Text("Get a notification when your heart rate goes above or below the specified range.") + Text(" You can customize this in notification settings.")) {
-                Toggle("Heart Range Notifications", isOn: $settingsManager.settings.heartSettings.rangeReminderEnabled)
-            }
-            Section(header: Text("Daily Goals"), footer: Text("Get notified when you reach your daily fitness goals.")) {
-                Toggle("Steps", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled)
-            }
+            HealthNotificationSections(isSetup: true)
+            ExerciseNotificationSections(isSetup: true)
+            GoalsNotificationSections(isSetup: true)
             Button {
                 notificationManager.requestNotificationAuthorization()
 

@@ -26,6 +26,8 @@ struct AppleHealthSyncView: View {
     @AppStorage("syncHeartRateToAppleHealth") private var syncHeartRate = true
     @AppStorage("syncCaloriesToAppleHealth") private var syncCalories = true
     @AppStorage("syncExerciseToAppleHealth") private var syncExercise = true
+    @AppStorage("syncSleepToAppleHealth") private var syncSleep = true
+    @AppStorage("fillStepsFromAppleHealth") private var fillSteps = true
 
     var body: some View {
         List {
@@ -37,12 +39,20 @@ struct AppleHealthSyncView: View {
                 Toggle("Heart Rate", isOn: $syncHeartRate)
                 Toggle("Calories", isOn: $syncCalories)
                 Toggle("Exercise", isOn: $syncExercise)
+                if SleepManager.shared.isSupported {
+                    Toggle("Sleep", isOn: $syncSleep)
+                }
             } header: {
                 Text("Synced Data")
             } footer: {
                 Text("Turn off any data you don't want written to Apple Health.")
             }
             .disabled(!syncToAppleHealth)
+            Section {
+                Toggle("Fill Missing Step Days", isOn: $fillSteps)
+            } footer: {
+                Text("Use steps from your iPhone and other sources in Apple Health for days your watch wasn't connected.")
+            }
         }
         .navigationTitle("Apple Health")
     }

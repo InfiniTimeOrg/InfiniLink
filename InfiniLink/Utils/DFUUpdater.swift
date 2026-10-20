@@ -6,10 +6,10 @@
 //
 
 import Foundation
-import NordicDFU
+import Zip
 import SwiftUI
 
-class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, LoggerDelegate {
+class DFUUpdater: ObservableObject {
     static let shared = DFUUpdater()
 
     enum Stage: Equatable {
@@ -23,7 +23,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     let bleManager = BLEManager.shared
     let downloadManager = DownloadManager.shared
 
-    private var dfuController: DFUServiceController?
+    private(set) var transfer: DFUTransfer?
     private var isAccessingScopedResource = false
 
     @Published private(set) var stage: Stage = .idle
@@ -34,13 +34,31 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     @Published var resourceFilename = ""
     @Published var firmwareSelected = false
     @Published var local = true
-    @Published var firmwareURL: URL!
-    @Published var resourceURL: URL!
+    @Published var firmwareURL: URL?
+    @Published var resourceURL: URL?
 
     @AppStorage("updateResourcesWithFirmware") var updateResourcesWithFirmware = true
-    @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 12
+    @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
+
+    var statusText: String {
+        switch stage {
+        case .idle:
+            return NSLocalizedString("Preparing", comment: "")
+        case .downloading:
+            return NSLocalizedString("Downloading", comment: "")
+        case .uploadingResources:
+            return statusDetail.isEmpty ? NSLocalizedString("Updating resources", comment: "") : statusDetail
+        case .installing:
+            return statusDetail.isEmpty ? NSLocalizedString("Installing", comment: "") : statusDetail
+        case .failed:
+            return ""
+        }
+    }
 
     func fileSize(from fileUrl: URL) -> Int {
+        let isAccessing = fileUrl.startAccessingSecurityScopedResource()
+        defer { if isAccessing { fileUrl.stopAccessingSecurityScopedResource() } }
+        
         do {
             let resource = try fileUrl.resourceValues(forKeys: [.fileSizeKey])
             return resource.fileSize ?? 0
@@ -59,30 +77,26 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         percentComplete = 0
     }
 
-    // Everything is on disk now (either downloaded or in a local file)
-    // push resources (if any) and then flash
+    // Everything is on disk now (either downloaded or in a local file), so push resources (if any) and then flash
     func install() {
         downloadManager.updateStarted = true
 
-        if firmwareURL == nil, resourceURL != nil {
-            installResourcesOnly()
-        } else if !local, resourceURL != nil {
-            uploadResources { [self] in installFirmware() }
+        if let resourceURL {
+            uploadResources(from: resourceURL) { [self] in
+                if firmwareURL == nil {
+                    finish(.completed)
+                } else {
+                    installFirmware()
+                }
+            }
         } else {
             installFirmware()
         }
     }
 
-    // External-resources-only flow
-    // push resources over BLEFS, no firmware flash
-    func installResourcesOnly() {
-        downloadManager.updateStarted = true
-        uploadResources { [self] in finish(.completed) }
-    }
-
     func cancel() {
         downloadManager.cancelActiveDownload()
-        _ = dfuController?.abort()
+        transfer?.cancel()
         finish(.cancelled)
     }
 
@@ -98,10 +112,10 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         fail(NSLocalizedString("The watch's resources couldn't be updated.", comment: ""))
     }
 
-    private func uploadResources(then next: @escaping () -> Void) {
+    private func uploadResources(from url: URL, then next: @escaping () -> Void) {
         stage = .uploadingResources
         statusDetail = ""
-        BLEFSHandler.shared.uploadExternalResources(completion: next)
+        BLEFSHandler.shared.uploadExternalResources(from: url, completion: next)
     }
 
     private func installFirmware() {
@@ -118,9 +132,14 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             isAccessingScopedResource = firmwareURL.startAccessingSecurityScopedResource()
         }
 
-        let firmware: DFUFirmware
+        guard let controlPoint = bleManager.dfuControlPointCharacteristic, let packet = bleManager.dfuPacketCharacteristic else {
+            fail(NSLocalizedString("The watch isn't ready for updates. Make sure file access and updates are allowed on it.", comment: ""))
+            return
+        }
+
+        let package: (image: Data, initPacket: Data)
         do {
-            firmware = try DFUFirmware(urlToZipFile: firmwareURL)
+            package = try loadPackage(firmwareURL)
         } catch {
             fail(NSLocalizedString("The firmware file couldn't be read. Make sure it's a valid DFU zip.", comment: ""))
             return
@@ -130,14 +149,62 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
         statusDetail = ""
         percentComplete = 0
 
-        let initiator = DFUServiceInitiator().with(firmware: firmware)
-        initiator.packetReceiptNotificationParameter = UInt16(clamping: packetReceiptNotification)
-        initiator.logger = self
-        initiator.delegate = self
-        initiator.progressDelegate = self
+        let transfer = DFUTransfer(peripheral: target, controlPoint: controlPoint, packet: packet, image: package.image, initPacket: package.initPacket, packetsPerReceipt: UInt8(clamping: packetReceiptNotification))
+        transfer.onStep = { [weak self] step in
+            self?.statusDetail = self?.description(of: step) ?? ""
+        }
+        transfer.onProgress = { [weak self] progress in
+            self?.percentComplete = progress * 100
+        }
+        transfer.onFinish = { [weak self] error in
+            if let error {
+                self?.fail(error)
+            } else {
+                log("Firmware update completed", type: .info, caller: "DFUUpdater", target: .dfu)
+                self?.finish(.completed)
+            }
+        }
+        self.transfer = transfer
 
         bleManager.beginFirmwareUpdate()
-        dfuController = initiator.start(target: target)
+        transfer.start()
+    }
+
+    private func loadPackage(_ url: URL) throws -> (image: Data, initPacket: Data) {
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        try Zip.unzipFile(url, destination: directory, overwrite: true, password: nil)
+        defer { try? FileManager.default.removeItem(at: directory) }
+
+        var binFile: String?
+        var datFile: String?
+        if let data = try? Data(contentsOf: directory.appendingPathComponent("manifest.json")),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+           let application = (json["manifest"] as? [String: Any])?["application"] as? [String: Any] {
+            binFile = application["bin_file"] as? String
+            datFile = application["dat_file"] as? String
+        }
+
+        let files = try FileManager.default.contentsOfDirectory(atPath: directory.path)
+        guard let bin = binFile ?? files.first(where: { $0.hasSuffix(".bin") }), let dat = datFile ?? files.first(where: { $0.hasSuffix(".dat") }) else {
+            throw CocoaError(.fileReadCorruptFile)
+        }
+
+        return (try Data(contentsOf: directory.appendingPathComponent(bin)), try Data(contentsOf: directory.appendingPathComponent(dat)))
+    }
+
+    private func description(of step: DFUTransfer.Step) -> String {
+        switch step {
+        case .starting:
+            return NSLocalizedString("Starting", comment: "")
+        case .sendingInit:
+            return NSLocalizedString("Preparing", comment: "")
+        case .sendingImage:
+            return NSLocalizedString("Installing", comment: "")
+        case .validating:
+            return NSLocalizedString("Verifying", comment: "")
+        case .activating, .done:
+            return NSLocalizedString("Restarting", comment: "")
+        }
     }
 
     private enum Outcome { case completed, cancelled, failed }
@@ -148,7 +215,7 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
     }
 
     private func finish(_ outcome: Outcome, message: String? = nil) {
-        dfuController = nil
+        transfer = nil
 
         if isAccessingScopedResource {
             firmwareURL?.stopAccessingSecurityScopedResource()
@@ -173,32 +240,5 @@ class DFUUpdater: ObservableObject, DFUServiceDelegate, DFUProgressDelegate, Log
             downloadManager.updateStarted = false
             stage = .idle
         }
-    }
-
-    func dfuStateDidChange(to state: DFUState) {
-        statusDetail = state.description
-
-        switch state {
-        case .completed:
-            log("Firmware update completed", type: .info, caller: "DFUUpdater", target: .dfu)
-            finish(.completed)
-        case .aborted:
-            log("Firmware update aborted", type: .info, caller: "DFUUpdater", target: .dfu)
-            finish(.cancelled)
-        default:
-            break
-        }
-    }
-
-    func dfuError(_ error: DFUError, didOccurWithMessage message: String) {
-        fail(message)
-    }
-
-    func dfuProgressDidChange(for part: Int, outOf totalParts: Int, to progress: Int, currentSpeedBytesPerSecond: Double, avgSpeedBytesPerSecond: Double) {
-        percentComplete = Double(progress)
-    }
-
-    func logWith(_ level: LogLevel, message: String) {
-        log("DFU log: \(message)", type: .info, caller: "DFUUpdater", target: .dfu)
     }
 }

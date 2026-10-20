@@ -9,6 +9,11 @@ import Foundation
 import CoreLocation
 import SwiftUI
 
+struct SavedLocation: Codable, Hashable {
+    let name: String
+    let address: String
+}
+
 enum AddressComponent: CaseIterable {
     case name
     case locality
@@ -21,12 +26,20 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     
     @AppStorage("useCurrentLocation") var useCurrentLocation = true
     @AppStorage("setLocation") var setLocation = "Cupertino"
+    @AppStorage("displayLocation") var displayLocation = "Cupertino"
+    
+    @Published var savedLocations: [SavedLocation] = [] {
+        didSet {
+            guard let data = try? JSONEncoder().encode(savedLocations) else { return }
+            UserDefaults.standard.set(data, forKey: "savedWeatherLocations")
+        }
+    }
     
     @Published var location: CLLocation?
     @Published var locationName: String = ""
-    @Published var locationManager = CLLocationManager()
+    let locationManager = CLLocationManager()
     
-    private lazy var weatherController = WeatherController.shared
+    private var deviceLocationRequests: [(CLLocation?) -> Void] = []
     
     func canGetUserLocation() -> Bool {
         return locationManager.authorizationStatus != .restricted && locationManager.authorizationStatus != .denied && locationManager.authorizationStatus != .notDetermined
@@ -36,20 +49,51 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         super.init()
         self.locationManager.delegate = self
         
+        if let data = UserDefaults.standard.data(forKey: "savedWeatherLocations"),
+           let decoded = try? JSONDecoder().decode([SavedLocation].self, from: data) {
+            savedLocations = decoded
+        } else if UserDefaults.standard.string(forKey: "setLocation") != nil {
+            // Migrate the location from before saved locations existed
+            savedLocations = [SavedLocation(name: displayLocation, address: setLocation)]
+        }
+        
         self.requestLocation()
     }
     
-    func getLocation(_ manual: Bool = false) {
+    func selectLocation(_ location: SavedLocation) {
+        displayLocation = location.name
+        setLocation(location.address)
+    }
+    
+    func addLocation(_ location: SavedLocation) {
+        if !savedLocations.contains(location) {
+            savedLocations.append(location)
+        }
+        selectLocation(location)
+    }
+    
+    func removeLocations(at offsets: IndexSet) {
+        savedLocations.remove(atOffsets: offsets)
+        
+        if !savedLocations.contains(where: { $0.address == setLocation }) {
+            if let first = savedLocations.first {
+                selectLocation(first)
+            } else {
+                useCurrentLocation = true
+                getLocation()
+            }
+        }
+    }
+    
+    // Setting the location triggers a weather fetch
+    func getLocation() {
         if useCurrentLocation {
             self.requestLocation()
-            self.weatherController.fetchWeatherData(checkTimeInterval: manual)
         } else {
             self.getCoordinateFrom(address: setLocation) { coordinate, error in
                 if let coordinate = coordinate {
-                    let location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
-                    self.location = location
-                    self.updateLocationName(for: location)
-                    self.weatherController.fetchWeatherData(checkTimeInterval: manual)
+                    self.locationName = self.displayLocation
+                    self.location = CLLocation(latitude: coordinate.latitude, longitude: coordinate.longitude)
                 } else if let error = error {
                     log("Error finding location for address \(self.setLocation): \(error.localizedDescription)", caller: "LocationManager")
                 }
@@ -70,9 +114,9 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
-    func setLocation(_ location: String, manual: Bool = false) {
+    func setLocation(_ location: String) {
         self.setLocation = location
-        self.getLocation(manual)
+        self.getLocation()
     }
     
     func getCoordinateFrom(address: String, completion: @escaping (_ coordinate: CLLocationCoordinate2D?, _ error: Error?) -> ()) {
@@ -111,6 +155,22 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
         }
     }
     
+    // The phone's own location, even when weather uses a saved city
+    func requestDeviceLocation(completion: @escaping (CLLocation?) -> Void) {
+        guard canGetUserLocation() else {
+            completion(nil)
+            return
+        }
+        
+        deviceLocationRequests.append(completion)
+        locationManager.requestLocation()
+    }
+    
+    private func finishDeviceLocationRequests(with location: CLLocation?) {
+        deviceLocationRequests.forEach { $0(location) }
+        deviceLocationRequests = []
+    }
+    
     func requestLocation() {
         switch locationManager.authorizationStatus {
         case .authorizedWhenInUse, .authorizedAlways:
@@ -125,13 +185,17 @@ class LocationManager: NSObject, ObservableObject, CLLocationManagerDelegate {
     }
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        if let location = locations.first, useCurrentLocation {
+        finishDeviceLocationRequests(with: locations.last)
+        
+        if let location = locations.last, useCurrentLocation {
             self.location = location
             updateLocationName(for: location)
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        finishDeviceLocationRequests(with: manager.location)
+        
         if useCurrentLocation {
             DispatchQueue.main.async {
                 WeatherController.shared.errorWhileFetching = error

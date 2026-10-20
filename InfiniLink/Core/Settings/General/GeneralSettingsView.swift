@@ -53,6 +53,16 @@ struct GeneralSettingsView: View {
                 } label: {
                     ListRowView(title: "Data Sync", icon: "arrow.triangle.2.circlepath", iconColor: .green)
                 }
+                NavigationLink {
+                    ExportDataView()
+                } label: {
+                    ListRowView(title: "Export Data", icon: "square.and.arrow.up", iconColor: .blue)
+                }
+                NavigationLink {
+                    StoredDataView()
+                } label: {
+                    ListRowView(title: "Stored Data", icon: "internaldrive.fill", iconColor: .gray)
+                }
             }
             Section {
                 NavigationLink {
@@ -79,6 +89,7 @@ struct GeneralSettingsView: View {
             }
         }
         .navigationTitle("General")
+
     }
 }
 

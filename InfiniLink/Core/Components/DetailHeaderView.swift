@@ -27,6 +27,10 @@ struct Header {
 struct DetailHeaderSubItemView: View {
     @Environment(\.colorScheme) var colorScheme
     
+    @ScaledMetric private var iconSize: CGFloat = 21
+    @ScaledMetric private var valueSize: CGFloat = 22
+    @ScaledMetric private var unitSize: CGFloat = 17
+    
     let title: String
     let value: String
     let unit: String?
@@ -46,28 +50,32 @@ struct DetailHeaderSubItemView: View {
             if let name = icon?.0, let color = icon?.1 {
                 Image(systemName: name)
                     .foregroundStyle(color)
-                    .font(.system(size: 21).weight(.medium))
+                    .font(.system(size: iconSize).weight(.medium))
                     .frame(minWidth: 30)
+                    .accessibilityHidden(true)
             }
             VStack(alignment: .leading, spacing: 3) {
                 HStack(alignment: .top, spacing: 3) {
                     Text(title.uppercased())
                         .font(.caption.weight(.medium))
                     if let completion {
-                        Image(systemName: "info.circle")
-                            .font(.caption.weight(.medium))
-                            .onTapGesture {
-                                completion()
-                            }
+                        Button {
+                            completion()
+                        } label: {
+                            Image(systemName: "info.circle")
+                                .font(.caption.weight(.medium))
+                        }
+                        .buttonStyle(.plain)
+                        .accessibilityLabel(Text("More Info"))
                     }
                 }
                 .foregroundStyle(.gray)
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
                     Text(value)
-                        .font(.system(size: 22).weight(.semibold))
+                        .font(.system(size: valueSize).weight(.semibold))
                     if let unit {
                         Text(unit)
-                            .font(.system(size: 17).weight(.medium))
+                            .font(.system(size: unitSize).weight(.medium))
                             .foregroundColor(.primary.opacity(0.75))
                     }
                 }
@@ -77,6 +85,7 @@ struct DetailHeaderSubItemView: View {
         .padding(12)
         .background(colorScheme == .dark ? AnyShapeStyle(Material.regular) : AnyShapeStyle(Color(.systemBackground)))
         .clipShape(RoundedRectangle(cornerRadius: 15))
+        .accessibilityElement(children: completion == nil ? .combine : .contain)
     }
 }
 
@@ -95,8 +104,14 @@ struct DetailHeaderView<V: View>: View {
     
     @State private var isHeartAnimating = false
     
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    
+    @ScaledMetric private var titleSize: CGFloat = 50
+    @ScaledMetric private var unitsSize: CGFloat = 20
+    @ScaledMetric private var subtitleSize: CGFloat = 17.5
+    
     func updateAnimState() {
-        if let last = heartPoints.last?.timestamp, abs(last.timeIntervalSinceNow) < 60 && animate {
+        if let last = heartPoints.last?.timestamp, abs(last.timeIntervalSinceNow) < 60 && animate && !reduceMotion {
             isHeartAnimating = true
         }
     }
@@ -118,6 +133,7 @@ struct DetailHeaderView<V: View>: View {
                     Image(systemName: header.icon)
                         .foregroundStyle(header.accent)
                         .font(.system(size: min(width / 4.4, 115)))
+                        .accessibilityHidden(true)
                         .scaleEffect(isHeartAnimating ? 0.85 : 1.0)
                         .animation(
                             .snappy(duration: 0.9)
@@ -126,21 +142,22 @@ struct DetailHeaderView<V: View>: View {
                         )
                     HStack(alignment: .firstTextBaseline, spacing: 2) {
                         Text(header.title)
-                            .font(.system(size: 50).bold())
+                            .font(.system(size: titleSize).bold())
                             .contentTransition(.numericText())
                             .animation(.default, value: header.title)
                         if let units = header.units {
                             Text(units.uppercased())
                                 .foregroundStyle(.primary.opacity(0.8))
-                                .font(.system(size: 20).weight(.bold))
+                                .font(.system(size: unitsSize).weight(.bold))
                         }
                     }
                     if let subtitle = header.subtitle {
                         Text(subtitle)
                             .foregroundStyle(.gray)
-                            .font(.system(size: 17.5).weight(.medium))
+                            .font(.system(size: subtitleSize).weight(.medium))
                     }
                 }
+                .accessibilityElement(children: .combine)
                 headerItems
             }
         }

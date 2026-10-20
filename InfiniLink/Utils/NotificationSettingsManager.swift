@@ -13,6 +13,8 @@ struct NotificationSettings: Codable {
     var waterReminderEnabled = true
     var waterReminderAmount = 7
 
+    var inactivitySettings = InactivitySettings()
+
     var transliterationEnabled = true
 
     var batterySettings = BatterySettings()
@@ -31,6 +33,7 @@ struct NotificationSettings: Codable {
         watchNotificationsEnabled = value(.watchNotificationsEnabled, watchNotificationsEnabled)
         waterReminderEnabled = value(.waterReminderEnabled, waterReminderEnabled)
         waterReminderAmount = value(.waterReminderAmount, waterReminderAmount)
+        inactivitySettings = value(.inactivitySettings, inactivitySettings)
         transliterationEnabled = value(.transliterationEnabled, transliterationEnabled)
         batterySettings = value(.batterySettings, batterySettings)
         heartSettings = value(.heartSettings, heartSettings)
@@ -39,8 +42,28 @@ struct NotificationSettings: Codable {
     }
 }
 
+struct InactivitySettings: Codable {
+    var enabled = false
+    var minutes = 60
+    var startHour = 9
+    var endHour = 21
+}
+
 struct GoalSettings: Codable {
     var stepReminderEnabled = true
+    var halfwayReminderEnabled = false
+    var streakReminderEnabled = true
+    var recordReminderEnabled = true
+    
+    init() {}
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        stepReminderEnabled = (try? container.decode(Bool.self, forKey: .stepReminderEnabled)) ?? stepReminderEnabled
+        halfwayReminderEnabled = (try? container.decode(Bool.self, forKey: .halfwayReminderEnabled)) ?? halfwayReminderEnabled
+        streakReminderEnabled = (try? container.decode(Bool.self, forKey: .streakReminderEnabled)) ?? streakReminderEnabled
+        recordReminderEnabled = (try? container.decode(Bool.self, forKey: .recordReminderEnabled)) ?? recordReminderEnabled
+    }
 }
 
 struct ExerciseSettings: Codable {

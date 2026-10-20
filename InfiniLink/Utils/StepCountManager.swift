@@ -12,12 +12,11 @@ class StepCountManager: ObservableObject {
     static let shared = StepCountManager()
     
     let chartManager = ChartManager.shared
-    let bleManager = BLEManager.shared
     let persistenceManager = PersistenceController.shared
     let deviceManager = DeviceManager.shared
     
     var stepGoal: Int {
-        return Int(DeviceManager.shared.settings.stepsGoal)
+        return Int(deviceManager.settings.stepsGoal)
     }
     
     func setStepCount(_ steps: Int, for date: Date = Date()) {
@@ -31,15 +30,10 @@ class StepCountManager: ObservableObject {
         }
     }
     
-    private func updateStepCount(_ existing: StepCounts, with steps: Int32, for date: Date = Date(), isArbitrary: Bool = false) {
+    private func updateStepCount(_ existing: StepCounts, with steps: Int32, for date: Date = Date()) {
         existing.timestamp = date
         existing.previousSteps = existing.steps
-        
-        if isArbitrary {
-            existing.steps += steps
-        } else {
-            existing.steps = steps
-        }
+        existing.steps = steps
         
         persistenceManager.save()
     }

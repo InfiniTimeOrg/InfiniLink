@@ -94,6 +94,45 @@ struct WorkoutSessionStore {
     }
 }
 
+struct CustomExerciseDefinition: Codable {
+    let id: String
+    let name: String
+    let icon: String
+    let tracksSteps: Bool
+    let tracksRoute: Bool
+    let activityType: UInt
+
+    init(name: String, icon: String, tracksSteps: Bool, tracksRoute: Bool, activityType: HKWorkoutActivityType) {
+        self.id = "custom-" + UUID().uuidString
+        self.name = name
+        self.icon = icon
+        self.tracksSteps = tracksSteps
+        self.tracksRoute = tracksRoute
+        self.activityType = activityType.rawValue
+    }
+
+    init(from exercise: Exercise) {
+        self.id = exercise.id
+        self.name = exercise.name
+        self.icon = exercise.icon
+        self.tracksSteps = exercise.components.contains(.steps)
+        self.tracksRoute = exercise.components.contains(.location)
+        self.activityType = exercise.activityType.rawValue
+    }
+
+    var exercise: Exercise {
+        var components: [ExerciseComponents] = [.heart]
+        if tracksSteps {
+            components.append(.steps)
+        }
+        if tracksRoute {
+            components.append(.location)
+        }
+
+        return Exercise(id: id, name: name, icon: icon, components: components, activityType: HKWorkoutActivityType(rawValue: activityType) ?? .other)
+    }
+}
+
 struct Exercise: Identifiable {
     let id: String
     var name: String
@@ -109,5 +148,9 @@ struct Exercise: Identifiable {
         self.components = components
         self.pace = pace
         self.activityType = activityType
+    }
+
+    var isCustom: Bool {
+        return id.hasPrefix("custom-")
     }
 }

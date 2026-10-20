@@ -18,7 +18,10 @@ struct FindLostDeviceView: View {
     @ObservedObject private var locationManager = LocationManager.shared
     
     private let bleWriteManager = BLEWriteManager()
-    private let rssiTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    
+    // Kept in state so view updates don't restart them
+    @State private var rssiTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var hapticTimer = Timer.publish(every: 0.05, on: .main, in: .common).autoconnect()
 
     private func focusMap(on point: DisconnectMapPoint) {
         let coordinate = CLLocationCoordinate2D(
@@ -39,6 +42,36 @@ struct FindLostDeviceView: View {
     @State private var address = ""
     @State private var pingTimer: Timer? = nil
     @State private var isPinging = false
+    @State private var smoothedRSSI: Double?
+    @State private var lastHaptic = Date.distantPast
+    
+    private let hapticGenerator = UIImpactFeedbackGenerator(style: .heavy)
+    
+    private func updateSmoothedRSSI() {
+        guard let rssi = bleManager.rssi, bleManager.isConnectedToPinetime else {
+            smoothedRSSI = nil
+            return
+        }
+        
+        smoothedRSSI = (smoothedRSSI ?? Double(rssi)) * 0.6 + Double(rssi) * 0.4
+    }
+    
+    private func playProximityHaptic() {
+        guard let smoothedRSSI else { return }
+        
+        let closeness = min(max((smoothedRSSI + 100) / 40, 0), 1)
+        guard Date().timeIntervalSince(lastHaptic) >= 1 - closeness * 0.85 else { return }
+        
+        lastHaptic = Date()
+        hapticGenerator.impactOccurred(intensity: 0.5 + closeness * 0.5)
+        hapticGenerator.prepare()
+    }
+
+    private func stopPinging() {
+        pingTimer?.invalidate()
+        pingTimer = nil
+        isPinging = false
+    }
     
     private func openInMaps(to coordinate: CLLocationCoordinate2D) {
         let destination = MKMapItem(placemark: MKPlacemark(coordinate: coordinate))
@@ -49,14 +82,20 @@ struct FindLostDeviceView: View {
     
     var body: some View {
         GeometryReader { geo in
-            NavigationView {
+            NavigationStack {
                 List {
                     VStack(spacing: 8) {
                         Image(systemName: bleManager.isConnectedToPinetime ? "checkmark.circle" : "xmark.circle")
                             .font(.system(size: 50))
                             .foregroundStyle(bleManager.isConnectedToPinetime ? .green : .red)
-                        Text("\(deviceManager.name) is \(bleManager.isConnectedToPinetime ? "connected" : "disconnected")")
-                            .font(.title2.weight(.bold))
+                        Group {
+                            if bleManager.isConnectedToPinetime {
+                                Text("\(deviceManager.name) is connected")
+                            } else {
+                                Text("\(deviceManager.name) is disconnected")
+                            }
+                        }
+                        .font(.title2.weight(.bold))
                         if bleManager.isConnectedToPinetime {
                             if let rssiInt = bleManager.rssi {
                                 let rssi = RSSI.from(rssi: rssiInt)
@@ -73,72 +112,59 @@ struct FindLostDeviceView: View {
                     .frame(maxWidth: .infinity)
                     .frame(height: min(geo.size.width / 2, 200))
                     .multilineTextAlignment(.center)
-                    if let point = chartManager.disconnectMapPoint() {
-                        let date = {
-                            let timestamp = point.timestamp ?? Date()
-                            let dateFormatter = DateFormatter()
-                            dateFormatter.timeStyle = .short
-                            dateFormatter.dateStyle = .none
-                            
-                            if bleManager.isConnectedToPinetime {
-                                return dateFormatter.string(from: Date())
-                            }
-                            if abs(timestamp.timeIntervalSinceNow) >= 1440 {
-                                dateFormatter.dateStyle = .medium
-                                dateFormatter.timeStyle = .short
-                                return dateFormatter.string(from: timestamp)
+                    let point = chartManager.disconnectMapPoint()
+                    if let point, !bleManager.isConnectedToPinetime {
+                        let timestamp = point.timestamp ?? Date()
+                        let date = abs(timestamp.timeIntervalSinceNow) >= 60 * 60 * 24 ? timestamp.formatted(date: .abbreviated, time: .shortened) : timestamp.formatted(date: .omitted, time: .shortened)
+                        
+                        Section {
+                            if address.isEmpty {
+                                Text("\(deviceManager.name) was last seen at \(date).")
                             } else {
-                                return dateFormatter.string(from: timestamp)
-                            }
-                        }()
-                        if !bleManager.isConnectedToPinetime {
-                            Section {
-                                // TODO: add support for "last seen 20 mins ago, at *location*"
-                                Text("\(deviceManager.name) was last seen \(address.isEmpty ? "at \(date)" : "at \(address), at \(date)").")
+                                Text("\(deviceManager.name) was last seen at \(address), at \(date).")
                             }
                         }
-                        Section(footer: bleManager.notifyCharacteristic == nil ? Text("\(deviceManager.name) must be connected to ping it.") : nil) {
-                            Button(isPinging ? "Stop Pinging" : "Ping \(deviceManager.name)") {
-                                isPinging.toggle()
+                    }
+                    Section(footer: bleManager.notifyCharacteristic == nil ? Text("\(deviceManager.name) must be connected to ping it.") : nil) {
+                        Button(isPinging ? "Stop Pinging" : "Ping \(deviceManager.name)") {
+                            isPinging.toggle()
+                            
+                            if isPinging {
+                                // Send this immediately, because otherwise there'll be a six second delay
+                                bleWriteManager.sendLostNotification()
                                 
-                                if isPinging {
-                                    // Send this immediately, because otherwise there'll be a six second delay
+                                // Start timer for repeated notifications
+                                pingTimer = Timer.scheduledTimer(withTimeInterval: 6, repeats: true) { _ in
                                     bleWriteManager.sendLostNotification()
-                                    
-                                    // Start timer for repeated notifications
-                                    pingTimer = Timer.scheduledTimer(withTimeInterval: 6, repeats: true) { _ in
-                                        bleWriteManager.sendLostNotification()
-                                    }
-                                } else {
-                                    pingTimer?.invalidate()
-                                    pingTimer = nil
+                                }
+                            } else {
+                                stopPinging()
+                            }
+                        }
+                        .disabled(bleManager.notifyCharacteristic == nil)
+                    }
+                    if let point, !bleManager.isConnectedToPinetime {
+                        Section {
+                            Map(
+                                coordinateRegion: $region,
+                                annotationItems: [point]
+                            ) { point in
+                                MapAnnotation(
+                                    coordinate: CLLocationCoordinate2D(
+                                        latitude: point.latitude,
+                                        longitude: point.longitude
+                                    )
+                                ) {
+                                    Image(systemName: "mappin.circle.fill")
+                                        .font(.title)
+                                        .foregroundStyle(.red)
                                 }
                             }
-                            .disabled(bleManager.notifyCharacteristic == nil)
-                        }
-                        if !bleManager.isConnectedToPinetime {
-                            Section {
-                                Map(
-                                    coordinateRegion: $region,
-                                    annotationItems: [point]
-                                ) { point in
-                                    MapAnnotation(
-                                        coordinate: CLLocationCoordinate2D(
-                                            latitude: point.latitude,
-                                            longitude: point.longitude
-                                        )
-                                    ) {
-                                        Image(systemName: "mappin.circle.fill")
-                                            .font(.title)
-                                            .foregroundStyle(.red)
-                                    }
-                                }
-                                .frame(height: 400)
-                                .id(mapId)
-                                .listRowInsets(EdgeInsets())
-                                Button("Get Directions") {
-                                    openInMaps(to: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude))
-                                }
+                            .frame(height: 400)
+                            .id(mapId)
+                            .listRowInsets(EdgeInsets())
+                            Button("Get Directions") {
+                                openInMaps(to: CLLocationCoordinate2D(latitude: point.latitude, longitude: point.longitude))
                             }
                         }
                     }
@@ -163,10 +189,16 @@ struct FindLostDeviceView: View {
                     focusMap(on: newPoint)
                 }
             }
-            .navigationViewStyle(.stack)
         }
         .onReceive(rssiTimer) { _ in
             bleManager.infiniTime?.readRSSI()
+            updateSmoothedRSSI()
+        }
+        .onReceive(hapticTimer) { _ in
+            playProximityHaptic()
+        }
+        .onDisappear {
+            stopPinging()
         }
     }
 }

@@ -11,9 +11,6 @@ import MediaPlayer
 struct MusicSettingsView: View {
     @AppStorage("allowMusicControl") var allowMusicControl = true
     @AppStorage("allowVolumeControl") var allowVolumeControl = true
-    @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
-    
-    @ObservedObject private var deviceManager = DeviceManager.shared
     
     @State private var authorizationStatus = MPMediaLibrary.authorizationStatus()
     
@@ -50,9 +47,6 @@ struct MusicSettingsView: View {
                 Toggle("Allow Music Control", isOn: $allowMusicControl)
             }
             Toggle("Allow Volume Control", isOn: $allowVolumeControl)
-            Section(footer: Text("Pause any currently playing music when \(deviceManager.name) goes out of range of your phone.")) {
-                Toggle("Pause on Walk-Away", isOn: $pauseOnWalkaway)
-            }
         }
         .navigationTitle("Music")
     }

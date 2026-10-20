@@ -118,7 +118,7 @@ struct DebugLogsView: View {
 }
 
 #Preview {
-    NavigationView {
+    NavigationStack {
         DebugLogsView()
             .onAppear {
 #if DEBUG

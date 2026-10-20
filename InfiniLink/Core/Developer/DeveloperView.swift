@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 
 struct DeveloperView: View {
     @ObservedObject var bleManager = BLEManager.shared
@@ -15,12 +16,42 @@ struct DeveloperView: View {
     @AppStorage("forceAncs") var forceAncs = true
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
     
+    @State private var heartDay = ""
+    @State private var generatedDayOffset = 0
+    
     private let bleWriteManager = BLEWriteManager()
     private let musicController = MusicController.shared
     private let healthKitManager = HealthKitManager.shared
     private let deviceManager = DeviceManager.shared
     private let chartManager = ChartManager.shared
     private let stepCountManager = StepCountManager.shared
+    private let persistenceController = PersistenceController.shared
+
+    func generateRandomHeartPoints(dayOffset: Int) {
+        let context = persistenceController.container.viewContext
+        
+        let calendar = Calendar.current
+        let targetDay = calendar.date(byAdding: .day, value: dayOffset, to: Date())!
+        
+        let startOfDay = calendar.startOfDay(for: targetDay)
+        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        
+        for _ in 0..<150 {
+            let randomTime = TimeInterval.random(in: 0..<endOfDay.timeIntervalSince(startOfDay))
+            let timestamp = startOfDay.addingTimeInterval(randomTime)
+            
+            let point = HeartDataPoint(context: context)
+            point.deviceId = deviceManager.pairedDeviceID
+            point.timestamp = timestamp
+            point.value = Double(Int.random(in: 55...165))
+        }
+        
+        do {
+            try context.save()
+        } catch {
+            log("Error generating heart points: \(error)", caller: "ChartManager")
+        }
+    }
     
     var body: some View {
         List {
@@ -28,8 +59,12 @@ struct DeveloperView: View {
                 NavigationLink("Debug Logs") {
                     DebugLogsView()
                 }
+                NavigationLink("Connection Diagnostics") {
+                    ConnectionDiagnosticsView()
+                }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
+            Toggle("Fake Recovery Mode", isOn: $bleManager.fakeRecoveryMode)
             Section {
                 Picker("Packet Receipt Notification", selection: $packetReceiptNotification) {
                     ForEach([0, 10, 12, 16, 18, 20, 24], id: \.self) { value in
@@ -128,11 +163,25 @@ struct DeveloperView: View {
                     stepCountManager.setStepCount(0)
                 }
             }
+            Section("Test HRM") {
+                TextField("Days", text: $heartDay)
+                    .onSubmit {
+                        generatedDayOffset = Int(heartDay) ?? 0
+                    }
+                Button("Add a Day") {
+                    generateRandomHeartPoints(dayOffset: generatedDayOffset)
+                }
+            }
             Section {
                 Button(role: .destructive) {
                     stepCountManager.clearCurrentDaySteps()
                 } label: {
                     Text("Clear Step Data")
+                }
+                Button(role: .destructive) {
+                    chartManager.clearHrmData()
+                } label: {
+                    Text("Clear HRM Data")
                 }
                 Button(role: .destructive) {
                     chartManager.deleteAllUserExercises()
@@ -158,6 +207,59 @@ struct DeveloperView: View {
             }
         }
         .navigationTitle("Developer")
+    }
+}
+
+struct ConnectionDiagnosticsView: View {
+    @ObservedObject var bleManager = BLEManager.shared
+    
+    @State private var rssiTimer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
+    
+    var body: some View {
+        List {
+            Section {
+                AboutRowView("Status", value: bleManager.connectionState)
+                if bleManager.isConnectedToPinetime, let rssi = bleManager.rssi {
+                    HStack {
+                        Text("Signal")
+                        Spacer()
+                        Text("\(rssi) dBm")
+                            .foregroundStyle(.gray)
+                        Text(RSSI.from(rssi: rssi).connectionStrength)
+                            .foregroundStyle(RSSI.from(rssi: rssi).color)
+                    }
+                }
+                AboutRowView("ANCS", value: bleManager.ancsAuthorized ? NSLocalizedString("Authorized", comment: "") : NSLocalizedString("Not Authorized", comment: ""))
+            }
+            Section {
+                AboutRowView("Disconnects This Session", value: "\(bleManager.disconnectCount)")
+                if let date = bleManager.lastDisconnectDate {
+                    HStack {
+                        Text("Last Disconnect")
+                        Spacer()
+                        Text(date, format: .relative(presentation: .named))
+                            .foregroundStyle(.gray)
+                    }
+                    AboutRowView("Reason", value: bleManager.lastDisconnectReason ?? NSLocalizedString("Disconnected by InfiniLink", comment: ""))
+                }
+                if let date = bleManager.lastDataReceivedDate {
+                    HStack {
+                        Text("Last Data Received")
+                        Spacer()
+                        Text(date, format: .relative(presentation: .named))
+                            .foregroundStyle(.gray)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Connection Diagnostics")
+        .onAppear {
+            bleManager.infiniTime?.readRSSI()
+        }
+        .onReceive(rssiTimer) { _ in
+            // Reading the RSSI also re-renders the relative dates above
+            bleManager.infiniTime?.readRSSI()
+        }
     }
 }
 

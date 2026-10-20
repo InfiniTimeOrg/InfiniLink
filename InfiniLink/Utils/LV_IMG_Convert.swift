@@ -128,7 +128,6 @@ func lvImageConvert(img: CGImage, colorFormat: ColorFormat = .CF_TRUE_COLOR_ALPH
     }
     
     let header_32bit: UInt32 = lv_cf | (UInt32(imgWidth << 10)) | (UInt32(imgHeight << 21))
-    print("header_32bit: \(header_32bit)")
     
     var buf_out = Data(count: 4 + buf.count)
     buf_out[0] = UInt8(header_32bit & 0x000000FF)

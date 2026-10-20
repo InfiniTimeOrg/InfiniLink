@@ -54,20 +54,9 @@ struct CalendarDayDetailView: View {
                                 .lineLimit(selectedDetent == .medium ? 1 : nil)
                         }
                         .multilineTextAlignment(.center)
-//                        if selectedDetent == .medium {
-//                            VStack(spacing: 4) {
-//                                Image(systemName: "chevron.up").font(.body.weight(.medium))
-//                                Text("Swipe up for more details")
-//                            }
-//                            .font(.subheadline)
-//                            .foregroundStyle(.gray)
-//                        } else {
-//                            StepMenuItemView(steps: Int(stepPoint?.steps ?? 0))
-//                        }
                     }
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .padding()
-//                    .animation(.easeInOut(duration: 0.3), value: selectedDetent)
                 }
             }
             .navigationBarTitleDisplayMode(.inline)

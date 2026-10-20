@@ -11,6 +11,8 @@ import CoreData
 import SwiftUI
 
 struct BLECharacteristicHandler {
+    static let shared = BLECharacteristicHandler()
+    
     let bleFs = BLEFSHandler.shared
     let bleManager = BLEManager.shared
     let healthKitManager = HealthKitManager.shared
@@ -23,12 +25,11 @@ struct BLECharacteristicHandler {
     let motionController = MotionController.shared
     let fitnessCalculator = FitnessCalculator()
     
-    @AppStorage("filterHeartRateData") var filterHeartRateData: Bool = false
-    @AppStorage("pauseOnWalkaway") var pauseOnWalkaway = true
+    @AppStorage("filterHeartRateData") var filterHeartRateData = true
     
     @AppStorage("lastHeartRateUpdateTimestamp") var lastHeartRateUpdateTimestamp: Double = 0
+    @AppStorage("lastHeartRateValue") var lastHeartRateValue = 0
     @AppStorage("lastTimeCheckCompleted") var lastTimeCheckCompleted: Double = 0
-    @AppStorage("lastTimeStepGoalNotified") var lastTimeStepGoalNotified: Double = 0
     @AppStorage("lastStatsSyncTimestamp") var lastStatsSyncTimestamp: Double = 0
 
     @AppStorage("healthKitLastRawStepCount") var healthKitLastRawStepCount = -1
@@ -40,66 +41,73 @@ struct BLECharacteristicHandler {
     func heartRate(from characteristic: CBCharacteristic) -> Int {
         guard let characteristicData = characteristic.value else { return -1 }
         let byteArray = [UInt8](characteristicData)
+        guard byteArray.count >= 2 else { return -1 }
         
         let firstBitValue = byteArray[0] & 0x01
         if firstBitValue == 0 {
             // Heart Rate Value Format is in the 2nd byte
             return Int(byteArray[1])
         } else {
-            // Heart Rate Value Format is in the 2nd and 3rd bytes
-            return (Int(byteArray[1]) << 8) + Int(byteArray[2])
+            // Heart Rate Value Format is little-endian in the 2nd and 3rd bytes
+            guard byteArray.count >= 3 else { return -1 }
+            return Int(byteArray[1]) + (Int(byteArray[2]) << 8)
         }
     }
     
     func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
         switch characteristic.uuid {
-        case bleManager.cbuuidList.musicControl:
+        case BLEUUID.musicControl:
             peripheral.setNotifyValue(true, for: characteristic)
             bleManager.musicChars.control = characteristic
-        case bleManager.cbuuidList.statusControl:
+        case BLEUUID.statusControl:
             bleManager.musicChars.status = characteristic
-        case bleManager.cbuuidList.musicTrack:
+        case BLEUUID.musicTrack:
             bleManager.musicChars.track = characteristic
-        case bleManager.cbuuidList.musicArtist:
+        case BLEUUID.musicArtist:
             bleManager.musicChars.artist = characteristic
-        case bleManager.cbuuidList.positionTrack:
+        case BLEUUID.positionTrack:
             bleManager.musicChars.position = characteristic
-        case bleManager.cbuuidList.lengthTrack:
+        case BLEUUID.lengthTrack:
             bleManager.musicChars.length = characteristic
-        case bleManager.cbuuidList.hrm:
+        case BLEUUID.hrm:
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.bat:
+        case BLEUUID.bat:
             peripheral.readValue(for: characteristic)
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.motion:
+        case BLEUUID.motion:
             peripheral.readValue(for: characteristic)
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.blefsTransfer:
+        case BLEUUID.blefsTransfer:
             bleManager.blefsTransfer = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.notify:
+            bleFs.readSettings { settings in
+                guard let settings else { return }
+                deviceManager.updateSettings(settings)
+            }
+        case BLEUUID.notify:
             bleManager.notifyCharacteristic = characteristic
-        case bleManager.cbuuidList.stepCount:
+        case BLEUUID.stepCount:
             peripheral.readValue(for: characteristic)
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.time:
+        case BLEUUID.time:
             bleManager.currentTimeService = characteristic
             BLEWriteManager().setTime(characteristic: characteristic)
-        case bleManager.cbuuidList.weather:
+        case BLEUUID.weather:
             bleManager.weatherCharacteristic = characteristic
-        case bleManager.cbuuidList.dfuControlPoint:
+            weatherController.fetchWeatherData()
+        case BLEUUID.dfuControlPoint:
             bleManager.dfuControlPointCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.dfuPacket:
+        case BLEUUID.dfuPacket:
             bleManager.dfuPacketCharacteristic = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
-        case bleManager.cbuuidList.navigationFlags:
+        case BLEUUID.navigationFlags:
             bleManager.navigationFlagsCharacteristic = characteristic
-        case bleManager.cbuuidList.navigationNarrative:
+        case BLEUUID.navigationNarrative:
             bleManager.navigationNarrativeCharacteristic = characteristic
-        case bleManager.cbuuidList.navigationDistance:
+        case BLEUUID.navigationDistance:
             bleManager.navigationDistanceCharacteristic = characteristic
-        case bleManager.cbuuidList.navigationProgress:
+        case BLEUUID.navigationProgress:
             bleManager.navigationProgressCharacteristic = characteristic
         default:
             break
@@ -108,34 +116,29 @@ struct BLECharacteristicHandler {
     
     func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
         switch characteristic.uuid {
-        case bleManager.cbuuidList.musicControl:
-            let musicControl = [UInt8](characteristic.value!)
+        case BLEUUID.musicControl:
+            guard let value = characteristic.value, let control = value.first else { break }
             
-            MusicController.shared.controlMusic(controlNumber: Int(musicControl[0]))
-        case bleManager.cbuuidList.hrm:
+            MusicController.shared.controlMusic(controlNumber: Int(control))
+        case BLEUUID.hrm:
             let bpm = heartRate(from: characteristic)
-            bleManager.heartRate = Double(bpm)
-
-            guard bpm > 0 else { return }
-
-            let currentTime = Date().timeIntervalSince1970
-            let timeSinceLastUpdate = (currentTime - lastHeartRateUpdateTimestamp) / 60
-
-            // Check if the last data point is available and if filtering is enabled
-            if let lastValue = chartManager.heartPoints().last?.value, filterHeartRateData {
-                let isWithinRange = abs(lastValue - bleManager.heartRate) <= 25
-
-                // Update heart rate if within the valid range or recent enough
-                if isWithinRange || timeSinceLastUpdate >= 30 {
-                    updateHeartRate(bpm: bpm)
-                } else {
-                    log("Abnormal heart rate value detected: \(bpm)", type: .info, caller: "BLECharacteristicHandler")
-                }
-            } else {
-                updateHeartRate(bpm: bpm)
+            guard bpm >= 0 else { break }
+            guard bpm > 0 else {
+                bleManager.heartRate = 0
+                break
             }
-        case bleManager.cbuuidList.bat:
-            guard let value = characteristic.value else { break }
+
+            // Only compare against a recent reading, since heart rate can change a lot over a few minutes
+            let secondsSinceLastReading = Date().timeIntervalSince1970 - lastHeartRateUpdateTimestamp
+            if filterHeartRateData && secondsSinceLastReading < 60 && abs(bpm - lastHeartRateValue) > 25 {
+                log("Abnormal heart rate value detected: \(bpm)", type: .info, caller: "BLECharacteristicHandler")
+                break
+            }
+
+            bleManager.heartRate = Double(bpm)
+            updateHeartRate(bpm: bpm)
+        case BLEUUID.bat:
+            guard let value = characteristic.value, !value.isEmpty else { break }
             let batData = [UInt8](value)
             
             log("Received battery value", type: .info, caller: "BLECharacteristicHandler")
@@ -146,12 +149,14 @@ struct BLECharacteristicHandler {
             chartManager.addBatteryDataPoint(batteryLevel: Double(batData[0]), time: Date())
 
             notificationManager.checkToSendBatteryNotifications()
-        case bleManager.cbuuidList.stepCount:
-            guard let value = characteristic.value else { break }
+        case BLEUUID.stepCount:
+            guard let value = characteristic.value, value.count >= 4 else { break }
             let stepData = [UInt8](value)
             let stepCount = Int(stepData[0]) + (Int(stepData[1]) * 256) + (Int(stepData[2]) * 65536) + (Int(stepData[3]) * 16777216)
             
             bleManager.stepCount = stepCount
+            // Also on 0 so inactivity checks start after connecting
+            notificationManager.updateActivity(steps: stepCount)
             if stepCount != 0 {
                 syncStepsToHealthKit(rawWatchCount: stepCount)
                 syncCaloriesToHealthKit(rawWatchCount: stepCount)
@@ -160,11 +165,11 @@ struct BLECharacteristicHandler {
                 checkForCompletedStepGoal()
             }
             syncStatsIfNeeded()
-        case bleManager.cbuuidList.blefsTransfer:
+        case BLEUUID.blefsTransfer:
             guard let value = characteristic.value else { break }
             
             bleFs.handleResponse(responseData: [UInt8](value))
-        case bleManager.cbuuidList.motion:
+        case BLEUUID.motion:
             // It also constantly updates, so to work around iOS timer restrictions, we use this to fetch data in the background
             let currentTime = Date().timeIntervalSince1970
             let timeDifference = currentTime - lastTimeCheckCompleted
@@ -178,18 +183,16 @@ struct BLECharacteristicHandler {
                 motionController.ingest(x: x, y: y, z: z)
             }
 
-            // We only need to read the rssi here (in the background) for the pause on walkway feature
-            if MusicController.shared.musicPlaying == 1 && pauseOnWalkaway {
-                peripheral.readRSSI()
-            }
-            
             // Only update every five seconds
             if timeDifference > 5 {
                 notificationManager.checkAndNotifyForWaterReminders()
+                notificationManager.checkForInactivity()
 
                 weatherController.checkForUpdate()
 
                 notificationManager.checkHostBatteryState()
+
+                SleepManager.shared.processIfNeeded()
 
                 lastTimeCheckCompleted = Date().timeIntervalSince1970
             }
@@ -239,21 +242,13 @@ struct BLECharacteristicHandler {
     }
 
     private func checkForCompletedStepGoal() {
-        let notifSettings = NotificationSettingsManager.shared.settings
-        if bleManager.stepCount >= Int(deviceManager.settings.stepsGoal) && notifSettings.watchNotificationsEnabled && notifSettings.goalSettings.stepReminderEnabled {
-            let currentTime = Date().timeIntervalSince1970
-            let twentyFourHours: TimeInterval = 86400
-            
-            if (currentTime - lastTimeStepGoalNotified) >= twentyFourHours {
-                notificationManager.sendStepGoalReachedNotification()
-                lastTimeStepGoalNotified = currentTime
-            }
-        }
+        notificationManager.checkStepGoals(steps: bleManager.stepCount, goal: Int(deviceManager.settings.stepsGoal))
     }
     private func updateHeartRate(bpm: Int) {
         lastHeartRateUpdateTimestamp = Date().timeIntervalSince1970
+        lastHeartRateValue = bpm
         
-        healthKitManager.writeHeartRate(date: Date(), dataToAdd: bleManager.heartRate)
+        healthKitManager.writeHeartRate(date: Date(), dataToAdd: Double(bpm))
         chartManager.addHeartRateDataPoint(heartRate: Double(bpm), time: Date())
         ExerciseViewModel.shared.ingestHeartRate(bpm)
 
