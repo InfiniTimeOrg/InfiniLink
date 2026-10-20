@@ -1734,7 +1734,7 @@
     "Sleep timeline for last night" : {
 
     },
-    "Sleep tracking needs %@ to measure your heart rate in the background every 5 or 10 minutes." : {
+    "Sleep tracking needs %@ to measure your heart rate in the background at least every 10 minutes." : {
 
     },
     "Software Update" : {
