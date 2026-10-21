@@ -128,7 +128,6 @@
 		E0C0DE00000000000000B002 /* ImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B001 /* ImportManager.swift */; };
 		E0C0DE00000000000000B004 /* BatteryStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B003 /* BatteryStats.swift */; };
 		E0C0DE00000000000000B006 /* BatteryStatsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B005 /* BatteryStatsSectionView.swift */; };
-		E0C0DE00000000000000B008 /* BatteryHealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B007 /* BatteryHealthView.swift */; };
 		E0C0DE00000000000000B00A /* MotionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B009 /* MotionController.swift */; };
 		E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */; };
 		E0C7C83F2CAEF91C0043DA2D /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */; };
@@ -318,7 +317,6 @@
 		E0C0DE00000000000000B001 /* ImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportManager.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000B003 /* BatteryStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStats.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000B005 /* BatteryStatsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStatsSectionView.swift; sourceTree = "<group>"; };
-		E0C0DE00000000000000B007 /* BatteryHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryHealthView.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000B009 /* MotionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionController.swift; sourceTree = "<group>"; };
 		E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
@@ -588,7 +586,6 @@
 				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
 				75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */,
 				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
-				E0C0DE00000000000000B007 /* BatteryHealthView.swift */,
 				E0C0DE00000000000000A005 /* ExerciseSettingsView.swift */,
 				75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */,
 				75048444307FA10F0082E487 /* HealthNotificationsView.swift */,
@@ -1006,7 +1003,6 @@
 				E0C0DE00000000000000B002 /* ImportManager.swift in Sources */,
 				E0C0DE00000000000000B004 /* BatteryStats.swift in Sources */,
 				E0C0DE00000000000000B006 /* BatteryStatsSectionView.swift in Sources */,
-				E0C0DE00000000000000B008 /* BatteryHealthView.swift in Sources */,
 				E0C0DE00000000000000B00A /* MotionController.swift in Sources */,
 				E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */,
 				E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */,

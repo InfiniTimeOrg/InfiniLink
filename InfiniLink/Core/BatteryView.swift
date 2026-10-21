@@ -11,13 +11,19 @@ import SwiftUI
 struct BatteryView: View {
     @ObservedObject private var bleManager = BLEManager.shared
     
-    @State private var points = ChartManager.shared.batteryPoints(predicate: ChartManager.shared.ninetyDayPredicate)
+    @State private var points: [BatteryDataPoint] = []
+    
+    private var remainingText: String? {
+        guard let remaining = BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel), remaining > 0 else { return nil }
+        return String(localized: "~\(BatteryStats.format(remaining, maximumUnitCount: 1)) left   ")
+        // this string unfortunately needs some trailing spaces for visual alignment, since the visual focus is on the remaining time and the ~ appears to shift the entire string to the right.
+    }
     
     var body: some View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), units: "%", icon: {
+                    DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), subtitle: remainingText, units: "%", icon: {
                         if bleManager.batteryLevel > 75 {
                             return "battery.100percent"
                         } else if bleManager.batteryLevel > 50 {
@@ -34,42 +40,22 @@ struct BatteryView: View {
                             .frame(height: 1)
                             .frame(maxWidth: .infinity)
                     }
-                } footer: {
-                    if let remaining = BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel), remaining > 0 {
-                        Text("~\(format(remaining)) left")
-                            .frame(maxWidth: .infinity, alignment: .center)
-                            .padding(EdgeInsets(top: -40, leading: 0, bottom: 0, trailing: 14))
-                            .font(.system(size: 20))
-                    }
                 }
                 .listRowBackground(Color.clear)
-                .listRowInsets(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0))
                 BatteryChartView()
-                BatteryStatsSectionView()
-                .navigationTitle("Battery")
+                BatteryStatsSectionView(points: points)
             }
         }
-    }
-}
-
-private func format(_ duration: TimeInterval) -> String {
-        let formatter = DateComponentsFormatter()
-        formatter.unitsStyle = .abbreviated
-
-        if duration >= 86400 {
-            formatter.allowedUnits = [.day, .hour]
-            formatter.maximumUnitCount = 2
-        } else {
-            formatter.allowedUnits = [.hour, .minute]
-            formatter.maximumUnitCount = 1
+        .navigationTitle("Battery")
+        .onAppear {
+            fetch()
         }
-
-        return formatter.string(from: duration) ?? "--"
+        .onChange(of: bleManager.batteryLevel) { _ in
+            fetch()
+        }
     }
-
-#Preview {
-    NavigationStack {
-        BatteryView()
-            .navigationBarTitleDisplayMode(.inline)
+    
+    private func fetch() {
+        points = ChartManager.shared.batteryPoints(predicate: ChartManager.shared.ninetyDayPredicate)
     }
 }

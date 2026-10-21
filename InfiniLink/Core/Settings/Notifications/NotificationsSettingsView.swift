@@ -37,12 +37,12 @@ struct NotificationsSettingsView: View {
                     NavigationLink {
                         ExerciseNotificationsView()
                     } label: {
-                        ListRowView(title: "Exercise Notifications", icon: "figure.run", iconColor: .orange)
+                        ListRowView(title: "Exercise", icon: "figure.run", iconColor: .orange)
                     }
                     NavigationLink {
                         HealthNotificationsView()
                     } label: {
-                        ListRowView(title: "Health Notifications", icon: "heart.fill", iconColor: .red)
+                        ListRowView(title: "Health", icon: "heart.fill", iconColor: .red)
                     }
                     NavigationLink {
                         GoalsNotificationsView()
@@ -52,7 +52,7 @@ struct NotificationsSettingsView: View {
                     NavigationLink {
                         BatterySettingsView()
                     } label: {
-                        ListRowView(title: "Battery Notifications", icon: "battery.100percent", iconColor: .green)
+                        ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
                     }
                 }
                 Section {

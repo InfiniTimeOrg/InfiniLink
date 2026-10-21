@@ -99,11 +99,25 @@ enum BatteryStats {
         return (fullCycle / 100) * currentLevel
     }
     
-    static func currentUptime(from points: [BatteryDataPoint]) -> TimeInterval? {
-        guard let latest = points.compactMap(\.timestamp).max(),
-              let session = sessions(from: points, charging: false).last,
-              session.end == latest else { return nil }
+    static func timeSinceLastCharge(from points: [BatteryDataPoint]) -> TimeInterval? {
+        guard let charge = sessions(from: points, charging: true).last else { return nil }
+        return Date().timeIntervalSince(charge.end)
+    }
+    
+    static func format(_ duration: TimeInterval?, maximumUnitCount: Int = 2) -> String {
+        guard let duration, duration.isFinite, duration > 0 else { return "--" }
 
-        return session.duration
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .abbreviated
+
+        if duration >= 86400 {
+            formatter.allowedUnits = [.day, .hour]
+            formatter.maximumUnitCount = 2
+        } else {
+            formatter.allowedUnits = [.hour, .minute]
+            formatter.maximumUnitCount = maximumUnitCount
+        }
+
+        return formatter.string(from: duration) ?? "--"
     }
 }
