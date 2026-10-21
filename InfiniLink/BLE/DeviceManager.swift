@@ -53,6 +53,13 @@ class DeviceManager: ObservableObject {
     
     @Published var settings = Settings()
     
+    // Reading settings.dat wakes the watch's screen, so only do it when we don't have settings cached for this firmware
+    func readSettingsIfNeeded() {
+        guard BLEManager.shared.blefsTransfer != nil, let expected = WatchSettingsFile.expectedVersion(forFirmware: firmware), settings.version != expected else { return }
+        
+        BLEFSHandler.shared.readSettingsFile { _, _, _ in }
+    }
+    
     var heartRateBackgroundPeriod: Int? {
         get { UserDefaults.standard.object(forKey: "heartRateBackgroundPeriod-\(pairedDeviceID ?? "")") as? Int }
         set {
@@ -84,6 +91,7 @@ class DeviceManager: ObservableObject {
         context.perform {
             guard let device = self.currentDevice(in: context) else { return }
 
+            device.settingsVersion = Int32(clamping: settings.version)
             device.brightLevel = Int16(settings.brightLevel.rawValue)
             device.chimesOption = Int16(settings.chimesOption.rawValue)
             device.clockType = Int16(settings.clockType.rawValue)
@@ -143,6 +151,7 @@ class DeviceManager: ObservableObject {
     }
     
     func removeDevice(_ device: Device) {
+        let isCurrent = device.uuid == pairedDeviceID
         let context = persistenceController.container.viewContext
         context.delete(device)
         
@@ -155,8 +164,10 @@ class DeviceManager: ObservableObject {
         
         fetchAllDevices()
         // Switch to the user's next watch, or show the welcome view if there isn't one. If using secure pairing, iOS will still keep the bond and we have no way to remove it
-        pairedDeviceID = watches.first?.uuid
-        pairedDevice = watches.first
+        if isCurrent {
+            pairedDeviceID = watches.first?.uuid
+            pairedDevice = watches.first
+        }
         
         log("Successfully removed device", type: .info, caller: "DeviceManager")
     }
@@ -195,6 +206,8 @@ extension DeviceManager {
 
         context.perform {
             guard let device = self.currentDevice(in: context) else { return }
+            
+            let oldFirmware = device.firmware
 
             switch characteristic.uuid {
             case BLEUUID.modelNumber:
@@ -227,6 +240,9 @@ extension DeviceManager {
                 self.objectWillChange.send()
                 WatchFaceCatalog.shared.objectWillChange.send()
                 DownloadManager.shared.evaluateFirmwareUpdate()
+                if device.firmware != oldFirmware {
+                    self.readSettingsIfNeeded()
+                }
             }
         }
     }

@@ -218,13 +218,18 @@ class BLEManager: NSObject, ObservableObject {
     
     func unpair(device: Device? = nil) {
         guard let device = device ?? deviceManager.pairedDevice else { return }
+        let isCurrent = device.uuid == deviceManager.pairedDeviceID
         
         // We need to disconnect first because BLE updateInfo methods will be called when Core Data doesn't have an object to update
-        disconnect()
+        if isCurrent {
+            disconnect()
+        }
         log("Unpaired from \(device.name ?? "InfiniTime")", type: .info, caller: "BLEManager", target: .ble)
         // Delete the device object we have saved for this watch
         deviceManager.removeDevice(device)
-        startScanning()
+        if isCurrent {
+            startScanning()
+        }
     }
     
     func disconnect() {

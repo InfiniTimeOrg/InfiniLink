@@ -21,6 +21,7 @@ struct MyDevicesView: View {
     @State private var showUnpairConfirmation = false
     
     @State private var selectedWatch: Device?
+    @State private var watchToUnpair: Device?
     
     var body: some View {
         NavigationStack {
@@ -103,7 +104,7 @@ struct MyDevicesView: View {
                             .foregroundStyle(.red)
                             .alert("Are you sure you want to unpair from \(selectedWatch.name ?? "InfiniTime")?", isPresented: $showUnpairConfirmation) {
                                 Button(role: .destructive) {
-                                    bleManager.unpair(device: selectedWatch)
+                                    watchToUnpair = selectedWatch
                                     dismiss()
                                 } label: {
                                     Text("Unpair")
@@ -125,6 +126,12 @@ struct MyDevicesView: View {
             }
             .sheet(isPresented: $showConnectSheet, onDismiss: { bleManager.isPairingNewDevice = false }) {
                 ConnectView()
+            }
+        }
+        // Unpair once we're gone so the rows don't show the deleted watch as Unknown while dismissing
+        .onDisappear {
+            if let watchToUnpair {
+                bleManager.unpair(device: watchToUnpair)
             }
         }
     }

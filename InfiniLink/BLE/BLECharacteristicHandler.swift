@@ -80,10 +80,7 @@ struct BLECharacteristicHandler {
         case BLEUUID.blefsTransfer:
             bleManager.blefsTransfer = characteristic
             peripheral.setNotifyValue(true, for: characteristic)
-            bleFs.readSettings { settings in
-                guard let settings else { return }
-                deviceManager.updateSettings(settings)
-            }
+            deviceManager.readSettingsIfNeeded()
         case BLEUUID.notify:
             bleManager.notifyCharacteristic = characteristic
         case BLEUUID.stepCount:

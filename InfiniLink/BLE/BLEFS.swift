@@ -382,6 +382,9 @@ class BLEFSHandler: ObservableObject {
             }
 
             DispatchQueue.main.async {
+                if let file {
+                    DeviceManager.shared.updateSettings(file.settings)
+                }
                 completion(file, usingDefaults, detail)
             }
         }
