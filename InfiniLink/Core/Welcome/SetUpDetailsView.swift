@@ -191,7 +191,9 @@ struct NotificationsSetupView: View {
             .multilineTextAlignment(.center)
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)
-            NotificationSettingsSections(isSetup: true)
+            HealthNotificationSections(isSetup: true)
+            ExerciseNotificationSections(isSetup: true)
+            GoalsNotificationSections(isSetup: true)
             Button {
                 notificationManager.requestNotificationAuthorization()
 

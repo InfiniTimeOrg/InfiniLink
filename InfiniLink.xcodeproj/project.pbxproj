@@ -14,6 +14,10 @@
 		264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 264BFE4326BC51CE0050A223 /* ContentView.swift */; };
 		264BFE4626BC51CF0050A223 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4526BC51CF0050A223 /* Assets.xcassets */; };
 		264BFE4926BC51CF0050A223 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 264BFE4826BC51CF0050A223 /* Preview Assets.xcassets */; };
+		75048443307FA0EE0082E487 /* ExerciseNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */; };
+		75048445307FA1110082E487 /* HealthNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048444307FA10F0082E487 /* HealthNotificationsView.swift */; };
+		75048447307FA1230082E487 /* GoalsNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048446307FA1220082E487 /* GoalsNotificationsView.swift */; };
+		75BC303B30766EFB003EEC2D /* BatterySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */; };
 		29A3DBA0977BCAC25C41B952 /* DataExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ADB3414CF417B037C06A47 /* DataExporter.swift */; };
 		2BD49B4A5D560BFC08CBA8E8 /* WorkoutAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C2E310B92D23E5E3E385E6 /* WorkoutAnalysis.swift */; };
 		36E613FC638D4ED50F76C145 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFC0382BEC8406837173344 /* SleepView.swift */; };
@@ -92,7 +96,7 @@
 		E0A7C0732CB0ECCE0042A12D /* NotificationsSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */; };
 		E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */; };
 		E0A7C0782CB193BC0042A12D /* WeatherSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0772CB193BC0042A12D /* WeatherSettingsView.swift */; };
-		E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */; };
+		E0A7C07A2CB1AAAC0042A12D /* BatteryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0792CB1AAAC0042A12D /* BatteryView.swift */; };
 		E0A7C07D2CB1AD370042A12D /* MusicController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C07C2CB1AD370042A12D /* MusicController.swift */; };
 		E0A7C07F2CB1B3300042A12D /* BLEFS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C07E2CB1B3300042A12D /* BLEFS.swift */; };
 		E0A7C0822CB1B4990042A12D /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E0A7C0812CB1B4990042A12D /* Zip */; };
@@ -124,7 +128,6 @@
 		E0C0DE00000000000000B002 /* ImportManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B001 /* ImportManager.swift */; };
 		E0C0DE00000000000000B004 /* BatteryStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B003 /* BatteryStats.swift */; };
 		E0C0DE00000000000000B006 /* BatteryStatsSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B005 /* BatteryStatsSectionView.swift */; };
-		E0C0DE00000000000000B008 /* BatteryHealthView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B007 /* BatteryHealthView.swift */; };
 		E0C0DE00000000000000B00A /* MotionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000B009 /* MotionController.swift */; };
 		E0C7C8392CAEF71F0043DA2D /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */; };
 		E0C7C83F2CAEF91C0043DA2D /* ConnectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */; };
@@ -198,6 +201,10 @@
 		264BFE4F26BC51CF0050A223 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		264BFE5426BC51CF0050A223 /* InfiniLinkTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		264BFE5F26BC51CF0050A223 /* InfiniLinkUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = InfiniLinkUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseNotificationsView.swift; sourceTree = "<group>"; };
+		75048444307FA10F0082E487 /* HealthNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthNotificationsView.swift; sourceTree = "<group>"; };
+		75048446307FA1220082E487 /* GoalsNotificationsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalsNotificationsView.swift; sourceTree = "<group>"; };
+		75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySettingsView.swift; sourceTree = "<group>"; };
 		29D557AFE18F6E0D6C8040F6 /* SleepManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepManager.swift; sourceTree = "<group>"; };
 		304C0A743F00AF1921B28A07 /* DirectionsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DirectionsView.swift; sourceTree = "<group>"; };
 		38940757BE9CAEB4E614B70F /* WatchFaceSettingsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchFaceSettingsView.swift; sourceTree = "<group>"; };
@@ -279,7 +286,7 @@
 		E0A7C0722CB0ECCE0042A12D /* NotificationsSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C0772CB193BC0042A12D /* WeatherSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeatherSettingsView.swift; sourceTree = "<group>"; };
-		E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatterySettingsView.swift; sourceTree = "<group>"; };
+		E0A7C0792CB1AAAC0042A12D /* BatteryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryView.swift; sourceTree = "<group>"; };
 		E0A7C07C2CB1AD370042A12D /* MusicController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicController.swift; sourceTree = "<group>"; };
 		E0A7C07E2CB1B3300042A12D /* BLEFS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEFS.swift; sourceTree = "<group>"; };
 		E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
@@ -310,7 +317,6 @@
 		E0C0DE00000000000000B001 /* ImportManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportManager.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000B003 /* BatteryStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStats.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000B005 /* BatteryStatsSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryStatsSectionView.swift; sourceTree = "<group>"; };
-		E0C0DE00000000000000B007 /* BatteryHealthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryHealthView.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000B009 /* MotionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MotionController.swift; sourceTree = "<group>"; };
 		E0C7C8382CAEF71F0043DA2D /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		E0C7C83E2CAEF91C0043DA2D /* ConnectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectView.swift; sourceTree = "<group>"; };
@@ -578,10 +584,12 @@
 				E03C30B32CC7030A00DD8363 /* Notifications */,
 				E08F2F312CC899D00094217A /* Weather */,
 				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
+				75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */,
 				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
-				E0A7C0792CB1AAAC0042A12D /* BatterySettingsView.swift */,
-				E0C0DE00000000000000B007 /* BatteryHealthView.swift */,
 				E0C0DE00000000000000A005 /* ExerciseSettingsView.swift */,
+				75048442307FA0E10082E487 /* ExerciseNotificationsView.swift */,
+				75048444307FA10F0082E487 /* HealthNotificationsView.swift */,
+				75048446307FA1220082E487 /* GoalsNotificationsView.swift */,
 				DD08CDEF696462C6EA84DBD2 /* WatchSettingsEditor.swift */,
 				AF55D05523CC229A1C615270 /* StepSettingsView.swift */,
 			);
@@ -707,6 +715,7 @@
 				E0C7C8372CAEF70B0043DA2D /* Welcome */,
 				E05046872D136F0600FE4BCD /* Developer */,
 				E0A7C0972CB227060042A12D /* HeartView.swift */,
+				E0A7C0792CB1AAAC0042A12D /* BatteryView.swift */,
 				E03C30B62CC7417C00DD8363 /* WeatherView.swift */,
 				E0A7C0992CB2270D0042A12D /* StepsView.swift */,
 				E0C7C8462CAF01950043DA2D /* DeviceView.swift */,
@@ -954,6 +963,7 @@
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,
+				75048445307FA1110082E487 /* HealthNotificationsView.swift in Sources */,
 				E06C5D822FBBE26F0099F982 /* BatteryChartView.swift in Sources */,
 				E09696DD2D2E3D6500CCCBF8 /* AppDetailsView.swift in Sources */,
 				E05DA4C12D13752C00A49203 /* DebugLogManager.swift in Sources */,
@@ -986,12 +996,13 @@
 				E03A7DF62D0D4DDB007A9209 /* DeveloperModeSettingsView.swift in Sources */,
 				E0A7C0762CB17E520042A12D /* MusicSettingsView.swift in Sources */,
 				E0ED76102CB5CA8A00BC7E44 /* PersonalizationController.swift in Sources */,
+				75BC303B30766EFB003EEC2D /* BatterySettingsView.swift in Sources */,
+				75048443307FA0EE0082E487 /* ExerciseNotificationsView.swift in Sources */,
 				E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */,
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
 				E0C0DE00000000000000B002 /* ImportManager.swift in Sources */,
 				E0C0DE00000000000000B004 /* BatteryStats.swift in Sources */,
 				E0C0DE00000000000000B006 /* BatteryStatsSectionView.swift in Sources */,
-				E0C0DE00000000000000B008 /* BatteryHealthView.swift in Sources */,
 				E0C0DE00000000000000B00A /* MotionController.swift in Sources */,
 				E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */,
 				E09696E72D323A6D00CCCBF8 /* StepChartView.swift in Sources */,
@@ -1006,8 +1017,9 @@
 				E0C0DE00000000000000A008 /* WorkoutShared.swift in Sources */,
 				E0C0DE00000000000000A00B /* WorkoutLiveActivityController.swift in Sources */,
 				E0599A002CB46EB200D64E0B /* StepCountManager.swift in Sources */,
+				75048447307FA1230082E487 /* GoalsNotificationsView.swift in Sources */,
 				E0599A042CB4C58800D64E0B /* LV_IMG_Convert.swift in Sources */,
-				E0A7C07A2CB1AAAC0042A12D /* BatterySettingsView.swift in Sources */,
+				E0A7C07A2CB1AAAC0042A12D /* BatteryView.swift in Sources */,
 				E08F2F332CC899E30094217A /* SetWeatherLocationView.swift in Sources */,
 				E07D8F182CBE2071005C1325 /* ActionView.swift in Sources */,
 				B7C1D2E3F4A5B6C7D8E9F0A2 /* ConnectedView.swift in Sources */,

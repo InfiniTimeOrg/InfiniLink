@@ -193,7 +193,7 @@ struct DeviceView: View {
                             ListRowView(title: "Customization", icon: "wrench.fill", iconColor: .gray)
                         }
                         NavigationLink {
-                            column(BatterySettingsView())
+                            column(BatteryView())
                         } label: {
                             ListRowView(title: "Battery", icon: "battery.100percent", iconColor: .green)
                         }
