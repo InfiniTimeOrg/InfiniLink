@@ -30,8 +30,8 @@ class SleepManager: ObservableObject {
         deviceManager.firmware.compare("1.16.0", options: .numeric) != .orderedAscending
     }
     
-    // 5 or 10 min gives enough HR data overnight without killing the battery
-    static let backgroundPeriods: [UInt16] = [300, 600]
+    // Continuous up to every 10 min gives enough HR data overnight
+    static let backgroundPeriods: [UInt16] = [0, 30, 60, 300, 600]
     
     var hasRequiredMeasurements: Bool {
         deviceManager.heartRateBackgroundPeriod.map { Self.backgroundPeriods.contains(UInt16(clamping: $0)) } ?? false

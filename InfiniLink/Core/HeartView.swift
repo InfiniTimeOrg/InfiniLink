@@ -70,10 +70,10 @@ struct HeartView: View {
                 Section {
                     DetailHeaderView(Header(title: String(format: "%.0f", values.last ?? 0), subtitle: timestamp(for: samples.last?.date), units: "BPM", icon: "heart.fill", accent: .red), width: geo.size.width, animate: (samples.last?.date.timeIntervalSinceNow ?? 60) < 60) {
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                            averageItem(NSLocalizedString("Resting", comment: ""), resting, icon: "bed.double.fill")
-                            averageItem(NSLocalizedString("Awake Avg", comment: ""), averages.awake, icon: "sun.max.fill")
-                            averageItem(NSLocalizedString("Sleep Avg", comment: ""), averages.sleep, icon: "moon.fill")
                             averageItem(NSLocalizedString("Workout Avg", comment: ""), averages.workout, icon: "figure.run")
+                            averageItem(NSLocalizedString("Awake Avg", comment: ""), averages.awake, icon: "sun.max.fill")
+                            averageItem(NSLocalizedString("Sleep Avg", comment: ""), averages.sleep, icon: "bed.double.fill")
+                            averageItem(NSLocalizedString("Resting", comment: ""), resting, icon: "chair.lounge.fill")
                         }
                     }
                 }

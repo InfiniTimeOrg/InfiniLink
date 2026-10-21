@@ -19,6 +19,7 @@ struct DeviceView: View {
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
+    @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
     
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
@@ -213,10 +214,12 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Weather", icon: "sun.max.fill", iconColor: .yellow)
                         }
-                        NavigationLink {
-                            column(DirectionsView())
-                        } label: {
-                            ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue, isBeta: true)
+                        if enableBetaNavigation {
+                            NavigationLink {
+                                column(DirectionsView())
+                            } label: {
+                                ListRowView(title: "Navigation", icon: "map.fill", iconColor: .blue)
+                            }
                         }
                         NavigationLink {
                             column(MusicSettingsView())
@@ -314,30 +317,17 @@ struct ListRowView: View {
     let title: String
     let icon: String
     let iconColor: Color
-    let isBeta: Bool
     
-    init(title: String, icon: String, iconColor: Color? = nil, isBeta: Bool = false) {
+    init(title: String, icon: String, iconColor: Color? = nil) {
         self.title = title
         self.icon = icon
         self.iconColor = iconColor ?? .blue
-        self.isBeta = isBeta
     }
     
     var body: some View {
         Label {
-            HStack(spacing: 6) {
-                Text(NSLocalizedString(title, comment: ""))
-                    .foregroundStyle(.primary)
-                if isBeta {
-                    Text("Beta")
-                        .font(.caption2.weight(.semibold))
-                        .padding(.horizontal, 6)
-                        .padding(.vertical, 2)
-                        .foregroundStyle(.blue)
-                        .background(Color.blue.opacity(0.15))
-                        .clipShape(Capsule())
-                }
-            }
+            Text(NSLocalizedString(title, comment: ""))
+                .foregroundStyle(.primary)
         } icon: {
             ListRowIconView(icon: icon, color: iconColor)
         }

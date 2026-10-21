@@ -111,8 +111,8 @@ struct SleepView: View {
                         let recorded = nights.filter { $0.asleepMinutes > 0 }
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
                             if let bedtime = lastNight.first?.start, let wake = lastNight.last?.end {
-                                DetailHeaderSubItemView(title: "Bedtime", value: bedtime.formatted(date: .omitted, time: .shortened), icon: ("moon.fill", .indigo))
-                                DetailHeaderSubItemView(title: "Wake", value: wake.formatted(date: .omitted, time: .shortened), icon: ("sun.max.fill", .orange))
+                                DetailHeaderSubItemView(title: "Fell Asleep", value: bedtime.formatted(date: .omitted, time: .shortened), icon: ("moon.fill", .indigo))
+                                DetailHeaderSubItemView(title: "Woke Up", value: wake.formatted(date: .omitted, time: .shortened), icon: ("sun.max.fill", .orange))
                                 DetailHeaderSubItemView(title: "Awake", value: duration(lastNightAwake), icon: ("eye.fill", .orange))
                             }
                             if !recorded.isEmpty {
@@ -125,19 +125,22 @@ struct SleepView: View {
                 .listRowBackground(Color.clear)
                 if !sleepManager.hasRequiredMeasurements {
                     Section {
-                        Label("Sleep tracking needs \(deviceManager.name) to measure your heart rate in the background every 5 or 10 minutes.", systemImage: "heart.text.square.fill")
+                        Label("Sleep tracking needs \(deviceManager.name) to measure your heart rate in the background at least every 10 minutes.", systemImage: "heart.text.square.fill")
                         if let file = editor.file, !editor.usingDefaults {
                             Picker("Background Measurements", selection: Binding(
-                                get: { file.heartRateBackgroundPeriod.flatMap { SleepManager.backgroundPeriods.contains($0) ? $0 : nil } ?? SleepManager.backgroundPeriods[0] },
+                                get: { file.heartRateBackgroundPeriod.flatMap { SleepManager.backgroundPeriods.contains($0) ? $0 : nil } ?? 300 },
                                 set: { editor.file?.heartRateBackgroundPeriod = $0 }
                             )) {
+                                Text("Continuous").tag(UInt16(0))
+                                Text("30 seconds").tag(UInt16(30))
+                                Text("1 minute").tag(UInt16(60))
                                 Text("5 minutes").tag(UInt16(300))
                                 Text("10 minutes").tag(UInt16(600))
                             }
                             Button {
                                 // The picker shows 5 min by default, so make sure that's actually what gets saved
-                                if !SleepManager.backgroundPeriods.contains(editor.file?.heartRateBackgroundPeriod ?? 0) {
-                                    editor.file?.heartRateBackgroundPeriod = SleepManager.backgroundPeriods[0]
+                                if !SleepManager.backgroundPeriods.contains(editor.file?.heartRateBackgroundPeriod ?? UInt16.max) {
+                                    editor.file?.heartRateBackgroundPeriod = 300
                                 }
                                 editor.requestSave()
                             } label: {
