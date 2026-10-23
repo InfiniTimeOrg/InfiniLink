@@ -36,13 +36,12 @@ struct SleepAnalyzer {
     static let notWornFractionOfStill = 0.1 // Below this fraction of the still threshold the watch is likely lying on a table
     static let fallbackStillThreshold = 2000.0 // Used until there's enough daytime activity to compare against
     static let heartRateAwakeMargin = 15.0 // BPM above the night's baseline that counts as awake
-    static let minimumRunMinutes = 10
+    static let surroundingMinutes = 7 // Minutes on each side used to decide if a minute is awake
+    static let awakeActiveFraction = 0.5 // Awake when at least this much of the surrounding minutes are active
+    static let minimumRunMinutes = 20
     static let maximumGapMinutes = 30
     static let minimumSessionMinutes = 60
     static let minimumNotWornMinutes = 60
-
-    // Cole-Kripke weights for minutes -4...+2
-    private static let weights: [Double] = [106, 54, 58, 76, 230, 74, 67]
 
     // A night is 6pm to noon the next day
     static func window(containing date: Date) -> DateInterval? {
@@ -93,29 +92,23 @@ struct SleepAnalyzer {
         let stillThreshold = stillThreshold(daytimeMedian: daytimeMedian)
         let notWornThreshold = stillThreshold * notWornFractionOfStill
 
-        var states = [SleepState](repeating: .noData, count: minuteCount)
-        for index in 0..<minuteCount where activityByMinute[index] != nil {
-            var weighted = 0.0
-            var totalWeight = 0.0
-            for (offset, weight) in zip(-4...2, weights) {
-                let neighbor = index + offset
-                if neighbor >= 0 && neighbor < minuteCount, let value = activityByMinute[neighbor] {
-                    weighted += value * weight
-                    totalWeight += weight
-                }
-            }
-            states[index] = weighted / totalWeight < stillThreshold ? .asleep : .awake
-        }
-
         // HR well above the night's baseline means they're awake, even if they're still
         let nightRates = heartByMinute.compactMap { $0 }.sorted()
-        if nightRates.count >= 10 {
-            let baseline = nightRates[nightRates.count / 5]
-            for index in 0..<minuteCount {
-                if let rate = heartByMinute[index], rate > baseline + heartRateAwakeMargin, states[index] == .asleep {
-                    states[index] = .awake
-                }
+        let awakeHeartRate = nightRates.count >= 10 ? nightRates[nightRates.count / 5] + heartRateAwakeMargin : .infinity
+
+        var isActive = [Bool?](repeating: nil, count: minuteCount)
+        for index in 0..<minuteCount {
+            if let value = activityByMinute[index] {
+                isActive[index] = value >= stillThreshold || (heartByMinute[index] ?? 0) > awakeHeartRate
             }
+        }
+
+        // Brief movements are normal while asleep, so only call a minute awake when most of the minutes around it are active
+        var states = [SleepState](repeating: .noData, count: minuteCount)
+        for index in 0..<minuteCount where isActive[index] != nil {
+            let surrounding = isActive[max(0, index - surroundingMinutes)...min(minuteCount - 1, index + surroundingMinutes)].compactMap { $0 }
+            let activeFraction = Double(surrounding.filter { $0 }.count) / Double(surrounding.count)
+            states[index] = activeFraction >= awakeActiveFraction ? .awake : .asleep
         }
 
         // Long stretches with no movement and no HR means the watch wasn't being worn
@@ -154,7 +147,8 @@ struct SleepAnalyzer {
 
         var merged = [Range<Int>]()
         for run in runs {
-            if let last = merged.last, run.lowerBound - last.upperBound <= maximumGapMinutes {
+            // Missing data doesn't count toward the gap so a dropped connection doesn't split the night
+            if let last = merged.last, states[last.upperBound..<run.lowerBound].filter({ $0 == .awake }).count <= maximumGapMinutes {
                 merged[merged.count - 1] = last.lowerBound..<run.upperBound
             } else {
                 merged.append(run)

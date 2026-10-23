@@ -13,7 +13,7 @@ struct ExportDataView: View {
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
 
     @State private var selectedTypes: Set<DataExporter.DataType> = [.heartRate, .steps, .battery, .sleep, .exercise]
-    @State private var range = 0
+    @State private var range = 1
     @State private var isExporting = false
     @State private var exportURL: URL?
     @State private var showShareSheet = false
@@ -27,8 +27,10 @@ struct ExportDataView: View {
     private var startDate: Date? {
         switch range {
         case 0:
-            return Calendar.current.date(byAdding: .day, value: -7, to: Date())
+            return Calendar.current.date(byAdding: .day, value: -2, to: Date())
         case 1:
+            return Calendar.current.date(byAdding: .day, value: -7, to: Date())
+        case 2:
             return Calendar.current.date(byAdding: .day, value: -30, to: Date())
         default:
             return nil
@@ -39,9 +41,10 @@ struct ExportDataView: View {
         List {
             Section {
                 Picker("Range", selection: $range) {
-                    Text("Past Week").tag(0)
-                    Text("Past Month").tag(1)
-                    Text("All Time").tag(2)
+                    Text("Past 2 Days").tag(0)
+                    Text("Past Week").tag(1)
+                    Text("Past Month").tag(2)
+                    Text("All Time").tag(3)
                 }
             }
             Section {
