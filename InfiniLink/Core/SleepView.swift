@@ -51,7 +51,7 @@ struct SleepView: View {
     @State private var sessions = [SleepSession]()
 
     private var lastNight: [SleepSession] {
-        guard let window = SleepAnalyzer.latestWindow() else { return [] }
+        guard let latest = sessions.last?.start, let window = SleepAnalyzer.window(containing: latest) else { return [] }
         return sessions.filter { window.contains($0.start ?? .distantPast) }
     }
 
