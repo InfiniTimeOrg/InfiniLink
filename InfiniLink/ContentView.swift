@@ -26,7 +26,7 @@ struct ContentView: View {
                     DeviceView(isSidebar: true)
                 } detail: {
                     NavigationStack {
-                        HeartView()
+                        GeneralSettingsView()
                     }
                 }
             } else {
