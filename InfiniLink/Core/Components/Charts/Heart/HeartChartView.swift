@@ -9,7 +9,7 @@ import SwiftUI
 import Charts
 
 fileprivate let heartColor = Color.pink
-fileprivate let darkHeartColor = Color(red: 0.369, green: 0.090, blue: 0.145) // dark pink
+fileprivate let darkHeartColor = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.369, green: 0.090, blue: 0.145, alpha: 1) : UIColor(red: 0.973, green: 0.792, blue: 0.835, alpha: 1) }) // Dark pink, light pink in light mode
 
 struct HeartChartDataPoint: Identifiable, Equatable {
     var id: Date { date } // Stable across refetches so bars don't flicker when the buffer reloads
