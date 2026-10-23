@@ -64,6 +64,8 @@ class ExerciseViewModel: ObservableObject {
         Exercise(id: "outdoor-run", name: "Outdoor Run", icon: "figure.run", components: [.heart, .steps, .location], pace: .jog),
         Exercise(id: "outdoor-cycle", name: "Outdoor Cycle", icon: "figure.outdoor.cycle", components: [.heart, .location], activityType: .cycling),
         Exercise(id: "indoor-run", name: "Indoor Run", icon: "figure.run.treadmill", components: [.heart, .steps], pace: .jog),
+        Exercise(id: "outdoor-walk", name: "Outdoor Walk", icon: "figure.walk", components: [.heart, .steps, .location], activityType: .walking),
+        Exercise(id: "indoor-walk", name: "Indoor Walk", icon: "figure.walk.treadmill", components: [.heart, .steps], activityType: .walking),
         Exercise(id: "indoor-cycle", name: "Indoor Cycle", icon: "figure.indoor.cycle", components: [.heart], activityType: .cycling),
         Exercise(id: "strength-training", name: "Strength Training", icon: "figure.strengthtraining.traditional", components: [.heart], activityType: .traditionalStrengthTraining),
         Exercise(id: "table-tennis", name: "Table Tennis", icon: "figure.table.tennis", components: [.heart], activityType: .tableTennis),
@@ -431,7 +433,9 @@ class ExerciseViewModel: ObservableObject {
     // Shared by the live estimate and the saved workout so they agree
     private static func calories(for exercise: Exercise, averageHeartRate: Double, duration: TimeInterval, steps: Int) -> Int {
         let calculator = FitnessCalculator()
-        if averageHeartRate > 0 {
+        // Keytel overestimates at walking intensity, so walks use steps instead
+        let usesSteps = [.walking, .hiking].contains(exercise.activityType) && exercise.components.contains(.steps)
+        if averageHeartRate > 0 && !usesSteps {
             return calculator.calculateCaloriesBurned(heartRate: averageHeartRate, durationSeconds: duration)
         }
         return calculator.calculateCaloriesBurned(steps: steps, pace: exercise.pace)

@@ -129,7 +129,8 @@ struct CustomExerciseDefinition: Codable {
             components.append(.location)
         }
 
-        return Exercise(id: id, name: name, icon: icon, components: components, activityType: HKWorkoutActivityType(rawValue: activityType) ?? .other)
+        let type = HKWorkoutActivityType(rawValue: activityType) ?? .other
+        return Exercise(id: id, name: name, icon: icon, components: components, pace: type == .running ? .jog : .avgWalk, activityType: type)
     }
 }
 
