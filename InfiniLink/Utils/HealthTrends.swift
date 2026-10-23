@@ -81,10 +81,10 @@ struct HealthTrends {
         }
     }
 
-    // Today's averages
-    // Last night's sleep counted even if it started yesterday
+    // Averages over the last 24 hours
+    // Sleep counted in full even if it started earlier
     func heartRateAverages(deviceId: String, activeWorkoutStart: Date?, completion: @escaping (HeartRateAverages) -> Void) {
-        let start = Calendar.current.startOfDay(for: Date())
+        let start = Date().addingTimeInterval(-86400)
 
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
