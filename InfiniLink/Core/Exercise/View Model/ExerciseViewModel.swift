@@ -473,7 +473,7 @@ class ExerciseViewModel: ObservableObject {
     @available(iOS 16.2, *)
     private func liveActivityState() -> WorkoutAttributes.ContentState {
         return WorkoutAttributes.ContentState(
-            effectiveStart: Date().addingTimeInterval(-elapsed),
+            effectiveStart: Date().addingTimeInterval(-(session?.elapsed() ?? elapsed)),
             pausedAt: exercisePaused ? Date() : nil,
             heartRate: Int(bleManager.heartRate),
             steps: stepsTaken,
