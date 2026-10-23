@@ -45,14 +45,14 @@ struct MyDevicesView: View {
                                             .foregroundStyle(Color.primary)
                                             .font(.title2.weight(.semibold))
                                         Text({
-                                            if let peripheral = bleManager.infiniTime, peripheral.identifier.uuidString == watch.uuid {
+                                            if bleManager.connectedDeviceID == watch.uuid {
                                                 return bleManager.connectionState
                                             } else {
                                                 return "InfiniTime " + (watch.firmware ?? "")
                                             }
                                         }())
                                         .foregroundStyle(.gray)
-                                        if bleManager.infiniTime?.identifier.uuidString != watch.uuid, let lastSeen = bleManager.lastSeenDate(for: watch.uuid) {
+                                        if bleManager.connectedDeviceID != watch.uuid, let lastSeen = bleManager.lastSeenDate(for: watch.uuid) {
                                             Text("Last connected \(lastSeen, format: .relative(presentation: .named))")
                                                 .font(.footnote)
                                                 .foregroundStyle(.gray)

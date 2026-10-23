@@ -111,7 +111,7 @@ struct BLECharacteristicHandler {
         }
     }
     
-    func handleUpdates(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
+    func handleUpdates(characteristic: CBCharacteristic) {
         switch characteristic.uuid {
         case BLEUUID.musicControl:
             guard let value = characteristic.value, let control = value.first else { break }

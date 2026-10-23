@@ -160,14 +160,19 @@ class BLEFSHandler: ObservableObject {
     private func send(_ packet: Data, expecting command: Commands) -> [UInt8]? {
         // Responses arrive on the main queue, so waiting for them there would always time out
         assert(!Thread.isMainThread, "BLE FS requests must run off the main thread")
-        guard bleManager.isConnectedToPinetime, let infiniTime = bleManager.infiniTime, let transfer = bleManager.blefsTransfer else { return nil }
+        guard bleManager.isConnectedToPinetime, let transfer = bleManager.blefsTransfer else { return nil }
         
         // Drop anything left over from a request that timed out
         while responseSignal.wait(timeout: .now()) == .success {
             _ = responseLock.withLock { responses.removeFirst() }
         }
         
-        infiniTime.writeValue(packet, for: transfer, type: .withResponse)
+        if MockWatch.shared.isConnected {
+            MockWatch.shared.fileSystem.respond(to: [UInt8](packet)).forEach(handleResponse)
+        } else {
+            guard let infiniTime = bleManager.infiniTime else { return nil }
+            infiniTime.writeValue(packet, for: transfer, type: .withResponse)
+        }
         return nextResponse(command)
     }
     

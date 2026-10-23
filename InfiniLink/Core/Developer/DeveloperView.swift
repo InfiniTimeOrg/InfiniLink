@@ -10,6 +10,7 @@ import Combine
 
 struct DeveloperView: View {
     @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var mockWatch = MockWatch.shared
     
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
@@ -62,6 +63,12 @@ struct DeveloperView: View {
                 }
                 NavigationLink("Connection Diagnostics") {
                     ConnectionDiagnosticsView()
+                }
+            }
+            if MockWatch.isAvailable && deviceManager.pairedDeviceID == MockWatch.id {
+                Section("Simulated Watch") {
+                    Toggle("Connected", isOn: Binding(get: { mockWatch.isConnected }, set: { $0 ? mockWatch.connect() : bleManager.disconnect() }))
+                    Stepper("Battery: \(mockWatch.batteryLevel)%", value: Binding(get: { mockWatch.batteryLevel }, set: { mockWatch.setBatteryLevel($0) }), in: 0...100, step: 5)
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)

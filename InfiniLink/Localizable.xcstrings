@@ -456,6 +456,9 @@
     "Battery Low" : {
 
     },
+    "Battery: %lld%%" : {
+
+    },
     "BLE" : {
 
     },
@@ -1441,6 +1444,9 @@
     "Pair New Device" : {
 
     },
+    "Pair Simulated Watch" : {
+
+    },
     "Past Month" : {
 
     },
@@ -1696,6 +1702,9 @@
 
     },
     "Signal: " : {
+
+    },
+    "Simulated Watch" : {
 
     },
     "Single Tap" : {

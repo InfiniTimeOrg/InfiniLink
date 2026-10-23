@@ -172,6 +172,13 @@ struct ConnectView: View {
                             .alert(isPresented: $showHelpAlert) {
                                 Alert(title: Text("Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts."))
                             }
+                            if MockWatch.isAvailable {
+                                Button("Pair Simulated Watch") {
+                                    MockWatch.shared.connect()
+                                    dismiss()
+                                }
+                                .padding(.top, 8)
+                            }
                         }
                     } else {
                         Text("Bluetooth needs to be enabled to pair a watch.")

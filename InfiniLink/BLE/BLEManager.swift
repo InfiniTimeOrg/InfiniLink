@@ -120,6 +120,9 @@ class BLEManager: NSObject, ObservableObject {
     var isInstallingUpdate: Bool {
         return isReconnectingAfterUpdate && !isConnectedToPinetime
     }
+    var connectedDeviceID: String? {
+        return infiniTime?.identifier.uuidString ?? (MockWatch.shared.isConnected ? MockWatch.id : nil)
+    }
     var isBusy: Bool {
         return isConnecting || (isScanning && !isPairingNewDevice)
     }
@@ -162,6 +165,10 @@ class BLEManager: NSObject, ObservableObject {
     }
     
     func startScanning() {
+        if deviceManager.pairedDeviceID == MockWatch.id && !isPairingNewDevice {
+            MockWatch.shared.connect()
+            return
+        }
         guard manager?.state == .poweredOn else { return }
         
         if let id = deviceManager.pairedDeviceID,
@@ -234,6 +241,7 @@ class BLEManager: NSObject, ObservableObject {
     
     func disconnect() {
         isReconnectingAfterUpdate = false
+        MockWatch.shared.disconnect()
 
         if let infiniTime = infiniTime {
             self.manager?.cancelPeripheralConnection(infiniTime)
@@ -278,7 +286,7 @@ class BLEManager: NSObject, ObservableObject {
     }
     
     // Drop every characteristic from the old connection so nothing writes to a stale peripheral
-    private func clearCharacteristics() {
+    func clearCharacteristics() {
         blefsTransfer = nil
         currentTimeService = nil
         notifyCharacteristic = nil
@@ -400,7 +408,7 @@ extension BLEManager: CBCentralManagerDelegate {
     }
     
     func centralManagerDidUpdateState(_ central: CBCentralManager) {
-        isBluetoothOn = (central.state == .poweredOn)
+        isBluetoothOn = (central.state == .poweredOn) || MockWatch.isAvailable
         isConnecting = false
         isScanning = false
         
@@ -474,7 +482,7 @@ extension BLEManager: CBPeripheralDelegate {
         }
         
         deviceManager.updateInfo(characteristic: characteristic)
-        BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic, peripheral: peripheral)
+        BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {
