@@ -19,7 +19,7 @@ struct WeatherSettingsView: View {
     var body: some View {
         List {
             Section(footer: Text("Use your current location to fetch local weather data. Location accuracy can be managed in Settings.")) {
-                Toggle("Use Current Location", isOn: $useCurrentLocation)
+                Toggle("Use Current Location", isOn: $useCurrentLocation.animation())
             }
             if !useCurrentLocation {
                 Section {

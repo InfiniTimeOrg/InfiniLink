@@ -30,7 +30,7 @@ struct NotificationsSettingsView: View {
                 }
             }
             Section {
-                Toggle("Enable Notifications", isOn: $settingsManager.settings.watchNotificationsEnabled)
+                Toggle("Enable Notifications", isOn: $settingsManager.settings.watchNotificationsEnabled.animation())
             }
             if settingsManager.settings.watchNotificationsEnabled {
                 Section {

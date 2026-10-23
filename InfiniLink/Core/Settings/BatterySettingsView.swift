@@ -38,7 +38,7 @@ struct BatterySettingsView: View {
                     }
                 }
                 Section {
-                    Toggle("Notify at Custom Percentage", isOn: $settingsManager.settings.batterySettings.customNotificationEnabled)
+                    Toggle("Notify at Custom Percentage", isOn: $settingsManager.settings.batterySettings.customNotificationEnabled.animation())
                 }
                 if settingsManager.settings.batterySettings.customNotificationEnabled {
                     HStack {

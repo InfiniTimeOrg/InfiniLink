@@ -39,7 +39,7 @@ struct HealthNotificationSections: View {
 
     var body: some View {
         Section(header: isSetup ? Text("Health") : nil, footer: footer("Receive a reminder to drink water for the set amount of times a day.")) {
-            Toggle("Water Reminder", isOn: $settingsManager.settings.waterReminderEnabled)
+            Toggle("Water Reminder", isOn: $settingsManager.settings.waterReminderEnabled.animation())
             if !isSetup && settingsManager.settings.waterReminderEnabled {
                 Picker("Interval", selection: $settingsManager.settings.waterReminderAmount) {
                     ForEach(0..<9, id: \.self) { amount in
@@ -49,7 +49,7 @@ struct HealthNotificationSections: View {
             }
         }
         Section(footer: footer("Get a reminder to move when you haven't walked for a while during the set hours.")) {
-            Toggle("Inactivity Reminder", isOn: $settingsManager.settings.inactivitySettings.enabled)
+            Toggle("Inactivity Reminder", isOn: $settingsManager.settings.inactivitySettings.enabled.animation())
             if !isSetup && settingsManager.settings.inactivitySettings.enabled {
                 Picker("Remind After", selection: $settingsManager.settings.inactivitySettings.minutes) {
                     ForEach([30, 45, 60, 90, 120], id: \.self) { minutes in
@@ -69,7 +69,7 @@ struct HealthNotificationSections: View {
             }
         }
         Section(footer: footer("Get a notification when your heart rate goes above or below the specified range.")) {
-            Toggle("Heart Range Notifications", isOn: $settingsManager.settings.heartSettings.rangeReminderEnabled)
+            Toggle("Heart Range Notifications", isOn: $settingsManager.settings.heartSettings.rangeReminderEnabled.animation())
             if !isSetup && settingsManager.settings.heartSettings.rangeReminderEnabled {
                 HStack {
                     Text("Minimum")

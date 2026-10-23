@@ -78,7 +78,7 @@ struct WatchSettingsView: View {
                         ForEach(wakeModes, id: \.1) { mode in
                             Toggle(mode.0, isOn: Binding(
                                 get: { file.isWakeUpModeOn(mode.1) },
-                                set: { editor.file?.setWakeUpMode(mode.1, enabled: $0) }
+                                set: { enabled in withAnimation { editor.file?.setWakeUpMode(mode.1, enabled: enabled) } }
                             ))
                         }
                         if file.isWakeUpModeOn(.Shake) {

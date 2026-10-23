@@ -38,7 +38,7 @@ struct WatchAlarmView: View {
                     Section {
                         Toggle("Enable Alarm", isOn: Binding(
                             get: { file.isEnabled },
-                            set: { editor.file?.isEnabled = $0 }
+                            set: { enabled in withAnimation { editor.file?.isEnabled = enabled } }
                         ))
                     }
                     if file.isEnabled {

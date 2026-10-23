@@ -23,7 +23,7 @@ struct GoalsNotificationSections: View {
 
     var body: some View {
         Section(header: isSetup ? Text("Daily Goals") : nil, footer: Text("Get notified when you reach your step goal, keep a streak going, or take more steps than ever before.")) {
-            Toggle("Step Goal", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled)
+            Toggle("Step Goal", isOn: $settingsManager.settings.goalSettings.stepReminderEnabled.animation())
             if settingsManager.settings.goalSettings.stepReminderEnabled {
                 Toggle("Streaks", isOn: $settingsManager.settings.goalSettings.streakReminderEnabled)
             }
