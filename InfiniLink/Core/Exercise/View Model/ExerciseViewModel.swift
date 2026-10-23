@@ -117,6 +117,7 @@ class ExerciseViewModel: ObservableObject {
         maxHeartRate = 0
         exercisePaused = false
         autoPaused = false
+        lastSplitMark = 0
         resetMovementTracking()
 
         routeRecorder.reset()
@@ -539,7 +540,7 @@ class ExerciseViewModel: ObservableObject {
             let heartPoints = (try? context.fetch(request)) ?? []
 
             let averageHeartRate = Self.timeWeightedAverage(of: heartPoints)
-            let duration = endDate.timeIntervalSince(startDate)
+            let duration = session.elapsed(at: endDate)
             let calories = Double(Self.calories(for: exercise, averageHeartRate: averageHeartRate, duration: duration, steps: steps))
 
             let userExercise = UserExercise(context: context)
