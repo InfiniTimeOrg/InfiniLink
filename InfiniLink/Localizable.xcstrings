@@ -102,7 +102,10 @@
     "%@ needs to be connected to update its software." : {
 
     },
-    "%@ was last seen %@." : {
+    "%@ times" : {
+
+    },
+    "%@ was last seen at %@, at %@." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -254,6 +257,15 @@
     "•" : {
 
     },
+    "~%@ full cycle" : {
+
+    },
+    "~%@ left   " : {
+
+    },
+    "~%@ to full" : {
+
+    },
     "1 device discovered" : {
 
     },
@@ -290,8 +302,6 @@
     },
     "30 seconds" : {
 
-    },
-    "1 device discovered" : {
     },
     "A new section will be added to your device overview." : {
 
@@ -549,9 +559,11 @@
     "Continuous" : {
 
     },
-    "Copy" : {
+    "Convert accented characters to plain text so notifications display correctly." : {
+
     },
-    "Converting..." : {
+    "Copy" : {
+
     },
     "Couldn't Save Alarm" : {
 
@@ -780,6 +792,9 @@
     "Exercise" : {
 
     },
+    "Exercise Notifications" : {
+
+    },
     "Export" : {
 
     },
@@ -973,6 +988,9 @@
     "Health Details" : {
 
     },
+    "Health Notifications" : {
+
+    },
     "heart" : {
 
     },
@@ -1158,6 +1176,9 @@
     "Installing..." : {
 
     },
+    "Interval" : {
+
+    },
     "iPhone" : {
 
     },
@@ -1178,6 +1199,9 @@
 
     },
     "Kilojoules" : {
+
+    },
+    "Last Charged" : {
 
     },
     "Last connected %@" : {
@@ -1308,6 +1332,9 @@
     "Min" : {
 
     },
+    "Minimum" : {
+
+    },
     "Minutes" : {
 
     },
@@ -1417,6 +1444,9 @@
     "Notify on Low Battery" : {
 
     },
+    "Notify your watch when a workout starts, pauses, resumes, ends, and on each completed mile or kilometer." : {
+
+    },
     "Now" : {
 
     },
@@ -1457,6 +1487,9 @@
 
     },
     "Paused" : {
+
+    },
+    "Percent" : {
 
     },
     "Pin" : {
@@ -1952,6 +1985,9 @@
     "Total" : {
 
     },
+    "Transliterate to ASCII" : {
+
+    },
     "Travel By" : {
 
     },
@@ -2097,6 +2133,9 @@
     "Watch faces will go back to InfiniTime's order, all of them will be shown, and your custom watch faces will be removed." : {
 
     },
+    "Watch Haptics" : {
+
+    },
     "Watch Notifications Disabled" : {
 
     },
@@ -2154,6 +2193,9 @@
 
     },
     "You haven't recorded any exercises yet. Tap %@ to start one." : {
+
+    },
+    "You reached your goal, keep up the good work!" : {
 
     },
     "You took %d step%@ and burned %@." : {
