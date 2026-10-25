@@ -107,16 +107,15 @@ struct SleepView: View {
         GeometryReader { geo in
             List {
                 Section {
-                    DetailHeaderView(Header(title: duration(lastNightAsleep), subtitle: lastNight.isEmpty ? NSLocalizedString("No sleep recorded last night", comment: "") : NSLocalizedString("Last night", comment: ""), icon: "bed.double.fill", accent: .indigo), width: geo.size.width) {
+                    DetailHeaderView(Header(title: duration(lastNightAsleep), subtitle: lastNightAsleep == 0 ? NSLocalizedString("No sleep recorded last night", comment: "") : NSLocalizedString("Last night", comment: ""), icon: "bed.double.fill", accent: .indigo), width: geo.size.width) {
                         let recorded = nights.filter { $0.asleepMinutes > 0 }
-                        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                            if let bedtime = lastNight.first?.start, let wake = lastNight.last?.end {
-                                DetailHeaderSubItemView(title: "Fell Asleep", value: bedtime.formatted(date: .omitted, time: .shortened), icon: ("moon.fill", .indigo))
-                                DetailHeaderSubItemView(title: "Woke Up", value: wake.formatted(date: .omitted, time: .shortened), icon: ("sun.max.fill", .orange))
-                                DetailHeaderSubItemView(title: "Awake", value: duration(lastNightAwake), icon: ("eye.fill", .orange))
-                            }
-                            if !recorded.isEmpty {
-                                DetailHeaderSubItemView(title: "Avg (7 days)", value: duration(recorded.reduce(0) { $0 + $1.asleepMinutes } / recorded.count), icon: ("chart.bar.fill", .indigo))
+                        let slept = lastNightAsleep > 0
+                        if slept || !recorded.isEmpty {
+                            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
+                                DetailHeaderSubItemView(title: "Fell Asleep", value: slept ? lastNight.first?.start?.formatted(date: .omitted, time: .shortened) ?? "--" : "--", icon: ("moon.fill", .indigo))
+                                DetailHeaderSubItemView(title: "Woke Up", value: slept ? lastNight.last?.end?.formatted(date: .omitted, time: .shortened) ?? "--" : "--", icon: ("sun.max.fill", .orange))
+                                DetailHeaderSubItemView(title: "Awake", value: slept ? duration(lastNightAwake) : "--", icon: ("eye.fill", .orange))
+                                DetailHeaderSubItemView(title: "Avg (7 days)", value: recorded.isEmpty ? "--" : duration(recorded.reduce(0) { $0 + $1.asleepMinutes } / recorded.count), icon: ("chart.bar.fill", .indigo))
                             }
                         }
                     }
