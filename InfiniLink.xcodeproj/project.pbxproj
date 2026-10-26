@@ -13,6 +13,25 @@
 		E0C0DE00000000000000C005 /* ChargingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C004 /* ChargingManager.swift */; };
 		E0C0DE00000000000000C007 /* AutoUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C006 /* AutoUpdateManager.swift */; };
 		E0C0DE00000000000000C009 /* ChargingLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C008 /* ChargingLiveActivity.swift */; };
+		709E08C32B5D40B8B8943F7E /* StorageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 140317E70816472DAE7BEA79 /* StorageAPI.swift */; };
+		5FADB426D6E54302B616FACF /* VolumeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 232EA65667B646688D7E0798 /* VolumeAPI.swift */; };
+		AF740809C72D49EAA7DF386C /* MediaAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = CB1868217E544C15B11C8917 /* MediaAPI.swift */; };
+		31E0B95BB5554EE3B14C8A74 /* LocationAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09A71F3022FB41BCACB5DF48 /* LocationAPI.swift */; };
+		A0C4D7F3AB8443A8B9F051B7 /* PluginPolicy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC11A2AA0E4163AE0090F2 /* PluginPolicy.swift */; };
+		729A2A285D79481FBE303484 /* WatchesAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 136A13DDD6E24BE2AA4BF0DE /* WatchesAPI.swift */; };
+		2F2A1F78CE1E4AA8A422361F /* BLEAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C5EA3645A414F4592644467 /* BLEAPI.swift */; };
+		38C88AD319A64DA4BE3CE39C /* FSAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB379CD210A248E598970FB9 /* FSAPI.swift */; };
+		8EBC21E6C5B9419F98B51FD0 /* HTTPAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7AE48779D3CA47EBA110744B /* HTTPAPI.swift */; };
+		F949466BE36C4718847215B1 /* Plugin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A4A058CF424EB6A2FBF097 /* Plugin.swift */; };
+		710F8C31333144D1B686C9B9 /* PluginStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E61BB792AEB141078C047D26 /* PluginStore.swift */; };
+		1D6943B86D494B499A3F857D /* PluginManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE445DC4CC774762B114E6E9 /* PluginManager.swift */; };
+		23B40FD0D56D4D8593ABFF8B /* PluginRunner.swift in Sources */ = {isa = PBXBuildFile; fileRef = C593261BB9DC48ADB6641B4D /* PluginRunner.swift */; };
+		333FEC9F3EA147E08F0C3F8E /* ConsoleAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE1A68CF6A2484CBE0E6381 /* ConsoleAPI.swift */; };
+		40628E66E2A44A01BC02F6F4 /* TimerAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CDFE2A16400457F9D7E6561 /* TimerAPI.swift */; };
+		A4DFB80CB8FB40CAA2CAEBBD /* PluginsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 443B3DA0126D49658DFAE4A1 /* PluginsView.swift */; };
+		A477DA003AD24B628A550392 /* PluginImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3C6F76DAC4943C5AEAA026F /* PluginImportView.swift */; };
+		BA7334A0A1684F19B92608FE /* PluginDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BAE970E9CC6455BB025FF8B /* PluginDetailView.swift */; };
+		7EE0FFAE3F0B413CA75D03F7 /* Keychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E9E9543CCF44C1F948BA15B /* Keychain.swift */; };
 		009D471D8A6DF109A3C6B9BD /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304C0A743F00AF1921B28A07 /* DirectionsView.swift */; };
 		0D0A58D9E89935A7878AB233 /* DataRetention.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90EF4CFB93C89807B8CECD9 /* DataRetention.swift */; };
 		1340C962EE272ECE524A057F /* StoredDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564C1FBB48D66AC14760F520 /* StoredDataView.swift */; };
@@ -213,6 +232,25 @@
 		E0C0DE00000000000000C004 /* ChargingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingManager.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000C006 /* AutoUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoUpdateManager.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000C008 /* ChargingLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingLiveActivity.swift; sourceTree = "<group>"; };
+		140317E70816472DAE7BEA79 /* StorageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StorageAPI.swift; sourceTree = "<group>"; };
+		232EA65667B646688D7E0798 /* VolumeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VolumeAPI.swift; sourceTree = "<group>"; };
+		CB1868217E544C15B11C8917 /* MediaAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaAPI.swift; sourceTree = "<group>"; };
+		09A71F3022FB41BCACB5DF48 /* LocationAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationAPI.swift; sourceTree = "<group>"; };
+		7CFC11A2AA0E4163AE0090F2 /* PluginPolicy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginPolicy.swift; sourceTree = "<group>"; };
+		136A13DDD6E24BE2AA4BF0DE /* WatchesAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchesAPI.swift; sourceTree = "<group>"; };
+		1C5EA3645A414F4592644467 /* BLEAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEAPI.swift; sourceTree = "<group>"; };
+		DB379CD210A248E598970FB9 /* FSAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FSAPI.swift; sourceTree = "<group>"; };
+		7AE48779D3CA47EBA110744B /* HTTPAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HTTPAPI.swift; sourceTree = "<group>"; };
+		39A4A058CF424EB6A2FBF097 /* Plugin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Plugin.swift; sourceTree = "<group>"; };
+		E61BB792AEB141078C047D26 /* PluginStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginStore.swift; sourceTree = "<group>"; };
+		BE445DC4CC774762B114E6E9 /* PluginManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginManager.swift; sourceTree = "<group>"; };
+		C593261BB9DC48ADB6641B4D /* PluginRunner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginRunner.swift; sourceTree = "<group>"; };
+		3EE1A68CF6A2484CBE0E6381 /* ConsoleAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsoleAPI.swift; sourceTree = "<group>"; };
+		5CDFE2A16400457F9D7E6561 /* TimerAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimerAPI.swift; sourceTree = "<group>"; };
+		443B3DA0126D49658DFAE4A1 /* PluginsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginsView.swift; sourceTree = "<group>"; };
+		E3C6F76DAC4943C5AEAA026F /* PluginImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginImportView.swift; sourceTree = "<group>"; };
+		0BAE970E9CC6455BB025FF8B /* PluginDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PluginDetailView.swift; sourceTree = "<group>"; };
+		0E9E9543CCF44C1F948BA15B /* Keychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Keychain.swift; sourceTree = "<group>"; };
 		0E2639060097BBFC1CC1D73F /* HealthTrends.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthTrends.swift; sourceTree = "<group>"; };
 		1AFC0382BEC8406837173344 /* SleepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* InfiniLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -404,6 +442,46 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F7F4B7E4E1B548A8BBE6EA43 /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				7CFC11A2AA0E4163AE0090F2 /* PluginPolicy.swift */,
+				76D4B32A15A0435D83B1490B /* API */,
+				39A4A058CF424EB6A2FBF097 /* Plugin.swift */,
+				E61BB792AEB141078C047D26 /* PluginStore.swift */,
+				BE445DC4CC774762B114E6E9 /* PluginManager.swift */,
+				C593261BB9DC48ADB6641B4D /* PluginRunner.swift */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
+		76D4B32A15A0435D83B1490B /* API */ = {
+			isa = PBXGroup;
+			children = (
+				140317E70816472DAE7BEA79 /* StorageAPI.swift */,
+				232EA65667B646688D7E0798 /* VolumeAPI.swift */,
+				CB1868217E544C15B11C8917 /* MediaAPI.swift */,
+				09A71F3022FB41BCACB5DF48 /* LocationAPI.swift */,
+				136A13DDD6E24BE2AA4BF0DE /* WatchesAPI.swift */,
+				1C5EA3645A414F4592644467 /* BLEAPI.swift */,
+				DB379CD210A248E598970FB9 /* FSAPI.swift */,
+				7AE48779D3CA47EBA110744B /* HTTPAPI.swift */,
+				3EE1A68CF6A2484CBE0E6381 /* ConsoleAPI.swift */,
+				5CDFE2A16400457F9D7E6561 /* TimerAPI.swift */,
+			);
+			path = API;
+			sourceTree = "<group>";
+		};
+		D931349669E64D1BABE78A2D /* Plugins */ = {
+			isa = PBXGroup;
+			children = (
+				443B3DA0126D49658DFAE4A1 /* PluginsView.swift */,
+				E3C6F76DAC4943C5AEAA026F /* PluginImportView.swift */,
+				0BAE970E9CC6455BB025FF8B /* PluginDetailView.swift */,
+			);
+			path = Plugins;
+			sourceTree = "<group>";
+		};
 		264BFE3526BC51CE0050A223 = {
 			isa = PBXGroup;
 			children = (
@@ -430,6 +508,7 @@
 			children = (
 				E059999F2CB2ED5D00D64E0B /* Fonts */,
 				E0A7C07B2CB1AD2E0042A12D /* Utils */,
+				F7F4B7E4E1B548A8BBE6EA43 /* Plugins */,
 				E0A7C0692CB0DE450042A12D /* Model */,
 				E0C7C8522CAF14870043DA2D /* BLE */,
 				E0C7C8362CAEF6BF0043DA2D /* Core */,
@@ -615,6 +694,7 @@
 				E0A7C0892CB1E4BF0042A12D /* General */,
 				E03C30B32CC7030A00DD8363 /* Notifications */,
 				E08F2F312CC899D00094217A /* Weather */,
+				D931349669E64D1BABE78A2D /* Plugins */,
 				E0A7C0752CB17E520042A12D /* MusicSettingsView.swift */,
 				75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */,
 				E0A7C0A42CB2527F0042A12D /* HeartSettingsView.swift */,
@@ -634,6 +714,7 @@
 			isa = PBXGroup;
 			children = (
 				E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */,
+				0E9E9543CCF44C1F948BA15B /* Keychain.swift */,
 				E05999FD2CB462BF00D64E0B /* ChartManager.swift */,
 				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
 				E0C0DE00000000000000B001 /* ImportManager.swift */,
@@ -997,6 +1078,25 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				709E08C32B5D40B8B8943F7E /* StorageAPI.swift in Sources */,
+				5FADB426D6E54302B616FACF /* VolumeAPI.swift in Sources */,
+				AF740809C72D49EAA7DF386C /* MediaAPI.swift in Sources */,
+				31E0B95BB5554EE3B14C8A74 /* LocationAPI.swift in Sources */,
+				A0C4D7F3AB8443A8B9F051B7 /* PluginPolicy.swift in Sources */,
+				729A2A285D79481FBE303484 /* WatchesAPI.swift in Sources */,
+				2F2A1F78CE1E4AA8A422361F /* BLEAPI.swift in Sources */,
+				38C88AD319A64DA4BE3CE39C /* FSAPI.swift in Sources */,
+				8EBC21E6C5B9419F98B51FD0 /* HTTPAPI.swift in Sources */,
+				F949466BE36C4718847215B1 /* Plugin.swift in Sources */,
+				710F8C31333144D1B686C9B9 /* PluginStore.swift in Sources */,
+				1D6943B86D494B499A3F857D /* PluginManager.swift in Sources */,
+				23B40FD0D56D4D8593ABFF8B /* PluginRunner.swift in Sources */,
+				333FEC9F3EA147E08F0C3F8E /* ConsoleAPI.swift in Sources */,
+				40628E66E2A44A01BC02F6F4 /* TimerAPI.swift in Sources */,
+				A4DFB80CB8FB40CAA2CAEBBD /* PluginsView.swift in Sources */,
+				A477DA003AD24B628A550392 /* PluginImportView.swift in Sources */,
+				BA7334A0A1684F19B92608FE /* PluginDetailView.swift in Sources */,
+				7EE0FFAE3F0B413CA75D03F7 /* Keychain.swift in Sources */,
 				E02C62122CD05DA900C4D19B /* CurrentUpdateView.swift in Sources */,
 				E076FEC82FB415AC00FF6A17 /* NotificationSettingsManager.swift in Sources */,
 				E0A7C0782CB193BC0042A12D /* WeatherSettingsView.swift in Sources */,

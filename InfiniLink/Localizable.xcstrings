@@ -370,6 +370,9 @@
     "About InfiniLink" : {
 
     },
+    "Access your location" : {
+
+    },
     "Accelerometer May Have Failed" : {
 
     },
@@ -448,6 +451,9 @@
     "Apple Health" : {
 
     },
+    "Are you sure you want to delete %@?" : {
+
+    },
     "Are you sure you want to end the exercise?" : {
 
     },
@@ -461,6 +467,9 @@
 
     },
     "Asleep" : {
+
+    },
+    "Author" : {
 
     },
     "At Bedtime" : {
@@ -602,6 +611,9 @@
     "Change Photo" : {
 
     },
+    "Change your phone's volume" : {
+
+    },
     "Charge Before Bed" : {
 
     },
@@ -621,6 +633,9 @@
 
     },
     "Chimes" : {
+
+    },
+    "Choose File..." : {
 
     },
     "Choose a firmware update or external resources. External resources are fonts and images that are required for some apps and watch faces." : {
@@ -644,7 +659,13 @@
     "Clear Step Data" : {
 
     },
+    "Clear Stored Data" : {
+
+    },
     "Close" : {
+
+    },
+    "Code" : {
 
     },
     "Color Scheme" : {
@@ -680,10 +701,19 @@
     "Continuous" : {
 
     },
+    "Control and see what's playing in Apple Music" : {
+
+    },
     "Convert accented characters to plain text so notifications display correctly." : {
 
     },
     "Copy" : {
+
+    },
+    "Couldn't Import Plugin" : {
+
+    },
+    "Couldn't Install Plugin" : {
 
     },
     "Couldn't Back Up Watch" : {
@@ -791,6 +821,9 @@
     "Delete Older Data" : {
 
     },
+    "Delete Plugin" : {
+
+    },
     "Delete Unpaired Watch Data" : {
 
     },
@@ -886,6 +919,9 @@
     "Enable Notifications" : {
 
     },
+    "Enable Plugins (beta)" : {
+
+    },
     "Enabled" : {
 
     },
@@ -905,6 +941,9 @@
 
     },
     "Ensure that your watch is not connected to another device. If the issue persists, press and hold the side button until the watch restarts." : {
+
+    },
+    "Enter a valid URL." : {
 
     },
     "Error" : {
@@ -1045,6 +1084,9 @@
 
     },
     "From" : {
+
+    },
+    "From URL..." : {
 
     },
     "Full" : {
@@ -1229,6 +1271,9 @@
     "Icon" : {
 
     },
+    "ID" : {
+
+    },
     "If you have an InfiniTime device, you can pair it here." : {
       "localizations" : {
         "fr" : {
@@ -1248,6 +1293,12 @@
           }
         }
       }
+    },
+    "Import" : {
+
+    },
+    "Import from URL" : {
+
     },
     "Inactivity Reminder" : {
 
@@ -1325,6 +1376,15 @@
     "InfiniTime on GitHub" : {
 
     },
+    "Info" : {
+
+    },
+    "Install" : {
+
+    },
+    "Install Plugin" : {
+
+    },
     "Install builds of InfiniTime made by GitHub Actions. Requires you to sign in to GitHub." : {
 
     },
@@ -1354,6 +1414,12 @@
 
     },
     "Interval" : {
+
+    },
+    "Invalid header line: %@" : {
+
+    },
+    "Invalid parameter: %@" : {
 
     },
     "iPhone" : {
@@ -1394,6 +1460,9 @@
 
     },
     "Last Night" : {
+
+    },
+    "Last Notification" : {
 
     },
     "Learn more" : {
@@ -1512,6 +1581,15 @@
     "Minutes" : {
 
     },
+    "Missing or invalid plugin ID" : {
+
+    },
+    "Missing plugin footer" : {
+
+    },
+    "Missing plugin name" : {
+
+    },
     "Model Name" : {
 
     },
@@ -1570,6 +1648,9 @@
     "Next" : {
 
     },
+    "Next Song" : {
+
+    },
     "Night" : {
 
     },
@@ -1577,6 +1658,9 @@
 
     },
     "No Logs" : {
+
+    },
+    "No Plugins" : {
 
     },
     "No pull requests match your search." : {
@@ -1642,6 +1726,9 @@
     "OK" : {
 
     },
+    "On" : {
+
+    },
     "Open pull requests to InfiniTime with a successful build. Builds expire after 90 days and may be unstable." : {
 
     },
@@ -1675,6 +1762,9 @@
     "Past Week" : {
 
     },
+    "Paste Code" : {
+
+    },
     "Pause Workout" : {
 
     },
@@ -1682,6 +1772,9 @@
 
     },
     "Percent" : {
+
+    },
+    "Permissions" : {
 
     },
     "Pin" : {
@@ -1694,6 +1787,18 @@
 
     },
     "Pinned" : {
+
+    },
+    "Playing" : {
+
+    },
+    "Plugins" : {
+
+    },
+    "Plugins can talk to your watch and add new features to InfiniLink. Only install plugins from sources you trust." : {
+
+    },
+    "Plugins must start with a \"// ==InfiniLink Plugin==\" header" : {
 
     },
     "PM" : {
@@ -1731,6 +1836,9 @@
 
     },
     "Range" : {
+
+    },
+    "Read and write files on your watch" : {
 
     },
     "Reason" : {
@@ -1906,6 +2014,9 @@
     "Send a notification to your devices when your watch's battery level reaches full capacity." : {
 
     },
+    "Send HTTP requests" : {
+
+    },
     "Send Notification" : {
 
     },
@@ -1983,6 +2094,9 @@
     "Signal: " : {
 
     },
+    "Simulated Music" : {
+
+    },
     "Simulated Watch" : {
 
     },
@@ -2014,6 +2128,12 @@
 
     },
     "Software Version" : {
+
+    },
+    "Song" : {
+
+    },
+    "Source" : {
 
     },
     "Some settings in the backup aren't supported by this version of InfiniTime, so they weren't restored." : {
@@ -2234,6 +2354,9 @@
     "This new version of InfiniLink has not been localized yet, so if you can help translate, visit the InfiniLink GitHub repo to open a pull request!" : {
 
     },
+    "This plugin will be able to talk to your watch while InfiniLink is running. Only install plugins from sources you trust." : {
+
+    },
     "This Week" : {
 
     },
@@ -2317,10 +2440,16 @@
     "Unknown date" : {
 
     },
+    "Unknown header key: %@" : {
+
+    },
     "Unpair" : {
 
     },
     "Unpin" : {
+
+    },
+    "Unsupported permission: %@" : {
 
     },
     "Unplugged at %@" : {
@@ -2337,6 +2466,9 @@
       }
     },
     "Until" : {
+
+    },
+    "Update" : {
 
     },
     "Update Available" : {
@@ -2368,6 +2500,9 @@
         }
       }
     },
+    "Update Plugin" : {
+
+    },
     "Update Resources" : {
 
     },
@@ -2387,6 +2522,9 @@
 
     },
     "Upload Files" : {
+
+    },
+    "URL" : {
 
     },
     "Uploading" : {
@@ -2444,6 +2582,9 @@
 
     },
     "View All" : {
+
+    },
+    "Volume: %lld" : {
 
     },
     "View on GitHub" : {

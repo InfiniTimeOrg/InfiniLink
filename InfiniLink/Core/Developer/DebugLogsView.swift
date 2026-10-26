@@ -31,6 +31,11 @@ struct DebugLogsView: View {
                     Label("DFU", systemImage: "arrow.up.doc")
                 }
                 .tag("dfu")
+            logs(for: .plugin)
+                .tabItem {
+                    Label("Plugins", systemImage: "puzzlepiece.extension")
+                }
+                .tag("plugin")
         }
         .navigationTitle("\(logSelection == "ble" ? "BLE" : NSLocalizedString("App", comment: "")) Logs")
     }

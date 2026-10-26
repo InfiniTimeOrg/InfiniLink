@@ -20,6 +20,7 @@
 - Watch settings, alarm, and watch face editing
 - Watch file browser and uploading of [external resource packages](https://github.com/InfiniTimeOrg/InfiniTime/blob/develop/doc/gettingStarted/updating-software.md#updating-resources)
 - Download and install InfiniTime firmware updates from GitHub releases, InfiniTime's automated builds, and local files
+- JavaScript plugins (beta) that can talk to the watch, make web requests, and more. See [Building InfiniLink Plugins](docs/Plugins.md)
 
 ### Partially implemented features:
 - System-wide notifications—implemented in [#2217](https://github.com/InfiniTimeOrg/InfiniTime/pull/2217), but not available in the main branch yet.

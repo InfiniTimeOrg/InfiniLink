@@ -81,6 +81,7 @@ class BLEManager: NSObject, ObservableObject {
         var length: CBCharacteristic?
     }
     var musicChars = MusicCharacteristics()
+    var discoveredCharacteristics: [CBUUID: CBCharacteristic] = [:]
     
     @Published var isBluetoothOn = true // Keep this variable initally true because otherwise it could quickly flash the "Bluetooth Disabled" message
     @Published var isScanning = false
@@ -311,6 +312,8 @@ class BLEManager: NSObject, ObservableObject {
         musicChars = MusicCharacteristics()
         chargeState = nil
         ChargingManager.shared.update()
+        discoveredCharacteristics = [:]
+        PluginManager.shared.watchDisconnected()
     }
     
     func lastSeenDate(for uuid: String?) -> Date? {
@@ -475,6 +478,11 @@ extension BLEManager: CBPeripheralDelegate {
             deviceManager.readInfoCharacteristics(characteristic: characteristic, peripheral: peripheral)
             BLECharacteristicHandler.shared.handleDiscoveredCharacteristics(characteristic: characteristic, peripheral: peripheral)
         }
+        
+        // Plugins grab characteristics as soon as they hear about the connection, so wait for all of them
+        if peripheral.services?.allSatisfy({ $0.characteristics != nil }) == true {
+            PluginManager.shared.watchConnected()
+        }
     }
     
     func peripheral(_ peripheral: CBPeripheral, didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
@@ -496,6 +504,7 @@ extension BLEManager: CBPeripheralDelegate {
         
         deviceManager.updateInfo(characteristic: characteristic)
         BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic)
+        PluginManager.shared.handleValue(characteristic)
     }
     
     func peripheral(_ peripheral: CBPeripheral, didWriteValueFor characteristic: CBCharacteristic, error: Error?) {

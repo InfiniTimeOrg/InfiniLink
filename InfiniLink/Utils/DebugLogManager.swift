@@ -11,6 +11,7 @@ enum DebugLogTarget: String {
     case ble
     case app
     case dfu
+    case plugin
 }
 
 enum DebugLogType: String {

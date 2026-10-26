@@ -22,7 +22,8 @@ struct DeviceView: View {
     
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
-    
+    @AppStorage("enablePlugins") var enablePlugins = false
+
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
 
@@ -247,6 +248,13 @@ struct DeviceView: View {
                             column(MusicSettingsView())
                         } label: {
                             ListRowView(title: "Music", icon: "music.note", iconColor: .red)
+                        }
+                        if enablePlugins {
+                            NavigationLink {
+                                column(PluginsView())
+                            } label: {
+                                ListRowView(title: "Plugins", icon: "puzzlepiece.extension.fill", iconColor: .purple)
+                            }
                         }
                     }
                 }

@@ -55,6 +55,8 @@ struct BLECharacteristicHandler {
     }
     
     func handleDiscoveredCharacteristics(characteristic: CBCharacteristic, peripheral: CBPeripheral) {
+        bleManager.discoveredCharacteristics[characteristic.uuid] = characteristic
+        
         switch characteristic.uuid {
         case BLEUUID.musicControl:
             peripheral.setNotifyValue(true, for: characteristic)

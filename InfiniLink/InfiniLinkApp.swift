@@ -22,6 +22,7 @@ struct InfiniLink: App {
         
         downloadManager.checkForFirmwareUpdate()
         DataRetention.shared.deleteOldData()
+        PluginManager.shared.reload()
     }
     
     var body: some Scene {

@@ -42,13 +42,16 @@ struct BLEWriteManager {
     }
     
     func sendNotification(_ notif: AppNotification) {
-        guard bleManager.infiniTime != nil else { return }
+        guard bleManager.infiniTime != nil || MockWatch.shared.isConnected else { return }
         
         let title = settingsManager.settings.transliterationEnabled ? notif.title.asciiSafe : notif.title
         let body = settingsManager.settings.transliterationEnabled ? notif.subtitle.asciiSafe : notif.subtitle
         
         let notification = Data(("   " + title + "\0").utf8) + Data((body + "\0").utf8)
         if let notifyCharacteristic = bleManager.notifyCharacteristic, settingsManager.settings.watchNotificationsEnabled {
+            if MockWatch.shared.isConnected {
+                MockWatch.shared.write(notification, to: notifyCharacteristic.uuid)
+            }
             bleManager.infiniTime?.writeValue(notification, for: notifyCharacteristic, type: .withResponse)
             log("Notification sent with title: \(title)", type: .info, caller: "BLEWriteManager", target: .ble)
         }
@@ -142,6 +145,17 @@ struct BLEWriteManager {
         infiniTime.writeValue(icon, for: flags, type: .withResponse)
         
         log("Wrote navigation update", type: .info, caller: "BLEWriteManager", target: .ble)
+    }
+    
+    // Plugins check PluginPolicy before calling this
+    func writeRaw(_ data: Data, to characteristic: CBCharacteristic) {
+        if MockWatch.shared.isConnected {
+            MockWatch.shared.write(data, to: characteristic.uuid)
+            return
+        }
+        guard let infiniTime = bleManager.infiniTime else { return }
+        
+        infiniTime.writeValue(data, for: characteristic, type: characteristic.properties.contains(.write) ? .withResponse : .withoutResponse)
     }
 }
 

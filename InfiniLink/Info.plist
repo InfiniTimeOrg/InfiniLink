@@ -47,6 +47,13 @@
 	<true/>
 	<key>LSSupportsOpeningDocumentsInPlace</key>
 	<true/>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Plugins you install can connect to devices on your local network, such as a Home Assistant server.</string>
 	<key>NSAppleMusicUsageDescription</key>
 	<string>This app needs permission to allow your PineTime to control your music.</string>
 	<key>NSBluetoothAlwaysUsageDescription</key>

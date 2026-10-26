@@ -12,11 +12,13 @@ struct DeveloperView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var mockWatch = MockWatch.shared
     @ObservedObject var motionController = MotionController.shared
+    @ObservedObject var mockMusicPlayer = MockMusicPlayer.shared
     
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
     @AppStorage("forceAncs") var forceAncs = true
     @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
+    @AppStorage("enablePlugins") var enablePlugins = false
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
     @AppStorage("forceDatFailures") var forceDatFailures = false
     
@@ -72,6 +74,17 @@ struct DeveloperView: View {
                     Toggle("Connected", isOn: Binding(get: { mockWatch.isConnected }, set: { $0 ? mockWatch.connect() : bleManager.disconnect() }))
                     Stepper("Battery: \(mockWatch.batteryLevel)%", value: Binding(get: { mockWatch.batteryLevel }, set: { mockWatch.setBatteryLevel($0) }), in: 0...100, step: 5)
                     Toggle("Charging", isOn: Binding(get: { mockWatch.isCharging }, set: { mockWatch.setCharging($0) }))
+                    if let notification = mockWatch.lastNotification {
+                        LabeledContent("Last Notification", value: notification)
+                    }
+                }
+                Section("Simulated Music") {
+                    LabeledContent("Song", value: mockMusicPlayer.title)
+                    Toggle("Playing", isOn: Binding(get: { mockMusicPlayer.isPlaying }, set: { $0 ? mockMusicPlayer.play() : mockMusicPlayer.pause() }))
+                    Button("Next Song") {
+                        mockMusicPlayer.skipToNextItem()
+                    }
+                    Stepper("Volume: \(mockMusicPlayer.volume)", value: $mockMusicPlayer.volume, in: 0...15)
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)
@@ -86,6 +99,10 @@ struct DeveloperView: View {
                 }
             Section {
                 Toggle("Enable Navigation (beta)", isOn: $enableBetaNavigation)
+                Toggle("Enable Plugins (beta)", isOn: $enablePlugins)
+                    .onChange(of: enablePlugins) { _ in
+                        PluginManager.shared.reload()
+                    }
             }
             Section {
                 Picker("Packet Receipt Notification", selection: $packetReceiptNotification) {

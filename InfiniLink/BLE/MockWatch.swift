@@ -24,6 +24,7 @@ class MockWatch: ObservableObject {
     @Published var isConnected = false
     @Published var batteryLevel = 85
     @Published var isCharging = false
+    @Published var lastNotification: String?
 
     let fileSystem = MockFileSystem()
 
@@ -31,6 +32,8 @@ class MockWatch: ObservableObject {
     private var ticks = 0
     private var heartRate = 72
     private var steps = 0
+    private var characteristics: [CBUUID: CBMutableCharacteristic] = [:]
+    private var gattServices: [CBMutableService] = [] // Characteristics only hold their service weakly
 
     private let info: [CBUUID: String] = [
         BLEUUID.modelNumber: "InfiniTime",
@@ -41,10 +44,22 @@ class MockWatch: ObservableObject {
         BLEUUID.manufacturer: "PINE64"
     ]
 
+    private let services: [String: [CBUUID]] = [ // So plugins can look up chars by id
+        "180D": [BLEUUID.hrm],
+        "180F": [BLEUUID.bat, BLEUUID.batteryLevelStatus],
+        "1805": [BLEUUID.time],
+        "1811": [BLEUUID.notify],
+        "180A": [BLEUUID.modelNumber, BLEUUID.serial, BLEUUID.firmware, BLEUUID.hardwareRevision, BLEUUID.softwareRevision, BLEUUID.manufacturer],
+        "FEBB": [BLEUUID.blefsVersion, BLEUUID.blefsTransfer],
+        "00000000-78FC-48FE-8E23-433B3A1942D0": [BLEUUID.musicControl, BLEUUID.statusControl, BLEUUID.musicArtist, BLEUUID.musicTrack, BLEUUID.positionTrack, BLEUUID.lengthTrack],
+        "00010000-78FC-48FE-8E23-433B3A1942D0": [BLEUUID.navigationFlags, BLEUUID.navigationNarrative, BLEUUID.navigationDistance, BLEUUID.navigationProgress],
+        "00030000-78FC-48FE-8E23-433B3A1942D0": [BLEUUID.stepCount, BLEUUID.motion],
+        "00050000-78FC-48FE-8E23-433B3A1942D0": [BLEUUID.weather]
+    ]
+
     func connect() {
         guard Self.isAvailable, !isConnected else { return }
 
-        // Use .shared here instead of storing it, since BLEManager reaches this during its own setup
         let bleManager = BLEManager.shared
         let deviceManager = DeviceManager.shared
 
@@ -59,18 +74,25 @@ class MockWatch: ObservableObject {
             deviceManager.updateName("Simulator")
         }
 
+        setUpCharacteristics()
         isConnected = true
         bleManager.isConnecting = false
         bleManager.isConnectedToPinetime = true
         bleManager.ancsAuthorized = true
         bleManager.rssi = -55
-        bleManager.currentTimeService = characteristic(BLEUUID.time)
-        bleManager.blefsTransfer = characteristic(BLEUUID.blefsTransfer)
+        bleManager.currentTimeService = characteristics[BLEUUID.time]
+        bleManager.blefsTransfer = characteristics[BLEUUID.blefsTransfer]
+        bleManager.notifyCharacteristic = characteristics[BLEUUID.notify]
+        bleManager.discoveredCharacteristics = characteristics
 
-        for (uuid, value) in info {
-            deviceManager.updateInfo(characteristic: characteristic(uuid, value: Data(value.utf8)))
+        var values = info.mapValues { Data($0.utf8) }
+        values[BLEUUID.blefsVersion] = Data([1, 0])
+        for (uuid, value) in values {
+            guard let characteristic = characteristics[uuid] else { continue }
+
+            characteristic.value = value
+            deviceManager.updateInfo(characteristic: characteristic)
         }
-        deviceManager.updateInfo(characteristic: characteristic(BLEUUID.blefsVersion, value: Data([1, 0])))
         deviceManager.readWatchFiles()
 
         send(BLEUUID.bat, [UInt8(batteryLevel)])
@@ -79,6 +101,7 @@ class MockWatch: ObservableObject {
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             self?.tick()
         }
+        PluginManager.shared.watchConnected()
 
         log("Connected to simulated watch", type: .info, caller: "MockWatch", target: .ble)
     }
@@ -91,6 +114,8 @@ class MockWatch: ObservableObject {
         timer?.invalidate()
         timer = nil
         isConnected = false
+        characteristics = [:]
+        gattServices = []
         bleManager.clearCharacteristics()
         bleManager.isConnectedToPinetime = false
         bleManager.hasLoadedBatteryLevel = false
@@ -119,6 +144,26 @@ class MockWatch: ObservableObject {
         send(BLEUUID.batteryLevelStatus, [0, UInt8(powerState & 0xFF), UInt8(powerState >> 8)])
     }
 
+    func read(_ uuid: CBUUID) {
+        guard let characteristic = characteristics[uuid] else { return }
+
+        PluginManager.shared.handleValue(characteristic)
+    }
+
+    func write(_ data: Data, to uuid: CBUUID) {
+        guard let characteristic = characteristics[uuid] else { return }
+
+        characteristic.value = data
+        if uuid == BLEUUID.notify {
+            // Three header bytes, then the title and body, each ending in a null
+            let parts = data.dropFirst(3).split(separator: 0, omittingEmptySubsequences: false).map { String(decoding: $0, as: UTF8.self) }
+            lastNotification = parts.prefix(2).filter { !$0.isEmpty }.joined(separator: ": ")
+            log("Simulated watch got notification: \(lastNotification ?? "")", type: .info, caller: "MockWatch", target: .ble)
+        } else {
+            log("Simulated watch got \(data.count) bytes on \(uuid)", type: .info, caller: "MockWatch", target: .ble)
+        }
+    }
+
     private func tick() {
         ticks += 1
         heartRate = min(max(heartRate + Int.random(in: -3...3), 55), 140)
@@ -139,14 +184,102 @@ class MockWatch: ObservableObject {
     }
 
     private func send(_ uuid: CBUUID, _ bytes: [UInt8]) {
+        guard let characteristic = characteristics[uuid] else { return }
+
+        characteristic.value = Data(bytes)
         BLEManager.shared.lastDataReceivedDate = Date()
-        BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic(uuid, value: Data(bytes)))
+        BLECharacteristicHandler.shared.handleUpdates(characteristic: characteristic)
+        PluginManager.shared.handleValue(characteristic)
     }
 
-    private func characteristic(_ uuid: CBUUID, value: Data? = nil) -> CBMutableCharacteristic {
-        let characteristic = CBMutableCharacteristic(type: uuid, properties: [.read, .notify], value: nil, permissions: .readable)
-        characteristic.value = value
-        return characteristic
+    private func setUpCharacteristics() {
+        gattServices = services.map { serviceUUID, uuids in
+            let service = CBMutableService(type: CBUUID(string: serviceUUID), primary: true)
+            service.characteristics = uuids.map { uuid in
+                let characteristic = CBMutableCharacteristic(type: uuid, properties: [.read, .write, .notify], value: nil, permissions: [.readable, .writeable])
+                characteristic.value = Data()
+                characteristics[uuid] = characteristic
+                return characteristic
+            }
+            return service
+        }
+    }
+}
+
+// The simulator doesn't have Apple Music
+class MockMusicPlayer: ObservableObject, PluginMusicPlayer {
+    static let shared = MockMusicPlayer()
+
+    private let songs = [
+        (title: "Bluetooth Low Energy", artist: "The Pinetimes", album: "InfiniTime", duration: 214.0),
+        (title: "Over the Air", artist: "The Pinetimes", album: "InfiniTime", duration: 187.0),
+        (title: "Heart Rate", artist: "Sensor", album: "Wrist", duration: 241.0)
+    ]
+
+    @Published private(set) var index = 0
+    @Published private(set) var isPlaying = false
+    @Published var volume = 8 // Out of 15
+    private var elapsed: TimeInterval = 0
+    private var resumedDate: Date?
+
+    var title: String {
+        return songs[index].title
+    }
+
+    var currentPlaybackTime: TimeInterval {
+        get {
+            return min(elapsed + (resumedDate.map { Date().timeIntervalSince($0) } ?? 0), songs[index].duration)
+        }
+        set {
+            elapsed = min(max(newValue, 0), songs[index].duration)
+            resumedDate = isPlaying ? Date() : nil
+            changed()
+        }
+    }
+
+    var state: [String: Any] {
+        let song = songs[index]
+        return [
+            "isPlaying": isPlaying,
+            "position": Int(currentPlaybackTime),
+            "duration": Int(song.duration),
+            "title": song.title,
+            "artist": song.artist,
+            "album": song.album
+        ]
+    }
+
+    func play() {
+        guard !isPlaying else { return }
+
+        isPlaying = true
+        resumedDate = Date()
+        changed()
+    }
+
+    func pause() {
+        guard isPlaying else { return }
+
+        elapsed = currentPlaybackTime
+        isPlaying = false
+        resumedDate = nil
+        changed()
+    }
+
+    func skipToNextItem() {
+        index = (index + 1) % songs.count
+        currentPlaybackTime = 0
+    }
+
+    func skipToPreviousItem() {
+        index = (index + songs.count - 1) % songs.count
+        currentPlaybackTime = 0
+    }
+
+    func beginGeneratingPlaybackNotifications() {}
+
+    private func changed() {
+        PluginManager.shared.handleMediaChange()
     }
 }
 
