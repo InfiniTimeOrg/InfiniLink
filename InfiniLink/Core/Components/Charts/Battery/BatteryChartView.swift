@@ -169,14 +169,14 @@ struct BatteryChartView: View {
                             .contentTransition(.numericText())
                             Group {
                                 if let selectedPoint {
-                                    Text(selectedPoint.date.addingTimeInterval(-1800).formatted(.dateTime.month(.abbreviated).day().hour().minute()))
+                                    Text(selectedPoint.date.addingTimeInterval(-1800).formatted(.dateTime.month(.abbreviated).day().hour(.localized).minute()))
                                 } else {
                                     let rounded = Date(timeIntervalSinceReferenceDate: (scrollPositionDate.timeIntervalSinceReferenceDate / 3600).rounded() * 3600)
                                     let isFullDay = cal.component(.hour, from: rounded) == 0
                                     let end = Date(timeInterval: visibleDomain, since: rounded)
                                     Text(isFullDay
                                          ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-                                         : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour().minute()))")
+                                         : "\(rounded.formatted(.dateTime.month(.abbreviated).day())), \(rounded.formatted(.dateTime.hour(.localized).minute())) – \(end.formatted(.dateTime.month(.abbreviated).day())), \(end.formatted(.dateTime.hour(.localized).minute()))")
                                 }
                             }
                             .foregroundColor(.secondary)

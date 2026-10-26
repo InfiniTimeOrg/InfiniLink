@@ -35,3 +35,11 @@ extension Date {
         return dates
     }
 }
+
+extension Date.FormatStyle.Symbol.Hour {
+    // Forcing 24-hour time on a 12-hour locale drops the leading zero
+    static var localized: Self {
+        let uses24Hour = !(DateFormatter.dateFormat(fromTemplate: "j", options: 0, locale: .current) ?? "").contains("a")
+        return uses24Hour ? .twoDigits(amPM: .omitted) : .defaultDigits(amPM: .abbreviated)
+    }
+}

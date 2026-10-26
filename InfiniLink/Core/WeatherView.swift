@@ -15,11 +15,11 @@ struct WeatherView: View {
         guard let today = weather.dailyForecast.first else { return nil }
 
         if let sunrise = today.sun.sunrise, Date() < sunrise {
-            return ("Sunrise", sunrise.formatted(.dateTime.hour().minute()))
+            return ("Sunrise", sunrise.formatted(.dateTime.hour(.localized).minute()))
         } else if let sunset = today.sun.sunset, Date() < sunset {
-            return ("Sunset", sunset.formatted(.dateTime.hour().minute()))
+            return ("Sunset", sunset.formatted(.dateTime.hour(.localized).minute()))
         } else if let sunrise = weather.dailyForecast.forecast.dropFirst().first?.sun.sunrise {
-            return ("Sunrise", sunrise.formatted(.dateTime.hour().minute()))
+            return ("Sunrise", sunrise.formatted(.dateTime.hour(.localized).minute()))
         }
 
         return nil

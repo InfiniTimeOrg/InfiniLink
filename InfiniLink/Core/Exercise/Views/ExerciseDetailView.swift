@@ -114,7 +114,7 @@ struct ExerciseDetailView: View {
                 Section("Time") {
                     let startDate = userExercise.startDate!
 
-                    Text("Starting on \(startDate.formatted(.dateTime.day().month())) at \(startDate.formatted(.dateTime.hour().minute())), the exercise lasted \(timeDifferenceFormatted(startDate: startDate, endDate: userExercise.endDate!)).")
+                    Text("Starting on \(startDate.formatted(.dateTime.day().month())) at \(startDate.formatted(.dateTime.hour(.localized).minute())), the exercise lasted \(timeDifferenceFormatted(startDate: startDate, endDate: userExercise.endDate!)).")
                 }
                 if userExercise.distance > 0 {
                     Section("Distance") {

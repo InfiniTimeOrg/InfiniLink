@@ -110,7 +110,7 @@ struct ExerciseHistoryRowView: View {
             VStack(alignment: .leading, spacing: 4) {
                 Text(exercise.name)
                     .font(.body.weight(.medium))
-                Text(userExercise.startDate?.formatted(date: .abbreviated, time: .shortened) ?? NSLocalizedString("Unknown date", comment: ""))
+                Text(userExercise.startDate?.formatted(.dateTime.month(.abbreviated).day().year().hour(.localized).minute()) ?? NSLocalizedString("Unknown date", comment: ""))
                     .foregroundStyle(Color.gray)
             }
             Spacer()
