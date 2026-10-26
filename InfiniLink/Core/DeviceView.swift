@@ -17,6 +17,7 @@ struct DeviceView: View {
     @ObservedObject var notificationManager = NotificationManager.shared
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject var dfuUpdater = DFUUpdater.shared
+    @ObservedObject var motionController = MotionController.shared
     
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
@@ -117,6 +118,12 @@ struct DeviceView: View {
                                 Image(systemName: exercise.icon)
                                     .font(.title2.weight(.medium))
                             }
+                        }
+                    } else if (motionController.isAccelerometerDead || motionController.fakeDeadAccelerometer) && bleManager.isConnectedToPinetime {
+                        BannerView("Accelerometer May Have Failed", "\(deviceManager.name) isn't sending motion data. Some features not work as expected.") {
+                            Image(systemName: "gyroscope")
+                                .font(.title2.weight(.medium))
+                                .foregroundStyle(.orange)
                         }
                     } else if downloadManager.updateAvailable && !DFUUpdater.shared.local && bleManager.dfuControlPointCharacteristic != nil && comparison != .orderedDescending && comparison != .orderedSame {
                         NavigationLink {

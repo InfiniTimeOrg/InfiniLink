@@ -77,6 +77,7 @@ struct BLECharacteristicHandler {
         case BLEUUID.motion:
             peripheral.readValue(for: characteristic)
             peripheral.setNotifyValue(true, for: characteristic)
+            motionController.checkAccelerometer()
         case BLEUUID.blefsTransfer:
             bleManager.blefsTransfer = characteristic
             peripheral.setNotifyValue(true, for: characteristic)

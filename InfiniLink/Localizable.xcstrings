@@ -93,6 +93,9 @@
     "%@ is using its default settings. Save them in Customization first, then turn this on." : {
 
     },
+    "%@ isn't sending motion data. Some features not work as expected." : {
+
+    },
     "%@ Logs" : {
 
     },
@@ -310,6 +313,9 @@
 
     },
     "About InfiniLink" : {
+
+    },
+    "Accelerometer May Have Failed" : {
 
     },
     "Active Exercise" : {
@@ -824,6 +830,9 @@
 
     },
     "Fair" : {
+
+    },
+    "Fake Dead Accelerometer" : {
 
     },
     "Fake Recovery Mode" : {

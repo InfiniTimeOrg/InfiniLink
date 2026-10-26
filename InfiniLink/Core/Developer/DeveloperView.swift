@@ -11,6 +11,7 @@ import Combine
 struct DeveloperView: View {
     @ObservedObject var bleManager = BLEManager.shared
     @ObservedObject var mockWatch = MockWatch.shared
+    @ObservedObject var motionController = MotionController.shared
     
     @AppStorage("includeTestArtist") var includeTestArtist = true
     @AppStorage("includeTestSongName") var includeTestSongName = true
@@ -73,6 +74,7 @@ struct DeveloperView: View {
             }
             Toggle("Force ANCS", isOn: $forceAncs)
             Toggle("Fake Recovery Mode", isOn: $bleManager.fakeRecoveryMode)
+            Toggle("Fake Dead Accelerometer", isOn: $motionController.fakeDeadAccelerometer)
             Section {
                 Toggle("Enable Navigation (beta)", isOn: $enableBetaNavigation)
             }
