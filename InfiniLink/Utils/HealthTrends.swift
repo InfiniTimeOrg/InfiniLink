@@ -81,15 +81,15 @@ struct HealthTrends {
         }
     }
 
-    // Averages over the last 24 hours
-    // Sleep counted in full even if it started earlier
+    // Today's averages
+    // Sleep from the last 24 hours counted in full since it spans two days
     func heartRateAverages(deviceId: String, activeWorkoutStart: Date?, completion: @escaping (HeartRateAverages) -> Void) {
-        let start = Date().addingTimeInterval(-86400)
+        let start = Calendar.current.startOfDay(for: Date())
 
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
             let now = Date()
-            let sleep = self.sleepIntervals(in: DateInterval(start: start, end: now), deviceId: deviceId, context: context)
+            let sleep = self.sleepIntervals(in: DateInterval(start: now.addingTimeInterval(-86400), end: now), deviceId: deviceId, context: context)
 
             let request: NSFetchRequest<UserExercise> = UserExercise.fetchRequest()
             request.predicate = NSPredicate(format: "deviceId == %@ AND endDate >= %@", deviceId, start as NSDate)

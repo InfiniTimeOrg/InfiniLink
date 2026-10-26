@@ -33,8 +33,8 @@ struct HeartView: View {
             HealthTrends().heartRateAverages(deviceId: deviceId, activeWorkoutStart: ExerciseViewModel.shared.sessionStartDate) { averages in
                 self.averages = averages
             }
-            HealthTrends().restingHeartRates(days: 2, deviceId: deviceId) { days in
-                resting = days.last?.bpm
+            HealthTrends().restingHeartRates(days: 1, deviceId: deviceId) { days in
+                resting = days.first?.bpm
             }
         }
     }
