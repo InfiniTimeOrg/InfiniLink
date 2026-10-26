@@ -33,7 +33,6 @@ struct SleepAnalyzer {
     static let windowStartHour = 18
     static let windowEndHour = 12
     static let stillFractionOfDaytime = 0.15 // A minute counts as still below this fraction of the median daytime activity
-    static let notWornFractionOfStill = 0.1 // Below this fraction of the still threshold the watch is likely lying on a table
     static let fallbackStillThreshold = 2000.0 // Used until there's enough daytime activity to compare against
     static let heartRateAwakeMargin = 15.0 // BPM above the night's baseline that counts as awake
     static let surroundingMinutes = 7 // Minutes on each side used to decide if a minute is awake
@@ -41,7 +40,7 @@ struct SleepAnalyzer {
     static let minimumRunMinutes = 20
     static let maximumGapMinutes = 30
     static let minimumSessionMinutes = 60
-    static let minimumNotWornMinutes = 60
+    static let minimumNotWornMinutes = 15 // Still with no HR this long means the watch is off, since HR is reliable when still
 
     // A night is 6pm to noon the next day
     static func window(containing date: Date) -> DateInterval? {
@@ -90,7 +89,28 @@ struct SleepAnalyzer {
         }
 
         let stillThreshold = stillThreshold(daytimeMedian: daytimeMedian)
-        let notWornThreshold = stillThreshold * notWornFractionOfStill
+
+        // A watch on a table still reads as still so missing HR is what shows it's not being worn
+        var runStart: Int?
+        var flatCount = 0
+        for index in 0...minuteCount {
+            if index < minuteCount && activityByMinute[index] == nil && heartByMinute[index] == nil {
+                continue // Dropped connection
+            }
+            let isFlat = index < minuteCount && (activityByMinute[index] ?? .infinity) < stillThreshold && heartByMinute[index] == nil
+            if isFlat {
+                runStart = runStart ?? index
+                flatCount += 1
+            } else if let start = runStart {
+                if flatCount >= minimumNotWornMinutes {
+                    for flat in start..<index {
+                        activityByMinute[flat] = nil
+                    }
+                }
+                runStart = nil
+                flatCount = 0
+            }
+        }
 
         // HR well above the night's baseline means they're awake, even if they're still
         let nightRates = heartByMinute.compactMap { $0 }.sorted()
@@ -111,37 +131,27 @@ struct SleepAnalyzer {
             states[index] = activeFraction >= awakeActiveFraction ? .awake : .asleep
         }
 
-        // Long stretches with no movement and no HR means the watch wasn't being worn
-        var runStart: Int?
-        for index in 0...minuteCount {
-            let isFlat = index < minuteCount && (activityByMinute[index] ?? .infinity) < notWornThreshold && heartByMinute[index] == nil
-            if isFlat {
-                runStart = runStart ?? index
-            } else if let start = runStart {
-                if index - start >= minimumNotWornMinutes {
-                    for flat in start..<index {
-                        states[flat] = .noData
-                    }
-                }
-                runStart = nil
-            }
-        }
-
         return sessions(from: states, windowStart: window.start)
     }
 
     private static func sessions(from states: [SleepState], windowStart: Date) -> [DetectedSleep] {
         var runs = [Range<Int>]()
         var runStart: Int?
+        var lastAsleep = 0
+        var asleepCount = 0
+        // Only awake minutes end a run, so a dropped connection doesn't cut off the end of the night
         for index in 0...states.count {
-            let asleep = index < states.count && states[index] == .asleep
-            if asleep {
+            let state = index < states.count ? states[index] : .awake
+            if state == .asleep {
                 runStart = runStart ?? index
-            } else if let start = runStart {
-                if index - start >= minimumRunMinutes {
-                    runs.append(start..<index)
+                lastAsleep = index
+                asleepCount += 1
+            } else if state == .awake, let start = runStart {
+                if asleepCount >= minimumRunMinutes {
+                    runs.append(start..<lastAsleep + 1)
                 }
                 runStart = nil
+                asleepCount = 0
             }
         }
 
