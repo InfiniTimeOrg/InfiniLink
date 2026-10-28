@@ -73,7 +73,7 @@ struct HeartView: View {
                             averageItem(NSLocalizedString("Workout Avg", comment: ""), averages.workout, icon: "figure.run")
                             averageItem(NSLocalizedString("Awake Avg", comment: ""), averages.awake, icon: "sun.max.fill")
                             averageItem(NSLocalizedString("Sleep Avg", comment: ""), averages.sleep, icon: "bed.double.fill")
-                            averageItem(NSLocalizedString("Resting", comment: ""), resting, icon: "chair.lounge.fill")
+                            averageItem(NSLocalizedString("Resting", comment: ""), resting, icon: "figure.mind.and.body")
                         }
                     }
                 }
