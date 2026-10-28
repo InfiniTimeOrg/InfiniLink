@@ -13,25 +13,37 @@ struct SleepRun: Identifiable {
     let state: SleepState
     let start: Date
     let end: Date
+}
 
-    var label: String {
-        switch state {
+extension SleepState {
+    var name: String {
+        switch self {
         case .asleep:
             return NSLocalizedString("Asleep", comment: "")
         case .awake:
             return NSLocalizedString("Awake", comment: "")
         case .noData:
-            return NSLocalizedString("No Data", comment: "")
+            return NSLocalizedString("Unmeasurable", comment: "")
         }
     }
     var color: Color {
-        switch state {
+        switch self {
         case .asleep:
             return .indigo
         case .awake:
             return .orange
         case .noData:
-            return .gray.opacity(0.4)
+            return .gray
+        }
+    }
+    var level: Double {
+        switch self {
+        case .awake:
+            return 2
+        case .asleep:
+            return 1
+        case .noData:
+            return 0
         }
     }
 }
@@ -77,8 +89,19 @@ struct SleepView: View {
         }
     }
 
-    // Group by the morning they ended
-    private var nights: [SleepNight] {
+    private var hourMarks: [Date] { // About four whole hours across the night, like Health
+        guard let start = runs.first?.start, let end = runs.last?.end,
+              let first = Calendar.current.nextDate(after: start.addingTimeInterval(-1), matching: DateComponents(minute: 0, second: 0), matchingPolicy: .nextTime) else { return [] }
+        let step = max(1, Int(ceil(end.timeIntervalSince(first) / 3600 / 4)))
+
+        return stride(from: first, through: end, by: Double(step) * 3600).map { $0 }
+    }
+
+    private var transitions: [(date: Date, from: SleepState, to: SleepState)] {
+        zip(runs, runs.dropFirst()).compactMap { $0.end == $1.start ? ($0.end, $0.state, $1.state) : nil }
+    }
+
+    private var nights: [SleepNight] { // Group by the morning that nights ended
         let calendar = Calendar.current
         let grouped = Dictionary(grouping: sessions) { calendar.startOfDay(for: $0.end ?? Date()) }
 
@@ -115,7 +138,7 @@ struct SleepView: View {
                                 DetailHeaderSubItemView(title: "Fell Asleep", value: slept ? lastNight.first?.start?.formatted(.dateTime.hour().minute()) ?? "--" : "--", icon: ("moon.fill", .indigo))
                                 DetailHeaderSubItemView(title: "Woke Up", value: slept ? lastNight.last?.end?.formatted(.dateTime.hour().minute()) ?? "--" : "--", icon: ("sun.max.fill", .orange))
                                 DetailHeaderSubItemView(title: "Awake", value: slept ? duration(lastNightAwake) : "--", icon: ("eye.fill", .orange))
-                                DetailHeaderSubItemView(title: "Avg (7 days)", value: recorded.isEmpty ? "--" : duration(recorded.reduce(0) { $0 + $1.asleepMinutes } / recorded.count), icon: ("chart.bar.fill", .indigo))
+                                DetailHeaderSubItemView(title: "Daily Avg", value: recorded.isEmpty ? "--" : duration(recorded.reduce(0) { $0 + $1.asleepMinutes } / recorded.count), icon: ("chart.bar.fill", .indigo))
                             }
                         }
                     }
@@ -163,21 +186,44 @@ struct SleepView: View {
                 }
                 if !runs.isEmpty {
                     Section("Last Night") {
-                        Chart(runs) { run in
-                            BarMark(
-                                xStart: .value("Start", run.start),
-                                xEnd: .value("End", run.end),
-                                y: .value("State", run.label)
-                            )
-                            .foregroundStyle(run.color)
+                        Chart {
+                            ForEach(transitions, id: \.date) { transition in
+                                let upper = transition.from.level > transition.to.level ? transition.from : transition.to
+                                let lower = upper == transition.from ? transition.to : transition.from
+                                RuleMark(
+                                    x: .value("Time", transition.date),
+                                    yStart: .value("State", lower.level),
+                                    yEnd: .value("State", upper.level)
+                                )
+                                .lineStyle(StrokeStyle(lineWidth: 1))
+                                .foregroundStyle(LinearGradient(colors: [upper.color, lower.color], startPoint: .top, endPoint: .bottom).opacity(0.4))
+                            }
+                            ForEach(runs) { run in
+                                RectangleMark(
+                                    xStart: .value("Start", run.start),
+                                    xEnd: .value("End", run.end),
+                                    yStart: .value("State", run.state.level - 0.3),
+                                    yEnd: .value("State", run.state.level + 0.3)
+                                )
+                                .cornerRadius(4)
+                                .foregroundStyle(by: .value("State", run.state.name))
+                            }
+                        }
+                        .chartForegroundStyleScale(domain: SleepState.allCases.map(\.name), range: SleepState.allCases.map(\.color))
+                        .chartYScale(domain: -0.5...2.5)
+                        .chartYAxis {
+                            AxisMarks(values: [0.5, 1.5]) {
+                                AxisGridLine(stroke: StrokeStyle(lineWidth: 1, dash: [2, 3]))
+                            }
                         }
                         .chartXAxis {
-                            AxisMarks(values: .automatic(desiredCount: 4)) {
+                            AxisMarks(values: hourMarks) {
                                 AxisGridLine()
+                                AxisTick()
                                 AxisValueLabel(format: .dateTime.hour())
                             }
                         }
-                        .frame(height: 140)
+                        .frame(height: 200)
                         .padding(.vertical, 8)
                         .accessibilityLabel(Text("Sleep timeline for last night"))
                     }
