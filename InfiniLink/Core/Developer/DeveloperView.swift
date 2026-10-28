@@ -129,6 +129,9 @@ struct DeveloperView: View {
                         progress: 98
                     )
                 }
+                Button("Test Sleep") {
+                    SleepManager.shared.generateTestSession()
+                }
             }
             Section {
                 Button("Test Music") {
@@ -157,14 +160,6 @@ struct DeveloperView: View {
                 }
                 Button("Save 100 Steps") {
                     healthKitManager.writeSteps(100)
-                }
-            }
-            Button("Dump Motion Activity") {
-                let points = chartManager.motionActivityPoints(predicate: chartManager.sevenDayPredicate)
-                log("\(points.count) motion activity points in the last 7 days", type: .info, caller: "DeveloperView")
-                
-                for point in points.suffix(50) {
-                    log("\(point.timestamp?.formatted() ?? "?"): \(point.value)", type: .info, caller: "DeveloperView")
                 }
             }
             Section("Test Steps") {

@@ -731,9 +731,6 @@
     "Driving" : {
 
     },
-    "Dump Motion Activity" : {
-
-    },
     "Enable Alarm" : {
 
     },
@@ -1885,6 +1882,9 @@
 
     },
     "Test Navigation" : {
+
+    },
+    "Test Sleep" : {
 
     },
     "Test Steps" : {

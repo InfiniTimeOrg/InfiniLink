@@ -128,6 +128,45 @@ class SleepManager: ObservableObject {
         }
     }
 
+    func generateTestSession() {
+        guard let deviceId = deviceManager.pairedDeviceID else { return }
+
+        let start = Calendar.current.startOfDay(for: Date()).addingTimeInterval(-Double.random(in: 30...120) * 60)
+        guard let window = SleepAnalyzer.window(containing: start) else { return }
+
+        let target = Int.random(in: 390...510)
+        var minutes = [SleepState]()
+        repeat {
+            if !minutes.isEmpty {
+                let unmeasurable = Int.random(in: 0..<5) == 0
+                minutes += Array(repeating: unmeasurable ? .noData : .awake, count: unmeasurable ? Int.random(in: 15...40) : Int.random(in: 2...10))
+            }
+            minutes += Array(repeating: .asleep, count: Int.random(in: 30...90))
+        } while minutes.count < target
+
+        let context = persistenceController.container.viewContext
+        for existing in sessions(in: window, deviceId: deviceId, context: context) {
+            context.delete(existing)
+        }
+
+        let session = SleepSession(context: context)
+        session.id = UUID()
+        session.deviceId = deviceId
+        session.start = start
+        session.end = start.addingTimeInterval(Double(minutes.count) * 60)
+        session.asleepMinutes = Int32(minutes.filter { $0 == .asleep }.count)
+        session.awakeMinutes = Int32(minutes.filter { $0 == .awake }.count)
+        session.minutes = Data(minutes.map { $0.rawValue })
+
+        UserDefaults.standard.set(max(UserDefaults.standard.double(forKey: finalizedKey), window.end.timeIntervalSince1970), forKey: finalizedKey)
+
+        do {
+            try context.save()
+        } catch {
+            log("Error saving test sleep session: \(error.localizedDescription)", caller: "SleepManager")
+        }
+    }
+
     func states(for session: SleepSession) -> [SleepState] {
         guard let data = session.minutes else { return [] }
 
