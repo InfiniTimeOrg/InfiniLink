@@ -112,8 +112,8 @@ struct SleepView: View {
                         let slept = lastNightAsleep > 0
                         if slept || !recorded.isEmpty {
                             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())]) {
-                                DetailHeaderSubItemView(title: "Fell Asleep", value: slept ? lastNight.first?.start?.formatted(.dateTime.hour(.localized).minute()) ?? "--" : "--", icon: ("moon.fill", .indigo))
-                                DetailHeaderSubItemView(title: "Woke Up", value: slept ? lastNight.last?.end?.formatted(.dateTime.hour(.localized).minute()) ?? "--" : "--", icon: ("sun.max.fill", .orange))
+                                DetailHeaderSubItemView(title: "Fell Asleep", value: slept ? lastNight.first?.start?.formatted(.dateTime.hour().minute()) ?? "--" : "--", icon: ("moon.fill", .indigo))
+                                DetailHeaderSubItemView(title: "Woke Up", value: slept ? lastNight.last?.end?.formatted(.dateTime.hour().minute()) ?? "--" : "--", icon: ("sun.max.fill", .orange))
                                 DetailHeaderSubItemView(title: "Awake", value: slept ? duration(lastNightAwake) : "--", icon: ("eye.fill", .orange))
                                 DetailHeaderSubItemView(title: "Avg (7 days)", value: recorded.isEmpty ? "--" : duration(recorded.reduce(0) { $0 + $1.asleepMinutes } / recorded.count), icon: ("chart.bar.fill", .indigo))
                             }

@@ -115,7 +115,7 @@ struct FindLostDeviceView: View {
                     let point = chartManager.disconnectMapPoint()
                     if let point, !bleManager.isConnectedToPinetime {
                         let timestamp = point.timestamp ?? Date()
-                        let date = abs(timestamp.timeIntervalSinceNow) >= 60 * 60 * 24 ? timestamp.formatted(.dateTime.month(.abbreviated).day().year().hour(.localized).minute()) : timestamp.formatted(.dateTime.hour(.localized).minute())
+                        let date = abs(timestamp.timeIntervalSinceNow) >= 60 * 60 * 24 ? timestamp.formatted(.dateTime.month(.abbreviated).day().year().hour().minute()) : timestamp.formatted(.dateTime.hour().minute())
                         
                         Section {
                             if address.isEmpty {

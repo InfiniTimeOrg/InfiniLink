@@ -108,7 +108,7 @@ struct HeartChartView: View {
         
         return isFullDay
         ? rounded.formatted(.dateTime.weekday(.abbreviated).month(.abbreviated).day().year())
-        : (rounded..<end).formatted(.interval.month(.abbreviated).day().hour(.localized).minute())
+        : (rounded..<end).formatted(.interval.month(.abbreviated).day().hour().minute())
     }
     
     func pointMarkValue(for point: HeartChartDataPoint) -> Double {
@@ -358,7 +358,7 @@ struct HeartChartView: View {
             
             let kind = low ? NSLocalizedString("low", comment: "") : NSLocalizedString("high", comment: "")
             let count = "\(formatter.string(from: NSNumber(value: dates.count)) ?? "\(dates.count)") \(kind)"
-            let times = dates.map { $0.formatted(.dateTime.hour(.localized).minute()) }
+            let times = dates.map { $0.formatted(.dateTime.hour().minute()) }
             return (count, dates.count <= 2 ? ", at " + times.joined(separator: " and ") : "", dates.count == 1)
         }
         guard let first = parts.first else { return nil }

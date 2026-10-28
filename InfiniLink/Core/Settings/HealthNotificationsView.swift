@@ -30,7 +30,7 @@ struct HealthNotificationSections: View {
 
     private func hourLabel(_ hour: Int) -> String {
         let date = Calendar.current.date(bySettingHour: hour % 24, minute: 0, second: 0, of: Date()) ?? Date()
-        return date.formatted(.dateTime.hour(.localized).minute())
+        return date.formatted(.dateTime.hour().minute())
     }
 
     private func footer(_ text: LocalizedStringKey) -> Text {

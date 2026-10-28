@@ -59,7 +59,7 @@ struct DebugLogsView: View {
                 ForEach(filteredLogs) { log in
                     VStack(alignment: .leading, spacing: 8) {
                         Group {
-                            let date = log.date.formatted(.dateTime.day().weekday().month().hour(.localized).minute().second())
+                            let date = log.date.formatted(.dateTime.day().weekday().month().hour().minute().second())
                             if let caller = log.caller {
                                 Text(caller + " • " + date)
                             } else {
