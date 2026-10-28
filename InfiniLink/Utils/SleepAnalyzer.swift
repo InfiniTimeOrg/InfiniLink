@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum SleepState: UInt8 {
+enum SleepState: UInt8, CaseIterable {
     case awake = 0
     case asleep = 1
     case noData = 2
@@ -41,6 +41,7 @@ struct SleepAnalyzer {
     static let maximumGapMinutes = 30
     static let minimumSessionMinutes = 60
     static let minimumNotWornMinutes = 15 // Still with no HR this long means the watch is off, since HR is reliable when still
+    static let maximumFilledGapMinutes = 10
 
     // A night is 6pm to noon the next day
     static func window(containing date: Date) -> DateInterval? {
@@ -129,6 +130,21 @@ struct SleepAnalyzer {
             let surrounding = isActive[max(0, index - surroundingMinutes)...min(minuteCount - 1, index + surroundingMinutes)].compactMap { $0 }
             let activeFraction = Double(surrounding.filter { $0 }.count) / Double(surrounding.count)
             states[index] = activeFraction >= awakeActiveFraction ? .awake : .asleep
+        }
+
+        // Absorb short gaps
+        var gapStart: Int?
+        for index in 0..<minuteCount {
+            if states[index] == .noData {
+                gapStart = gapStart ?? index
+            } else if let start = gapStart {
+                if start > 0 && index - start <= maximumFilledGapMinutes && states[start - 1] == states[index] {
+                    for gap in start..<index {
+                        states[gap] = states[index]
+                    }
+                }
+                gapStart = nil
+            }
         }
 
         return sessions(from: states, windowStart: window.start)
