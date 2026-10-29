@@ -32,6 +32,7 @@ struct SleepAnalyzer {
     // These are first guesses, need tuning with real nights (INL-84)
     static let windowStartHour = 18
     static let windowEndHour = 12
+    static let scheduleMarginMinutes = 180 // Wiggle room around the schedule
     static let stillFractionOfDaytime = 0.15 // A minute counts as still below this fraction of the median daytime activity
     static let fallbackStillThreshold = 2000.0 // Used until there's enough daytime activity to compare against
     static let heartRateAwakeMargin = 15.0 // BPM above the night's baseline that counts as awake
@@ -42,20 +43,34 @@ struct SleepAnalyzer {
     static let minimumSessionMinutes = 60
     static let minimumNotWornMinutes = 15 // Still with no HR this long means the watch is off, since HR is reliable when still
     static let maximumFilledGapMinutes = 10
+    static let minimumNapMinutes = 20
+    static let napHeartRateMargin = 10.0 // How far above last night's sleeping HR a nap can be
+    static let napHeartRateMinutes = 10 // HR is measured at least every 10 min
 
-    // A night is 6pm to noon the next day
+    // In minutes after midnight, 6pm to noon without a schedule
+    static var windowMinutes: (start: Int, end: Int) {
+        let schedule = SleepManager.shared.schedule
+        guard schedule.enabled else { return (windowStartHour * 60, windowEndHour * 60) }
+
+        return ((schedule.bedtime - scheduleMarginMinutes + 1440) % 1440, (schedule.wake + scheduleMarginMinutes) % 1440)
+    }
+
     static func window(containing date: Date) -> DateInterval? {
         let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: date)
+        let (startMinute, endMinute) = windowMinutes
 
-        guard hour >= windowStartHour || hour < windowEndHour else { return nil }
+        // Tonight's or last night's
+        for offset in [0, -1] {
+            guard let day = calendar.date(byAdding: .day, value: offset, to: date),
+                  let start = calendar.date(bySettingHour: startMinute / 60, minute: startMinute % 60, second: 0, of: day),
+                  let endDay = endMinute > startMinute ? day : calendar.date(byAdding: .day, value: 1, to: day),
+                  let end = calendar.date(bySettingHour: endMinute / 60, minute: endMinute % 60, second: 0, of: endDay) else { continue }
 
-        let day = hour >= windowStartHour ? date : calendar.date(byAdding: .day, value: -1, to: date) ?? date
-        guard let start = calendar.date(bySettingHour: windowStartHour, minute: 0, second: 0, of: day),
-              let nextDay = calendar.date(byAdding: .day, value: 1, to: start),
-              let end = calendar.date(bySettingHour: windowEndHour, minute: 0, second: 0, of: nextDay) else { return nil }
-
-        return DateInterval(start: start, end: end)
+            if start <= date && date < end {
+                return DateInterval(start: start, end: end)
+            }
+        }
+        return nil
     }
 
     static func latestWindow(before date: Date = Date()) -> DateInterval? {
@@ -63,10 +78,19 @@ struct SleepAnalyzer {
             return current
         }
 
-        return window(containing: Calendar.current.date(byAdding: .hour, value: -12, to: date) ?? date)
+        // We're between nights, so use the last one
+        let calendar = Calendar.current
+        let endMinute = windowMinutes.end
+        guard var end = calendar.date(bySettingHour: endMinute / 60, minute: endMinute % 60, second: 0, of: date) else { return nil }
+        if end > date {
+            end = calendar.date(byAdding: .day, value: -1, to: end) ?? end
+        }
+
+        return window(containing: end.addingTimeInterval(-60))
     }
 
-    static func analyze(window: DateInterval, activity: [(date: Date, value: Double)], heartRates: [(date: Date, value: Double)], daytimeMedian: Double?) -> [DetectedSleep] {
+    // Passing sleepingHeartRate looks for naps instead
+    static func analyze(window: DateInterval, activity: [(date: Date, value: Double)], heartRates: [(date: Date, value: Double)], daytimeMedian: Double?, sleepingHeartRate: Double? = nil) -> [DetectedSleep] {
         let minuteCount = Int(min(window.end, Date()).timeIntervalSince(window.start) / 60)
         guard minuteCount > 0 else { return [] }
 
@@ -118,8 +142,18 @@ struct SleepAnalyzer {
         let awakeHeartRate = nightRates.count >= 10 ? nightRates[nightRates.count / 5] + heartRateAwakeMargin : .infinity
 
         var isActive = [Bool?](repeating: nil, count: minuteCount)
+        var lastHeartRate: (index: Int, value: Double)?
         for index in 0..<minuteCount {
-            if let value = activityByMinute[index] {
+            if let value = heartByMinute[index] {
+                lastHeartRate = (index, value)
+            }
+            guard let value = activityByMinute[index] else { continue }
+
+            if let sleepingHeartRate {
+                // Sitting still looks like a nap, so HR has to be close to sleeping too
+                let recent = lastHeartRate.flatMap { index - $0.index <= napHeartRateMinutes ? $0.value : nil }
+                isActive[index] = value >= stillThreshold || (recent ?? .infinity) > sleepingHeartRate + napHeartRateMargin
+            } else {
                 isActive[index] = value >= stillThreshold || (heartByMinute[index] ?? 0) > awakeHeartRate
             }
         }
@@ -147,10 +181,10 @@ struct SleepAnalyzer {
             }
         }
 
-        return sessions(from: states, windowStart: window.start)
+        return sessions(from: states, windowStart: window.start, minimumMinutes: sleepingHeartRate == nil ? minimumSessionMinutes : minimumNapMinutes)
     }
 
-    private static func sessions(from states: [SleepState], windowStart: Date) -> [DetectedSleep] {
+    private static func sessions(from states: [SleepState], windowStart: Date, minimumMinutes: Int) -> [DetectedSleep] {
         var runs = [Range<Int>]()
         var runStart: Int?
         var lastAsleep = 0
@@ -185,7 +219,7 @@ struct SleepAnalyzer {
             let minutes = Array(states[range])
             let sleep = DetectedSleep(start: windowStart.addingTimeInterval(Double(range.lowerBound) * 60), minutes: minutes)
 
-            return sleep.asleepMinutes >= minimumSessionMinutes ? sleep : nil
+            return sleep.asleepMinutes >= minimumMinutes ? sleep : nil
         }
     }
 

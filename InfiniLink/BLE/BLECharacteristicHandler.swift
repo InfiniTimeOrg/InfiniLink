@@ -185,6 +185,7 @@ struct BLECharacteristicHandler {
             if timeDifference > 5 {
                 notificationManager.checkAndNotifyForWaterReminders()
                 notificationManager.checkForInactivity()
+                notificationManager.checkForBedtime()
 
                 weatherController.checkForUpdate()
 

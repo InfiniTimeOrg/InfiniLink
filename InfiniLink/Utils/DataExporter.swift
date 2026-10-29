@@ -86,7 +86,7 @@ struct DataExporter {
             let request: NSFetchRequest<SleepSession> = SleepSession.fetchRequest()
             request.predicate = predicate("start")
             request.sortDescriptors = [NSSortDescriptor(key: "start", ascending: true)]
-            return "start,end,asleep_minutes,awake_minutes\n" + (try context.fetch(request)).map { "\(date($0.start)),\(date($0.end)),\($0.asleepMinutes),\($0.awakeMinutes)" }.joined(separator: "\n")
+            return "start,end,asleep_minutes,awake_minutes,nap\n" + (try context.fetch(request)).map { "\(date($0.start)),\(date($0.end)),\($0.asleepMinutes),\($0.awakeMinutes),\($0.isNap)" }.joined(separator: "\n")
         case .exercise:
             let request: NSFetchRequest<UserExercise> = UserExercise.fetchRequest()
             request.predicate = predicate("startDate")

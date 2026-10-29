@@ -307,6 +307,36 @@ extension NotificationManager {
     }
 }
 
+// MARK: Sleep
+extension NotificationManager {
+    func checkForBedtime() {
+        let schedule = SleepManager.shared.schedule
+        let bedtime = settings.bedtimeSettings
+        guard settings.watchNotificationsEnabled, bedtime.enabled, schedule.enabled else { return }
+
+        let calendar = Calendar.current
+        let minute = (schedule.bedtime - bedtime.minutesBefore + 1440) % 1440
+        // Only send it on time, and check yesterday too in case it crosses midnight
+        var reminder: Date?
+        for offset in [0, -1] {
+            if let day = calendar.date(byAdding: .day, value: offset, to: Date()),
+               let date = calendar.date(bySettingHour: minute / 60, minute: minute % 60, second: 0, of: day),
+               (date..<date.addingTimeInterval(thirtyMinutes)).contains(Date()) {
+                reminder = date
+            }
+        }
+        // Remember which one we sent, since after midnight it's a new day
+        guard let reminder, UserDefaults.standard.double(forKey: "lastBedtimeReminder") != reminder.timeIntervalSince1970 else { return }
+
+        // Bedtimes after midnight count for the day before
+        let bedtimeDate = reminder.addingTimeInterval(TimeInterval(bedtime.minutesBefore * 60))
+        guard let night = calendar.date(byAdding: .hour, value: -12, to: bedtimeDate), schedule.days.contains(calendar.component(.weekday, from: night)) else { return }
+
+        sendGoalNotification(AppNotification(title: NSLocalizedString("Bedtime", comment: ""), subtitle: NSLocalizedString("It's time to get ready for bed", comment: "")))
+        UserDefaults.standard.set(reminder.timeIntervalSince1970, forKey: "lastBedtimeReminder")
+    }
+}
+
 // MARK: Goals
 extension NotificationManager {
     private func notifiedToday(_ key: String) -> Bool {

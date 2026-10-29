@@ -72,7 +72,13 @@
         }
       }
     },
+    "%@ awake" : {
+
+    },
     "%@ battery remaining" : {
+
+    },
+    "%@ before" : {
 
     },
     "%@ is connected" : {
@@ -107,6 +113,16 @@
     },
     "%@ times" : {
 
+    },
+    "%@ to %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ to %2$@"
+          }
+        }
+      }
     },
     "%@ was last seen at %@, at %@." : {
       "localizations" : {
@@ -210,6 +226,16 @@
         }
       }
     },
+    "%lld naps today • %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$lld naps today • %2$@"
+          }
+        }
+      }
+    },
     "%lld readings" : {
       "localizations" : {
         "en" : {
@@ -273,6 +299,9 @@
 
     },
     "1 minute" : {
+
+    },
+    "1 nap today • %@" : {
 
     },
     "1 time" : {
@@ -408,6 +437,9 @@
     "Asleep" : {
 
     },
+    "At Bedtime" : {
+
+    },
     "Authorized" : {
 
     },
@@ -473,6 +505,18 @@
 
     },
     "Battery: %lld%%" : {
+
+    },
+    "Bedtime" : {
+
+    },
+    "Bedtime Reminder" : {
+
+    },
+    "Bedtime reminders are only sent on these days." : {
+
+    },
+    "Bedtime, %@" : {
 
     },
     "BLE" : {
@@ -631,6 +675,9 @@
 
     },
     "Days" : {
+
+    },
+    "Days Active" : {
 
     },
     "Debug Logs" : {
@@ -838,6 +885,9 @@
     "Feet" : {
 
     },
+    "Fell Asleep" : {
+
+    },
     "Female" : {
       "localizations" : {
         "fr" : {
@@ -936,6 +986,9 @@
         }
       }
     },
+    "Get a reminder to get ready for bed before the bedtime in your sleep schedule." : {
+
+    },
     "Get a reminder to move when you haven't walked for a while during the set hours." : {
 
     },
@@ -946,6 +999,9 @@
 
     },
     "Get notified when you reach your step goal, keep a streak going, or take more steps than ever before." : {
+
+    },
+    "Goal" : {
 
     },
     "Goal Reached" : {
@@ -1198,6 +1254,9 @@
         }
       }
     },
+    "It's time to get ready for bed" : {
+
+    },
     "Its data stays in InfiniLink and comes back if you pair it again on this iPhone. You can delete data from unpaired watches in General > Stored Data." : {
 
     },
@@ -1217,9 +1276,6 @@
 
     },
     "Last Disconnect" : {
-
-    },
-    "Last night" : {
 
     },
     "Last Night" : {
@@ -1366,6 +1422,9 @@
 
     },
     "Name" : {
+
+    },
+    "Naps" : {
 
     },
     "Navigation" : {
@@ -1594,6 +1653,9 @@
     "Remind After" : {
 
     },
+    "Remind Me" : {
+
+    },
     "Remove Photo" : {
 
     },
@@ -1643,6 +1705,9 @@
 
     },
     "Save to Watch" : {
+
+    },
+    "Schedule" : {
 
     },
     "Screen Timeout" : {
@@ -1710,6 +1775,9 @@
         }
       }
     },
+    "Set a Sleep Schedule" : {
+
+    },
     "Set to 0" : {
 
     },
@@ -1762,6 +1830,9 @@
 
     },
     "Sleep Avg" : {
+
+    },
+    "Sleep Schedule" : {
 
     },
     "Sleep timeline for last night" : {
@@ -1896,6 +1967,9 @@
     "That's %@ of your goal." : {
 
     },
+    "That's %@ short of your goal." : {
+
+    },
     "The firmware file couldn't be read. Make sure it's a valid DFU zip." : {
 
     },
@@ -1997,6 +2071,9 @@
     "Total" : {
 
     },
+    "Track naps and get a reminder when it's time for bed." : {
+
+    },
     "Transliterate to ASCII" : {
 
     },
@@ -2007,6 +2084,9 @@
 
     },
     "Turn on Bluetooth to connect to your watch." : {
+
+    },
+    "Type" : {
 
     },
     "Units" : {
@@ -2124,6 +2204,9 @@
     "Wake Up" : {
 
     },
+    "Wake Up, %@" : {
+
+    },
     "Walking" : {
 
     },
@@ -2186,6 +2269,9 @@
     "What would you like to use \"%@\" for?" : {
 
     },
+    "Woke Up" : {
+
+    },
     "Workout" : {
 
     },
@@ -2204,13 +2290,39 @@
     "You covered %@." : {
 
     },
+    "You fell asleep at %@ and woke up at %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You fell asleep at %1$@ and woke up at %2$@."
+          }
+        }
+      }
+    },
+    "You fell asleep within 30 minutes of your bedtime on %lld of %lld nights." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You fell asleep within 30 minutes of your bedtime on %1$lld of %2$lld nights."
+          }
+        }
+      }
+    },
     "You have arrived" : {
 
     },
     "You haven't recorded any exercises yet. Tap %@ to start one." : {
 
     },
+    "You met your sleep goal." : {
+
+    },
     "You reached your goal, keep up the good work!" : {
+
+    },
+    "You slept %@ without waking up." : {
 
     },
     "You took %d step%@ and burned %@." : {
@@ -2241,6 +2353,26 @@
     },
     "You will be notified when your watch's battery level reaches %@." : {
 
+    },
+    "You woke up %lld times for a total of %@, but still slept %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You woke up %1$lld times for a total of %2$@, but still slept %3$@."
+          }
+        }
+      }
+    },
+    "You woke up once for %@, but still slept %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "You woke up once for %1$@, but still slept %2$@."
+          }
+        }
+      }
     },
     "You're %lld steps away from your goal, which is about %@ %@. Once you complete your goal, you'll have burned %@ and walked for about %@!" : {
       "localizations" : {
@@ -2281,6 +2413,9 @@
     "You're so close! Just about a minute left and only %lld steps to reach your goal!" : {
 
     },
+    "You've averaged %@ of sleep this week." : {
+
+    },
     "You've been inactive for a while. Get up and take a short walk." : {
 
     },
@@ -2309,6 +2444,9 @@
 
     },
     "Your resting heart rate has averaged %lld BPM this past week." : {
+
+    },
+    "Your schedule helps tell your night's sleep apart from naps, and sets when you get a bedtime reminder." : {
 
     },
     "Your watch is estimated to be around %@ away." : {

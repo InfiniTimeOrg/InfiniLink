@@ -14,6 +14,7 @@ struct NotificationSettings: Codable {
     var waterReminderAmount = 7
 
     var inactivitySettings = InactivitySettings()
+    var bedtimeSettings = BedtimeSettings()
 
     var transliterationEnabled = true
 
@@ -34,6 +35,7 @@ struct NotificationSettings: Codable {
         waterReminderEnabled = value(.waterReminderEnabled, waterReminderEnabled)
         waterReminderAmount = value(.waterReminderAmount, waterReminderAmount)
         inactivitySettings = value(.inactivitySettings, inactivitySettings)
+        bedtimeSettings = value(.bedtimeSettings, bedtimeSettings)
         transliterationEnabled = value(.transliterationEnabled, transliterationEnabled)
         batterySettings = value(.batterySettings, batterySettings)
         heartSettings = value(.heartSettings, heartSettings)
@@ -47,6 +49,11 @@ struct InactivitySettings: Codable {
     var minutes = 60
     var startHour = 9
     var endHour = 21
+}
+
+struct BedtimeSettings: Codable {
+    var enabled = true
+    var minutesBefore = 30
 }
 
 struct GoalSettings: Codable {

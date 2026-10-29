@@ -68,6 +68,22 @@ struct HealthNotificationSections: View {
                 }
             }
         }
+        if !isSetup && SleepManager.shared.isSupported {
+            Section(footer: Text("Get a reminder to get ready for bed before the bedtime in your sleep schedule.")) {
+                Toggle("Bedtime Reminder", isOn: $settingsManager.settings.bedtimeSettings.enabled.animation())
+                if settingsManager.settings.bedtimeSettings.enabled {
+                    Picker("Remind Me", selection: $settingsManager.settings.bedtimeSettings.minutesBefore) {
+                        ForEach([0, 15, 30, 45, 60, 90, 120], id: \.self) { minutes in
+                            if minutes == 0 {
+                                Text("At Bedtime").tag(minutes)
+                            } else {
+                                Text("\(Duration.seconds(minutes * 60).formatted(.units(allowed: [.hours, .minutes], width: .wide))) before").tag(minutes)
+                            }
+                        }
+                    }
+                }
+            }
+        }
         Section(footer: footer("Get a notification when your heart rate goes above or below the specified range.")) {
             Toggle("Heart Range Notifications", isOn: $settingsManager.settings.heartSettings.rangeReminderEnabled.animation())
             if !isSetup && settingsManager.settings.heartSettings.rangeReminderEnabled {
