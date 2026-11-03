@@ -226,16 +226,6 @@
         }
       }
     },
-    "%lld naps today • %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$lld naps today • %2$@"
-          }
-        }
-      }
-    },
     "%lld readings" : {
       "localizations" : {
         "en" : {
@@ -299,9 +289,6 @@
 
     },
     "1 minute" : {
-
-    },
-    "1 nap today • %@" : {
 
     },
     "1 time" : {
@@ -2096,9 +2083,6 @@
 
     },
     "Unknown date" : {
-
-    },
-    "Unmeasurable" : {
 
     },
     "Unpair" : {

@@ -27,7 +27,7 @@ extension SleepState {
         case .awake:
             return NSLocalizedString("Awake", comment: "")
         case .noData:
-            return NSLocalizedString("Unmeasurable", comment: "")
+            return NSLocalizedString("No Data", comment: "")
         }
     }
     var color: Color {
@@ -229,11 +229,10 @@ struct SleepView: View {
     }
 
     private var headerSubtitle: String? {
-        if !napsToday.isEmpty {
-            let napTime = duration(napsToday.reduce(0) { $0 + Int($1.asleepMinutes) })
-            return napsToday.count == 1 ? String(localized: "1 nap today • \(napTime)") : String(localized: "\(napsToday.count) naps today • \(napTime)")
+        guard let start = lastNight.first?.start, let end = lastNight.last?.end else {
+            return NSLocalizedString("No sleep recorded last night", comment: "")
         }
-        return lastNightAsleep == 0 ? NSLocalizedString("No sleep recorded last night", comment: "") : nil
+        return "\(start.formatted(date: .omitted, time: .shortened)) – \(end.formatted(date: .omitted, time: .shortened))"
     }
 
     private var lastNightSummary: String? {
@@ -463,7 +462,7 @@ struct SleepView: View {
                                 .accessibilityValue(Text(duration(night.napMinutes)))
                             }
                         }
-                        .chartForegroundStyleScale(domain: [NSLocalizedString("Sleep", comment: ""), NSLocalizedString("Naps", comment: "")], range: [Color.indigo, Color.gray])
+                        .chartForegroundStyleScale(domain: [NSLocalizedString("Sleep", comment: ""), NSLocalizedString("Naps", comment: "")], range: [Color.indigo, Color.teal])
                         .chartLegend(naps.isEmpty ? .hidden : .automatic)
                         .chartXAxis {
                             AxisMarks(values: nights.map { $0.date }) {
