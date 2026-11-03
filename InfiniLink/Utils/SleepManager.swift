@@ -121,18 +121,21 @@ class SleepManager: ObservableObject {
             var newlyFinalized = [SleepSession]()
 
             for (window, nightBefore) in periods {
-                let activity = self.activity(in: window, deviceId: deviceId, context: context)
-                let heartRates = self.heartRates(in: window, deviceId: deviceId, context: context)
+                let next = nightBefore == nil ? Calendar.current.date(byAdding: .day, value: 1, to: window.start).flatMap { SleepAnalyzer.window(containing: $0) } : nil
+                let analysisWindow = DateInterval(start: window.start, end: max(window.end, next?.start ?? window.end))
+                let activity = self.activity(in: analysisWindow, deviceId: deviceId, context: context)
+                let heartRates = self.heartRates(in: analysisWindow, deviceId: deviceId, context: context)
                 var detected = [DetectedSleep]()
                 if let nightBefore {
                     // Need last night's HR to compare against
                     if let sleepingHeartRate = self.sleepingHeartRate(in: nightBefore, deviceId: deviceId, context: context) {
+                        let nightEnd = self.sessions(in: nightBefore, deviceId: deviceId, context: context).filter { !$0.isNap }.compactMap(\.end).max() ?? .distantPast
                         detected = SleepAnalyzer.analyze(window: window, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian, sleepingHeartRate: sleepingHeartRate).filter { nap in
-                            !dismissedNaps.contains { nap.start.timeIntervalSince1970 < $0[1] && nap.end.timeIntervalSince1970 > $0[0] }
+                            nap.start >= nightEnd && !dismissedNaps.contains { nap.start.timeIntervalSince1970 < $0[1] && nap.end.timeIntervalSince1970 > $0[0] }
                         }
                     }
                 } else {
-                    detected = SleepAnalyzer.analyze(window: window, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian)
+                    detected = SleepAnalyzer.analyze(window: analysisWindow, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian).filter { $0.start < window.end }
                 }
 
                 // Redo the whole night each time so late data replaces the first guess
@@ -140,7 +143,8 @@ class SleepManager: ObservableObject {
                     context.delete(existing)
                 }
 
-                let isFinal = Date() >= window.end
+                // Wait until they've been up long enough that the sleep can't continue
+                let isFinal = Date() >= analysisWindow.end || (Date() >= window.end && detected.allSatisfy { Date().timeIntervalSince($0.end) >= Double(SleepAnalyzer.maximumGapMinutes) * 60 })
                 for sleep in detected {
                     let session = SleepSession(context: context)
                     session.id = UUID()
