@@ -29,13 +29,15 @@ struct DetectedSleep {
 }
 
 struct SleepAnalyzer {
-    // These are first guesses, need tuning with real nights (INL-84)
     static let windowStartHour = 18
     static let windowEndHour = 12
     static let scheduleMarginMinutes = 180 // Wiggle room around the schedule
     static let stillFractionOfDaytime = 0.15 // A minute counts as still below this fraction of the median daytime activity
     static let fallbackStillThreshold = 2000.0 // Used until there's enough daytime activity to compare against
+    static let nightStillMultiplier = 1.5 // A minute counts as still below this multiple of the night's resting activity
     static let heartRateAwakeMargin = 15.0 // BPM above the night's baseline that counts as awake
+    static let wakeHeartRateMargin = 10.0 // BPM above the night's baseline a wake-up needs to reach
+    static let minimumWakeMinutes = 5
     static let surroundingMinutes = 7 // Minutes on each side used to decide if a minute is awake
     static let awakeActiveFraction = 0.5 // Awake when at least this much of the surrounding minutes are active
     static let minimumRunMinutes = 20
@@ -113,7 +115,8 @@ struct SleepAnalyzer {
             }
         }
 
-        let stillThreshold = stillThreshold(daytimeMedian: daytimeMedian)
+        // compare nights against their own resting activity
+        let stillThreshold = (sleepingHeartRate == nil ? nightStillThreshold(of: activityByMinute.compactMap { $0 }) : nil) ?? stillThreshold(daytimeMedian: daytimeMedian)
 
         // A watch on a table still reads as still so missing HR is what shows it's not being worn
         var runStart: Int?
@@ -137,9 +140,10 @@ struct SleepAnalyzer {
             }
         }
 
-        // HR well above the night's baseline means they're awake, even if they're still
+        // HR well above the night's baseline means we're awake even if we're still
         let nightRates = heartByMinute.compactMap { $0 }.sorted()
-        let awakeHeartRate = nightRates.count >= 10 ? nightRates[nightRates.count / 5] + heartRateAwakeMargin : .infinity
+        let baselineHeartRate = nightRates.count >= 10 ? nightRates[nightRates.count / 5] : nil
+        let awakeHeartRate = baselineHeartRate.map { $0 + heartRateAwakeMargin } ?? .infinity
 
         var isActive = [Bool?](repeating: nil, count: minuteCount)
         var lastHeartRate: (index: Int, value: Double)?
@@ -178,6 +182,30 @@ struct SleepAnalyzer {
                     }
                 }
                 gapStart = nil
+            }
+        }
+
+        // Rolling over looks like waking up, so a bout between sleep needs to be long enough and raise HR
+        if sleepingHeartRate == nil {
+            let wakeHeartRate = baselineHeartRate.map { $0 + wakeHeartRateMargin } ?? 0
+            var index = 0
+            while index < minuteCount {
+                guard states[index] == .awake else {
+                    index += 1
+                    continue
+                }
+                let start = index
+                while index < minuteCount && states[index] == .awake {
+                    index += 1
+                }
+                guard start > 0, index < minuteCount, states[start - 1] == .asleep, states[index] == .asleep else { continue }
+
+                let rates = heartByMinute[start..<index].compactMap { $0 }
+                if index - start < minimumWakeMinutes || (index - start <= maximumGapMinutes && !rates.isEmpty && !rates.contains(where: { $0 > wakeHeartRate })) {
+                    for minute in start..<index {
+                        states[minute] = .asleep
+                    }
+                }
             }
         }
 
@@ -225,6 +253,14 @@ struct SleepAnalyzer {
 
     static func stillThreshold(daytimeMedian: Double?) -> Double {
         return daytimeMedian.map { $0 * stillFractionOfDaytime } ?? fallbackStillThreshold
+    }
+
+    // The quietest tenth of the night is lying still
+    static func nightStillThreshold(of values: [Double]) -> Double? {
+        guard values.count >= 180 else { return nil }
+
+        let sorted = values.sorted()
+        return sorted[sorted.count / 10] * nightStillMultiplier
     }
     
     static func daytimeMedian(of activity: [(date: Date, value: Double)]) -> Double? {
