@@ -23,6 +23,8 @@ struct HealthTrends {
     let persistenceController = PersistenceController.shared
 
     private let minimumSamples = 5
+    private let stillMinutes = 5 // HR takes about 4 minutes of rest to settle
+    private let sleepBuffer: TimeInterval = 1800 // Lying in bed around sleep isn't daytime rest
 
     func restingHeartRates(days: Int, deviceId: String, completion: @escaping ([RestingHeartRateDay]) -> Void) {
         let calendar = Calendar.current
@@ -61,12 +63,11 @@ struct HealthTrends {
                     guard sample.value > 0, sample.date >= day else { return false }
 
                     let hour = calendar.component(.hour, from: sample.date)
-                    guard (6..<22).contains(hour), !sleepIntervals.contains(where: { $0.contains(sample.date) }) else { return false }
+                    guard (6..<22).contains(hour), !sleepIntervals.contains(where: { $0.start.addingTimeInterval(-sleepBuffer) <= sample.date && sample.date < $0.end.addingTimeInterval(sleepBuffer) }) else { return false }
 
                     guard !activityByMinute.isEmpty else { return true }
                     let minute = Int(sample.date.timeIntervalSince1970 / 60)
-                    let movement = activityByMinute[minute] ?? activityByMinute[minute - 1]
-                    return movement.map { $0 < stillThreshold } ?? false
+                    return (1...stillMinutes).allSatisfy { (activityByMinute[minute - $0] ?? .infinity) < stillThreshold }
                 }
                 .map { $0.value }
                 .sorted()
