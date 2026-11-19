@@ -29,6 +29,9 @@ struct HealthTrends {
     func restingHeartRates(days: Int, deviceId: String, completion: @escaping ([RestingHeartRateDay]) -> Void) {
         let calendar = Calendar.current
         guard let start = calendar.date(byAdding: .day, value: -(days - 1), to: calendar.startOfDay(for: Date())) else { return }
+        // Skip the night in case sleep was missed, which is all of it without sleep tracking
+        let schedule = SleepManager.shared.schedule
+        let night = schedule.enabled ? (start: schedule.bedtime, end: schedule.wake) : SleepManager.shared.isSupported && SleepManager.shared.hasRequiredMeasurements ? (start: 60, end: 300) : (start: 1320, end: 360)
 
         let context = persistenceController.container.newBackgroundContext()
         context.perform {
@@ -62,8 +65,9 @@ struct HealthTrends {
                 let restingSamples = heartRates[dayStartIndex..<heartIndex].filter { sample in
                     guard sample.value > 0, sample.date >= day else { return false }
 
-                    let hour = calendar.component(.hour, from: sample.date)
-                    guard (6..<22).contains(hour), !sleepIntervals.contains(where: { $0.start.addingTimeInterval(-sleepBuffer) <= sample.date && sample.date < $0.end.addingTimeInterval(sleepBuffer) }) else { return false }
+                    let minuteOfDay = calendar.component(.hour, from: sample.date) * 60 + calendar.component(.minute, from: sample.date)
+                    let isNight = night.start < night.end ? (night.start..<night.end).contains(minuteOfDay) : minuteOfDay >= night.start || minuteOfDay < night.end
+                    guard !isNight, !sleepIntervals.contains(where: { $0.start.addingTimeInterval(-sleepBuffer) <= sample.date && sample.date < $0.end.addingTimeInterval(sleepBuffer) }) else { return false }
 
                     guard !activityByMinute.isEmpty else { return true }
                     let minute = Int(sample.date.timeIntervalSince1970 / 60)
