@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreBluetooth
 import Zip
 import SwiftUI
 
@@ -167,7 +168,28 @@ class DFUUpdater: ObservableObject {
         self.transfer = transfer
 
         bleManager.beginFirmwareUpdate()
+        pauseStreamingNotifications(on: target)
         transfer.start()
+    }
+
+    private static let streamingCharacteristics: Set<CBUUID> = [BLEUUID.motion, BLEUUID.stepCount, BLEUUID.hrm]
+    private var pausedCharacteristics: [CBCharacteristic] = []
+
+    private func pauseStreamingNotifications(on peripheral: CBPeripheral) {
+        pausedCharacteristics = (peripheral.services ?? [])
+            .flatMap { $0.characteristics ?? [] }
+            .filter { Self.streamingCharacteristics.contains($0.uuid) && $0.isNotifying }
+        for characteristic in pausedCharacteristics {
+            peripheral.setNotifyValue(false, for: characteristic)
+        }
+    }
+
+    private func resumeStreamingNotifications() {
+        defer { pausedCharacteristics = [] }
+        guard let peripheral = bleManager.infiniTime, peripheral.state == .connected else { return }
+        for characteristic in pausedCharacteristics where characteristic.service?.peripheral === peripheral {
+            peripheral.setNotifyValue(true, for: characteristic)
+        }
     }
 
     private func loadPackage(_ url: URL) throws -> (image: Data, initPacket: Data) {
@@ -216,6 +238,7 @@ class DFUUpdater: ObservableObject {
 
     private func finish(_ outcome: Outcome, message: String? = nil) {
         transfer = nil
+        resumeStreamingNotifications()
 
         if isAccessingScopedResource {
             firmwareURL?.stopAccessingSecurityScopedResource()
