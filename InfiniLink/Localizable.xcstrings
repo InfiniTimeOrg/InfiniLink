@@ -176,6 +176,9 @@
     "%d Day Streak" : {
 
     },
+    "%d files couldn't be restored." : {
+
+    },
     "%d Months" : {
 
     },
@@ -262,9 +265,6 @@
       }
     },
     "%lld*" : {
-
-    },
-    "%lld%%" : {
 
     },
     "%u" : {
@@ -467,10 +467,31 @@
     "Awake Avg" : {
 
     },
+    "Back Up" : {
+
+    },
+    "Back Up Watch" : {
+
+    },
+    "Back Up Watch?" : {
+
+    },
     "Background" : {
 
     },
     "Background Measurements" : {
+
+    },
+    "Backing Up" : {
+
+    },
+    "Backup Failed" : {
+
+    },
+    "Backup Ready" : {
+
+    },
+    "Backup Restored" : {
 
     },
     "Bar" : {
@@ -600,6 +621,12 @@
 
     },
     "Copy" : {
+
+    },
+    "Couldn't Back Up Watch" : {
+
+    },
+    "Couldn't Open Backup" : {
 
     },
     "Couldn't Save Alarm" : {
@@ -894,6 +921,9 @@
           }
         }
       }
+    },
+    "Files in this backup will replace ones with the same name on %@." : {
+
     },
     "Fill Missing Step Days" : {
 
@@ -1511,6 +1541,9 @@
     "OK" : {
 
     },
+    "Open the file explorer to save the file." : {
+
+    },
     "Open the Navigation app on %@ to see your directions." : {
 
     },
@@ -1661,6 +1694,15 @@
     "Reset Watch Faces" : {
 
     },
+    "Resources weren't restored. You can install them later via a software update." : {
+
+    },
+    "Restart your watch to apply any new settings." : {
+
+    },
+    "Restart your watch to apply your changes. Updating settings on the watch before then will undo these changes." : {
+
+    },
     "Restarting" : {
 
     },
@@ -1668,6 +1710,18 @@
 
     },
     "Resting Heart Rate" : {
+
+    },
+    "Restore" : {
+
+    },
+    "Restore Backup?" : {
+
+    },
+    "Restore from Backup" : {
+
+    },
+    "Restoring" : {
 
     },
     "Results" : {
@@ -1832,6 +1886,9 @@
 
     },
     "Software Version" : {
+
+    },
+    "Some settings in the backup aren't supported by this version of InfiniTime, so they weren't restored." : {
 
     },
     "Split" : {
@@ -2006,6 +2063,19 @@
     "There wasn't any heart rate data recorded for this exercise." : {
 
     },
+    "This backup is from InfiniTime %@, but %@ is on %@. Resources like fonts and images won't be restored." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This backup is from InfiniTime %1$@, but %2$@ is on %3$@. Resources like fonts and images won't be restored."
+          }
+        }
+      }
+    },
+    "This copies the files on %@ into a backup you can save. You can restore it later from the + menu." : {
+
+    },
     "This exercise will be deleted from InfiniLink." : {
 
     },
@@ -2013,6 +2083,9 @@
 
     },
     "This file is not currently supported." : {
+
+    },
+    "This file isn't an InfiniLink watch backup." : {
 
     },
     "This is a local firmware file and cannot be verified. Proceed at your own risk." : {
@@ -2123,6 +2196,9 @@
         }
       }
     },
+    "Update Resources" : {
+
+    },
     "Updating resources" : {
 
     },
@@ -2135,10 +2211,7 @@
     "Upload Files" : {
 
     },
-    "Uploading..." : {
-
-    },
-    "Uploading... %lld%%" : {
+    "Uploading" : {
 
     },
     "Use Current Location" : {
@@ -2424,9 +2497,6 @@
     "Your iPhone has reached %@" : {
 
     },
-    "Your iPhone will ask to pair with your watch. Tap Pair so your iPhone's notifications can show on your watch." : {
-
-    },
     "Your resting heart rate has averaged %lld BPM this past week." : {
 
     },
@@ -2434,9 +2504,6 @@
 
     },
     "Your watch is estimated to be around %@ away." : {
-
-    },
-    "Your watch only loads its settings when it starts, so changes apply after you restart it by pressing and holding the side button. Changing settings on the watch before then will undo these changes." : {
 
     },
     "Your watch only loads the alarm when it starts, so it applies after you restart it by pressing and holding the side button. Changing the alarm on the watch before then will undo this." : {

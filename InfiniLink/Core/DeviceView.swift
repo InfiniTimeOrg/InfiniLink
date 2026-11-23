@@ -18,6 +18,7 @@ struct DeviceView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var motionController = MotionController.shared
+    @ObservedObject var transfer = FileTransferManager.shared
     
     @AppStorage("enableDeveloperMode") var enableDeveloperMode = false
     @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
@@ -109,6 +110,12 @@ struct DeviceView: View {
                                         .frame(width: 50, height: 50)
                                 }
                             }
+                        }
+                    } else if transfer.task != nil || transfer.backupURL != nil || transfer.restoreResult != nil || transfer.showBackupError {
+                        NavigationLink {
+                            column(FileSystemView())
+                        } label: {
+                            FileTransferBannerView()
                         }
                     } else if let exercise = exerciseViewModel.currentExercise {
                         NavigationLink {
@@ -378,4 +385,32 @@ struct ScrollOffsetPreferenceKey: PreferenceKey {
             DownloadManager.shared.updateBody = "Testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing testing."
             DFUUpdater.shared.local = false
         }
+}
+
+struct FileTransferBannerView: View {
+    @ObservedObject var transfer = FileTransferManager.shared
+    @ObservedObject var bleFs = BLEFSHandler.shared
+    
+    var body: some View {
+        if transfer.task != nil {
+            HStack(spacing: 14) {
+                Image(systemName: "doc.on.doc.fill")
+                    .font(.title2.weight(.medium))
+                VStack(alignment: .leading, spacing: 6) {
+                    HStack(spacing: 0) {
+                        Text("\(transfer.statusText)... ")
+                        Text(transfer.fractionComplete(bytesWritten: bleFs.progress), format: .percent.precision(.fractionLength(0)))
+                    }
+                    .fontWeight(.semibold)
+                    ProgressView(value: transfer.fractionComplete(bytesWritten: bleFs.progress))
+                }
+            }
+        } else {
+            BannerView(transfer.showBackupError ? "Backup Failed" : (transfer.backupURL != nil ? "Backup Ready" : "Backup Restored"), "Open the file explorer to save the file.") {
+                Image(systemName: transfer.showBackupError ? "exclamationmark.triangle.fill" : "checkmark.circle.fill")
+                    .font(.title2.weight(.medium))
+                    .foregroundStyle(transfer.showBackupError ? .orange : .green)
+            }
+        }
+    }
 }

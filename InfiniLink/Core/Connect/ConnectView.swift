@@ -15,14 +15,9 @@ struct ConnectView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     
-    @AppStorage("forceAncs") var forceAncs = true
-    
     @State private var showHelpAlert = false
     @State private var showAllDevices = false
     @State private var deviceWithPendingConnectionID: UUID?
-    
-    @State private var circleSize: CGFloat = 60
-    @State private var circleOpacity: CGFloat = 1
     
     let columns = [
         GridItem(.flexible()),
@@ -35,26 +30,6 @@ struct ConnectView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
             dismiss()
         }
-    }
-    
-    func startCircleAnimation(geo: CGSize) {
-        guard !reduceMotion else { return }
-        
-        animateCircle(geo: geo)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            resetCircle()
-            animateCircle(geo: geo)
-        }
-    }
-    func animateCircle(geo: CGSize) {
-        withAnimation(.easeInOut(duration: 1.2)) {
-            circleSize = geo.width / 2
-            circleOpacity = 0
-        }
-    }
-    func resetCircle() {
-        circleSize = 0
-        circleOpacity = 1
     }
     
     var body: some View {
@@ -76,6 +51,9 @@ struct ConnectView: View {
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(height: 150)
+                                            .background {
+                                                DiscoveryPulse(reduceMotion: reduceMotion)
+                                            }
                                         Text(infiniTime.name ?? "InfiniTime")
                                             .font(.title.weight(.bold))
                                         if let rssi = bleManager.discoveredRSSI[infiniTime.identifier] {
@@ -83,9 +61,6 @@ struct ConnectView: View {
                                         }
                                     }
                                     Spacer()
-                                    if forceAncs {
-                                        PairingInfoView()
-                                    }
                                     Button {
                                         connect(infiniTime)
                                     } label: {
@@ -112,24 +87,11 @@ struct ConnectView: View {
                                         }
                                     }
                                 }
-                                .background {
-                                    // Discovery animation; is there a more efficient way to do this?
-                                    Circle()
-                                        .fill(Color.blue)
-                                        .frame(width: circleSize, height: circleSize)
-                                        .opacity(circleOpacity)
-                                        .offset(y: -48)
-                                }
                                 .onAppear {
-                                    startCircleAnimation(geo: geo.size)
                                     bleManager.stopScanning()
                                 }
                             } else {
                                 ScrollView {
-                                    if forceAncs {
-                                        PairingInfoView()
-                                            .padding(.bottom, 8)
-                                    }
                                     LazyVGrid(columns: columns, spacing: 10) {
                                         ForEach(bleManager.newPeripherals, id: \.identifier) { device in
                                             Button {
@@ -210,20 +172,6 @@ struct ConnectView: View {
     }
 }
 
-struct PairingInfoView: View {
-    var body: some View {
-        Label {
-            Text("Your iPhone will ask to pair with your watch. Tap Pair so your iPhone's notifications can show on your watch.")
-        } icon: {
-            Image(systemName: "bell.badge")
-                .foregroundStyle(.blue)
-        }
-        .font(.footnote)
-        .foregroundStyle(.gray)
-        .frame(maxWidth: .infinity, alignment: .leading)
-    }
-}
-
 struct SignalStrengthView: View {
     let rssi: Int
     
@@ -241,4 +189,28 @@ struct SignalStrengthView: View {
 
 #Preview {
     ConnectView()
+}
+
+private struct DiscoveryPulse: View {
+    let reduceMotion: Bool
+    
+    @State private var isAnimating = false
+    
+    private let duration = 4.0
+    
+    var body: some View {
+        if !reduceMotion {
+            Circle()
+                .fill(Color.blue.opacity(0.2))
+                .scaleEffect(isAnimating ? 2.4 : 0.4)
+                .blur(radius: isAnimating ? 16 : 0)
+                .animation(.timingCurve(0.1, 0.8, 0.2, 1, duration: duration).repeatForever(autoreverses: false), value: isAnimating)
+                .opacity(isAnimating ? 0 : 1)
+                .animation(.timingCurve(0.2, 0.6, 0.3, 1, duration: duration).repeatForever(autoreverses: false), value: isAnimating)
+                .allowsHitTesting(false)
+                .onAppear {
+                    isAnimating = true
+                }
+        }
+    }
 }

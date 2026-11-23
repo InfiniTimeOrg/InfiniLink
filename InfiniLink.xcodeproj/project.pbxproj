@@ -19,6 +19,8 @@
 		75048447307FA1230082E487 /* GoalsNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048446307FA1220082E487 /* GoalsNotificationsView.swift */; };
 		75BC303B30766EFB003EEC2D /* BatterySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */; };
 		29A3DBA0977BCAC25C41B952 /* DataExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ADB3414CF417B037C06A47 /* DataExporter.swift */; };
+		5B1C0A2E7D4F4E8A9C3B6D21 /* WatchBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C0A2E7D4F4E8A9C3B6D20 /* WatchBackup.swift */; };
+		5B1C0A2E7D4F4E8A9C3B6D23 /* FileTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C0A2E7D4F4E8A9C3B6D22 /* FileTransferManager.swift */; };
 		2BD49B4A5D560BFC08CBA8E8 /* WorkoutAnalysis.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3C2E310B92D23E5E3E385E6 /* WorkoutAnalysis.swift */; };
 		36E613FC638D4ED50F76C145 /* SleepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AFC0382BEC8406837173344 /* SleepView.swift */; };
 		4673257DE1BF6B628CCB24AC /* NavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A5E75B738B443D712B510B0 /* NavigationController.swift */; };
@@ -224,6 +226,8 @@
 		BFE5CDF942F56FE05B9F5F30 /* WatchAlarmFile.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchAlarmFile.swift; sourceTree = "<group>"; };
 		C3C2E310B92D23E5E3E385E6 /* WorkoutAnalysis.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WorkoutAnalysis.swift; sourceTree = "<group>"; };
 		C8ADB3414CF417B037C06A47 /* DataExporter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DataExporter.swift; sourceTree = "<group>"; };
+		5B1C0A2E7D4F4E8A9C3B6D20 /* WatchBackup.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchBackup.swift; sourceTree = "<group>"; };
+		5B1C0A2E7D4F4E8A9C3B6D22 /* FileTransferManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FileTransferManager.swift; sourceTree = "<group>"; };
 		C90EF4CFB93C89807B8CECD9 /* DataRetention.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DataRetention.swift; sourceTree = "<group>"; };
 		D95685321EAD8E5AFFF7E163 /* CustomExerciseView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = CustomExerciseView.swift; sourceTree = "<group>"; };
 		DD08CDEF696462C6EA84DBD2 /* WatchSettingsEditor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = WatchSettingsEditor.swift; sourceTree = "<group>"; };
@@ -628,6 +632,8 @@
 				3CE53937C332FA6148886C50 /* SleepAnalyzer.swift */,
 				29D557AFE18F6E0D6C8040F6 /* SleepManager.swift */,
 				C8ADB3414CF417B037C06A47 /* DataExporter.swift */,
+				5B1C0A2E7D4F4E8A9C3B6D20 /* WatchBackup.swift */,
+				5B1C0A2E7D4F4E8A9C3B6D22 /* FileTransferManager.swift */,
 				C3C2E310B92D23E5E3E385E6 /* WorkoutAnalysis.swift */,
 				0E2639060097BBFC1CC1D73F /* HealthTrends.swift */,
 				6A5E75B738B443D712B510B0 /* NavigationController.swift */,
@@ -1064,6 +1070,8 @@
 				E422AAE47C59548FE166805A /* SleepManager.swift in Sources */,
 				36E613FC638D4ED50F76C145 /* SleepView.swift in Sources */,
 				29A3DBA0977BCAC25C41B952 /* DataExporter.swift in Sources */,
+				5B1C0A2E7D4F4E8A9C3B6D21 /* WatchBackup.swift in Sources */,
+				5B1C0A2E7D4F4E8A9C3B6D23 /* FileTransferManager.swift in Sources */,
 				B01BA0EFE1951F1C336FE6EB /* ExportDataView.swift in Sources */,
 				DB8F27EC680BFDE879286301 /* CustomExerciseView.swift in Sources */,
 				2BD49B4A5D560BFC08CBA8E8 /* WorkoutAnalysis.swift in Sources */,

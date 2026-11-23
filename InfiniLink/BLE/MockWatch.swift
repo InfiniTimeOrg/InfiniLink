@@ -51,6 +51,7 @@ class MockWatch: ObservableObject {
         if deviceManager.pairedDeviceID != Self.id {
             DownloadManager.shared.clearUpdate()
         }
+        BLEFSHandler.shared.clearListingCache()
         deviceManager.pairedDeviceID = Self.id
         deviceManager.pairedDevice = deviceManager.currentDevice() ?? deviceManager.addDevice(uuid: Self.id)
         if deviceManager.pairedDevice?.name == nil {

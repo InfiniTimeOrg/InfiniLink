@@ -6,8 +6,6 @@
 //
 
 import Foundation
-import UIKit
-import UniformTypeIdentifiers
 
 class FileSystemViewModel: ObservableObject {
     let path: String
@@ -15,10 +13,11 @@ class FileSystemViewModel: ObservableObject {
     @Published var entries: [BLEFSHandler.Dir] = []
     @Published var isLoading = false
     @Published var pendingFiles: [URL] = []
-    @Published var isUploading = false
-    @Published var uploadSize = 0
+    @Published var pendingRestore: WatchBackup.Contents?
+    @Published var showOpenBackupError = false
     
     private let bleFs = BLEFSHandler.shared
+    private let transfer = FileTransferManager.shared
     
     init(path: String) {
         self.path = path
@@ -29,14 +28,33 @@ class FileSystemViewModel: ObservableObject {
     }
     
     func load() {
-        isLoading = true
+        if let cached = bleFs.cachedListing(path: path) {
+            entries = cached
+            isLoading = false
+            return
+        }
         
+        isLoading = true
+        fetch { self.isLoading = false }
+    }
+    
+    @MainActor
+    func refresh() async { // Don't use the cached list for pull to refresh
+        await withCheckedContinuation { continuation in
+            fetch { continuation.resume() }
+        }
+    }
+    
+    private func fetch(completion: @escaping () -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let entries = self.bleFs.listDir(path: self.path)
+            let listing = self.bleFs.listDir(path: self.path)?.filter { $0.pathNames != "." && $0.pathNames != ".." }
+            if let listing {
+                self.bleFs.cacheListing(listing, path: self.path)
+            }
             
             DispatchQueue.main.async {
-                self.entries = (entries ?? []).filter { $0.pathNames != "." && $0.pathNames != ".." }
-                self.isLoading = false
+                self.entries = listing ?? []
+                completion()
             }
         }
     }
@@ -50,29 +68,17 @@ class FileSystemViewModel: ObservableObject {
     }
     
     func uploadPendingFiles() {
-        let files = pendingFiles
-        isUploading = true
-        
-        DispatchQueue.global(qos: .userInitiated).async {
-            for url in files {
-                let isAccessing = url.startAccessingSecurityScopedResource()
-                defer { if isAccessing { url.stopAccessingSecurityScopedResource() } }
-                
-                guard let upload = self.uploadData(for: url) else {
-                    log("Couldn't read \(url.lastPathComponent) for upload", caller: "FileSystemViewModel", target: .ble)
-                    continue
-                }
-                
-                DispatchQueue.main.async { self.uploadSize = upload.data.count }
-                _ = self.bleFs.writeFile(data: upload.data, path: self.path(for: upload.name))
-            }
-            
-            DispatchQueue.main.async {
-                self.isUploading = false
-                self.pendingFiles = []
-                self.load()
-            }
-        }
+        transfer.upload(pendingFiles, to: path)
+        pendingFiles = []
+    }
+    
+    func openBackup(_ url: URL) {
+        pendingRestore = WatchBackup().open(url)
+        showOpenBackupError = pendingRestore == nil
+    }
+    
+    func restore(_ contents: WatchBackup.Contents) {
+        transfer.restore(contents)
     }
     
     // Runs a change on the watch, then reloads the list
@@ -83,16 +89,5 @@ class FileSystemViewModel: ObservableObject {
             change()
             DispatchQueue.main.async { self.load() }
         }
-    }
-    
-    // Images are converted to LVGL's format so the watch can show them
-    private func uploadData(for url: URL) -> (data: Data, name: String)? {
-        guard UTType(filenameExtension: url.pathExtension)?.conforms(to: .image) == true else {
-            return (try? Data(contentsOf: url)).map { ($0, url.lastPathComponent) }
-        }
-        guard let image = UIImage(contentsOfFile: url.path)?.cgImage, let data = lvImageConvert(img: image) else { return nil }
-        
-        let name = url.deletingPathExtension().lastPathComponent.prefix(26).trimmingCharacters(in: .whitespacesAndNewlines).replacingOccurrences(of: "\\s+", with: "_", options: .regularExpression)
-        return (data, name + ".bin")
     }
 }

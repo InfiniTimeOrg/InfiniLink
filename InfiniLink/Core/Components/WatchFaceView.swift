@@ -436,7 +436,7 @@ struct Terminal: View {
             line(Text("user@watch:~ $ now").foregroundColor(lightGray), at: 0)
             line(Text("[TIME] ") + Text(time).foregroundColor(.rgb(0x11, 0xcc, 0x55)), at: 1)
             line(Text("[DATE] ") + Text(String(format: "%04d-%02d-%02d", calendar.component(.year, from: date), calendar.component(.month, from: date), calendar.component(.day, from: date))).foregroundColor(.rgb(0x00, 0x7f, 0xff)), at: 2)
-            line(Text("[BATT] ") + Text("\(Int(bleManager.batteryLevel))%").foregroundColor(batteryColor), at: 3)
+            line(Text("[BATT] ") + Text(verbatim: "\(Int(bleManager.batteryLevel))%").foregroundColor(batteryColor), at: 3)
             line(Text("[STEP] ") + Text("\(bleManager.stepCount) steps").foregroundColor(.rgb(0xff, 0xb0, 0x00)), at: 4)
             line(Text("[L_HR] ") + (bleManager.heartRate == 0 ? Text("---").foregroundColor(.rgb(0x50, 0x50, 0x50)) : Text("\(Int(bleManager.heartRate)) bpm").foregroundColor(.rgb(0xff, 0x40, 0x00))), at: 5)
             if showsWeather {

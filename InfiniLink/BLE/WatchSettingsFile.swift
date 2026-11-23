@@ -88,6 +88,35 @@ struct WatchSettingsFile {
         return file
     }
 
+    func migrated(to version: UInt32) -> WatchSettingsFile? {
+        guard var file = Self.defaults(version: version) else { return nil }
+
+        file.stepsGoal = stepsGoal
+        file.screenTimeOut = screenTimeOut
+        file.alwaysOnDisplay = alwaysOnDisplay
+        file.clockType = clockType
+        file.weatherFormat = weatherFormat
+        file.notificationStatus = notificationStatus
+        file.watchFace = watchFace
+        file.chimesOption = chimesOption
+        file.ptsColorTime = ptsColorTime
+        file.ptsColorBar = ptsColorBar
+        file.ptsColorBG = ptsColorBG
+        file.ptsGaugeStyle = ptsGaugeStyle
+        file.ptsWeather = ptsWeather
+        file.prideFlag = prideFlag
+        file.infineatShowSideCover = infineatShowSideCover
+        file.infineatColorIndex = infineatColorIndex
+        file.shakeWakeThreshold = shakeWakeThreshold
+        file.brightLevel = brightLevel
+        file.heartRateBackgroundPeriod = heartRateBackgroundPeriod
+        file.dfuAndFsEnabledOnBoot = dfuAndFsEnabledOnBoot
+        for mode in (0...4).compactMap({ WakeUpMode(rawValue: $0) }) {
+            file.setWakeUpMode(mode, enabled: isWakeUpModeOn(mode))
+        }
+        return file
+    }
+
     private func byte(_ offset: Int) -> UInt8 {
         return data[data.startIndex + offset]
     }

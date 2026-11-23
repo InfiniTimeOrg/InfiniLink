@@ -90,6 +90,11 @@ class BLEFSHandler: ObservableObject {
     // The watch handles one request at a time
     private let requestLock = NSLock()
     
+    // Directory listings for the file browser, so going back into a folder doesn't list it over BLE again.
+    // Writes, deletes and new folders made through this handler clear the listings they affect
+    private var listingCache: [String: [Dir]] = [:]
+    private let listingCacheLock = NSLock()
+    
     func uploadExternalResources(from url: URL, completion: @escaping() -> Void) {
         log("External resource upload requested", type: .info, caller: "BLEFSHandler", target: .ble)
         
@@ -132,7 +137,7 @@ class BLEFSHandler: ObservableObject {
     }
     
     // Make each parent directory of the path, ignoring ones that already exist
-    private func createDir(path: String) {
+    func createDir(path: String) {
         let components = path.split(separator: "/").dropLast()
         
         for index in components.indices {
@@ -236,7 +241,7 @@ class BLEFSHandler: ObservableObject {
     func writeFile(data: Data, path: String) -> Bool {
         log("Write file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        return requestLock.withLock {
+        let written: Bool = requestLock.withLock {
             var packet = header(.write, path: path)
             packet.append(contentsOf: UInt32(0).littleEndianBytes)
             packet.append(contentsOf: UInt64(Date().timeIntervalSince1970).littleEndianBytes)
@@ -265,24 +270,39 @@ class BLEFSHandler: ObservableObject {
             
             return true
         }
+        
+        // Even a failed write can leave a partial file behind
+        if written {
+            updateListing(changedAt: path, with: Dir(fileSize: data.count, pathNames: (path as NSString).lastPathComponent))
+        } else {
+            invalidateListing(changedAt: path)
+        }
+        return written
     }
     
     func deleteFile(path: String) -> Bool {
         log("Delete file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        return requestLock.withLock {
+        let deleted: Bool = requestLock.withLock {
             var packet = header(.delete, path: path)
             packet.append(Data(path.utf8))
             
             return isOK(send(packet, expecting: .deleteResponse), "Delete \(path)")
         }
+        
+        if deleted {
+            updateListing(changedAt: path, with: nil)
+        } else {
+            invalidateListing(changedAt: path)
+        }
+        return deleted
     }
     
     // Fails if the directory already exists, so callers that don't care can ignore the result
     func makeDir(path: String) -> Bool {
         log("Make directory called", type: .info, caller: "BLEFSHandler", target: .ble)
         
-        return requestLock.withLock {
+        let made: Bool = requestLock.withLock {
             var packet = header(.mkdir, path: path)
             packet.append(contentsOf: [UInt8](repeating: 0, count: 4))
             packet.append(contentsOf: UInt64(Date().timeIntervalSince1970).littleEndianBytes)
@@ -290,6 +310,11 @@ class BLEFSHandler: ObservableObject {
             
             return isOK(send(packet, expecting: .mkdirResponse), "Make directory \(path)", logFailure: false)
         }
+        
+        if made {
+            updateListing(changedAt: path, with: Dir(flags: 1, pathNames: (path as NSString).lastPathComponent))
+        }
+        return made
     }
 
     func listDir(path: String) -> [Dir]? {
@@ -323,6 +348,44 @@ class BLEFSHandler: ObservableObject {
             }
             
             return nil
+        }
+    }
+    
+    func cachedListing(path: String) -> [Dir]? {
+        listingCacheLock.withLock { listingCache[path] }
+    }
+    
+    func cacheListing(_ entries: [Dir], path: String) {
+        listingCacheLock.withLock { listingCache[path] = entries }
+    }
+    
+    func clearListingCache() {
+        listingCacheLock.withLock { listingCache.removeAll() }
+    }
+    
+    private func invalidateListing(changedAt path: String) {
+        let parent = (path as NSString).deletingLastPathComponent
+        
+        listingCacheLock.withLock {
+            listingCache[parent.isEmpty ? "/" : parent] = nil
+            listingCache = listingCache.filter { $0.key != path && !$0.key.hasPrefix(path + "/") }
+        }
+    }
+    
+    private func updateListing(changedAt path: String, with entry: Dir?) {
+        let parent = (path as NSString).deletingLastPathComponent
+        let key = parent.isEmpty ? "/" : parent
+        let name = (path as NSString).lastPathComponent
+        
+        listingCacheLock.withLock {
+            if var entries = listingCache[key] {
+                entries.removeAll { $0.pathNames == name }
+                if let entry {
+                    entries.append(entry)
+                }
+                listingCache[key] = entries
+            }
+            listingCache = listingCache.filter { $0.key != path && !$0.key.hasPrefix(path + "/") }
         }
     }
     

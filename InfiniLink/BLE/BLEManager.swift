@@ -208,6 +208,7 @@ class BLEManager: NSObject, ObservableObject {
         }
         
         isConnecting = false
+        BLEFSHandler.shared.clearListingCache()
         deviceManager.pairedDeviceID = peripheral.identifier.uuidString
         deviceManager.pairedDevice = deviceManager.currentDevice() ?? deviceManager.addDevice(uuid: peripheral.identifier.uuidString)
         
@@ -287,6 +288,7 @@ class BLEManager: NSObject, ObservableObject {
     
     // Drop every characteristic from the old connection so nothing writes to a stale peripheral
     func clearCharacteristics() {
+        BLEFSHandler.shared.clearListingCache()
         blefsTransfer = nil
         currentTimeService = nil
         notifyCharacteristic = nil

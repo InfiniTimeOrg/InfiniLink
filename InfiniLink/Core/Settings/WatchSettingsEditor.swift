@@ -103,7 +103,7 @@ struct WatchSettingsAlerts: ViewModifier {
                 if editor.usingDefaults {
                     Text("This writes a new settings file to \(deviceName). Every setting on it, like the step goal, wake modes, and brightness, is set to what InfiniLink shows or InfiniTime's defaults. Changes apply after you restart your watch by pressing and holding the side button.")
                 } else {
-                    Text("Your watch only loads its settings when it starts, so changes apply after you restart it by pressing and holding the side button. Changing settings on the watch before then will undo these changes.")
+                    Text("Restart your watch to apply your changes. Updating settings on the watch before then will undo these changes.")
                 }
             }
             .alert("Couldn't Save Settings", isPresented: $editor.showSaveError) {
