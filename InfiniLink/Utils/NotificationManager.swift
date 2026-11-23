@@ -18,6 +18,10 @@ class NotificationManager: ObservableObject {
     
     @AppStorage("lastBatteryLevelNotified") var lastBatteryLevelNotified: Double = -1
     @AppStorage("lastHostBatteryLevelNotified") var lastHostBatteryLevelNotified: Double = -1
+    @AppStorage("lowBatteryThresholdNotified") var lowBatteryThresholdNotified: Double = 101
+    @AppStorage("customBatteryNotified") var customBatteryNotified = false
+    @AppStorage("hostFullNotified") var hostFullNotified = false
+    @AppStorage("hostLowNotified") var hostLowNotified = false
     
     @AppStorage("lastTimeMinHeartRangeNotified") var lastTimeMinHeartRangeNotified: Double = 0
     @AppStorage("lastTimeMaxHeartRangeNotified") var lastTimeMaxHeartRangeNotified: Double = 0
@@ -36,9 +40,6 @@ class NotificationManager: ObservableObject {
     private var hasStepsSinceConnect = false
     
     private var previousStepsCache: (key: String, steps: [Date: Int])?
-    
-    private var hostFullNotified = false
-    private var hostLowNotified = false
     
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
@@ -140,22 +141,39 @@ extension NotificationManager {
     }
     
     func checkToSendBatteryNotifications() {
+        guard bleManager.hasLoadedBatteryLevel else { return }
         let bat = bleManager.batteryLevel
         let previous = lastBatteryLevelNotified
         lastBatteryLevelNotified = bat
         
+        let chargeState = bleManager.chargeState
+        let onCharger = chargeState == .charging || chargeState == .full
+        if onCharger || (chargeState == nil && bat >= 30) {
+            lowBatteryThresholdNotified = 101
+        }
+        if onCharger || (chargeState == nil && bat >= min(batterySettings.customNotificationPercentage + 10, 100)) {
+            customBatteryNotified = false
+        }
+        
         // Skip if watch notifications are off, this is the first reading, or the level hasn't changed
         guard settings.watchNotificationsEnabled, previous >= 0, bat != previous else { return }
         
+        if bat == 100 {
+            sendFullyChargedBatteryNotification()
+            return
+        }
+        guard !onCharger else { return }
+        
         // Compare against the previous reading so a level that skips past a threshold still notifies
         let crossedBelow = { (threshold: Double) in previous > threshold && bat <= threshold }
+        let lowThreshold = [5, 10, 20].first { crossedBelow($0) && $0 < lowBatteryThresholdNotified }
         
-        if batterySettings.customNotificationEnabled && crossedBelow(batterySettings.customNotificationPercentage) {
+        if batterySettings.customNotificationEnabled && !customBatteryNotified && crossedBelow(batterySettings.customNotificationPercentage) {
             sendBatteryNotification(custom: true)
-        } else if bat == 100 {
-            sendFullyChargedBatteryNotification()
-        } else if batterySettings.lowBattery.enabled && [20, 10, 5].contains(where: crossedBelow) {
+            customBatteryNotified = true
+        } else if batterySettings.lowBattery.enabled, let lowThreshold {
             sendBatteryNotification(custom: false)
+            lowBatteryThresholdNotified = lowThreshold
         }
     }
     
