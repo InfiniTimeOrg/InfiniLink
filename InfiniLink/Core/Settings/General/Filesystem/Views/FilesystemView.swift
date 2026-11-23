@@ -149,7 +149,7 @@ struct FileSystemView: View {
                     .presentationDetents([.medium, .large])
             }
         }
-        .alert("Restore Backup?", isPresented: Binding(get: { model.pendingRestore != nil }, set: { if !$0 { model.pendingRestore = nil } }), presenting: model.pendingRestore) { contents in
+        .alert("Restore Backup?", isPresented: Binding(get: { model.pendingRestore != nil }, set: { if !$0 { DispatchQueue.main.async { model.pendingRestore = nil } } }), presenting: model.pendingRestore) { contents in
             Button("Restore") {
                 model.restore(contents)
             }
@@ -161,7 +161,7 @@ struct FileSystemView: View {
                 Text("This backup is from InfiniTime \(contents.manifest.firmware), but \(deviceManager.name) is on \(deviceManager.firmware). Resources like fonts and images won't be restored.")
             }
         }
-        .alert("Backup Restored", isPresented: Binding(get: { model.path == "/" && transfer.restoreResult != nil }, set: { if !$0 { transfer.restoreResult = nil } }), presenting: transfer.restoreResult) { result in
+        .alert("Backup Restored", isPresented: Binding(get: { model.path == "/" && transfer.restoreResult != nil }, set: { if !$0 { DispatchQueue.main.async { transfer.restoreResult = nil } } }), presenting: transfer.restoreResult) { result in
             if result.skippedResources {
                 Button("Update Resources") {
                     showSoftwareUpdate = true
