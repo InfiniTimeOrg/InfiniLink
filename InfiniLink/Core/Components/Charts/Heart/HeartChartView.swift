@@ -271,8 +271,7 @@ struct HeartChartView: View {
                 .padding(12)
                 .foregroundStyle(Color.primary)
                 .fontWeight(.medium)
-                .background(Material.regular)
-                .clipShape(Circle())
+                .glassBackground(in: Circle())
         }
         .disabled(disabled)
         .opacity(disabled ? 0.5 : 1)

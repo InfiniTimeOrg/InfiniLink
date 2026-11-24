@@ -39,8 +39,7 @@ struct RenameView: View {
                             .font(.system(size: 11).weight(.bold))
                             .foregroundStyle(.gray)
                             .padding(6)
-                            .background(Material.regular)
-                            .clipShape(Circle())
+                            .glassBackground(in: Circle())
                     }
                 }
             }
@@ -53,7 +52,7 @@ struct RenameView: View {
                 } label: {
                     Image(systemName: "checkmark")
                 }
-                .buttonStyle(.borderedProminent)
+                .glassButtonStyle(prominent: true)
             }
         }
         .onAppear {

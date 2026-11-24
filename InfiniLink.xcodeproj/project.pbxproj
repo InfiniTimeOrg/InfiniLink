@@ -111,6 +111,7 @@
 		E0A7C0822CB1B4990042A12D /* Zip in Frameworks */ = {isa = PBXBuildFile; productRef = E0A7C0812CB1B4990042A12D /* Zip */; };
 		E0A7C0842CB1B7A60042A12D /* WatchFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */; };
 		E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */; };
+		E0A7C0882CB1B83E0042A12D /* View+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0872CB1B83E0042A12D /* View+Extension.swift */; };
 		E0A7C0882CB1BBE70042A12D /* GeneralSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */; };
 		E0A7C08B2CB1E4CC0042A12D /* SoftwareUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */; };
 		E0A7C0922CB1EE8F0042A12D /* DFUUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */; };
@@ -310,6 +311,7 @@
 		E0A7C07E2CB1B3300042A12D /* BLEFS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BLEFS.swift; sourceTree = "<group>"; };
 		E0A7C0832CB1B7A60042A12D /* WatchFaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchFaceView.swift; sourceTree = "<group>"; };
 		E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extension.swift"; sourceTree = "<group>"; };
+		E0A7C0872CB1B83E0042A12D /* View+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extension.swift"; sourceTree = "<group>"; };
 		E0A7C0872CB1BBE70042A12D /* GeneralSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralSettingsView.swift; sourceTree = "<group>"; };
 		E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdateView.swift; sourceTree = "<group>"; };
 		E0A7C08F2CB1EE8F0042A12D /* DFUUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DFUUpdater.swift; sourceTree = "<group>"; };
@@ -428,6 +430,7 @@
 				264BFE4126BC51CE0050A223 /* InfiniLinkApp.swift */,
 				264BFE4326BC51CE0050A223 /* ContentView.swift */,
 				E0A7C0852CB1B83E0042A12D /* Color+Extension.swift */,
+				E0A7C0872CB1B83E0042A12D /* View+Extension.swift */,
 				E09696DE2D2EC7EC00CCCBF8 /* String+Extension.swift */,
 				E0B85D6E2CB8CDC700D85122 /* Date+Extension.swift */,
 				E09696E42D318AFB00CCCBF8 /* Data+Extension.swift */,
@@ -988,6 +991,7 @@
 				E076FEC82FB415AC00FF6A17 /* NotificationSettingsManager.swift in Sources */,
 				E0A7C0782CB193BC0042A12D /* WeatherSettingsView.swift in Sources */,
 				E0A7C0862CB1B83E0042A12D /* Color+Extension.swift in Sources */,
+				E0A7C0882CB1B83E0042A12D /* View+Extension.swift in Sources */,
 				E05999FE2CB462BF00D64E0B /* ChartManager.swift in Sources */,
 				E03C30B52CC7032800DD8363 /* ArbitraryNotificationView.swift in Sources */,
 				264BFE4426BC51CE0050A223 /* ContentView.swift in Sources */,

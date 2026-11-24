@@ -64,8 +64,7 @@ struct ActionView: View {
                                     .padding(.horizontal, 18)
                                     .font(.body.weight(.semibold))
                                     .foregroundStyle(foreground(for: button.role))
-                                    .background(background(for: button.role))
-                                    .clipShape(Capsule())
+                                    .glassBackground(background(for: button.role))
                             }
                         }
                     }

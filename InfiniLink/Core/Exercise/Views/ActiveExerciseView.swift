@@ -91,9 +91,8 @@ struct ActiveExerciseView: View {
                             .padding(15)
                             .padding(.leading, exerciseViewModel.exercisePaused ? 2 : 0) // Offset play icon a little to the right because it doesn't look centered to the eye
                             .frame(width: 45, height: 45)
-                            .background(Material.regular)
                             .foregroundStyle(exerciseViewModel.exercisePaused ? Color.white : Color.primary)
-                            .clipShape(Circle())
+                            .glassBackground(in: Circle())
                     }
                     Button {
                         showEndConfirmation = true
@@ -101,9 +100,8 @@ struct ActiveExerciseView: View {
                         Image(systemName: "stop.fill")
                             .font(.system(size: 25))
                             .padding(25)
-                            .background(Color.red)
                             .foregroundStyle(Color.white)
-                            .clipShape(Circle())
+                            .glassBackground(.red, in: Circle())
                     }
                     Color.clear // This centers the other elements
                         .frame(width: 45, height: 45)

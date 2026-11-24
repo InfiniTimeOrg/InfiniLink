@@ -57,9 +57,8 @@ struct CurrentUpdateView: View {
                         Text("Close")
                             .padding(14)
                             .font(.body.weight(.semibold))
-                            .background(Color.gray)
                             .foregroundStyle(.white)
-                            .clipShape(Capsule())
+                            .glassBackground(.gray)
                     }
                 } else {
                     Button {
@@ -68,9 +67,8 @@ struct CurrentUpdateView: View {
                         Text("Cancel Update")
                             .padding(14)
                             .font(.body.weight(.semibold))
-                            .background(Color.red)
                             .foregroundStyle(.white)
-                            .clipShape(Capsule())
+                            .glassBackground(.red)
                     }
                 }
             }

@@ -184,7 +184,7 @@ struct RecoverExerciseView: View {
                     Text("Resume")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.borderedProminent)
+                .glassButtonStyle(prominent: true)
                 if canSave {
                     Button {
                         exerciseViewModel.saveAndEndRecoveredSession()
@@ -192,7 +192,7 @@ struct RecoverExerciseView: View {
                         Text("Save & End")
                             .frame(maxWidth: .infinity)
                     }
-                    .buttonStyle(.bordered)
+                    .glassButtonStyle()
                     .tint(.primary)
                 }
                 Button(role: .destructive) {
@@ -201,7 +201,7 @@ struct RecoverExerciseView: View {
                     Text("Discard")
                         .frame(maxWidth: .infinity)
                 }
-                .buttonStyle(.bordered)
+                .glassButtonStyle()
                 .tint(.red)
             }
             .fontWeight(.semibold)

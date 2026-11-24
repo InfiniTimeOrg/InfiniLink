@@ -157,9 +157,8 @@ struct SetUpDetailsView: View {
                         .padding()
                         .fontWeight(.semibold)
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue)
                         .foregroundStyle(.white)
-                        .clipShape(.rect(cornerRadius: 15))
+                        .glassBackground(.blue)
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
@@ -203,9 +202,8 @@ struct NotificationsSetupView: View {
                     .padding()
                     .font(.body.weight(.semibold))
                     .frame(maxWidth: .infinity)
-                    .background(Color.blue)
                     .foregroundStyle(.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 15))
+                    .glassBackground(.blue)
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowBackground(Color.clear)

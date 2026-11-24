@@ -67,9 +67,8 @@ struct WelcomeView: View {
                         .padding()
                         .font(.body.weight(.semibold))
                         .frame(maxWidth: .infinity)
-                        .background(Color.blue)
                         .foregroundStyle(.white)
-                        .clipShape(Capsule())
+                        .glassBackground(.blue)
                 }
                 .sheet(isPresented: $showPairingSheet) {
                     ConnectView()
