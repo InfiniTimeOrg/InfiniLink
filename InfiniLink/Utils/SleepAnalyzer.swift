@@ -92,7 +92,7 @@ struct SleepAnalyzer {
     }
 
     // Passing sleepingHeartRate looks for naps instead
-    static func analyze(window: DateInterval, activity: [(date: Date, value: Double)], heartRates: [(date: Date, value: Double)], daytimeMedian: Double?, sleepingHeartRate: Double? = nil, offWrist: [DateInterval] = []) -> [DetectedSleep] {
+    static func analyze(window: DateInterval, activity: [(date: Date, value: Double)], heartRates: [(date: Date, value: Double)], daytimeMedian: Double?, sleepingHeartRate: Double? = nil, recentSleepingHeartRate: Double? = nil, offWrist: [DateInterval] = []) -> [DetectedSleep] {
         let minuteCount = Int(min(window.end, Date()).timeIntervalSince(window.start) / 60)
         guard minuteCount > 0 else { return [] }
 
@@ -149,21 +149,21 @@ struct SleepAnalyzer {
 
         // HR well above the night's baseline means we're awake even if we're still
         let nightRates = heartByMinute.compactMap { $0 }.sorted()
-        let baselineHeartRate = nightRates.count >= 10 ? nightRates[nightRates.count / 5] : nil
+        // Before we've fallen asleep the night's HR is all awake, so don't let the baseline go above a recent night's
+        let baselineHeartRate = [nightRates.count >= 10 ? nightRates[nightRates.count / 5] : nil, recentSleepingHeartRate].compactMap { $0 }.min()
         let awakeHeartRate = baselineHeartRate.map { $0 + heartRateAwakeMargin } ?? .infinity
 
         var isActive = [Bool?](repeating: nil, count: minuteCount)
-        var lastHeartRate: (index: Int, value: Double)?
         for index in 0..<minuteCount {
-            if let value = heartByMinute[index] {
-                lastHeartRate = (index, value)
-            }
             guard let value = activityByMinute[index] else { continue }
 
             if let sleepingHeartRate {
-                // Sitting still looks like a nap, so HR has to be close to sleeping too
-                let recent = lastHeartRate.flatMap { index - $0.index <= napHeartRateMinutes ? $0.value : nil }
-                isActive[index] = value >= stillThreshold || (recent ?? .infinity) > sleepingHeartRate + napHeartRateMargin
+                // Sitting still looks like a nap
+                // so HR needs to be close to sleeping values
+                //
+                // We use the median so one high reading doesn't wake us up
+                let nearby = heartByMinute[max(0, index - napHeartRateMinutes)...min(minuteCount - 1, index + napHeartRateMinutes)].compactMap { $0 }
+                isActive[index] = value >= stillThreshold || (median(nearby) ?? .infinity) > sleepingHeartRate + napHeartRateMargin
             } else {
                 isActive[index] = value >= stillThreshold || (heartByMinute[index] ?? 0) > awakeHeartRate
             }
@@ -205,10 +205,11 @@ struct SleepAnalyzer {
                 while index < minuteCount && states[index] == .awake {
                     index += 1
                 }
-                guard start > 0, index < minuteCount, states[start - 1] == .asleep, states[index] == .asleep else { continue }
+                guard states[..<start].last(where: { $0 != .noData }) == .asleep, states[index...].first(where: { $0 != .noData }) == .asleep else { continue }
 
+                // Median so one high reading doesn't keep it awake
                 let rates = heartByMinute[start..<index].compactMap { $0 }
-                if index - start < minimumWakeMinutes || (index - start <= maximumGapMinutes && !rates.isEmpty && !rates.contains(where: { $0 > wakeHeartRate })) {
+                if index - start < minimumWakeMinutes || (index - start <= maximumGapMinutes && median(rates).map { $0 <= wakeHeartRate } == true) {
                     for minute in start..<index {
                         states[minute] = .asleep
                     }

@@ -137,7 +137,8 @@ class SleepManager: ObservableObject {
                         }
                     }
                 } else {
-                    detected = SleepAnalyzer.analyze(window: analysisWindow, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian, offWrist: offWrist).filter { $0.start < window.end }
+                    let recentHeartRate = self.recentSleepingHeartRate(before: window.start, deviceId: deviceId, context: context)
+                    detected = SleepAnalyzer.analyze(window: analysisWindow, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian, recentSleepingHeartRate: recentHeartRate, offWrist: offWrist).filter { $0.start < window.end }
                 }
 
                 // Redo the whole night each time so late data replaces the first guess
@@ -359,6 +360,16 @@ class SleepManager: ObservableObject {
         request.predicate = NSPredicate(format: "deviceId == %@ AND timestamp >= %@ AND timestamp < %@", deviceId, window.start.addingTimeInterval(-12 * 3600) as NSDate, window.end as NSDate)
 
         return BatteryStats.chargerIntervals(from: (try? context.fetch(request)) ?? []).filter { $0.intersects(window) }
+    }
+
+    private func recentSleepingHeartRate(before date: Date, deviceId: String, context: NSManagedObjectContext) -> Double? {
+        let request: NSFetchRequest<SleepSession> = SleepSession.fetchRequest()
+        request.predicate = NSPredicate(format: "deviceId == %@ AND isNap == NO AND start >= %@ AND start < %@", deviceId, date.addingTimeInterval(-7 * 86400) as NSDate, date as NSDate)
+        request.sortDescriptors = [NSSortDescriptor(key: "start", ascending: false)]
+        request.fetchLimit = 1
+
+        guard let start = (try? context.fetch(request))?.first?.start, let night = SleepAnalyzer.window(containing: start) else { return nil }
+        return sleepingHeartRate(in: night, deviceId: deviceId, context: context)
     }
 
     private func sleepingHeartRate(in night: DateInterval, deviceId: String, context: NSManagedObjectContext) -> Double? {
