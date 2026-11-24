@@ -17,16 +17,24 @@ struct SoftwareUpdateView: View {
     
     @State private var resourceError: String?
     @State private var showCancelConfirmation = false
+    @State private var showOtherVersions = false
     
     var body: some View {
         GeometryReader { geo in
             List {
                 if !isImport && !bleManager.isReconnectingAfterUpdate && !downloadManager.updateStarted {
                     Section {
-                        NavigationLink {
-                            OtherUpdateVersions()
+                        Button {
+                            showOtherVersions = true
                         } label: {
-                            Text("Other Versions")
+                            HStack {
+                                Text("Other Versions")
+                                    .foregroundStyle(Color.primary)
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .font(.footnote.weight(.semibold))
+                                    .foregroundStyle(.tertiary)
+                            }
                         }
                     }
                 }
@@ -53,6 +61,11 @@ struct SoftwareUpdateView: View {
                 }
             }
             .navigationTitle("Software Update")
+            .navigationDestination(isPresented: $showOtherVersions) {
+                OtherUpdateVersions {
+                    showOtherVersions = false
+                }
+            }
             .toolbar {
                 if !isImport {
                     NavigationLink {
@@ -248,6 +261,8 @@ struct OtherUpdateVersions: View {
     @State private var showLocalFileSheet = false
     @State private var showInvalidFileAlert = false
     
+    let onSelectDevelopmentBuild: () -> Void
+    
     @ObservedObject var dfuUpdater = DFUUpdater.shared
     @ObservedObject var downloadManager = DownloadManager.shared
     @ObservedObject var bleManager = BLEManager.shared
@@ -275,6 +290,13 @@ struct OtherUpdateVersions: View {
                 if !bleManager.isDeviceInRecoveryMode {
                     Text("Choose a firmware update or external resources. External resources are fonts and images that are required for some apps and watch faces.")
                 }
+            }
+            Section {
+                NavigationLink("Development Builds (beta)") {
+                    GitHubBuildsView(onSelect: onSelectDevelopmentBuild)
+                }
+            } footer: {
+                Text("Install builds of InfiniTime made by GitHub Actions. Requires you to sign in to GitHub.")
             }
             Section("Releases") {
                 if downloadManager.releases.isEmpty && !downloadManager.loadingReleases {

@@ -49,6 +49,16 @@
     "[WTHR] " : {
 
     },
+    "#%d: %@\n\nThis build is from a pull request that may not have been reviewed. Only install it if you trust the code it was built from." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "#%1$d: %2$@\n\nThis build is from a pull request that may not have been reviewed. Only install it if you trust the code it was built from."
+          }
+        }
+      }
+    },
     "%@" : {
 
     },
@@ -796,6 +806,12 @@
     "Developer Mode" : {
 
     },
+    "Development Builds" : {
+
+    },
+    "Development Builds (beta)" : {
+
+    },
     "Device not appearing?" : {
 
     },
@@ -840,6 +856,9 @@
 
     },
     "Double Tap" : {
+
+    },
+    "Download" : {
 
     },
     "Downloading" : {
@@ -1084,6 +1103,31 @@
     "Get notified when you reach your step goal, keep a streak going, or take more steps than ever before." : {
 
     },
+    "GitHub couldn't complete sign in. Please try again." : {
+
+    },
+    "GitHub couldn't load pull requests." : {
+
+    },
+    "GitHub didn't return a download for this build." : {
+
+    },
+    "GitHub is limiting requests right now. Please try again later." : {
+
+    },
+    "GitHub requires an account to download builds from InfiniTime's automated tests. InfiniLink can only read InfiniTime's builds." : {
+
+    },
+    "GitHub returned an error (%d): %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "GitHub returned an error (%1$d): %2$@"
+          }
+        }
+      }
+    },
     "Goal" : {
 
     },
@@ -1279,6 +1323,12 @@
       }
     },
     "InfiniTime on GitHub" : {
+
+    },
+    "Install builds of InfiniTime made by GitHub Actions. Requires you to sign in to GitHub." : {
+
+    },
+    "Install Development Build?" : {
 
     },
     "Install future updates automatically while %@ charges overnight? You can change this in Software Update settings." : {
@@ -1529,6 +1579,9 @@
     "No Logs" : {
 
     },
+    "No pull requests match your search." : {
+
+    },
     "No sleep recorded last night" : {
 
     },
@@ -1587,6 +1640,9 @@
 
     },
     "OK" : {
+
+    },
+    "Open pull requests to InfiniTime with a successful build. Builds expire after 90 days and may be unstable." : {
 
     },
     "Open the file explorer to save the file." : {
@@ -1820,6 +1876,9 @@
     "Search for an address..." : {
 
     },
+    "Search pull requests" : {
+
+    },
     "Selected" : {
 
     },
@@ -1907,6 +1966,15 @@
 
     },
     "Show your watch's charge on the Lock Screen while it's charging." : {
+
+    },
+    "Sign in to GitHub to download builds." : {
+
+    },
+    "Sign in with GitHub" : {
+
+    },
+    "Sign Out of GitHub" : {
 
     },
     "Signal" : {
@@ -2117,6 +2185,9 @@
     "There aren't any available releases." : {
 
     },
+    "There aren't any pull requests with builds." : {
+
+    },
     "There isn't any %@ data to show" : {
 
     },
@@ -2132,6 +2203,9 @@
           }
         }
       }
+    },
+    "This build doesn't have a firmware file, or it has expired." : {
+
     },
     "This copies the files on %@ into a backup you can save. You can restore it later from the + menu." : {
 
@@ -2372,6 +2446,9 @@
     "View All" : {
 
     },
+    "View on GitHub" : {
+
+    },
     "Wake Up" : {
 
     },
@@ -2593,6 +2670,9 @@
 
     },
     "Your %@ workout is still going. Open InfiniLink to end it if you're done." : {
+
+    },
+    "Your GitHub sign in expired. Please sign in again." : {
 
     },
     "Your heart rate fell below %lld BPM" : {

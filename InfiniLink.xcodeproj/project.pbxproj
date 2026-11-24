@@ -24,6 +24,8 @@
 		75048445307FA1110082E487 /* HealthNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048444307FA10F0082E487 /* HealthNotificationsView.swift */; };
 		75048447307FA1230082E487 /* GoalsNotificationsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75048446307FA1220082E487 /* GoalsNotificationsView.swift */; };
 		75BC303B30766EFB003EEC2D /* BatterySettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC303A30766EF4003EEC2D /* BatterySettingsView.swift */; };
+		29933A70D174C32598546618 /* GitHubBuilds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 177ED7C2849FC2FC06902AE0 /* GitHubBuilds.swift */; };
+		AC1238CF398B3029BFE4A2C2 /* GitHubBuildsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6DCA237932969A62131B5459 /* GitHubBuildsView.swift */; };
 		29A3DBA0977BCAC25C41B952 /* DataExporter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8ADB3414CF417B037C06A47 /* DataExporter.swift */; };
 		5B1C0A2E7D4F4E8A9C3B6D21 /* WatchBackup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C0A2E7D4F4E8A9C3B6D20 /* WatchBackup.swift */; };
 		5B1C0A2E7D4F4E8A9C3B6D23 /* FileTransferManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B1C0A2E7D4F4E8A9C3B6D22 /* FileTransferManager.swift */; };
@@ -202,6 +204,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		C0F1A9E52F3B4D6E8A7C9B10 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		D1A2B3C42F3B4D6E8A7C9B11 /* Secrets.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Secrets.xcconfig; sourceTree = "<group>"; };
+		177ED7C2849FC2FC06902AE0 /* GitHubBuilds.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GitHubBuilds.swift; sourceTree = "<group>"; };
+		6DCA237932969A62131B5459 /* GitHubBuildsView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = GitHubBuildsView.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000D001 /* SoftwareUpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdateSettingsView.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000C001 /* ChargingShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingShared.swift; sourceTree = "<group>"; };
 		E0C0DE00000000000000C004 /* ChargingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingManager.swift; sourceTree = "<group>"; };
@@ -442,6 +448,8 @@
 				E06973AA2B35E6F4009C2F7D /* InfiniLink.entitlements */,
 				264BFE4526BC51CF0050A223 /* Assets.xcassets */,
 				264BFE4F26BC51CF0050A223 /* Info.plist */,
+				C0F1A9E52F3B4D6E8A7C9B10 /* Config.xcconfig */,
+				D1A2B3C42F3B4D6E8A7C9B11 /* Secrets.xcconfig */,
 				264BFE4726BC51CF0050A223 /* Preview Content */,
 			);
 			path = InfiniLink;
@@ -460,6 +468,7 @@
 			children = (
 				E0A7C08A2CB1E4CC0042A12D /* SoftwareUpdateView.swift */,
 				E02C62112CD05DA900C4D19B /* CurrentUpdateView.swift */,
+				6DCA237932969A62131B5459 /* GitHubBuildsView.swift */,
 			);
 			path = Update;
 			sourceTree = "<group>";
@@ -655,6 +664,7 @@
 				C3C2E310B92D23E5E3E385E6 /* WorkoutAnalysis.swift */,
 				0E2639060097BBFC1CC1D73F /* HealthTrends.swift */,
 				6A5E75B738B443D712B510B0 /* NavigationController.swift */,
+				177ED7C2849FC2FC06902AE0 /* GitHubBuilds.swift */,
 				C90EF4CFB93C89807B8CECD9 /* DataRetention.swift */,
 			);
 			path = Utils;
@@ -1105,6 +1115,8 @@
 				EB433FECF2241E07C0DAC20C /* WatchFaceCatalog.swift in Sources */,
 				8AE0BBEFA52E176ABC580B30 /* WatchSettingsEditor.swift in Sources */,
 				B180E5A78417EBD55BD67E3B /* WatchFaceSettingsView.swift in Sources */,
+				29933A70D174C32598546618 /* GitHubBuilds.swift in Sources */,
+				AC1238CF398B3029BFE4A2C2 /* GitHubBuildsView.swift in Sources */,
 				D00C088CA25BB531F38E76DF /* WatchAlarmFile.swift in Sources */,
 				7B669746175A133D23D35962 /* WatchSettingsView.swift in Sources */,
 				53917E8707F202244D35066E /* WatchAlarmView.swift in Sources */,
@@ -1295,6 +1307,7 @@
 		};
 		264BFE6926BC51CF0050A223 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0F1A9E52F3B4D6E8A7C9B10 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -1327,6 +1340,7 @@
 		};
 		264BFE6A26BC51CF0050A223 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = C0F1A9E52F3B4D6E8A7C9B10 /* Config.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;

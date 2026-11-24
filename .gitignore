@@ -19,3 +19,6 @@ xcuserdata/
 *.xcuserstate
 !default.xcworkspace
 *.swp
+
+# Secrets
+InfiniLink/Secrets.xcconfig
