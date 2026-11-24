@@ -44,7 +44,6 @@ class WatchFileEditor<File: WatchFile>: ObservableObject {
     @Published private(set) var isLoading = false
     @Published private(set) var isSaving = false
     @Published private(set) var loadFailed = false
-    @Published private(set) var failureDetail: String?
     @Published private(set) var usingDefaults = false
     @Published var showSaveConfirmation = false
     @Published var showSaveError = false
@@ -57,13 +56,12 @@ class WatchFileEditor<File: WatchFile>: ObservableObject {
         guard BLEManager.shared.blefsTransfer != nil, !isLoading else { return }
 
         isLoading = true
-        File.read { file, usingDefaults, detail in
+        File.read { file, usingDefaults, _ in
             self.isLoading = false
             self.file = file
             self.original = usingDefaults ? nil : file
             self.usingDefaults = usingDefaults
             self.loadFailed = file == nil
-            self.failureDetail = detail
         }
     }
 

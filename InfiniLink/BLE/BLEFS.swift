@@ -417,25 +417,6 @@ class BLEFSHandler: ObservableObject {
         }
     }
     
-    func readSettings(completion: @escaping(Settings?) -> Void) {
-        log("Settings requested", type: .info, caller: "BLEFSHandler", target: .ble)
-        
-        DispatchQueue.global(qos: .default).async {
-            let readFile = self.readFile(path: "/settings.dat")
-            
-            guard let file = WatchSettingsFile(data: readFile.data) else {
-                log("Settings file not readable: \(readFile.data.count) bytes, version \(WatchSettingsFile.version(of: readFile.data).map { String(format: "0x%02x", $0) } ?? "none")", caller: "BLEFSHandler", target: .ble)
-                DispatchQueue.main.async { completion(nil) }
-                return
-            }
-            
-            DispatchQueue.main.async {
-                DeviceManager.shared.updateHeartRateBackgroundPeriod(from: file)
-                completion(file.settings)
-            }
-        }
-    }
-    
     func readSettingsFile(completion: @escaping(WatchSettingsFile?, Bool, String?) -> Void) {
         DispatchQueue.global(qos: .userInitiated).async {
             let readFile = self.readFile(path: "/settings.dat")
@@ -459,6 +440,13 @@ class BLEFSHandler: ObservableObject {
             if file == nil {
                 detail = readFile.valid || readFile.missing ? nil : "read failed, "
                 detail = (detail ?? "") + "firmware \(firmware), file version \(fileVersion.map { String(format: "0x%02x", $0) } ?? "none"), \(readFile.data.count) bytes"
+            }
+            if UserDefaults.standard.bool(forKey: "forceDatFailures") {
+                file = nil
+                usingDefaults = false
+            }
+            if readFile.valid || readFile.missing {
+                DeviceManager.shared.setReadable(file != nil, path: "/settings.dat")
             }
             if file == nil || usingDefaults {
                 log("Settings file not used as is: firmware \(firmware), file version \(fileVersion.map { String(format: "0x%02x", $0) } ?? "none"), \(readFile.data.count) bytes", caller: "BLEFSHandler", target: .ble)
@@ -499,12 +487,19 @@ class BLEFSHandler: ObservableObject {
             var usingDefaults = false
             var detail: String?
 
-            if file == nil && (readFile.missing || (readFile.valid && (version ?? 0) < WatchAlarmFile.currentVersion)) {
+            if file == nil && (readFile.missing || (readFile.valid && version == 0)) {
                 file = WatchAlarmFile.defaults
                 usingDefaults = true
             } else if file == nil {
                 detail = "\(readFile.valid ? "" : "read failed, ")alarm version \(version.map { String($0) } ?? "none"), \(readFile.data.count) bytes"
                 log("Alarm file not usable: \(detail ?? "")", caller: "BLEFSHandler", target: .ble)
+            }
+            if UserDefaults.standard.bool(forKey: "forceDatFailures") {
+                file = nil
+                usingDefaults = false
+            }
+            if readFile.valid || readFile.missing {
+                DeviceManager.shared.setReadable(file != nil, path: WatchAlarmFile.path)
             }
 
             DispatchQueue.main.async {

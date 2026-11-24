@@ -18,6 +18,7 @@ struct DeveloperView: View {
     @AppStorage("forceAncs") var forceAncs = true
     @AppStorage("enableBetaNavigation") var enableBetaNavigation = false
     @AppStorage("dfuPacketReceiptNotification") var packetReceiptNotification = 0
+    @AppStorage("forceDatFailures") var forceDatFailures = false
     
     @State private var heartDay = ""
     @State private var generatedDayOffset = 0
@@ -76,6 +77,13 @@ struct DeveloperView: View {
             Toggle("Force ANCS", isOn: $forceAncs)
             Toggle("Fake Recovery Mode", isOn: $bleManager.fakeRecoveryMode)
             Toggle("Fake Dead Accelerometer", isOn: $motionController.fakeDeadAccelerometer)
+            Toggle("Force .dat Read Failures", isOn: $forceDatFailures)
+                .onChange(of: forceDatFailures) { _ in
+                    BLEFSHandler.shared.readSettingsFile { _, _, _ in }
+                    if WatchAlarmFile.supported(onFirmware: deviceManager.firmware) {
+                        BLEFSHandler.shared.readAlarmFile { _, _, _ in }
+                    }
+                }
             Section {
                 Toggle("Enable Navigation (beta)", isOn: $enableBetaNavigation)
             }

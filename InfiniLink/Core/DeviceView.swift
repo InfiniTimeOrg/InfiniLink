@@ -212,6 +212,7 @@ struct DeviceView: View {
                         } label: {
                             ListRowView(title: "Customization", icon: "wrench.fill", iconColor: .gray)
                         }
+                        .disabled(!deviceManager.canRead("/settings.dat"))
                         NavigationLink {
                             column(BatteryView())
                         } label: {
@@ -228,6 +229,7 @@ struct DeviceView: View {
                             } label: {
                                 ListRowView(title: "Alarm", icon: "alarm.fill", iconColor: .orange)
                             }
+                            .disabled(!deviceManager.canRead(WatchAlarmFile.path))
                         }
                         NavigationLink {
                             column(WeatherView())

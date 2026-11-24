@@ -53,11 +53,41 @@ class DeviceManager: ObservableObject {
     
     @Published var settings = Settings()
     
-    // Reading settings.dat wakes the watch's screen, so only do it when we don't have settings cached for this firmware
-    func readSettingsIfNeeded() {
-        guard BLEManager.shared.blefsTransfer != nil, let expected = WatchSettingsFile.expectedVersion(forFirmware: firmware), settings.version != expected else { return }
-        
-        BLEFSHandler.shared.readSettingsFile { _, _, _ in }
+    // Reading files wakes the watch's screen, so only do it when we don't have settings cached or haven't checked this firmware yet
+    func readWatchFiles() {
+        guard BLEManager.shared.blefsTransfer != nil else { return }
+
+        let checked = checkedFirmware == firmware
+        if let expected = WatchSettingsFile.expectedVersion(forFirmware: firmware), settings.version != expected || !checked {
+            BLEFSHandler.shared.readSettingsFile { _, _, _ in }
+        }
+        if !checked && WatchAlarmFile.supported(onFirmware: firmware) {
+            BLEFSHandler.shared.readAlarmFile { _, _, _ in }
+        }
+        checkedFirmware = firmware
+    }
+
+    private var checkedFirmware: String? {
+        get { UserDefaults.standard.string(forKey: "checkedFirmware-\(pairedDeviceID ?? "")") }
+        set { UserDefaults.standard.set(newValue, forKey: "checkedFirmware-\(pairedDeviceID ?? "")") }
+    }
+
+    private var unreadableFiles: [String: String] { // key failed files to the version they failed on
+        get { UserDefaults.standard.dictionary(forKey: "unreadableFiles-\(pairedDeviceID ?? "")") as? [String: String] ?? [:] }
+        set {
+            objectWillChange.send()
+            UserDefaults.standard.set(newValue, forKey: "unreadableFiles-\(pairedDeviceID ?? "")")
+        }
+    }
+
+    func canRead(_ path: String) -> Bool {
+        return unreadableFiles[path] != firmware
+    }
+
+    func setReadable(_ readable: Bool, path: String) {
+        DispatchQueue.main.async {
+            self.unreadableFiles[path] = readable ? nil : self.firmware
+        }
     }
     
     var heartRateBackgroundPeriod: Int? {
@@ -241,7 +271,7 @@ extension DeviceManager {
                 WatchFaceCatalog.shared.objectWillChange.send()
                 DownloadManager.shared.evaluateFirmwareUpdate()
                 if device.firmware != oldFirmware {
-                    self.readSettingsIfNeeded()
+                    self.readWatchFiles()
                 }
             }
         }

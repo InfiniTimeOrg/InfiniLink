@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct FileSystemDetailView: View {
-    @State private var settings: Settings?
     @State private var textData: String?
     @State private var csvData: [[String]]?
     
@@ -20,51 +19,12 @@ struct FileSystemDetailView: View {
     private var fileName: String {
         (path as NSString).lastPathComponent
     }
-    private var isSettings: Bool {
-        path == "/settings.dat"
-    }
-    
-    func row(key: LocalizedStringKey, value: LocalizedStringKey) -> some View {
-        HStack {
-            Text(key)
-            Spacer()
-            Text(value)
-                .foregroundColor(.gray)
-        }
-    }
-    
+
     var body: some View {
         Group {
             if isLoadingFile {
                 ProgressView()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
-            } else if let settings {
-                List {
-                    row(key: "Display Timeout", value: "\(settings.screenTimeOut / 1000) Seconds")
-                    row(key: "Brightness Level", value: {
-                        switch settings.brightLevel {
-                        case .Low:
-                            return "Low"
-                        case .Mid:
-                            return "Mid"
-                        case .High:
-                            return "High"
-                        }
-                    }())
-                    row(key: "Time Format", value: settings.clockType == .H12 ? "12 Hour" : "24 Hour")
-                    row(key: "Steps Goal", value: "\(settings.stepsGoal)")
-                    row(key: "Weather Format", value: settings.weatherFormat == .Imperial ? "Imperial" : "Metric")
-                    row(key: "Hourly Chimes", value: {
-                        switch settings.chimesOption {
-                        case .None:
-                            return "None"
-                        case .Hours:
-                            return "Hour"
-                        case .HalfHours:
-                            return "Half Hour"
-                        }
-                    }())
-                }
             } else {
                 ScrollView {
                     VStack {
@@ -96,19 +56,12 @@ struct FileSystemDetailView: View {
             guard !hasLoaded else { return }
             hasLoaded = true
             
-            if isSettings {
-                BLEFSHandler.shared.readSettings { settings in
-                    self.settings = settings
-                    isLoadingFile = false
-                }
-            } else {
-                BLEFSHandler.shared.readFile(path) { data in
-                    show(data)
-                    isLoadingFile = false
-                }
+            BLEFSHandler.shared.readFile(path) { data in
+                show(data)
+                isLoadingFile = false
             }
         }
-        .navigationTitle(isSettings ? "Settings" : fileName)
+        .navigationTitle(fileName)
         .navigationBarTitleDisplayMode(.inline)
     }
     

@@ -113,17 +113,7 @@ struct WatchFaceSettingsView: View {
                     Section {
                         WatchSettingsSaveButton(editor: editor)
                     }
-                } else if editor.loadFailed {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("InfiniLink couldn't read the settings from \(deviceManager.name). Watch face settings need InfiniTime 1.14 or later.")
-                        if let detail = editor.failureDetail {
-                            Text(detail)
-                                .font(.footnote.monospaced())
-                                .foregroundStyle(.gray)
-                                .textSelection(.enabled)
-                        }
-                    }
-                } else {
+                } else if !editor.loadFailed {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                 }

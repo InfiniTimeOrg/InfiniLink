@@ -32,9 +32,7 @@ struct StepSettingsView: View {
                     }
                 } else if editor.usingDefaults {
                     Text("\(deviceManager.name) is using its default settings. Save them in Customization first, then change your step goal.")
-                } else if editor.loadFailed {
-                    Text("InfiniLink couldn't read the settings from \(deviceManager.name).")
-                } else {
+                } else if !editor.loadFailed {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                 }

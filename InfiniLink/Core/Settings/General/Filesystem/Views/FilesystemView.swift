@@ -20,6 +20,7 @@ struct FileSystemView: View {
     @State private var showNewFolderView = false
     @State private var showBackUpAlert = false
     @State private var showSoftwareUpdate = false
+    @State private var isRefreshingSettings = false
     @State private var newFolderName = ""
     
     @FocusState private var isNewFolderFocused: Bool
@@ -39,14 +40,42 @@ struct FileSystemView: View {
                     .frame(maxWidth: .infinity)
             } else {
                 ForEach(model.entries, id: \.pathNames) { entry in
-                    NavigationLink {
-                        if entry.isDirectory {
-                            FileSystemView(path: model.path(for: entry.pathNames))
+                    let label = Label(entry.pathNames, systemImage: entry.isDirectory ? "folder" : "doc")
+                        .foregroundStyle(.blue)
+
+                    Group {
+                        if entry.isDirectory || !entry.pathNames.hasSuffix(".dat") { // Dat files are raw so there's nothing to show
+                            NavigationLink {
+                                if entry.isDirectory {
+                                    FileSystemView(path: model.path(for: entry.pathNames))
+                                } else {
+                                    FileSystemDetailView(path: model.path(for: entry.pathNames))
+                                }
+                            } label: {
+                                label
+                            }
                         } else {
-                            FileSystemDetailView(path: model.path(for: entry.pathNames))
+                            HStack {
+                                label
+                                if model.path(for: entry.pathNames) == "/settings.dat" {
+                                    Spacer()
+                                    Button {
+                                        isRefreshingSettings = true
+                                        bleFs.readSettingsFile { _, _, _ in
+                                            isRefreshingSettings = false
+                                        }
+                                    } label: {
+                                        if isRefreshingSettings {
+                                            ProgressView()
+                                        } else {
+                                            Image(systemName: "arrow.clockwise")
+                                        }
+                                    }
+                                    .buttonStyle(.borderless)
+                                    .disabled(isRefreshingSettings || transfer.task != nil)
+                                }
+                            }
                         }
-                    } label: {
-                        Label(entry.pathNames, systemImage: entry.isDirectory ? "folder" : "doc")
                     }
                     .contextMenu {
                         Button(role: .destructive) {

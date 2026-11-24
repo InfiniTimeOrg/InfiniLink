@@ -12,16 +12,13 @@ struct WatchAlarmView: View {
 
     @StateObject private var editor = WatchAlarmEditor()
 
-    private var time: Binding<Date> {
+    private func time(_ index: Int, _ alarm: WatchAlarmFile.Alarm) -> Binding<Date> {
         Binding(
-            get: {
-                let file = editor.file ?? WatchAlarmFile.defaults
-                return Calendar.current.date(bySettingHour: Int(file.hours), minute: Int(file.minutes), second: 0, of: Date()) ?? Date()
-            },
+            get: { Calendar.current.date(bySettingHour: Int(alarm.hours), minute: Int(alarm.minutes), second: 0, of: Date()) ?? Date() },
             set: { date in
                 let components = Calendar.current.dateComponents([.hour, .minute], from: date)
-                editor.file?.hours = UInt8(components.hour ?? 7)
-                editor.file?.minutes = UInt8(components.minute ?? 0)
+                editor.file?[index]?.hours = UInt8(components.hour ?? 7)
+                editor.file?[index]?.minutes = UInt8(components.minute ?? 0)
             }
         )
     }
@@ -35,22 +32,28 @@ struct WatchAlarmView: View {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                 } else if let file = editor.file {
-                    Section {
-                        Toggle("Enable Alarm", isOn: Binding(
-                            get: { file.isEnabled },
-                            set: { enabled in withAnimation { editor.file?.isEnabled = enabled } }
-                        ))
-                    }
-                    if file.isEnabled {
-                        Section {
-                            DatePicker("Time", selection: time, displayedComponents: .hourAndMinute)
-                            Picker("Repeat", selection: Binding(
-                                get: { file.recurrence },
-                                set: { editor.file?.recurrence = $0 }
-                            )) {
-                                Text("Never").tag(WatchAlarmFile.Recurrence.none)
-                                Text("Every Day").tag(WatchAlarmFile.Recurrence.daily)
-                                Text("Weekdays").tag(WatchAlarmFile.Recurrence.weekdays)
+                    ForEach(0..<file.count, id: \.self) { index in // Ignore any alarms we can't read
+                        if let alarm = file[index] {
+                            Section {
+                                Toggle("Enable Alarm", isOn: Binding(
+                                    get: { alarm.isEnabled },
+                                    set: { enabled in withAnimation { editor.file?[index]?.isEnabled = enabled } }
+                                ))
+                                if alarm.isEnabled {
+                                    DatePicker("Time", selection: time(index, alarm), displayedComponents: .hourAndMinute)
+                                    Picker("Repeat", selection: Binding(
+                                        get: { alarm.recurrence },
+                                        set: { editor.file?[index]?.recurrence = $0 }
+                                    )) {
+                                        Text("Never").tag(WatchAlarmFile.Recurrence.none)
+                                        Text("Every Day").tag(WatchAlarmFile.Recurrence.daily)
+                                        Text("Weekdays").tag(WatchAlarmFile.Recurrence.weekdays)
+                                    }
+                                }
+                            } header: {
+                                if file.count > 1 {
+                                    Text("Alarm \(index + 1)")
+                                }
                             }
                         }
                     }
@@ -68,17 +71,7 @@ struct WatchAlarmView: View {
                         }
                         .disabled(!editor.hasChanges || editor.isSaving)
                     }
-                } else if editor.loadFailed {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("InfiniLink couldn't read the alarm from \(deviceManager.name).")
-                        if let detail = editor.failureDetail {
-                            Text(detail)
-                                .font(.footnote.monospaced())
-                                .foregroundStyle(.gray)
-                                .textSelection(.enabled)
-                        }
-                    }
-                } else {
+                } else if !editor.loadFailed {
                     ProgressView()
                         .frame(maxWidth: .infinity)
                 }

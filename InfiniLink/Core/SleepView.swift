@@ -293,7 +293,7 @@ struct SleepView: View {
                 }
                 .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
                 .listRowBackground(Color.clear)
-                if !sleepManager.hasRequiredMeasurements {
+                if !sleepManager.hasRequiredMeasurements && deviceManager.canRead("/settings.dat") {
                     Section {
                         Label("Sleep tracking needs \(deviceManager.name) to measure your heart rate in the background at least every 10 minutes.", systemImage: "heart.text.square.fill")
                         if let file = editor.file, !editor.usingDefaults {

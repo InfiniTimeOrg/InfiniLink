@@ -49,10 +49,12 @@ struct StepsView: View {
             }
         }
         .toolbar {
-            NavigationLink {
-                StepSettingsView()
-            } label: {
-                Label("Settings", systemImage: "gear")
+            if deviceManager.canRead("/settings.dat") {
+                NavigationLink {
+                    StepSettingsView()
+                } label: {
+                    Label("Settings", systemImage: "gear")
+                }
             }
         }
     }

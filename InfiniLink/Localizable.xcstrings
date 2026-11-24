@@ -305,12 +305,6 @@
     "%lld*" : {
 
     },
-    "%u" : {
-
-    },
-    "%u Seconds" : {
-
-    },
     "•" : {
 
     },
@@ -345,13 +339,7 @@
     "10 minutes" : {
 
     },
-    "12 Hour" : {
-
-    },
     "12-Hour" : {
-
-    },
-    "24 Hour" : {
 
     },
     "24-Hour" : {
@@ -400,6 +388,9 @@
 
     },
     "Alarm" : {
+
+    },
+    "Alarm %lld" : {
 
     },
     "All data from watches that are no longer paired, including their exercises, will be deleted from InfiniLink. Data saved to Apple Health isn't affected." : {
@@ -587,9 +578,6 @@
 
     },
     "Brightness" : {
-
-    },
-    "Brightness Level" : {
 
     },
     "Calories" : {
@@ -845,9 +833,6 @@
     "Display" : {
 
     },
-    "Display Timeout" : {
-
-    },
     "Distance" : {
 
     },
@@ -1031,6 +1016,9 @@
     "Flag" : {
 
     },
+    "Force .dat Read Failures" : {
+
+    },
     "Force ANCS" : {
 
     },
@@ -1127,9 +1115,6 @@
     "Half" : {
 
     },
-    "Half Hour" : {
-
-    },
     "Halfway There" : {
 
     },
@@ -1186,12 +1171,6 @@
 
     },
     "High" : {
-
-    },
-    "Hour" : {
-
-    },
-    "Hourly Chimes" : {
 
     },
     "Hours" : {
@@ -1255,18 +1234,6 @@
       }
     },
     "InfiniLink couldn't create the export. Please try again." : {
-
-    },
-    "InfiniLink couldn't read the alarm from %@." : {
-
-    },
-    "InfiniLink couldn't read the settings from %@." : {
-
-    },
-    "InfiniLink couldn't read the settings from %@. Watch face settings need InfiniTime 1.14 or later." : {
-
-    },
-    "InfiniLink couldn't read the settings from %@. Watch settings need InfiniTime 1.14 or later." : {
 
     },
     "InfiniLink is the official iOS companion app for InfiniTime. To submit a bug report or request a feature, open an issue on InfiniLink's GitHub repository, or send feedback in TestFlight.\n\nReceiving notifications on your InfiniTime device requires the Apple Notification Center Service, implemented in pull request #2217, linked below.\n\nMusic control from InfiniTime is available when using the Apple Music app, but system-wide media control will require the Apple Media Service to be implemented InfiniTime.\n\nFor more information on InfiniLink or InfiniTime, visit their GitHub repositories." : {
@@ -1486,9 +1453,6 @@
     "Metric" : {
 
     },
-    "Mid" : {
-
-    },
     "Min" : {
 
     },
@@ -1566,9 +1530,6 @@
 
     },
     "No sleep recorded last night" : {
-
-    },
-    "None" : {
 
     },
     "Not Authorized" : {
@@ -2049,9 +2010,6 @@
         }
       }
     },
-    "Steps Goal" : {
-
-    },
     "Steps Per Minute" : {
       "localizations" : {
         "fr" : {
@@ -2465,16 +2423,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Météo"
-          }
-        }
-      }
-    },
-    "Weather Format" : {
-      "localizations" : {
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Format météo"
           }
         }
       }

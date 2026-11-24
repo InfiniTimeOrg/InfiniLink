@@ -71,7 +71,7 @@ class MockWatch: ObservableObject {
             deviceManager.updateInfo(characteristic: characteristic(uuid, value: Data(value.utf8)))
         }
         deviceManager.updateInfo(characteristic: characteristic(BLEUUID.blefsVersion, value: Data([1, 0])))
-        deviceManager.readSettingsIfNeeded()
+        deviceManager.readWatchFiles()
 
         send(BLEUUID.bat, [UInt8(batteryLevel)])
         sendChargeState()
