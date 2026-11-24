@@ -25,6 +25,9 @@
     "–" : {
 
     },
+    "\"%@\" isn't a firmware update or external resources." : {
+
+    },
     "[BATT] " : {
 
     },
@@ -186,6 +189,9 @@
     "%@!" : {
 
     },
+    "%@..." : {
+
+    },
     "%@... " : {
 
     },
@@ -246,6 +252,9 @@
 
     },
     "%lld in" : {
+
+    },
+    "%lld KB" : {
 
     },
     "%lld more device%@ found" : {
@@ -616,6 +625,9 @@
     "Chimes" : {
 
     },
+    "Choose a firmware update or external resources. External resources are fonts and images that are required for some apps and watch faces." : {
+
+    },
     "Choose how the point mark on the heart rate chart is calculated." : {
 
     },
@@ -680,6 +692,9 @@
 
     },
     "Couldn't Open Backup" : {
+
+    },
+    "Couldn't Open File" : {
 
     },
     "Couldn't Save Alarm" : {
@@ -927,9 +942,6 @@
     "Export Route" : {
 
     },
-    "External Resources" : {
-
-    },
     "External resources are fonts and images not included in the firmware required to use some apps and watch faces." : {
       "localizations" : {
         "fr" : {
@@ -939,9 +951,6 @@
           }
         }
       }
-    },
-    "External resources are fonts and images that are required for some apps and watch faces." : {
-
     },
     "Fair" : {
 
@@ -964,6 +973,16 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Femme"
+          }
+        }
+      }
+    },
+    "File %lld of %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "File %1$lld of %2$lld"
           }
         }
       }
@@ -1007,9 +1026,6 @@
 
     },
     "Firmware packets sent between the watch's flow-control acks. Low values result in slower updates, and high values result in faster updates, but send big bursts that can drop the update." : {
-
-    },
-    "Firmware Update" : {
 
     },
     "Flag" : {
@@ -1210,9 +1226,6 @@
         }
       }
     },
-    "Import Zip File" : {
-
-    },
     "Inactivity Reminder" : {
 
     },
@@ -1299,6 +1312,9 @@
       }
     },
     "InfiniTime on GitHub" : {
+
+    },
+    "Install future updates automatically while %@ charges overnight? You can change this in Software Update settings." : {
 
     },
     "Install updates once %@ has been on its charger for an hour at a time you're usually asleep, based on your recent sleep tracking or your sleep schedule." : {
@@ -1562,6 +1578,9 @@
 
     },
     "Not enough heart rate data yet. Resting heart rate is estimated from readings taken while you're still during the day." : {
+
+    },
+    "Not Now" : {
 
     },
     "Not Playing" : {
@@ -2168,6 +2187,12 @@
     "This file is not currently supported." : {
 
     },
+    "This file isn't a firmware update or external resources." : {
+
+    },
+    "This file isn't a firmware update." : {
+
+    },
     "This file isn't an InfiniLink watch backup." : {
 
     },
@@ -2242,6 +2267,9 @@
     "Turn off any data you don't want written to Apple Health." : {
 
     },
+    "Turn On" : {
+
+    },
     "Turn on Bluetooth to connect to your watch." : {
 
     },
@@ -2311,7 +2339,13 @@
     "Update Resources" : {
 
     },
+    "Updating InfiniTime" : {
+
+    },
     "Updating resources" : {
+
+    },
+    "Updating Resources" : {
 
     },
     "Updating..." : {
@@ -2325,6 +2359,16 @@
     },
     "Uploading" : {
 
+    },
+    "Uploading file %lld of %lld..." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Uploading file %1$lld of %2$lld..."
+          }
+        }
+      }
     },
     "Use Current Location" : {
 
@@ -2439,9 +2483,6 @@
 
     },
     "Weight" : {
-
-    },
-    "What would you like to use \"%@\" for?" : {
 
     },
     "Woke Up" : {

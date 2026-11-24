@@ -72,8 +72,6 @@ struct CurrentUpdateView: View {
                             .foregroundStyle(.white)
                             .clipShape(Capsule())
                     }
-                    .disabled(dfuUpdater.stage == .uploadingResources)
-                    .opacity(dfuUpdater.stage == .uploadingResources ? 0.5 : 1)
                 }
             }
             .frame(maxHeight: .infinity)

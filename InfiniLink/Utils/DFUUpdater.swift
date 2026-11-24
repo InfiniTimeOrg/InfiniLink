@@ -29,6 +29,7 @@ class DFUUpdater: ObservableObject {
 
     @Published private(set) var stage: Stage = .idle
     @Published var statusDetail = ""
+    @Published var resourceFile: (index: Int, count: Int)?
     @Published var percentComplete: Double = 0
 
     @Published var firmwareFilename = ""
@@ -48,7 +49,8 @@ class DFUUpdater: ObservableObject {
         case .downloading:
             return NSLocalizedString("Downloading", comment: "")
         case .uploadingResources:
-            return statusDetail.isEmpty ? NSLocalizedString("Updating resources", comment: "") : statusDetail
+            guard let resourceFile else { return NSLocalizedString("Updating resources", comment: "") }
+            return String(localized: "File \(resourceFile.index) of \(resourceFile.count)")
         case .installing:
             return statusDetail.isEmpty ? NSLocalizedString("Installing", comment: "") : statusDetail
         case .failed:
@@ -97,6 +99,9 @@ class DFUUpdater: ObservableObject {
 
     func cancel() {
         downloadManager.cancelActiveDownload()
+        if stage == .uploadingResources {
+            BLEFSHandler.shared.cancelResourceUpload()
+        }
         transfer?.cancel()
         finish(.cancelled)
     }
@@ -115,7 +120,7 @@ class DFUUpdater: ObservableObject {
 
     private func uploadResources(from url: URL, then next: @escaping () -> Void) {
         stage = .uploadingResources
-        statusDetail = ""
+        resourceFile = nil
         BLEFSHandler.shared.uploadExternalResources(from: url, completion: next)
     }
 
@@ -246,6 +251,7 @@ class DFUUpdater: ObservableObject {
         }
 
         statusDetail = ""
+        resourceFile = nil
         percentComplete = 0
         bleManager.endFirmwareUpdate(installed: outcome == .completed)
         AutoUpdateManager.shared.updateFinished(installed: outcome == .completed)
@@ -258,6 +264,7 @@ class DFUUpdater: ObservableObject {
             resourceFilename = ""
             resourceURL = nil
             downloadManager.updateAvailable = false
+            downloadManager.externalResources = false
             downloadManager.updateStarted = false
             stage = .idle
         case .cancelled:

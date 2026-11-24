@@ -87,17 +87,22 @@ class BLEFSHandler: ObservableObject {
     private let responseLock = NSLock()
     private let responseSignal = DispatchSemaphore(value: 0)
     private var responses: [[UInt8]] = []
-    // The watch handles one request at a time
-    private let requestLock = NSLock()
+    private let requestLock = NSLock() // Handle one request at a time
     
-    // Directory listings for the file browser, so going back into a folder doesn't list it over BLE again.
     // Writes, deletes and new folders made through this handler clear the listings they affect
     private var listingCache: [String: [Dir]] = [:]
     private let listingCacheLock = NSLock()
-    
+
+    private var isResourceUploadCancelled = false
+
+    func cancelResourceUpload() {
+        isResourceUploadCancelled = true
+    }
+
     func uploadExternalResources(from url: URL, completion: @escaping() -> Void) {
         log("External resource upload requested", type: .info, caller: "BLEFSHandler", target: .ble)
-        
+        isResourceUploadCancelled = false
+
         DispatchQueue.global(qos: .default).async { [self] in
             do {
                 let isAccessing = url.startAccessingSecurityScopedResource()
@@ -108,22 +113,32 @@ class BLEFSHandler: ObservableObject {
                 let resources = try JSONDecoder().decode(ResourcesJSON.self, from: jsonData).resources
                 
                 for (index, resource) in resources.enumerated() {
+                    guard !isResourceUploadCancelled else { return }
+
                     createDir(path: resource.path)
                     let fileData = try Data(contentsOf: unzipDirectory.appendingPathComponent(resource.filename))
-                    
+
                     DispatchQueue.main.async {
-                        self.dfuUpdater.statusDetail = "Uploading file \(index + 1) of \(resources.count)"
+                        self.dfuUpdater.resourceFile = (index + 1, resources.count)
                     }
-                    
-                    guard writeFile(data: fileData, path: resource.path) else {
-                        DispatchQueue.main.async { self.dfuUpdater.reportResourceUploadFailure() }
+
+                    let written = writeFile(data: fileData, path: resource.path, isCancelled: { self.isResourceUploadCancelled }) { sent in
+                        let fraction = (Double(index) + Double(sent) / Double(max(fileData.count, 1))) / Double(resources.count)
+                        DispatchQueue.main.async { self.dfuUpdater.percentComplete = fraction * 100 }
+                    }
+                    guard written else {
+                        if isResourceUploadCancelled {
+                            // Files that finished stay, only the partial one is removed
+                            _ = deleteFile(path: resource.path)
+                        } else {
+                            DispatchQueue.main.async { self.dfuUpdater.reportResourceUploadFailure() }
+                        }
                         return
                     }
                 }
-                
+
                 DispatchQueue.main.async {
-                    self.dfuUpdater.statusDetail = "Completing uploads"
-                    
+                    guard !self.isResourceUploadCancelled else { return }
                     completion()
                 }
             } catch {
@@ -238,7 +253,7 @@ class BLEFSHandler: ObservableObject {
         }
     }
 
-    func writeFile(data: Data, path: String) -> Bool {
+    func writeFile(data: Data, path: String, isCancelled: () -> Bool = { false }, progress: ((Int) -> Void)? = nil) -> Bool {
         log("Write file called", type: .info, caller: "BLEFSHandler", target: .ble)
         
         let written: Bool = requestLock.withLock {
@@ -254,6 +269,8 @@ class BLEFSHandler: ObservableObject {
             
             var sent = 0
             while sent < data.count {
+                guard !isCancelled() else { return false }
+
                 let end = min(sent + writeChunkSize, data.count)
                 
                 packet = Data([Commands.writeData.rawValue, Responses.ok.rawValue, Commands.padding.rawValue, Commands.padding.rawValue])
@@ -266,6 +283,7 @@ class BLEFSHandler: ObservableObject {
                 
                 sent = end
                 DispatchQueue.main.async { self.progress = end }
+                progress?(end)
             }
             
             return true

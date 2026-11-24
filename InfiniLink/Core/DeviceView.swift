@@ -25,7 +25,6 @@ struct DeviceView: View {
     
     @State private var showMyDevicesSheet = false
     @State private var showNavigationTitle = false
-    @State private var showCancelUpdateConfirmation = false
 
     // Used as the sidebar on iPad
     var isSidebar = false
@@ -103,7 +102,7 @@ struct DeviceView: View {
                         }
                     } else if bleManager.isDeviceInRecoveryMode {
                         if downloadManager.updateStarted || bleManager.isReconnectingAfterUpdate {
-                            recoveryUpdateRow
+                            UpdateProgressRow()
                         } else {
                             NavigationLink {
                                 column(SoftwareUpdateView())
@@ -116,6 +115,8 @@ struct DeviceView: View {
                                 }
                             }
                         }
+                    } else if downloadManager.updateStarted && downloadManager.externalResources {
+                        UpdateProgressRow()
                     } else if transfer.task != nil || transfer.backupURL != nil || transfer.restoreResult != nil || transfer.showBackupError {
                         NavigationLink {
                             column(FileSystemView())
@@ -279,15 +280,17 @@ struct DeviceView: View {
         .sheet(isPresented: $showMyDevicesSheet) {
             MyDevicesView()
         }
-        .alert("Are you sure you want to stop this update?", isPresented: $showCancelUpdateConfirmation) {
-            Button("Stop Update", role: .destructive) {
-                dfuUpdater.cancel()
-            }
-            Button("Cancel", role: .cancel) { }
-        }
     }
-    
-    var recoveryUpdateRow: some View {
+}
+
+struct UpdateProgressRow: View {
+    @ObservedObject var bleManager = BLEManager.shared
+    @ObservedObject var deviceManager = DeviceManager.shared
+    @ObservedObject var dfuUpdater = DFUUpdater.shared
+
+    @State private var showCancelUpdateConfirmation = false
+
+    var body: some View {
         HStack(spacing: 14) {
             Image(.infiniTime)
                 .resizable()
@@ -305,13 +308,23 @@ struct DeviceView: View {
                     Text("\(deviceManager.name) is installing the update.")
                         .foregroundStyle(.gray)
                 } else {
-                    HStack(spacing: 0) {
-                        Text("\(dfuUpdater.statusText)... ")
-                        if dfuUpdater.percentComplete != 0 {
-                            Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(dfuUpdater.stage == .uploadingResources ? "Updating Resources" : "Updating InfiniTime")
+                            .fontWeight(.semibold)
+                        HStack(spacing: 0) {
+                            Text(dfuUpdater.statusText)
+                            if dfuUpdater.percentComplete != 0 {
+                                HStack(spacing: 0) {
+                                    Text(" • ")
+                                    Text(dfuUpdater.percentComplete / 100, format: .percent.precision(.fractionLength(0)))
+                                }
+                                .fixedSize()
+                            }
                         }
+                        .font(.subheadline)
+                        .foregroundStyle(.gray)
+                        .lineLimit(1)
                     }
-                    .fontWeight(.semibold)
                     ProgressView(value: dfuUpdater.percentComplete, total: 100)
                 }
             }
@@ -329,6 +342,12 @@ struct DeviceView: View {
             }
         }
         .buttonStyle(.borderless)
+        .alert("Are you sure you want to stop this update?", isPresented: $showCancelUpdateConfirmation) {
+            Button("Stop Update", role: .destructive) {
+                dfuUpdater.cancel()
+            }
+            Button("Cancel", role: .cancel) { }
+        }
     }
 }
 

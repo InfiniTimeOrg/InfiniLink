@@ -9,6 +9,7 @@
 
 import Foundation
 import SwiftUI
+import Zip
 
 class DownloadManager: NSObject, ObservableObject {
     static let shared = DownloadManager()
@@ -140,6 +141,27 @@ class DownloadManager: NSObject, ObservableObject {
         updateBody = NSLocalizedString("External resources are fonts and images not included in the firmware required to use some apps and watch faces.", comment: "")
         updateSize = dfuUpdater.fileSize(from: url)
         externalResources = true
+    }
+    
+    func selectLocalFile(_ url: URL) -> Bool {
+        let isAccessing = url.startAccessingSecurityScopedResource()
+        defer { if isAccessing { url.stopAccessingSecurityScopedResource() } }
+        
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        guard (try? Zip.unzipFile(url, destination: directory, overwrite: true, password: nil)) != nil else { return false }
+        
+        if FileManager.default.fileExists(atPath: directory.appendingPathComponent("resources.json").path) { // external resources zip
+            guard !BLEManager.shared.isDeviceInRecoveryMode else { return false }
+            selectLocalResources(url)
+            return true
+        }
+        if let data = try? Data(contentsOf: directory.appendingPathComponent("manifest.json")),
+           let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any], json["manifest"] != nil { // dfu zip
+            selectLocalFirmware(url)
+            return true
+        }
+        return false
     }
     
     func getUpdates() {

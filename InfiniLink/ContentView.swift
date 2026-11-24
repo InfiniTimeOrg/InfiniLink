@@ -44,9 +44,9 @@ struct ContentView: View {
         .alert(isPresented: $bleManager.showError) {
             Alert(title: Text("Error"), message: Text(bleManager.error), dismissButton: .default(Text("OK")))
         }
-        // Recovery mode shows the update inline on DeviceView
+        // Recovery mode and external resources show the update inline on DeviceView
         .fullScreenCover(isPresented: Binding(
-            get: { downloadManager.updateStarted && !bleManager.isDeviceInRecoveryMode },
+            get: { downloadManager.updateStarted && !bleManager.isDeviceInRecoveryMode && !downloadManager.externalResources },
             set: { downloadManager.updateStarted = $0 }
         )) {
             CurrentUpdateView()
@@ -65,29 +65,17 @@ struct ContentView: View {
         .onOpenURL { url in
             importManager.handleIncomingFile(url)
         }
-        .alert(
-            "Import Zip File",
-            isPresented: Binding(
-                get: { importManager.pendingZip != nil },
-                set: { if !$0 { importManager.cancelImport() } }
-            ),
-            presenting: importManager.pendingZip
-        ) { zip in
-            Button("Firmware Update") {
-                importManager.chooseFirmware(zip)
-            }
-            Button("External Resources") {
-                importManager.chooseExternalResources(zip)
-            }
-            Button("Cancel", role: .cancel) {
-                importManager.cancelImport()
-            }
-        } message: { zip in
-            Text("What would you like to use \"\(zip.filename)\" for?")
+        .alert("Couldn't Open File", isPresented: Binding(
+            get: { importManager.importError != nil },
+            set: { if !$0 { importManager.importError = nil } }
+        )) {
+            Button("OK", role: .cancel) { }
+        } message: {
+            Text(importManager.importError ?? "")
         }
         .sheet(isPresented: $importManager.showUpdateFlow) {
             NavigationStack {
-                SoftwareUpdateView()
+                SoftwareUpdateView(isImport: true)
                     .toolbar {
                         ToolbarItem(placement: .cancellationAction) {
                             Button("Close") {
@@ -98,7 +86,7 @@ struct ContentView: View {
             }
         }
         .onChange(of: downloadManager.updateStarted) { started in
-            if started { // Dismiss after the install starts
+            if started && !downloadManager.externalResources { // Dismiss after the install starts
                 importManager.showUpdateFlow = false
                 if bleManager.isDeviceInRecoveryMode { // Pop to root to show the inline progress
                     navigationID = UUID()

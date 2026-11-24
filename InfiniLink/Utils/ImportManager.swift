@@ -8,27 +8,14 @@
 import Foundation
 import SwiftUI
 
-// Handles zip files handed to InfiniLink from the system share sheet ("Copy to InfiniLink")
-// or the Files app. The user is asked whether the zip is firmware or external resources,
-// then it's fed into the same local-file update path as "Other Versions".
 class ImportManager: ObservableObject {
     static let shared = ImportManager()
 
-    struct PendingZip: Identifiable {
-        let id = UUID()
-        let url: URL
-
-        var filename: String { url.lastPathComponent }
-    }
-
-    // Non-nil while we're asking the user what the shared zip is for
-    @Published var pendingZip: PendingZip?
-    // Drives the Software Update sheet once the user has made a choice
+    @Published var importError: String?
     @Published var showUpdateFlow = false
 
     private let downloadManager = DownloadManager.shared
 
-    // Called from `.onOpenURL` when a file is opened into the app
     func handleIncomingFile(_ url: URL) {
         guard url.pathExtension.lowercased() == "zip" else {
             log("Ignoring shared file that isn't a zip: \(url.lastPathComponent)", caller: "ImportManager")
@@ -55,37 +42,20 @@ class ImportManager: ObservableObject {
             let destination = documentsURL.appendingPathComponent("shared-\(url.lastPathComponent)")
             try FileManager.default.copyItem(at: url, to: destination)
 
-            // iOS drops share-sheet copies in Documents/Inbox; we've made our own copy now
             if url.pathComponents.contains("Inbox") {
                 try? FileManager.default.removeItem(at: url)
             }
 
             DispatchQueue.main.async {
-                self.pendingZip = PendingZip(url: destination)
+                if self.downloadManager.selectLocalFile(destination) {
+                    self.showUpdateFlow = true
+                } else {
+                    try? FileManager.default.removeItem(at: destination)
+                    self.importError = String(localized: "\"\(url.lastPathComponent)\" isn't a firmware update or external resources.")
+                }
             }
         } catch {
             log("Couldn't import shared zip: \(error.localizedDescription)", caller: "ImportManager")
         }
-    }
-
-    func chooseFirmware(_ zip: PendingZip) {
-        downloadManager.selectLocalFirmware(zip.url)
-
-        pendingZip = nil
-        showUpdateFlow = true
-    }
-
-    func chooseExternalResources(_ zip: PendingZip) {
-        downloadManager.selectLocalResources(zip.url)
-
-        pendingZip = nil
-        showUpdateFlow = true
-    }
-
-    func cancelImport() {
-        if let zip = pendingZip {
-            try? FileManager.default.removeItem(at: zip.url)
-        }
-        pendingZip = nil
     }
 }
