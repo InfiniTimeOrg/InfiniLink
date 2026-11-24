@@ -86,7 +86,11 @@ class WeatherController: ObservableObject {
         let guardInterval: TimeInterval = 120 // 2 mins
         
         // Make sure the weather has not been fetched in the past 2 minutes
-        guard !checkTimeInterval || abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? guardInterval) >= guardInterval else { return }
+        guard !checkTimeInterval || abs(lastTimeWeatherFetched?.timeIntervalSinceNow ?? guardInterval) >= guardInterval else {
+            // Still send the recent forecast, e.g. to a watch that just connected
+            writeForecastToDevice()
+            return
+        }
         
         let currentLocation = CLLocation(latitude: latitude, longitude: longitude)
         lastFetchAttempt = Date()
