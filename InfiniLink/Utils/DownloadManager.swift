@@ -212,9 +212,6 @@ class DownloadManager: NSObject, ObservableObject {
         if let etag = UserDefaults.standard.string(forKey: etagKey), FileManager.default.fileExists(atPath: cacheURL.path) {
             request.setValue(etag, forHTTPHeaderField: "If-None-Match")
         }
-        if let token = GitHubBuilds.shared.token {
-            request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-        }
         
         URLSession.shared.dataTask(with: request) { data, response, error in
             let http = response as? HTTPURLResponse

@@ -17,7 +17,6 @@ struct GitHubBuildsView: View {
     @State private var downloadingPullRequest: GitHubPullRequest?
     @State private var searchText = ""
     @State private var error: String?
-    @State private var signInExpired = false
 
     let onSelect: () -> Void
 
@@ -27,7 +26,6 @@ struct GitHubBuildsView: View {
         } catch {
             if !(error is CancellationError) && !Task.isCancelled {
                 self.error = error.localizedDescription
-                signInExpired = (error as? GitHubError)?.signInExpired == true
             }
         }
     }
@@ -44,26 +42,7 @@ struct GitHubBuildsView: View {
     }
 
     var body: some View {
-        Group {
-            if gitHub.isSignedIn {
-                pullRequestList
-            } else {
-                List {
-                    Section {
-                        Button("Sign in with GitHub") {
-                            Task {
-                                await perform {
-                                    try await gitHub.signIn()
-                                    try await gitHub.loadPullRequests()
-                                }
-                            }
-                        }
-                    } footer: {
-                        Text("GitHub requires an account to download builds from InfiniTime's automated tests. InfiniLink can only read InfiniTime's builds.")
-                    }
-                }
-            }
-        }
+        pullRequestList
         .navigationTitle("Development Builds")
         .alert("Install Development Build?", isPresented: Binding(get: { pendingPullRequest != nil }, set: { if !$0 { pendingPullRequest = nil } }), presenting: pendingPullRequest) { pullRequest in
             Button("Download") {
@@ -77,14 +56,17 @@ struct GitHubBuildsView: View {
             get: { error != nil },
             set: { if !$0 { error = nil } }
         )) {
-            Button("OK", role: .cancel) {
-                if signInExpired {
-                    gitHub.signOut()
-                }
-            }
+            Button("OK", role: .cancel) {}
         } message: {
             Text(error ?? "")
         }
+    }
+
+    var filteredPullRequests: [GitHubPullRequest] {
+        let search = searchText.trimmingCharacters(in: .whitespaces).replacingOccurrences(of: "#", with: "")
+        guard !search.isEmpty else { return gitHub.pullRequests }
+
+        return gitHub.pullRequests.filter { String($0.number).hasPrefix(search) || $0.title.localizedCaseInsensitiveContains(search) || $0.author.localizedCaseInsensitiveContains(search) }
     }
 
     var pullRequestList: some View {
@@ -93,11 +75,11 @@ struct GitHubBuildsView: View {
                 if gitHub.isLoading && gitHub.pullRequests.isEmpty {
                     ProgressView()
                         .frame(maxWidth: .infinity)
-                } else if gitHub.pullRequests.isEmpty && !gitHub.isLoading {
+                } else if filteredPullRequests.isEmpty && !gitHub.isLoading {
                     (searchText.isEmpty ? Text("There aren't any pull requests with builds.") : Text("No pull requests match your search."))
                         .foregroundStyle(.gray)
                 }
-                ForEach(gitHub.pullRequests) { pullRequest in
+                ForEach(filteredPullRequests) { pullRequest in
                     Button {
                         pendingPullRequest = pullRequest
                     } label: {
@@ -128,22 +110,13 @@ struct GitHubBuildsView: View {
             } footer: {
                 Text("Open pull requests to InfiniTime with a successful build. Builds expire after 90 days and may be unstable.")
             }
-            Section {
-                Button("Sign Out of GitHub", role: .destructive) {
-                    gitHub.signOut()
-                }
-            }
         }
         .searchable(text: $searchText, prompt: Text("Search pull requests"))
         .refreshable {
-            await perform { try await gitHub.loadPullRequests(search: searchText) }
+            await perform { try await gitHub.loadPullRequests() }
         }
-        .task(id: searchText) {
-            if !searchText.isEmpty {
-                try? await Task.sleep(nanoseconds: 400_000_000)
-                if Task.isCancelled { return }
-            }
-            await perform { try await gitHub.loadPullRequests(search: searchText) }
+        .task {
+            await perform { try await gitHub.loadPullRequests() }
         }
     }
 }

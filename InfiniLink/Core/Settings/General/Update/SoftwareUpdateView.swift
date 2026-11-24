@@ -32,8 +32,8 @@ struct SoftwareUpdateView: View {
                                     .foregroundStyle(Color.primary)
                                 Spacer()
                                 Image(systemName: "chevron.right")
-                                    .font(.footnote.weight(.semibold))
-                                    .foregroundStyle(.tertiary)
+                                    .font(.footnote.weight(.bold))
+                                    .foregroundStyle(Color.secondary.opacity(0.65))
                             }
                         }
                     }

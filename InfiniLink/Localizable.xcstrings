@@ -1103,19 +1103,7 @@
     "Get notified when you reach your step goal, keep a streak going, or take more steps than ever before." : {
 
     },
-    "GitHub couldn't complete sign in. Please try again." : {
-
-    },
-    "GitHub couldn't load pull requests." : {
-
-    },
-    "GitHub didn't return a download for this build." : {
-
-    },
     "GitHub is limiting requests right now. Please try again later." : {
-
-    },
-    "GitHub requires an account to download builds from InfiniTime's automated tests. InfiniLink can only read InfiniTime's builds." : {
 
     },
     "GitHub returned an error (%d): %@" : {
@@ -1968,15 +1956,6 @@
     "Show your watch's charge on the Lock Screen while it's charging." : {
 
     },
-    "Sign in to GitHub to download builds." : {
-
-    },
-    "Sign in with GitHub" : {
-
-    },
-    "Sign Out of GitHub" : {
-
-    },
     "Signal" : {
 
     },
@@ -2670,9 +2649,6 @@
 
     },
     "Your %@ workout is still going. Open InfiniLink to end it if you're done." : {
-
-    },
-    "Your GitHub sign in expired. Please sign in again." : {
 
     },
     "Your heart rate fell below %lld BPM" : {
