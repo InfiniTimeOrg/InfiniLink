@@ -24,7 +24,7 @@ struct ChargingStatusText: View {
         if state.isFull {
             return Text("Charged")
         } else if let fullAt = state.fullAt, fullAt > Date() {
-            return Text("Full at \(fullAt, style: .time)")
+            return Text("Full at \(fullAt.formatted(.dateTime.hour().minute()))")
         } else {
             return Text("Charging")
         }

@@ -232,7 +232,7 @@ struct SleepView: View {
         guard let start = lastNight.first?.start, let end = lastNight.last?.end else {
             return NSLocalizedString("No sleep recorded last night", comment: "")
         }
-        return "\(start.formatted(date: .omitted, time: .shortened)) – \(end.formatted(date: .omitted, time: .shortened))"
+        return "\(start.formatted(.dateTime.hour().minute())) – \(end.formatted(.dateTime.hour().minute()))"
     }
 
     private var lastNightSummary: String? {
