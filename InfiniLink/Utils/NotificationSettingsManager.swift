@@ -90,6 +90,27 @@ struct BatterySettings: Codable {
     var customNotificationEnabled = false
     var customNotificationPercentage = 50.0
     var customNotificationSettings = NotifySettings()
+    
+    var unplugNotificationEnabled = false
+    var chargeReminderEnabled = true
+    var chargingLiveActivityEnabled = true
+    
+    init() {}
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        func value<T: Decodable>(_ key: CodingKeys, _ fallback: T) -> T {
+            (try? container.decode(T.self, forKey: key)) ?? fallback
+        }
+        lowBattery = value(.lowBattery, lowBattery)
+        fullBattery = value(.fullBattery, fullBattery)
+        customNotificationEnabled = value(.customNotificationEnabled, customNotificationEnabled)
+        customNotificationPercentage = value(.customNotificationPercentage, customNotificationPercentage)
+        customNotificationSettings = value(.customNotificationSettings, customNotificationSettings)
+        unplugNotificationEnabled = value(.unplugNotificationEnabled, unplugNotificationEnabled)
+        chargeReminderEnabled = value(.chargeReminderEnabled, chargeReminderEnabled)
+        chargingLiveActivityEnabled = value(.chargingLiveActivityEnabled, chargingLiveActivityEnabled)
+    }
 }
 
 struct BatteryNotificationSettings: Codable {

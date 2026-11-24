@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E0C0DE00000000000000D002 /* SoftwareUpdateSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000D001 /* SoftwareUpdateSettingsView.swift */; };
+		E0C0DE00000000000000C002 /* ChargingShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C001 /* ChargingShared.swift */; };
+		E0C0DE00000000000000C003 /* ChargingShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C001 /* ChargingShared.swift */; };
+		E0C0DE00000000000000C005 /* ChargingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C004 /* ChargingManager.swift */; };
+		E0C0DE00000000000000C007 /* AutoUpdateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C006 /* AutoUpdateManager.swift */; };
+		E0C0DE00000000000000C009 /* ChargingLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C0DE00000000000000C008 /* ChargingLiveActivity.swift */; };
 		009D471D8A6DF109A3C6B9BD /* DirectionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 304C0A743F00AF1921B28A07 /* DirectionsView.swift */; };
 		0D0A58D9E89935A7878AB233 /* DataRetention.swift in Sources */ = {isa = PBXBuildFile; fileRef = C90EF4CFB93C89807B8CECD9 /* DataRetention.swift */; };
 		1340C962EE272ECE524A057F /* StoredDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 564C1FBB48D66AC14760F520 /* StoredDataView.swift */; };
@@ -144,7 +150,7 @@
 		E0C9D9103051A7740070B1A1 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E0C9D90F3051A7740070B1A1 /* SwiftUI.framework */; };
 		E0C9D91D3051A7740070B1A1 /* WorkoutWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = E0C9D90C3051A7730070B1A1 /* WorkoutWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		E0C9D9823052EF4B0070B1A1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0C9D97C3052EF4B0070B1A1 /* Assets.xcassets */; };
-		E0C9D9843052EF4B0070B1A1 /* WorkoutWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C9D97E3052EF4B0070B1A1 /* WorkoutWidgetBundle.swift */; };
+		E0C9D9843052EF4B0070B1A1 /* InfiniLinkWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C9D97E3052EF4B0070B1A1 /* InfiniLinkWidgetBundle.swift */; };
 		E0C9D9853052EF4B0070B1A1 /* WorkoutWidgetLiveActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C9D9803052EF4B0070B1A1 /* WorkoutWidgetLiveActivity.swift */; };
 		E0DB931C2DEA54DB00BE9413 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = E0DB931B2DEA54DB00BE9413 /* README.md */; };
 		E0ED760E2CB5C8B500BC7E44 /* NotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0ED760D2CB5C8B500BC7E44 /* NotificationManager.swift */; };
@@ -195,6 +201,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		E0C0DE00000000000000D001 /* SoftwareUpdateSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftwareUpdateSettingsView.swift; sourceTree = "<group>"; };
+		E0C0DE00000000000000C001 /* ChargingShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingShared.swift; sourceTree = "<group>"; };
+		E0C0DE00000000000000C004 /* ChargingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingManager.swift; sourceTree = "<group>"; };
+		E0C0DE00000000000000C006 /* AutoUpdateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoUpdateManager.swift; sourceTree = "<group>"; };
+		E0C0DE00000000000000C008 /* ChargingLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChargingLiveActivity.swift; sourceTree = "<group>"; };
 		0E2639060097BBFC1CC1D73F /* HealthTrends.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = HealthTrends.swift; sourceTree = "<group>"; };
 		1AFC0382BEC8406837173344 /* SleepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = SleepView.swift; sourceTree = "<group>"; };
 		264BFE3E26BC51CE0050A223 /* InfiniLink.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InfiniLink.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -339,7 +350,7 @@
 		E0C9D90F3051A7740070B1A1 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		E0C9D97C3052EF4B0070B1A1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E0C9D97D3052EF4B0070B1A1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E0C9D97E3052EF4B0070B1A1 /* WorkoutWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutWidgetBundle.swift; sourceTree = "<group>"; };
+		E0C9D97E3052EF4B0070B1A1 /* InfiniLinkWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniLinkWidgetBundle.swift; sourceTree = "<group>"; };
 		E0C9D97F3052EF4B0070B1A1 /* WorkoutWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = WorkoutWidgetExtension.entitlements; sourceTree = "<group>"; };
 		E0C9D9803052EF4B0070B1A1 /* WorkoutWidgetLiveActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkoutWidgetLiveActivity.swift; sourceTree = "<group>"; };
 		E0DB931B2DEA54DB00BE9413 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = SOURCE_ROOT; };
@@ -580,6 +591,7 @@
 				E05D2E742D7EA95B004A6CE0 /* ChartType.swift */,
 				E00A86302DEBF3C1001533E1 /* RSSI.swift */,
 				E0C0DE00000000000000A007 /* WorkoutShared.swift */,
+				E0C0DE00000000000000C001 /* ChargingShared.swift */,
 				A015B3F1C7F138C5E5C9DACA /* WatchFaceCatalog.swift */,
 			);
 			path = Model;
@@ -600,6 +612,7 @@
 				75048446307FA1220082E487 /* GoalsNotificationsView.swift */,
 				DD08CDEF696462C6EA84DBD2 /* WatchSettingsEditor.swift */,
 				AF55D05523CC229A1C615270 /* StepSettingsView.swift */,
+				E0C0DE00000000000000D001 /* SoftwareUpdateSettingsView.swift */,
 				5A1E3C7F9B2D4E6A8C0F1B3E /* SleepSettingsView.swift */,
 			);
 			path = Settings;
@@ -613,6 +626,8 @@
 				E0A7C0902CB1EE8F0042A12D /* DownloadManager.swift */,
 				E0C0DE00000000000000B001 /* ImportManager.swift */,
 				E0C0DE00000000000000B003 /* BatteryStats.swift */,
+				E0C0DE00000000000000C004 /* ChargingManager.swift */,
+				E0C0DE00000000000000C006 /* AutoUpdateManager.swift */,
 				E0C0DE00000000000000B009 /* MotionController.swift */,
 				E05999FF2CB46EB100D64E0B /* StepCountManager.swift */,
 				E0A7C07C2CB1AD370042A12D /* MusicController.swift */,
@@ -767,9 +782,10 @@
 			children = (
 				E0C9D97C3052EF4B0070B1A1 /* Assets.xcassets */,
 				E0C9D97D3052EF4B0070B1A1 /* Info.plist */,
-				E0C9D97E3052EF4B0070B1A1 /* WorkoutWidgetBundle.swift */,
+				E0C9D97E3052EF4B0070B1A1 /* InfiniLinkWidgetBundle.swift */,
 				E0C9D97F3052EF4B0070B1A1 /* WorkoutWidgetExtension.entitlements */,
 				E0C9D9803052EF4B0070B1A1 /* WorkoutWidgetLiveActivity.swift */,
+				E0C0DE00000000000000C008 /* ChargingLiveActivity.swift */,
 			);
 			path = WorkoutWidget;
 			sourceTree = "<group>";
@@ -1015,6 +1031,9 @@
 				E0A7C0932CB1EE8F0042A12D /* DownloadManager.swift in Sources */,
 				E0C0DE00000000000000B002 /* ImportManager.swift in Sources */,
 				E0C0DE00000000000000B004 /* BatteryStats.swift in Sources */,
+				E0C0DE00000000000000C002 /* ChargingShared.swift in Sources */,
+				E0C0DE00000000000000C005 /* ChargingManager.swift in Sources */,
+				E0C0DE00000000000000C007 /* AutoUpdateManager.swift in Sources */,
 				E0C0DE00000000000000B006 /* BatteryStatsSectionView.swift in Sources */,
 				E0C0DE00000000000000B00A /* MotionController.swift in Sources */,
 				E02F66992DCD0B9D0050243E /* AllExercisesView.swift in Sources */,
@@ -1087,6 +1106,7 @@
 				53917E8707F202244D35066E /* WatchAlarmView.swift in Sources */,
 				9578D6AE6A4F9948164C9AAF /* StartExerciseView.swift in Sources */,
 				E26C0921DC4E9AE1D40D31A2 /* StepSettingsView.swift in Sources */,
+				E0C0DE00000000000000D002 /* SoftwareUpdateSettingsView.swift in Sources */,
 				5A1E3C7F9B2D4E6A8C0F1B3D /* SleepSettingsView.swift in Sources */,
 				0D0A58D9E89935A7878AB233 /* DataRetention.swift in Sources */,
 				1340C962EE272ECE524A057F /* StoredDataView.swift in Sources */,
@@ -1113,8 +1133,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0C0DE00000000000000A009 /* WorkoutShared.swift in Sources */,
-				E0C9D9843052EF4B0070B1A1 /* WorkoutWidgetBundle.swift in Sources */,
+				E0C9D9843052EF4B0070B1A1 /* InfiniLinkWidgetBundle.swift in Sources */,
 				E0C9D9853052EF4B0070B1A1 /* WorkoutWidgetLiveActivity.swift in Sources */,
+				E0C0DE00000000000000C003 /* ChargingShared.swift in Sources */,
+				E0C0DE00000000000000C009 /* ChargingLiveActivity.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

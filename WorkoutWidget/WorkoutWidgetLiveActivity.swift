@@ -10,8 +10,8 @@ import AppIntents
 import WidgetKit
 import SwiftUI
 
-private func timerText(_ state: WorkoutAttributes.ContentState) -> Text {
-    Text(timerInterval: state.effectiveStart...state.effectiveStart.addingTimeInterval(24 * 60 * 60), pauseTime: state.pausedAt, countsDown: false)
+private func timerText(_ state: WorkoutAttributes.ContentState, showsHours: Bool = true) -> Text {
+    Text(timerInterval: state.effectiveStart...state.effectiveStart.addingTimeInterval(24 * 60 * 60), pauseTime: state.pausedAt, countsDown: false, showsHours: showsHours)
 }
 
 private func distanceText(_ meters: Double, imperial: Bool) -> String {
@@ -22,9 +22,22 @@ private func energyText(_ kcal: Int, kilojoules: Bool) -> String {
     return kilojoules ? "\(Int((Double(kcal) * 4.184).rounded())) kJ" : "\(kcal)"
 }
 
-private func compactTimerWidth(_ state: WorkoutAttributes.ContentState) -> CGFloat {
-    let reference = state.pausedAt ?? Date()
-    return reference.timeIntervalSince(state.effectiveStart) >= 3600 ? 52 : 42
+struct WorkoutIslandIcon: View {
+    let icon: String
+    let paused: Bool
+
+    var body: some View {
+        Image(systemName: icon)
+            .overlay(alignment: .bottomTrailing) {
+                if paused {
+                    Image(systemName: "pause.circle.fill")
+                        .font(.system(size: 8, weight: .bold))
+                        .background(Circle().fill(.black).padding(-1))
+                        .offset(x: 1, y: 2)
+                }
+            }
+            .foregroundStyle(.orange)
+    }
 }
 
 struct WorkoutMetricsRow: View {
@@ -124,19 +137,17 @@ struct WorkoutWidgetLiveActivity: Widget {
                     WorkoutControlButtons(paused: context.state.pausedAt != nil)
                 }
             } compactLeading: {
-                Image(systemName: context.attributes.exerciseIcon)
-                    .foregroundStyle(.orange)
+                WorkoutIslandIcon(icon: context.attributes.exerciseIcon, paused: context.state.pausedAt != nil)
                     .padding(.leading, 3)
             } compactTrailing: {
-                timerText(context.state)
+                timerText(context.state, showsHours: false)
                     .monospacedDigit()
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
-                    .frame(maxWidth: compactTimerWidth(context.state))
+                    .frame(maxWidth: 42)
                     .foregroundStyle(.orange)
             } minimal: {
-                Image(systemName: context.attributes.exerciseIcon)
-                    .foregroundStyle(.orange)
+                WorkoutIslandIcon(icon: context.attributes.exerciseIcon, paused: context.state.pausedAt != nil)
             }
             .keylineTint(.orange)
         }

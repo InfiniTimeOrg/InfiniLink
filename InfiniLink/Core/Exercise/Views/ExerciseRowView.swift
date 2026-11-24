@@ -31,7 +31,7 @@ struct ExerciseRowView: View {
         } label: {
             Label(exercise.name, systemImage: exercise.icon)
         }
-        .disabled(!bleManager.hasLoadedCharacteristics)
+        .disabled(!bleManager.hasLoadedCharacteristics || bleManager.isOnCharger)
         .contextMenu {
             Button {
                 exerciseViewModel.setExercisePinned(exercise)

@@ -70,6 +70,7 @@ struct DeveloperView: View {
                 Section("Simulated Watch") {
                     Toggle("Connected", isOn: Binding(get: { mockWatch.isConnected }, set: { $0 ? mockWatch.connect() : bleManager.disconnect() }))
                     Stepper("Battery: \(mockWatch.batteryLevel)%", value: Binding(get: { mockWatch.batteryLevel }, set: { mockWatch.setBatteryLevel($0) }), in: 0...100, step: 5)
+                    Toggle("Charging", isOn: Binding(get: { mockWatch.isCharging }, set: { mockWatch.setCharging($0) }))
                 }
             }
             Toggle("Force ANCS", isOn: $forceAncs)

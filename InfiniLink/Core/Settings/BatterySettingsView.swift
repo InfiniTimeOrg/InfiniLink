@@ -50,6 +50,12 @@ struct BatterySettingsView: View {
                 if settingsManager.settings.batterySettings.customNotificationEnabled {
                     notificationSettings(nil, "You will be notified when your watch's battery level reaches \(settingsManager.settings.batterySettings.customNotificationPercentage / 100, format: .percent.precision(.fractionLength(0))).", $settingsManager.settings.batterySettings.customNotificationSettings)
                 }
+                Section(footer: Text("Get a notification on your watch with an estimate of how long the battery will last when it comes off its charger.")) {
+                    Toggle("Notify When Unplugged", isOn: $settingsManager.settings.batterySettings.unplugNotificationEnabled)
+                }
+                Section(footer: Text("Get a reminder an hour before bedtime if your watch might not last the night. Requires a sleep schedule.")) {
+                    Toggle("Remind to Charge Before Bed", isOn: $settingsManager.settings.batterySettings.chargeReminderEnabled)
+                }
             } else {
                 NavigationLink {
                     NotificationsSettingsView()
@@ -60,6 +66,9 @@ struct BatterySettingsView: View {
                             .foregroundStyle(.red)
                     }
                 }
+            }
+            Section(footer: Text("Show your watch's charge on the Lock Screen while it's charging.")) {
+                Toggle("Charging Live Activity", isOn: $settingsManager.settings.batterySettings.chargingLiveActivityEnabled)
             }
         }
         .navigationTitle("Settings")

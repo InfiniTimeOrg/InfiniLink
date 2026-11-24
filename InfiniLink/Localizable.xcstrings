@@ -81,6 +81,19 @@
     "%@ before" : {
 
     },
+    "%@ couldn't be updated to InfiniTime %@. Open Software Update to try again." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ couldn't be updated to InfiniTime %2$@. Open Software Update to try again."
+          }
+        }
+      }
+    },
+    "%@ Interrupted" : {
+
+    },
     "%@ is connected" : {
 
     },
@@ -105,6 +118,9 @@
     "%@ Logs" : {
 
     },
+    "%@ might not last the night. Charge it now so it can track your sleep." : {
+
+    },
     "%@ must be connected to ping it." : {
 
     },
@@ -124,6 +140,9 @@
         }
       }
     },
+    "%@ Unplugged" : {
+
+    },
     "%@ was last seen at %@, at %@." : {
       "localizations" : {
         "en" : {
@@ -140,6 +159,16 @@
           "stringUnit" : {
             "state" : "new",
             "value" : "%1$@ was last seen at %2$@."
+          }
+        }
+      }
+    },
+    "%@ was updated to InfiniTime %@ overnight." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ was updated to InfiniTime %2$@ overnight."
           }
         }
       }
@@ -285,6 +314,9 @@
     "~%@ to full" : {
 
     },
+    "~%@ to full   " : {
+
+    },
     "1 device discovered" : {
 
     },
@@ -406,9 +438,6 @@
     "Apple Health" : {
 
     },
-    "Are you sure you want to discard the active exercise?" : {
-
-    },
     "Are you sure you want to end the exercise?" : {
 
     },
@@ -434,6 +463,12 @@
 
     },
     "Auto-Paused" : {
+
+    },
+    "Automatic Update Failed" : {
+
+    },
+    "Automatic Updates" : {
 
     },
     "Automatically pause running and walking workouts when you stop moving, and resume when you start again." : {
@@ -536,6 +571,9 @@
     "Bluetooth needs to be enabled to pair a watch." : {
 
     },
+    "Bottom" : {
+
+    },
     "BPM" : {
 
     },
@@ -555,6 +593,21 @@
 
     },
     "Change Photo" : {
+
+    },
+    "Charge Before Bed" : {
+
+    },
+    "Charged   " : {
+
+    },
+    "Charging" : {
+
+    },
+    "Charging   " : {
+
+    },
+    "Charging Live Activity" : {
 
     },
     "Checking for updates..." : {
@@ -750,6 +803,9 @@
 
     },
     "Discard" : {
+
+    },
+    "Discard Workout" : {
 
     },
     "Disconnect" : {
@@ -993,6 +1049,9 @@
         }
       }
     },
+    "Get a notification on your watch with an estimate of how long the battery will last when it comes off its charger." : {
+
+    },
     "Get a notification when your heart rate goes above or below the specified range." : {
       "localizations" : {
         "fr" : {
@@ -1002,6 +1061,9 @@
           }
         }
       }
+    },
+    "Get a reminder an hour before bedtime if your watch might not last the night. Requires a sleep schedule." : {
+
     },
     "Get a reminder to get ready for bed before the bedtime in your sleep schedule." : {
 
@@ -1237,6 +1299,9 @@
       }
     },
     "InfiniTime on GitHub" : {
+
+    },
+    "Install updates once %@ has been on its charger for an hour at a time you're usually asleep, based on your recent sleep tracking or your sleep schedule." : {
 
     },
     "Installing" : {
@@ -1526,6 +1591,9 @@
     "Notify on Low Battery" : {
 
     },
+    "Notify When Unplugged" : {
+
+    },
     "Notify your watch when a workout starts, pauses, resumes, ends, and on each completed mile or kilometer." : {
 
     },
@@ -1676,6 +1744,9 @@
     "Remind Me" : {
 
     },
+    "Remind to Charge Before Bed" : {
+
+    },
     "Remove Photo" : {
 
     },
@@ -1727,6 +1798,9 @@
     "Results" : {
 
     },
+    "Resume" : {
+
+    },
     "Resume Workout" : {
 
     },
@@ -1734,6 +1808,9 @@
 
     },
     "Save" : {
+
+    },
+    "Save & End" : {
 
     },
     "Save 100 Steps" : {
@@ -1847,6 +1924,9 @@
 
     },
     "Show Weather" : {
+
+    },
+    "Show your watch's charge on the Lock Screen while it's charging." : {
 
     },
     "Signal" : {
@@ -1984,6 +2064,9 @@
     "System" : {
 
     },
+    "Take %@ off its charger to start an exercise." : {
+
+    },
     "Test Data" : {
 
     },
@@ -2097,6 +2180,19 @@
     "This Week" : {
 
     },
+    "This workout started %@ and didn't finish. %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "This workout started %1$@ and didn't finish. %2$@"
+          }
+        }
+      }
+    },
+    "This workout won't be saved." : {
+
+    },
     "This writes a new settings file to %@. Every setting on it, like the step goal, wake modes, and brightness, is set to what InfiniLink shows or InfiniTime's defaults. Changes apply after you restart your watch by pressing and holding the side button." : {
 
     },
@@ -2126,6 +2222,9 @@
 
     },
     "To customize battery notifications, you need to allow notifications in notification settings." : {
+
+    },
+    "Top" : {
 
     },
     "Total" : {
@@ -2163,6 +2262,19 @@
     },
     "Unpin" : {
 
+    },
+    "Unplugged at %@" : {
+
+    },
+    "Unplugged at %@, about %@ left" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "Unplugged at %1$@, about %2$@ left"
+          }
+        }
+      }
     },
     "Until" : {
 
@@ -2291,7 +2403,13 @@
     "Watch Haptics" : {
 
     },
+    "Watch Is Charging" : {
+
+    },
     "Watch Notifications Disabled" : {
+
+    },
+    "Watch Updated" : {
 
     },
     "Water Reminder" : {
@@ -2483,6 +2601,9 @@
 
     },
     "You've taken more steps today than on any other day" : {
+
+    },
+    "Your %@ workout is still going. Open InfiniLink to end it if you're done." : {
 
     },
     "Your heart rate fell below %lld BPM" : {

@@ -13,6 +13,7 @@ import CoreLocation
 enum BLEUUID {
     static let hrm = CBUUID(string: "2A37")
     static let bat = CBUUID(string: "2A19")
+    static let batteryLevelStatus = CBUUID(string: "2BED")
     static let time = CBUUID(string: "2A2B")
     static let notify = CBUUID(string: "2A46")
     static let modelNumber = CBUUID(string: "2A24")
@@ -42,6 +43,10 @@ enum BLEUUID {
     static let stepCount = CBUUID(string: "00030001-78FC-48FE-8E23-433B3A1942D0")
     static let positionTrack = CBUUID(string: "00000006-78FC-48FE-8E23-433B3A1942D0")
     static let lengthTrack = CBUUID(string: "00000007-78FC-48FE-8E23-433B3A1942D0")
+}
+
+enum ChargeState: Int16 {
+    case discharging = 1, charging = 2, full = 3
 }
 
 class BLEManager: NSObject, ObservableObject {
@@ -96,6 +101,7 @@ class BLEManager: NSObject, ObservableObject {
     
     @Published var heartRate: Double = 0
     @Published var batteryLevel: Double = 0
+    @Published var chargeState: ChargeState?
     @Published var stepCount: Int = 0
     @Published var rssi: Int?
     
@@ -110,6 +116,9 @@ class BLEManager: NSObject, ObservableObject {
     
     @AppStorage("forceAncs") var forceAncs = true
     
+    var isOnCharger: Bool {
+        return chargeState == .charging || chargeState == .full
+    }
     var hasLoadedCharacteristics: Bool {
         return currentTimeService != nil && isConnectedToPinetime // Use currentTimeService because it's present in all firmware versions
     }
@@ -300,6 +309,8 @@ class BLEManager: NSObject, ObservableObject {
         navigationDistanceCharacteristic = nil
         navigationProgressCharacteristic = nil
         musicChars = MusicCharacteristics()
+        chargeState = nil
+        ChargingManager.shared.update()
     }
     
     func lastSeenDate(for uuid: String?) -> Date? {

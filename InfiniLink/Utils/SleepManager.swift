@@ -45,6 +45,7 @@ class SleepManager: ObservableObject {
     }
 
     private var lastProcessedDate: Date?
+    private var recentNightsCache: (nights: [DateInterval], updated: Date)?
     private let processingInterval: TimeInterval = 60 * 15
     private let initialNightsToProcess = 7
 
@@ -125,17 +126,18 @@ class SleepManager: ObservableObject {
                 let analysisWindow = DateInterval(start: window.start, end: max(window.end, next?.start ?? window.end))
                 let activity = self.activity(in: analysisWindow, deviceId: deviceId, context: context)
                 let heartRates = self.heartRates(in: analysisWindow, deviceId: deviceId, context: context)
+                let offWrist = self.chargerIntervals(in: analysisWindow, deviceId: deviceId, context: context)
                 var detected = [DetectedSleep]()
                 if let nightBefore {
                     // Need last night's HR to compare against
                     if let sleepingHeartRate = self.sleepingHeartRate(in: nightBefore, deviceId: deviceId, context: context) {
                         let nightEnd = self.sessions(in: nightBefore, deviceId: deviceId, context: context).filter { !$0.isNap }.compactMap(\.end).max() ?? .distantPast
-                        detected = SleepAnalyzer.analyze(window: window, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian, sleepingHeartRate: sleepingHeartRate).filter { nap in
+                        detected = SleepAnalyzer.analyze(window: window, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian, sleepingHeartRate: sleepingHeartRate, offWrist: offWrist).filter { nap in
                             nap.start >= nightEnd && !dismissedNaps.contains { nap.start.timeIntervalSince1970 < $0[1] && nap.end.timeIntervalSince1970 > $0[0] }
                         }
                     }
                 } else {
-                    detected = SleepAnalyzer.analyze(window: analysisWindow, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian).filter { $0.start < window.end }
+                    detected = SleepAnalyzer.analyze(window: analysisWindow, activity: activity, heartRates: heartRates, daytimeMedian: daytimeMedian, offWrist: offWrist).filter { $0.start < window.end }
                 }
 
                 // Redo the whole night each time so late data replaces the first guess
@@ -282,6 +284,38 @@ class SleepManager: ObservableObject {
         return data.map { SleepState(rawValue: $0) ?? .noData }
     }
 
+    static func nightMinute(_ date: Date) -> Int {
+        let components = Calendar.current.dateComponents([.hour, .minute], from: date)
+        return ((components.hour ?? 0) * 60 + (components.minute ?? 0) - 18 * 60 + 1440) % 1440
+    }
+
+    func recentNights() -> [DateInterval] {
+        if let cache = recentNightsCache, Date().timeIntervalSince(cache.updated) < 3600 {
+            return cache.nights
+        }
+        let grouped = Dictionary(grouping: recentSessions().filter { !$0.isNap }) { session in
+            session.start.flatMap { SleepAnalyzer.window(containing: $0)?.start }
+        }
+        let nights = grouped.compactMap { night, sessions -> DateInterval? in
+            guard night != nil, let start = sessions.compactMap(\.start).min(), let end = sessions.compactMap(\.end).max(), end > start else { return nil }
+            return DateInterval(start: start, end: end)
+        }
+        .sorted { $0.start > $1.start }
+        let recent = Array(nights.prefix(3))
+        recentNightsCache = (recent, Date())
+        return recent
+    }
+
+    var usualSleepRange: Range<Int>? {
+        let nights = recentNights()
+        if nights.count >= 2, let start = nights.map({ Self.nightMinute($0.start) }).min(), let end = nights.map({ Self.nightMinute($0.end) }).max(), end > start {
+            return start..<end
+        }
+        guard schedule.enabled else { return nil }
+        let bedtime = (schedule.bedtime - 18 * 60 + 1440) % 1440, wake = (schedule.wake - 18 * 60 + 1440) % 1440
+        return bedtime < wake ? bedtime..<wake : nil
+    }
+
     func recentSessions(nights: Int = 7) -> [SleepSession] {
         guard let deviceId = deviceManager.pairedDeviceID,
               let latest = SleepAnalyzer.latestWindow(),
@@ -317,6 +351,14 @@ class SleepManager: ObservableObject {
             guard let date = point.timestamp else { return nil }
             return (date, point.value)
         }
+    }
+
+    // In case it was already charging when the window opened
+    private func chargerIntervals(in window: DateInterval, deviceId: String, context: NSManagedObjectContext) -> [DateInterval] {
+        let request: NSFetchRequest<BatteryDataPoint> = BatteryDataPoint.fetchRequest()
+        request.predicate = NSPredicate(format: "deviceId == %@ AND timestamp >= %@ AND timestamp < %@", deviceId, window.start.addingTimeInterval(-12 * 3600) as NSDate, window.end as NSDate)
+
+        return BatteryStats.chargerIntervals(from: (try? context.fetch(request)) ?? []).filter { $0.intersects(window) }
     }
 
     private func sleepingHeartRate(in night: DateInterval, deviceId: String, context: NSManagedObjectContext) -> Double? {

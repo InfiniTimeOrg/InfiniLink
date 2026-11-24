@@ -14,10 +14,33 @@ struct BatteryChartDataPoint: Identifiable {
     let value: Double
 }
 
+private struct OutlinedBolt: View { // Can't add a stroke to an sf symbol
+    @Environment(\.colorScheme) private var colorScheme
+
+    private let borderWidth: CGFloat = 2.25
+    private let steps = 16 // Enough copies so it's smooth
+
+    var body: some View {
+        let bolt = Image(systemName: "bolt.fill").font(.system(size: 12, weight: .bold))
+        ZStack {
+            ForEach(0..<steps, id: \.self) { index in
+                let angle = Double(index) / Double(steps) * 2 * .pi
+                bolt.offset(x: cos(angle) * borderWidth, y: sin(angle) * borderWidth)
+            }
+            .foregroundStyle(colorScheme == .dark ? Color.black : Color.white)
+            bolt
+                .foregroundStyle(Color.green)
+        }
+        .padding(borderWidth)
+        .drawingGroup()
+    }
+}
+
 struct BatteryChartView: View {
     @ObservedObject var bleManager = BLEManager.shared
 
     @State private var points = [BatteryChartDataPoint]()
+    @State private var chargingHours = [Date]()
     @State private var scrollPositionDate: Date = Date()
     @State private var rawSelectedDate: Date? = nil
 
@@ -40,6 +63,21 @@ struct BatteryChartView: View {
     private var visibleLast: Int? {
         visiblePoints.last.map { Int($0.value) }
     }
+    private var chargingRuns: [DateInterval] {
+        var runs = [DateInterval]()
+        for hour in chargingHours {
+            if let last = runs.last, last.end == hour {
+                runs[runs.count - 1].end = hour.addingTimeInterval(3600)
+            } else {
+                runs.append(DateInterval(start: hour, duration: 3600))
+            }
+        }
+        return runs
+    }
+    private func boltPlacement(for run: DateInterval) -> (date: Date, fits: Bool) {
+        let visible = run.intersection(with: DateInterval(start: scrollPositionDate, duration: visibleDomain)) ?? run
+        return (visible.start.addingTimeInterval(visible.duration / 2), visible.duration >= 5400)
+    }
     private var selectedPoint: BatteryChartDataPoint? {
         guard let rawSelectedDate else { return nil }
         return points.min(by: {
@@ -51,7 +89,6 @@ struct BatteryChartView: View {
         let raw = ChartManager.shared.batteryPoints().map {
             BatteryChartDataPoint(date: $0.timestamp ?? Date(), value: $0.value)
         }
-        // Keep one point per hour (the last one in each bucket)
         let grouped = Dictionary(grouping: raw) { point -> Date in
             Calendar.current.dateInterval(of: .hour, for: point.date)!.start
         }
@@ -61,6 +98,18 @@ struct BatteryChartView: View {
         }.sorted { $0.date < $1.date }
     }
 
+    func chargingHourStarts() -> [Date] {
+        let intervals = BatteryStats.chargerIntervals(from: ChartManager.shared.batteryPoints())
+        return Set(intervals.flatMap { interval -> [Date] in
+            var hours = [Date]()
+            var hour = cal.dateInterval(of: .hour, for: interval.start)!.start
+            while hour < interval.end {
+                hours.append(hour)
+                hour.addTimeInterval(3600)
+            }
+            return hours
+        }).sorted()
+    }
 
     func chart() -> some View {
         let xMin = cal.startOfDay(for: earliestDate)
@@ -68,6 +117,35 @@ struct BatteryChartView: View {
 
         var chart: some View {
             Chart {
+                ForEach(chargingHours, id: \.self) { hour in
+                    RectangleMark(
+                        xStart: .value("Start", hour),
+                        xEnd: .value("End", hour.addingTimeInterval(3600)),
+                        yStart: .value("Bottom", 0),
+                        yEnd: .value("Top", 100)
+                    )
+                    .foregroundStyle(Color.green.opacity(0.15))
+                }
+                ForEach(chargingRuns, id: \.start) { run in
+                    RectangleMark(
+                        xStart: .value("Start", run.start),
+                        xEnd: .value("End", run.end),
+                        yStart: .value("Bottom", -5),
+                        yEnd: .value("Top", -3)
+                    )
+                    .cornerRadius(2.5)
+                    .foregroundStyle(Color.green)
+                    let bolt = boltPlacement(for: run)
+                    PointMark(
+                        x: .value("Time", bolt.date),
+                        y: .value("Charging", -4)
+                    )
+                    .symbol {
+                        OutlinedBolt()
+                            .opacity(bolt.fits ? 1 : 0)
+                            .animation(.easeOut(duration: 0.2), value: bolt.fits)
+                    }
+                }
                 if let selectedPoint {
                     RuleMark(x: .value("Selected", selectedPoint.date))
                         .foregroundStyle(Color.gray)
@@ -83,7 +161,7 @@ struct BatteryChartView: View {
             }
             .frame(minHeight: 280)
             .padding(.horizontal, 8)
-            .chartYScale(domain: 0...100)
+            .chartYScale(domain: -14...100)
             .chartXScale(domain: xMin...xMax)
             .chartXAxis {
                 AxisMarks(values: .stride(by: .hour, count: 6)) { value in
@@ -93,7 +171,7 @@ struct BatteryChartView: View {
                 }
             }
             .chartYAxis {
-                AxisMarks(position: .trailing) { value in
+                AxisMarks(position: .trailing, values: [0, 25, 50, 75, 100]) { value in
                     AxisGridLine()
                     AxisValueLabel()
                 }
@@ -196,6 +274,7 @@ struct BatteryChartView: View {
         .listRowBackground(Color.clear)
         .onAppear {
             points = batteryPoints()
+            chargingHours = chargingHourStarts()
             scrollPositionDate = cal.startOfDay(for: latestDate)
         }
         .onChange(of: selectedPoint?.date) { newValue in

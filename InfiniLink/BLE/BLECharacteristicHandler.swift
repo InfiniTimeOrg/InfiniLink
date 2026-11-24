@@ -71,7 +71,7 @@ struct BLECharacteristicHandler {
             bleManager.musicChars.length = characteristic
         case BLEUUID.hrm:
             peripheral.setNotifyValue(true, for: characteristic)
-        case BLEUUID.bat:
+        case BLEUUID.bat, BLEUUID.batteryLevelStatus:
             peripheral.readValue(for: characteristic)
             peripheral.setNotifyValue(true, for: characteristic)
         case BLEUUID.motion:
@@ -144,9 +144,26 @@ struct BLECharacteristicHandler {
             bleManager.batteryLevel = Double(batData[0])
             bleManager.hasLoadedBatteryLevel = true
             
-            chartManager.addBatteryDataPoint(batteryLevel: Double(batData[0]), time: Date())
+            chartManager.addBatteryDataPoint(batteryLevel: Double(batData[0]), chargeState: bleManager.chargeState, time: Date())
 
             notificationManager.checkToSendBatteryNotifications()
+            ChargingManager.shared.update()
+        case BLEUUID.batteryLevelStatus:
+            guard let value = characteristic.value, value.count >= 3 else { break }
+            let bytes = [UInt8](value)
+            let powerState = UInt16(bytes[1]) | (UInt16(bytes[2]) << 8)
+            
+            switch (powerState >> 5) & 0b11 {
+            case 1: bleManager.chargeState = .charging
+            case 3: bleManager.chargeState = .full
+            default: bleManager.chargeState = .discharging
+            }
+            
+            if bleManager.hasLoadedBatteryLevel {
+                chartManager.addBatteryDataPoint(batteryLevel: bleManager.batteryLevel, chargeState: bleManager.chargeState, time: Date())
+            }
+            notificationManager.checkToSendBatteryNotifications()
+            ChargingManager.shared.update()
         case BLEUUID.stepCount:
             guard let value = characteristic.value, value.count >= 4 else { break }
             let stepData = [UInt8](value)
@@ -190,6 +207,9 @@ struct BLECharacteristicHandler {
                 weatherController.checkForUpdate()
 
                 notificationManager.checkHostBatteryState()
+                notificationManager.checkChargeBeforeBed()
+                notificationManager.checkIfAwake()
+                AutoUpdateManager.shared.checkIfNeeded()
 
                 SleepManager.shared.processIfNeeded()
 

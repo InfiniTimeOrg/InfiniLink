@@ -156,51 +156,81 @@ struct ExerciseView: View {
 struct RecoverExerciseView: View {
     @ObservedObject var exerciseViewModel = ExerciseViewModel.shared
 
-    @State private var showConfirmation = false
+    @State private var showDiscardConfirmation = false
+    @State private var contentHeight: CGFloat = 300
 
     let session: WorkoutSession
 
     private var exerciseName: String {
-        return exerciseViewModel.exercise(for: session.exerciseId)?.name ?? "Workout"
+        exerciseViewModel.exercise(for: session.exerciseId)?.name ?? NSLocalizedString("Workout", comment: "")
+    }
+    private var canSave: Bool {
+        return session.elapsed(at: session.lastHeartbeat) >= 30
     }
 
     var body: some View {
-        NavigationStack {
-            ActionView(Action(title: "Exercise in progress", subtitle: "Started \(session.startDate.formatted(.relative(presentation: .named))). Resume where you left off, save it as-is, or discard it.", icon: exerciseViewModel.exercise(for: session.exerciseId)?.icon ?? "figure.run", accent: .blue, buttons: [
-                ActionButton("Resume", action: {
-                    exerciseViewModel.resumeRecoveredSession()
-                }),
-                ActionButton("Save & End", role: .cancel, action: {
-                    exerciseViewModel.saveAndEndRecoveredSession()
-                }),
-                ActionButton("Discard", role: .destructive, action: {
-                    showConfirmation = true
-                })
-            ]))
-            .interactiveDismissDisabled()
-            .toolbar {
-                Button(role: .cancel) {
-                    showConfirmation = true
-                } label: {
-                    Label("Cancel", systemImage: "xmark")
-                }
+        VStack(spacing: 24) {
+            VStack(spacing: 8) {
+                Text("\(exerciseName) Interrupted")
+                    .font(.title2.weight(.bold))
+                Text("This workout started \(session.startDate.formatted(.relative(presentation: .named))) and didn't finish. \(canSave ? "Pick up where you left off, or save what was recorded." : "It's too short to save, but you can pick up where you left off.")")
+                    .foregroundStyle(.secondary)
             }
+            .multilineTextAlignment(.center)
+            VStack(spacing: 10) {
+                Button {
+                    exerciseViewModel.resumeRecoveredSession()
+                } label: {
+                    Text("Resume")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.borderedProminent)
+                if canSave {
+                    Button {
+                        exerciseViewModel.saveAndEndRecoveredSession()
+                    } label: {
+                        Text("Save & End")
+                            .frame(maxWidth: .infinity)
+                    }
+                    .buttonStyle(.bordered)
+                    .tint(.primary)
+                }
+                Button(role: .destructive) {
+                    showDiscardConfirmation = true
+                } label: {
+                    Text("Discard")
+                        .frame(maxWidth: .infinity)
+                }
+                .buttonStyle(.bordered)
+                .tint(.red)
+            }
+            .fontWeight(.semibold)
+            .controlSize(.large)
+            .buttonBorderShape(.capsule)
         }
-        .confirmationDialog("Active Exercise", isPresented: $showConfirmation) {
-            Button(role: .destructive) {
+        .padding(.horizontal, 24)
+        .padding(.top, 32)
+        .padding(.bottom, 8)
+        .fixedSize(horizontal: false, vertical: true)
+        .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { contentHeight = $0 }
+        .frame(maxHeight: .infinity, alignment: .top)
+        .presentationDetents([.height(contentHeight)])
+        .presentationDragIndicator(.hidden)
+        .interactiveDismissDisabled()
+        .alert("Discard Workout", isPresented: $showDiscardConfirmation) {
+            Button("Discard", role: .destructive) {
                 exerciseViewModel.discardRecoveredSession()
-            } label: {
-                Text("Discard")
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Are you sure you want to discard the active exercise?")
+            Text("This workout won't be saved.")
         }
     }
 }
 
 #Preview {
-    NavigationStack {
-        RecoverExerciseView(session: WorkoutSession(exerciseId: "test"))
-    }
+    Color.clear
+        .sheet(isPresented: .constant(true)) {
+            RecoverExerciseView(session: WorkoutSession(exerciseId: "test"))
+        }
 }

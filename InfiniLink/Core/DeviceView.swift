@@ -76,6 +76,11 @@ struct DeviceView: View {
                                                     return Color.red
                                                 }
                                             }())
+                                        if bleManager.isOnCharger {
+                                            Image(systemName: "bolt.fill")
+                                                .font(.caption)
+                                                .padding(.leading, 2)
+                                        }
                                     }
                                 }
                                 .foregroundStyle(Color.gray)

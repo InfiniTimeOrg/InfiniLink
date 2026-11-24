@@ -248,6 +248,7 @@ class DFUUpdater: ObservableObject {
         statusDetail = ""
         percentComplete = 0
         bleManager.endFirmwareUpdate(installed: outcome == .completed)
+        AutoUpdateManager.shared.updateFinished(installed: outcome == .completed)
 
         switch outcome {
         case .failed:

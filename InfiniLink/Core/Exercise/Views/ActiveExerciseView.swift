@@ -113,6 +113,13 @@ struct ActiveExerciseView: View {
             }
         }
         .padding()
+        .toolbar {
+            NavigationLink {
+                ExerciseSettingsView()
+            } label: {
+                Label("Settings", systemImage: "gear")
+            }
+        }
         .alert(canSave ? "Are you sure you want to end the exercise?" : "Are you sure you want to end the exercise? The duration of the exercise is too short to save.", isPresented: $showEndConfirmation) {
             Button(role: .destructive) {
                 exerciseViewModel.endExercise(save: canSave)

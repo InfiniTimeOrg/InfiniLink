@@ -12,6 +12,7 @@ struct ContentView: View {
     @ObservedObject private var downloadManager = DownloadManager.shared
     @ObservedObject private var exerciseViewModel = ExerciseViewModel.shared
     @ObservedObject private var importManager = ImportManager.shared
+    @ObservedObject private var autoUpdateManager = AutoUpdateManager.shared
 
     @AppStorage("pairedDeviceID") private var pairedDeviceID: String?
 
@@ -52,6 +53,14 @@ struct ContentView: View {
         }
         .sheet(item: $exerciseViewModel.recoverableSession) { session in
             RecoverExerciseView(session: session)
+        }
+        .alert("Automatic Updates", isPresented: $autoUpdateManager.showOffer) {
+            Button("Turn On") {
+                autoUpdateManager.enabled = true
+            }
+            Button("Not Now", role: .cancel) { }
+        } message: {
+            Text("Install future updates automatically while \(DeviceManager.shared.name) charges overnight? You can change this in Software Update settings.")
         }
         .onOpenURL { url in
             importManager.handleIncomingFile(url)

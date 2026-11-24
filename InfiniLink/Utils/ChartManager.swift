@@ -114,7 +114,7 @@ class ChartManager: ObservableObject {
         }
     }
 
-    func addBatteryDataPoint(batteryLevel: Double, time: Date) {
+    func addBatteryDataPoint(batteryLevel: Double, chargeState: ChargeState?, time: Date) {
         let context = persistenceController.container.newBackgroundContext()
         let deviceId = deviceManager.pairedDeviceID
         context.perform {
@@ -123,12 +123,13 @@ class ChartManager: ObservableObject {
             lastRequest.sortDescriptors = [NSSortDescriptor(key: "timestamp", ascending: false)]
             lastRequest.fetchLimit = 1
 
-            if let last = try? context.fetch(lastRequest).first, last.value == batteryLevel {
+            if let last = try? context.fetch(lastRequest).first, last.value == batteryLevel, last.chargeState == chargeState?.rawValue ?? 0 {
                 return
             }
 
             let batteryDataPoint = BatteryDataPoint(context: context)
             batteryDataPoint.value = batteryLevel
+            batteryDataPoint.chargeState = chargeState?.rawValue ?? 0
             batteryDataPoint.timestamp = time
             batteryDataPoint.deviceId = deviceId
 

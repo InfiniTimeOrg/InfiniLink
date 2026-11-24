@@ -22,6 +22,10 @@ struct StartExerciseView: View {
                     Section {
                         Text(DeviceManager.shared.name + " needs to be connected before you can start an exercise.")
                     }
+                } else if bleManager.isOnCharger {
+                    Section {
+                        Text("Take \(DeviceManager.shared.name) off its charger to start an exercise.")
+                    }
                 }
                 if !exerciseViewModel.pinnedExerciseIds.isEmpty {
                     Section("Pinned") {

@@ -23,6 +23,7 @@ class MockWatch: ObservableObject {
 
     @Published var isConnected = false
     @Published var batteryLevel = 85
+    @Published var isCharging = false
 
     let fileSystem = MockFileSystem()
 
@@ -73,6 +74,7 @@ class MockWatch: ObservableObject {
         deviceManager.readSettingsIfNeeded()
 
         send(BLEUUID.bat, [UInt8(batteryLevel)])
+        sendChargeState()
         tick()
         timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
             self?.tick()
@@ -104,6 +106,19 @@ class MockWatch: ObservableObject {
         }
     }
 
+    func setCharging(_ charging: Bool) {
+        isCharging = charging
+        if isConnected {
+            sendChargeState()
+        }
+    }
+
+    private func sendChargeState() {
+        let state: UInt16 = !isCharging ? 2 : (batteryLevel == 100 ? 3 : 1)
+        let powerState: UInt16 = 1 | (isCharging ? 0b10 : 0) | (state << 5)
+        send(BLEUUID.batteryLevelStatus, [0, UInt8(powerState & 0xFF), UInt8(powerState >> 8)])
+    }
+
     private func tick() {
         ticks += 1
         heartRate = min(max(heartRate + Int.random(in: -3...3), 55), 140)
@@ -115,7 +130,10 @@ class MockWatch: ObservableObject {
         let motion = [Int16.random(in: -60...60), Int16.random(in: -60...60), Int16.random(in: -1084 ... -964)]
         send(BLEUUID.motion, motion.flatMap { withUnsafeBytes(of: $0.littleEndian, Array.init) })
 
-        if ticks % 12 == 0 { // drain a percent a minute
+        if isCharging {
+            setBatteryLevel(batteryLevel + 1)
+            sendChargeState()
+        } else if ticks % 12 == 0 { // drain a percent a minute
             setBatteryLevel(batteryLevel - 1)
         }
     }

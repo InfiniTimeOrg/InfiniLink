@@ -14,6 +14,13 @@ struct BatteryView: View {
     @State private var points: [BatteryDataPoint] = []
     
     private var remainingText: String? {
+        if bleManager.chargeState == .full {
+            return String(localized: "Charged   ")
+        }
+        if bleManager.chargeState == .charging {
+            guard let remaining = BatteryStats.timeUntilFull(from: points, currentLevel: bleManager.batteryLevel), remaining > 0 else { return String(localized: "Charging   ") }
+            return String(localized: "~\(BatteryStats.format(remaining, maximumUnitCount: 1)) to full   ")
+        }
         guard let remaining = BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel), remaining > 0 else { return nil }
         return String(localized: "~\(BatteryStats.format(remaining, maximumUnitCount: 1)) left   ")
         // this string unfortunately needs some trailing spaces for visual alignment, since the visual focus is on the remaining time and the ~ appears to shift the entire string to the right.
@@ -24,7 +31,9 @@ struct BatteryView: View {
             List {
                 Section {
                     DetailHeaderView(Header(title: String(format: "%.0f", bleManager.batteryLevel), subtitle: remainingText, units: "%", icon: {
-                        if bleManager.batteryLevel > 75 {
+                        if bleManager.isOnCharger {
+                            return "battery.100percent.bolt"
+                        } else if bleManager.batteryLevel > 75 {
                             return "battery.100percent"
                         } else if bleManager.batteryLevel > 50 {
                             return "battery.75percent"

@@ -92,7 +92,7 @@ struct SleepAnalyzer {
     }
 
     // Passing sleepingHeartRate looks for naps instead
-    static func analyze(window: DateInterval, activity: [(date: Date, value: Double)], heartRates: [(date: Date, value: Double)], daytimeMedian: Double?, sleepingHeartRate: Double? = nil) -> [DetectedSleep] {
+    static func analyze(window: DateInterval, activity: [(date: Date, value: Double)], heartRates: [(date: Date, value: Double)], daytimeMedian: Double?, sleepingHeartRate: Double? = nil, offWrist: [DateInterval] = []) -> [DetectedSleep] {
         let minuteCount = Int(min(window.end, Date()).timeIntervalSince(window.start) / 60)
         guard minuteCount > 0 else { return [] }
 
@@ -112,6 +112,13 @@ struct SleepAnalyzer {
         for point in heartRates where point.value > 0 {
             if let index = minuteIndex(point.date) {
                 heartByMinute[index] = point.value
+            }
+        }
+
+        for interval in offWrist {
+            for index in 0..<minuteCount where interval.contains(window.start.addingTimeInterval(Double(index) * 60 + 30)) {
+                activityByMinute[index] = nil
+                heartByMinute[index] = nil
             }
         }
 

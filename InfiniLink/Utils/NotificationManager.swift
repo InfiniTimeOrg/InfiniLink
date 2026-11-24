@@ -41,6 +41,11 @@ class NotificationManager: ObservableObject {
     
     private var previousStepsCache: (key: String, steps: [Date: Int])?
     
+    private var lastMovedDate = Date.distantPast
+    private var wasAsleep = false
+    private var heldNotification: AppNotification?
+    private var sendHeldDate: Date?
+    
     private var nextReminderCheckDate: Date?
     private var waterReminderStartHour: Int = 8
     private var waterReminderEndHour: Int = 20
@@ -112,7 +117,7 @@ extension NotificationManager {
         }
         
         // At most one iPhone battery notification every thirty minutes
-        guard level >= 0, lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
+        guard level >= 0, !isAsleep, lastHostBatteryLevelNotified == -1 || (currentTime - lastHostBatteryLevelNotified) >= thirtyMinutes else { return }
         
         if state == .full && !hostFullNotified {
             let notif = AppNotification(title: NSLocalizedString("Fully Charged", comment: ""), subtitle: String(localized: "Your iPhone has reached \(level / 100, format: .percent.precision(.fractionLength(0)))"))
@@ -147,7 +152,7 @@ extension NotificationManager {
         lastBatteryLevelNotified = bat
         
         let chargeState = bleManager.chargeState
-        let onCharger = chargeState == .charging || chargeState == .full
+        let onCharger = bleManager.isOnCharger
         if onCharger || (chargeState == nil && bat >= 30) {
             lowBatteryThresholdNotified = 101
         }
@@ -156,7 +161,7 @@ extension NotificationManager {
         }
         
         // Skip if watch notifications are off, this is the first reading, or the level hasn't changed
-        guard settings.watchNotificationsEnabled, previous >= 0, bat != previous else { return }
+        guard settings.watchNotificationsEnabled, previous >= 0, bat != previous, !isAsleep else { return }
         
         if bat == 100 {
             sendFullyChargedBatteryNotification()
@@ -200,7 +205,7 @@ extension NotificationManager {
 extension NotificationManager {
     func sendHeartRangeNotification(_ bpm: Int) {
         let heartSettings = settings.heartSettings
-        guard settings.watchNotificationsEnabled, heartSettings.rangeReminderEnabled else { return }
+        guard settings.watchNotificationsEnabled, heartSettings.rangeReminderEnabled, !bleManager.isOnCharger else { return }
 
         let currentTime = Date().timeIntervalSince1970
         let tenMinutes = TimeInterval(60 * 10)
@@ -300,6 +305,7 @@ extension NotificationManager {
         if steps - baseline >= activeStepThreshold {
             inactivityBaselineSteps = steps
             lastActiveDate = Date()
+            lastMovedDate = Date()
         }
     }
     
@@ -312,7 +318,7 @@ extension NotificationManager {
         guard settings.watchNotificationsEnabled, inactivity.enabled, hasStepsSinceConnect, ExerciseViewModel.shared.currentExercise == nil else { return }
         
         let hour = Calendar.current.component(.hour, from: Date())
-        guard hour >= inactivity.startHour && hour < inactivity.endHour else {
+        guard hour >= inactivity.startHour && hour < inactivity.endHour, !bleManager.isOnCharger else {
             lastActiveDate = Date()
             return
         }
@@ -327,31 +333,114 @@ extension NotificationManager {
 
 // MARK: Sleep
 extension NotificationManager {
+    // Check yesterday too in case it crosses midnight
+    private func recentOccurrence(ofMinute minute: Int) -> Date? {
+        let calendar = Calendar.current
+        var occurrence: Date?
+        for offset in [0, -1] {
+            if let day = calendar.date(byAdding: .day, value: offset, to: Date()),
+               let date = calendar.date(bySettingHour: minute / 60, minute: minute % 60, second: 0, of: day),
+               (date..<date.addingTimeInterval(thirtyMinutes)).contains(Date()) {
+                occurrence = date
+            }
+        }
+        return occurrence
+    }
+    
+    // Bedtimes after midnight count for the day before
+    private func isScheduledNight(bedtime: Date) -> Bool {
+        let calendar = Calendar.current
+        guard let night = calendar.date(byAdding: .hour, value: -12, to: bedtime) else { return false }
+        return SleepManager.shared.schedule.days.contains(calendar.component(.weekday, from: night))
+    }
+    
     func checkForBedtime() {
         let schedule = SleepManager.shared.schedule
         let bedtime = settings.bedtimeSettings
         guard settings.watchNotificationsEnabled, bedtime.enabled, schedule.enabled else { return }
 
-        let calendar = Calendar.current
-        let minute = (schedule.bedtime - bedtime.minutesBefore + 1440) % 1440
-        // Only send it on time, and check yesterday too in case it crosses midnight
-        var reminder: Date?
-        for offset in [0, -1] {
-            if let day = calendar.date(byAdding: .day, value: offset, to: Date()),
-               let date = calendar.date(bySettingHour: minute / 60, minute: minute % 60, second: 0, of: day),
-               (date..<date.addingTimeInterval(thirtyMinutes)).contains(Date()) {
-                reminder = date
-            }
-        }
         // Remember which one we sent, since after midnight it's a new day
-        guard let reminder, UserDefaults.standard.double(forKey: "lastBedtimeReminder") != reminder.timeIntervalSince1970 else { return }
+        let minute = (schedule.bedtime - bedtime.minutesBefore + 1440) % 1440
+        guard let reminder = recentOccurrence(ofMinute: minute), UserDefaults.standard.double(forKey: "lastBedtimeReminder") != reminder.timeIntervalSince1970 else { return }
 
-        // Bedtimes after midnight count for the day before
-        let bedtimeDate = reminder.addingTimeInterval(TimeInterval(bedtime.minutesBefore * 60))
-        guard let night = calendar.date(byAdding: .hour, value: -12, to: bedtimeDate), schedule.days.contains(calendar.component(.weekday, from: night)) else { return }
+        guard isScheduledNight(bedtime: reminder.addingTimeInterval(TimeInterval(bedtime.minutesBefore * 60))) else { return }
 
         sendGoalNotification(AppNotification(title: NSLocalizedString("Bedtime", comment: ""), subtitle: NSLocalizedString("It's time to get ready for bed", comment: "")))
         UserDefaults.standard.set(reminder.timeIntervalSince1970, forKey: "lastBedtimeReminder")
+    }
+    
+    func checkChargeBeforeBed() {
+        let schedule = SleepManager.shared.schedule
+        guard settings.watchNotificationsEnabled, batterySettings.chargeReminderEnabled, schedule.enabled, bleManager.hasLoadedBatteryLevel, !bleManager.isOnCharger else { return }
+        
+        let minutesBefore = 60
+        let minute = (schedule.bedtime - minutesBefore + 1440) % 1440
+        guard let reminder = recentOccurrence(ofMinute: minute), UserDefaults.standard.double(forKey: "lastChargeReminder") != reminder.timeIntervalSince1970 else { return }
+        UserDefaults.standard.set(reminder.timeIntervalSince1970, forKey: "lastChargeReminder")
+        
+        let bedtime = reminder.addingTimeInterval(TimeInterval(minutesBefore * 60))
+        guard isScheduledNight(bedtime: bedtime) else { return }
+        
+        let untilWake = TimeInterval((minutesBefore + schedule.goalMinutes + 60) * 60)
+        let points = ChartManager.shared.batteryPoints(predicate: ChartManager.shared.ninetyDayPredicate)
+        let remaining = BatteryStats.remainingUptime(from: points, currentLevel: bleManager.batteryLevel)
+        guard remaining.map({ $0 < untilWake }) ?? (bleManager.batteryLevel <= 20) else { return }
+        
+        sendGoalNotification(AppNotification(title: NSLocalizedString("Charge Before Bed", comment: ""), subtitle: String(localized: "\(DeviceManager.shared.name) might not last the night. Charge it now so it can track your sleep.")))
+    }
+    
+    func sendChargingDuringExerciseNotification() {
+        guard let exercise = ExerciseViewModel.shared.currentExercise, !isAsleep else { return }
+        
+        sendNotificationToHost(AppNotification(title: NSLocalizedString("Watch Is Charging", comment: ""), subtitle: String(localized: "Your \(exercise.name) workout is still going. Open InfiniLink to end it if you're done.")))
+    }
+    
+    // Still for half an hour so being up late doesn't count
+    var isAsleep: Bool {
+        guard let range = SleepManager.shared.usualSleepRange, range.contains(SleepManager.nightMinute(Date())) else { return false }
+        return Date().timeIntervalSince(lastMovedDate) >= thirtyMinutes
+    }
+    
+    func markMoved() {
+        lastMovedDate = Date()
+    }
+    
+    func checkIfAwake() {
+        let asleep = isAsleep
+        if wasAsleep && !asleep {
+            sendHeldDate = Date().addingTimeInterval(2 * 60)
+        }
+        wasAsleep = asleep
+        
+        guard !asleep, let sendHeldDate, Date() >= sendHeldDate else { return }
+        self.sendHeldDate = nil
+        if let heldNotification {
+            sendNotificationToHost(heldNotification)
+            self.heldNotification = nil
+        }
+    }
+    
+    func sendWhenAwake(_ notif: AppNotification) {
+        if isAsleep {
+            heldNotification = notif
+        } else {
+            sendNotificationToHost(notif)
+        }
+    }
+    
+    func sendUnpluggedNotification() {
+        guard settings.watchNotificationsEnabled, batterySettings.unplugNotificationEnabled else { return }
+        
+        let level = bleManager.batteryLevel
+        let points = ChartManager.shared.batteryPoints(predicate: ChartManager.shared.ninetyDayPredicate)
+        let percent = (level / 100).formatted(.percent.precision(.fractionLength(0)))
+        let subtitle: String
+        if let remaining = BatteryStats.remainingUptime(from: points, currentLevel: level), remaining > 0 {
+            subtitle = String(localized: "Unplugged at \(percent), about \(BatteryStats.format(remaining, maximumUnitCount: 1)) left")
+        } else {
+            subtitle = String(localized: "Unplugged at \(percent)")
+        }
+        bleWriteManager.sendNotification(AppNotification(title: String(localized: "\(DeviceManager.shared.name) Unplugged"), subtitle: subtitle))
     }
 }
 

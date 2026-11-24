@@ -13,6 +13,7 @@ import UIKit
 final class WorkoutLiveActivityController {
     private var activity: Activity<WorkoutAttributes>?
     private let staleAfter: TimeInterval = 60
+    private let relevanceScore: Double = 100 // Above charging
 
     func start(name: String, icon: String, state: WorkoutAttributes.ContentState) {
         guard ActivityAuthorizationInfo().areActivitiesEnabled else { return }
@@ -33,7 +34,7 @@ final class WorkoutLiveActivityController {
         do {
             activity = try Activity.request(
                 attributes: attributes,
-                content: .init(state: state, staleDate: Date().addingTimeInterval(staleAfter)),
+                content: .init(state: state, staleDate: Date().addingTimeInterval(staleAfter), relevanceScore: relevanceScore),
                 pushType: nil
             )
         } catch {
@@ -49,7 +50,7 @@ final class WorkoutLiveActivityController {
             let task = UIApplication.shared.beginBackgroundTask()
             defer { UIApplication.shared.endBackgroundTask(task) }
 
-            await activity.update(.init(state: state, staleDate: Date().addingTimeInterval(staleAfter)))
+            await activity.update(.init(state: state, staleDate: Date().addingTimeInterval(staleAfter), relevanceScore: relevanceScore))
         }
     }
 

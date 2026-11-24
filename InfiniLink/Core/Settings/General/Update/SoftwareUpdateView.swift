@@ -52,6 +52,13 @@ struct SoftwareUpdateView: View {
                 }
             }
             .navigationTitle("Software Update")
+            .toolbar {
+                NavigationLink {
+                    SoftwareUpdateSettingsView()
+                } label: {
+                    Label("Settings", systemImage: "gear")
+                }
+            }
         }
         .onAppear {
             if downloadManager.releases.isEmpty {
@@ -100,7 +107,7 @@ struct SoftwareUpdateView: View {
                 }
             }
             let updateDisabled = !bleManager.isDeviceInRecoveryMode &&
-                                 (!bleManager.hasLoadedCharacteristics || bleManager.batteryLevel <= 10)
+                                 (!bleManager.hasLoadedCharacteristics || (bleManager.batteryLevel <= 10 && bleManager.chargeState != .charging))
             Section {
                 if !dfuUpdater.local && !bleManager.isDeviceInRecoveryMode {
                     Toggle("Update External Resources", isOn: $dfuUpdater.updateResourcesWithFirmware)
