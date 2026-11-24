@@ -5,7 +5,7 @@
 //  Created by Liam Willey on 10/23/26.
 //
 
-import Foundation
+import SwiftUI
 import CryptoKit
 
 enum PluginPermission: String, Codable, CaseIterable {
@@ -16,6 +16,49 @@ enum PluginPermission: String, Codable, CaseIterable {
     case location = "LOCATION"
     
     var title: String {
+        switch self {
+        case .http:
+            return NSLocalizedString("Network", comment: "")
+        case .filesystem:
+            return NSLocalizedString("Files", comment: "")
+        case .volumeControl:
+            return NSLocalizedString("Volume", comment: "")
+        case .mediaControl:
+            return NSLocalizedString("Music", comment: "")
+        case .location:
+            return NSLocalizedString("Location", comment: "")
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .http:
+            return "network"
+        case .filesystem:
+            return "folder.fill"
+        case .volumeControl:
+            return "speaker.wave.2.fill"
+        case .mediaControl:
+            return "music.note"
+        case .location:
+            return "location.fill"
+        }
+    }
+    
+    var color: Color {
+        switch self {
+        case .http:
+            return .blue
+        case .filesystem:
+            return .teal
+        case .volumeControl, .mediaControl:
+            return .red
+        case .location:
+            return .green
+        }
+    }
+
+    var subtitle: String {
         switch self {
         case .http:
             return NSLocalizedString("Send HTTP requests", comment: "")

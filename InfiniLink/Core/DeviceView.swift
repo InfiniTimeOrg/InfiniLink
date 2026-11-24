@@ -253,7 +253,7 @@ struct DeviceView: View {
                             NavigationLink {
                                 column(PluginsView())
                             } label: {
-                                ListRowView(title: "Plugins", icon: "puzzlepiece.extension.fill", iconColor: .purple)
+                                ListRowView(title: "Plugins", icon: "puzzlepiece.extension.fill", iconColor: .indigo)
                             }
                         }
                     }
@@ -378,6 +378,36 @@ struct ListRowView: View {
                 .foregroundStyle(.primary)
         } icon: {
             ListRowIconView(icon: icon, color: iconColor)
+        }
+    }
+}
+
+struct ListRowDetailView<Accessory: View>: View {
+    let title: String
+    let subtitle: String
+    let icon: String
+    let iconColor: Color
+    let accessory: Accessory
+
+    init(title: String, subtitle: String, icon: String, iconColor: Color = .gray, @ViewBuilder accessory: () -> Accessory = { EmptyView() }) {
+        self.title = title
+        self.subtitle = subtitle
+        self.icon = icon
+        self.iconColor = iconColor
+        self.accessory = accessory()
+    }
+
+    var body: some View {
+        HStack(spacing: 10) {
+            ListRowIconView(icon: icon, color: iconColor)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .fontWeight(.semibold)
+                Text(subtitle)
+                    .foregroundStyle(.secondary)
+            }
+            Spacer()
+            accessory
         }
     }
 }

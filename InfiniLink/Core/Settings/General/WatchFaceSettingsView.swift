@@ -161,18 +161,18 @@ struct ManageWatchFacesView: View {
                 Button("Reset to Defaults", role: .destructive) {
                     showResetConfirmation = true
                 }
+                .confirmationDialog("Are you sure?", isPresented: $showResetConfirmation) {
+                    Button("Reset to Defaults", role: .destructive) {
+                        catalog.resetToDefaults()
+                    }
+                } message: {
+                    Text("Watch faces will go back to InfiniTime's order, all of them will be shown, and your custom watch faces will be removed.")
+                }
             }
         }
         .navigationTitle("Manage Watch Faces")
         .toolbar {
             EditButton()
-        }
-        .confirmationDialog("Reset Watch Faces", isPresented: $showResetConfirmation) {
-            Button("Reset to Defaults", role: .destructive) {
-                catalog.resetToDefaults()
-            }
-        } message: {
-            Text("Watch faces will go back to InfiniTime's order, all of them will be shown, and your custom watch faces will be removed.")
         }
     }
 }

@@ -65,6 +65,9 @@ class BLEFSHandler: ObservableObject {
         // Extended status
         case dirNotEmptyError = 0x0A
         
+        // InfiniTime sends littlefs errors as-is, so a missing file is LFS_ERR_NOENT
+        case noEntry = 0xFE
+        
         var description: String {
             switch self {
             case .ok: return "OK"
@@ -73,6 +76,7 @@ class BLEFSHandler: ObservableObject {
             case .protocolError: return "protocol error"
             case .readOnly: return "read only"
             case .dirNotEmptyError: return "directory not empty"
+            case .noEntry: return "no such file"
             }
         }
     }
@@ -227,8 +231,9 @@ class BLEFSHandler: ObservableObject {
             packet.append(Data(path.utf8))
             
             while let response = send(packet, expecting: .readResponse) {
-                guard isOK(response, "Read \(path)", logFailure: response[1] != Responses.noFile.rawValue), response.count >= 16 else {
-                    result.missing = response[1] == Responses.noFile.rawValue
+                let missing = response[1] == Responses.noFile.rawValue || response[1] == Responses.noEntry.rawValue
+                guard isOK(response, "Read \(path)", logFailure: !missing), response.count >= 16 else {
+                    result.missing = missing
                     return result
                 }
                 

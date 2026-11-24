@@ -17,8 +17,10 @@ struct PluginDetailView: View {
     @State private var values: [String: String] = [:]
     @State private var settingsChanged = false
     @State private var showDeleteConfirmation = false
+    @State private var showClearDataConfirmation = false
     @State private var hasStoredData = false
     @State private var showInfo = false
+    @State private var showLogs = false
     
     var plugin: Plugin? {
         pluginManager.plugins.first { $0.id == id }
@@ -55,12 +57,15 @@ struct PluginDetailView: View {
                     } label: {
                         Label("Info", systemImage: "info.circle")
                     }
+                    Button {
+                        showLogs = true
+                    } label: {
+                        Label("Logs", systemImage: "doc.text")
+                    }
                     Divider()
                     if hasStoredData {
                         Button(role: .destructive) {
-                            PluginStore.setStorage([:], for: id)
-                            hasStoredData = false
-                            pluginManager.restart(id)
+                            showClearDataConfirmation = true
                         } label: {
                             Label("Clear Stored Data", systemImage: "eraser")
                         }
@@ -73,10 +78,27 @@ struct PluginDetailView: View {
                 } label: {
                     Image(systemName: "ellipsis")
                 }
+                .confirmationDialog("Are you sure you want to clear \(plugin.name)'s stored data?", isPresented: $showClearDataConfirmation, titleVisibility: .visible) {
+                    Button("Clear Stored Data", role: .destructive) {
+                        PluginStore.setStorage([:], for: id)
+                        hasStoredData = false
+                        pluginManager.restart(id)
+                    }
+                }
+                .confirmationDialog("Are you sure you want to delete \(plugin.name)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
+                    Button("Delete", role: .destructive) {
+                        pluginManager.delete(plugin)
+                        dismiss()
+                    }
+                }
             }
         }
         .navigationDestination(isPresented: $showInfo) {
             PluginInfoView(plugin: plugin)
+        }
+        .navigationDestination(isPresented: $showLogs) {
+            DebugLogListView(target: .plugin, caller: plugin.name)
+                .navigationTitle("Logs")
         }
         .navigationTitle(plugin.name)
         .onAppear {
@@ -92,12 +114,6 @@ struct PluginDetailView: View {
                 pluginManager.restart(id)
             }
         }
-        .confirmationDialog("Are you sure you want to delete \(plugin.name)?", isPresented: $showDeleteConfirmation, titleVisibility: .visible) {
-            Button("Delete", role: .destructive) {
-                pluginManager.delete(plugin)
-                dismiss()
-            }
-        }
     }
     
     @ViewBuilder
@@ -110,14 +126,23 @@ struct PluginDetailView: View {
         
         switch param.kind {
         case .string:
-            TextField(param.name, text: value)
-                .textInputAutocapitalization(.never)
-                .autocorrectionDisabled()
+            LabeledContent(param.name) {
+                TextField("Not Set", text: value)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .multilineTextAlignment(.trailing)
+            }
         case .secret:
-            SecureField(param.name, text: value)
+            LabeledContent(param.name) {
+                SecureField("Not Set", text: value)
+                    .multilineTextAlignment(.trailing)
+            }
         case .int:
-            TextField(param.name, text: value)
-                .keyboardType(.numberPad)
+            LabeledContent(param.name) {
+                TextField("Not Set", text: value)
+                    .keyboardType(.numberPad)
+                    .multilineTextAlignment(.trailing)
+            }
         case .boolean:
             Toggle(param.name, isOn: Binding(get: { value.wrappedValue == "true" }, set: { value.wrappedValue = $0 ? "true" : "false" }))
         }
@@ -132,7 +157,7 @@ struct PluginInfoView: View {
             if !plugin.permissions.isEmpty {
                 Section("Permissions") {
                     ForEach(plugin.permissions, id: \.self) { permission in
-                        Text(permission.title)
+                        ListRowDetailView(title: permission.title, subtitle: permission.subtitle, icon: permission.icon, iconColor: permission.color)
                     }
                 }
             }
@@ -142,7 +167,8 @@ struct PluginInfoView: View {
                     AboutRowView("Author", value: author)
                 }
                 if let url = plugin.downloadURL {
-                    AboutRowView("Source", value: url.host() ?? url.absoluteString)
+                    AboutRowView("Source", value: url.absoluteString)
+                        .lineLimit(1)
                 }
             }
             Section {

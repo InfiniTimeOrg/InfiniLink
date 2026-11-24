@@ -128,9 +128,6 @@
     "%@ isn't sending motion data. Some features not work as expected." : {
 
     },
-    "%@ Logs" : {
-
-    },
     "%@ might not last the night. Charge it now so it can track your sleep." : {
 
     },
@@ -370,10 +367,10 @@
     "About InfiniLink" : {
 
     },
-    "Access your location" : {
+    "Accelerometer May Have Failed" : {
 
     },
-    "Accelerometer May Have Failed" : {
+    "Access your location" : {
 
     },
     "Active Exercise" : {
@@ -445,10 +442,16 @@
     "App Icon" : {
 
     },
+    "App Logs" : {
+
+    },
     "Appearance" : {
 
     },
     "Apple Health" : {
+
+    },
+    "Are you sure you want to clear %@'s stored data?" : {
 
     },
     "Are you sure you want to delete %@?" : {
@@ -466,13 +469,16 @@
     "Are you sure you want to unpair from %@?" : {
 
     },
+    "Are you sure?" : {
+
+    },
     "Asleep" : {
 
     },
-    "Author" : {
+    "At Bedtime" : {
 
     },
-    "At Bedtime" : {
+    "Author" : {
 
     },
     "Authorized" : {
@@ -584,6 +590,9 @@
     "BLE" : {
 
     },
+    "BLE Logs" : {
+
+    },
     "Bluetooth Disabled" : {
 
     },
@@ -635,10 +644,10 @@
     "Chimes" : {
 
     },
-    "Choose File..." : {
+    "Choose a firmware update or external resources. External resources are fonts and images that are required for some apps and watch faces." : {
 
     },
-    "Choose a firmware update or external resources. External resources are fonts and images that are required for some apps and watch faces." : {
+    "Choose File..." : {
 
     },
     "Choose how the point mark on the heart rate chart is calculated." : {
@@ -710,13 +719,13 @@
     "Copy" : {
 
     },
+    "Couldn't Back Up Watch" : {
+
+    },
     "Couldn't Import Plugin" : {
 
     },
     "Couldn't Install Plugin" : {
-
-    },
-    "Couldn't Back Up Watch" : {
 
     },
     "Couldn't Open Backup" : {
@@ -849,6 +858,9 @@
 
     },
     "DFU" : {
+
+    },
+    "DFU Logs" : {
 
     },
     "Disabled" : {
@@ -1039,6 +1051,9 @@
           }
         }
       }
+    },
+    "Files" : {
+
     },
     "Files in this backup will replace ones with the same name on %@." : {
 
@@ -1382,9 +1397,6 @@
     "Install" : {
 
     },
-    "Install Plugin" : {
-
-    },
     "Install builds of InfiniTime made by GitHub Actions. Requires you to sign in to GitHub." : {
 
     },
@@ -1392,6 +1404,9 @@
 
     },
     "Install future updates automatically while %@ charges overnight? You can change this in Software Update settings." : {
+
+    },
+    "Install Plugin" : {
 
     },
     "Install updates once %@ has been on its charger for an hour at a time you're usually asleep, based on your recent sleep tracking or your sleep schedule." : {
@@ -1500,7 +1515,13 @@
     "Loading..." : {
 
     },
+    "Location" : {
+
+    },
     "Locations" : {
+
+    },
+    "Logs" : {
 
     },
     "Looking for your watch..." : {
@@ -1623,6 +1644,9 @@
     "Navigation ended" : {
 
     },
+    "Network" : {
+
+    },
     "Never" : {
 
     },
@@ -1669,6 +1693,9 @@
     "No sleep recorded last night" : {
 
     },
+    "None" : {
+
+    },
     "Not Authorized" : {
 
     },
@@ -1682,6 +1709,9 @@
 
     },
     "Not Playing" : {
+
+    },
+    "Not Set" : {
 
     },
     "Nothing matched your search. Ensure your spelling is correct and try again." : {
@@ -1790,6 +1820,9 @@
 
     },
     "Playing" : {
+
+    },
+    "Plugin Logs" : {
 
     },
     "Plugins" : {
@@ -1904,9 +1937,6 @@
 
     },
     "Reset to Defaults" : {
-
-    },
-    "Reset Watch Faces" : {
 
     },
     "Resources weren't restored. You can install them later via a software update." : {
@@ -2130,13 +2160,13 @@
     "Software Version" : {
 
     },
+    "Some settings in the backup aren't supported by this version of InfiniTime, so they weren't restored." : {
+
+    },
     "Song" : {
 
     },
     "Source" : {
-
-    },
-    "Some settings in the backup aren't supported by this version of InfiniTime, so they weren't restored." : {
 
     },
     "Split" : {
@@ -2449,9 +2479,6 @@
     "Unpin" : {
 
     },
-    "Unsupported permission: %@" : {
-
-    },
     "Unplugged at %@" : {
 
     },
@@ -2464,6 +2491,9 @@
           }
         }
       }
+    },
+    "Unsupported permission: %@" : {
+
     },
     "Until" : {
 
@@ -2524,9 +2554,6 @@
     "Upload Files" : {
 
     },
-    "URL" : {
-
-    },
     "Uploading" : {
 
     },
@@ -2539,6 +2566,9 @@
           }
         }
       }
+    },
+    "URL" : {
+
     },
     "Use Current Location" : {
 
@@ -2584,10 +2614,13 @@
     "View All" : {
 
     },
-    "Volume: %lld" : {
+    "View on GitHub" : {
 
     },
-    "View on GitHub" : {
+    "Volume" : {
+
+    },
+    "Volume: %lld" : {
 
     },
     "Wake Up" : {

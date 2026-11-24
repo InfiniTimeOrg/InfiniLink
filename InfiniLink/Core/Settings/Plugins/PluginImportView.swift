@@ -41,7 +41,7 @@ struct PluginImportView: View {
                             .foregroundStyle(.gray)
                     }
                     ForEach(plugin.permissions, id: \.self) { permission in
-                        Text(permission.title)
+                        ListRowDetailView(title: permission.title, subtitle: permission.subtitle, icon: permission.icon, iconColor: permission.color)
                     }
                 } header: {
                     Text("Permissions")

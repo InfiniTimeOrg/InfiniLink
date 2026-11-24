@@ -222,7 +222,7 @@ struct ExerciseDetailView: View {
                 Label("Delete", systemImage: "trash")
             }
         }
-        .confirmationDialog("Delete Exercise", isPresented: $showDeleteConfirmation) {
+        .confirmationDialog("Are you sure?", isPresented: $showDeleteConfirmation) {
             Button("Delete Exercise", role: .destructive) {
                 deleteOnDisappear = true
                 dismiss()

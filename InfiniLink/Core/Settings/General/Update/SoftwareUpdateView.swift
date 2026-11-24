@@ -40,15 +40,7 @@ struct SoftwareUpdateView: View {
                 }
                 if bleManager.isReconnectingAfterUpdate {
                     Section {
-                        HStack(spacing: 10) {
-                            ListRowIconView(icon: "gear.badge", color: .gray)
-                            VStack(alignment: .leading, spacing: 3) {
-                                Text(bleManager.isInstallingUpdate ? "Installing..." : "Updating...")
-                                    .fontWeight(.bold)
-                                Text("\(deviceManager.name) is installing the update.")
-                                    .foregroundStyle(.secondary)
-                            }
-                            Spacer()
+                        ListRowDetailView(title: bleManager.isInstallingUpdate ? NSLocalizedString("Installing...", comment: "") : NSLocalizedString("Updating...", comment: ""), subtitle: String(format: NSLocalizedString("%@ is installing the update.", comment: ""), deviceManager.name), icon: "gear.badge") {
                             ProgressView()
                         }
                     }

@@ -46,6 +46,20 @@ struct StoredDataView: View {
                         Text(label(option)).tag(option)
                     }
                 }
+                .alert("Delete Old Data", isPresented: Binding(
+                    get: { pendingMonths != nil },
+                    set: { if !$0 { pendingMonths = nil } }
+                )) {
+                    Button("Delete Older Data", role: .destructive) {
+                        if let pendingMonths {
+                            months = pendingMonths
+                            retention.deleteOldData()
+                        }
+                    }
+                    Button("Cancel", role: .cancel) { }
+                } message: {
+                    Text("Data older than \(label(pendingMonths ?? 0).lowercased()) will be deleted from InfiniLink. Data saved to Apple Health isn't affected.")
+                }
             } footer: {
                 Text("Heart rate, steps, battery, motion, sleep, and disconnect locations older than this are deleted. Exercises are always kept.")
             }
@@ -57,33 +71,20 @@ struct StoredDataView: View {
                 } footer: {
                     Text(String(format: NSLocalizedString("%d records are from watches that are no longer paired. They come back if you pair the same watch again on this iPhone.", comment: ""), unpairedCount))
                 }
+                .confirmationDialog("Delete Unpaired Watch Data", isPresented: $showUnpairedConfirmation) {
+                    Button("Delete Data", role: .destructive) {
+                        retention.deleteUnpairedData {
+                            unpairedCount = retention.unpairedRecordCount()
+                        }
+                    }
+                } message: {
+                    Text("All data from watches that are no longer paired, including their exercises, will be deleted from InfiniLink. Data saved to Apple Health isn't affected.")
+                }
             }
         }
         .navigationTitle("Stored Data")
         .onAppear {
             unpairedCount = retention.unpairedRecordCount()
-        }
-        .confirmationDialog("Delete Old Data", isPresented: Binding(
-            get: { pendingMonths != nil },
-            set: { if !$0 { pendingMonths = nil } }
-        )) {
-            Button("Delete Older Data", role: .destructive) {
-                if let pendingMonths {
-                    months = pendingMonths
-                    retention.deleteOldData()
-                }
-            }
-        } message: {
-            Text("Data older than \(label(pendingMonths ?? 0).lowercased()) will be deleted from InfiniLink. Data saved to Apple Health isn't affected.")
-        }
-        .confirmationDialog("Delete Unpaired Watch Data", isPresented: $showUnpairedConfirmation) {
-            Button("Delete Data", role: .destructive) {
-                retention.deleteUnpairedData {
-                    unpairedCount = retention.unpairedRecordCount()
-                }
-            }
-        } message: {
-            Text("All data from watches that are no longer paired, including their exercises, will be deleted from InfiniLink. Data saved to Apple Health isn't affected.")
         }
     }
 }

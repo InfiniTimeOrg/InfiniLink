@@ -8,42 +8,60 @@
 import SwiftUI
 
 struct DebugLogsView: View {
-    @ObservedObject var logManager = DebugLogManager.shared
-    
     @AppStorage("logSelection") var logSelection = "ble"
     
-    @State private var searchText = ""
+    var title: String {
+        switch logSelection {
+        case "ble":
+            return NSLocalizedString("BLE Logs", comment: "")
+        case "dfu":
+            return NSLocalizedString("DFU Logs", comment: "")
+        case "plugin":
+            return NSLocalizedString("Plugin Logs", comment: "")
+        default:
+            return NSLocalizedString("App Logs", comment: "")
+        }
+    }
     
     var body: some View {
         TabView(selection: $logSelection) {
-            logs(for: .app)
+            DebugLogListView(target: .app)
                 .tabItem {
                     Label("App", systemImage: "doc")
                 }
                 .tag("app")
-            logs(for: .ble)
+            DebugLogListView(target: .ble)
                 .tabItem {
                     Label("BLE", systemImage: "radiowaves.right")
                 }
                 .tag("ble")
-            logs(for: .dfu)
+            DebugLogListView(target: .dfu)
                 .tabItem {
                     Label("DFU", systemImage: "arrow.up.doc")
                 }
                 .tag("dfu")
-            logs(for: .plugin)
+            DebugLogListView(target: .plugin)
                 .tabItem {
                     Label("Plugins", systemImage: "puzzlepiece.extension")
                 }
                 .tag("plugin")
         }
-        .navigationTitle("\(logSelection == "ble" ? "BLE" : NSLocalizedString("App", comment: "")) Logs")
+        .navigationTitle(title)
     }
+}
+
+struct DebugLogListView: View {
+    @ObservedObject var logManager = DebugLogManager.shared
     
-    func logs(for type: DebugLogTarget) -> some View {
+    let target: DebugLogTarget
+    var caller: String? = nil
+    
+    @State private var searchText = ""
+    
+    var body: some View {
         var filteredLogs: [DebugLog] {
             return logManager.logs
-                .filter({ $0.target == type })
+                .filter({ $0.target == target && (caller == nil || $0.caller == caller) })
                 .filter({
                     if !searchText.isEmpty {
                         let query = searchText.lowercased()
